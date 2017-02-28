@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "lib": ["es6", "dom"],
+        "noUnusedLocals": true,
+        "types": ["node"]
+    },
+    "include": [
+        "index.ts",
+        "example.ts"
+    ]
+}
