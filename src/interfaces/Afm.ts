@@ -37,8 +37,8 @@ export interface IMeasureDefinition {
     showInPercent?: boolean; // if true, take all from 'attributes',
 };
 
-export interface IMeasure { // TODO attribute v measure uri???
-    id: string; // measure URI
+export interface IMeasure {
+    id: string;
     definition?: IMeasureDefinition;
 }
 

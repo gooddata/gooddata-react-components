@@ -1,4 +1,5 @@
-import { isEmpty, compact, flow, uniq, flatten } from 'lodash';
+import { isEmpty, compact, flow, uniq, flatten, pick, get } from 'lodash';
+import { ISort, ITransformation } from '../interfaces/Transformation';
 import {
     IMeasure,
     IMeasureAttributeFilter,
@@ -7,7 +8,7 @@ import {
     IAfm,
     IDateFilter,
     IAttributeFilter
-} from '../Afm';
+} from '../interfaces/Afm';
 
 type ObjectUri = string;
 
@@ -59,7 +60,8 @@ const getPercentMetricExpression = (item: IMeasure, attributesMapping, attribute
 
     const byAllExpression = attributesUris.map((attributeUri) => `ALL [${attributeUri}]`).join(',');
 
-    return `SELECT (${metricExpressionWithoutFilters}${whereExpression}) / (${metricExpressionWithoutFilters} BY ${byAllExpression}${whereExpression})`;
+    return `SELECT (${metricExpressionWithoutFilters}${whereExpression}) ` +
+        `/ (${metricExpressionWithoutFilters} BY ${byAllExpression}${whereExpression})`;
 };
 
 const createContributionMetric = (item, attributesMapping, attributesUris) => {
@@ -177,4 +179,16 @@ export const generateFilters = (afm: IAfm) => {
 
         return memo;
     }, { $and: [] });
+};
+
+export const generateSorting = (transformation): ISort[] => {
+    return get(transformation, 'sorting', []).map((sort) => ({
+        column: sort.column,
+        direction: sort.direction
+    }));
+};
+
+export const getMeasureAdditionalInfo = (transformation: ITransformation, id: string) => {
+    const info = get(transformation, 'measures', []).find((measure) => measure.id === id);
+    return pick(info, ['title', 'format']);
 };

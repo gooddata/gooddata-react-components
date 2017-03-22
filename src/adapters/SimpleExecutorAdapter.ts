@@ -1,5 +1,4 @@
 import { md, execution } from 'gooddata';
-import { get } from 'lodash';
 import { IAdapter, IDataSource } from '../Interfaces';
 import { DataSource } from '../DataSource';
 import {
@@ -7,6 +6,8 @@ import {
     generateFilters,
     lookupAttributes,
     normalizeAfm,
+    getMeasureAdditionalInfo,
+    generateSorting,
     AttributeMap
 } from './utils';
 
@@ -66,7 +67,7 @@ export class SimpleExecutorAdapter implements IAdapter {
         return Promise.resolve([]);
     }
 
-     private convertData(afm, transformation, attributesMapping) {
+    private convertData(afm, transformation, attributesMapping) {
         const columns = [];
         const definitions = [];
 
@@ -74,24 +75,18 @@ export class SimpleExecutorAdapter implements IAdapter {
 
         // Get columns
         columns.push(...afm.measures.map((item) => {
-            if (item.definition) {
-                definitions.push({
-                    metricDefinition: {
-                        title: item.definition.title,
-                        format: item.definition.format,
-                        expression: generateMetricDefinition(item, afm, attributesMapping),
-                        identifier: item.id
-                    }
-                });
-            }
+            definitions.push({
+                metricDefinition: {
+                    expression: generateMetricDefinition(item, afm, attributesMapping),
+                    identifier: item.id,
+                    ...getMeasureAdditionalInfo(transformation, item.id)
+                }
+            });
 
             return item.id;
         }));
 
-        // Collect sort info
-        const orderBy = this.convertSorting(transformation);
-
-        // Get filters
+        const orderBy = generateSorting(transformation);
         const where = generateFilters(afm);
 
         return {
@@ -103,13 +98,4 @@ export class SimpleExecutorAdapter implements IAdapter {
             }
         };
     }
-
-    // TODO move to utils
-    private convertSorting(transformation) {
-        return get(transformation, 'sorting', []).map((sort) => ({
-            column: sort.column,
-            direction: sort.direction
-        }));
-    }
 }
-

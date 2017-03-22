@@ -1,5 +1,13 @@
-import { lookupAttributes, normalizeAfm, generateMetricDefinition, generateFilters } from '../../src/adapters/utils';
-import { IAfm, IFilter } from '../../src/Afm';
+import {
+    lookupAttributes,
+    normalizeAfm,
+    generateMetricDefinition,
+    generateFilters,
+    generateSorting,
+    getMeasureAdditionalInfo
+} from '../../src/adapters/utils';
+import { IAfm, IFilter } from '../../src/interfaces/Afm';
+import { ITransformation } from '../../src/interfaces/Transformation';
 
 describe('lookupAttributes', () => {
     it('should extract displayForm from showInPercent', () => {
@@ -95,7 +103,6 @@ describe('lookupAttributes', () => {
         expect(lookupAttributes(simpleAfm)).toEqual([]);
     });
 });
-
 
 describe('normalizeAfm', () => {
     it('should add optional arrays', () => {
@@ -330,8 +337,65 @@ describe('generateMetricDefinition', () => {
             'SELECT (SELECT [/gdc/measure]) / (SELECT [/gdc/measure] BY ALL [/gdc/attribute])'
         );
         expect(generateMetricDefinition(afm.measures[1], afm, mapping)).toEqual(
-            'SELECT (SELECT (SELECT [/gdc/measure]) / (SELECT [/gdc/measure] BY ALL [/gdc/attribute])) FOR PREVIOUS ([/gdc/attribute])'
+            'SELECT (SELECT (SELECT [/gdc/measure]) ' +
+            '/ (SELECT [/gdc/measure] BY ALL [/gdc/attribute])) FOR PREVIOUS ([/gdc/attribute])'
         );
+    });
+});
+
+describe('generateSorting', () => {
+    it('should generate sorting from transformation', () => {
+        const transformation: ITransformation = {
+            sorting: [
+                {
+                    column: '/gdc/md/column1',
+                    direction: 'desc'
+                },
+                {
+                    column: '/gdc/md/column2',
+                    direction: 'asc'
+                }
+            ]
+        };
+
+        expect(generateSorting(transformation)).toEqual([
+            {
+                column: '/gdc/md/column1',
+                direction: 'desc'
+            }, {
+                column: '/gdc/md/column2',
+                direction: 'asc'
+            }
+        ]);
+    });
+});
+
+describe('getMeasureAdditionalInfo', () => {
+    it('should generate measure info with titles and formats', () => {
+        const transformation: ITransformation = {
+            measures: [
+                {
+                    id: 'a',
+                    title: 'A',
+                    format: 'fA'
+                },
+                {
+                    id: 'b',
+                    title: 'B',
+                    format: 'fB'
+                }
+            ]
+        };
+
+        expect(getMeasureAdditionalInfo(transformation, 'a')).toEqual({
+            title: 'A',
+            format: 'fA'
+        });
+
+        expect(getMeasureAdditionalInfo(transformation, 'b')).toEqual({
+            title: 'B',
+            format: 'fB'
+        });
     });
 });
 
@@ -366,8 +430,8 @@ describe('generateFilters', () => {
 
         expect(generateFilters(afm)).toEqual(
             {
-                $and: [{
-                    "/gdc/attribute1": {
+                '$and': [{
+                    '/gdc/attribute1': {
                         $in: [{
                             id: 'a'
                         }, {
@@ -375,7 +439,7 @@ describe('generateFilters', () => {
                         }]
                     }
                 }, {
-                    "/gdc/attribute2": {
+                    '/gdc/attribute2': {
                         $not: {
                             $in: [{
                                 id: 'c'
@@ -385,9 +449,9 @@ describe('generateFilters', () => {
                         }
                     }
                 }],
-                "/gdc/datefilter": {
+                '/gdc/datefilter': {
                     $between: [0, 12],
-                    $granularity: "GDC.time.year"
+                    $granularity: 'GDC.time.year'
                 }
             }
         );

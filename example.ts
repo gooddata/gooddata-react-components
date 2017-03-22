@@ -1,6 +1,7 @@
+/* tslint:disable */
 import { SimpleExecutorAdapter } from './src/adapters/SimpleExecutorAdapter';
 import { DataTable } from './src/DataTable';
-import { IAfm } from './src/Afm';
+import { IAfm } from './src/interfaces/Afm';
 import * as gooddata from 'gooddata';
 import { testData } from './examples/data';
 
@@ -16,97 +17,97 @@ const data = testData[0];
 
 const adapter = new SimpleExecutorAdapter(data.projectId);
 
-const generatedMetricWithFilters: IAfm = {
-    measures: [
-        {
-            id: 'close_bop_with_filters',
-            definition: {
-                baseObject: {
-                    id: data.CLOSE_BOP
-                },
-                filters: [{
-                    id: data.SALES_REP_DF,
-                    in: [
-                        data.SALES_REP_ADAM_BRADLEY,
-                        data.SALES_REP_ALEJANDRO_VIBIANO,
-                        data.SALES_RE_ALEXANDR_FYODR
-                    ]
-                }]
-            }
-        }
-    ],
-    attributes: [
+// const generatedMetricWithFilters: IAfm = {
+//     measures: [
+//         {
+//             id: 'close_bop_with_filters',
+//             definition: {
+//                 baseObject: {
+//                     id: data.CLOSE_BOP
+//                 },
+//                 filters: [{
+//                     id: data.SALES_REP_DF,
+//                     in: [
+//                         data.SALES_REP_ADAM_BRADLEY,
+//                         data.SALES_REP_ALEJANDRO_VIBIANO,
+//                         data.SALES_RE_ALEXANDR_FYODR
+//                     ]
+//                 }]
+//             }
+//         }
+//     ],
+//     attributes: [
 
-    ]
-};
+//     ]
+// };
 
-const simplePopAfm: IAfm = {
-    measures: [
-        {
-            id: data.CLOSE_BOP
-        },
-        {
-            id: 'close_bop_pop',
-            definition: {
-                baseObject: {
-                    id: data.CLOSE_BOP
-                },
-                popAttribute: {
-                    id: data.DATE_CLOSED_YEAR_DF
-                }
-            }
-        }
-    ],
-    attributes: [
+// const simplePopAfm: IAfm = {
+//     measures: [
+//         {
+//             id: data.CLOSE_BOP
+//         },
+//         {
+//             id: 'close_bop_pop',
+//             definition: {
+//                 baseObject: {
+//                     id: data.CLOSE_BOP
+//                 },
+//                 popAttribute: {
+//                     id: data.DATE_CLOSED_YEAR_DF
+//                 }
+//             }
+//         }
+//     ],
+//     attributes: [
 
-    ]
-};
+//     ]
+// };
 
-const simpleShowInPercentAfm: IAfm = {
-    measures: [
-        {
-            id: 'close_bop_percent',
-            definition: {
-                baseObject: {
-                    id: data.CLOSE_BOP
-                },
-                showInPercent: true
-            }
-        }
-    ],
-    attributes: [
-        {
-            id: data.DATE_CLOSED_YEAR_DF
-        }
-    ]
-};
+// const simpleShowInPercentAfm: IAfm = {
+//     measures: [
+//         {
+//             id: 'close_bop_percent',
+//             definition: {
+//                 baseObject: {
+//                     id: data.CLOSE_BOP
+//                 },
+//                 showInPercent: true
+//             }
+//         }
+//     ],
+//     attributes: [
+//         {
+//             id: data.DATE_CLOSED_YEAR_DF
+//         }
+//     ]
+// };
 
-const showInPercentWithFiltersAfm: IAfm = {
-    measures: [
-        {
-            id: 'close_bop_percent',
-            definition: {
-                baseObject: {
-                    id: data.CLOSE_BOP
-                },
-                filters: [{
-                    id: data.SALES_REP_DF,
-                    in: [
-                        data.SALES_REP_ADAM_BRADLEY,
-                        data.SALES_REP_ALEJANDRO_VIBIANO,
-                        data.SALES_RE_ALEXANDR_FYODR
-                    ]
-                }],
-                showInPercent: true
-            }
-        }
-    ],
-    attributes: [
-        {
-            id: data.DATE_CLOSED_YEAR_DF
-        }
-    ]
-};
+// const showInPercentWithFiltersAfm: IAfm = {
+//     measures: [
+//         {
+//             id: 'close_bop_percent',
+//             definition: {
+//                 baseObject: {
+//                     id: data.CLOSE_BOP
+//                 },
+//                 filters: [{
+//                     id: data.SALES_REP_DF,
+//                     in: [
+//                         data.SALES_REP_ADAM_BRADLEY,
+//                         data.SALES_REP_ALEJANDRO_VIBIANO,
+//                         data.SALES_RE_ALEXANDR_FYODR
+//                     ]
+//                 }],
+//                 showInPercent: true
+//             }
+//         }
+//     ],
+//     attributes: [
+//         {
+//             id: data.DATE_CLOSED_YEAR_DF
+//         }
+//     ]
+// };
 
 const popAndPercentAfm: IAfm = {
     measures: [
@@ -170,9 +171,3 @@ gooddata.user.login('xxx', 'xxx').then(() => {
         popAndPercentAfm
         , transformation);
 });
-
-popAndPercentAfm;
-showInPercentWithFiltersAfm;
-simpleShowInPercentAfm;
-simplePopAfm;
-generatedMetricWithFilters;
