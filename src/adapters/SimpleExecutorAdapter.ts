@@ -30,9 +30,11 @@ import {
 export class SimpleExecutorAdapter implements IAdapter {
 
     private projectId: string;
+    private settings;
 
-    constructor(projectId: string) {
+    constructor(projectId: string, settings = {}) {
         this.projectId = projectId;
+        this.settings = settings; // TODO add interface
     }
 
     public createDataSource(afm): IDataSource {
@@ -45,7 +47,7 @@ export class SimpleExecutorAdapter implements IAdapter {
                         this.convertData(normalizedAfm, transformation, attributesMapping);
                     // dump('Columns', columns);
                     // dump('ExecutionConfiguration', executionConfiguration);
-                    return execution.getData(this.projectId, columns, executionConfiguration);
+                    return execution.getData(this.projectId, columns, executionConfiguration, this.settings);
                 })
                 .catch((err) => {
                     console.error('err', err);
