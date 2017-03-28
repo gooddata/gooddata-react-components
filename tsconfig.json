@@ -3,6 +3,7 @@
         "allowJs": true,
         "moduleResolution": "node",
         "module": "es6",
+        "jsx": "react",
         "lib": ["es6", "dom"],
         "noUnusedLocals": true,
         "types": ["node"],
