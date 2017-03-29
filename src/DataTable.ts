@@ -23,6 +23,10 @@ export class DataTable {
     }
 
     public getData(afm, transformation) {
+        if (!shouldExecuteAfm(afm)) {
+            return;
+        }
+
         if (!isEqual(afm, this.afm)) {
             this.afm = afm;
             this.dataSource = this.adapter.createDataSource(afm);

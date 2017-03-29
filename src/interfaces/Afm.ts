@@ -13,11 +13,17 @@ export interface IDateFilter extends IBaseFilter {
     granularity: string;
 }
 
-export interface IMeasureAttributeFilter {
+export interface IPositiveFilter {
     id: string; // attribute displayForm URI
-    in?: string[]; // attribute elements IDs
-    notIn?: string[]; // attribute elements IDs
+    in: string[]; // attribute elements IDs
 }
+
+export interface INegativeFilter {
+    id: string; // attribute displayForm URI
+    notIn: string[]; // attribute elements IDs
+}
+
+export type IMeasureAttributeFilter = INegativeFilter | IPositiveFilter;
 
 export interface ISpecificObject {
     id: string;
@@ -39,7 +45,7 @@ export interface IMeasureDefinition {
 
 export interface IMeasure {
     id: string;
-    definition?: IMeasureDefinition;
+    definition: IMeasureDefinition;
 }
 
 export interface IAttribute {

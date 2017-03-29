@@ -7,7 +7,9 @@ import {
     ILookupObject,
     IAfm,
     IDateFilter,
-    IAttributeFilter
+    IAttributeFilter,
+    IPositiveFilter,
+    INegativeFilter
 } from '../interfaces/Afm';
 
 type ObjectUri = string;
@@ -20,14 +22,14 @@ interface IAttributeMapKeys {
 export type AttributeMap = IAttributeMapKeys[];
 
 const getFilterExpression = (filter: IMeasureAttributeFilter, attributesMapping) => {
-    const elements = filter.in || filter.notIn;
+    const elements = (filter as IPositiveFilter).in || (filter as INegativeFilter).notIn;
 
     if (isEmpty(elements)) {
         return null;
     }
 
     const uri = getAttributeByDisplayForm(attributesMapping, filter.id);
-    const inExpr = filter.notIn ? 'NOT IN' : 'IN';
+    const inExpr = (filter as INegativeFilter).notIn ? 'NOT IN' : 'IN';
     const elementsForQuery = elements.map((e) => `[${uri}/elements?id=${e}]`);
 
     return `[${uri}] ${inExpr} (${elementsForQuery.join(',')})`;

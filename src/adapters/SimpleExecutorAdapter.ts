@@ -11,22 +11,6 @@ import {
     AttributeMap
 } from './utils';
 
-// function dump(title, obj) {
-//     console.log(title,
-//         JSON.stringify(obj, null, 2)
-//     );
-// }
-
-// function streamToString(stream, callback) {
-//     let str = '';
-//     stream.on('data', (chunk) => {
-//         str += chunk;
-//     });
-//     stream.on('end', () => {
-//         callback(str);
-//     });
-// }
-
 export class SimpleExecutorAdapter implements IAdapter {
 
     private projectId: string;
@@ -34,7 +18,9 @@ export class SimpleExecutorAdapter implements IAdapter {
 
     constructor(projectId: string, settings = {}) {
         this.projectId = projectId;
-        this.settings = settings; // TODO add interface
+        // settings for gooddata SDK
+        // @see https://github.com/gooddata/gooddata-js/blob/master/src/execution.js#L71
+        this.settings = settings;
     }
 
     public createDataSource(afm): IDataSource {

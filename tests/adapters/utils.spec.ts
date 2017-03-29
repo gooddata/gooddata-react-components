@@ -39,7 +39,12 @@ describe('lookupAttributes', () => {
         const simplePopAfm: IAfm = {
             measures: [
                 {
-                    id: '/gdc/md/close_bop'
+                    id: 'close_bop',
+                    definition: {
+                        baseObject: {
+                            id: '/gdc/md/close_bop'
+                        }
+                    }
                 },
                 {
                     id: 'close_bop_pop',
@@ -90,7 +95,12 @@ describe('lookupAttributes', () => {
         const simpleAfm: IAfm = {
             measures: [
                 {
-                    id: 'close_bop_percent'
+                    id: 'close_bop_percent',
+                    definition: {
+                        baseObject: {
+                            id: '/gdc/md/close_bop/percent'
+                        }
+                    }
                 }
             ],
             attributes: [
@@ -107,11 +117,72 @@ describe('lookupAttributes', () => {
 describe('normalizeAfm', () => {
     it('should add optional arrays', () => {
         const afm: IAfm = {};
-
         expect(normalizeAfm(afm)).toEqual({
             measures: [],
             attributes: [],
             filters: []
+        });
+
+        expect(normalizeAfm({
+            attributes: [
+                {
+                    id: '1'
+                }
+            ]
+        })).toEqual({
+            attributes: [
+                {
+                    id: '1'
+                }
+            ],
+            measures: [],
+            filters: []
+        });
+
+        expect(normalizeAfm({
+            measures: [
+                {
+                    id: '1',
+                    definition: {
+                        baseObject: {
+                            id: '/uri'
+                        }
+                    }
+                }
+            ]
+        })).toEqual({
+            measures: [
+                {
+                    id: '1',
+                    definition: {
+                        baseObject: {
+                            id: '/uri'
+                        }
+                    }
+                }
+            ],
+            attributes: [],
+            filters: []
+        });
+
+        expect(normalizeAfm({
+            filters: [
+                {
+                    id: '1',
+                    type: 'date',
+                    between: [0, 1]
+                }
+            ]
+        })).toEqual({
+            attributes: [],
+            measures: [],
+            filters: [
+                {
+                    id: '1',
+                    type: 'date',
+                    between: [0, 1]
+                }
+            ]
         });
     });
 });
@@ -131,6 +202,28 @@ describe('generateMetricDefinition', () => {
         };
         expect(generateMetricDefinition(afm.measures[0], afm, [])).toEqual(
             'SELECT SUM([/gdc/measure])'
+        );
+    });
+
+    it('should generate metric with empty filter', () => {
+        const afm: IAfm = {
+            measures: [{
+                id: 'metric_empty_filter',
+                definition: {
+                    baseObject: {
+                        id: '/gdc/measure'
+                    },
+                    filters: [
+                        {
+                            id: '/uri',
+                            in: []
+                        }
+                    ]
+                }
+            }]
+        };
+        expect(generateMetricDefinition(afm.measures[0], afm, [])).toEqual(
+            'SELECT [/gdc/measure]'
         );
     });
 
@@ -183,7 +276,12 @@ describe('generateMetricDefinition', () => {
         const afm: IAfm = {
             measures: [
                 {
-                    id: '/gdc/measure'
+                    id: 'm1',
+                    definition: {
+                        baseObject: {
+                            id: '/gdc/measure'
+                        }
+                    }
                 },
                 {
                     id: 'close_bop_pop',
