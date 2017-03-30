@@ -13,11 +13,17 @@ export interface IDateFilter extends IBaseFilter {
     granularity: string;
 }
 
-export interface IMeasureAttributeFilter {
+export interface IPositiveFilter {
     id: string; // attribute displayForm URI
-    in?: string[]; // attribute elements IDs
-    notIn?: string[]; // attribute elements IDs
+    in: string[]; // attribute elements IDs
 }
+
+export interface INegativeFilter {
+    id: string; // attribute displayForm URI
+    notIn: string[]; // attribute elements IDs
+}
+
+export type IMeasureAttributeFilter = INegativeFilter | IPositiveFilter;
 
 export interface ISpecificObject {
     id: string;
@@ -37,9 +43,9 @@ export interface IMeasureDefinition {
     showInPercent?: boolean; // if true, take all from 'attributes',
 };
 
-export interface IMeasure { // TODO attribute v measure uri???
-    id: string; // measure URI
-    definition?: IMeasureDefinition;
+export interface IMeasure {
+    id: string;
+    definition: IMeasureDefinition;
 }
 
 export interface IAttribute {

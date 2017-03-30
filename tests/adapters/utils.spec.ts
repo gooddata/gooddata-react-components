@@ -1,5 +1,13 @@
-import { lookupAttributes, normalizeAfm, generateMetricDefinition, generateFilters } from '../../src/adapters/utils';
-import { IAfm, IFilter } from '../../src/Afm';
+import {
+    lookupAttributes,
+    normalizeAfm,
+    generateMetricDefinition,
+    generateFilters,
+    generateSorting,
+    getMeasureAdditionalInfo
+} from '../../src/adapters/utils';
+import { IAfm, IFilter } from '../../src/interfaces/Afm';
+import { ITransformation } from '../../src/interfaces/Transformation';
 
 describe('lookupAttributes', () => {
     it('should extract displayForm from showInPercent', () => {
@@ -31,7 +39,12 @@ describe('lookupAttributes', () => {
         const simplePopAfm: IAfm = {
             measures: [
                 {
-                    id: '/gdc/md/close_bop'
+                    id: 'close_bop',
+                    definition: {
+                        baseObject: {
+                            id: '/gdc/md/close_bop'
+                        }
+                    }
                 },
                 {
                     id: 'close_bop_pop',
@@ -82,7 +95,12 @@ describe('lookupAttributes', () => {
         const simpleAfm: IAfm = {
             measures: [
                 {
-                    id: 'close_bop_percent'
+                    id: 'close_bop_percent',
+                    definition: {
+                        baseObject: {
+                            id: '/gdc/md/close_bop/percent'
+                        }
+                    }
                 }
             ],
             attributes: [
@@ -96,15 +114,75 @@ describe('lookupAttributes', () => {
     });
 });
 
-
 describe('normalizeAfm', () => {
     it('should add optional arrays', () => {
         const afm: IAfm = {};
-
         expect(normalizeAfm(afm)).toEqual({
             measures: [],
             attributes: [],
             filters: []
+        });
+
+        expect(normalizeAfm({
+            attributes: [
+                {
+                    id: '1'
+                }
+            ]
+        })).toEqual({
+            attributes: [
+                {
+                    id: '1'
+                }
+            ],
+            measures: [],
+            filters: []
+        });
+
+        expect(normalizeAfm({
+            measures: [
+                {
+                    id: '1',
+                    definition: {
+                        baseObject: {
+                            id: '/uri'
+                        }
+                    }
+                }
+            ]
+        })).toEqual({
+            measures: [
+                {
+                    id: '1',
+                    definition: {
+                        baseObject: {
+                            id: '/uri'
+                        }
+                    }
+                }
+            ],
+            attributes: [],
+            filters: []
+        });
+
+        expect(normalizeAfm({
+            filters: [
+                {
+                    id: '1',
+                    type: 'date',
+                    between: [0, 1]
+                }
+            ]
+        })).toEqual({
+            attributes: [],
+            measures: [],
+            filters: [
+                {
+                    id: '1',
+                    type: 'date',
+                    between: [0, 1]
+                }
+            ]
         });
     });
 });
@@ -124,6 +202,28 @@ describe('generateMetricDefinition', () => {
         };
         expect(generateMetricDefinition(afm.measures[0], afm, [])).toEqual(
             'SELECT SUM([/gdc/measure])'
+        );
+    });
+
+    it('should generate metric with empty filter', () => {
+        const afm: IAfm = {
+            measures: [{
+                id: 'metric_empty_filter',
+                definition: {
+                    baseObject: {
+                        id: '/gdc/measure'
+                    },
+                    filters: [
+                        {
+                            id: '/uri',
+                            in: []
+                        }
+                    ]
+                }
+            }]
+        };
+        expect(generateMetricDefinition(afm.measures[0], afm, [])).toEqual(
+            'SELECT [/gdc/measure]'
         );
     });
 
@@ -176,7 +276,12 @@ describe('generateMetricDefinition', () => {
         const afm: IAfm = {
             measures: [
                 {
-                    id: '/gdc/measure'
+                    id: 'm1',
+                    definition: {
+                        baseObject: {
+                            id: '/gdc/measure'
+                        }
+                    }
                 },
                 {
                     id: 'close_bop_pop',
@@ -330,8 +435,65 @@ describe('generateMetricDefinition', () => {
             'SELECT (SELECT [/gdc/measure]) / (SELECT [/gdc/measure] BY ALL [/gdc/attribute])'
         );
         expect(generateMetricDefinition(afm.measures[1], afm, mapping)).toEqual(
-            'SELECT (SELECT (SELECT [/gdc/measure]) / (SELECT [/gdc/measure] BY ALL [/gdc/attribute])) FOR PREVIOUS ([/gdc/attribute])'
+            'SELECT (SELECT (SELECT [/gdc/measure]) ' +
+            '/ (SELECT [/gdc/measure] BY ALL [/gdc/attribute])) FOR PREVIOUS ([/gdc/attribute])'
         );
+    });
+});
+
+describe('generateSorting', () => {
+    it('should generate sorting from transformation', () => {
+        const transformation: ITransformation = {
+            sorting: [
+                {
+                    column: '/gdc/md/column1',
+                    direction: 'desc'
+                },
+                {
+                    column: '/gdc/md/column2',
+                    direction: 'asc'
+                }
+            ]
+        };
+
+        expect(generateSorting(transformation)).toEqual([
+            {
+                column: '/gdc/md/column1',
+                direction: 'desc'
+            }, {
+                column: '/gdc/md/column2',
+                direction: 'asc'
+            }
+        ]);
+    });
+});
+
+describe('getMeasureAdditionalInfo', () => {
+    it('should generate measure info with titles and formats', () => {
+        const transformation: ITransformation = {
+            measures: [
+                {
+                    id: 'a',
+                    title: 'A',
+                    format: 'fA'
+                },
+                {
+                    id: 'b',
+                    title: 'B',
+                    format: 'fB'
+                }
+            ]
+        };
+
+        expect(getMeasureAdditionalInfo(transformation, 'a')).toEqual({
+            title: 'A',
+            format: 'fA'
+        });
+
+        expect(getMeasureAdditionalInfo(transformation, 'b')).toEqual({
+            title: 'B',
+            format: 'fB'
+        });
     });
 });
 
@@ -366,8 +528,8 @@ describe('generateFilters', () => {
 
         expect(generateFilters(afm)).toEqual(
             {
-                $and: [{
-                    "/gdc/attribute1": {
+                '$and': [{
+                    '/gdc/attribute1': {
                         $in: [{
                             id: 'a'
                         }, {
@@ -375,7 +537,7 @@ describe('generateFilters', () => {
                         }]
                     }
                 }, {
-                    "/gdc/attribute2": {
+                    '/gdc/attribute2': {
                         $not: {
                             $in: [{
                                 id: 'c'
@@ -385,9 +547,9 @@ describe('generateFilters', () => {
                         }
                     }
                 }],
-                "/gdc/datefilter": {
+                '/gdc/datefilter': {
                     $between: [0, 12],
-                    $granularity: "GDC.time.year"
+                    $granularity: 'GDC.time.year'
                 }
             }
         );

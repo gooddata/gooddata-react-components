@@ -1,4 +1,5 @@
-import { isEmpty, compact, flow, uniq, flatten } from 'lodash';
+import { isEmpty, compact, flow, uniq, flatten, pick, get } from 'lodash';
+import { ISort, ITransformation } from '../interfaces/Transformation';
 import {
     IMeasure,
     IMeasureAttributeFilter,
@@ -6,8 +7,10 @@ import {
     ILookupObject,
     IAfm,
     IDateFilter,
-    IAttributeFilter
-} from '../Afm';
+    IAttributeFilter,
+    IPositiveFilter,
+    INegativeFilter
+} from '../interfaces/Afm';
 
 type ObjectUri = string;
 
@@ -19,14 +22,14 @@ interface IAttributeMapKeys {
 export type AttributeMap = IAttributeMapKeys[];
 
 const getFilterExpression = (filter: IMeasureAttributeFilter, attributesMapping) => {
-    const elements = filter.in || filter.notIn;
+    const elements = (filter as IPositiveFilter).in || (filter as INegativeFilter).notIn;
 
     if (isEmpty(elements)) {
         return null;
     }
 
     const uri = getAttributeByDisplayForm(attributesMapping, filter.id);
-    const inExpr = filter.notIn ? 'NOT IN' : 'IN';
+    const inExpr = (filter as INegativeFilter).notIn ? 'NOT IN' : 'IN';
     const elementsForQuery = elements.map((e) => `[${uri}/elements?id=${e}]`);
 
     return `[${uri}] ${inExpr} (${elementsForQuery.join(',')})`;
@@ -59,7 +62,8 @@ const getPercentMetricExpression = (item: IMeasure, attributesMapping, attribute
 
     const byAllExpression = attributesUris.map((attributeUri) => `ALL [${attributeUri}]`).join(',');
 
-    return `SELECT (${metricExpressionWithoutFilters}${whereExpression}) / (${metricExpressionWithoutFilters} BY ${byAllExpression}${whereExpression})`;
+    return `SELECT (${metricExpressionWithoutFilters}${whereExpression}) ` +
+        `/ (${metricExpressionWithoutFilters} BY ${byAllExpression}${whereExpression})`;
 };
 
 const createContributionMetric = (item, attributesMapping, attributesUris) => {
@@ -177,4 +181,16 @@ export const generateFilters = (afm: IAfm) => {
 
         return memo;
     }, { $and: [] });
+};
+
+export const generateSorting = (transformation): ISort[] => {
+    return get(transformation, 'sorting', []).map((sort) => ({
+        column: sort.column,
+        direction: sort.direction
+    }));
+};
+
+export const getMeasureAdditionalInfo = (transformation: ITransformation, id: string) => {
+    const info = get(transformation, 'measures', []).find((measure) => measure.id === id);
+    return pick(info, ['title', 'format']);
 };

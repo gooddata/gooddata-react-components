@@ -1,8 +1,12 @@
 import { IAdapter, IDataSource } from './Interfaces';
-import { isEqual } from 'lodash';
+import { isEqual, get } from 'lodash';
 
 type IDataSubscriber = (data: any) => any;
 type IErrorSubscriber = (error: any) => any;
+
+function shouldExecuteAfm(afm) {
+    return get(afm, 'measures.length') > 0 || get(afm, 'attributes.length') > 0;
+}
 
 export class DataTable {
     private adapter: IAdapter;
@@ -19,6 +23,10 @@ export class DataTable {
     }
 
     public getData(afm, transformation) {
+        if (!shouldExecuteAfm(afm)) {
+            return;
+        }
+
         if (!isEqual(afm, this.afm)) {
             this.afm = afm;
             this.dataSource = this.adapter.createDataSource(afm);
@@ -28,6 +36,10 @@ export class DataTable {
     }
 
     public execute(afm, transformation) {
+        if (!shouldExecuteAfm(afm)) {
+            return Promise.resolve(null);
+        }
+
         if (!isEqual(afm, this.afm)) {
             this.afm = afm;
             this.dataSource = this.adapter.createDataSource(afm);

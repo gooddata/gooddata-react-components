@@ -1,5 +1,4 @@
 import { md, execution } from 'gooddata';
-import { get } from 'lodash';
 import { IAdapter, IDataSource } from '../Interfaces';
 import { DataSource } from '../DataSource';
 import {
@@ -7,31 +6,21 @@ import {
     generateFilters,
     lookupAttributes,
     normalizeAfm,
+    getMeasureAdditionalInfo,
+    generateSorting,
     AttributeMap
 } from './utils';
-
-// function dump(title, obj) {
-//     console.log(title,
-//         JSON.stringify(obj, null, 2)
-//     );
-// }
-
-// function streamToString(stream, callback) {
-//     let str = '';
-//     stream.on('data', (chunk) => {
-//         str += chunk;
-//     });
-//     stream.on('end', () => {
-//         callback(str);
-//     });
-// }
 
 export class SimpleExecutorAdapter implements IAdapter {
 
     private projectId: string;
+    private settings;
 
-    constructor(projectId: string) {
+    constructor(projectId: string, settings = {}) {
         this.projectId = projectId;
+        // settings for gooddata SDK
+        // @see https://github.com/gooddata/gooddata-js/blob/master/src/execution.js#L71
+        this.settings = settings;
     }
 
     public createDataSource(afm): IDataSource {
@@ -44,7 +33,7 @@ export class SimpleExecutorAdapter implements IAdapter {
                         this.convertData(normalizedAfm, transformation, attributesMapping);
                     // dump('Columns', columns);
                     // dump('ExecutionConfiguration', executionConfiguration);
-                    return execution.getData(this.projectId, columns, executionConfiguration);
+                    return execution.getData(this.projectId, columns, executionConfiguration, this.settings);
                 })
                 .catch((err) => {
                     console.error('err', err);
@@ -66,7 +55,7 @@ export class SimpleExecutorAdapter implements IAdapter {
         return Promise.resolve([]);
     }
 
-     private convertData(afm, transformation, attributesMapping) {
+    private convertData(afm, transformation, attributesMapping) {
         const columns = [];
         const definitions = [];
 
@@ -74,24 +63,18 @@ export class SimpleExecutorAdapter implements IAdapter {
 
         // Get columns
         columns.push(...afm.measures.map((item) => {
-            if (item.definition) {
-                definitions.push({
-                    metricDefinition: {
-                        title: item.definition.title,
-                        format: item.definition.format,
-                        expression: generateMetricDefinition(item, afm, attributesMapping),
-                        identifier: item.id
-                    }
-                });
-            }
+            definitions.push({
+                metricDefinition: {
+                    expression: generateMetricDefinition(item, afm, attributesMapping),
+                    identifier: item.id,
+                    ...getMeasureAdditionalInfo(transformation, item.id)
+                }
+            });
 
             return item.id;
         }));
 
-        // Collect sort info
-        const orderBy = this.convertSorting(transformation);
-
-        // Get filters
+        const orderBy = generateSorting(transformation);
         const where = generateFilters(afm);
 
         return {
@@ -103,13 +86,4 @@ export class SimpleExecutorAdapter implements IAdapter {
             }
         };
     }
-
-    // TODO move to utils
-    private convertSorting(transformation) {
-        return get(transformation, 'sorting', []).map((sort) => ({
-            column: sort.column,
-            direction: sort.direction
-        }));
-    }
 }
-
