@@ -1,9 +1,12 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "allowJs": true,
+        "moduleResolution": "node",
+        "module": "es6",
         "lib": ["es6", "dom"],
         "noUnusedLocals": true,
-        "types": ["node"]
+        "types": ["node"],
+        "target": "es6"
     },
     "include": [
         "index.ts",
