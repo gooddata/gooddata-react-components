@@ -1,18 +1,18 @@
 import * as React from 'react';
-import { IAfm } from "../../Afm";
-import { DataTable } from "../../DataTable";
-import { SimpleExecutorAdapter } from "../../adapters/SimpleExecutorAdapter";
+import { IAfm } from '../../interfaces/Afm';
+import { DataTable } from '../../DataTable';
+import { SimpleExecutorAdapter } from '../../adapters/SimpleExecutorAdapter';
 
 export interface IExecuteProps {
     afm: IAfm;
     projectId: string;
     // TODO: Use proper interface
-    onExecute: (result: object) => void;
-    onError: (error: object) => void;
+    onExecute: (result: Object) => void;
+    onError: (error: Object) => void;
 }
 
 // TODO: Is it ok to create data table every time?
-function execute(projectId: string, afm: IAfm): Promise<object> {
+function execute(projectId: string, afm: IAfm): Promise<Object> {
     const adapter = new SimpleExecutorAdapter(projectId);
     const dataTable = new DataTable(adapter);
 

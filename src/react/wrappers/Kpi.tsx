@@ -1,6 +1,6 @@
-import * as React from "react";
+import * as React from 'react';
 import { Execute } from '../execution/Execute';
-import { IAfm } from "../../Afm";
+import { IAfm } from '../../interfaces/Afm';
 
 type URIString = string;
 
@@ -14,9 +14,18 @@ export interface IKpiState {
     result: any;
 }
 
-function buildAFM(measures: string[]): IAfm {
+function buildAFM(measureUri: string): IAfm {
     return {
-        measures: measures.map((measureUri) => ({ id: measureUri }))
+        measures: [
+            {
+                id: 'm1',
+                definition: {
+                    baseObject: {
+                        id: measureUri
+                    }
+                }
+            }
+        ]
     };
 }
 
@@ -48,7 +57,7 @@ export class Kpi extends React.Component<IKpiProps, IKpiState> {
             return <h1>Error</h1>;
         }
 
-        const afm = buildAFM([this.props.measure]);
+        const afm = buildAFM(this.props.measure);
 
         return (
             <Execute

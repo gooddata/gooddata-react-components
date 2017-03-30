@@ -38,7 +38,7 @@
     "build": "tsc --outDir dist",
     "test": "jest",
     "watchTest": "jest --watch",
-    "dev": "rm -rf dist && tsc --outDir dist --watch",
+    "dev": "rm -rf dist && tsc --outDir dist --watch --module commonjs",
     "prepublish": "rm -rf dist && tsc --outDir dist && babel dist --out-dir dist",
     "validate": "tslint -c tslint.json 'src/**/*.ts' *.ts"
   },
