@@ -10,7 +10,6 @@
         "target": "es6"
     },
     "include": [
-        "index.ts",
-        "example.ts"
+        "index.ts"
     ]
 }
