@@ -12,22 +12,33 @@ export interface IExecuteProps {
     // TODO: Use proper interface
     onExecute: (result: Object) => void;
     onError: (error: Object) => void;
+    dataTableFactory?: IDataTableFactory;
 }
+
+type IDataTableFactory = (projectId: string) => IDataTable;
 
 function execute(dataTable: IDataTable, afm: IAfm): Promise<Object> {
     // TODO: Do we need to pass custom transformation?
     return dataTable.execute(afm, null);
 }
 
+function dataTableFactory(projectId): IDataTable {
+    const adapter = new SimpleExecutorAdapter(projectId);
+    return new DataTable(adapter);
+}
+
 export class Execute extends React.Component<IExecuteProps, undefined> {
+
+    public static defaultProps: Partial<IExecuteProps> = {
+        dataTableFactory
+    };
 
     private dataTable: IDataTable;
 
     public constructor(props) {
         super(props);
 
-        const adapter = new SimpleExecutorAdapter(props.projectId);
-        this.dataTable = new DataTable(adapter);
+        this.dataTable = props.dataTableFactory(props.projectId);
     }
 
     public componentDidMount() {
