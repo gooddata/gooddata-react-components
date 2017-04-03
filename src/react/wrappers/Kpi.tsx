@@ -32,7 +32,7 @@ function buildAFM(measureUri: string): IAfm {
 }
 
 function Loading() {
-    return <div style={{ background: '#cacaca', display: 'inline-block', width: '20px', height: '10px' }} />;
+    return <span style={{ background: '#cacaca', color: '#cacaca' }}>⃞⃞⃞</span>;
 }
 
 export class Kpi extends React.Component<IKpiProps, IKpiState> {
