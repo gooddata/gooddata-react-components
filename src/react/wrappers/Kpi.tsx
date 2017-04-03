@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { get } from 'lodash';
 import { Execute } from '../execution/Execute';
 import { IAfm } from '../../interfaces/Afm';
 
@@ -42,7 +43,9 @@ export class Kpi extends React.Component<IKpiProps, IKpiState> {
         this.onExecute = this.onExecute.bind(this);
     }
 
-    public onExecute(result) {
+    public onExecute(data) {
+        const result = get(data, 'rawData.0.0');
+
         this.setState({ result, error: false });
     }
 

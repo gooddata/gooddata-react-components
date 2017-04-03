@@ -57,7 +57,7 @@ export class Execute extends React.Component<IExecuteProps, undefined> {
 
     public render() {
         return (
-            <div>{this.props.children}</div>
+            <span>{this.props.children}</span>
         );
     }
 
