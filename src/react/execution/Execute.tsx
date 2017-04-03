@@ -12,6 +12,7 @@ export interface IExecuteProps {
     // TODO: Use proper interface
     onExecute: (result: Object) => void;
     onError: (error: Object) => void;
+    onLoading: (state: boolean) => void;
     dataTableFactory?: IDataTableFactory;
 }
 
@@ -52,7 +53,8 @@ export class Execute extends React.Component<IExecuteProps, undefined> {
     }
 
     public shouldComponentUpdate(nextProps) {
-        return !isEqual(nextProps.afm, this.props.afm);
+        return !isEqual(nextProps.afm, this.props.afm) ||
+            !isEqual(nextProps.children, this.props.children);
     }
 
     public render() {
@@ -64,8 +66,11 @@ export class Execute extends React.Component<IExecuteProps, undefined> {
     private runExecution() {
         const { afm } = this.props;
 
+        this.props.onLoading(true);
+
         execute(this.dataTable, afm)
             .then(this.props.onExecute)
-            .catch(this.props.onError);
+            .catch(this.props.onError)
+            .then(() => this.props.onLoading(false));
     };
 }

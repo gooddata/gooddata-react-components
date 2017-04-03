@@ -13,6 +13,7 @@ export interface IKpiProps {
 export interface IKpiState {
     error: boolean;
     result: any;
+    isLoading: boolean;
 }
 
 function buildAFM(measureUri: string): IAfm {
@@ -30,17 +31,23 @@ function buildAFM(measureUri: string): IAfm {
     };
 }
 
+function Loading() {
+    return <div style={{ background: '#cacaca', display: 'inline-block', width: '20px', height: '10px' }} />;
+}
+
 export class Kpi extends React.Component<IKpiProps, IKpiState> {
     constructor(props) {
         super(props);
 
         this.state = {
             error: false,
-            result: null
+            result: null,
+            isLoading: true
         };
 
         this.onError = this.onError.bind(this);
         this.onExecute = this.onExecute.bind(this);
+        this.onLoading = this.onLoading.bind(this);
     }
 
     public onExecute(data) {
@@ -55,6 +62,10 @@ export class Kpi extends React.Component<IKpiProps, IKpiState> {
         this.setState({ error: true });
     }
 
+    public onLoading(isLoading: boolean) {
+        this.setState({ isLoading });
+    }
+
     public render() {
         if (this.state.error) {
             return <h1>Error</h1>;
@@ -67,9 +78,10 @@ export class Kpi extends React.Component<IKpiProps, IKpiState> {
                 afm={afm}
                 onError={this.onError}
                 onExecute={this.onExecute}
+                onLoading={this.onLoading}
                 projectId={this.props.projectId}
             >
-                {this.state.result}
+                {this.state.isLoading ? <Loading /> : this.state.result}
             </Execute>
         );
     }

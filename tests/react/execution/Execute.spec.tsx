@@ -26,6 +26,7 @@ describe('Execute', () => {
             projectId: 'foo',
             onExecute: jest.fn(),
             onError: jest.fn(),
+            onLoading: jest.fn(),
             ...props
         };
         return mount(<Execute {...defaultProps} />);
@@ -40,6 +41,20 @@ describe('Execute', () => {
 
         setTimeout(() => {
             expect(onExecute).toBeCalled();
+            done();
+        }, 0);
+    });
+
+    it('should dispatch loading before and after execution', (done) => {
+        const onLoading = jest.fn();
+
+        const wrapper = createComponent({
+            dataTableFactory,
+            onLoading
+        });
+
+        setTimeout(() => {
+            expect(onLoading).toHaveBeenCalledTimes(2);
             done();
         }, 0);
     });
