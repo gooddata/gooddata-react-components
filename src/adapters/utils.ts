@@ -139,19 +139,11 @@ export const lookupAttributes = (afm: IAfm) => {
 };
 
 export const normalizeAfm = (afm: IAfm) => {
-    if (!afm.attributes) {
-        afm.attributes = [];
-    }
-
-    if (!afm.filters) {
-        afm.filters = [];
-    }
-
-    if (!afm.measures) {
-        afm.measures = [];
-    }
-
-    return afm;
+    return {
+        attributes: afm.attributes || [],
+        measures: afm.measures || [],
+        filters: afm.filters || []
+    };
 };
 
 const generateDateFilter = (filter: IDateFilter) => {
