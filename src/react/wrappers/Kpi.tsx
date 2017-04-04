@@ -1,4 +1,5 @@
 import * as React from 'react';
+import numeral from 'numeral';
 import { get } from 'lodash';
 import { Execute } from '../execution/Execute';
 import { IAfm } from '../../interfaces/Afm';
@@ -8,6 +9,7 @@ type URIString = string;
 export interface IKpiProps {
     measure: URIString;
     projectId: string;
+    format?: string;
 }
 
 export interface IKpiState {
@@ -36,6 +38,10 @@ function Loading() {
 }
 
 export class Kpi extends React.Component<IKpiProps, IKpiState> {
+    public static defaultProps = {
+        format: '$0,0.00'
+    };
+
     constructor(props) {
         super(props);
 
@@ -66,6 +72,10 @@ export class Kpi extends React.Component<IKpiProps, IKpiState> {
         this.setState({ isLoading });
     }
 
+    public getFormattedResult(): string {
+        return numeral(this.state.result).format(this.props.format);
+    }
+
     public render() {
         if (this.state.error) {
             return <h1>Error</h1>;
@@ -82,7 +92,7 @@ export class Kpi extends React.Component<IKpiProps, IKpiState> {
                 onLoading={this.onLoading}
                 projectId={this.props.projectId}
             >
-                {this.state.isLoading ? <Loading /> : this.state.result}
+                {this.state.isLoading ? <Loading /> : this.getFormattedResult()}
             </Execute>
         );
     }
