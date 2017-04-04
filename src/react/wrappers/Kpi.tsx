@@ -75,6 +75,7 @@ export class Kpi extends React.Component<IKpiProps, IKpiState> {
 
         return (
             <Execute
+                className="gdc-kpi"
                 afm={afm}
                 onError={this.onError}
                 onExecute={this.onExecute}

@@ -14,6 +14,7 @@ export interface IExecuteProps {
     onError: (error: Object) => void;
     onLoading: (state: boolean) => void;
     dataTableFactory?: IDataTableFactory;
+    className?: string;
 }
 
 type IDataTableFactory = (projectId: string) => IDataTable;
@@ -59,7 +60,7 @@ export class Execute extends React.Component<IExecuteProps, undefined> {
 
     public render() {
         return (
-            <span>{this.props.children}</span>
+            <span className={this.props.className}>{this.props.children}</span>
         );
     }
 
