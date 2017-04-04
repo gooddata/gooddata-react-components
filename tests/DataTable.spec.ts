@@ -111,5 +111,33 @@ describe('DataTable', () => {
                 expect(data).toEqual(null);
             });
         });
+
+        it('should be canceled when repeating request', () => {
+            const asyncDataSource = {
+                getData() {
+                    return new Promise((resolve) => {
+                        setTimeout(resolve, 0, dataResponse);
+                    });
+                }
+            };
+            const dt = new DataTable(new DummyAdapter(dataResponse, true, asyncDataSource));
+
+            const promiseToBeCancelled = dt.execute(afm, transformation);
+            const promise = dt.execute(afm, transformation); // call next execution to cancel "promiseToBeCancelled"
+
+            return promiseToBeCancelled.then(
+                () => expect(true).toBeFalsy(), // fail
+                (reason) => {
+                    expect(reason).toEqual({
+                        isCancelled: true
+                    });
+
+                    return promise.then(
+                        (value) => expect(value).toEqual(dataResponse),
+                        () => expect(true).toBeFalsy() // fail
+                    );
+                }
+            );
+        });
     });
 });
