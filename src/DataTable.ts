@@ -14,16 +14,17 @@ function shouldExecuteAfm(afm) {
  * { isCanceled: true, (error: ErrorReason)? }
  *
  * Inspiration: https://facebook.github.io/react/blog/2015/12/16/ismounted-antipattern.html
+ * Fixed solution: https://github.com/facebook/react/issues/5465#issuecomment-269805565
+ * see https://www.youtube.com/watch?v=otCpCn0l4Wo
  */
 const makeCancelable = (promise) => {
     let isCancelled = false;
 
     const wrappedPromise = new Promise((resolve, reject) => {
-        promise.then((value) =>
-            isCancelled ? reject({ isCancelled }) : resolve(value)
-        );
-        promise.catch((error) =>
-            isCancelled ? reject({ isCancelled, error }) : reject(error)
+        promise.then(
+            // Don't split - UnhandledPromiseRejectionWarning may occur
+            (value) => isCancelled ? reject({ isCancelled }) : resolve(value),
+            (error) => isCancelled ? reject({ isCancelled, error }) : reject(error)
         );
     });
 
@@ -111,7 +112,10 @@ export class DataTable {
     }
 
     private getDataPromise(transformation) {
-        this.cancellablePromise && this.cancellablePromise.cancel();
+        if (this.cancellablePromise) {
+            this.cancellablePromise.cancel();
+        }
+
         this.cancellablePromise = makeCancelable(
             this.dataSource.getData(transformation)
         );
