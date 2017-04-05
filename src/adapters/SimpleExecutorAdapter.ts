@@ -34,9 +34,6 @@ export class SimpleExecutorAdapter implements IAdapter {
                     // dump('Columns', columns);
                     // dump('ExecutionConfiguration', executionConfiguration);
                     return execution.getData(this.projectId, columns, executionConfiguration, this.settings);
-                })
-                .catch((err) => {
-                    console.error('err', err);
                 });
         };
 

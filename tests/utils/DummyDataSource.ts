@@ -14,6 +14,6 @@ export class DummyDataSource implements IDataSource {
             return Promise.resolve(this.data);
         }
 
-        return Promise.reject('Error');
+        return Promise.reject('DummyDataSource reject');
     }
 }

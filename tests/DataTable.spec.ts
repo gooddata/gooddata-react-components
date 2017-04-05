@@ -48,14 +48,14 @@ describe('DataTable', () => {
             }, 0);
         });
 
-        it('should dispatch onError callback when error occurs', (done) =>{
+        it('should dispatch onError callback when error occurs', (done) => {
             const { dt, errCb, dataCb } = setupDataTable(false);
 
             dt.getData(afm, transformation);
 
             setTimeout(() => {
                 expect(dataCb).not.toBeCalled();
-                expect(errCb).toHaveBeenCalledWith('Error');
+                expect(errCb).toHaveBeenCalled();
 
                 done();
             }, 0);
@@ -109,6 +109,14 @@ describe('DataTable', () => {
 
             return dt.execute(nonExecutableAfm, transformation).then((data) => {
                 expect(data).toEqual(null);
+            });
+        });
+
+        it('should reject promise for error', (done) => {
+            const dt = new DataTable(new DummyAdapter(dataResponse, false));
+            dt.execute(afm, transformation).catch(() => {
+                expect(true).toEqual(true);
+                done();
             });
         });
 
