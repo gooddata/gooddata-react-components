@@ -69,10 +69,10 @@ AFM (attribute - fiter - measure) is unified input for GoodData data layer and d
                     id: '/uri/to/gooddata/fact
                 },
                 aggregation: 'COUNT',
-                filters: {
+                filters: [{
                     id: '/uri/to/gooddata/attribute',
                     in: ['1', '2']
-                },
+                }],
                 showInPercent: true
             }
         }
@@ -122,10 +122,10 @@ AFM (attribute - fiter - measure) is unified input for GoodData data layer and d
                 baseObject: {
                     id: '/uri/to/gooddata/metric'
                 },
-                filters: {
+                filters: [{
                     id: '/uri/to/gooddata/attribute',
                     in: ['1', '2']
-                }
+                }]
             }
         },
         {
