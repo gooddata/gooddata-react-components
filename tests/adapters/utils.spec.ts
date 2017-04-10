@@ -91,6 +91,39 @@ describe('lookupAttributes', () => {
         ]);
     });
 
+    it('should extract displayForm from metric with filters & showInPercent and attribute', () => {
+        const popAfm: IAfm = {
+            measures: [
+                {
+                    id: 'measure_with_filter',
+                    definition: {
+                        baseObject: {
+                            id: '/gdc/md/close_bop'
+                        },
+                        filters: [{
+                            id: '/gdc/md/filter_attr_display_form',
+                            in: [
+                                '/gdc/md/attr?id=1',
+                                '/gdc/md/attr?id=2'
+                            ]
+                        }],
+                        showInPercent: true
+                    }
+                }
+            ],
+            attributes: [
+                {
+                    id: '/gdc/md/attr_display_form'
+                }
+            ]
+        };
+
+        expect(lookupAttributes(popAfm)).toEqual([
+            '/gdc/md/attr_display_form',
+            '/gdc/md/filter_attr_display_form'
+        ]);
+    });
+
     it('should not extract displayForm for simple AFM', () => {
         const simpleAfm: IAfm = {
             measures: [

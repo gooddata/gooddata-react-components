@@ -116,19 +116,20 @@ export const generateMetricDefinition = (item: IMeasure, afm: IAfm, attributesMa
 
 export const lookupAttributes = (afm: IAfm) => {
     const attributes = afm.measures.map((measure) => {
+        const ids = [];
         if (isPoP(measure)) { // MAQL - FOR PREVIOUS ([attributeUri])
-            return measure.definition.popAttribute.id;
+            ids.push(measure.definition.popAttribute.id);
         }
 
         if (isShowInPercent(measure)) { // MAQL - BY ALL [attributeUri1], ALL [attributeUri2]
-            return afm.attributes.map((attribute) => attribute.id);
+            ids.push(...afm.attributes.map((attribute) => attribute.id));
         }
 
         if (hasFilters(measure)) {
-            return measure.definition.filters.map((filter) => filter.id);
+            ids.push(...measure.definition.filters.map((filter) => filter.id));
         }
 
-        return null;
+        return ids;
     });
 
     return flow(
