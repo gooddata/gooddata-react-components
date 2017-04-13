@@ -1,14 +1,15 @@
 import * as React from 'react';
 import numeral from 'numeral';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import { Execute } from '../execution/Execute';
-import { IAfm } from '../../interfaces/Afm';
+import { IAfm, IFilter, IAttributeFilter } from '../../interfaces/Afm';
 
 type URIString = string;
 
 export interface IKpiProps {
     measure: URIString;
     projectId: string;
+    filters?: IFilter[];
     format?: string;
 }
 
@@ -18,7 +19,12 @@ export interface IKpiState {
     isLoading: boolean;
 }
 
-function buildAFM(measureUri: string): IAfm {
+function isNotEmptyFilter(filter: IAttributeFilter) {
+    return (filter.type === 'date') ||
+        (!isEmpty(filter.in) || !isEmpty(filter.notIn));
+}
+
+function buildAFM(measureUri: string, filters: IFilter[] = []): IAfm {
     return {
         measures: [
             {
@@ -29,7 +35,9 @@ function buildAFM(measureUri: string): IAfm {
                     }
                 }
             }
-        ]
+        ],
+
+        filters: filters.filter(isNotEmptyFilter)
     };
 }
 
@@ -38,8 +46,9 @@ function Loading() {
 }
 
 export class Kpi extends React.Component<IKpiProps, IKpiState> {
-    public static defaultProps = {
-        format: '$0,0.00'
+    public static defaultProps: Partial<IKpiProps> = {
+        format: '$0,0.00',
+        filters: []
     };
 
     constructor(props) {
@@ -81,11 +90,11 @@ export class Kpi extends React.Component<IKpiProps, IKpiState> {
             return <h1>Error</h1>;
         }
 
-        const afm = buildAFM(this.props.measure);
+        const afm = buildAFM(this.props.measure, this.props.filters);
 
         return (
             <Execute
-                className="gdc-kpi"
+                className='gdc-kpi'
                 afm={afm}
                 onError={this.onError}
                 onExecute={this.onExecute}

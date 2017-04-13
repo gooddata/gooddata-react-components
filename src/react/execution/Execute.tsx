@@ -44,18 +44,17 @@ export class Execute extends React.Component<IExecuteProps, undefined> {
     }
 
     public componentDidMount() {
-        this.runExecution();
+        this.runExecution(this.props);
     }
 
     public componentWillReceiveProps(nextProps) {
-        if (!isEqual(nextProps.afm, this.props.afm)) {
-            this.runExecution();
+        if (this.hasPropsChanged(nextProps, ['afm'])) {
+            this.runExecution(nextProps);
         }
     }
 
     public shouldComponentUpdate(nextProps) {
-        return !isEqual(nextProps.afm, this.props.afm) ||
-            !isEqual(nextProps.children, this.props.children);
+        return this.hasPropsChanged(nextProps, ['afm', 'children']);
     }
 
     public render() {
@@ -64,14 +63,26 @@ export class Execute extends React.Component<IExecuteProps, undefined> {
         );
     }
 
-    private runExecution() {
-        const { afm } = this.props;
+    private isPropChanged(nextProps, propName) {
+        if (propName === 'children') {
+            return nextProps.children !== this.props.children;
+        }
+
+        return !isEqual(nextProps[propName], this.props[propName]);
+    }
+
+    private hasPropsChanged(nextProps, propNames) {
+        return propNames.some((propName) => this.isPropChanged(nextProps, propName));
+    }
+
+    private runExecution(props) {
+        const { afm, onExecute, onError, onLoading } = props;
 
         this.props.onLoading(true);
 
         execute(this.dataTable, afm)
-            .then(this.props.onExecute)
-            .catch(this.props.onError)
-            .then(() => this.props.onLoading(false));
+            .then(onExecute)
+            .catch(onError)
+            .then(() => onLoading(false));
     };
 }
