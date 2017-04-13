@@ -2,12 +2,14 @@ import * as React from 'react';
 import { isEqual } from 'lodash';
 
 import { IAfm } from '../../interfaces/Afm';
+import { ITransformation } from '../../interfaces/Transformation';
 import { IDataTable } from '../../interfaces/DataTable';
 import { DataTable } from '../../DataTable';
 import { SimpleExecutorAdapter } from '../../adapters/SimpleExecutorAdapter';
 
 export interface IExecuteProps {
     afm: IAfm;
+    transformation?: ITransformation;
     projectId: string;
     // TODO: Use proper interface
     onExecute: (result: Object) => void;
@@ -19,9 +21,8 @@ export interface IExecuteProps {
 
 type IDataTableFactory = (projectId: string) => IDataTable;
 
-function execute(dataTable: IDataTable, afm: IAfm): Promise<Object> {
-    // TODO: Do we need to pass custom transformation?
-    return dataTable.execute(afm, null);
+function execute(dataTable: IDataTable, afm: IAfm, transformation: ITransformation = {}): Promise<Object> {
+    return dataTable.execute(afm, transformation);
 }
 
 function dataTableFactory(projectId): IDataTable {
@@ -76,11 +77,11 @@ export class Execute extends React.Component<IExecuteProps, undefined> {
     }
 
     private runExecution(props) {
-        const { afm, onExecute, onError, onLoading } = props;
+        const { afm, transformation, onExecute, onError, onLoading } = props;
 
         this.props.onLoading(true);
 
-        execute(this.dataTable, afm)
+        execute(this.dataTable, afm, transformation)
             .then(onExecute)
             .catch(onError)
             .then(() => onLoading(false));
