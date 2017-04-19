@@ -19,7 +19,7 @@ export interface IExecuteProps {
     className?: string;
 }
 
-type IDataTableFactory = (projectId: string) => IDataTable;
+export type IDataTableFactory = (projectId: string) => IDataTable;
 
 function execute(dataTable: IDataTable, afm: IAfm, transformation: ITransformation = {}): Promise<Object> {
     return dataTable.execute(afm, transformation);

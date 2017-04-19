@@ -1,4 +1,4 @@
-interface IBaseFilter {
+export interface IBaseFilter {
     id: string; // dateDataSet URI or attribute displayForm URI
     type: string;
 }
@@ -41,7 +41,7 @@ export interface IMeasureDefinition {
         id: string // attribute displayForm URI
     };
     showInPercent?: boolean; // if true, take all from 'attributes',
-};
+}
 
 export interface IMeasure {
     id: string;
@@ -50,7 +50,7 @@ export interface IMeasure {
 
 export interface IAttribute {
     id: string; // attribute displayForm URI
-};
+}
 
 export type IFilter = IDateFilter | IAttributeFilter;
 
@@ -58,4 +58,4 @@ export interface IAfm {
     attributes?: IAttribute[];
     filters?: IFilter[];
     measures?: IMeasure[];
-};
+}

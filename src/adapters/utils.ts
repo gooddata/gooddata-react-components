@@ -12,9 +12,9 @@ import {
     INegativeFilter
 } from '../interfaces/Afm';
 
-type ObjectUri = string;
+export type ObjectUri = string;
 
-interface IAttributeMapKeys {
+export interface IAttributeMapKeys {
     attribute: ObjectUri;
     attributeDisplayForm: ObjectUri;
 }
@@ -139,13 +139,13 @@ export const lookupAttributes = (afm: IAfm) => {
     )(attributes);
 };
 
-export const normalizeAfm = (afm: IAfm) => {
+export function normalizeAfm(afm: IAfm): IAfm {
     return {
         attributes: afm.attributes || [],
         measures: afm.measures || [],
         filters: afm.filters || []
     };
-};
+}
 
 const generateDateFilter = (filter: IDateFilter) => {
     return {

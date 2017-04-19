@@ -29,9 +29,9 @@
     react-responsive "1.2.6"
     react-textarea-autosize "4.0.5"
 
-"@gooddata/indigo-visualizations@0.1.3":
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/@gooddata/indigo-visualizations/-/indigo-visualizations-0.1.3.tgz#94a3092cc98f61cfb6a68e1e80c016bc3c786b41"
+"@gooddata/indigo-visualizations@0.1.3-vojty-legend-refactor-2017-04-19T15-30-21-735Z":
+  version "0.1.3-vojty-legend-refactor-2017-04-19T15-30-21-735Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/indigo-visualizations/-/indigo-visualizations-0.1.3-vojty-legend-refactor-2017-04-19T15-30-21-735Z.tgz#60ad1ce2e72e49d816931f83dcc2e5fdb430f165"
   dependencies:
     "@gooddata/goodstrap" "38.0.0"
     "@gooddata/js-utils" "0.5.0"
@@ -1159,16 +1159,16 @@ element-resize-detector@^1.1.9:
   dependencies:
     batch-processor "^1.0.0"
 
-"ember-legacy@git+ssh://git@github.com/gooddata/emberjs.git#1.3.2":
+"ember-legacy@git+ssh://git@github.com/gooddata/emberjs#1.3.2":
   version "1.3.2"
-  resolved "git+ssh://git@github.com/gooddata/emberjs.git#9d61112fdd90d0b1038e888c43c3434302236277"
+  resolved "git+ssh://git@github.com/gooddata/emberjs#9d61112fdd90d0b1038e888c43c3434302236277"
   dependencies:
     handlebars ">= 1.0.0 < 2.0"
     jquery "*"
 
-"ember@git+ssh://git@github.com/gooddata/emberjs.git#1.8.1":
+"ember@git+ssh://git@github.com/gooddata/emberjs#1.8.1":
   version "1.8.1"
-  resolved "git+ssh://git@github.com/gooddata/emberjs.git#f9a7b58df44fbf70bf6bba569662660a9808f7c3"
+  resolved "git+ssh://git@github.com/gooddata/emberjs#f9a7b58df44fbf70bf6bba569662660a9808f7c3"
   dependencies:
     handlebars ">= 1.0.0 < 2.0.0"
     jquery ">=1.7.0 < 2.2.0"
@@ -2812,7 +2812,7 @@ react-day-picker@3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-3.1.1.tgz#7fa385dc7b424cee3eb09696e1918e6b18abafdb"
 
-"react-dnd-touch-backend@github:gooddata/react-dnd-touch-backend#v0.0.1":
+react-dnd-touch-backend@gooddata/react-dnd-touch-backend#v0.0.1:
   version "0.0.1"
   resolved "https://codeload.github.com/gooddata/react-dnd-touch-backend/tar.gz/6136545d1255c484739224525cb9beb2736e20e9"
   dependencies:

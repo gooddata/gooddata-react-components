@@ -1,17 +1,19 @@
 import { SimpleExecutorAdapter } from './src/adapters/SimpleExecutorAdapter';
 import { DataTable } from './src/DataTable';
 import { Kpi } from './src/react/wrappers/Kpi';
-import { IFilter } from './src/interfaces/Afm';
 import { LineChart } from './src/react/wrappers/LineChart';
 import { BarChart } from './src/react/wrappers/BarChart';
 import { ColumnChart } from './src/react/wrappers/ColumnChart';
+import { mergeFilters } from './src/helpers/filters';
 
 export {
     DataTable,
     SimpleExecutorAdapter,
     Kpi,
-    IFilter,
     LineChart,
     BarChart,
-    ColumnChart
+    ColumnChart,
+    mergeFilters
 };
+
+export * from './src/interfaces/Afm';

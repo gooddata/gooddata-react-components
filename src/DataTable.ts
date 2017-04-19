@@ -1,8 +1,8 @@
 import { IAdapter, IDataSource } from './Interfaces';
 import { isEqual, get } from 'lodash';
 
-type IDataSubscriber = (data: any) => any;
-type IErrorSubscriber = (error: any) => any;
+export type IDataSubscriber = (data: any) => any;
+export type IErrorSubscriber = (error: any) => any;
 
 function shouldExecuteAfm(afm) {
     return get(afm, 'measures.length') > 0 || get(afm, 'attributes.length') > 0;

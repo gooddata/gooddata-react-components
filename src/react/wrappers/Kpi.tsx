@@ -1,10 +1,11 @@
 import * as React from 'react';
 import numeral from 'numeral';
-import { get, isEmpty } from 'lodash';
+import { get } from 'lodash';
 import { Execute } from '../execution/Execute';
-import { IAfm, IFilter, IAttributeFilter } from '../../interfaces/Afm';
+import { IAfm, IFilter } from '../../interfaces/Afm';
+import { isNotEmptyFilter } from '../../helpers/filters';
 
-type URIString = string;
+export type URIString = string;
 
 export interface IKpiProps {
     measure: URIString;
@@ -17,11 +18,6 @@ export interface IKpiState {
     error: boolean;
     result: any;
     isLoading: boolean;
-}
-
-function isNotEmptyFilter(filter: IAttributeFilter) {
-    return (filter.type === 'date') ||
-        (!isEmpty(filter.in) || !isEmpty(filter.notIn));
 }
 
 function buildAFM(measureUri: string, filters: IFilter[] = []): IAfm {

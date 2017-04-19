@@ -1,6 +1,6 @@
 import { IDataSource } from './Interfaces';
 
-type execFactory = (transformation) => Promise<any>;
+export type execFactory = (transformation) => Promise<any>;
 
 export class DataSource implements IDataSource {
 
