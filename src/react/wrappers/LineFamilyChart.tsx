@@ -57,9 +57,9 @@ export class LineFamilyChart extends React.Component<ILineFamilyChartProps, ILin
             return <Loading />;
         }
 
-        const { type, afm, config } = this.props;
+        const { type, afm, config, transformation } = this.props;
 
-        const visConfig = generateConfig(type, afm, config);
+        const visConfig = generateConfig(type, afm, transformation, config);
 
         return (
             <IntlWrapper>
