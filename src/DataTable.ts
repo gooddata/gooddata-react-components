@@ -1,5 +1,7 @@
+import isEqual = require('lodash/isEqual');
+import get = require('lodash/get');
+
 import { IAdapter, IDataSource } from './Interfaces';
-import { isEqual, get } from 'lodash';
 
 export type IDataSubscriber = (data: any) => any;
 export type IErrorSubscriber = (error: any) => any;

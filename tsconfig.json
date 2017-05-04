@@ -1,12 +1,10 @@
 {
     "compilerOptions": {
         "moduleResolution": "node",
-        "module": "es6",
+        "module": "commonjs",
         "jsx": "react",
         "lib": ["es6", "dom"],
-        "noUnusedLocals": true,
-        "types": ["node"],
-        "target": "es6"
+        "noUnusedLocals": true
     },
     "include": [
         "index.ts"

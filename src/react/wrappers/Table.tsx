@@ -1,43 +1,45 @@
 import * as React from 'react';
-import LineFamilyChartTransformation from '@gooddata/indigo-visualizations/lib/Chart/LineFamilyChartTransformation';
+import TableTransformation from '@gooddata/indigo-visualizations/lib/Table/TableTransformation';
 import { Execute } from '../execution/Execute';
 import { IAfm } from '../../interfaces/Afm';
-import { ITransformation } from '../../interfaces/Transformation';
+import { ITransformation, ISort } from '../../interfaces/Transformation';
 import { IntlWrapper } from './IntlWrapper';
 import { Loading } from '../Loading';
+import { getSorting, ISortingChange } from '../../helpers/sorting';
 import { generateConfig } from '../../helpers/config';
 
-export interface ILineFamilyChartConfig {
-    colours?: String[];
-}
-
-export interface ILineFamilyChartProps {
+export interface ITableProps {
     afm: IAfm;
     projectId: string;
-    transformation: ITransformation;
-    config?: ILineFamilyChartConfig;
-    type: 'line' | 'bar' | 'column';
+    transformation?: ITransformation;
 }
 
-export interface ILineFamilyChartState {
+export interface ITableState {
     error: boolean;
     result: any;
     isLoading: boolean;
+    sorting: ISort;
 }
 
-export class LineFamilyChart extends React.Component<ILineFamilyChartProps, ILineFamilyChartState> {
+export class Table extends React.Component<ITableProps, ITableState> {
+    public static defaultProps: Partial<ITableProps> = {
+        transformation: {}
+    };
+
     constructor(props) {
         super(props);
 
         this.state = {
             error: false,
             result: null,
-            isLoading: true
+            isLoading: true,
+            sorting: null
         };
 
         this.onError = this.onError.bind(this);
         this.onExecute = this.onExecute.bind(this);
         this.onLoading = this.onLoading.bind(this);
+        this.onSortChange = this.onSortChange.bind(this);
     }
 
     public onExecute(data) {
@@ -52,31 +54,41 @@ export class LineFamilyChart extends React.Component<ILineFamilyChartProps, ILin
         this.setState({ isLoading });
     }
 
+    public onSortChange(change: ISortingChange) {
+        this.setState({ sorting: getSorting(change, this.state.sorting) });
+    }
+
     public getComponent() {
         if (this.state.isLoading) {
             return <Loading />;
         }
 
-        const { type, afm, config } = this.props;
-
-        const visConfig = generateConfig(type, afm, config);
-
         return (
             <IntlWrapper>
-                <LineFamilyChartTransformation
-                    config={visConfig}
+                <TableTransformation
                     data={this.state.result}
+                    config={generateConfig('table', this.props.afm, this.getTransformation())}
+                    onSortChange={this.onSortChange}
                 />
             </IntlWrapper>
         );
     }
 
+    public getTransformation(): ITransformation {
+        const { sorting } = this.state;
+        const { transformation } = this.props;
+
+        if (sorting) {
+            return { ...transformation, sorting: [sorting] };
+        }
+
+        return transformation;
+    }
+
     public render() {
         const {
             afm,
-            projectId,
-            type,
-            transformation
+            projectId
         } = this.props;
 
         if (this.state.error) {
@@ -85,9 +97,9 @@ export class LineFamilyChart extends React.Component<ILineFamilyChartProps, ILin
 
         return (
             <Execute
-                className={`gdc-${type}-chart`}
+                className={`gdc-table-chart`}
                 afm={afm}
-                transformation={transformation}
+                transformation={this.getTransformation()}
                 onError={this.onError}
                 onExecute={this.onExecute}
                 onLoading={this.onLoading}

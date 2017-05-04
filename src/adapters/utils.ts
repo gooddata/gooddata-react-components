@@ -1,4 +1,10 @@
-import { isEmpty, compact, flow, uniq, flatten, pick, get } from 'lodash';
+import isEmpty = require('lodash/isEmpty');
+import compact = require('lodash/compact');
+import flow = require('lodash/flow');
+import uniq = require('lodash/uniq');
+import flatten = require('lodash/flatten');
+import pick = require('lodash/pick');
+import get = require('lodash/get');
 import { ISort, ITransformation } from '../interfaces/Transformation';
 import {
     IMeasure,
@@ -176,14 +182,17 @@ export const generateFilters = (afm: IAfm) => {
     }, { $and: [] });
 };
 
-export const generateSorting = (transformation): ISort[] => {
-    return get(transformation, 'sorting', []).map((sort) => ({
-        column: sort.column,
-        direction: sort.direction
-    }));
+export const getSorting = (transformation): ISort[] => {
+    return get(transformation, 'sorting', []);
 };
 
-export const getMeasureAdditionalInfo = (transformation: ITransformation, id: string) => {
-    const info = get(transformation, 'measures', []).find((measure) => measure.id === id);
-    return pick(info, ['title', 'format']);
-};
+export interface IAdditionalInfo {
+    title?: string;
+    format?: string;
+}
+
+export const getMeasureAdditionalInfo =
+    (transformation: ITransformation, id: string): IAdditionalInfo  => {
+        const info = get(transformation, 'measures', []).find((measure) => measure.id === id);
+        return pick<IAdditionalInfo, {}>(info, ['title', 'format']);
+    };

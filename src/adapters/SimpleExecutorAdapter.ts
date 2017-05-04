@@ -7,7 +7,7 @@ import {
     lookupAttributes,
     normalizeAfm,
     getMeasureAdditionalInfo,
-    generateSorting,
+    getSorting,
     AttributeMap
 } from './utils';
 
@@ -76,7 +76,7 @@ export class SimpleExecutorAdapter implements IAdapter {
             return item.id;
         }));
 
-        const orderBy = generateSorting(transformation);
+        const orderBy = getSorting(transformation);
         const where = generateFilters(afm);
 
         return {

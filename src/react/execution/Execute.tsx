@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { isEqual } from 'lodash';
+import isEqual = require('lodash/isEqual');
 
 import { IAfm } from '../../interfaces/Afm';
 import { ITransformation } from '../../interfaces/Transformation';
@@ -49,13 +49,13 @@ export class Execute extends React.Component<IExecuteProps, undefined> {
     }
 
     public componentWillReceiveProps(nextProps) {
-        if (this.hasPropsChanged(nextProps, ['afm'])) {
+        if (this.hasPropsChanged(nextProps, ['afm', 'transformation'])) {
             this.runExecution(nextProps);
         }
     }
 
     public shouldComponentUpdate(nextProps) {
-        return this.hasPropsChanged(nextProps, ['afm', 'children']);
+        return this.hasPropsChanged(nextProps, ['afm', 'transformation', 'children']);
     }
 
     public render() {

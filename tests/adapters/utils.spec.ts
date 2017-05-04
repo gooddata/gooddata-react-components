@@ -3,7 +3,7 @@ import {
     normalizeAfm,
     generateMetricDefinition,
     generateFilters,
-    generateSorting,
+    getSorting,
     getMeasureAdditionalInfo
 } from '../../src/adapters/utils';
 import { IAfm, IFilter } from '../../src/interfaces/Afm';
@@ -474,7 +474,7 @@ describe('generateMetricDefinition', () => {
     });
 });
 
-describe('generateSorting', () => {
+describe('getSorting', () => {
     it('should generate sorting from transformation', () => {
         const transformation: ITransformation = {
             sorting: [
@@ -489,7 +489,7 @@ describe('generateSorting', () => {
             ]
         };
 
-        expect(generateSorting(transformation)).toEqual([
+        expect(getSorting(transformation)).toEqual([
             {
                 column: '/gdc/md/column1',
                 direction: 'desc'

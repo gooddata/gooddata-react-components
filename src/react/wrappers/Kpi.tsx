@@ -1,6 +1,7 @@
 import * as React from 'react';
-import numeral from 'numeral';
-import { get } from 'lodash';
+import * as numeral from 'numeral';
+import get = require('lodash/get');
+
 import { Execute } from '../execution/Execute';
 import { IAfm, IFilter } from '../../interfaces/Afm';
 import { isNotEmptyFilter } from '../../helpers/filters';

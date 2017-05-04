@@ -1,9 +1,14 @@
-import { cloneDeep, isEmpty } from 'lodash';
-import { IAfm, IFilter } from '../interfaces/Afm';
+import cloneDeep = require('lodash/cloneDeep');
+import isEmpty = require('lodash/isEmpty');
 
-export function isNotEmptyFilter(filter: any): boolean {
+import { IAfm, IFilter, IAttributeFilter } from '../interfaces/Afm';
+
+export function isNotEmptyFilter(filter: IFilter): boolean {
     return (filter.type === 'date') ||
-        (!isEmpty(filter.in) || !isEmpty(filter.notIn));
+        (
+            !isEmpty((filter as IAttributeFilter).in) ||
+            !isEmpty((filter as IAttributeFilter).notIn)
+        );
 }
 
 export function mergeFilters(afm: IAfm, filters: IFilter[]): IAfm {
