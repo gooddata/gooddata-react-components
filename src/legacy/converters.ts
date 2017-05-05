@@ -103,12 +103,21 @@ function convertMeasure(transformation, afm: IAfm, measure: IMeasure): VisObj.IM
     };
 }
 
+function isStacking(transformation: ITransformation, attribute: IAttribute): boolean {
+    return (transformation.buckets || []).some((bucket) => {
+        return bucket.name === 'stacks' &&
+            (bucket.attributes || []).some((attr) => attr.id === attribute.id);
+    });
+}
+
 function convertAttribute(transformation, attribute: IAttribute): VisObj.ICategory {
     const sorting = getAttributeSorting(transformation, attribute) || {};
 
+    const collection = isStacking(transformation, attribute) ? 'stack' : 'attribute';
+
     return {
         category: {
-            collection: 'attribute',
+            collection,
             displayForm: attribute.id,
             type: 'attribute',
             ...sorting

@@ -9,19 +9,20 @@ import {
     categoryWithSorting,
     factBasedMeasure,
     attributeBasedMeasure,
+    stackingAttribute
 } from '../fixtures/Afm.fixtures';
 
 import { toVisObj } from '../../src/legacy/converters';
 import { VisualizationType } from '../../src/legacy/model/VisualizationObject';
 
-const table: VisualizationType = 'bar';
+const bar: VisualizationType = 'bar';
 
 describe('converters', () => {
     describe('toVizObj', () => {
         it('should convert empty AFM to empty viz. object', () => {
             const { afm, transformation } = empty;
 
-            expect(toVisObj(table, afm, transformation)).toEqual({
+            expect(toVisObj(bar, afm, transformation)).toEqual({
                 type: 'bar',
 
                 buckets: {
@@ -35,7 +36,7 @@ describe('converters', () => {
         it('should convert simple measure', () => {
             const { afm, transformation } = simpleMeasure;
 
-            expect(toVisObj(table, afm, transformation)).toEqual({
+            expect(toVisObj(bar, afm, transformation)).toEqual({
                 type: 'bar',
 
                 buckets: {
@@ -58,7 +59,7 @@ describe('converters', () => {
         it('should convert fact based measure', () => {
             const { afm, transformation } = factBasedMeasure;
 
-            expect(toVisObj(table, afm, transformation)).toEqual({
+            expect(toVisObj(bar, afm, transformation)).toEqual({
                 type: 'bar',
 
                 buckets: {
@@ -82,7 +83,7 @@ describe('converters', () => {
         it('should convert attribute base measure', () => {
             const { afm, transformation } = attributeBasedMeasure;
 
-            expect(toVisObj(table, afm, transformation)).toEqual({
+            expect(toVisObj(bar, afm, transformation)).toEqual({
                 type: 'bar',
 
                 buckets: {
@@ -106,7 +107,7 @@ describe('converters', () => {
         it('should handle the case when no transformation is given', () => {
             const { afm  } = simpleMeasure;
 
-            expect(toVisObj(table, afm, null)).toEqual({
+            expect(toVisObj(bar, afm, null)).toEqual({
                 type: 'bar',
 
                 buckets: {
@@ -129,7 +130,7 @@ describe('converters', () => {
         it('should convert show in percent measure with attribute', () => {
             const { afm, transformation } = showInPercent;
 
-            expect(toVisObj(table, afm, transformation)).toEqual({
+            expect(toVisObj(bar, afm, transformation)).toEqual({
                 type: 'bar',
 
                 buckets: {
@@ -160,7 +161,7 @@ describe('converters', () => {
         it('should convert show in percent measure with date', () => {
             const { afm, transformation } = showInPercentWithDate;
 
-            expect(toVisObj(table, afm, transformation)).toEqual({
+            expect(toVisObj(bar, afm, transformation)).toEqual({
                 type: 'bar',
 
                 buckets: {
@@ -191,7 +192,7 @@ describe('converters', () => {
         it('should apply sorting to simple measure', () => {
             const { afm, transformation } = measureWithSorting;
 
-            expect(toVisObj(table, afm, transformation)).toEqual({
+            expect(toVisObj(bar, afm, transformation)).toEqual({
                 type: 'bar',
 
                 buckets: {
@@ -218,7 +219,7 @@ describe('converters', () => {
         it('should handle measure with PoP', () => {
             const { afm, transformation } = popMeasure;
 
-            expect(toVisObj(table, afm, transformation)).toEqual({
+            expect(toVisObj(bar, afm, transformation)).toEqual({
                 type: 'bar',
                 buckets: {
                     measures: [
@@ -254,7 +255,7 @@ describe('converters', () => {
         it('should handle measure with PoP with sorting', () => {
             const { afm, transformation } = popMeasureWithSorting;
 
-            expect(toVisObj(table, afm, transformation)).toEqual({
+            expect(toVisObj(bar, afm, transformation)).toEqual({
                 type: 'bar',
                 buckets: {
                     measures: [
@@ -290,7 +291,7 @@ describe('converters', () => {
         it('should apply sorting to category', () => {
             const { afm, transformation } = categoryWithSorting;
 
-            expect(toVisObj(table, afm, transformation)).toEqual({
+            expect(toVisObj(bar, afm, transformation)).toEqual({
                 type: 'bar',
 
                 buckets: {
@@ -303,6 +304,39 @@ describe('converters', () => {
                             sort: 'desc'
                         }
                     }],
+                    filters: []
+                }
+            });
+        });
+
+        it('should set attribute collection to stack', () => {
+            const { afm, transformation } = stackingAttribute;
+
+            expect(toVisObj(bar, afm, transformation)).toEqual({
+                type: 'bar',
+
+                buckets: {
+                    measures: [
+                        {
+                            measure: {
+                                measureFilters: [],
+                                objectUri: '/gdc/md/project/obj/metric.id',
+                                showInPercent: false,
+                                showPoP: false,
+                                title: 'm1',
+                                type: 'metric'
+                            }
+                        }
+                    ],
+                    categories: [
+                        {
+                            category: {
+                                collection: 'stack',
+                                displayForm: '/gdc/md/project/obj/attr.id',
+                                type: 'attribute'
+                            }
+                        }
+                    ],
                     filters: []
                 }
             });

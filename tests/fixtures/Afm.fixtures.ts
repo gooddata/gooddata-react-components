@@ -284,3 +284,35 @@ export const attributeBasedMeasure: IFixture = {
         ]
     }
 };
+
+export const stackingAttribute: IFixture = {
+    afm: {
+        measures: [
+            {
+                id: 'm1',
+                definition: {
+                    baseObject: {
+                        id: '/gdc/md/project/obj/metric.id'
+                    }
+                }
+            }
+        ],
+        attributes: [
+            { id: '/gdc/md/project/obj/attr.id' }
+        ]
+    },
+
+    transformation: {
+        buckets: [
+            {
+                name: 'stacks',
+                attributes: [
+                    {
+                        id: '/gdc/md/project/obj/attr.id',
+                        title: 'Stacking attribute'
+                    }
+                ]
+            }
+        ]
+    }
+};
