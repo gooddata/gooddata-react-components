@@ -38,7 +38,6 @@ function dataTableFactory(projectId): IDataTable {
 }
 
 export class Execute extends React.Component<IExecuteProps, undefined> {
-
     public static defaultProps: Partial<IExecuteProps> = {
         dataTableFactory
     };

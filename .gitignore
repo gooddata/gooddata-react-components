@@ -1,6 +1,7 @@
 node_modules
 yarn-error.log
 npm-debug.log
+yalc.lock
 dist
 .idea
 .DS_Store

@@ -25,7 +25,8 @@ describe('lookupAttributes', () => {
             ],
             attributes: [
                 {
-                    id: '/gdc/md/date_display_form'
+                    id: '/gdc/md/date_display_form',
+                    type: 'date'
                 }
             ]
         };
@@ -113,7 +114,8 @@ describe('lookupAttributes', () => {
             ],
             attributes: [
                 {
-                    id: '/gdc/md/attr_display_form'
+                    id: '/gdc/md/attr_display_form',
+                    type: 'attribute'
                 }
             ]
         };
@@ -138,7 +140,8 @@ describe('lookupAttributes', () => {
             ],
             attributes: [
                 {
-                    id: '/gdc/md/date_display_form'
+                    id: '/gdc/md/date_display_form',
+                    type: 'date'
                 }
             ]
         };
@@ -159,13 +162,15 @@ describe('normalizeAfm', () => {
         expect(normalizeAfm({
             attributes: [
                 {
-                    id: '1'
+                    id: '1',
+                    type: 'date'
                 }
             ]
         })).toEqual({
             attributes: [
                 {
-                    id: '1'
+                    id: '1',
+                    type: 'date'
                 }
             ],
             measures: [],
@@ -358,7 +363,8 @@ describe('generateMetricDefinition', () => {
             ],
             attributes: [
                 {
-                    id: '/gdc/attribute_display_form'
+                    id: '/gdc/attribute_display_form',
+                    type: 'attribute'
                 }
             ]
         };
@@ -397,7 +403,8 @@ describe('generateMetricDefinition', () => {
             ],
             attributes: [
                 {
-                    id: '/gdc/attribute_display_form'
+                    id: '/gdc/attribute_display_form',
+                    type: 'attribute'
                 }
             ]
         };
@@ -452,7 +459,8 @@ describe('generateMetricDefinition', () => {
             ],
             attributes: [
                 {
-                    id: '/gdc/attribute_display_form'
+                    id: '/gdc/attribute_display_form',
+                    type: 'date'
                 }
             ]
         };
@@ -555,6 +563,11 @@ describe('generateFilters', () => {
                         'c',
                         'd'
                     ]
+                },
+                {
+                    id: '/gdc/attribute2',
+                    type: 'attribute',
+                    notIn: []
                 }
             ]
         };

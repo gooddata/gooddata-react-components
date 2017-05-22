@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@gooddata/goodstrap@41.0.0":
-  version "41.0.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-41.0.0.tgz#9420865d1af45bd67b3cdb7794862be6a9689081"
+"@gooddata/goodstrap@42.0.0":
+  version "42.0.0"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-42.0.0.tgz#785e7bd9e5f221ec7cb3003668ccf5c03ce4d0e4"
   dependencies:
     "@gooddata/js-utils" "0.5.0"
     classnames "2.2.5"
@@ -23,17 +23,18 @@
     react-day-picker "3.1.1"
     react-dnd "2.1.4"
     react-dnd-touch-backend gooddata/react-dnd-touch-backend#v0.0.1
+    react-document-title "2.0.3"
     react-intl "2.2.3"
     react-native-listener "1.0.1"
     react-portal "3.0.0"
     react-responsive "1.2.6"
     react-textarea-autosize "4.0.5"
 
-"@gooddata/indigo-visualizations@0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/indigo-visualizations/-/indigo-visualizations-0.2.0.tgz#cd64dbe74ffbcbe950f2e5742d639886f8d3247c"
+"@gooddata/indigo-visualizations@0.2.5":
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/@gooddata/indigo-visualizations/-/indigo-visualizations-0.2.5.tgz#4391bd50e0ceda1b632d23fec179063370883903"
   dependencies:
-    "@gooddata/goodstrap" "41.0.0"
+    "@gooddata/goodstrap" "42.0.0"
     "@gooddata/js-utils" "0.5.0"
     "@gooddata/numberjs" "3.0.0"
     classnames "2.2.5"
@@ -967,6 +968,10 @@ exec-sh@^0.2.0:
   dependencies:
     merge "^1.1.3"
 
+exenv@^1.2.1:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/exenv/-/exenv-1.2.2.tgz#2ae78e85d9894158670b03d47bec1f03bd91bb9d"
+
 expand-brackets@^0.1.4:
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/expand-brackets/-/expand-brackets-0.1.5.tgz#df07284e342a807cd733ac5af72411e581d1177b"
@@ -1016,7 +1021,7 @@ fb-watchman@^2.0.0:
   dependencies:
     bser "^2.0.0"
 
-fbjs@^0.8.4:
+fbjs@^0.8.4, fbjs@^0.8.9:
   version "0.8.12"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.12.tgz#10b5d92f76d45575fd63a217d4ea02bea2f8ed04"
   dependencies:
@@ -2130,7 +2135,7 @@ lodash.isarray@^3.0.0:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/lodash.isarray/-/lodash.isarray-3.0.4.tgz#79e4eb88c36a8122af86f844aa9bcd851b5fbb55"
 
-lodash.keys@^3.0.0:
+lodash.keys@^3.0.0, lodash.keys@^3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/lodash.keys/-/lodash.keys-3.1.2.tgz#4dbc0472b156be50a0b286855d1bd0b0c656098a"
   dependencies:
@@ -2203,7 +2208,7 @@ longest@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/longest/-/longest-1.0.1.tgz#30a0b2da38f73770e8294a0d22e6625ed77d0097"
 
-loose-envify@^1.0.0, loose-envify@^1.1.0:
+loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.3.1.tgz#d1a8ad33fa9ce0e713d65fdd0ac8b748d478c848"
   dependencies:
@@ -2620,6 +2625,13 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
+prop-types@^15.5.6:
+  version "15.5.10"
+  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.10.tgz#2797dfc3126182e3a95e3dfbb2e893ddd7456154"
+  dependencies:
+    fbjs "^0.8.9"
+    loose-envify "^1.3.1"
+
 prr@~0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/prr/-/prr-0.0.0.tgz#1a84b85908325501411853d0081ee3fa86e2926a"
@@ -2672,6 +2684,13 @@ react-dnd@2.1.4, react-dnd@^2.0.0:
     invariant "^2.1.0"
     lodash "^4.2.0"
 
+react-document-title@2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/react-document-title/-/react-document-title-2.0.3.tgz#bbf922a0d71412fc948245e4283b2412df70f2b9"
+  dependencies:
+    prop-types "^15.5.6"
+    react-side-effect "^1.0.2"
+
 react-dom@15.3.2:
   version "15.3.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.3.2.tgz#c46b0aa5380d7b838e7a59c4a7beff2ed315531f"
@@ -2706,6 +2725,13 @@ react-responsive@1.2.6:
   dependencies:
     hyphenate-style-name "^1.0.0"
     matchmedia "^0.1.2"
+
+react-side-effect@^1.0.2:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-side-effect/-/react-side-effect-1.1.0.tgz#57209f7ebc940d55e0fda82fe51422654175d609"
+  dependencies:
+    exenv "^1.2.1"
+    shallowequal "^0.2.2"
 
 react-textarea-autosize@4.0.5:
   version "4.0.5"
@@ -2939,6 +2965,12 @@ set-blocking@^2.0.0:
 setimmediate@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/setimmediate/-/setimmediate-1.0.5.tgz#290cbb232e306942d7d7ea9b83732ab7856f8285"
+
+shallowequal@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/shallowequal/-/shallowequal-0.2.2.tgz#1e32fd5bcab6ad688a4812cb0cc04efc75c7014e"
+  dependencies:
+    lodash.keys "^3.1.2"
 
 shellwords@^0.1.0:
   version "0.1.0"

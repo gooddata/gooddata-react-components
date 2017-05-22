@@ -36,6 +36,38 @@ export const simpleMeasure: IFixture = {
     }
 };
 
+export const filteredMeasure: IFixture = {
+    afm: {
+        measures: [
+            {
+                id: 'm1',
+                definition: {
+                    baseObject: {
+                        id: '/gdc/md/project/obj/metric.id'
+                    },
+                    filters: [
+                        {
+                            id: '/gdc/md/project/obj/attr.df.id',
+                            in: [
+                                '1', '2'
+                            ]
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+
+    transformation: {
+        measures: [
+            {
+                id: 'm1',
+                title: 'Measure M1'
+            }
+        ]
+    }
+};
+
 export const popMeasure: IFixture = {
     afm: {
         measures: [
@@ -48,20 +80,21 @@ export const popMeasure: IFixture = {
                 }
             },
             {
-                id: 'm2',
+                id: 'm1_pop',
                 definition: {
                     baseObject: {
                         lookupId: 'm1'
                     },
                     popAttribute: {
-                        id: '/gdc/md/project/obj/attr.id'
+                        id: '/gdc/md/project/obj/attr.df.id'
                     }
                 }
             }
         ],
         attributes: [
             {
-                id: '/gdc/md/project/obj/attr.id'
+                id: '/gdc/md/project/obj/attr.df.id',
+                type: 'date'
             }
         ]
     },
@@ -73,8 +106,8 @@ export const popMeasure: IFixture = {
                title: 'Measure M1'
            },
            {
-               id: 'm2',
-               title: 'Measure M2'
+               id: 'm1_pop',
+               title: 'Measure M1 - previous year'
            }
        ],
 
@@ -96,20 +129,21 @@ export const popMeasureWithSorting: IFixture = {
                 }
             },
             {
-                id: 'm2',
+                id: 'm1_pop',
                 definition: {
                     baseObject: {
                         lookupId: 'm1'
                     },
                     popAttribute: {
-                        id: '/gdc/md/project/obj/attr.id'
+                        id: '/gdc/md/project/obj/attr.df.id'
                     }
                 }
             }
         ],
         attributes: [
             {
-                id: '/gdc/md/project/obj/attr.id'
+                id: '/gdc/md/project/obj/attr.df.id',
+                type: 'date'
             }
         ]
     },
@@ -121,13 +155,16 @@ export const popMeasureWithSorting: IFixture = {
                 title: 'Measure M1'
             },
             {
-                id: 'm2',
-                title: 'Measure M2'
+                id: 'm1_pop',
+                title: 'Measure M1 - previous year'
             }
         ],
 
         sorting: [
-            { column: 'm2', direction: 'desc' }
+            {
+                column: 'm1_pop',
+                direction: 'desc'
+            }
         ]
     }
 };
@@ -148,7 +185,8 @@ export const showInPercent: IFixture = {
 
         attributes: [
             {
-                id: '/gdc/md/project/obj/attr.id'
+                id: '/gdc/md/project/obj/attr.id',
+                type: 'attribute'
             }
         ]
     },
@@ -179,7 +217,8 @@ export const showInPercentWithDate: IFixture = {
 
         attributes: [
             {
-                id: '/gdc/md/project/obj/date.id'
+                id: '/gdc/md/project/obj/date.id',
+                type: 'date'
             }
         ]
     },
@@ -224,7 +263,10 @@ export const measureWithSorting: IFixture = {
 export const categoryWithSorting: IFixture = {
     afm: {
         attributes: [
-            { id: '/gdc/md/project/obj/attr.id' }
+            {
+                id: '/gdc/md/project/obj/attr.id',
+                type: 'attribute'
+            }
         ]
     },
 
@@ -244,7 +286,7 @@ export const factBasedMeasure: IFixture = {
                     baseObject: {
                         id: '/gdc/md/project/obj/fact.id'
                     },
-                    aggregation: 'SUM'
+                    aggregation: 'sum'
                 }
             }
         ]
@@ -269,7 +311,7 @@ export const attributeBasedMeasure: IFixture = {
                     baseObject: {
                         id: '/gdc/md/project/obj/attr.id'
                     },
-                    aggregation: 'COUNT'
+                    aggregation: 'count'
                 }
             }
         ]
@@ -291,6 +333,7 @@ export const stackingAttribute: IFixture = {
             {
                 id: 'm1',
                 definition: {
+                    aggregation: 'sum',
                     baseObject: {
                         id: '/gdc/md/project/obj/metric.id'
                     }
@@ -298,21 +341,72 @@ export const stackingAttribute: IFixture = {
             }
         ],
         attributes: [
-            { id: '/gdc/md/project/obj/attr.id' }
+            {
+                id: '/gdc/md/project/obj/date.df.id',
+                type: 'date'
+            },
+            {
+                id: '/gdc/md/project/obj/attr.df.id',
+                type: 'attribute'
+            }
+        ],
+        filters: [
+            {
+                between: [-3, 0],
+                granularity: 'quarter',
+                id: '/gdc/md/project/obj/dataset.id',
+                type: 'date'
+            },
+            {
+                id: '/gdc/md/project/obj/attr.df.id',
+                type: 'attribute',
+                notIn: []
+            }
         ]
     },
 
     transformation: {
+        measures: [
+            { id: 'm1', title: 'Sum of Bundle cost', format: '#,##0.00' }
+        ],
         buckets: [
             {
                 name: 'stacks',
                 attributes: [
                     {
-                        id: '/gdc/md/project/obj/attr.id',
-                        title: 'Stacking attribute'
+                        id: '/gdc/md/project/obj/attr.df.id'
                     }
                 ]
             }
         ]
     }
+};
+
+export const attributeFilter: IFixture = {
+    afm: {
+        filters: [{
+            id: '/gdc/md/project/obj/attr.df.id',
+            type: 'attribute',
+            in: [
+                '1', '2', '3'
+            ]
+        }, {
+            id: '/gdc/md/project/obj/attr2.df.id',
+            type: 'attribute',
+            in: []
+        }]
+    },
+    transformation: {}
+};
+
+export const dateFilter: IFixture = {
+    afm: {
+        filters: [{
+            id: '/gdc/md/project/obj/dataset.id',
+            type: 'date',
+            between: [-89, 0],
+            granularity: 'date'
+        }]
+    },
+    transformation: {}
 };
