@@ -851,16 +851,16 @@ element-resize-detector@^1.1.9:
   dependencies:
     batch-processor "^1.0.0"
 
-"ember-legacy@git+ssh://git@github.com/gooddata/emberjs.git#1.3.2":
+"ember-legacy@git+ssh://git@github.com/gooddata/emberjs#1.3.2":
   version "1.3.2"
-  resolved "git+ssh://git@github.com/gooddata/emberjs.git#9d61112fdd90d0b1038e888c43c3434302236277"
+  resolved "git+ssh://git@github.com/gooddata/emberjs#9d61112fdd90d0b1038e888c43c3434302236277"
   dependencies:
     handlebars ">= 1.0.0 < 2.0"
     jquery "*"
 
-"ember@git+ssh://git@github.com/gooddata/emberjs.git#1.8.1":
+"ember@git+ssh://git@github.com/gooddata/emberjs#1.8.1":
   version "1.8.1"
-  resolved "git+ssh://git@github.com/gooddata/emberjs.git#f9a7b58df44fbf70bf6bba569662660a9808f7c3"
+  resolved "git+ssh://git@github.com/gooddata/emberjs#f9a7b58df44fbf70bf6bba569662660a9808f7c3"
   dependencies:
     handlebars ">= 1.0.0 < 2.0.0"
     jquery ">=1.7.0 < 2.2.0"
@@ -1216,6 +1216,17 @@ gooddata@1.4.0:
     lodash "4.17.4"
     md5 "2.2.1"
 
+gooddata@1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/gooddata/-/gooddata-1.5.1.tgz#bdbbef3e1b451f6a54a3ad37f906dde6ad9809fc"
+  dependencies:
+    es6-promise "3.0.2"
+    fetch-cookie "0.4.0"
+    invariant "2.2.2"
+    isomorphic-fetch "2.2.1"
+    lodash "4.17.4"
+    md5 "2.2.1"
+
 got@^5.0.0:
   version "5.7.1"
   resolved "https://registry.yarnpkg.com/got/-/got-5.7.1.tgz#5f81635a61e4a6589f180569ea4e381680a51f35"
@@ -1381,13 +1392,9 @@ hyphenate-style-name@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/hyphenate-style-name/-/hyphenate-style-name-1.0.2.tgz#31160a36930adaf1fc04c6074f7eb41465d4ec4b"
 
-iconv-lite@0.4.13:
+iconv-lite@0.4.13, iconv-lite@~0.4.13:
   version "0.4.13"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.13.tgz#1f88aba4ab0b1508e8312acc39345f36e992e2f2"
-
-iconv-lite@~0.4.13:
-  version "0.4.15"
-  resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.15.tgz#fe265a218ac6a57cfe854927e9d04c19825eddeb"
 
 immutable@3.8.1:
   version "3.8.1"
@@ -2649,7 +2656,7 @@ react-day-picker@3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-3.1.1.tgz#7fa385dc7b424cee3eb09696e1918e6b18abafdb"
 
-"react-dnd-touch-backend@github:gooddata/react-dnd-touch-backend#v0.0.1":
+react-dnd-touch-backend@gooddata/react-dnd-touch-backend#v0.0.1:
   version "0.0.1"
   resolved "https://codeload.github.com/gooddata/react-dnd-touch-backend/tar.gz/6136545d1255c484739224525cb9beb2736e20e9"
   dependencies:
