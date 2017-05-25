@@ -1,14 +1,15 @@
 import * as React from 'react';
+import noop = require('lodash/noop');
 import TableTransformation from '@gooddata/indigo-visualizations/lib/Table/TableTransformation';
 import { Execute } from '../execution/Execute';
 import { IAfm } from '../../interfaces/Afm';
 import { ITransformation, ISort } from '../../interfaces/Transformation';
 import { IntlWrapper } from './IntlWrapper';
-import { Loading } from '../Loading';
+import { IEvents } from './events';
 import { getSorting, ISortingChange } from '../../helpers/sorting';
 import { generateConfig } from '../../helpers/config';
 
-export interface ITableProps {
+export interface ITableProps extends IEvents {
     afm: IAfm;
     projectId: string;
     transformation?: ITransformation;
@@ -21,9 +22,15 @@ export interface ITableState {
     sorting: ISort;
 }
 
+const defaultErrorHandler = (error) => {
+    console.error(error);
+};
+
 export class Table extends React.Component<ITableProps, ITableState> {
     public static defaultProps: Partial<ITableProps> = {
-        transformation: {}
+        transformation: {},
+        onError: defaultErrorHandler,
+        onLoadingChanged: noop
     };
 
     constructor(props) {
@@ -48,10 +55,12 @@ export class Table extends React.Component<ITableProps, ITableState> {
 
     public onError(error) {
         this.setState({ error: true });
+        this.props.onError(error);
     }
 
     public onLoading(isLoading: boolean) {
         this.setState({ isLoading });
+        this.props.onLoadingChanged({ isLoading });
     }
 
     public onSortChange(change: ISortingChange) {
@@ -60,7 +69,7 @@ export class Table extends React.Component<ITableProps, ITableState> {
 
     public getComponent() {
         if (this.state.isLoading) {
-            return <Loading />;
+            return null;
         }
 
         return (
@@ -92,7 +101,7 @@ export class Table extends React.Component<ITableProps, ITableState> {
         } = this.props;
 
         if (this.state.error) {
-            return <h1>Error</h1>;
+            return null;
         }
 
         return (

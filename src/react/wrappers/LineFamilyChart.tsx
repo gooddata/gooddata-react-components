@@ -1,17 +1,28 @@
 import * as React from 'react';
+import noop = require('lodash/noop');
 import LineFamilyChartTransformation from '@gooddata/indigo-visualizations/lib/Chart/LineFamilyChartTransformation';
 import { Execute } from '../execution/Execute';
 import { IAfm } from '../../interfaces/Afm';
 import { ITransformation } from '../../interfaces/Transformation';
 import { IntlWrapper } from './IntlWrapper';
-import { Loading } from '../Loading';
 import { generateConfig } from '../../helpers/config';
+import { IEvents } from './events';
+import { DATA_TOO_LARGE_DISPLAY } from './errorStates';
+
 
 export interface ILineFamilyChartConfig {
-    colours?: String[];
+    colors?: String[];
+    legend?: {
+        enabled?: boolean;
+        position?: 'top' | 'left' | 'right' | 'bottom';
+    };
+    limits?: {
+        series?: Number,
+        categories?: Number
+    };
 }
 
-export interface ILineFamilyChartProps {
+export interface ILineFamilyChartProps extends IEvents {
     afm: IAfm;
     projectId: string;
     transformation: ITransformation;
@@ -25,7 +36,16 @@ export interface ILineFamilyChartState {
     isLoading: boolean;
 }
 
+const defaultErrorHandler = (error) => {
+    console.error(error);
+};
+
 export class LineFamilyChart extends React.Component<ILineFamilyChartProps, ILineFamilyChartState> {
+    public static defaultProps: Partial<ILineFamilyChartProps> = {
+        onError: defaultErrorHandler,
+        onLoadingChanged: noop
+    };
+
     constructor(props) {
         super(props);
 
@@ -46,15 +66,17 @@ export class LineFamilyChart extends React.Component<ILineFamilyChartProps, ILin
 
     public onError(error) {
         this.setState({ error: true });
+        this.props.onError(error);
     }
 
     public onLoading(isLoading: boolean) {
         this.setState({ isLoading });
+        this.props.onLoadingChanged({ isLoading });
     }
 
     public getComponent() {
         if (this.state.isLoading) {
-            return <Loading />;
+            return null;
         }
 
         const { type, afm, config, transformation } = this.props;
@@ -66,6 +88,8 @@ export class LineFamilyChart extends React.Component<ILineFamilyChartProps, ILin
                 <LineFamilyChartTransformation
                     config={visConfig}
                     data={this.state.result}
+                    onDataTooLarge={() => this.onError({ status: DATA_TOO_LARGE_DISPLAY })}
+                    limits={config.limits}
                 />
             </IntlWrapper>
         );
@@ -80,7 +104,7 @@ export class LineFamilyChart extends React.Component<ILineFamilyChartProps, ILin
         } = this.props;
 
         if (this.state.error) {
-            return <h1>Error</h1>;
+            return null;
         }
 
         return (
