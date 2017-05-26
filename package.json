@@ -14,7 +14,7 @@
   "dependencies": {
     "@gooddata/indigo-visualizations": "0.2.0",
     "es6-promise": "4.0.5",
-    "gooddata": "1.5.1",
+    "gooddata": "1.6.0",
     "lodash": "4.17.4",
     "numeral": "2.0.6",
     "react-intl": "2.2.3"

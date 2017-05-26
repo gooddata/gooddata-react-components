@@ -1,4 +1,3 @@
-import { md, execution } from 'gooddata';
 import { IAdapter, IDataSource } from '../Interfaces';
 import { DataSource } from '../DataSource';
 import {
@@ -15,8 +14,10 @@ export class SimpleExecutorAdapter implements IAdapter {
 
     private projectId: string;
     private settings;
+    private sdk;
 
-    constructor(projectId: string, settings = {}) {
+    constructor(sdk, projectId: string, settings = {}) {
+        this.sdk = sdk;
         this.projectId = projectId;
         // settings for gooddata SDK
         // @see https://github.com/gooddata/gooddata-js/blob/master/src/execution.js#L71
@@ -33,7 +34,7 @@ export class SimpleExecutorAdapter implements IAdapter {
                         this.convertData(normalizedAfm, transformation, attributesMapping);
                     // dump('Columns', columns);
                     // dump('ExecutionConfiguration', executionConfiguration);
-                    return execution.getData(this.projectId, columns, executionConfiguration, this.settings);
+                    return this.sdk.execution.getData(this.projectId, columns, executionConfiguration, this.settings);
                 });
         };
 
@@ -43,7 +44,7 @@ export class SimpleExecutorAdapter implements IAdapter {
     private loadAttributes(afm): Promise<AttributeMap> {
         const attributes = lookupAttributes(afm);
         if (attributes.length > 0) {
-            return md.getObjects(this.projectId, attributes)
+            return this.sdk.md.getObjects(this.projectId, attributes)
                 .then((items) => items.map((item) => ({
                     attribute: item.attributeDisplayForm.content.formOf,
                     attributeDisplayForm: item.attributeDisplayForm.meta.uri
