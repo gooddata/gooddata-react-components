@@ -6,6 +6,13 @@ import { ITransformation } from '../../interfaces/Transformation';
 import { IDataTable } from '../../interfaces/DataTable';
 import { DataTable } from '../../DataTable';
 import { SimpleExecutorAdapter } from '../../adapters/SimpleExecutorAdapter';
+import { ISimpleExecutorResult } from '../../Interfaces';
+import {
+    DATA_TOO_LARGE_TO_COMPUTE,
+    BAD_REQUEST,
+    UNKNOWN_ERROR,
+    NO_DATA
+} from '../wrappers/errorStates';
 
 export interface IExecuteProps {
     afm: IAfm;
@@ -82,8 +89,22 @@ export class Execute extends React.Component<IExecuteProps, undefined> {
         this.props.onLoading(true);
 
         execute(this.dataTable, afm, transformation)
-            .then(onExecute)
-            .catch(onError)
+            .then((data) => {
+                if ((data as ISimpleExecutorResult).isEmpty) {
+                    onError({ status: NO_DATA });
+                } else {
+                    onExecute(data);
+                }
+            })
+            .catch((error) => {
+                if (error.response.status === 413) {
+                    return onError({ status: DATA_TOO_LARGE_TO_COMPUTE, error });
+                }
+                if (error.response.status === 400) {
+                    return onError({ status: BAD_REQUEST, error });
+                }
+                onError({ status: UNKNOWN_ERROR, error });
+            })
             .then(() => onLoading(false));
     };
 }

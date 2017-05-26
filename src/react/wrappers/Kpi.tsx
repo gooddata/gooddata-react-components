@@ -1,14 +1,16 @@
 import * as React from 'react';
 import * as numeral from 'numeral';
 import get = require('lodash/get');
+import noop = require('lodash/noop');
 
 import { Execute } from '../execution/Execute';
 import { IAfm, IFilter } from '../../interfaces/Afm';
 import { isNotEmptyFilter } from '../../helpers/filters';
+import { IEvents } from './events';
 
 export type URIString = string;
 
-export interface IKpiProps {
+export interface IKpiProps extends IEvents {
     measure: URIString;
     projectId: string;
     filters?: IFilter[];
@@ -38,14 +40,16 @@ function buildAFM(measureUri: string, filters: IFilter[] = []): IAfm {
     };
 }
 
-function Loading() {
-    return <span style={{ background: '#cacaca', color: '#cacaca' }}>⃞⃞⃞</span>;
-}
+const defaultErrorHandler = (error) => {
+    console.error(error);
+};
 
 export class Kpi extends React.Component<IKpiProps, IKpiState> {
     public static defaultProps: Partial<IKpiProps> = {
         format: '$0,0.00',
-        filters: []
+        filters: [],
+        onError: defaultErrorHandler,
+        onLoadingChanged: noop
     };
 
     constructor(props) {
@@ -69,13 +73,13 @@ export class Kpi extends React.Component<IKpiProps, IKpiState> {
     }
 
     public onError(error) {
-        console.error(error);
-
         this.setState({ error: true });
+        this.props.onError(error);
     }
 
     public onLoading(isLoading: boolean) {
         this.setState({ isLoading });
+        this.props.onLoadingChanged({ isLoading });
     }
 
     public getFormattedResult(): string {
@@ -84,7 +88,7 @@ export class Kpi extends React.Component<IKpiProps, IKpiState> {
 
     public render() {
         if (this.state.error) {
-            return <h1>Error</h1>;
+            return null;
         }
 
         const afm = buildAFM(this.props.measure, this.props.filters);
@@ -98,7 +102,7 @@ export class Kpi extends React.Component<IKpiProps, IKpiState> {
                 onLoading={this.onLoading}
                 projectId={this.props.projectId}
             >
-                {this.state.isLoading ? <Loading /> : this.getFormattedResult()}
+                {this.state.isLoading || this.getFormattedResult()}
             </Execute>
         );
     }
