@@ -9,7 +9,7 @@ export interface IAdapter {
 export interface IHeader {
     id: string;
     title: string;
-    uri: string;
+    uri?: string;
     type: string;
 }
 

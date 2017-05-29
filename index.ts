@@ -6,6 +6,7 @@ import { BarChart } from './src/react/wrappers/BarChart';
 import { Table } from './src/react/wrappers/Table';
 import { ColumnChart } from './src/react/wrappers/ColumnChart';
 import { mergeFilters } from './src/helpers/filters';
+import { Visualization } from './src/react/wrappers/Visualization';
 
 export {
     DataTable,
@@ -15,6 +16,7 @@ export {
     LineChart,
     BarChart,
     ColumnChart,
+    Visualization,
     mergeFilters
 };
 

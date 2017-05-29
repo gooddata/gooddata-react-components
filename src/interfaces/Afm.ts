@@ -1,14 +1,19 @@
-export interface IBaseFilter {
+export interface IBaseAttributeFilter {
     id: string; // dateDataSet URI or attribute displayForm URI
-    type: string;
+    type: 'attribute';
 }
 
-export interface IAttributeFilter extends IBaseFilter {
-    in?: string[]; // attribute elements IDs
-    notIn?: string[]; // attribute elements IDs
+export interface IPositiveAttributeFilter extends IBaseAttributeFilter {
+    in: string[]; // attribute elements IDs
 }
 
-export interface IDateFilter extends IBaseFilter {
+export interface INegativeAttributeFilter extends IBaseAttributeFilter {
+    notIn: string[]; // attribute elements IDs
+}
+
+export interface IDateFilter {
+    id: string; // dateDataSet URI
+    type: 'date';
     between: [string, string] | [number, number];
     granularity: string;
 }
@@ -50,7 +55,10 @@ export interface IMeasure {
 
 export interface IAttribute {
     id: string; // attribute displayForm URI
+    type: 'date' | 'attribute';
 }
+
+export type IAttributeFilter = IPositiveAttributeFilter | INegativeAttributeFilter;
 
 export type IFilter = IDateFilter | IAttributeFilter;
 

@@ -15,7 +15,9 @@ import {
     IDateFilter,
     IAttributeFilter,
     IPositiveFilter,
-    INegativeFilter
+    INegativeFilter,
+    IPositiveAttributeFilter,
+    INegativeAttributeFilter
 } from '../interfaces/Afm';
 
 export type ObjectUri = string;
@@ -161,9 +163,23 @@ const generateDateFilter = (filter: IDateFilter) => {
 };
 
 const generateAttributeFilter = (filter: IAttributeFilter) => {
-    return (filter.in) ?
-        { $in: filter.in.map((id) => ({ id })) } :
-        { $not: { $in: filter.notIn.map((id) => ({ id })) }};
+    const positiveFilter = filter as IPositiveAttributeFilter;
+    if (positiveFilter.in && positiveFilter.in.length > 0) {
+        return {
+            $in: positiveFilter.in.map((id) => ({ id }))
+        };
+    }
+
+    const negativeFilter = filter as INegativeAttributeFilter;
+    if (negativeFilter.notIn.length > 0) {
+        return {
+            $not: {
+                $in: (filter as INegativeAttributeFilter).notIn.map((id) => ({ id }))
+            }
+        };
+    }
+
+    return null;
 };
 
 export const generateFilters = (afm: IAfm) => {
@@ -173,9 +189,12 @@ export const generateFilters = (afm: IAfm) => {
         }
 
         if (filter.type === 'attribute') {
-            memo.$and.push({
-                [filter.id]: generateAttributeFilter(filter as IAttributeFilter)
-            });
+            const attrFilter = generateAttributeFilter(filter as IAttributeFilter);
+            if (attrFilter) {
+                memo.$and.push({
+                    [filter.id]: attrFilter
+                });
+            }
         }
 
         return memo;

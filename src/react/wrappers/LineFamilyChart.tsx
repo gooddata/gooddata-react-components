@@ -10,6 +10,8 @@ import { IEvents } from './events';
 import { DATA_TOO_LARGE_DISPLAY } from './errorStates';
 
 
+export type LineFamilyChartTypes = 'line' | 'bar' | 'column';
+
 export interface ILineFamilyChartConfig {
     colors?: String[];
     legend?: {
@@ -27,7 +29,7 @@ export interface ILineFamilyChartProps extends IEvents {
     projectId: string;
     transformation: ITransformation;
     config?: ILineFamilyChartConfig;
-    type: 'line' | 'bar' | 'column';
+    type: LineFamilyChartTypes;
 }
 
 export interface ILineFamilyChartState {
@@ -43,7 +45,8 @@ const defaultErrorHandler = (error) => {
 export class LineFamilyChart extends React.Component<ILineFamilyChartProps, ILineFamilyChartState> {
     public static defaultProps: Partial<ILineFamilyChartProps> = {
         onError: defaultErrorHandler,
-        onLoadingChanged: noop
+        onLoadingChanged: noop,
+        config: {}
     };
 
     constructor(props) {

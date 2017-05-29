@@ -25,7 +25,7 @@ describe('Execute', () => {
         setTimeout(() => {
             try {
                 expect(onLoadingChanged.mock.calls[1]).toEqual([{ isLoading: false }]);
-                expect(wrapper.find('.gdc-kpi').text()).toEqual('$10,000.00');
+                expect(wrapper.find('.gdc-kpi').text()).toEqual('$32,016.00');
                 done();
             } catch (error) {
                 console.error(error);

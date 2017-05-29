@@ -1,6 +1,6 @@
 export type SortDirection = 'asc' | 'desc';
 
-export type EmbeddedFilters = IEmbeddedDateFilter | IEmbeddedListAttributeFilter;
+export type EmbeddedFilter = IEmbeddedDateFilter | IEmbeddedListAttributeFilter;
 
 export interface IEmbeddedDateFilter {
     dateFilter: {
@@ -8,7 +8,7 @@ export interface IEmbeddedDateFilter {
         from?: string | number;
         to?: string | number;
         granularity: string;
-        attribute: string;
+        attribute?: string;
         dataset?: string;
         dimension?: string;
     };
@@ -44,9 +44,11 @@ export interface IVisualizationStyle {
     };
 }
 
+export type MeasureType = 'metric' | 'fact' | 'attribute';
+
 export interface IMeasure {
     measure: {
-        type: 'metric' | 'fact' | 'attribute';
+        type: MeasureType;
         aggregation?: 'sum' | 'count' | 'avg' | 'min' | 'max' | 'median' | 'runsum';
         objectUri: string;
         showInPercent: boolean;
@@ -80,6 +82,6 @@ export interface IVisualizationObject {
     buckets: {
         measures: IMeasure[];
         categories: ICategory[];
-        filters: EmbeddedFilters[];
+        filters: EmbeddedFilter[];
     };
 }

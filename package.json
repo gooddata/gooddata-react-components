@@ -12,7 +12,7 @@
     "definition": "dist/index.d.ts"
   },
   "dependencies": {
-    "@gooddata/indigo-visualizations": "0.2.0",
+    "@gooddata/indigo-visualizations": "0.2.5",
     "es6-promise": "4.0.5",
     "gooddata": "1.5.1",
     "lodash": "4.17.4",
