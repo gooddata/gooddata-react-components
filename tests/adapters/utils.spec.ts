@@ -4,9 +4,10 @@ import {
     generateMetricDefinition,
     generateFilters,
     getSorting,
-    getMeasureAdditionalInfo
+    getMeasureAdditionalInfo,
+    loadAttributesMap
 } from '../../src/adapters/utils';
-import { IAfm, IFilter } from '../../src/interfaces/Afm';
+import { IAfm } from '../../src/interfaces/Afm';
 import { ITransformation } from '../../src/interfaces/Transformation';
 
 describe('lookupAttributes', () => {
@@ -208,6 +209,7 @@ describe('normalizeAfm', () => {
                 {
                     id: '1',
                     type: 'date',
+                    granularity: 'year',
                     between: [0, 1]
                 }
             ]
@@ -218,6 +220,7 @@ describe('normalizeAfm', () => {
                 {
                     id: '1',
                     type: 'date',
+                    granularity: 'year',
                     between: [0, 1]
                 }
             ]
@@ -226,30 +229,47 @@ describe('normalizeAfm', () => {
 });
 
 describe('generateMetricDefinition', () => {
-    it('should generate metric with aggregation', () => {
+    it('should generate metric with aggregation and uri', () => {
         const afm: IAfm = {
             measures: [{
                 id: 'metric_sum',
                 definition: {
                     baseObject: {
-                        id: '/gdc/measure'
+                        id: '/gdc/md/measure/obj/1'
                     },
                     aggregation: 'sum'
                 }
             }]
         };
         expect(generateMetricDefinition(afm.measures[0], afm, [])).toEqual(
-            'SELECT SUM([/gdc/measure])'
+            'SELECT SUM([/gdc/md/measure/obj/1])'
         );
     });
 
-    it('should generate metric with empty filter', () => {
+    it('should generate metric with aggregation and identifier', () => {
+        const afm: IAfm = {
+            measures: [{
+                id: 'metric_sum',
+                definition: {
+                    baseObject: {
+                        id: 'identifier'
+                    },
+                    aggregation: 'sum'
+                }
+            }]
+        };
+        expect(generateMetricDefinition(afm.measures[0], afm, [])).toEqual(
+            'SELECT SUM({identifier})'
+        );
+    });
+
+    it('should generate metric with empty filter and uri', () => {
         const afm: IAfm = {
             measures: [{
                 id: 'metric_empty_filter',
                 definition: {
                     baseObject: {
-                        id: '/gdc/measure'
+                        id: '/gdc/md/measure/obj/1'
                     },
                     filters: [
                         {
@@ -261,27 +281,49 @@ describe('generateMetricDefinition', () => {
             }]
         };
         expect(generateMetricDefinition(afm.measures[0], afm, [])).toEqual(
-            'SELECT [/gdc/measure]'
+            'SELECT [/gdc/md/measure/obj/1]'
         );
     });
 
-    it('should generate metric with filters', () => {
+    it('should generate metric with empty filter and identifier', () => {
+        const afm: IAfm = {
+            measures: [{
+                id: 'metric_empty_filter',
+                definition: {
+                    baseObject: {
+                        id: 'identifier'
+                    },
+                    filters: [
+                        {
+                            id: '/uri',
+                            in: []
+                        }
+                    ]
+                }
+            }]
+        };
+        expect(generateMetricDefinition(afm.measures[0], afm, [])).toEqual(
+            'SELECT {identifier}'
+        );
+    });
+
+    it('should generate metric with filters and uris', () => {
         const afm: IAfm = {
             measures: [
                 {
                     id: 'metric_with_filters',
                     definition: {
                         baseObject: {
-                            id: '/gdc/measure'
+                            id: '/gdc/md/measure/obj/1'
                         },
                         filters: [{
-                            id: '/gdc/filter_attr_display_form1',
+                            id: '/gdc/md/filter_attr_display_form1/obj/1',
                             in: [
                                 '1',
                                 '2'
                             ]
                         }, {
-                            id: '/gdc/filter_attr_display_form2',
+                            id: '/gdc/md/filter_attr_display_form2/obj/1',
                             in: [
                                 '1',
                                 '2'
@@ -293,31 +335,76 @@ describe('generateMetricDefinition', () => {
         };
         const mapping = [
             {
-                attribute: '/gdc/filter_attr1',
-                attributeDisplayForm: '/gdc/filter_attr_display_form1'
+                attribute: '/gdc/md/filter_attr1/obj/1',
+                attributeDisplayForm: '/gdc/md/filter_attr_display_form1/obj/1'
             },
             {
-                attribute: '/gdc/filter_attr2',
-                attributeDisplayForm: '/gdc/filter_attr_display_form2'
+                attribute: '/gdc/md/filter_attr2/obj/1',
+                attributeDisplayForm: '/gdc/md/filter_attr_display_form2/obj/1'
             }
         ];
         expect(generateMetricDefinition(afm.measures[0], afm, mapping)).toEqual(
-            'SELECT [/gdc/measure] ' +
-            'WHERE [/gdc/filter_attr1] ' +
-            'IN ([/gdc/filter_attr1/elements?id=1],[/gdc/filter_attr1/elements?id=2]) ' +
-            'AND [/gdc/filter_attr2] ' +
-            'IN ([/gdc/filter_attr2/elements?id=1],[/gdc/filter_attr2/elements?id=2])'
+            'SELECT [/gdc/md/measure/obj/1] ' +
+            'WHERE [/gdc/md/filter_attr1/obj/1] ' +
+            'IN ([/gdc/md/filter_attr1/obj/1/elements?id=1],[/gdc/md/filter_attr1/obj/1/elements?id=2]) ' +
+            'AND [/gdc/md/filter_attr2/obj/1] ' +
+            'IN ([/gdc/md/filter_attr2/obj/1/elements?id=1],[/gdc/md/filter_attr2/obj/1/elements?id=2])'
         );
     });
 
-    it('should generate PoP', () => {
+    it('should generate metric with filters and identifiers', () => {
+        const afm: IAfm = {
+            measures: [
+                {
+                    id: 'metric_with_filters',
+                    definition: {
+                        baseObject: {
+                            id: 'measureIdentifier'
+                        },
+                        filters: [{
+                            id: 'attribute_display_form_identifier_1',
+                            in: [
+                                '1',
+                                '2'
+                            ]
+                        }, {
+                            id: 'attribute_display_form_identifier_2',
+                            in: [
+                                '1',
+                                '2'
+                            ]
+                        }]
+                    }
+                }
+            ]
+        };
+        const mapping = [
+            {
+                attribute: 'attribute_identifier_1',
+                attributeDisplayForm: 'attribute_display_form_identifier_1'
+            },
+            {
+                attribute: 'attribute_identifier_2',
+                attributeDisplayForm: 'attribute_display_form_identifier_2'
+            }
+        ];
+        expect(generateMetricDefinition(afm.measures[0], afm, mapping)).toEqual(
+            'SELECT {measureIdentifier} ' +
+            'WHERE {attribute_identifier_1} ' +
+            'IN ({attribute_identifier_1?1},{attribute_identifier_1?2}) ' +
+            'AND {attribute_identifier_2} ' +
+            'IN ({attribute_identifier_2?1},{attribute_identifier_2?2})'
+        );
+    });
+
+    it('should generate PoP with uris', () => {
         const afm: IAfm = {
             measures: [
                 {
                     id: 'm1',
                     definition: {
                         baseObject: {
-                            id: '/gdc/measure'
+                            id: '/gdc/md/measure/obj/1'
                         }
                     }
                 },
@@ -325,10 +412,10 @@ describe('generateMetricDefinition', () => {
                     id: 'close_bop_pop',
                     definition: {
                         baseObject: {
-                            id: '/gdc/measure'
+                            id: '/gdc/md/measure/obj/1'
                         },
                         popAttribute: {
-                            id: '/gdc/date_display_form'
+                            id: '/gdc/md/date_display_form/obj/1'
                         }
                     }
                 }
@@ -339,23 +426,61 @@ describe('generateMetricDefinition', () => {
         };
         const mapping = [
             {
-                attribute: '/gdc/date_attribute',
-                attributeDisplayForm: '/gdc/date_display_form'
+                attribute: '/gdc/md/date_attribute/obj/1',
+                attributeDisplayForm: '/gdc/md/date_display_form/obj/1'
             }
         ];
         expect(generateMetricDefinition(afm.measures[1], afm, mapping)).toEqual(
-            'SELECT [/gdc/measure] FOR PREVIOUS ([/gdc/date_attribute])'
+            'SELECT [/gdc/md/measure/obj/1] FOR PREVIOUS ([/gdc/md/date_attribute/obj/1])'
         );
     });
 
-    it('should generate showInPercent', () => {
+    it('should generate PoP with identifiers', () => {
+        const afm: IAfm = {
+            measures: [
+                {
+                    id: 'm1',
+                    definition: {
+                        baseObject: {
+                            id: 'measure_identifier'
+                        }
+                    }
+                },
+                {
+                    id: 'close_bop_pop',
+                    definition: {
+                        baseObject: {
+                            id: 'measure_identifier'
+                        },
+                        popAttribute: {
+                            id: 'attribute_display_form_identifier'
+                        }
+                    }
+                }
+            ],
+            attributes: [
+
+            ]
+        };
+        const mapping = [
+            {
+                attribute: 'attribute_identifier',
+                attributeDisplayForm: 'attribute_display_form_identifier'
+            }
+        ];
+        expect(generateMetricDefinition(afm.measures[1], afm, mapping)).toEqual(
+            'SELECT {measure_identifier} FOR PREVIOUS ({attribute_identifier})'
+        );
+    });
+
+    it('should generate showInPercent with uris', () => {
         const afm: IAfm = {
             measures: [
                 {
                     id: 'close_bop_percent',
                     definition: {
                         baseObject: {
-                            id: '/gdc/measure'
+                            id: '/gdc/md/measure/obj/1'
                         },
                         showInPercent: true
                     }
@@ -363,7 +488,7 @@ describe('generateMetricDefinition', () => {
             ],
             attributes: [
                 {
-                    id: '/gdc/attribute_display_form',
+                    id: '/gdc/md/attribute_display_form/obj/1',
                     type: 'attribute'
                 }
             ]
@@ -371,27 +496,62 @@ describe('generateMetricDefinition', () => {
 
         const mapping = [
             {
-                attribute: '/gdc/attribute',
-                attributeDisplayForm: '/gdc/attribute_display_form'
+                attribute: '/gdc/md/attribute/obj/1',
+                attributeDisplayForm: '/gdc/md/attribute_display_form/obj/1'
             }
         ];
 
         expect(generateMetricDefinition(afm.measures[0], afm, mapping)).toEqual(
-            'SELECT (SELECT [/gdc/measure]) / (SELECT [/gdc/measure] BY ALL [/gdc/attribute])'
+            'SELECT (SELECT [/gdc/md/measure/obj/1]) / (SELECT [/gdc/md/measure/obj/1] ' +
+            'BY ALL [/gdc/md/attribute/obj/1])'
         );
     });
 
-    it('should generate showInPercent with filters', () => {
+    it('should generate showInPercent with identifiers', () => {
         const afm: IAfm = {
             measures: [
                 {
                     id: 'close_bop_percent',
                     definition: {
                         baseObject: {
-                            id: '/gdc/measure'
+                            id: 'measure_identifier'
+                        },
+                        showInPercent: true
+                    }
+                }
+            ],
+            attributes: [
+                {
+                    id: 'attribute_display_form_identifier',
+                    type: 'attribute'
+                }
+            ]
+        };
+
+        const mapping = [
+            {
+                attribute: 'attribute_identifier',
+                attributeDisplayForm: 'attribute_display_form_identifier'
+            }
+        ];
+
+        expect(generateMetricDefinition(afm.measures[0], afm, mapping)).toEqual(
+            'SELECT (SELECT {measure_identifier}) / (SELECT {measure_identifier} ' +
+            'BY ALL {attribute_identifier})'
+        );
+    });
+
+    it('should generate showInPercent with filters and uris', () => {
+        const afm: IAfm = {
+            measures: [
+                {
+                    id: 'close_bop_percent',
+                    definition: {
+                        baseObject: {
+                            id: '/gdc/md/measure/obj/1'
                         },
                         filters: [{
-                            id: '/gdc/filter_attr_display_form',
+                            id: '/gdc/md/filter_attr_display_form/obj/1',
                             in: [
                                 '1',
                                 '2'
@@ -403,7 +563,7 @@ describe('generateMetricDefinition', () => {
             ],
             attributes: [
                 {
-                    id: '/gdc/attribute_display_form',
+                    id: '/gdc/md/attribute_display_form/obj/1',
                     type: 'attribute'
                 }
             ]
@@ -411,36 +571,88 @@ describe('generateMetricDefinition', () => {
 
         const mapping = [
             {
-                attribute: '/gdc/attribute',
-                attributeDisplayForm: '/gdc/attribute_display_form'
+                attribute: '/gdc/md/attribute/obj/1',
+                attributeDisplayForm: '/gdc/md/attribute_display_form/obj/1'
             },
             {
-                attribute: '/gdc/filter_attr',
-                attributeDisplayForm: '/gdc/filter_attr_display_form'
+                attribute: '/gdc/md/filter_attr/obj/1',
+                attributeDisplayForm: '/gdc/md/filter_attr_display_form/obj/1'
             }
         ];
 
         expect(generateMetricDefinition(afm.measures[0], afm, mapping)).toEqual(
             'SELECT ' +
-            '(SELECT [/gdc/measure] ' +
-                'WHERE [/gdc/filter_attr] ' +
-                'IN ([/gdc/filter_attr/elements?id=1],[/gdc/filter_attr/elements?id=2])) ' +
+            '(SELECT [/gdc/md/measure/obj/1] ' +
+                'WHERE [/gdc/md/filter_attr/obj/1] ' +
+                'IN ([/gdc/md/filter_attr/obj/1/elements?id=1],[/gdc/md/filter_attr/obj/1/elements?id=2])) ' +
             '/ ' +
-            '(SELECT [/gdc/measure] ' +
-                'BY ALL [/gdc/attribute] ' +
-                'WHERE [/gdc/filter_attr] ' +
-                'IN ([/gdc/filter_attr/elements?id=1],[/gdc/filter_attr/elements?id=2]))'
+            '(SELECT [/gdc/md/measure/obj/1] ' +
+                'BY ALL [/gdc/md/attribute/obj/1] ' +
+                'WHERE [/gdc/md/filter_attr/obj/1] ' +
+                'IN ([/gdc/md/filter_attr/obj/1/elements?id=1],[/gdc/md/filter_attr/obj/1/elements?id=2]))'
         );
     });
 
-    it('should generate PoP & showInPercent (referenced definitions)', () => {
+    it('should generate showInPercent with filters and identifiers', () => {
+        const afm: IAfm = {
+            measures: [
+                {
+                    id: 'close_bop_percent',
+                    definition: {
+                        baseObject: {
+                            id: 'measure_identifier'
+                        },
+                        filters: [{
+                            id: 'filter_attr_display_form_identifier',
+                            in: [
+                                '1',
+                                '2'
+                            ]
+                        }],
+                        showInPercent: true
+                    }
+                }
+            ],
+            attributes: [
+                {
+                    id: 'attribute_display_form_identifier',
+                    type: 'attribute'
+                }
+            ]
+        };
+
+        const mapping = [
+            {
+                attribute: 'attribute_identifier',
+                attributeDisplayForm: 'attribute_display_form_identifier'
+            },
+            {
+                attribute: 'filter_attribute_identifier',
+                attributeDisplayForm: 'filter_attr_display_form_identifier'
+            }
+        ];
+
+        expect(generateMetricDefinition(afm.measures[0], afm, mapping)).toEqual(
+            'SELECT ' +
+            '(SELECT {measure_identifier} ' +
+            'WHERE {filter_attribute_identifier} ' +
+            'IN ({filter_attribute_identifier?1},{filter_attribute_identifier?2})) ' +
+            '/ ' +
+            '(SELECT {measure_identifier} ' +
+            'BY ALL {attribute_identifier} ' +
+            'WHERE {filter_attribute_identifier} ' +
+            'IN ({filter_attribute_identifier?1},{filter_attribute_identifier?2}))'
+        );
+    });
+
+    it('should generate PoP & showInPercent (referenced definitions) with uris', () => {
         const afm: IAfm = {
             measures: [
                 {
                     id: 'measure_in_percent',
                     definition: {
                         baseObject: {
-                            id: '/gdc/measure'
+                            id: '/gdc/md/measure/obj/1'
                         },
                         showInPercent: true
                     }
@@ -452,14 +664,14 @@ describe('generateMetricDefinition', () => {
                             lookupId: 'measure_in_percent'
                         },
                         popAttribute: {
-                            id: '/gdc/attribute_display_form'
+                            id: '/gdc/md/attribute_display_form/obj/1'
                         }
                     }
                 }
             ],
             attributes: [
                 {
-                    id: '/gdc/attribute_display_form',
+                    id: '/gdc/md/attribute_display_form/obj/1',
                     type: 'date'
                 }
             ]
@@ -467,17 +679,69 @@ describe('generateMetricDefinition', () => {
 
         const mapping = [
             {
-                attribute: '/gdc/attribute',
-                attributeDisplayForm: '/gdc/attribute_display_form'
+                attribute: '/gdc/md/attribute/obj/1',
+                attributeDisplayForm: '/gdc/md/attribute_display_form/obj/1'
             }
         ];
 
         expect(generateMetricDefinition(afm.measures[0], afm, mapping)).toEqual(
-            'SELECT (SELECT [/gdc/measure]) / (SELECT [/gdc/measure] BY ALL [/gdc/attribute])'
+            'SELECT (SELECT [/gdc/md/measure/obj/1]) / (SELECT [/gdc/md/measure/obj/1] ' +
+            'BY ALL [/gdc/md/attribute/obj/1])'
         );
         expect(generateMetricDefinition(afm.measures[1], afm, mapping)).toEqual(
-            'SELECT (SELECT (SELECT [/gdc/measure]) ' +
-            '/ (SELECT [/gdc/measure] BY ALL [/gdc/attribute])) FOR PREVIOUS ([/gdc/attribute])'
+            'SELECT (SELECT (SELECT [/gdc/md/measure/obj/1]) ' +
+            '/ (SELECT [/gdc/md/measure/obj/1] BY ALL [/gdc/md/attribute/obj/1])) ' +
+            'FOR PREVIOUS ([/gdc/md/attribute/obj/1])'
+        );
+    });
+
+    it('should generate PoP & showInPercent (referenced definitions) with identifiers', () => {
+        const afm: IAfm = {
+            measures: [
+                {
+                    id: 'measure_in_percent',
+                    definition: {
+                        baseObject: {
+                            id: 'measure_identifier'
+                        },
+                        showInPercent: true
+                    }
+                },
+                {
+                    id: 'measure_pop',
+                    definition: {
+                        baseObject: {
+                            lookupId: 'measure_in_percent'
+                        },
+                        popAttribute: {
+                            id: 'attribute_display_form_identifier'
+                        }
+                    }
+                }
+            ],
+            attributes: [
+                {
+                    id: 'attribute_display_form_identifier',
+                    type: 'attribute'
+                }
+            ]
+        };
+
+        const mapping = [
+            {
+                attribute: 'attribute_identifier',
+                attributeDisplayForm: 'attribute_display_form_identifier'
+            }
+        ];
+
+        expect(generateMetricDefinition(afm.measures[0], afm, mapping)).toEqual(
+            'SELECT (SELECT {measure_identifier}) / (SELECT {measure_identifier} ' +
+            'BY ALL {attribute_identifier})'
+        );
+        expect(generateMetricDefinition(afm.measures[1], afm, mapping)).toEqual(
+            'SELECT (SELECT (SELECT {measure_identifier}) ' +
+            '/ (SELECT {measure_identifier} BY ALL {attribute_identifier})) ' +
+            'FOR PREVIOUS ({attribute_identifier})'
         );
     });
 });
@@ -543,13 +807,13 @@ describe('generateFilters', () => {
         const afm: IAfm = {
             filters: [
                 {
-                    id: '/gdc/datefilter',
+                    id: '/gdc/md/datefilter/obj/1',
                     type: 'date',
                     between: [0, 12],
                     granularity: 'year'
                 },
                 {
-                    id: '/gdc/attribute1',
+                    id: '/gdc/md/attribute1/obj/1',
                     type: 'attribute',
                     in: [
                         'a',
@@ -557,7 +821,7 @@ describe('generateFilters', () => {
                     ]
                 },
                 {
-                    id: '/gdc/attribute2',
+                    id: '/gdc/md/attribute2/obj/1',
                     type: 'attribute',
                     notIn: [
                         'c',
@@ -575,7 +839,7 @@ describe('generateFilters', () => {
         expect(generateFilters(afm)).toEqual(
             {
                 '$and': [{
-                    '/gdc/attribute1': {
+                    '/gdc/md/attribute1/obj/1': {
                         $in: [{
                             id: 'a'
                         }, {
@@ -583,7 +847,7 @@ describe('generateFilters', () => {
                         }]
                     }
                 }, {
-                    '/gdc/attribute2': {
+                    '/gdc/md/attribute2/obj/1': {
                         $not: {
                             $in: [{
                                 id: 'c'
@@ -593,11 +857,132 @@ describe('generateFilters', () => {
                         }
                     }
                 }],
-                '/gdc/datefilter': {
+                '/gdc/md/datefilter/obj/1': {
                     $between: [0, 12],
                     $granularity: 'GDC.time.year'
                 }
             }
         );
+    });
+});
+
+describe('loadAttributesMap', () => {
+    const getObjectsResponse = [
+        {
+            attributeDisplayForm: {
+                content: {
+                    formOf: '/gdc/md/project/obj/11'
+                },
+                meta: {
+                    uri: '/gdc/md/project/obj/1',
+                    identifier: 'abcd1'
+                }
+            }
+        }
+    ];
+
+    const getUrisFromIdentifiersResponse = [
+        {
+            uri: '/gdc/md/project/obj/1'
+        }
+    ];
+
+    const projectId = 'project';
+
+    function createSdkMock() {
+         return {
+            md: {
+                getUrisFromIdentifiers: jest.fn(() => Promise.resolve(getUrisFromIdentifiersResponse)),
+                getObjects: jest.fn(() => Promise.resolve(getObjectsResponse))
+            }
+        };
+    }
+
+    it('should return array with attributes and display forms for AFM with uris', () => {
+        const sdk = createSdkMock();
+        const afm: IAfm = {
+            measures: [
+                {
+                    id: 'measure_in_percent',
+                    definition: {
+                        baseObject: {
+                            id: 'measure_identifier'
+                        },
+                        showInPercent: true
+                    }
+                },
+                {
+                    id: 'measure_pop',
+                    definition: {
+                        baseObject: {
+                            lookupId: 'measure_in_percent'
+                        },
+                        popAttribute: {
+                            id: '/gdc/md/project/obj/11'
+                        }
+                    }
+                }
+            ],
+            attributes: [
+                {
+                    id: '/gdc/md/project/obj/11',
+                    type: 'attribute'
+                }
+            ]
+        };
+        return loadAttributesMap(afm, sdk, projectId).then((attributesMap) => {
+            expect(sdk.md.getObjects).toHaveBeenCalled();
+            expect(sdk.md.getUrisFromIdentifiers).not.toHaveBeenCalled();
+            expect(attributesMap).toEqual([
+                {
+                    attribute: '/gdc/md/project/obj/11',
+                    attributeDisplayForm: '/gdc/md/project/obj/1'
+                }
+            ]);
+        });
+    });
+
+    it('should return array with attributes and display forms for AFM with identifiers', () => {
+        const sdk = createSdkMock();
+        const afm: IAfm = {
+            measures: [
+                {
+                    id: 'measure_in_percent',
+                    definition: {
+                        baseObject: {
+                            id: 'measure_identifier'
+                        },
+                        showInPercent: true
+                    }
+                },
+                {
+                    id: 'measure_pop',
+                    definition: {
+                        baseObject: {
+                            lookupId: 'measure_in_percent'
+                        },
+                        popAttribute: {
+                            id: 'attrDfIdentifier'
+                        }
+                    }
+                }
+            ],
+            attributes: [
+                {
+                    id: 'attrDfIdentifier',
+                    type: 'attribute'
+                }
+            ]
+        };
+        return loadAttributesMap(afm, sdk, projectId).then((attributesMap) => {
+            expect(sdk.md.getObjects).toHaveBeenCalled();
+            expect(sdk.md.getUrisFromIdentifiers).toHaveBeenCalled();
+            expect(attributesMap).toEqual([
+                {
+                    attribute: '/gdc/md/project/obj/11',
+                    attributeDisplayForm: 'abcd1'
+                }
+            ]);
+        });
     });
 });

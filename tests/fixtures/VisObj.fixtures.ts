@@ -1,4 +1,13 @@
 import { IVisualizationObject } from '../../src/legacy/model/VisualizationObject';
+import {
+    ATTRIBUTE_DISPLAY_FORM_URI,
+    ATTRIBUTE_URI,
+    ATTRIBUTE_DISPLAY_FORM_URI_2,
+    ATTRIBUTE_URI_2,
+    DATE_DATA_SET_URI,
+    DATE_DISPLAY_FORM_URI,
+    DATE_URI
+} from './Afm.fixtures';
 
 const simpleMeasure: IVisualizationObject = {
     type: 'bar',
@@ -27,13 +36,13 @@ const filteredMeasure: IVisualizationObject = {
             measure: {
                 measureFilters: [{
                     listAttributeFilter: {
-                        attribute: '/gdc/md/project/obj/attr.id',
-                        displayForm: '/gdc/md/project/obj/attr.df.id',
+                        attribute: ATTRIBUTE_URI,
+                        displayForm: ATTRIBUTE_DISPLAY_FORM_URI,
                         default: {
                             negativeSelection: false,
                             attributeElements: [
-                                '/gdc/md/project/obj/attr.id?id=1',
-                                '/gdc/md/project/obj/attr.id?id=2'
+                                `${ATTRIBUTE_URI}?id=1`,
+                                `${ATTRIBUTE_URI}?id=2`
                             ]
                         }
                     }
@@ -77,7 +86,7 @@ const attributeBasedMeasure: IVisualizationObject = {
         measures: [{
             measure: {
                 measureFilters: [],
-                objectUri: '/gdc/md/project/obj/attr.id',
+                objectUri: ATTRIBUTE_DISPLAY_FORM_URI,
                 showInPercent: false,
                 showPoP: false,
                 title: 'COUNT of Measure M1',
@@ -108,7 +117,7 @@ const showInPercent: IVisualizationObject = {
             category: {
                 type: 'attribute',
                 collection: 'attribute',
-                displayForm: '/gdc/md/project/obj/attr.id'
+                displayForm: ATTRIBUTE_DISPLAY_FORM_URI
             }
         }],
         filters: []
@@ -132,7 +141,7 @@ const showInPercentWithDate: IVisualizationObject = {
         categories: [{
             category: {
                 collection: 'attribute',
-                displayForm: '/gdc/md/project/obj/date.id',
+                displayForm: DATE_DISPLAY_FORM_URI,
                 type: 'date'
             }
         }],
@@ -187,8 +196,8 @@ const popMeasure: IVisualizationObject = {
                 category: {
                     type: 'date',
                     collection: 'attribute',
-                    displayForm: '/gdc/md/project/obj/attr.df.id',
-                    attribute: '/gdc/md/project/obj/attr.id'
+                    displayForm: ATTRIBUTE_DISPLAY_FORM_URI,
+                    attribute: ATTRIBUTE_URI
                 }
             }
         ],
@@ -220,8 +229,8 @@ const popMeasureWithSorting: IVisualizationObject = {
                 category: {
                     type: 'date',
                     collection: 'attribute',
-                    displayForm: '/gdc/md/project/obj/attr.df.id',
-                    attribute: '/gdc/md/project/obj/attr.id'
+                    displayForm: ATTRIBUTE_DISPLAY_FORM_URI,
+                    attribute: ATTRIBUTE_URI
                 }
             }
         ],
@@ -236,7 +245,7 @@ const categoryWithSorting: IVisualizationObject = {
         categories: [{
             category: {
                 collection: 'attribute',
-                displayForm: '/gdc/md/project/obj/attr.id',
+                displayForm: ATTRIBUTE_DISPLAY_FORM_URI,
                 type: 'attribute',
                 sort: 'desc'
             }
@@ -252,8 +261,8 @@ const dateFilter: IVisualizationObject = {
         categories: [],
         filters: [{
             dateFilter: {
-                attribute: '/gdc/md/project/obj/attr.id',
-                dataset: '/gdc/md/project/obj/dataset.id',
+                attribute: DATE_URI,
+                dataset: DATE_DATA_SET_URI,
                 from: -89,
                 granularity: 'GDC.time.date',
                 to: 0,
@@ -270,22 +279,22 @@ const attributeFilter: IVisualizationObject = {
         categories: [],
         filters: [{
             listAttributeFilter: {
-                attribute: '/gdc/md/project/obj/attr.id',
-                displayForm: '/gdc/md/project/obj/attr.df.id',
+                attribute: ATTRIBUTE_URI,
+                displayForm: ATTRIBUTE_DISPLAY_FORM_URI,
                 default: {
                     negativeSelection: false,
                     attributeElements: [
-                        '/gdc/md/project/obj/attr.id?id=1',
-                        '/gdc/md/project/obj/attr.id?id=2',
-                        '/gdc/md/project/obj/attr.id?id=3'
+                        `${ATTRIBUTE_URI}?id=1`,
+                        `${ATTRIBUTE_URI}?id=2`,
+                        `${ATTRIBUTE_URI}?id=3`
                     ]
                 }
             }
         },
         {
             listAttributeFilter: {
-                attribute: '/gdc/md/project/obj/attr2.id',
-                displayForm: '/gdc/md/project/obj/attr2.df.id',
+                attribute: ATTRIBUTE_URI_2,
+                displayForm: ATTRIBUTE_DISPLAY_FORM_URI_2,
                 default: {
                     negativeSelection: false,
                     attributeElements: []
@@ -319,16 +328,16 @@ const stackingAttribute: IVisualizationObject = {
                 category: {
                     type: 'date',
                     collection: 'attribute',
-                    displayForm: '/gdc/md/project/obj/date.df.id',
-                    attribute: '/gdc/md/project/obj/attr.id'
+                    displayForm: DATE_DISPLAY_FORM_URI,
+                    attribute: DATE_URI
                 }
             },
             {
                 category: {
                     type: 'attribute',
                     collection: 'stack',
-                    attribute: '/gdc/md/project/obj/attr.id',
-                    displayForm: '/gdc/md/project/obj/attr.df.id'
+                    attribute: ATTRIBUTE_URI,
+                    displayForm: ATTRIBUTE_DISPLAY_FORM_URI
                 }
             }
         ],
@@ -339,14 +348,14 @@ const stackingAttribute: IVisualizationObject = {
                     from: -3,
                     to: 0,
                     granularity: 'GDC.time.quarter',
-                    dataset: '/gdc/md/project/obj/dataset.id',
-                    attribute: '/gdc/md/project/obj/attr.id'
+                    dataset: DATE_DATA_SET_URI,
+                    attribute: DATE_URI
                 }
             },
             {
                 listAttributeFilter: {
-                    attribute: '/gdc/md/project/obj/attr.id',
-                    displayForm: '/gdc/md/project/obj/attr.df.id',
+                    attribute: ATTRIBUTE_URI,
+                    displayForm: ATTRIBUTE_DISPLAY_FORM_URI,
                     default: {
                         negativeSelection: true,
                         attributeElements: [

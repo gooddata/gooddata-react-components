@@ -6,6 +6,7 @@ import flatten = require('lodash/flatten');
 import pick = require('lodash/pick');
 import get = require('lodash/get');
 import { ISort, ITransformation } from '../interfaces/Transformation';
+import { isUri, areUris } from '../helpers/uri';
 import {
     IMeasure,
     IMeasureAttributeFilter,
@@ -19,6 +20,7 @@ import {
     IPositiveAttributeFilter,
     INegativeAttributeFilter
 } from '../interfaces/Afm';
+import invariant = require('invariant');
 
 export type ObjectUri = string;
 
@@ -36,11 +38,11 @@ const getFilterExpression = (filter: IMeasureAttributeFilter, attributesMapping)
         return null;
     }
 
-    const uri = getAttributeByDisplayForm(attributesMapping, filter.id);
+    const id = getAttributeByDisplayForm(attributesMapping, filter.id);
     const inExpr = (filter as INegativeFilter).notIn ? 'NOT IN' : 'IN';
-    const elementsForQuery = elements.map((e) => `[${uri}/elements?id=${e}]`);
+    const elementsForQuery = elements.map((e) => isUri(id) ? `[${id}/elements?id=${e}]` : `{${id}?${e}}`);
 
-    return `[${uri}] ${inExpr} (${elementsForQuery.join(',')})`;
+    return `${wrapId(id)} ${inExpr} (${elementsForQuery.join(',')})`;
 };
 
 const getFiltersExpression = (filters: IMeasureAttributeFilter[] = [], attributesMapping) => {
@@ -49,12 +51,15 @@ const getFiltersExpression = (filters: IMeasureAttributeFilter[] = [], attribute
     return compact(filterExpressions).join(' AND ');
 };
 
+const wrapId = (id: string) => isUri(id) ? `[${id}]` : `{${id}}`;
+
 const getSimpleMetricExpression = (item: IMeasure, attributesMapping, includeFilters = true) => {
     const { filters, baseObject, aggregation } = item.definition;
     const filterExpression = includeFilters ? getFiltersExpression(filters, attributesMapping) : null;
-    const uri = (baseObject as ISpecificObject).id;
+    const id = (baseObject as ISpecificObject).id;
+    const wrappedIdentifier = wrapId(id);
 
-    return `${aggregation ? `${aggregation.toUpperCase()}([${uri}])` : `[${uri}]`
+    return `${aggregation ? `${aggregation.toUpperCase()}(${wrappedIdentifier})` : `${wrappedIdentifier}`
         }${filterExpression ? ` WHERE ${filterExpression}` : ''}`;
 };
 
@@ -68,7 +73,7 @@ const getPercentMetricExpression = (item: IMeasure, attributesMapping, attribute
     const filterExpression = getFiltersExpression(item.definition.filters, attributesMapping);
     const whereExpression = filterExpression ? ` WHERE ${filterExpression}` : '';
 
-    const byAllExpression = attributesUris.map((attributeUri) => `ALL [${attributeUri}]`).join(',');
+    const byAllExpression = attributesUris.map((attributeUri) => `ALL ${wrapId(attributeUri)}`).join(',');
 
     return `SELECT (${metricExpressionWithoutFilters}${whereExpression}) ` +
         `/ (${metricExpressionWithoutFilters} BY ${byAllExpression}${whereExpression})`;
@@ -88,7 +93,8 @@ const createPoPMetric = (item: IMeasure, afm: IAfm, attributesMapping) => {
         generatedMetricExpression = `SELECT ${getSimpleMetricExpression(item, attributesMapping)}`;
     }
     const attributeUri = getAttributeByDisplayForm(attributesMapping, item.definition.popAttribute.id);
-    return `${generatedMetricExpression} FOR PREVIOUS ([${attributeUri}])`;
+
+    return `${generatedMetricExpression} FOR PREVIOUS (${wrapId(attributeUri)})`;
 };
 
 const isPoP = (item: IMeasure): boolean => {
@@ -103,8 +109,10 @@ const hasFilters = (item: IMeasure): boolean => {
     return !!(item.definition && item.definition.filters);
 };
 
-const getAttributeByDisplayForm = (mapping, displayForm): string => {
-    return mapping.find((item) => item.attributeDisplayForm === displayForm).attribute;
+const getAttributeByDisplayForm = (mapping: AttributeMap, displayForm): string => {
+    const item = mapping.find((i) => i.attributeDisplayForm === displayForm);
+    invariant(item, `${displayForm} not found in ${JSON.stringify(mapping)}`);
+    return item.attribute;
 };
 
 export const generateMetricDefinition = (item: IMeasure, afm: IAfm, attributesMapping) => {
@@ -125,11 +133,11 @@ export const generateMetricDefinition = (item: IMeasure, afm: IAfm, attributesMa
 export const lookupAttributes = (afm: IAfm) => {
     const attributes = afm.measures.map((measure) => {
         const ids = [];
-        if (isPoP(measure)) { // MAQL - FOR PREVIOUS ([attributeUri])
+        if (isPoP(measure)) { // MAQL - FOR PREVIOUS ([attributeUri]) OR ({attributeId})
             ids.push(measure.definition.popAttribute.id);
         }
 
-        if (isShowInPercent(measure)) { // MAQL - BY ALL [attributeUri1], ALL [attributeUri2]
+        if (isShowInPercent(measure)) { // MAQL - BY ALL [attributeUri1], ALL [attributeUri2] OR ALL {attributeId2}
             ids.push(...afm.attributes.map((attribute) => attribute.id));
         }
 
@@ -215,3 +223,25 @@ export const getMeasureAdditionalInfo =
         const info = get(transformation, 'measures', []).find((measure) => measure.id === id);
         return pick<IAdditionalInfo, {}>(info, ['title', 'format']);
     };
+
+export function loadAttributesMap(afm: IAfm, sdk, projectId: string): Promise<AttributeMap> {
+    const attributes = lookupAttributes(afm);
+
+    if (attributes.length > 0) {
+        const loadAttributeUris = areUris(attributes)
+            ? Promise.resolve(attributes)
+            : sdk.md.getUrisFromIdentifiers(projectId, attributes)
+                .then((pairs) => pairs.map((pair) => pair.uri));
+
+        return loadAttributeUris.then((objectUris) => {
+            return sdk.md.getObjects(projectId, objectUris)
+                .then((items) => items.map((item) => ({
+                    attribute: item.attributeDisplayForm.content.formOf,
+                    attributeDisplayForm: areUris(attributes) ?
+                        item.attributeDisplayForm.meta.uri :
+                        item.attributeDisplayForm.meta.identifier
+                })));
+        });
+    }
+    return Promise.resolve([]);
+}

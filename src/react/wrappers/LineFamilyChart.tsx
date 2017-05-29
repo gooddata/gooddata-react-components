@@ -83,14 +83,15 @@ export class LineFamilyChart extends React.Component<ILineFamilyChartProps, ILin
         }
 
         const { type, afm, config, transformation } = this.props;
+        const { result } = this.state;
 
-        const visConfig = generateConfig(type, afm, transformation, config);
+        const visConfig = generateConfig(type, afm, transformation, config, result.headers);
 
         return (
             <IntlWrapper>
                 <LineFamilyChartTransformation
                     config={visConfig}
-                    data={this.state.result}
+                    data={result}
                     onDataTooLarge={() => this.onError({ status: DATA_TOO_LARGE_DISPLAY })}
                     limits={config.limits}
                 />

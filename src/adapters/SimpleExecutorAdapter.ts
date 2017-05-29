@@ -3,11 +3,10 @@ import { DataSource } from '../DataSource';
 import {
     generateMetricDefinition,
     generateFilters,
-    lookupAttributes,
     normalizeAfm,
     getMeasureAdditionalInfo,
     getSorting,
-    AttributeMap
+    loadAttributesMap
 } from './utils';
 
 export class SimpleExecutorAdapter implements IAdapter {
@@ -27,7 +26,7 @@ export class SimpleExecutorAdapter implements IAdapter {
     public createDataSource(afm): IDataSource {
         const normalizedAfm = normalizeAfm(afm);
         const execFactory = (transformation) => {
-            return this.loadAttributes(normalizedAfm)
+            return loadAttributesMap(normalizedAfm, this.sdk, this.projectId)
                 .then((attributesMapping) => {
                     // dump('AttributesMapping', attributesMapping);
                     const { columns, executionConfiguration } =
@@ -39,18 +38,6 @@ export class SimpleExecutorAdapter implements IAdapter {
         };
 
         return new DataSource(execFactory);
-    }
-
-    private loadAttributes(afm): Promise<AttributeMap> {
-        const attributes = lookupAttributes(afm);
-        if (attributes.length > 0) {
-            return this.sdk.md.getObjects(this.projectId, attributes)
-                .then((items) => items.map((item) => ({
-                    attribute: item.attributeDisplayForm.content.formOf,
-                    attributeDisplayForm: item.attributeDisplayForm.meta.uri
-                })));
-        }
-        return Promise.resolve([]);
     }
 
     private convertData(afm, transformation, attributesMapping) {

@@ -14,13 +14,17 @@ import {
     attributeBasedMeasure,
     stackingAttribute,
     attributeFilter,
-    dateFilter
+    dateFilter,
+    attributeWithIdentifier,
+    ATTRIBUTE_URI,
+    ATTRIBUTE_DISPLAY_FORM_URI
 } from '../fixtures/Afm.fixtures';
 
 import { charts } from '../fixtures/VisObj.fixtures';
 
 import { toVisObj, toAFM } from '../../src/legacy/converters';
 import { VisualizationType } from '../../src/legacy/model/VisualizationObject';
+import { IHeader } from '../../src/Interfaces';
 
 const bar: VisualizationType = 'bar';
 
@@ -90,7 +94,7 @@ describe('converters', () => {
         });
 
         it('should handle the case when no transformation is given', () => {
-            const { afm  } = simpleMeasure;
+            const { afm } = simpleMeasure;
 
             expect(toVisObj(bar, afm, null)).toEqual({
                 type: 'bar',
@@ -151,13 +155,13 @@ describe('converters', () => {
         it('should set attribute collection to stack', () => {
             const { afm, transformation } = stackingAttribute;
 
-            expect(toVisObj(bar, afm, transformation)).toEqual(removeAttribute(charts.bar.stackingAttribute);
+            expect(toVisObj(bar, afm, transformation)).toEqual(removeAttribute(charts.bar.stackingAttribute));
         });
     });
 
     describe('toAFM', () => {
         const attributesMap = {
-            '/gdc/md/project/obj/attr.id': '/gdc/md/project/obj/attr.df.id'
+            [ATTRIBUTE_URI]: ATTRIBUTE_DISPLAY_FORM_URI
         };
 
         it('should convert simple measures', () => {
@@ -191,6 +195,42 @@ describe('converters', () => {
         it('should convert measure with show in percent with attribute', () => {
             expect(toAFM(charts.bar.showInPercent, attributesMap)).toEqual({
                 ...showInPercent,
+                type: 'bar'
+            });
+        });
+
+        it('should handle attribute with identifier', () => {
+            const { afm, transformation } = attributeWithIdentifier;
+            const resultHeaders: IHeader[] = [
+                {
+                    id: 'bar',
+                    title: 'Attribute Bar',
+                    uri: ATTRIBUTE_DISPLAY_FORM_URI,
+                    type: 'attrLabel'
+                }
+            ];
+
+            expect(toVisObj(bar, afm, transformation, resultHeaders)).toEqual({
+                buckets: {
+                    categories: [{
+                        category: {
+                            collection: 'attribute',
+                            displayForm: ATTRIBUTE_DISPLAY_FORM_URI,
+                            type: 'attribute'
+                        }
+                    }],
+                    filters: [],
+                    measures: [{
+                        measure: {
+                            measureFilters: [],
+                            objectUri: 'foo',
+                            showInPercent: false,
+                            showPoP: false,
+                            title: 'm1',
+                            type: 'metric'
+                        }
+                    }]
+                },
                 type: 'bar'
             });
         });
