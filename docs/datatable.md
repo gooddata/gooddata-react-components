@@ -22,7 +22,7 @@ const transformation = {};
 
 gooddata.config.setCustomDomain('secure.gooddata.com');
 gooddata.user.login('username', 'password').then(() => {
-    const adapter = new SimpleExecutorAdapter('projectId');
+    const adapter = new SimpleExecutorAdapter(gooddata, 'projectId');
     const dt = new DataTable(adapter);
 
     dt.onData((data) => console.log(data));

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import isEqual = require('lodash/isEqual');
+import sdk from 'gooddata';
 
 import { IAfm } from '../../interfaces/Afm';
 import { ITransformation } from '../../interfaces/Transformation';
@@ -33,7 +34,7 @@ function execute(dataTable: IDataTable, afm: IAfm, transformation: ITransformati
 }
 
 function dataTableFactory(projectId): IDataTable {
-    const adapter = new SimpleExecutorAdapter(projectId);
+    const adapter = new SimpleExecutorAdapter(sdk, projectId);
     return new DataTable(adapter);
 }
 
