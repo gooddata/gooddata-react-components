@@ -1,11 +1,13 @@
 import {
     lookupAttributes,
     normalizeAfm,
-    generateMetricDefinition,
+    generateMetricExpression,
     generateFilters,
     getSorting,
     getMeasureAdditionalInfo,
-    loadAttributesMap
+    loadAttributesMap,
+    generateMetricDefinition,
+    SHOW_IN_PERCENT_MEASURE_FORMAT
 } from '../../src/adapters/utils';
 import { IAfm } from '../../src/interfaces/Afm';
 import { ITransformation } from '../../src/interfaces/Transformation';
@@ -209,8 +211,8 @@ describe('normalizeAfm', () => {
                 {
                     id: '1',
                     type: 'date',
-                    granularity: 'year',
-                    between: [0, 1]
+                    between: [0, 1],
+                    granularity: 'year'
                 }
             ]
         })).toEqual({
@@ -220,15 +222,15 @@ describe('normalizeAfm', () => {
                 {
                     id: '1',
                     type: 'date',
-                    granularity: 'year',
-                    between: [0, 1]
+                    between: [0, 1],
+                    granularity: 'year'
                 }
             ]
         });
     });
 });
 
-describe('generateMetricDefinition', () => {
+describe('generateMetricExpressionn', () => {
     it('should generate metric with aggregation and uri', () => {
         const afm: IAfm = {
             measures: [{
@@ -241,7 +243,7 @@ describe('generateMetricDefinition', () => {
                 }
             }]
         };
-        expect(generateMetricDefinition(afm.measures[0], afm, [])).toEqual(
+        expect(generateMetricExpression(afm.measures[0], afm, [])).toEqual(
             'SELECT SUM([/gdc/md/measure/obj/1])'
         );
     });
@@ -258,7 +260,7 @@ describe('generateMetricDefinition', () => {
                 }
             }]
         };
-        expect(generateMetricDefinition(afm.measures[0], afm, [])).toEqual(
+        expect(generateMetricExpression(afm.measures[0], afm, [])).toEqual(
             'SELECT SUM({identifier})'
         );
     });
@@ -280,7 +282,7 @@ describe('generateMetricDefinition', () => {
                 }
             }]
         };
-        expect(generateMetricDefinition(afm.measures[0], afm, [])).toEqual(
+        expect(generateMetricExpression(afm.measures[0], afm, [])).toEqual(
             'SELECT [/gdc/md/measure/obj/1]'
         );
     });
@@ -302,7 +304,7 @@ describe('generateMetricDefinition', () => {
                 }
             }]
         };
-        expect(generateMetricDefinition(afm.measures[0], afm, [])).toEqual(
+        expect(generateMetricExpression(afm.measures[0], afm, [])).toEqual(
             'SELECT {identifier}'
         );
     });
@@ -343,7 +345,7 @@ describe('generateMetricDefinition', () => {
                 attributeDisplayForm: '/gdc/md/filter_attr_display_form2/obj/1'
             }
         ];
-        expect(generateMetricDefinition(afm.measures[0], afm, mapping)).toEqual(
+        expect(generateMetricExpression(afm.measures[0], afm, mapping)).toEqual(
             'SELECT [/gdc/md/measure/obj/1] ' +
             'WHERE [/gdc/md/filter_attr1/obj/1] ' +
             'IN ([/gdc/md/filter_attr1/obj/1/elements?id=1],[/gdc/md/filter_attr1/obj/1/elements?id=2]) ' +
@@ -388,7 +390,7 @@ describe('generateMetricDefinition', () => {
                 attributeDisplayForm: 'attribute_display_form_identifier_2'
             }
         ];
-        expect(generateMetricDefinition(afm.measures[0], afm, mapping)).toEqual(
+        expect(generateMetricExpression(afm.measures[0], afm, mapping)).toEqual(
             'SELECT {measureIdentifier} ' +
             'WHERE {attribute_identifier_1} ' +
             'IN ({attribute_identifier_1?1},{attribute_identifier_1?2}) ' +
@@ -430,7 +432,7 @@ describe('generateMetricDefinition', () => {
                 attributeDisplayForm: '/gdc/md/date_display_form/obj/1'
             }
         ];
-        expect(generateMetricDefinition(afm.measures[1], afm, mapping)).toEqual(
+        expect(generateMetricExpression(afm.measures[1], afm, mapping)).toEqual(
             'SELECT [/gdc/md/measure/obj/1] FOR PREVIOUS ([/gdc/md/date_attribute/obj/1])'
         );
     });
@@ -468,7 +470,7 @@ describe('generateMetricDefinition', () => {
                 attributeDisplayForm: 'attribute_display_form_identifier'
             }
         ];
-        expect(generateMetricDefinition(afm.measures[1], afm, mapping)).toEqual(
+        expect(generateMetricExpression(afm.measures[1], afm, mapping)).toEqual(
             'SELECT {measure_identifier} FOR PREVIOUS ({attribute_identifier})'
         );
     });
@@ -501,7 +503,7 @@ describe('generateMetricDefinition', () => {
             }
         ];
 
-        expect(generateMetricDefinition(afm.measures[0], afm, mapping)).toEqual(
+        expect(generateMetricExpression(afm.measures[0], afm, mapping)).toEqual(
             'SELECT (SELECT [/gdc/md/measure/obj/1]) / (SELECT [/gdc/md/measure/obj/1] ' +
             'BY ALL [/gdc/md/attribute/obj/1])'
         );
@@ -535,7 +537,7 @@ describe('generateMetricDefinition', () => {
             }
         ];
 
-        expect(generateMetricDefinition(afm.measures[0], afm, mapping)).toEqual(
+        expect(generateMetricExpression(afm.measures[0], afm, mapping)).toEqual(
             'SELECT (SELECT {measure_identifier}) / (SELECT {measure_identifier} ' +
             'BY ALL {attribute_identifier})'
         );
@@ -580,7 +582,7 @@ describe('generateMetricDefinition', () => {
             }
         ];
 
-        expect(generateMetricDefinition(afm.measures[0], afm, mapping)).toEqual(
+        expect(generateMetricExpression(afm.measures[0], afm, mapping)).toEqual(
             'SELECT ' +
             '(SELECT [/gdc/md/measure/obj/1] ' +
                 'WHERE [/gdc/md/filter_attr/obj/1] ' +
@@ -632,7 +634,7 @@ describe('generateMetricDefinition', () => {
             }
         ];
 
-        expect(generateMetricDefinition(afm.measures[0], afm, mapping)).toEqual(
+        expect(generateMetricExpression(afm.measures[0], afm, mapping)).toEqual(
             'SELECT ' +
             '(SELECT {measure_identifier} ' +
             'WHERE {filter_attribute_identifier} ' +
@@ -684,11 +686,11 @@ describe('generateMetricDefinition', () => {
             }
         ];
 
-        expect(generateMetricDefinition(afm.measures[0], afm, mapping)).toEqual(
+        expect(generateMetricExpression(afm.measures[0], afm, mapping)).toEqual(
             'SELECT (SELECT [/gdc/md/measure/obj/1]) / (SELECT [/gdc/md/measure/obj/1] ' +
             'BY ALL [/gdc/md/attribute/obj/1])'
         );
-        expect(generateMetricDefinition(afm.measures[1], afm, mapping)).toEqual(
+        expect(generateMetricExpression(afm.measures[1], afm, mapping)).toEqual(
             'SELECT (SELECT (SELECT [/gdc/md/measure/obj/1]) ' +
             '/ (SELECT [/gdc/md/measure/obj/1] BY ALL [/gdc/md/attribute/obj/1])) ' +
             'FOR PREVIOUS ([/gdc/md/attribute/obj/1])'
@@ -734,11 +736,11 @@ describe('generateMetricDefinition', () => {
             }
         ];
 
-        expect(generateMetricDefinition(afm.measures[0], afm, mapping)).toEqual(
+        expect(generateMetricExpression(afm.measures[0], afm, mapping)).toEqual(
             'SELECT (SELECT {measure_identifier}) / (SELECT {measure_identifier} ' +
             'BY ALL {attribute_identifier})'
         );
-        expect(generateMetricDefinition(afm.measures[1], afm, mapping)).toEqual(
+        expect(generateMetricExpression(afm.measures[1], afm, mapping)).toEqual(
             'SELECT (SELECT (SELECT {measure_identifier}) ' +
             '/ (SELECT {measure_identifier} BY ALL {attribute_identifier})) ' +
             'FOR PREVIOUS ({attribute_identifier})'
@@ -798,6 +800,92 @@ describe('getMeasureAdditionalInfo', () => {
         expect(getMeasureAdditionalInfo(transformation, 'b')).toEqual({
             title: 'B',
             format: 'fB'
+        });
+    });
+});
+
+describe('generateMetricDefinition', () => {
+    it('should generate metric definition with given format for normal measure', () => {
+        const afm: IAfm = {
+            measures: [
+                {
+                    id: 'close_bop',
+                    definition: {
+                        baseObject: {
+                            id: '/gdc/md/measure/obj/2'
+                        },
+                    }
+                }
+            ],
+            attributes: [
+                {
+                    id: '/gdc/md/attribute_display_form/obj/1',
+                    type: 'attribute'
+                }
+            ]
+        };
+
+        const transformation: ITransformation = {
+            measures: [
+                { id: 'close_bop', title: 'Measure', format: '#,##0.00' }
+            ]
+        };
+
+        const mapping = [
+            {
+                attribute: '/gdc/md/attribute/obj/123',
+                attributeDisplayForm: '/gdc/md/attribute_display_form/obj/1'
+            }
+        ];
+
+        expect(generateMetricDefinition(afm, transformation, mapping, afm.measures[0])).toEqual({
+            expression: 'SELECT [/gdc/md/measure/obj/2]',
+            format: '#,##0.00',
+            identifier: 'close_bop',
+            title: 'Measure'
+        });
+    });
+
+    it('should generate metric definition with special format for show in percent measure', () => {
+        const afm: IAfm = {
+            measures: [
+                {
+                    id: 'close_bop_percent',
+                    definition: {
+                        baseObject: {
+                            id: '/gdc/md/measure/obj/2'
+                        },
+                        showInPercent: true
+                    }
+                }
+            ],
+            attributes: [
+                {
+                    id: '/gdc/md/attribute_display_form/obj/1',
+                    type: 'attribute'
+                }
+            ]
+        };
+
+        const transformation: ITransformation = {
+            measures: [
+                { id: 'close_bop_percent', title: '% Measure', format: '#,##0.00' }
+            ]
+        };
+
+        const mapping = [
+            {
+                attribute: '/gdc/md/attribute/obj/123',
+                attributeDisplayForm: '/gdc/md/attribute_display_form/obj/1'
+            }
+        ];
+
+        expect(generateMetricDefinition(afm, transformation, mapping, afm.measures[0])).toEqual({
+            expression: 'SELECT (SELECT [/gdc/md/measure/obj/2]) / '
+                + '(SELECT [/gdc/md/measure/obj/2] BY ALL [/gdc/md/attribute/obj/123])',
+            format: SHOW_IN_PERCENT_MEASURE_FORMAT,
+            identifier: 'close_bop_percent',
+            title: '% Measure'
         });
     });
 });

@@ -1,13 +1,15 @@
 import { IAdapter, IDataSource } from '../Interfaces';
 import { DataSource } from '../DataSource';
 import {
-    generateMetricDefinition,
+    AttributeMap,
     generateFilters,
-    normalizeAfm,
-    getMeasureAdditionalInfo,
+    generateMetricDefinition,
     getSorting,
-    loadAttributesMap
+    loadAttributesMap,
+    normalizeAfm
 } from './utils';
+import { IAfm } from '../interfaces/Afm';
+import { ITransformation } from '../interfaces/Transformation';
 
 export class SimpleExecutorAdapter implements IAdapter {
 
@@ -40,7 +42,7 @@ export class SimpleExecutorAdapter implements IAdapter {
         return new DataSource(execFactory);
     }
 
-    private convertData(afm, transformation, attributesMapping) {
+    private convertData(afm: IAfm, transformation: ITransformation, attributesMapping: AttributeMap) {
         const columns = [];
         const definitions = [];
 
@@ -53,13 +55,10 @@ export class SimpleExecutorAdapter implements IAdapter {
 
         // Get columns
         columns.push(...afm.measures.map((item) => {
-            definitions.push({
-                metricDefinition: {
-                    expression: generateMetricDefinition(item, afm, attributesMapping),
-                    identifier: item.id,
-                    ...getMeasureAdditionalInfo(transformation, item.id)
-                }
-            });
+            const metricDefinition =
+                generateMetricDefinition(afm, transformation, attributesMapping, item);
+
+            definitions.push({ metricDefinition });
 
             return item.id;
         }));

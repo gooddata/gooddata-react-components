@@ -22,6 +22,8 @@ import {
 } from '../interfaces/Afm';
 import invariant = require('invariant');
 
+export const SHOW_IN_PERCENT_MEASURE_FORMAT = '#,##0.00%';
+
 export type ObjectUri = string;
 
 export interface IAttributeMapKeys {
@@ -88,7 +90,7 @@ const createPoPMetric = (item: IMeasure, afm: IAfm, attributesMapping) => {
     let generatedMetricExpression;
     if (baseObject.lookupId) {
         const base = afm.measures.find((measure) => measure.id === baseObject.lookupId);
-        generatedMetricExpression = `SELECT (${generateMetricDefinition(base, afm, attributesMapping)})`;
+        generatedMetricExpression = `SELECT (${generateMetricExpression(base, afm, attributesMapping)})`;
     } else {
         generatedMetricExpression = `SELECT ${getSimpleMetricExpression(item, attributesMapping)}`;
     }
@@ -115,7 +117,7 @@ const getAttributeByDisplayForm = (mapping: AttributeMap, displayForm): string =
     return item.attribute;
 };
 
-export const generateMetricDefinition = (item: IMeasure, afm: IAfm, attributesMapping) => {
+export const generateMetricExpression = (item: IMeasure, afm: IAfm, attributesMapping) => {
     if (isPoP(item)) {
         return createPoPMetric(item, afm, attributesMapping);
     }
@@ -245,3 +247,22 @@ export function loadAttributesMap(afm: IAfm, sdk, projectId: string): Promise<At
     }
     return Promise.resolve([]);
 }
+
+export const getMeasureFormat = (item: IMeasure, defaultFormat: string) =>
+    (item.definition.showInPercent ? SHOW_IN_PERCENT_MEASURE_FORMAT : defaultFormat);
+
+export const generateMetricDefinition = (
+    afm: IAfm,
+    transformation: ITransformation,
+    attributesMapping: AttributeMap,
+    item: IMeasure
+) => {
+    const { title, format } = getMeasureAdditionalInfo(transformation, item.id);
+
+    return {
+        expression: generateMetricExpression(item, afm, attributesMapping),
+        identifier: item.id,
+        title,
+        format: getMeasureFormat(item, format)
+    };
+};
