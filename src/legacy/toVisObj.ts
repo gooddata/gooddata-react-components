@@ -4,6 +4,8 @@ import * as AFM from '../interfaces/Afm';
 import * as Transformation from '../interfaces/Transformation';
 import { getMeasureAdditionalInfo, getSorting, normalizeAfm } from '../adapters/utils';
 import * as VisObj from './model/VisualizationObject';
+import { IHeader } from '../Interfaces';
+import { isUri } from '../helpers/uri';
 
 function convertMeasureFilter(): VisObj.IEmbeddedListAttributeFilter {
     return {
@@ -141,7 +143,14 @@ function isStacking(transformation: Transformation.ITransformation, attribute: A
     });
 }
 
-function convertAttribute(transformation, attribute: AFM.IAttribute): VisObj.ICategory {
+function getAttributeDisplayForm(attribute, headers: IHeader[]) {
+    if (isUri(attribute.id)) {
+        return attribute.id;
+    }
+    return headers.find((header) => header.id === attribute.id).uri;
+}
+
+function convertAttribute(transformation, headers: IHeader[] = [], attribute: AFM.IAttribute): VisObj.ICategory {
     const sorting = getAttributeSorting(transformation, attribute) || {};
 
     const collection = isStacking(transformation, attribute) ? 'stack' : 'attribute';
@@ -149,7 +158,7 @@ function convertAttribute(transformation, attribute: AFM.IAttribute): VisObj.ICa
     return {
         category: {
             collection,
-            displayForm: attribute.id,
+            displayForm: getAttributeDisplayForm(attribute, headers),
             type: attribute.type,
             ...sorting
         }
@@ -218,7 +227,8 @@ function convertFilter(filter: AFM.IFilter): VisObj.EmbeddedFilter {
 export function toVisObj(
     type: VisObj.VisualizationType,
     AFM: AFM.IAfm,
-    transformation: Transformation.ITransformation
+    transformation: Transformation.ITransformation,
+    resultHeaders: IHeader[] = []
 ): VisObj.IVisualizationObject {
     const normalized = normalizeAfm(AFM);
 
@@ -230,7 +240,7 @@ export function toVisObj(
                 .filter(partial(isNotReferencedMeasure, normalized.measures))
                 .map(partial(convertMeasure, transformation, normalized)),
 
-            categories: normalized.attributes.map(partial(convertAttribute, transformation)),
+            categories: normalized.attributes.map(partial(convertAttribute, transformation, resultHeaders)),
 
             filters: normalized.filters.map(convertFilter)
         }

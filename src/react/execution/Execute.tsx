@@ -1,6 +1,7 @@
 import * as React from 'react';
 import isEqual = require('lodash/isEqual');
-import sdk from 'gooddata';
+import get = require('lodash/get');
+import * as sdk from 'gooddata';
 
 import { IAfm } from '../../interfaces/Afm';
 import { ITransformation } from '../../interfaces/Transformation';
@@ -97,10 +98,11 @@ export class Execute extends React.Component<IExecuteProps, undefined> {
                 }
             })
             .catch((error) => {
-                if (error.response.status === 413) {
+                const status = get(error, 'response.status');
+                if (status === 413) {
                     return onError({ status: DATA_TOO_LARGE_TO_COMPUTE, error });
                 }
-                if (error.response.status === 400) {
+                if (status === 400) {
                     return onError({ status: BAD_REQUEST, error });
                 }
                 onError({ status: UNKNOWN_ERROR, error });

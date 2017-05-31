@@ -3,11 +3,9 @@ jest.mock('gooddata');
 import * as React from 'react';
 import { mount } from 'enzyme';
 
-import { DataTable } from '../../../src/DataTable';
 import { Kpi, IKpiProps } from '../../../src/react/wrappers/Kpi';
-import { DummyAdapter } from '../../utils/DummyAdapter';
 
-describe('Execute', () => {
+describe('Kpi', () => {
     function createComponent(props: IKpiProps) {
         return mount(<Kpi {...props} />);
     }

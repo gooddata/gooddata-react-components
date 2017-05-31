@@ -12,6 +12,14 @@ export const empty: IFixture = {
     transformation: {}
 };
 
+export const ATTRIBUTE_DISPLAY_FORM_URI = '/gdc/md/project/obj/1';
+export const ATTRIBUTE_URI = '/gdc/md/project/obj/11';
+export const ATTRIBUTE_DISPLAY_FORM_URI_2 = '/gdc/md/project/obj/2';
+export const ATTRIBUTE_URI_2 = '/gdc/md/project/obj/22';
+export const DATE_DISPLAY_FORM_URI = '/gdc/md/project/obj/3';
+export const DATE_URI = '/gdc/md/project/33';
+export const DATE_DATA_SET_URI = '/gdc/md/project/333';
+
 export const simpleMeasure: IFixture = {
     afm: {
         measures: [
@@ -47,7 +55,7 @@ export const filteredMeasure: IFixture = {
                     },
                     filters: [
                         {
-                            id: '/gdc/md/project/obj/attr.df.id',
+                            id: ATTRIBUTE_DISPLAY_FORM_URI,
                             in: [
                                 '1', '2'
                             ]
@@ -86,14 +94,14 @@ export const popMeasure: IFixture = {
                         lookupId: 'm1'
                     },
                     popAttribute: {
-                        id: '/gdc/md/project/obj/attr.df.id'
+                        id: ATTRIBUTE_DISPLAY_FORM_URI
                     }
                 }
             }
         ],
         attributes: [
             {
-                id: '/gdc/md/project/obj/attr.df.id',
+                id: ATTRIBUTE_DISPLAY_FORM_URI,
                 type: 'date'
             }
         ]
@@ -135,14 +143,14 @@ export const popMeasureWithSorting: IFixture = {
                         lookupId: 'm1'
                     },
                     popAttribute: {
-                        id: '/gdc/md/project/obj/attr.df.id'
+                        id: ATTRIBUTE_DISPLAY_FORM_URI
                     }
                 }
             }
         ],
         attributes: [
             {
-                id: '/gdc/md/project/obj/attr.df.id',
+                id: ATTRIBUTE_DISPLAY_FORM_URI,
                 type: 'date'
             }
         ]
@@ -185,7 +193,7 @@ export const showInPercent: IFixture = {
 
         attributes: [
             {
-                id: '/gdc/md/project/obj/attr.id',
+                id: ATTRIBUTE_DISPLAY_FORM_URI,
                 type: 'attribute'
             }
         ]
@@ -217,7 +225,7 @@ export const showInPercentWithDate: IFixture = {
 
         attributes: [
             {
-                id: '/gdc/md/project/obj/date.id',
+                id: DATE_DISPLAY_FORM_URI,
                 type: 'date'
             }
         ]
@@ -264,7 +272,7 @@ export const categoryWithSorting: IFixture = {
     afm: {
         attributes: [
             {
-                id: '/gdc/md/project/obj/attr.id',
+                id: ATTRIBUTE_DISPLAY_FORM_URI,
                 type: 'attribute'
             }
         ]
@@ -272,7 +280,10 @@ export const categoryWithSorting: IFixture = {
 
     transformation: {
         sorting: [
-            { column: '/gdc/md/project/obj/attr.id', direction: 'desc' }
+            {
+                column: ATTRIBUTE_DISPLAY_FORM_URI,
+                direction: 'desc'
+            }
         ]
     }
 };
@@ -309,7 +320,7 @@ export const attributeBasedMeasure: IFixture = {
                 id: 'm1',
                 definition: {
                     baseObject: {
-                        id: '/gdc/md/project/obj/attr.id'
+                        id: ATTRIBUTE_DISPLAY_FORM_URI
                     },
                     aggregation: 'count'
                 }
@@ -342,23 +353,23 @@ export const stackingAttribute: IFixture = {
         ],
         attributes: [
             {
-                id: '/gdc/md/project/obj/date.df.id',
+                id: DATE_DISPLAY_FORM_URI,
                 type: 'date'
             },
             {
-                id: '/gdc/md/project/obj/attr.df.id',
+                id: ATTRIBUTE_DISPLAY_FORM_URI,
                 type: 'attribute'
             }
         ],
         filters: [
             {
+                id: DATE_DATA_SET_URI,
                 between: [-3, 0],
                 granularity: 'quarter',
-                id: '/gdc/md/project/obj/dataset.id',
                 type: 'date'
             },
             {
-                id: '/gdc/md/project/obj/attr.df.id',
+                id: ATTRIBUTE_DISPLAY_FORM_URI,
                 type: 'attribute',
                 notIn: []
             }
@@ -374,7 +385,7 @@ export const stackingAttribute: IFixture = {
                 name: 'stacks',
                 attributes: [
                     {
-                        id: '/gdc/md/project/obj/attr.df.id'
+                        id: ATTRIBUTE_DISPLAY_FORM_URI
                     }
                 ]
             }
@@ -385,13 +396,13 @@ export const stackingAttribute: IFixture = {
 export const attributeFilter: IFixture = {
     afm: {
         filters: [{
-            id: '/gdc/md/project/obj/attr.df.id',
+            id: ATTRIBUTE_DISPLAY_FORM_URI,
             type: 'attribute',
             in: [
                 '1', '2', '3'
             ]
         }, {
-            id: '/gdc/md/project/obj/attr2.df.id',
+            id: ATTRIBUTE_DISPLAY_FORM_URI_2,
             type: 'attribute',
             in: []
         }]
@@ -402,11 +413,34 @@ export const attributeFilter: IFixture = {
 export const dateFilter: IFixture = {
     afm: {
         filters: [{
-            id: '/gdc/md/project/obj/dataset.id',
+            id: DATE_DATA_SET_URI,
             type: 'date',
             between: [-89, 0],
             granularity: 'date'
         }]
     },
+    transformation: {}
+};
+
+export const attributeWithIdentifier: IFixture = {
+    afm: {
+        measures: [
+            {
+                id: 'm1',
+                definition: {
+                    baseObject: {
+                        id: 'foo'
+                    }
+                }
+            }
+        ],
+        attributes: [
+            {
+                id: 'bar',
+                type: 'attribute'
+            }
+        ]
+    },
+
     transformation: {}
 };
