@@ -4,17 +4,19 @@ import * as React from 'react';
 import { mount } from 'enzyme';
 
 import { IAfm } from '../../../src/interfaces/Afm';
-import { LineFamilyChart, ILineFamilyChartProps } from '../../../src/react/wrappers/LineFamilyChart';
+import { BaseChart, IChartProps } from '../../../src/react/wrappers/BaseChart';
 import {
     DATA_TOO_LARGE_DISPLAY,
     DATA_TOO_LARGE_TO_COMPUTE,
-    NO_DATA
+    NO_DATA,
+    NEGATIVE_VALUES
 } from '../../../src/react/wrappers/errorStates';
 import LineFamilyChartTransformation from '@gooddata/indigo-visualizations/lib/Chart/LineFamilyChartTransformation';
+import PieChartTransformation from '@gooddata/indigo-visualizations/lib/Chart/PieChartTransformation';
 
-describe('LineFamilyChart', () => {
-    function createComponent(props: ILineFamilyChartProps) {
-        return mount(<LineFamilyChart {...props} />);
+describe('BaseChart', () => {
+    function createComponent(props: IChartProps) {
+        return mount(<BaseChart {...props} />);
     }
 
     function createProps(customProps = {}) {
@@ -28,7 +30,7 @@ describe('LineFamilyChart', () => {
                 }
             },
             ...customProps
-        } as ILineFamilyChartProps;
+        } as IChartProps;
     }
 
     it('should render line chart', (done) => {
@@ -153,6 +155,94 @@ describe('LineFamilyChart', () => {
                 expect(wrapper.find(LineFamilyChartTransformation).length).toBe(0);
                 expect(onError).toHaveBeenCalledTimes(1);
                 expect(onError).toHaveBeenCalledWith({ status: DATA_TOO_LARGE_DISPLAY });
+                done();
+            } catch (error) {
+                console.error(error);
+            }
+        }, 1);
+    });
+
+    it('should call onError callback if pie chart limit is exceeded and render nothing', (done) => {
+        const afm: IAfm = {
+            measures: [
+                {
+                    id: 'too-large-for-pie',
+                    definition: {
+                        baseObject: {
+                            id: '/gd/md/m1'
+                        }
+                    }
+                }
+            ]
+        };
+
+        const onLoadingChanged = jest.fn();
+        const onError = jest.fn();
+        const props = createProps({
+            afm,
+            onError,
+            onLoadingChanged,
+            config: {
+                legend: {
+                    enabled: false
+                }
+            },
+            type: 'pie'
+        });
+        const wrapper = createComponent(props);
+
+        expect(onLoadingChanged).toHaveBeenCalledTimes(1);
+        setTimeout(() => {
+            try {
+                expect(onLoadingChanged).toHaveBeenCalledTimes(2);
+                expect(wrapper.find('.gdc-pie-chart').length).toEqual(0);
+                expect(wrapper.find(PieChartTransformation).length).toBe(0);
+                expect(onError).toHaveBeenCalledTimes(1);
+                expect(onError).toHaveBeenCalledWith({ status: DATA_TOO_LARGE_DISPLAY });
+                done();
+            } catch (error) {
+                console.error(error);
+            }
+        }, 1);
+    });
+
+    it('should call onError callback for negative data in pie chart and render nothing', (done) => {
+        const afm: IAfm = {
+            measures: [
+                {
+                    id: 'negative-values-measure',
+                    definition: {
+                        baseObject: {
+                            id: '/gd/md/m1'
+                        }
+                    }
+                }
+            ]
+        };
+
+        const onLoadingChanged = jest.fn();
+        const onError = jest.fn();
+        const props = createProps({
+            afm,
+            onError,
+            onLoadingChanged,
+            config: {
+                legend: {
+                    enabled: false
+                }
+            },
+            type: 'pie'
+        });
+        const wrapper = createComponent(props);
+
+        expect(onLoadingChanged).toHaveBeenCalledTimes(1);
+        setTimeout(() => {
+            try {
+                expect(onLoadingChanged).toHaveBeenCalledTimes(2);
+                expect(wrapper.find('.gdc-pie-chart').length).toEqual(0);
+                expect(wrapper.find(PieChartTransformation).length).toBe(0);
+                expect(onError).toHaveBeenCalledTimes(1);
+                expect(onError).toHaveBeenCalledWith({ status: NEGATIVE_VALUES });
                 done();
             } catch (error) {
                 console.error(error);

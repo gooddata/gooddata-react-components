@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 
 import { IAfm } from '../../../src/interfaces/Afm';
 import { ColumnChart } from '../../../src/react/wrappers/ColumnChart';
-import { LineFamilyChart } from '../../../src/react/wrappers/LineFamilyChart';
+import { BaseChart } from '../../../src/react/wrappers/BaseChart';
 
 describe('ColumnChart', () => {
     function createComponent(props) {
@@ -28,6 +28,6 @@ describe('ColumnChart', () => {
             afm
         });
 
-        expect(wrapper.find(LineFamilyChart).length).toBe(1);
+        expect(wrapper.find(BaseChart).length).toBe(1);
     });
 });

@@ -3,3 +3,4 @@ export const DATA_TOO_LARGE_TO_COMPUTE = 'DATA_TOO_LARGE_TO_COMPUTE';
 export const BAD_REQUEST = 'BAD_REQUEST';
 export const UNKNOWN_ERROR = 'UNKNOWN_ERROR';
 export const NO_DATA = 'NO_DATA';
+export const NEGATIVE_VALUES = 'NEGATIVE_VALUES';

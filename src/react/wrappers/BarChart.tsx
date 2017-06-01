@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { LineFamilyChart, ILineFamilyChartProps } from './LineFamilyChart';
+import { BaseChart, IChartProps } from './BaseChart';
 
-export class BarChart extends React.Component<ILineFamilyChartProps, null> {
+export class BarChart extends React.Component<IChartProps, null> {
     public render() {
         return (
-            <LineFamilyChart
+            <BaseChart
                 type="bar"
                 {...this.props}
             />
