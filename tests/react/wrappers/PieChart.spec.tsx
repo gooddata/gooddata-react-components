@@ -10,7 +10,7 @@ describe('PieChart', () => {
         return shallow(<PieChart {...props} />);
     }
 
-    it('should render line chart', () => {
+    it('should render pie chart', () => {
         const afm: IAfm = {
             measures: [
                 {
