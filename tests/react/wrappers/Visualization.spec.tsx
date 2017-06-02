@@ -3,7 +3,7 @@ jest.mock('gooddata');
 import * as React from 'react';
 import Legend from '@gooddata/indigo-visualizations/lib/Chart/Legend/Legend';
 import { Visualization } from '../../../src/react/wrappers/Visualization';
-import { LineFamilyChart } from '../../../src/react/wrappers/LineFamilyChart';
+import { BaseChart } from '../../../src/react/wrappers/BaseChart';
 import { Table } from '../../../src/react/wrappers/Table';
 import { mount } from 'enzyme';
 
@@ -27,7 +27,7 @@ describe('Visualization', () => {
 
         setTimeout(() => {
             try {
-                expect(wrapper.find(LineFamilyChart).length).toBe(1);
+                expect(wrapper.find(BaseChart).length).toBe(1);
             } catch (error) {
                 console.log(error); // tslint:disable-line no-console
             } finally {
@@ -96,7 +96,7 @@ describe('Visualization', () => {
         }, 0);
     });
 
-    it('should trigger error in case of given uri is not valid', () => {
+    it('should trigger error in case of given uri is not valid', (done) => {
         const errorHandler = jest.fn();
 
         const wrapper = mount(
@@ -131,7 +131,7 @@ describe('Visualization', () => {
 
         setTimeout(() => {
             try {
-                expect(wrapper.find(LineFamilyChart).length).toBe(1);
+                expect(wrapper.find(BaseChart).length).toBe(1);
                 expect(wrapper.find(Legend).length).toBe(0);
             } catch (error) {
                 console.log(error); // tslint:disable-line no-console

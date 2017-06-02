@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Fetch } from '../fetching/Fetch';
-import { LineFamilyChart, ILineFamilyChartConfig, LineFamilyChartTypes } from './LineFamilyChart';
+import { BaseChart, IChartConfig, ChartTypes } from './BaseChart';
 import { Table } from './Table';
 import { toAFM, IAttributesMap } from '../../legacy/converters';
 import { IVisualizationObject } from '../../legacy/model/VisualizationObject';
@@ -9,7 +9,7 @@ import { IEvents } from './events';
 
 export interface IVisualizationProps extends IEvents {
     uri: string;
-    config?: ILineFamilyChartConfig;
+    config?: IChartConfig;
 }
 
 export interface IVisualizationState {
@@ -70,8 +70,8 @@ export class Visualization extends React.Component<IVisualizationProps, IVisuali
                     );
                 default:
                     return (
-                        <LineFamilyChart
-                            type={type as LineFamilyChartTypes}
+                        <BaseChart
+                            type={type as ChartTypes}
                             projectId={projectId}
                             afm={afm}
                             transformation={transformation}

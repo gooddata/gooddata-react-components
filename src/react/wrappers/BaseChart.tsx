@@ -1,18 +1,21 @@
 import * as React from 'react';
 import noop = require('lodash/noop');
 import LineFamilyChartTransformation from '@gooddata/indigo-visualizations/lib/Chart/LineFamilyChartTransformation';
+import PieChartTransformation from '@gooddata/indigo-visualizations/lib/Chart/PieChartTransformation';
 import { Execute } from '../execution/Execute';
 import { IAfm } from '../../interfaces/Afm';
 import { ITransformation } from '../../interfaces/Transformation';
 import { IntlWrapper } from './IntlWrapper';
 import { generateConfig } from '../../helpers/config';
 import { IEvents } from './events';
-import { DATA_TOO_LARGE_DISPLAY } from './errorStates';
+import {
+    DATA_TOO_LARGE_DISPLAY,
+    NEGATIVE_VALUES
+} from './errorStates';
 
+export type ChartTypes = 'line' | 'bar' | 'column' | 'pie';
 
-export type LineFamilyChartTypes = 'line' | 'bar' | 'column';
-
-export interface ILineFamilyChartConfig {
+export interface IChartConfig {
     colors?: String[];
     legend?: {
         enabled?: boolean;
@@ -24,15 +27,15 @@ export interface ILineFamilyChartConfig {
     };
 }
 
-export interface ILineFamilyChartProps extends IEvents {
+export interface IChartProps extends IEvents {
     afm: IAfm;
     projectId: string;
     transformation: ITransformation;
-    config?: ILineFamilyChartConfig;
-    type: LineFamilyChartTypes;
+    config?: IChartConfig;
+    type: ChartTypes;
 }
 
-export interface ILineFamilyChartState {
+export interface IChartState {
     error: boolean;
     result: any;
     isLoading: boolean;
@@ -42,8 +45,8 @@ const defaultErrorHandler = (error) => {
     console.error(error);
 };
 
-export class LineFamilyChart extends React.Component<ILineFamilyChartProps, ILineFamilyChartState> {
-    public static defaultProps: Partial<ILineFamilyChartProps> = {
+export class BaseChart extends React.Component<IChartProps, IChartState> {
+    public static defaultProps: Partial<IChartProps> = {
         onError: defaultErrorHandler,
         onLoadingChanged: noop,
         config: {}
@@ -77,28 +80,6 @@ export class LineFamilyChart extends React.Component<ILineFamilyChartProps, ILin
         this.props.onLoadingChanged({ isLoading });
     }
 
-    public getComponent() {
-        if (this.state.isLoading) {
-            return null;
-        }
-
-        const { type, afm, config, transformation } = this.props;
-        const { result } = this.state;
-
-        const visConfig = generateConfig(type, afm, transformation, config, result.headers);
-
-        return (
-            <IntlWrapper>
-                <LineFamilyChartTransformation
-                    config={visConfig}
-                    data={result}
-                    onDataTooLarge={() => this.onError({ status: DATA_TOO_LARGE_DISPLAY })}
-                    limits={config.limits}
-                />
-            </IntlWrapper>
-        );
-    }
-
     public render() {
         const {
             afm,
@@ -125,4 +106,43 @@ export class LineFamilyChart extends React.Component<ILineFamilyChartProps, ILin
             </Execute>
         );
     }
+
+    private getChartTransformation() {
+        const { type, afm, config, transformation } = this.props;
+        const { result } = this.state;
+
+        const visConfig = generateConfig(type, afm, transformation, config, result.headers);
+
+        if (type === 'pie') {
+            return (
+                <PieChartTransformation
+                    config={visConfig}
+                    data={result}
+                    onDataTooLarge={() => this.onError({ status: DATA_TOO_LARGE_DISPLAY })}
+                    onNegativeValues={() => this.onError({ status: NEGATIVE_VALUES })}
+                />
+            );
+        }
+
+        return (
+            <LineFamilyChartTransformation
+                config={visConfig}
+                data={result}
+                onDataTooLarge={() => this.onError({ status: DATA_TOO_LARGE_DISPLAY })}
+                limits={config.limits}
+            />
+        );
+    }
+
+    private getComponent() {
+        if (this.state.isLoading) {
+            return null;
+        }
+        return (
+            <IntlWrapper>
+                {this.getChartTransformation()}
+            </IntlWrapper>
+        );
+    }
+
 }

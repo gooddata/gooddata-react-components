@@ -1,3 +1,4 @@
+import range = require('lodash/range');
 import { ISimpleExecutorResult } from '../src/Interfaces';
 import { charts } from './fixtures';
 
@@ -26,6 +27,34 @@ const execution = {
                 headers: [{
                     id: 'abcd',
                     title: 'Attribute',
+                    type: 'attrLabel',
+                    uri: '/gdc/md/project/obj/1'
+                }]
+            });
+        }
+
+        if (columns.indexOf('negative-values-measure') >= 0) {
+            return Promise.resolve({
+                rawData: [['-1000']],
+                isEmpty: false,
+                headers: [{
+                    id: 'negative-values-measure',
+                    title: 'Negative values measure',
+                    type: 'metric',
+                    uri: '/gdc/md/project/obj/1'
+                }]
+            });
+        }
+
+        if (columns.indexOf('too-large-for-pie') >= 0) {
+            return Promise.resolve({
+                rawData: [
+                    ...range(0, 21).map((i) => [`${i}`])
+                ],
+                isEmpty: false,
+                headers: [{
+                    id: 'too-large-for-pie',
+                    title: 'Attributes',
                     type: 'attrLabel',
                     uri: '/gdc/md/project/obj/1'
                 }]

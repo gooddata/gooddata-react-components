@@ -2,12 +2,12 @@ import * as React from 'react';
 import { shallow } from 'enzyme';
 
 import { IAfm } from '../../../src/interfaces/Afm';
-import { LineChart } from '../../../src/react/wrappers/LineChart';
+import { PieChart } from '../../../src/react/wrappers/PieChart';
 import { BaseChart } from '../../../src/react/wrappers/BaseChart';
 
-describe('LineChart', () => {
+describe('PieChart', () => {
     function createComponent(props) {
-        return shallow(<LineChart {...props} />);
+        return shallow(<PieChart {...props} />);
     }
 
     it('should render line chart', () => {
