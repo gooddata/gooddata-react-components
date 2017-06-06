@@ -1,12 +1,10 @@
-import isEmpty from 'lodash-es/isEmpty';
-import compact from 'lodash-es/compact';
-import flow from 'lodash-es/flow';
-import uniq from 'lodash-es/uniq';
-import flatten from 'lodash-es/flatten';
-import pick from 'lodash-es/pick';
-import get from 'lodash-es/get';
-import * as invariant from 'invariant';
-
+import isEmpty = require('lodash/isEmpty');
+import compact = require('lodash/compact');
+import flow = require('lodash/flow');
+import uniq = require('lodash/uniq');
+import flatten = require('lodash/flatten');
+import pick = require('lodash/pick');
+import get = require('lodash/get');
 import { ISort, ITransformation } from '../interfaces/Transformation';
 import { isUri, areUris } from '../helpers/uri';
 import {
@@ -22,6 +20,7 @@ import {
     IPositiveAttributeFilter,
     INegativeAttributeFilter
 } from '../interfaces/Afm';
+import invariant = require('invariant');
 
 export const SHOW_IN_PERCENT_MEASURE_FORMAT = '#,##0.00%';
 

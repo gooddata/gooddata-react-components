@@ -10,10 +10,9 @@ export class DummyAdapter implements IAdapter {
     constructor(data, success = true, dataSource = null) {
         this.data = data;
         this.success = success;
-        this.dataSource = dataSource;
     }
 
-    public createDataSource(): IDataSource {
+    public createDataSource(afm: any): IDataSource {
         return this.dataSource
             ? this.dataSource
             : new DummyDataSource(this.data, this.success);

@@ -1,15 +1,7 @@
 {
-    "globals": {
-      "__TS_CONFIG__": {
-        "allowJs": true
-      }
-    },
     "transform": {
-      ".(ts|js)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+        ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
-    "transformIgnorePatterns": [
-      "<rootDir>/node_modules/(?!lodash-es)"
-    ],
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts)$",
     "moduleFileExtensions": ["ts", "js"],
     "collectCoverage": true,

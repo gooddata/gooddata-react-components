@@ -9,7 +9,7 @@ export class DummyDataSource implements IDataSource {
         this.resolve = resolve;
     }
 
-    public getData(): Promise<any> {
+    public getData(transformation: any): Promise<any> {
         if (this.resolve) {
             return Promise.resolve(this.data);
         }

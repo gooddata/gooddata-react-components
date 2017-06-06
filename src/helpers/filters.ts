@@ -1,6 +1,5 @@
-import cloneDeep from 'lodash-es/cloneDeep';
-import isEmpty from 'lodash-es/isEmpty';
-
+import cloneDeep = require('lodash/cloneDeep');
+import isEmpty = require('lodash/isEmpty');
 import * as Afm from '../interfaces/Afm';
 
 export function isNotEmptyFilter(filter: Afm.IFilter): boolean {

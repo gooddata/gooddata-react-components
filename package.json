@@ -3,8 +3,6 @@
   "version": "0.0.19",
   "description": "",
   "main": "dist/index.js",
-  "jsnext:main": "es/index.js",
-  "module": "es/index.js",
   "files": [
     "dist"
   ],
@@ -12,11 +10,11 @@
     "definition": "dist/index.d.ts"
   },
   "dependencies": {
-    "lodash-es": "4.17.4"
+    "lodash": "4.17.4"
   },
   "devDependencies": {
     "@types/jest": "18.1.1",
-    "@types/lodash-es": "4.14.5",
+    "@types/lodash": "4.14.61",
     "@types/node": "7.0.8",
     "jest": "19.0.2",
     "jest-junit": "1.3.0",
@@ -27,28 +25,18 @@
   "scripts": {
     "test": "jest",
     "watchTest": "jest --watch",
-    "dev": "rm -rf dist && tsc --outDir dist --watch",
-    "build:commonjs": "rm -rf dist && tsc --outDir dist",
-    "build:es2015": "rm -rf es && tsc -p tsconfig.es2015.json --outDir es",
-    "build": "yarn build:commonjs && yarn build:es2015",
-    "prepublish": "yarn build",
+    "dev": "rm -rf dist && tsc -d --outDir dist --watch",
+    "prepublish": "rm -rf dist && tsc -d --outDir dist",
     "validate": "tsc -p tsconfig.base.json --noEmit && tslint -c tslint.json 'src/**/*.ts'"
   },
   "author": "GoodData",
   "license": "UNLICENSED",
   "jest": {
-    "globals": {
-      "__TS_CONFIG__": {
-        "allowJs": true
-      }
-    },
     "transform": {
-      ".(ts|js)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
-    "transformIgnorePatterns": [
-      "<rootDir>/node_modules/(?!lodash-es)"
-    ],
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.ts$",
+    "testResultsProcessor": "<rootDir>/node_modules/ts-jest/coverageprocessor.js",
     "collectCoverageFrom": [
       "src/**/*.ts"
     ],

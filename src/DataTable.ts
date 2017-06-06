@@ -1,5 +1,5 @@
-import isEqual from 'lodash-es/isEqual';
-import get from 'lodash-es/get';
+import isEqual = require('lodash/isEqual');
+import get = require('lodash/get');
 
 import { IAdapter } from './interfaces/Adapter';
 import { IDataSource } from './interfaces/DataSource';
