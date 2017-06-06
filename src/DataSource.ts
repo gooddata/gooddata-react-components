@@ -1,4 +1,4 @@
-import { IDataSource } from './Interfaces';
+import { IDataSource } from './interfaces/DataSource';
 
 export type execFactory = (transformation) => Promise<any>;
 

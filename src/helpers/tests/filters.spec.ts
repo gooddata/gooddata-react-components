@@ -1,72 +1,72 @@
-import { isNotEmptyFilter, mergeFilters } from '../../src/helpers/filters';
-import { IDateFilter, IAttributeFilter, IAfm } from '../../src/interfaces/Afm';
+import * as Afm from '../../interfaces/Afm';
+import * as Filters from '../../helpers/filters';
 
 describe('isNotEmptyFilter', () => {
     it('should return true for date filter', () => {
-        const dateFilter: IDateFilter = {
+        const dateFilter: Afm.IDateFilter = {
             id: 'date filter',
             type: 'date',
             between: [0, 0],
             granularity: 'month'
         };
 
-        expect(isNotEmptyFilter(dateFilter)).toBe(true);
+        expect(Filters.isNotEmptyFilter(dateFilter)).toBe(true);
     });
 
     it('should return false for empty positive filter', () => {
-        const attributeFilter: IAttributeFilter = {
+        const attributeFilter: Afm.IAttributeFilter = {
             id: 'empty filter',
             type: 'attribute',
             in: []
         };
 
-        expect(isNotEmptyFilter(attributeFilter)).toBe(false);
+        expect(Filters.isNotEmptyFilter(attributeFilter)).toBe(false);
     });
 
     it('should return true for filled positive filter', () => {
-        const attributeFilter: IAttributeFilter = {
+        const attributeFilter: Afm.IAttributeFilter = {
             id: 'filled filter',
             type: 'attribute',
             in: ['1', '2', '3']
         };
 
-        expect(isNotEmptyFilter(attributeFilter)).toBe(true);
+        expect(Filters.isNotEmptyFilter(attributeFilter)).toBe(true);
     });
 
     it('should return false for empty negative filter', () => {
-        const attributeFilter: IAttributeFilter = {
+        const attributeFilter: Afm.IAttributeFilter = {
             id: 'empty filter',
             type: 'attribute',
             notIn: []
         };
 
-        expect(isNotEmptyFilter(attributeFilter)).toBe(false);
+        expect(Filters.isNotEmptyFilter(attributeFilter)).toBe(false);
     });
 
     it('should return true for filled negative filter', () => {
-        const attributeFilter: IAttributeFilter = {
+        const attributeFilter: Afm.IAttributeFilter = {
             id: 'filled filter',
             type: 'attribute',
             notIn: ['1', '2', '3']
         };
 
-        expect(isNotEmptyFilter(attributeFilter)).toBe(true);
+        expect(Filters.isNotEmptyFilter(attributeFilter)).toBe(true);
     });
 });
 
 describe('mergeFilters', () => {
     it('should concat existing filters with user filters', () => {
-        const afm: IAfm = {
+        const afm: Afm.IAfm = {
             filters: [
                 { id: 'filter', type: 'attribute', in: ['1', '2', '3'] }
             ]
         };
 
-        const filters = [
+        const filters: Afm.IAttributeFilter[] = [
             { id: 'user filter', type: 'attribute', in: ['4', '5', '6'] }
         ];
 
-        expect(mergeFilters(afm, filters)).toEqual({
+        expect(Filters.mergeFilters(afm, filters)).toEqual({
             filters: [
                 { id: 'filter', type: 'attribute', in: ['1', '2', '3'] },
                 { id: 'user filter', type: 'attribute', in: ['4', '5', '6'] }
@@ -75,13 +75,13 @@ describe('mergeFilters', () => {
     });
 
     it('should handle AFM without filters', () => {
-        const afm: IAfm = {};
+        const afm: Afm.IAfm = {};
 
-        const filters = [
+        const filters: Afm.IAttributeFilter[] = [
             { id: 'user filter', type: 'attribute', in: ['4', '5', '6'] }
         ];
 
-        expect(mergeFilters(afm, filters)).toEqual({
+        expect(Filters.mergeFilters(afm, filters)).toEqual({
             filters: [
                 { id: 'user filter', type: 'attribute', in: ['4', '5', '6'] }
             ]

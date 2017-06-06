@@ -1,4 +1,5 @@
-import { IAdapter, IDataSource } from '../../src/Interfaces';
+import { IAdapter } from '../interfaces/Adapter';
+import { IDataSource } from '../interfaces/DataSource';
 import { DummyDataSource } from './DummyDataSource';
 
 export class DummyAdapter implements IAdapter {

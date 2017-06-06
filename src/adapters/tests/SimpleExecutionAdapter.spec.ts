@@ -1,6 +1,6 @@
 import {
     SimpleExecutorAdapter
-} from '../../src/adapters/SimpleExecutorAdapter';
+} from '../SimpleExecutorAdapter';
 
 describe('SimpleExecutorAdapter', () => {
     const transformation = {};
@@ -18,7 +18,7 @@ describe('SimpleExecutorAdapter', () => {
         const adapter = new SimpleExecutorAdapter(DummySDK, projectId);
         const dataSource = adapter.createDataSource(afm);
 
-        const data = dataSource.getData(transformation).then(() => {
+        dataSource.getData(transformation).then(() => {
             expect(getDataStub).toBeCalled();
             done();
         });

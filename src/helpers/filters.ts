@@ -1,22 +1,16 @@
 import cloneDeep = require('lodash/cloneDeep');
 import isEmpty = require('lodash/isEmpty');
+import * as Afm from '../interfaces/Afm';
 
-import {
-    IAfm,
-    IFilter,
-    INegativeAttributeFilter,
-    IPositiveAttributeFilter
-} from '../interfaces/Afm';
-
-export function isNotEmptyFilter(filter: IFilter): boolean {
+export function isNotEmptyFilter(filter: Afm.IFilter): boolean {
     return (filter.type === 'date') ||
         (
-            !isEmpty((filter as IPositiveAttributeFilter).in) ||
-            !isEmpty((filter as INegativeAttributeFilter).notIn)
+            !isEmpty((filter as Afm.IPositiveAttributeFilter).in) ||
+            !isEmpty((filter as Afm.INegativeAttributeFilter).notIn)
         );
 }
 
-export function mergeFilters(afm: IAfm, filters: IFilter[]): IAfm {
+export function mergeFilters(afm: Afm.IAfm, filters: Afm.IFilter[]): Afm.IAfm {
     const cloned = cloneDeep(afm);
 
     return {

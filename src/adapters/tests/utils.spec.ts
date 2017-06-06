@@ -8,9 +8,9 @@ import {
     loadAttributesMap,
     generateMetricDefinition,
     SHOW_IN_PERCENT_MEASURE_FORMAT
-} from '../../src/adapters/utils';
-import { IAfm } from '../../src/interfaces/Afm';
-import { ITransformation } from '../../src/interfaces/Transformation';
+} from '../utils';
+import { IAfm } from '../../interfaces/Afm';
+import { ITransformation } from '../../interfaces/Transformation';
 
 describe('lookupAttributes', () => {
     it('should extract displayForm from showInPercent', () => {
@@ -813,7 +813,7 @@ describe('generateMetricDefinition', () => {
                     definition: {
                         baseObject: {
                             id: '/gdc/md/measure/obj/2'
-                        },
+                        }
                     }
                 }
             ],

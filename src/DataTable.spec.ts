@@ -1,6 +1,6 @@
-import { IAfm } from '../src/interfaces/Afm';
-import { DataTable } from '../src/DataTable';
-import { DummyAdapter } from '../tests/utils/DummyAdapter';
+import { IAfm } from './interfaces/Afm';
+import { DataTable } from './DataTable';
+import { DummyAdapter } from './utils/DummyAdapter';
 
 describe('DataTable', () => {
     const dataResponse = { rawData: [1, 2, 3] };

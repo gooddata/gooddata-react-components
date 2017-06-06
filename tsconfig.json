@@ -1,12 +1,6 @@
 {
-    "compilerOptions": {
-        "moduleResolution": "node",
-        "module": "commonjs",
-        "jsx": "react",
-        "lib": ["es6", "dom"],
-        "noUnusedLocals": true
-    },
+    "extends": "./tsconfig.base.json",
     "include": [
-        "index.ts"
+        "src/index.ts"
     ]
 }

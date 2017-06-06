@@ -1,4 +1,5 @@
-import { IAdapter, IDataSource } from '../Interfaces';
+import { IAdapter } from '../interfaces/Adapter';
+import { IDataSource } from '../interfaces/DataSource';
 import { DataSource } from '../DataSource';
 import {
     AttributeMap,

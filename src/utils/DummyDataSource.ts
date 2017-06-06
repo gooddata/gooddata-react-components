@@ -1,4 +1,4 @@
-import { IDataSource } from '../../src/Interfaces';
+import { IDataSource } from '../interfaces/DataSource';
 
 export class DummyDataSource implements IDataSource {
     private data;

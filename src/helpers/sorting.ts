@@ -1,5 +1,5 @@
 import { ISort } from '../interfaces/Transformation';
-import { ASC, DESC, COLUMN_TYPE_METRIC } from '../react/constants/Sorting';
+import { ASC, DESC, COLUMN_TYPE_METRIC } from '../constants/sorting';
 
 export interface ISortingChange {
     id: string;

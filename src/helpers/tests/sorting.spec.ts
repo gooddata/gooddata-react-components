@@ -1,6 +1,6 @@
-import { ISortingChange, getSorting } from '../../src/helpers/sorting';
-import { COLUMN_TYPE_METRIC, COLUMN_TYPE_ATTRIBUTE } from '../../src/react/constants/Sorting';
-import { ISort } from '../../src/interfaces/Transformation';
+import { ISortingChange, getSorting } from '../sorting';
+import { COLUMN_TYPE_METRIC, COLUMN_TYPE_ATTRIBUTE } from '../../constants/sorting';
+import { ISort } from '../../interfaces/Transformation';
 
 describe('getColumn', () => {
     function getChange(type: string): ISortingChange {
