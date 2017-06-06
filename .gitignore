@@ -3,6 +3,7 @@ yarn-error.log
 npm-debug.log
 yalc.lock
 dist
+es
 .idea
 .DS_Store
 .vscode
