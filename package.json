@@ -1,6 +1,6 @@
 {
   "name": "@gooddata/data-layer",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "",
   "main": "dist/index.js",
   "jsnext:main": "es/index.js",
