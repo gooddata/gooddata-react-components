@@ -30,7 +30,7 @@
     "validate": "tsc -p tsconfig.base.json --noEmit && tslint -c tslint.json 'src/**/*.ts'"
   },
   "author": "GoodData",
-  "license": "UNLICENSED",
+  "license": "SEE LICENSE IN LICENSE.txt",
   "jest": {
     "transform": {
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
