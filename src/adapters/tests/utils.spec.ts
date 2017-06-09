@@ -7,9 +7,10 @@ import {
     getMeasureAdditionalInfo,
     loadAttributesMap,
     generateMetricDefinition,
-    SHOW_IN_PERCENT_MEASURE_FORMAT
+    getMeasureFormat
 } from '../utils';
-import { IAfm } from '../../interfaces/Afm';
+import { SHOW_IN_PERCENT_MEASURE_FORMAT } from '../../constants/formats';
+import { IAfm, IMeasure } from '../../interfaces/Afm';
 import { ITransformation } from '../../interfaces/Transformation';
 
 describe('lookupAttributes', () => {
@@ -1072,5 +1073,131 @@ describe('loadAttributesMap', () => {
                 }
             ]);
         });
+    });
+});
+
+describe('getMeasureFormat', () => {
+    it('should return default format', () => {
+        const afm: IAfm = {
+            measures: [
+                {
+                    id: 'close_bop',
+                    definition: {
+                        baseObject: {
+                            id: '/gdc/md/measure/obj/2'
+                        }
+                    }
+                }
+            ],
+            attributes: [
+                {
+                    id: '/gdc/md/attribute_display_form/obj/1',
+                    type: 'attribute'
+                }
+            ]
+        };
+
+        const measure: IMeasure = afm.measures[0];
+        const defaultFormat = '#,##0.00000';
+        expect(getMeasureFormat(measure, defaultFormat, afm)).toEqual('#,##0.00000');
+    });
+
+    it('should return default format for PoP metric', () => {
+        const afm: IAfm = {
+            measures: [
+                {
+                    id: 'close_bop',
+                    definition: {
+                        baseObject: {
+                            id: '/gdc/md/measure/obj/2'
+                        }
+                    }
+                },
+                {
+                    id: 'close_bop_pop',
+                    definition: {
+                        baseObject: {
+                            lookupId: 'close_bop'
+                        },
+                        popAttribute: {
+                            id: '/gdc/md/date_display_form'
+                        }
+                    }
+                }
+            ],
+            attributes: [
+                {
+                    id: '/gdc/md/attribute_display_form/obj/1',
+                    type: 'attribute'
+                }
+            ]
+        };
+
+        const measure: IMeasure = afm.measures[1];
+        const defaultFormat = '#,##0.00000';
+        expect(getMeasureFormat(measure, defaultFormat, afm)).toEqual('#,##0.00000');
+    });
+
+    it('should return % format for metric with showInPercent: true', () => {
+        const afm: IAfm = {
+            measures: [
+                {
+                    id: 'close_bop_percent',
+                    definition: {
+                        baseObject: {
+                            id: '/gdc/md/measure/obj/2'
+                        },
+                        showInPercent: true
+                    }
+                }
+            ],
+            attributes: [
+                {
+                    id: '/gdc/md/attribute_display_form/obj/1',
+                    type: 'attribute'
+                }
+            ]
+        };
+
+        const measure: IMeasure = afm.measures[0];
+        const defaultFormat = '#,##0.00000';
+        expect(getMeasureFormat(measure, defaultFormat, afm)).toEqual(SHOW_IN_PERCENT_MEASURE_FORMAT);
+    });
+
+    it('should return % format for PoP derived from metric with showInPercent: true', () => {
+        const afm: IAfm = {
+            measures: [
+                {
+                    id: 'close_bop_percent',
+                    definition: {
+                        baseObject: {
+                            id: '/gdc/md/measure/obj/2'
+                        },
+                        showInPercent: true
+                    }
+                },
+                {
+                    id: 'close_bop_percent_pop',
+                    definition: {
+                        baseObject: {
+                            lookupId: 'close_bop_percent'
+                        },
+                        popAttribute: {
+                            id: '/gdc/md/date_display_form'
+                        }
+                    }
+                }
+            ],
+            attributes: [
+                {
+                    id: '/gdc/md/attribute_display_form/obj/1',
+                    type: 'attribute'
+                }
+            ]
+        };
+
+        const measure: IMeasure = afm.measures[1];
+        const defaultFormat = '#,##0.00000';
+        expect(getMeasureFormat(measure, defaultFormat, afm)).toEqual(SHOW_IN_PERCENT_MEASURE_FORMAT);
     });
 });

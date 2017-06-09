@@ -1,11 +1,21 @@
 import flatten = require('lodash/flatten');
+import get = require('lodash/get');
 import compact = require('lodash/compact');
+import omitBy = require('lodash/omitBy');
+import isUndefined = require('lodash/isUndefined');
 import * as Afm from '../interfaces/Afm';
 import * as Transformation from '../interfaces/Transformation';
 
 import * as VisObj from './model/VisualizationObject';
 
-const getMeasureId = (n: number, isPoP?: boolean): string => `m${n + 1}${isPoP ? '_pop' : ''}`;
+import { SHOW_IN_PERCENT_MEASURE_FORMAT } from '../constants/formats';
+
+const getMeasureId = (n: number, isPoP?: boolean, measure?: VisObj.IMeasure): string => {
+    if (measure && measure.measure.generatedId) {
+        return measure.measure.generatedId;
+    }
+    return `m${n + 1}${isPoP ? '_pop' : ''}`;
+};
 
 function convertBaseAttributeFilter(filter) {
     const items = filter.listAttributeFilter.default.attributeElements.map((el) => {
@@ -30,7 +40,7 @@ function convertMeasureAfm(measure: VisObj.IMeasure, index: number, popAttribute
     const filtersProp = filters.length ? { filters } : {};
     const measures: Afm.IMeasure[] = [
         {
-            id: getMeasureId(index),
+            id: getMeasureId(index, false, measure),
             definition: {
                 baseObject: {
                     id: measure.measure.objectUri
@@ -55,7 +65,7 @@ function convertMeasureAfm(measure: VisObj.IMeasure, index: number, popAttribute
             }
         };
 
-        measures.push(popMeasure);
+        measures.unshift(popMeasure);
     }
 
     return measures;
@@ -100,19 +110,30 @@ function convertFilter(filter: VisObj.EmbeddedFilter): Afm.IFilter {
     return convertAttributeFilter(filter as VisObj.IEmbeddedListAttributeFilter);
 }
 
-function convertMeasureTransformation(measure: VisObj.IMeasure, index: number): Transformation.IMeasure[] {
+function convertMeasureTransformation(
+    measure: VisObj.IMeasure,
+    index: number,
+    measuresMap?: VisObj.IMeasuresMap
+): Transformation.IMeasure[] {
+    const measureUri = get(measure, 'measure.objectUri');
+    const measureFromMap = get(measuresMap, measureUri);
+    const measureFromMapFormat = get(measureFromMap, 'measure.format');
+    const itemFormat = measure.measure.format || measureFromMapFormat;
+    const format = (measure.measure.showInPercent ? SHOW_IN_PERCENT_MEASURE_FORMAT : itemFormat);
+
     const measures: Transformation.IMeasure[] = [
-        {
+        omitBy({
             id: getMeasureId(index),
             title: measure.measure.title,
-            format: measure.measure.format
-        }
+            format
+        }, isUndefined) as Transformation.IMeasure
     ];
     if (measure.measure.showPoP) {
         measures.push({
             id: getMeasureId(index, true),
-            title: `${measure.measure.title} - previous year`
-        });
+            title: `${measure.measure.title} - previous year`,
+            format
+        } as Transformation.IMeasure);
     }
     return measures;
 }
@@ -182,11 +203,16 @@ function convertAFM(visObj: VisObj.IVisualizationObject, resolver: DisplayFormRe
     };
 }
 
-function convertTransformation(visObj: VisObj.IVisualizationObject): Transformation.ITransformation {
+function convertTransformation(
+    visObj: VisObj.IVisualizationObject,
+    measuresMap: VisObj.IMeasuresMap
+): Transformation.ITransformation {
     const sorting = convertSortingTransformation(visObj);
     const sortProp = sorting.length ? { sorting } : {};
 
-    const measuresTransformation = flatten(visObj.buckets.measures.map(convertMeasureTransformation));
+    const measuresTransformation = flatten(visObj.buckets.measures.map((measure, index) => {
+        return convertMeasureTransformation(measure, index, measuresMap);
+    }));
     const measuresTransformationProp = measuresTransformation.length ? { measures: measuresTransformation } : {};
 
     const stackingAttributes = visObj.buckets.categories
@@ -211,24 +237,24 @@ export interface IConvertedAFM {
     type: VisObj.VisualizationType;
 }
 
-export interface IAttributesMap {
-    [x: string]: string;
-}
-
 type DisplayFormResolver = (uri: string) => string;
 
-function makeDisplayFormUriResolver(attributesMap: IAttributesMap): DisplayFormResolver {
+function makeDisplayFormUriResolver(attributesMap: VisObj.IAttributesMap): DisplayFormResolver {
     return (uri: string) => {
         return attributesMap[uri];
     };
 }
 
-export function toAFM(visObj: VisObj.IVisualizationObject, attributesMap: IAttributesMap): IConvertedAFM {
+export function toAFM(
+    visObj: VisObj.IVisualizationObject,
+    attributesMap: VisObj.IAttributesMap,
+    measuresMap?: VisObj.IMeasuresMap
+): IConvertedAFM {
     return {
         type: visObj.type,
 
         afm: convertAFM(visObj, makeDisplayFormUriResolver(attributesMap)),
 
-        transformation: convertTransformation(visObj)
+        transformation: convertTransformation(visObj, measuresMap)
     };
 }

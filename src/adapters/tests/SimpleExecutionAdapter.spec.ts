@@ -16,11 +16,11 @@ describe('SimpleExecutorAdapter', () => {
         };
 
         const adapter = new SimpleExecutorAdapter(DummySDK, projectId);
-        const dataSource = adapter.createDataSource(afm);
-
-        dataSource.getData(transformation).then(() => {
-            expect(getDataStub).toBeCalled();
-            done();
+        adapter.createDataSource(afm).then((dataSource) => {
+            dataSource.getData(transformation).then(() => {
+                expect(getDataStub).toBeCalled();
+                done();
+            });
         });
     });
 });

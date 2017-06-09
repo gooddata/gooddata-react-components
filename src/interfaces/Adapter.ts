@@ -1,5 +1,5 @@
 import { IDataSource } from './DataSource';
 
 export interface IAdapter {
-    createDataSource(afm): IDataSource;
+    createDataSource(afm): Promise<IDataSource>;
 }

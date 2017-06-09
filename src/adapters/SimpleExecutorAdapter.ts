@@ -26,7 +26,7 @@ export class SimpleExecutorAdapter implements IAdapter {
         this.settings = settings;
     }
 
-    public createDataSource(afm): IDataSource {
+    public createDataSource(afm): Promise<IDataSource> {
         const normalizedAfm = normalizeAfm(afm);
         const execFactory = (transformation) => {
             return loadAttributesMap(normalizedAfm, this.sdk, this.projectId)
@@ -40,7 +40,8 @@ export class SimpleExecutorAdapter implements IAdapter {
                 });
         };
 
-        return new DataSource(execFactory);
+        const fingerprint = JSON.stringify(normalizedAfm);
+        return Promise.resolve(new DataSource(execFactory, fingerprint));
     }
 
     private convertData(afm: IAfm, transformation: ITransformation, attributesMapping: AttributeMap) {

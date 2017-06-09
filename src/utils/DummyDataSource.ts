@@ -16,4 +16,8 @@ export class DummyDataSource implements IDataSource {
 
         return Promise.reject('DummyDataSource reject');
     }
+
+    public getFingerprint() {
+        return '';
+    }
 }
