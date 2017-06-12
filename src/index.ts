@@ -4,6 +4,7 @@ import * as Filters from './helpers/filters';
 import * as Sorting from './helpers/sorting';
 import * as Transformation from './interfaces/Transformation';
 import * as Uri from './helpers/uri';
+import * as Converters from './legacy/converters';
 import { DataTable } from './DataTable';
 import { DummyAdapter } from './utils/DummyAdapter';
 import { SimpleExecutorAdapter } from './adapters/SimpleExecutorAdapter';
@@ -17,5 +18,6 @@ export {
     SimpleExecutorAdapter,
     Sorting,
     Transformation,
-    Uri
+    Uri,
+    Converters
 };
