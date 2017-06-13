@@ -45,7 +45,7 @@ function getAttributeSorting(
     transformation: Transformation.ITransformation,
     attribute: Afm.IAttribute
 ): { sort: VisObj.SortDirection } {
-    const sorting = AdapterUtils.getSorting(transformation).find((s) => s.column === attribute.id);
+    const sorting = AdapterUtils.getSorting(transformation).find(s => s.column === attribute.id);
 
     if (!sorting) {
         return null;
@@ -59,7 +59,7 @@ function getMeasureSorting(
     measure: Afm.IMeasure
 ): { sort: VisObj.IMeasureSort } {
     const sorting = AdapterUtils.getSorting(transformation)
-        .find((s) => (s.column === getLookupId(measure) || s.column === measure.id));
+        .find(s => (s.column === getLookupId(measure) || s.column === measure.id));
 
     if (!sorting) {
         return null;
@@ -82,7 +82,7 @@ function getMeasureFormat(transformation: Transformation.ITransformation, measur
 }
 
 function findMeasure(afm: Afm.IAfm, id: string): Afm.IMeasure {
-    return afm.measures.find((m) => m.id === id);
+    return afm.measures.find(m => m.id === id);
 }
 
 function getBaseObjectId(measure: Afm.IMeasure): string {
@@ -139,7 +139,7 @@ function convertMeasure(
 function isStacking(transformation: Transformation.ITransformation, attribute: Afm.IAttribute): boolean {
     return (transformation.buckets || []).some((bucket) => {
         return bucket.name === 'stacks' &&
-            (bucket.attributes || []).some((attr) => attr.id === attribute.id);
+            (bucket.attributes || []).some(attr => attr.id === attribute.id);
     });
 }
 
@@ -147,7 +147,7 @@ function getAttributeDisplayForm(attribute, headers: IHeader[]) {
     if (isUri(attribute.id)) {
         return attribute.id;
     }
-    return headers.find((header) => header.id === attribute.id).uri;
+    return headers.find(header => header.id === attribute.id).uri;
 }
 
 function convertAttribute(transformation, headers: IHeader[] = [], attribute: Afm.IAttribute): VisObj.ICategory {
@@ -166,7 +166,7 @@ function convertAttribute(transformation, headers: IHeader[] = [], attribute: Af
 }
 
 function isNotReferencedMeasure(measures: Afm.IMeasure[], measure: Afm.IMeasure): boolean {
-    const popMeasure = measures.find((m) => Boolean(m.definition.popAttribute)) || EmptyMeasure;
+    const popMeasure = measures.find(m => Boolean(m.definition.popAttribute)) || EmptyMeasure;
 
     return measure.id !== getLookupId(popMeasure);
 }

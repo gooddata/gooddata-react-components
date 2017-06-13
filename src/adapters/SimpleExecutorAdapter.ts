@@ -52,7 +52,7 @@ export class SimpleExecutorAdapter implements IAdapter {
             in exec request but /simpleexecutor is not able to handle it and also
             is not able to provide "well transformed" result data
          */
-        columns.push(...afm.attributes.map((attribute) => attribute.id));
+        columns.push(...afm.attributes.map(attribute => attribute.id));
 
         // Get columns
         columns.push(...afm.measures.map((item) => {
