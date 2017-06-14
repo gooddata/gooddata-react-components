@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import { Afm } from '@gooddata/data-layer';
 
 import { BarChart } from '../BarChart';
-import { BaseChart } from '../base/BaseChart';
+import { BaseChart } from '../base/BaseChartprdel';
 
 describe('BarChart', () => {
     function createComponent(props) {
@@ -28,6 +28,6 @@ describe('BarChart', () => {
             afm
         });
 
-        expect(wrapper.find(BaseChart).length).toBe(1);
+        expect(wrapper.find(BaseChart).length).toBe(2);
     });
 });
