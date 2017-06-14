@@ -19,7 +19,8 @@
     "jest": "19.0.2",
     "jest-junit": "1.3.0",
     "ts-jest": "19.0.14",
-    "tslint": "4.4.2",
+    "tslint": "5.4.3",
+    "tslint-config-gooddata": "0.0.2",
     "typescript": "2.2.2"
   },
   "scripts": {
@@ -27,7 +28,9 @@
     "watchTest": "jest --watch",
     "dev": "rm -rf dist && tsc -d --outDir dist --watch",
     "prepublish": "rm -rf dist && tsc -d --outDir dist",
-    "validate": "tsc -p tsconfig.base.json --noEmit && tslint -c tslint.json 'src/**/*.ts'"
+    "tslint": "tslint --format verbose --config tslint.json index.ts src/**/*.ts",
+    "tslint-ci": "mkdir -p ./ci/results && tslint --config tslint.json --format checkstyle --out ./ci/results/tslint-results.xml index.ts src/**/*.ts",
+    "validate": "tsc -p tsconfig.base.json --noEmit && yarn tslint"
   },
   "author": "GoodData",
   "license": "SEE LICENSE IN LICENSE.txt",

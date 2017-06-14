@@ -277,30 +277,32 @@ const attributeFilter: IVisualizationObject = {
     buckets: {
         measures: [],
         categories: [],
-        filters: [{
-            listAttributeFilter: {
-                attribute: ATTRIBUTE_URI,
-                displayForm: ATTRIBUTE_DISPLAY_FORM_URI,
-                default: {
-                    negativeSelection: false,
-                    attributeElements: [
-                        `${ATTRIBUTE_URI}?id=1`,
-                        `${ATTRIBUTE_URI}?id=2`,
-                        `${ATTRIBUTE_URI}?id=3`
-                    ]
+        filters: [
+            {
+                listAttributeFilter: {
+                    attribute: ATTRIBUTE_URI,
+                    displayForm: ATTRIBUTE_DISPLAY_FORM_URI,
+                    default: {
+                        negativeSelection: false,
+                        attributeElements: [
+                            `${ATTRIBUTE_URI}?id=1`,
+                            `${ATTRIBUTE_URI}?id=2`,
+                            `${ATTRIBUTE_URI}?id=3`
+                        ]
+                    }
+                }
+            },
+            {
+                listAttributeFilter: {
+                    attribute: ATTRIBUTE_URI_2,
+                    displayForm: ATTRIBUTE_DISPLAY_FORM_URI_2,
+                    default: {
+                        negativeSelection: false,
+                        attributeElements: []
+                    }
                 }
             }
-        },
-        {
-            listAttributeFilter: {
-                attribute: ATTRIBUTE_URI_2,
-                displayForm: ATTRIBUTE_DISPLAY_FORM_URI_2,
-                default: {
-                    negativeSelection: false,
-                    attributeElements: []
-                }
-            }
-        }]
+        ]
     }
 };
 

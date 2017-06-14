@@ -190,12 +190,12 @@ function convertTransformation(visObj: VisObj.IVisualizationObject): Transformat
     const measuresTransformationProp = measuresTransformation.length ? { measures: measuresTransformation } : {};
 
     const stackingAttributes = visObj.buckets.categories
-        .filter((category) => category.category.collection === 'stack')
-        .map((category) => ({
+        .filter(category => category.category.collection === 'stack')
+        .map(category => ({
             id: category.category.displayForm
         }));
     const stackingProp = stackingAttributes.length ?
-        { buckets: [{ attributes: stackingAttributes, name: 'stacks' } ]} :
+        { buckets: [{ attributes: stackingAttributes, name: 'stacks' }] } :
         {};
 
     return {

@@ -141,7 +141,7 @@ describe('DataTable', () => {
                     });
 
                     return promise.then(
-                        (value) => expect(value).toEqual(dataResponse),
+                        value => expect(value).toEqual(dataResponse),
                         () => expect(true).toBeFalsy() // fail
                     );
                 }

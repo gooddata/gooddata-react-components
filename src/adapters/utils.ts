@@ -42,13 +42,13 @@ const getFilterExpression = (filter: IMeasureAttributeFilter, attributesMapping)
 
     const id = getAttributeByDisplayForm(attributesMapping, filter.id);
     const inExpr = (filter as INegativeFilter).notIn ? 'NOT IN' : 'IN';
-    const elementsForQuery = elements.map((e) => isUri(id) ? `[${id}/elements?id=${e}]` : `{${id}?${e}}`);
+    const elementsForQuery = elements.map(e => isUri(id) ? `[${id}/elements?id=${e}]` : `{${id}?${e}}`);
 
     return `${wrapId(id)} ${inExpr} (${elementsForQuery.join(',')})`;
 };
 
 const getFiltersExpression = (filters: IMeasureAttributeFilter[] = [], attributesMapping) => {
-    const filterExpressions = filters.map((filter) => getFilterExpression(filter, attributesMapping));
+    const filterExpressions = filters.map(filter => getFilterExpression(filter, attributesMapping));
 
     return compact(filterExpressions).join(' AND ');
 };
@@ -75,7 +75,7 @@ const getPercentMetricExpression = (item: IMeasure, attributesMapping, attribute
     const filterExpression = getFiltersExpression(item.definition.filters, attributesMapping);
     const whereExpression = filterExpression ? ` WHERE ${filterExpression}` : '';
 
-    const byAllExpression = attributesUris.map((attributeUri) => `ALL ${wrapId(attributeUri)}`).join(',');
+    const byAllExpression = attributesUris.map(attributeUri => `ALL ${wrapId(attributeUri)}`).join(',');
 
     return `SELECT (${metricExpressionWithoutFilters}${whereExpression}) ` +
         `/ (${metricExpressionWithoutFilters} BY ${byAllExpression}${whereExpression})`;
@@ -89,7 +89,7 @@ const createPoPMetric = (item: IMeasure, afm: IAfm, attributesMapping) => {
     const baseObject = (item.definition.baseObject as ILookupObject);
     let generatedMetricExpression;
     if (baseObject.lookupId) {
-        const base = afm.measures.find((measure) => measure.id === baseObject.lookupId);
+        const base = afm.measures.find(measure => measure.id === baseObject.lookupId);
         generatedMetricExpression = `SELECT (${generateMetricExpression(base, afm, attributesMapping)})`;
     } else {
         generatedMetricExpression = `SELECT ${getSimpleMetricExpression(item, attributesMapping)}`;
@@ -112,7 +112,7 @@ const hasFilters = (item: IMeasure): boolean => {
 };
 
 const getAttributeByDisplayForm = (mapping: AttributeMap, displayForm): string => {
-    const item = mapping.find((i) => i.attributeDisplayForm === displayForm);
+    const item = mapping.find(i => i.attributeDisplayForm === displayForm);
     invariant(item, `${displayForm} not found in ${JSON.stringify(mapping)}`);
     return item.attribute;
 };
@@ -124,7 +124,7 @@ export const generateMetricExpression = (item: IMeasure, afm: IAfm, attributesMa
 
     if (isShowInPercent(item)) {
         const attributesUris = afm.attributes.map(
-            (attribute) => getAttributeByDisplayForm(attributesMapping, attribute.id)
+            attribute => getAttributeByDisplayForm(attributesMapping, attribute.id)
         );
         return createContributionMetric(item, attributesMapping, attributesUris);
     }
@@ -140,11 +140,11 @@ export const lookupAttributes = (afm: IAfm) => {
         }
 
         if (isShowInPercent(measure)) { // MAQL - BY ALL [attributeUri1], ALL [attributeUri2] OR ALL {attributeId2}
-            ids.push(...afm.attributes.map((attribute) => attribute.id));
+            ids.push(...afm.attributes.map(attribute => attribute.id));
         }
 
         if (hasFilters(measure)) {
-            ids.push(...measure.definition.filters.map((filter) => filter.id));
+            ids.push(...measure.definition.filters.map(filter => filter.id));
         }
 
         return ids;
@@ -176,7 +176,7 @@ const generateAttributeFilter = (filter: IAttributeFilter) => {
     const positiveFilter = filter as IPositiveAttributeFilter;
     if (positiveFilter.in && positiveFilter.in.length > 0) {
         return {
-            $in: positiveFilter.in.map((id) => ({ id }))
+            $in: positiveFilter.in.map(id => ({ id }))
         };
     }
 
@@ -184,7 +184,7 @@ const generateAttributeFilter = (filter: IAttributeFilter) => {
     if (negativeFilter.notIn.length > 0) {
         return {
             $not: {
-                $in: (filter as INegativeAttributeFilter).notIn.map((id) => ({ id }))
+                $in: (filter as INegativeAttributeFilter).notIn.map(id => ({ id }))
             }
         };
     }
@@ -222,7 +222,7 @@ export interface IAdditionalInfo {
 
 export const getMeasureAdditionalInfo =
     (transformation: ITransformation, id: string): IAdditionalInfo  => {
-        const info = get(transformation, 'measures', []).find((measure) => measure.id === id);
+        const info = get(transformation, 'measures', []).find(measure => measure.id === id);
         return pick<IAdditionalInfo, {}>(info, ['title', 'format']);
     };
 
@@ -233,11 +233,11 @@ export function loadAttributesMap(afm: IAfm, sdk, projectId: string): Promise<At
         const loadAttributeUris = areUris(attributes)
             ? Promise.resolve(attributes)
             : sdk.md.getUrisFromIdentifiers(projectId, attributes)
-                .then((pairs) => pairs.map((pair) => pair.uri));
+                .then(pairs => pairs.map(pair => pair.uri));
 
         return loadAttributeUris.then((objectUris) => {
             return sdk.md.getObjects(projectId, objectUris)
-                .then((items) => items.map((item) => ({
+                .then(items => items.map(item => ({
                     attribute: item.attributeDisplayForm.content.formOf,
                     attributeDisplayForm: areUris(attributes) ?
                         item.attributeDisplayForm.meta.uri :

@@ -26,8 +26,8 @@ const makeCancelable = (promise) => {
     const wrappedPromise = new Promise((resolve, reject) => {
         promise.then(
             // Don't split - UnhandledPromiseRejectionWarning may occur
-            (value) => isCancelled ? reject({ isCancelled }) : resolve(value),
-            (error) => isCancelled ? reject({ isCancelled, error }) : reject(error)
+            value => isCancelled ? reject({ isCancelled }) : resolve(value),
+            error => isCancelled ? reject({ isCancelled, error }) : reject(error)
         );
     });
 
@@ -104,10 +104,10 @@ export class DataTable {
 
     private fetchData(transformation) {
         this.getDataPromise(transformation)
-            .then((result) => this.dataSubscribers.forEach((handler) => handler(result)))
+            .then(result => this.dataSubscribers.forEach(handler => handler(result)))
             .catch((error) => {
                 if (!error.isCancelled) {
-                    this.errorSubscribers.forEach((handler) => handler(error));
+                    this.errorSubscribers.forEach(handler => handler(error));
                 }
             });
 

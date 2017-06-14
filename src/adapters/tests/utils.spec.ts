@@ -926,7 +926,7 @@ describe('generateFilters', () => {
 
         expect(generateFilters(afm)).toEqual(
             {
-                '$and': [{
+                $and: [{
                     '/gdc/md/attribute1/obj/1': {
                         $in: [{
                             id: 'a'
@@ -978,7 +978,7 @@ describe('loadAttributesMap', () => {
     const projectId = 'project';
 
     function createSdkMock() {
-         return {
+        return {
             md: {
                 getUrisFromIdentifiers: jest.fn(() => Promise.resolve(getUrisFromIdentifiersResponse)),
                 getObjects: jest.fn(() => Promise.resolve(getObjectsResponse))
