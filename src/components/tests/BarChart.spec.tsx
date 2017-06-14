@@ -28,6 +28,6 @@ describe('BarChart', () => {
             afm
         });
 
-        expect(wrapper.find(BaseChart).length).toBe(1);
+        expect(wrapper.find(BaseChart).length).toBe(2);
     });
 });
