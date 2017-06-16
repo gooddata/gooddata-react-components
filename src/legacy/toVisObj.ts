@@ -1,4 +1,5 @@
 import partial = require('lodash/partial');
+import get = require('lodash/get');
 import * as AdapterUtils from '../adapters/utils';
 import * as Afm from '../interfaces/Afm';
 import * as Transformation from '../interfaces/Transformation';
@@ -137,7 +138,7 @@ function convertMeasure(
 }
 
 function isStacking(transformation: Transformation.ITransformation, attribute: Afm.IAttribute): boolean {
-    return (transformation.buckets || []).some((bucket) => {
+    return get(transformation, 'buckets', []).some((bucket) => {
         return bucket.name === 'stacks' &&
             (bucket.attributes || []).some(attr => attr.id === attribute.id);
     });

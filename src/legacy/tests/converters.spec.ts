@@ -116,6 +116,12 @@ describe('converters', () => {
             });
         });
 
+        it('should handle the case when no transformation is given for attribute', () => {
+            const { afm } = showInPercent;
+
+            expect(() => toVisObj(bar, afm, null)).not.toThrow();
+        });
+
         it('should convert show in percent measure with attribute', () => {
             const { afm, transformation } = showInPercent;
 
