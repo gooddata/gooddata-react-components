@@ -16,3 +16,7 @@ echo "We don't know yet, olol"
 yarn test
 ```
 
+##Usage
+ - [DataTable](https://confluence.intgdc.com/display/VS/Obtain+Data+from+the+GoodData+Platform)
+ - [AFM](https://confluence.intgdc.com/display/VS/AFM)
+ - [Transformation](https://confluence.intgdc.com/display/VS/Transformation)
