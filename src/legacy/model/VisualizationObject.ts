@@ -74,7 +74,7 @@ export interface ICategory {
 
 export type CategoryCollection = 'attribute' | 'stack' | 'view' | 'trend' | 'segment';
 
-export type VisualizationType = 'table' | 'line' | 'column' | 'bar';
+export type VisualizationType = 'table' | 'line' | 'column' | 'bar' | 'pie' | 'doughnut' | 'combo';
 
 export interface IVisualizationObject {
     type: VisualizationType;
