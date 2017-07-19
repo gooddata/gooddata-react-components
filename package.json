@@ -6,9 +6,7 @@
   "files": [
     "dist"
   ],
-  "typescript": {
-    "definition": "dist/index.d.ts"
-  },
+  "typings": "dist/index.d.ts",
   "dependencies": {
     "lodash": "4.17.4"
   },
