@@ -47,8 +47,7 @@ describe.only('afmValidator', () => {
             }
         };
 
-        console.log(validator(afm));
-
+        // console.log(validator(afm));
 
     });
 });
