@@ -21,8 +21,7 @@ import {
     INegativeAttributeFilter
 } from '../interfaces/Afm';
 import invariant = require('invariant');
-
-export const SHOW_IN_PERCENT_MEASURE_FORMAT = '#,##0.00%';
+import { SHOW_IN_PERCENT_MEASURE_FORMAT } from '../constants/formats';
 
 export type ObjectUri = string;
 
@@ -194,7 +193,9 @@ const generateAttributeFilter = (filter: IAttributeFilter) => {
 
 export const generateFilters = (afm: IAfm) => {
     return afm.filters.reduce((memo, filter) => {
-        if (filter.type === 'date') {
+        if (filter.type === 'date' &&
+            filter.between[0] !== undefined &&
+            filter.between[1] !== undefined) {
             memo[filter.id] = generateDateFilter(filter as IDateFilter);
         }
 
@@ -248,8 +249,21 @@ export function loadAttributesMap(afm: IAfm, sdk, projectId: string): Promise<At
     return Promise.resolve([]);
 }
 
-export const getMeasureFormat = (item: IMeasure, defaultFormat: string) =>
-    (item.definition.showInPercent ? SHOW_IN_PERCENT_MEASURE_FORMAT : defaultFormat);
+export const getMeasureFormat = (item: IMeasure, defaultFormat: string, afm: IAfm) => {
+    if (isPoP(item)) {
+        const baseObject = item.definition.baseObject as any;
+
+        // baseObject defined by lookupId can define eg. showInPercent
+        if (baseObject.lookupId) {
+            const base = afm.measures.find(measure => measure.id === baseObject.lookupId);
+            return getMeasureFormat(base, defaultFormat, afm);
+        }
+        // baseObject defined by URL have to use default format
+        return defaultFormat;
+
+    }
+    return (item.definition.showInPercent ? SHOW_IN_PERCENT_MEASURE_FORMAT : defaultFormat);
+};
 
 export const generateMetricDefinition = (
     afm: IAfm,
@@ -263,6 +277,6 @@ export const generateMetricDefinition = (
         expression: generateMetricExpression(item, afm, attributesMapping),
         identifier: item.id,
         title,
-        format: getMeasureFormat(item, format)
+        format: getMeasureFormat(item, format, afm)
     };
 };

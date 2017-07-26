@@ -58,6 +58,7 @@ export interface IMeasure {
         format?: string;
         sort?: IMeasureSort;
         styles?: IVisualizationStyle[];
+        generatedId?: string
     };
 }
 
@@ -76,6 +77,11 @@ export type CategoryCollection = 'attribute' | 'stack' | 'view' | 'trend' | 'seg
 
 export type VisualizationType = 'table' | 'line' | 'column' | 'bar' | 'pie' | 'doughnut' | 'combo';
 
+export interface IVisualizationObjectMetadata {
+    meta;
+    content: IVisualizationObject;
+}
+
 export interface IVisualizationObject {
     type: VisualizationType;
 
@@ -84,4 +90,17 @@ export interface IVisualizationObject {
         categories: ICategory[];
         filters: EmbeddedFilter[];
     };
+}
+
+export interface IAttributesMap {
+    [x: string]: string;
+}
+
+export interface IMeasuresMap {
+    [x: string]: Partial<IMeasure>;
+}
+
+export interface IVisualizationMetadataResult {
+    metadata: IVisualizationObjectMetadata;
+    measuresMap: IMeasuresMap;
 }

@@ -108,6 +108,7 @@ const showInPercent: IVisualizationObject = {
                 measureFilters: [],
                 objectUri: '/gdc/md/project/obj/metric.id',
                 showInPercent: true,
+                format: '#,##0.00%',
                 showPoP: false,
                 title: 'Measure M1',
                 type: 'metric'
@@ -133,6 +134,7 @@ const showInPercentWithDate: IVisualizationObject = {
                 measureFilters: [],
                 objectUri: '/gdc/md/project/obj/metric.id',
                 showInPercent: true,
+                format: '#,##0.00%',
                 showPoP: false,
                 title: 'Measure M1',
                 type: 'metric'

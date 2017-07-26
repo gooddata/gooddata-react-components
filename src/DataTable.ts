@@ -61,10 +61,15 @@ export class DataTable {
 
         if (!isEqual(afm, this.afm)) {
             this.afm = afm;
-            this.dataSource = this.adapter.createDataSource(afm);
+            this.adapter.createDataSource(afm)
+                .then((dataSource) => {
+                    this.dataSource = dataSource;
+                    this.fetchData(transformation);
+                    return;
+                });
+        } else if (this.dataSource) {
+            this.fetchData(transformation);
         }
-
-        this.fetchData(transformation);
     }
 
     /**
@@ -76,12 +81,16 @@ export class DataTable {
             return Promise.resolve(null);
         }
 
-        if (!isEqual(afm, this.afm)) {
+        if (!isEqual(afm, this.afm) || !this.dataSource) {
             this.afm = afm;
-            this.dataSource = this.adapter.createDataSource(afm);
+            return this.adapter.createDataSource(afm)
+                .then((dataSource) => {
+                    this.dataSource = dataSource;
+                    return this.getDataPromise(transformation);
+                });
+        } else {
+            return this.getDataPromise(transformation);
         }
-
-        return this.getDataPromise(transformation);
     }
 
     public onData(callback) {

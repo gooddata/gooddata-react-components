@@ -80,14 +80,6 @@ export const popMeasure: IFixture = {
     afm: {
         measures: [
             {
-                id: 'm1',
-                definition: {
-                    baseObject: {
-                        id: '/gdc/md/project/obj/metric.id'
-                    }
-                }
-            },
-            {
                 id: 'm1_pop',
                 definition: {
                     baseObject: {
@@ -95,6 +87,14 @@ export const popMeasure: IFixture = {
                     },
                     popAttribute: {
                         id: ATTRIBUTE_DISPLAY_FORM_URI
+                    }
+                }
+            },
+            {
+                id: 'm1',
+                definition: {
+                    baseObject: {
+                        id: '/gdc/md/project/obj/metric.id'
                     }
                 }
             }
@@ -129,14 +129,6 @@ export const popMeasureWithSorting: IFixture = {
     afm: {
         measures: [
             {
-                id: 'm1',
-                definition: {
-                    baseObject: {
-                        id: '/gdc/md/project/obj/metric.id'
-                    }
-                }
-            },
-            {
                 id: 'm1_pop',
                 definition: {
                     baseObject: {
@@ -144,6 +136,14 @@ export const popMeasureWithSorting: IFixture = {
                     },
                     popAttribute: {
                         id: ATTRIBUTE_DISPLAY_FORM_URI
+                    }
+                }
+            },
+            {
+                id: 'm1',
+                definition: {
+                    baseObject: {
+                        id: '/gdc/md/project/obj/metric.id'
                     }
                 }
             }
@@ -203,7 +203,8 @@ export const showInPercent: IFixture = {
         measures: [
             {
                 id: 'm1',
-                title: 'Measure M1'
+                title: 'Measure M1',
+                format: '#,##0.00%'
             }
         ]
     }
@@ -235,7 +236,8 @@ export const showInPercentWithDate: IFixture = {
         measures: [
             {
                 id: 'm1',
-                title: 'Measure M1'
+                title: 'Measure M1',
+                format: '#,##0.00%'
             }
         ]
     }

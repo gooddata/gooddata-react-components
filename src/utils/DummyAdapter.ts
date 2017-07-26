@@ -12,9 +12,9 @@ export class DummyAdapter implements IAdapter {
         this.success = success;
     }
 
-    public createDataSource(afm: any): IDataSource {
+    public createDataSource(afm: any): Promise<IDataSource> {
         return this.dataSource
-            ? this.dataSource
-            : new DummyDataSource(this.data, this.success);
+            ? Promise.resolve(this.dataSource)
+            : Promise.resolve(new DummyDataSource(this.data, this.success));
     }
 }
