@@ -3,12 +3,26 @@ import {
     getAttributesMap
 } from '../../helpers/metadata';
 
+import * as VisObj from '../../legacy/model/VisualizationObject';
+
 describe('metadataHelpers', () => {
     const projectId = 'projectId';
     const m1Uri = '/m/1';
     const m2Uri = '/m/2';
     const m1Format = { format: '#.##1' };
     const m2Format = { format: '#.##2' };
+
+    const emptyVisualizationObject = {
+        meta: {},
+        content: {
+            type: 'column' as VisObj.VisualizationType,
+            buckets: {
+                measures: [],
+                categories: [],
+                filters: []
+            }
+        }
+    };
 
     describe('fetchMeasures', () => {
         const sdkMockMetrics = {
@@ -28,7 +42,7 @@ describe('metadataHelpers', () => {
         };
 
         it('should return empty object if there are no measures', (done) => {
-            fetchMeasures(sdkMockMetrics, projectId, {}).then((result) => {
+            fetchMeasures(sdkMockMetrics, projectId, emptyVisualizationObject).then((result) => {
                 expect(result).toEqual({});
                 done();
             });
@@ -36,13 +50,31 @@ describe('metadataHelpers', () => {
 
         it('should prepare mapping with formats for measures in md object', (done) => {
             const visualizationObject = {
+                meta: {},
                 content: {
+                    type: 'column' as VisObj.VisualizationType,
                     buckets: {
                         measures: [{
-                            measure: { objectUri: m1Uri }
+                            measure: {
+                                type: 'metric' as VisObj.MeasureType,
+                                objectUri: m1Uri,
+                                showInPercent: false,
+                                showPoP: false,
+                                title: 'metric 1',
+                                measureFilters: []
+                            }
                         }, {
-                            measure: { objectUri: m2Uri }
-                        }]
+                            measure: {
+                                type: 'metric' as VisObj.MeasureType,
+                                objectUri: m2Uri,
+                                showInPercent: false,
+                                showPoP: false,
+                                title: 'metric 2',
+                                measureFilters: []
+                            }
+                        }],
+                        categories: [],
+                        filters: []
                     }
                 }
             };
@@ -76,8 +108,7 @@ describe('metadataHelpers', () => {
         };
 
         it('should return empty if no date filter present', (done) => {
-            const visualizationObject = {};
-            getAttributesMap(sdkMockAttributes, projectId, visualizationObject).then((result) => {
+            getAttributesMap(sdkMockAttributes, projectId, emptyVisualizationObject).then((result) => {
                 expect(result).toEqual({});
                 done();
             });
@@ -85,13 +116,21 @@ describe('metadataHelpers', () => {
 
         it('should return empty if date filter in filter bucket', (done) => {
             const visualizationObject = {
+                meta: {},
                 content: {
+                    type: 'column' as VisObj.VisualizationType,
                     buckets: {
-                        filters: [{
-                            dateFilter: {
-                                attribute: dateUri
+                        measures: [],
+                        categories: [],
+                        filters: [
+                            {
+                                dateFilter: {
+                                    attribute: dateUri,
+                                    type: 'relative' as VisObj.EmbeddedDateFilterType,
+                                    granularity: 'year'
+                                }
                             }
-                        }]
+                        ]
                     }
                 }
             };
@@ -107,14 +146,20 @@ describe('metadataHelpers', () => {
 
         it('should return empty if date filter in categories', (done) => {
             const visualizationObject = {
+                meta:{},
                 content: {
+                    type: 'column' as VisObj.VisualizationType,
                     buckets: {
+                        measures: [],
                         categories: [{
                             category: {
-                                type: 'date',
-                                attribute: dateUri
+                                type: 'date' as VisObj.CategoryType,
+                                attribute: dateUri,
+                                collection: 'view' as VisObj.CategoryCollection,
+                                displayForm: 'df/uri'
                             }
-                        }]
+                        }],
+                        filters: []
                     }
                 }
             };

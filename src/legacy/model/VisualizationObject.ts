@@ -2,9 +2,11 @@ export type SortDirection = 'asc' | 'desc';
 
 export type EmbeddedFilter = IEmbeddedDateFilter | IEmbeddedListAttributeFilter;
 
+export type EmbeddedDateFilterType = 'relative' | 'absolute';
+
 export interface IEmbeddedDateFilter {
     dateFilter: {
-        type: 'relative' | 'absolute';
+        type: EmbeddedDateFilterType;
         from?: string | number;
         to?: string | number;
         granularity: string;
@@ -29,10 +31,11 @@ export interface IMeasureSort {
     direction: SortDirection;
     sortByPoP: boolean;
 }
+export type VisualizationStyleType = 'common' | 'table' | 'line' | 'column' | 'bar';
 
 export interface IVisualizationStyle {
     visualizationStyle: {
-        type: 'common' | 'table' | 'line' | 'column' | 'bar';
+        type: VisualizationStyleType;
         colorPalette: {
             measure?: {
                 color: string;
@@ -45,11 +48,12 @@ export interface IVisualizationStyle {
 }
 
 export type MeasureType = 'metric' | 'fact' | 'attribute';
+export type MeasureAggregation = 'sum' | 'count' | 'avg' | 'min' | 'max' | 'median' | 'runsum';
 
 export interface IMeasure {
     measure: {
         type: MeasureType;
-        aggregation?: 'sum' | 'count' | 'avg' | 'min' | 'max' | 'median' | 'runsum';
+        aggregation?: MeasureAggregation;
         objectUri: string;
         showInPercent: boolean;
         showPoP: boolean;
@@ -62,9 +66,11 @@ export interface IMeasure {
     };
 }
 
+export type CategoryType = 'attribute' | 'date';
+
 export interface ICategory {
     category: {
-        type: 'attribute' | 'date';
+        type: CategoryType;
         collection: CategoryCollection;
         displayForm: string;
         attribute?: string;
@@ -82,14 +88,15 @@ export interface IVisualizationObjectMetadata {
     content: IVisualizationObject;
 }
 
+export interface IBuckets {
+    measures: IMeasure[];
+    categories: ICategory[];
+    filters: EmbeddedFilter[];
+}
+
 export interface IVisualizationObject {
     type: VisualizationType;
-
-    buckets: {
-        measures: IMeasure[];
-        categories: ICategory[];
-        filters: EmbeddedFilter[];
-    };
+    buckets: IBuckets;
 }
 
 export interface IAttributesMap {

@@ -1,12 +1,32 @@
 import { appendFilters } from '../AfmUtils';
+import { IAttributeFilter, IDateFilter } from '../../interfaces/Afm';
 
 describe('appendFilters', () => {
-    const af1 = { id: '1' };
-    const af2 = { id: '2' };
+    const af1 = {
+        id: '1',
+        type: 'attribute',
+        in: []
+    } as IAttributeFilter;
+    const af2 = {
+        id: '2',
+        type: 'attribute',
+        notIn: []
+    } as IAttributeFilter;
 
-    const df1 = { id: 'd1', type: 'date', granularity: 'GDC.time.year' };
-    const df2 = { id: 'd2', type: 'date', granularity: 'GDC.time.year' };
-    const df1AllTime = { id: 'd1', type: 'date' };
+    const df1 = {
+        id: 'd1',
+        type: 'date',
+        granularity: 'GDC.time.year'
+    } as IDateFilter;
+    const df2 = {
+        id: 'd2',
+        type: 'date',
+        granularity: 'GDC.time.year'
+    } as IDateFilter;
+    const df1AllTime = {
+        id: 'd1',
+        type: 'date'
+    } as IDateFilter;
 
     it('should concatenate filters when all different', () => {
         const afm = {

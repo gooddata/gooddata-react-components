@@ -4,6 +4,7 @@ import * as MetadataSource from './interfaces/MetadataSource';
 import * as ExecutorResult from './interfaces/ExecutorResult';
 import * as Transformation from './interfaces/Transformation';
 import * as AdapterUtils from './adapters/utils';
+import * as DataSourceUtils from './dataSources/utils';
 import * as Filters from './helpers/filters';
 import * as Uri from './helpers/uri';
 import * as Converters from './legacy/converters';
@@ -25,6 +26,7 @@ export {
     UriMetadataSource,
 
     AdapterUtils,
+    DataSourceUtils,
     Afm,
     Converters,
     AfmConverter,
