@@ -10,7 +10,6 @@ GROUPID=${HOST_GROUPID:=$(id -g ${USER})}
 NPM_AUTH_TOKEN=$(cat ~/.npmrc | cut -d "=" -f 2)
 docker run --rm -u $USERID:$GROUPID -e NPM_AUTH_TOKEN=$NPM_AUTH_TOKEN $EXTRA \
     -v /var/lib/jenkins-slave/.ssh/:/var/lib/jenkins-slave/.ssh/:ro \
-    -e HOME=/var/lib/jenkins-slave \
     -v `pwd`:/code \
     -w /code \
     frontend-node-npm \
