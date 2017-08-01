@@ -28,8 +28,9 @@ RUN yarn -v
 #COPY . /code
 #COPY ./docker/install.sh /bin/install.sh
 #ENV HOME /code
+COPY ./docker/install.sh /
 
-#ENTRYPOINT ["/bin/install.sh"]
+ENTRYPOINT ["/install.sh"]
   # # Install packages via yarn
   # RUN ssh-agent /code/.ssh
   # RUN cd /code && \

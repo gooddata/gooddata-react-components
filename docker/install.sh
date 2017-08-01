@@ -1,13 +1,5 @@
 #!/bin/bash
-set -x
-echo "//registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN" >> /code/.npmrc
-
-#ssh-agent /.ssh
-cd /code
-ls -la
-whoami
-npm whoami
-
-ssh-add -l
-ssh -T git@github.com
-yarn install --pure-lockfile
+USERID=${USERID:-1000}
+GROUPID=${GROUPID:-1000}
+groupadd -fg "$GROUPID" uiuser
+useradd -o uiuser -u "$USERID" -g "$GROUPID" -m
