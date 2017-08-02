@@ -6,12 +6,25 @@ pwd
 #whoami
 #id
 echo $HOME
+chmod 600 /root/.ssh
 ls -la $HOME
-# echo "//registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN" > $HOME/.npmrc
+
+
+ls -la /root/.ssh
+echo "//registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN" > $HOME/.npmrc
 cat ~/.npmrc
-ssh-agent
+echo 'Host github.com
+    StrictHostKeyChecking no
+' >> /root/.ssh/config
+cat /root/.ssh/config
+eval "$(ssh-agent)"
+#ssh-agent
+ssh-add /root/.ssh/id_rsa
+
 ssh-add -l
-# ssh -T git@github.com
+
+#ssh -v git@github.com
+
 # yarn cache dir
 # #echo "//registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN" >> /code/.npmrc \
-# yarn install --pure-lockfile
+yarn install --pure-lockfile
