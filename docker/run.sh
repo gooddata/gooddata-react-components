@@ -7,6 +7,7 @@ pwd
 #id
 echo $HOME
 chmod 600 /root/.ssh
+chmod 600 /root/.ssh/*
 ls -la $HOME
 
 

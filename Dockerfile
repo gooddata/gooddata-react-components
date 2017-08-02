@@ -10,8 +10,8 @@ LABEL name="Docker Image for frontend testing and development on CentOS7" \
 # Node version
 ENV NODE_VERSION 6.11.1
 
-RUN yum clean all && \
-    yum install -y gcc-c++
+# RUN yum clean all && \
+#     yum install -y gcc-c++
 
 # Installing node.js & npm
 RUN curl -sL https://rpm.nodesource.com/setup_6.x | /bin/bash -E -

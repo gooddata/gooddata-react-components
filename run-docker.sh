@@ -9,9 +9,9 @@
 # -v /var/lib/jenkins-slave/.ssh/:/home/uiuser/.ssh/:ro \
 #NPM_AUTH_TOKEN=$(cat ~/.npmrc | cut -d "=" -f 2)
 #-e USERID=$(id -u) -e GROUPID=$(getent group docker | cut -d: -f3) \
-SSH_KEY_NAME='pavel.langhammer-id_rsa'
+SSH_KEY_NAME='github_id-rsa'
 
-NPM_AUTH_TOKEN=$(cat ~/.npmrc | cut -d "=" -f 2)
+#NPM_AUTH_TOKEN=$(cat ~/.npmrc | cut -d "=" -f 2)
 
 docker run --rm -e NPM_AUTH_TOKEN=$NPM_AUTH_TOKEN $EXTRA \
     -v `pwd`:/workspace \
