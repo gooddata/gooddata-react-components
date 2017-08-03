@@ -6,8 +6,10 @@ pwd
 #whoami
 #id
 echo $HOME
-chmod 600 /root/.ssh
-chmod 600 /root/.ssh/*
+mkdir -p /root/.ssh
+chmod 755 /root/.ssh
+cp /tmp/id_rsa /root/.ssh/
+chmod 600 /root/.ssh/id_rsa
 ls -la $HOME
 
 

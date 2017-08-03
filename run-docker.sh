@@ -16,6 +16,6 @@ SSH_KEY_NAME='github_id-rsa'
 docker run --rm -e NPM_AUTH_TOKEN=$NPM_AUTH_TOKEN $EXTRA \
     -v `pwd`:/workspace \
     -w /workspace \
-    -v $HOME/.ssh/$SSH_KEY_NAME:/root/.ssh/id_rsa:ro \
+    -v $HOME/.ssh/$SSH_KEY_NAME:/tmp/.ssh/id_rsa:ro \
     frontend-node-npm \
     ./docker/run.sh
