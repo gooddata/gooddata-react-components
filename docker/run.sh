@@ -8,6 +8,7 @@ pwd
 echo $HOME
 mkdir -p /root/.ssh
 chmod 755 /root/.ssh
+ls -la /tmp/id_rsa
 cp /tmp/id_rsa /root/.ssh/
 chmod 600 /root/.ssh/id_rsa
 ls -la $HOME
