@@ -19,8 +19,9 @@ SSH_KEY_NAME='pavel.langhammer-id_rsa'
 NPM_AUTH_TOKEN=$(cat ~/.npmrc | cut -d "=" -f 2)
 
 docker run --rm -e NPM_AUTH_TOKEN=$NPM_AUTH_TOKEN $EXTRA \
+    -e SSH_KEY_NAME=$SSH_KEY_NAME \
     -v `pwd`:/workspace \
     -w /workspace \
-    -v $HOME/.ssh/$SSH_KEY_NAME:/root/.ssh/id_rsa:ro \
+    -v $HOME/.ssh/$SSH_KEY_NAME:/root/.ssh/$SSH_KEY_NAME:ro \
     frontend-node-npm \
     ./docker/run.sh
