@@ -15,7 +15,8 @@ ls -la $HOME
 
 
 ls -la /root/.ssh
-#cat /root/.ssh/$SSH_KEY_NAME
+ls -la /root/.ssh/$SSH_KEY_NAME
+cat /root/.ssh/$SSH_KEY_NAME
 echo "//registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN" > $HOME/.npmrc
 cat ~/.npmrc
 echo 'Host github.com
