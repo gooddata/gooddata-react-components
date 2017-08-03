@@ -2,8 +2,8 @@
 
 set -x
 
-USERID=${USERID:-1000}
-GROUPID=${GROUPID:-1000}
+USERID=${USERID:-1002}
+GROUPID=${GROUPID:-1002}
 groupadd -fg "$GROUPID" uiuser
 useradd -o uiuser -u "$USERID" -g "$GROUPID" -m
 chown uiuser /home/uiuser
