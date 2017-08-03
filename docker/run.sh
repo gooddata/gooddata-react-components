@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -x
+
 ls -la
 pwd
 #whoami
@@ -14,18 +15,18 @@ echo $HOME
 ls -la $HOME
 
 
-ls -la /root/.ssh
-ls -la /root/.ssh/$SSH_KEY_NAME
-cat /root/.ssh/$SSH_KEY_NAME
+ls -la $HOME/.ssh
+ls -la $HOME/.ssh/$SSH_KEY_NAME
+cat $HOME/.ssh/config
 echo "//registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN" > $HOME/.npmrc
-cat ~/.npmrc
+# cat ~/.npmrc
 # echo 'Host github.com
 #     StrictHostKeyChecking no
 # ' >> /root/.ssh/config
 # cat /root/.ssh/config
 eval "$(ssh-agent)"
 #ssh-agent
-ssh-add /root/.ssh/$SSH_KEY_NAME
+ssh-add $HOME/.ssh/$SSH_KEY_NAME
 
 ssh-add -l
 

@@ -10,8 +10,8 @@ LABEL name="Docker Image for frontend testing and development on CentOS7" \
 # Node version
 ENV NODE_VERSION 6.11.1
 
-# RUN yum clean all && \
-#     yum install -y gcc-c++
+RUN yum clean all && \
+     yum install -y gcc-c++
 
 # Installing node.js & npm
 RUN curl -sL https://rpm.nodesource.com/setup_6.x | /bin/bash -E -
@@ -32,12 +32,12 @@ RUN yarn -v
 #COPY ./docker/install.sh /bin/install.sh
 #ENV HOME /code
 # https://github.com/ncopa/su-exec
-# COPY ./docker/su-exec.c /usr/src/su-exec.c
-# RUN  gcc /usr/src/su-exec.c -o /sbin/su-exec
+COPY ./docker/su-exec.c /usr/src/su-exec.c
+RUN  gcc /usr/src/su-exec.c -o /sbin/su-exec
 #
-# COPY ./docker/install.sh /
+COPY ./docker/install.sh /
 #
-# ENTRYPOINT ["/install.sh"]
+ENTRYPOINT ["/install.sh"]
   # # Install packages via yarn
   # RUN ssh-agent /code/.ssh
   # RUN cd /code && \
