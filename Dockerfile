@@ -26,11 +26,6 @@ RUN npm install -g -s --no-progress yarn
 RUN yum install -y git
 RUN yarn -v
 
-#RUN mkdir -p /code
-#WORKDIR /code
-#COPY . /code
-#COPY ./docker/install.sh /bin/install.sh
-#ENV HOME /code
 # https://github.com/ncopa/su-exec
 COPY ./docker/su-exec.c /usr/src/su-exec.c
 RUN  gcc /usr/src/su-exec.c -o /sbin/su-exec
@@ -38,8 +33,3 @@ RUN  gcc /usr/src/su-exec.c -o /sbin/su-exec
 COPY ./docker/install.sh /
 #
 ENTRYPOINT ["/install.sh"]
-  # # Install packages via yarn
-  # RUN ssh-agent /code/.ssh
-  # RUN cd /code && \
-  #   ls -la && \
-  #   yarn install --pure-lockfile
