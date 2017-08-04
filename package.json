@@ -4,7 +4,8 @@
   "description": "",
   "main": "dist/index.js",
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "typings": "dist/index.d.ts",
   "dependencies": {
