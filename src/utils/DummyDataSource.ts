@@ -20,4 +20,8 @@ export class DummyDataSource implements IDataSource {
     public getFingerprint() {
         return '';
     }
+
+    public getAfm() {
+        return {};
+    }
 }
