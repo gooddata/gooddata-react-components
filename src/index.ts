@@ -7,7 +7,7 @@ import { Table } from './components/Table';
 import { Visualization } from './components/Visualization';
 
 import { FilterProvider } from './components/base/Filter/FilterProvider';
-import { emitFiltersChange } from './components/base/Filter/emitFiltersChange';
+import { connectFilters } from './components/base/Filter/connectFilters';
 
 export {
     BarChart,
@@ -19,5 +19,5 @@ export {
     Visualization,
 
     FilterProvider,
-    emitFiltersChange
+    connectFilters
 };

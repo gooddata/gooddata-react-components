@@ -1,4 +1,3 @@
-import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
@@ -11,18 +10,8 @@ export interface IFilterProviderProps {
 
 const store = createStore(filterReducer); // TODO will not work with multiple filter providers
 
-export class FilterProvider extends React.PureComponent<IFilterProviderProps, null> {
-    static propTypes = {
-        filters: PropTypes.arrayOf(PropTypes.string)
-    };
-
-    public static defaultProps: Partial<IFilterProviderProps> = {
-        filters: []
-    };
-
+export class FilterProvider extends React.PureComponent<null, null> {
     public render() {
-        // const { filters } = this.props;
-
         return (
             <Provider store={store}>
                 {this.props.children}
