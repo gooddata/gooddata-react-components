@@ -6,6 +6,9 @@ import { PieChart } from './components/PieChart';
 import { Table } from './components/Table';
 import { Visualization } from './components/Visualization';
 
+import { FilterProvider } from './components/base/Filter/FilterProvider';
+import { emitFiltersChange } from './components/base/Filter/emitFiltersChange';
+
 export {
     BarChart,
     ColumnChart,
@@ -13,5 +16,8 @@ export {
     Kpi,
     PieChart,
     Table,
-    Visualization
+    Visualization,
+
+    FilterProvider,
+    emitFiltersChange
 };
