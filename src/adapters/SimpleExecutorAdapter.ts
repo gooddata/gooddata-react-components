@@ -40,8 +40,7 @@ export class SimpleExecutorAdapter implements IAdapter {
                 });
         };
 
-        const fingerprint = JSON.stringify(normalizedAfm);
-        return Promise.resolve(new DataSource(execFactory, fingerprint));
+        return Promise.resolve(new DataSource(execFactory, normalizedAfm));
     }
 
     private convertData(afm: IAfm, transformation: ITransformation, attributesMapping: AttributeMap) {
