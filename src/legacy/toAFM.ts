@@ -79,15 +79,22 @@ function convertAttribute(attribute: VisObj.ICategory): Afm.IAttribute {
 }
 
 function convertDateFilter(filter: VisObj.IEmbeddedDateFilter): Afm.IDateFilter {
-    return {
+    const retVal = {
         type: 'date',
         id: filter.dateFilter.dataset,
         between: [
-            (filter.dateFilter.from as string),
-            (filter.dateFilter.to as string)
+            filter.dateFilter.from,
+            filter.dateFilter.to
         ],
         granularity: filter.dateFilter.granularity.split('.')[2]
-    };
+    } as Afm.IDateFilter;
+    if (filter.dateFilter.type === 'relative') {
+        retVal.between = [
+            parseInt(filter.dateFilter.from as string, 10),
+            parseInt(filter.dateFilter.to as string, 10)
+        ];
+    }
+    return retVal;
 }
 
 function convertAttributeFilter(filter: VisObj.IEmbeddedListAttributeFilter): Afm.IAttributeFilter {

@@ -290,6 +290,13 @@ describe('converters', () => {
             });
         });
 
+        it('should convert date filter with from/to as strings', () => {
+            expect(toAFM(charts.bar.dateFilterWithStrings, attributesMap)).toEqual({
+                ...dateFilter,
+                type: 'bar'
+            });
+        });
+
         it('should convert stacking attribute', () => {
             expect(toAFM(charts.bar.stackingAttribute, attributesMap)).toEqual({
                 ...stackingAttribute,

@@ -274,6 +274,24 @@ const dateFilter: IVisualizationObject = {
     }
 };
 
+const dateFilterWithStrings: IVisualizationObject = {
+    type: 'bar',
+    buckets: {
+        measures: [],
+        categories: [],
+        filters: [{
+            dateFilter: {
+                attribute: DATE_URI,
+                dataset: DATE_DATA_SET_URI,
+                from: '-89',
+                granularity: 'GDC.time.date',
+                to: '0',
+                type: 'relative'
+            }
+        }]
+    }
+};
+
 const attributeFilter: IVisualizationObject = {
     type: 'bar',
     buckets: {
@@ -385,6 +403,7 @@ export const charts = {
         popMeasureWithSorting,
         categoryWithSorting,
         dateFilter,
+        dateFilterWithStrings,
         attributeFilter,
         stackingAttribute
     }
