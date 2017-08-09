@@ -4,11 +4,7 @@ import { Provider } from 'react-redux';
 
 import filterReducer from './reducers';
 
-export interface IFilterProviderProps {
-    filters?: String[];
-}
-
-const store = createStore(filterReducer); // TODO will not work with multiple filter providers
+const store = createStore(filterReducer);
 
 export class FilterProvider extends React.PureComponent<null, null> {
     public render() {

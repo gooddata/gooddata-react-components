@@ -7,6 +7,8 @@ import { Table } from './components/Table';
 import { Visualization } from './components/Visualization';
 
 import { FilterProvider } from './components/base/Filter/FilterProvider';
+import { FilterContext } from './components/base/Filter/FilterContext';
+
 import { connectFilters } from './components/base/Filter/connectFilters';
 
 export {
@@ -19,5 +21,6 @@ export {
     Visualization,
 
     FilterProvider,
+    FilterContext,
     connectFilters
 };

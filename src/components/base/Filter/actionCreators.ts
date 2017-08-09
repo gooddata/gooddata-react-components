@@ -5,7 +5,7 @@ export function addFilter(filterId, changes) {
     return changeFilter(filterId, changes);
 }
 
-export function remoteFilter(filterId) {
+export function removeFilter(filterId) {
     return {
         type: REMOVE_FILTER,
         payload: {
