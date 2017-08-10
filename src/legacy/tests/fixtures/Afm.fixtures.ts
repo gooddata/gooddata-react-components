@@ -424,6 +424,18 @@ export const dateFilter: IFixture = {
     transformation: {}
 };
 
+export const dateFilterWithoutInterval: IFixture = {
+    afm: {
+        filters: [{
+            id: DATE_DATA_SET_URI,
+            type: 'date',
+            between: [undefined, undefined]
+            granularity: 'date'
+        }]
+    },
+    transformation: {}
+};
+
 export const attributeWithIdentifier: IFixture = {
     afm: {
         measures: [

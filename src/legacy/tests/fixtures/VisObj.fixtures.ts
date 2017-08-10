@@ -292,6 +292,22 @@ const dateFilterWithStrings: IVisualizationObject = {
     }
 };
 
+const dateFilterWithUndefs: IVisualizationObject = {
+    type: 'bar',
+    buckets: {
+        measures: [],
+        categories: [],
+        filters: [{
+            dateFilter: {
+                attribute: DATE_URI,
+                dataset: DATE_DATA_SET_URI,
+                granularity: 'GDC.time.date',
+                type: 'relative'
+            }
+        }]
+    }
+};
+
 const attributeFilter: IVisualizationObject = {
     type: 'bar',
     buckets: {
@@ -404,6 +420,7 @@ export const charts = {
         categoryWithSorting,
         dateFilter,
         dateFilterWithStrings,
+        dateFilterWithUndefs,
         attributeFilter,
         stackingAttribute
     }
