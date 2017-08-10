@@ -88,7 +88,11 @@ function convertDateFilter(filter: VisObj.IEmbeddedDateFilter): Afm.IDateFilter 
         ],
         granularity: filter.dateFilter.granularity.split('.')[2]
     } as Afm.IDateFilter;
-    if (filter.dateFilter.type === 'relative') {
+
+    if (filter.dateFilter.type === 'relative' &&
+        filter.dateFilter.from !== undefined &&
+        filter.dateFilter.to !== undefined
+    ) {
         retVal.between = [
             parseInt(filter.dateFilter.from as string, 10),
             parseInt(filter.dateFilter.to as string, 10)

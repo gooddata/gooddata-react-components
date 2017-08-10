@@ -15,6 +15,7 @@ import {
     stackingAttribute,
     attributeFilter,
     dateFilter,
+    dateFilterWithoutInterval,
     attributeWithIdentifier,
     ATTRIBUTE_URI,
     ATTRIBUTE_DISPLAY_FORM_URI
@@ -293,6 +294,13 @@ describe('converters', () => {
         it('should convert date filter with from/to as strings', () => {
             expect(toAFM(charts.bar.dateFilterWithStrings, attributesMap)).toEqual({
                 ...dateFilter,
+                type: 'bar'
+            });
+        });
+
+        it('should do nothing when date filter from/to is undefined for relative (alltime)', () => {
+            expect(toAFM(charts.bar.dateFilterWithUndefs, attributesMap)).toEqual({
+                ...dateFilterWithoutInterval,
                 type: 'bar'
             });
         });
