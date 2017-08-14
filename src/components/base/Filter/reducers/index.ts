@@ -1,23 +1,28 @@
-import { fromJS } from 'immutable';
 import { CHANGE_FILTER, REMOVE_FILTER } from '../actionCreators';
 
-const defaultState = fromJS({
-    filters: {}
-});
-
-export default (state = defaultState, action) => {
+function filtersReducer(state = {}, action) {
     switch (action.type) {
         case REMOVE_FILTER: {
             const { filterId } = action.payload;
-            return state.delete(filterId);
+            delete state[filterId];
+            return {
+                ...state
+            };
         }
 
         case CHANGE_FILTER: {
             const { filterId, changes } = action.payload;
-            return state.setIn(['filters', filterId], changes);
+            return {
+                ...state,
+                [filterId]: changes
+            };
         }
 
         default:
             return state;
     }
+}
+
+export {
+    filtersReducer
 };

@@ -28,7 +28,7 @@ const mapStateToProps = (state, ownProps) => {
         filters: ownProps.filterIds.reduce((filters, filterId) => {
             return {
                 ...filters,
-                [filterId]: state.getIn(['filters', filterId])
+                [filterId]: state[filterId]
             };
         }, {})
     };

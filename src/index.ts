@@ -6,9 +6,9 @@ import { PieChart } from './components/PieChart';
 import { Table } from './components/Table';
 import { Visualization } from './components/Visualization';
 
-import { FilterProvider } from './components/base/Filter/FilterProvider';
 import { FilterContext } from './components/base/Filter/FilterContext';
 
+import { filtersReducer } from './components/base/Filter/reducers/index';
 import { connectFilters } from './components/base/Filter/connectFilters';
 
 export {
@@ -20,7 +20,7 @@ export {
     Table,
     Visualization,
 
-    FilterProvider,
     FilterContext,
-    connectFilters
+    connectFilters,
+    filtersReducer
 };

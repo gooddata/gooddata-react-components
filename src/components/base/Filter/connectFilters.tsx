@@ -8,7 +8,7 @@ export function connectFilters(Component, filterIds) {
             filters: filterIds.reduce((filters, filterId) => {
                 return {
                     ...filters,
-                    [filterId]: state.getIn(['filters', filterId])
+                    [filterId]: state.filters[filterId]
                 };
             }, {})
         };
