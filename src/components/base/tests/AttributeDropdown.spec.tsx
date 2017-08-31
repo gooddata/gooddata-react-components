@@ -99,6 +99,7 @@ describe('AttributeDropdown', () => {
         wrapper.find(DropdownButton).simulate('click');
 
         const testItems = () => {
+            console.log('testItems body', document.body.innerHTML);
             const itemElement = document.querySelector('.s-attribute-filter-list-item');
             ReactTestUtils.Simulate.click(itemElement);
             const applyElement = document.querySelector('.s-apply');
@@ -110,7 +111,12 @@ describe('AttributeDropdown', () => {
         const delayOffset = 250; // Magic constant inside Goodstrap FLEX_DIMENSIONS_THROTTLE :(
         const maxDelay = 1000;
         const increment = 10;
-        const intervalTest = () => (document.querySelectorAll('.s-attribute-filter-list-item').length);
+        const intervalTest = () => {
+            console.log('intervalTest s-attribute-filter-list-item',
+                document.querySelectorAll('.s-attribute-filter-list-item'));
+            console.log('intervalTest testItems', document.body.innerHTML);
+            return document.querySelectorAll('.s-attribute-filter-list-item').length;
+        };
         waitFor(intervalTest, maxDelay, delayOffset, increment).then(testItems, testItems);
     });
 
