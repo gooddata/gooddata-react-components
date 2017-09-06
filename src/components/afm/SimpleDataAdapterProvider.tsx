@@ -87,11 +87,9 @@ export function simpleDataAdapterProvider <T>(
 
         prepareAdapter(projectId: string) {
             const adapter = new SimpleExecutorAdapter(sdk, projectId);
-            this.setState(
-                {
-                    adapter
-                }
-            );
+            this.setState({
+                adapter
+            });
             return adapter;
         }
 
@@ -106,12 +104,10 @@ export function simpleDataAdapterProvider <T>(
                 const md = Converters.toVisObj(type, afm, transformation, result.headers);
                 const metadataSource = new SimpleMetadataSource(md, {});
 
-                this.setState(
-                    {
-                        dataSource,
-                        metadataSource
-                    }
-                );
+                this.setState({
+                    dataSource,
+                    metadataSource
+                });
             });
         }
 

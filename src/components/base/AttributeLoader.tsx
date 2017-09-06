@@ -23,19 +23,15 @@ export interface IAttributeLoaderState {
 }
 
 function getAttributeUri(metadata, projectId: string, uri: string, identifier: string): Promise<string> {
-    const uriPromise = new Promise<string>((resolve, reject) => {
-        if (uri) {
-            return resolve(uri);
-        }
-        if (!identifier || !projectId) {
-            return reject(new Error('Missing either uri, or identifier and projectId in AttributeFilter props'));
-        }
-        return metadata.getObjectUri(projectId, identifier).then((uri) => {
-            resolve(uri);
-        }, reject);
-    });
-    
-    return uriPromise;
+    if (uri) {
+        return Promise.resolve(uri);
+    }
+
+    if (!identifier || !projectId) {
+        return Promise.reject(new Error('Missing either uri, or identifier and projectId in AttributeFilter props'));
+    }
+
+    return metadata.getObjectUri(projectId, identifier);
 }
 
 function getAttributeDisplayForm(metadata, uri): Promise<IAttributeDisplayForm> {
