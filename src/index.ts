@@ -8,8 +8,10 @@ import { IDrillableItem } from './interfaces/DrillableItem';
 import { IVisualizationProperties } from './interfaces/VisualizationProperties';
 import * as promise from './helpers/promise';
 import { AttributeFilter } from './components/filters/AttributeFilter/AttributeFilter';
+import * as DataLayer from '@gooddata/data-layer';
 
 export {
+    DataLayer,
     BaseChart,
     CoreComponents,
     AfmComponents,
