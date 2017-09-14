@@ -23,10 +23,12 @@ describe('Kpi', () => {
         });
 
         expect(onLoadingChanged.mock.calls[0]).toEqual([{ isLoading: true }]);
-        postpone(() => {
-            expect(onLoadingChanged.mock.calls[1]).toEqual([{ isLoading: false }]);
-            expect(wrapper.find('.gdc-kpi').text()).toEqual('$32,016.00');
-            done();
-        });
+        postpone(
+            () => {
+                expect(onLoadingChanged.mock.calls[1]).toEqual([{ isLoading: false }]);
+                expect(wrapper.find('.gdc-kpi').text()).toEqual('$32,016.00');
+            },
+            done()
+        );
     });
 });

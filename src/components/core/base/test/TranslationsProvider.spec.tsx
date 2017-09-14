@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
 import { test } from '@gooddata/js-utils';
-import { IntlTranslationsProvider } from '../TranslationsProvider';
+import { IntlTranslationsProvider, ITranslationsComponentProps } from '../TranslationsProvider';
 import { Visualization } from '../../../tests/mocks';
 import { IntlWrapper } from '../IntlWrapper';
+import { ISimpleExecutorResult } from 'gooddata';
 
 const { postpone } = test;
 
@@ -25,29 +26,35 @@ describe('TranslationsProvider', () => {
     };
 
     it('shouldn\'t change empty data and add numeric symbols', (done) => {
-        const result = {
+        const result: ISimpleExecutorResult = {
             headers: [],
             rawData: []
         };
 
         const numericSymbols = ['k', 'M', 'G', 'T', 'P', 'E'];
-
         const wrapper = createComponent({ result });
-        postpone(() => {
-            expect(wrapper.find(Visualization).props().data).toEqual(result);
-            expect(wrapper.find(Visualization).props().numericSymbols).toEqual(numericSymbols);
-            done();
-        });
+        const translationsProviderProps = wrapper.find(Visualization).props() as ITranslationsComponentProps;
+
+        postpone(
+            () => {
+                expect(translationsProviderProps.data).toEqual(result);
+                expect(translationsProviderProps.numericSymbols).toEqual(numericSymbols);
+            },
+            done()
+        );
     });
 
     it('shouldn\'t change reesponse which does not cointain headers or rawData', (done) => {
         const result = { meta: 'someMeta' };
         const wrapper = createComponent({ result });
+        const translationsProviderProps = wrapper.find(Visualization).props() as ITranslationsComponentProps;
 
-        postpone(() => {
-            expect(wrapper.find(Visualization).props().data).toEqual(result);
-            done();
-        });
+        postpone(
+            () => {
+                expect(translationsProviderProps.data).toEqual(result);
+            },
+            done()
+        );
     });
 
     it('should replace empty attribute values', (done) => {
@@ -77,6 +84,7 @@ describe('TranslationsProvider', () => {
                 key: 'value3.2'
             }]]
         };
+
         const expected = {
             headers: [{
                 type: 'attrLabel'
@@ -103,12 +111,15 @@ describe('TranslationsProvider', () => {
                 key: 'value3.2'
             }]]
         };
+
         const wrapper = createComponent({ result });
+        const translationsProviderProps = wrapper.find(Visualization).props() as ITranslationsComponentProps;
 
-        postpone(() => {
-            expect(wrapper.find(Visualization).props().data).toEqual(expected);
-            done();
-        });
+        postpone(
+            () => {
+                expect(translationsProviderProps.data).toEqual(expected);
+            },
+            done()
+        );
     });
-
 });

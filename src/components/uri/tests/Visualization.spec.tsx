@@ -34,6 +34,7 @@ function getResponse(response: string, delay: number): Promise<string> {
     });
 }
 
+// tslint:disable-next-line:variable-name
 function uriResolver(_projectId: string, _uri: string, identifier: string): Promise<string> {
     if (identifier === 'table') {
         return getResponse(TABLE_URI, FAST);
@@ -55,10 +56,12 @@ describe('Visualization', () => {
             />
         );
 
-        postpone(() => {
-            expect(wrapper.find(BaseChart).length).toBe(1);
-            done();
-        });
+        postpone(
+            () => {
+                expect(wrapper.find(BaseChart).length).toBe(1);
+            },
+            done()
+        );
     });
 
     it('should render table', (done) => {
@@ -69,14 +72,16 @@ describe('Visualization', () => {
             />
         );
 
-        postpone(() => {
-            expect(wrapper.find(Table).length).toBe(1);
-            done();
-        });
+        postpone(
+            () => {
+                expect(wrapper.find(Table).length).toBe(1);
+            },
+            done()
+        );
     });
 
     it('should trigger error in case of given uri is not valid', (done) => {
-        const errorHandler = (value) => {
+        const errorHandler = (value: string) => {
             expect(value).toEqual(ErrorStates.NOT_FOUND);
             done();
         };
@@ -109,11 +114,14 @@ describe('Visualization', () => {
             />
         );
 
-        postpone(() => {
-            expect(wrapper.node.dataSource.afm.filters).toHaveLength(1);
-            expect(wrapper.node.dataSource.afm.filters[0]).toEqual(visFilters[0]);
-            done();
-        });
+        postpone(
+            () => {
+                const node: any = wrapper.getNode();
+                expect(node.dataSource.afm.filters).toHaveLength(1);
+                expect(node.dataSource.afm.filters[0]).toEqual(visFilters[0]);
+            },
+            done()
+        );
     });
 
     it('should add date filter, if it has different id', (done) => {
@@ -135,11 +143,14 @@ describe('Visualization', () => {
             />
         );
 
-        postpone(() => {
-            expect(wrapper.node.dataSource.afm.filters).toHaveLength(2);
-            expect(wrapper.node.dataSource.afm.filters[1]).toEqual(visFilters[0]);
-            done();
-        });
+        postpone(
+            () => {
+                const node: any = wrapper.getNode();
+                expect(node.dataSource.afm.filters).toHaveLength(2);
+                expect(node.dataSource.afm.filters[1]).toEqual(visFilters[0]);
+            },
+            done()
+        );
     });
 
     it('should add attribute filter', (done) => {
@@ -159,11 +170,14 @@ describe('Visualization', () => {
             />
         );
 
-        postpone(() => {
-            expect(wrapper.node.dataSource.afm.filters).toHaveLength(2);
-            expect(wrapper.node.dataSource.afm.filters[0]).toEqual(visFilters[0]);
-            done();
-        });
+        postpone(
+            () => {
+                const node: any = wrapper.getNode();
+                expect(node.dataSource.afm.filters).toHaveLength(2);
+                expect(node.dataSource.afm.filters[0]).toEqual(visFilters[0]);
+            },
+            done()
+        );
     });
 
     it('should handle slow requests', (done) => {
@@ -178,10 +192,13 @@ describe('Visualization', () => {
 
         wrapper.setProps({ identifier: 'table' });
 
-        postpone(() => {
-            expect(wrapper.find(Table).length).toBe(1);
-            done();
-        }, 300);
+        postpone(
+            () => {
+                expect(wrapper.find(Table).length).toBe(1);
+            },
+            done(),
+            300
+        );
     });
 
     it('should not re-render with same props', (done) => {
@@ -200,13 +217,15 @@ describe('Visualization', () => {
             filters: []
         });
 
-        postpone(() => {
-            // initial render without datasources & with created datasources
-            expect(spy).toHaveBeenCalledTimes(2);
-
-            spy.mockRestore();
-            done();
-        }, 300);
+        postpone(
+            () => {
+                // initial render without datasources & with created datasources
+                expect(spy).toHaveBeenCalledTimes(2);
+                spy.mockRestore();
+            },
+            done(),
+            300
+        );
     });
 
     it('should handle set state on unmounted component', (done) => {
@@ -221,6 +240,6 @@ describe('Visualization', () => {
         // Would throw an error if not handled properly
         wrapper.unmount();
 
-        postpone(done, 300);
+        postpone(done, done, 300);
     });
 });

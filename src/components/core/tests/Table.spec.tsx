@@ -2,8 +2,10 @@ import * as React from 'react';
 import { mount } from 'enzyme';
 
 import {
+    Header,
     VisualizationObject
 } from '@gooddata/data-layer';
+import { ISimpleExecutorResult } from 'gooddata';
 import { test } from '@gooddata/js-utils';
 
 import {
@@ -21,15 +23,33 @@ jest.mock('@gooddata/indigo-visualizations', () => ({
 
 import { Table, ITableProps } from '../Table';
 import { ErrorStates } from '../../../constants/errorStates';
+import { VisualizationTypes } from '../../../constants/visualizationTypes';
+import { getResultWithTwoMeasures } from '../../../execution/fixtures/SimpleExecutor.fixtures';
 
 const { postpone } = test;
 
 describe('Table', () => {
     const createComponent = (props: ITableProps) => {
-        return mount(<Table {...props} />);
+        return mount<ITableProps>(<Table {...props} />);
     };
 
     const createProps = (customProps = {}): ITableProps => {
+        const metadataResult: VisualizationObject.IVisualizationMetadataResult = {
+            metadata: {
+                meta: {
+                    title: 'foo'
+                },
+                content: {
+                    type: VisualizationTypes.COLUMN as VisualizationObject.VisualizationType,
+                    buckets: {
+                        measures: [],
+                        categories: [],
+                        filters: []
+                    }
+                }
+            },
+            measuresMap: {}
+        };
         return {
             height: 200,
             environment: 'dashboards',
@@ -39,15 +59,11 @@ describe('Table', () => {
                 getFingerprint: () => ('{}')
             },
             metadataSource: {
-                getVisualizationMetadata: () => Promise.resolve({
-                    metadata: {},
-                    measuresMap: {}
-                } as VisualizationObject.IVisualizationMetadataResult),
+                getVisualizationMetadata: () => Promise.resolve(metadataResult),
                 getFingerprint: () => '{}'
             },
-            locale: 'en-US',
             ...customProps
-        } as ITableProps;
+        };
     };
 
     beforeEach(() => {
@@ -64,18 +80,21 @@ describe('Table', () => {
             }
         });
         const wrapper = createComponent(props);
-        wrapper.setProps({ dataSource: {
-            getData: () => Promise.resolve({ foo: 'bar' }),
-            getAfm: () => ({}),
-            getFingerprint: () => 'differentprint'
-        }});
+        wrapper.setProps({
+            dataSource: {
+                getData() {
+                    return Promise.resolve(getResultWithTwoMeasures());
+                },
+                getAfm: () => ({}),
+                getFingerprint: () => 'differentprint'
+            }
+        });
 
         postpone(() => {
             expect(wrapper.find(TableTransformation).length).toBe(1);
             expect(initTableDataLoading).toHaveBeenCalledTimes(2);
             expect(onError).toHaveBeenCalledTimes(0);
-            done();
-        });
+        }, done);
     });
 
     it('should call initDataLoading when sorting changed', (done) => {
@@ -99,8 +118,7 @@ describe('Table', () => {
                 newProps.transformation,
                 newProps.visualizationProperties.sorting
             );
-            done();
-        });
+        }, done);
     });
 
     it('should not call initDataLoading second time', (done) => {
@@ -114,11 +132,13 @@ describe('Table', () => {
             }
         });
         const wrapper = createComponent(props);
-        wrapper.setProps({ dataSource: {
-            getData: () => Promise.resolve({}),
-            getAfm: () => ({}),
-            getFingerprint: () => '{}'
-        }});
+        wrapper.setProps({
+            dataSource: {
+                getData: () => Promise.resolve({}),
+                getAfm: () => ({}),
+                getFingerprint: () => '{}'
+            }
+        });
 
         postpone(() => {
             expect(wrapper.find('.gdc-indigo-responsive-table')).toBeDefined();
@@ -126,8 +146,7 @@ describe('Table', () => {
             expect(initTableDataLoading).toHaveBeenCalledTimes(1);
             expect(onError).toHaveBeenCalledTimes(1);
             expect(onError).toHaveBeenCalledWith({ status: ErrorStates.OK });
-            done();
-        });
+        }, done);
     });
 
     it('should render responsive table', (done) => {
@@ -145,11 +164,10 @@ describe('Table', () => {
             expect(initTableDataLoading).toHaveBeenCalledTimes(1);
             expect(onError).toHaveBeenCalledTimes(1);
             expect(onError).toHaveBeenCalledWith({ status: ErrorStates.OK });
-            done();
-        });
+        }, done);
     });
 
-    it('should not render responsive table when result is not available', () => {
+    it('should not render responsive table when result is not available', (done) => {
         const props = createProps();
         const wrapper = createComponent(props);
 
@@ -158,10 +176,10 @@ describe('Table', () => {
             wrapper.setState({ result: null }, () => {
                 expect(wrapper.find(TableTransformation).length).toBe(0);
             });
-        });
+        }, done);
     });
 
-    it('should not render responsive table when table is still loading', () => {
+    it('should not render responsive table when table is still loading', (done) => {
         const props = createProps();
         const wrapper = createComponent(props);
 
@@ -170,10 +188,10 @@ describe('Table', () => {
             wrapper.setState({ isLoading: true }, () => {
                 expect(wrapper.find(TableTransformation).length).toBe(0);
             });
-        });
+        }, done);
     });
 
-    it('should not render responsive table when error is set', () => {
+    it('should not render responsive table when error is set', (done) => {
         const props = createProps();
         const wrapper = createComponent(props);
 
@@ -182,7 +200,7 @@ describe('Table', () => {
             wrapper.setState({ error: ErrorStates.UNKNOWN_ERROR }, () => {
                 expect(wrapper.find(TableTransformation).length).toBe(0);
             });
-        });
+        }, done);
     });
 
     it('should call onError with DATA_TOO_LARGE', (done) => {
@@ -200,8 +218,7 @@ describe('Table', () => {
                 status: ErrorStates.DATA_TOO_LARGE_TO_COMPUTE,
                 options: expect.any(Object)
             });
-            done();
-        });
+        }, done);
     });
 
     it('should call pushData with execution result', (done) => {
@@ -209,12 +226,12 @@ describe('Table', () => {
         const props = createProps({
             pushData
         });
-        const resultMock = {
+        const resultMock: { result: ISimpleExecutorResult, sorting: Object, metadata: Object } = {
             result: {
                 isLoaded: true,
                 headers: [
                     {
-                        type: 'attrLabel',
+                        type: Header.HeaderType.Attribute,
                         id: 'label.csv_test.polozka',
                         uri: '/gdc/md/x3k4294x4k00lrz5degxnc6nykynhh52/obj/75662',
                         title: 'Polozka'
@@ -244,8 +261,7 @@ describe('Table', () => {
                     dateOptionsDisabled: false
                 }
             });
-            done();
-        });
+        }, done);
     });
 
     it('should trigger `onLoadingChanged`', (done) => {
@@ -259,7 +275,6 @@ describe('Table', () => {
 
         postpone(() => {
             expect(loadingHandler).toHaveBeenCalled();
-            done();
-        });
+        }, done);
     });
 });

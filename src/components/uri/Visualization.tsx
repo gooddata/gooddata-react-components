@@ -9,11 +9,14 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/switchMap';
 
 import { ErrorStates } from '../../constants/errorStates';
-import { BaseChart, ChartTypes, IChartConfig } from '../core/base/BaseChart';
+import { BaseChart, ChartType, IChartConfig } from '../core/base/BaseChart';
 import { Table } from '../core/Table';
 import { IEvents } from '../../interfaces/Events';
-import { visualizationPropTypes } from '../../proptypes/Visualization';
+import { VisualizationPropType, Requireable } from '../../proptypes/Visualization';
+import { VisualizationTypes } from '../../constants/visualizationTypes';
 import { IDrillableItem } from '../../interfaces/DrillableItem';
+
+export { Requireable };
 
 function isDateFilter(filter: Afm.IFilter): filter is Afm.IDateFilter {
     return filter.type === 'date';
@@ -31,6 +34,8 @@ function getAttributeFilters(filters: Afm.IFilter[]): Afm.IAttributeFilter[] {
     return filters.filter(isAttributeFilter);
 }
 
+export type VisualizationEnvironment = 'none' | 'dashboards';
+
 export interface IVisualizationProps extends IEvents {
     projectId: string;
     uri?: string;
@@ -44,7 +49,7 @@ export interface IVisualizationProps extends IEvents {
 
 export interface IVisualizationExecInfo {
     type: string;
-    dataSource: DataSource.IDataSource;
+    dataSource: DataSource.IDataSource<sdk.ISimpleExecutorResult>;
     metadataSource: MetadataSource.IMetadataSource;
 }
 
@@ -65,8 +70,9 @@ function uriResolver(projectId: string, uri?: string, identifier?: string): Prom
 }
 
 export class Visualization extends React.Component<IVisualizationProps, IVisualizationState> {
-    static propTypes = visualizationPropTypes;
-    static defaultProps = {
+    public static propTypes = VisualizationPropType;
+
+    public static defaultProps: Partial<IVisualizationProps> = {
         onError: noop,
         filters: [],
         uriResolver
@@ -76,12 +82,12 @@ export class Visualization extends React.Component<IVisualizationProps, IVisuali
     private type: string;
     private uriAdapter: UriAdapter;
     private metadataSource: MetadataSource.IMetadataSource;
-    private dataSource: DataSource.IDataSource;
+    private dataSource: DataSource.IDataSource<sdk.ISimpleExecutorResult>;
 
     private subscription: Subscription;
     private subject: Subject<Promise<IVisualizationExecInfo>>;
 
-    constructor(props) {
+    constructor(props: IVisualizationProps) {
         super(props);
 
         this.state = {
@@ -109,7 +115,7 @@ export class Visualization extends React.Component<IVisualizationProps, IVisuali
             );
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         const { projectId, uri, identifier, filters } = this.props;
 
         this.uriAdapter = new UriAdapter(sdk, projectId);
@@ -122,20 +128,20 @@ export class Visualization extends React.Component<IVisualizationProps, IVisuali
         });
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         this.subscription.unsubscribe();
         this.subject.unsubscribe();
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
+    public shouldComponentUpdate(nextProps: IVisualizationProps, nextState: IVisualizationState) {
         return this.hasChangedProps(nextProps) || (this.state.isLoading !== nextState.isLoading);
     }
 
-    public hasChangedProps(nextProps, propKeys = Object.keys(visualizationPropTypes)): boolean {
+    public hasChangedProps(nextProps: IVisualizationProps, propKeys = Object.keys(VisualizationPropType)): boolean {
         return propKeys.some(propKey => !isEqual(this.props[propKey], nextProps[propKey]));
     }
 
-    public componentWillReceiveProps(nextProps) {
+    public componentWillReceiveProps(nextProps: IVisualizationProps) {
         const hasInvalidResolvedUri = this.hasChangedProps(nextProps, ['uri', 'projectId', 'identifier']);
         const hasInvalidDatasource = hasInvalidResolvedUri || this.hasChangedProps(nextProps, ['filters']);
         if (hasInvalidDatasource) {
@@ -156,11 +162,45 @@ export class Visualization extends React.Component<IVisualizationProps, IVisuali
         }
     }
 
-    private prepareDataSources({
-        projectId,
-        identifier,
-        filters = [] as Afm.IFilter[]
-    }) {
+    public render() {
+        const { dataSource, metadataSource, type } = this;
+        if (!dataSource || !metadataSource || !type) {
+            return null;
+        }
+
+        const { drillableItems, onError, onLoadingChanged, locale, config } = this.props;
+
+        switch (type) {
+            case VisualizationTypes.TABLE:
+                return (
+                    <Table
+                        dataSource={dataSource}
+                        metadataSource={metadataSource}
+                        drillableItems={drillableItems}
+                        onError={onError}
+                        onLoadingChanged={onLoadingChanged}
+                        locale={locale}
+                    />
+                );
+            default:
+                return (
+                    <BaseChart
+                        dataSource={dataSource}
+                        metadataSource={metadataSource}
+                        drillableItems={drillableItems}
+                        onError={onError}
+                        onLoadingChanged={onLoadingChanged}
+                        type={type as ChartType}
+                        locale={locale}
+                        config={config}
+                    />
+                );
+        }
+    }
+
+    private prepareDataSources(
+        { projectId, identifier, filters = [] }: { projectId: string, identifier: string, filters: Afm.IFilter[] }
+    ) {
         const promise = this.props.uriResolver(projectId, this.visualizationUri, identifier)
             .then((visualizationUri) => {
                 this.visualizationUri = visualizationUri;
@@ -182,41 +222,5 @@ export class Visualization extends React.Component<IVisualizationProps, IVisuali
             });
 
         this.subject.next(promise);
-    }
-
-    public render() {
-        const { dataSource, metadataSource, type } = this;
-        if (!dataSource || !metadataSource || !type) {
-            return null;
-        }
-
-        const { drillableItems, onError, onLoadingChanged, locale, config } = this.props;
-
-        switch (type) {
-            case 'table':
-                return (
-                    <Table
-                        dataSource={dataSource}
-                        metadataSource={metadataSource}
-                        drillableItems={drillableItems}
-                        onError={onError}
-                        onLoadingChanged={onLoadingChanged}
-                        locale={locale}
-                    />
-                );
-            default:
-                return (
-                    <BaseChart
-                        dataSource={dataSource}
-                        metadataSource={metadataSource}
-                        drillableItems={drillableItems}
-                        onError={onError}
-                        onLoadingChanged={onLoadingChanged}
-                        type={type as ChartTypes}
-                        locale={locale}
-                        config={config}
-                    />
-                );
-        }
     }
 }

@@ -6,6 +6,7 @@ import { IntlWrapper } from '../../core/base/IntlWrapper';
 import { injectIntl } from 'react-intl';
 import { AttributeDropdown, AttributeDropdownWrapped, IAttributeDropdownProps } from './AttributeDropdown';
 import { AttributeLoader } from './AttributeLoader';
+import { IAttributeDisplayForm } from './model';
 
 const { PropTypes } = React;
 
@@ -39,7 +40,7 @@ const DefaultFilterError = injectIntl(({ intl }) => {
 });
 
 export class AttributeFilter extends React.PureComponent<IAttributeFilterProps, null> {
-    static propTypes = {
+    public static propTypes = {
         uri: PropTypes.string,
         identifier: PropTypes.string,
         projectId: PropTypes.string,
@@ -53,7 +54,7 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps, 
         })
     };
 
-    static defaultProps = {
+    public static defaultProps: Partial<IAttributeFilterProps> = {
         uri: null,
         identifier: null,
         projectId: null,
@@ -64,13 +65,23 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps, 
         FilterError: DefaultFilterError
     };
 
-    renderContent({ isLoading, error, attributeDisplayForm }) {
+    public render() {
+        const { locale, projectId, uri, identifier, metadata } = this.props;
+        return (
+            <IntlWrapper locale={locale}>
+                <AttributeLoader uri={uri} identifier={identifier} projectId={projectId} metadata={metadata}>
+                    {props => this.renderContent(props)}
+                </AttributeLoader>
+            </IntlWrapper>
+        );
+    }
+
+    private renderContent(
+        { isLoading, attributeDisplayForm }: {
+            isLoading: boolean, attributeDisplayForm: IAttributeDisplayForm }
+    ) {
         if (isLoading) {
             return <this.props.FilterLoading />;
-        }
-
-        if (error) {
-            return <this.props.FilterError />;
         }
 
         const dropdownProps: IAttributeDropdownProps
@@ -80,17 +91,6 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps, 
                 attributeDisplayForm={attributeDisplayForm}
                 {...dropdownProps}
             />
-        );
-    }
-
-    render() {
-        const { locale, projectId, uri, identifier, metadata } = this.props;
-        return (
-            <IntlWrapper locale={locale}>
-                <AttributeLoader uri={uri} identifier={identifier} projectId={projectId} metadata={metadata}>
-                    {props => this.renderContent(props)}
-                </AttributeLoader>
-            </IntlWrapper>
         );
     }
 }

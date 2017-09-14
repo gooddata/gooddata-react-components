@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
-import { VisualizationObject } from '@gooddata/data-layer';
+import { ISimpleExecutorResult } from 'gooddata';
+import { Afm, VisualizationObject, DataSource } from '@gooddata/data-layer';
 import { test } from '@gooddata/js-utils';
 
 import {
@@ -16,6 +17,7 @@ jest.mock('@gooddata/indigo-visualizations', () => ({
 
 import { BaseChart, IBaseChartProps } from '../BaseChart';
 import { ErrorStates } from '../../../../constants/errorStates';
+import { VisualizationTypes } from '../../../../constants/visualizationTypes';
 
 const { postpone } = test;
 
@@ -26,21 +28,25 @@ describe('BaseChart', () => {
         );
     }
 
-    const afm = { measures: [] };
+    const afm: Afm.IAfm = { measures: [] };
+    const dataSource: DataSource.IDataSource<ISimpleExecutorResult> = {
+        getData: (): Promise<ISimpleExecutorResult> => Promise.resolve({}),
+        getAfm: jest.fn().mockReturnValue(afm),
+        getFingerprint: jest.fn().mockReturnValue(JSON.stringify(afm))
+    };
+
     const createProps = (customProps = {}) => {
-        return {
+        const props: IBaseChartProps = {
             height: 200,
-            dataSource: {
-                getData: () => Promise.resolve(),
-                getAfm: jest.fn().mockReturnValue(afm),
-                getFingerprint: jest.fn().mockReturnValue(JSON.stringify(afm))
-            },
+            dataSource,
             metadataSource: {
                 getVisualizationMetadata: () => Promise.resolve({
                     metadata: {
-                        meta: {},
+                        meta: {
+                            title: 'foo'
+                        },
                         content: {
-                            type: 'column' as VisualizationObject.VisualizationType,
+                            type: VisualizationTypes.COLUMN as VisualizationObject.VisualizationType,
                             buckets: {
                                 measures: [],
                                 categories: [],
@@ -53,9 +59,10 @@ describe('BaseChart', () => {
                 getFingerprint: () => ''
             },
             locale: 'en-US',
-            type: 'line',
+            type: VisualizationTypes.LINE,
             ...customProps
-        } as IBaseChartProps;
+        };
+        return props;
     };
 
     beforeEach(() => {
@@ -73,11 +80,10 @@ describe('BaseChart', () => {
 
         postpone(() => {
             expect(wrapper.find(Visualization).length).toBe(1);
-            done();
-        });
+        }, done);
     });
 
-    it('should not render responsive table when result is not available', () => {
+    it('should not render responsive table when result is not available', (done) => {
         const props = createProps();
         const wrapper = createComponent(props);
 
@@ -87,10 +93,10 @@ describe('BaseChart', () => {
             wrapper.setState({ result: null }, () => {
                 expect(wrapper.find(Visualization).length).toBe(0);
             });
-        });
+        }, done);
     });
 
-    it('should not render responsive table when table is still loading', () => {
+    it('should not render responsive table when table is still loading', (done) => {
         const props = createProps();
         const wrapper = createComponent(props);
 
@@ -99,10 +105,10 @@ describe('BaseChart', () => {
             wrapper.setState({ isLoading: true }, () => {
                 expect(wrapper.find(Visualization).length).toBe(0);
             });
-        });
+        }, done);
     });
 
-    it('should not render responsive table when error is set', () => {
+    it('should not render responsive table when error is set', (done) => {
         const props = createProps();
         const wrapper = createComponent(props);
 
@@ -111,9 +117,8 @@ describe('BaseChart', () => {
             wrapper.setState({ error: ErrorStates.UNKNOWN_ERROR }, () => {
                 expect(wrapper.find(Visualization).length).toBe(0);
             });
-        });
+        }, done);
     });
-
 
     it('should correctly set loading state and call initDataLoading once', (done) => {
         const onLoadingChanged = jest.fn();
@@ -121,7 +126,7 @@ describe('BaseChart', () => {
         const props = createProps({
             onError,
             onLoadingChanged,
-            type: 'pie'
+            type: VisualizationTypes.PIE
         });
         createComponent(props);
 
@@ -133,8 +138,7 @@ describe('BaseChart', () => {
             expect(onError).toHaveBeenCalledTimes(1);
             expect(onError).toHaveBeenCalledWith({ status: ErrorStates.OK });
             expect(initChartDataLoading).toHaveBeenCalledTimes(1);
-            done();
-        });
+        }, done);
     });
 
     it('should call pushData on execution finish', (done) => {
@@ -144,8 +148,7 @@ describe('BaseChart', () => {
 
         postpone(() => {
             expect(pushData).toHaveBeenCalledTimes(1);
-            done();
-        });
+        }, done);
     });
 
     it('should call onError with DATA_TOO_LARGE_TO_COMPUTE', (done) => {
@@ -163,8 +166,7 @@ describe('BaseChart', () => {
                 status: ErrorStates.DATA_TOO_LARGE_TO_COMPUTE,
                 options: expect.any(Object)
             });
-            done();
-        });
+        }, done);
     });
 
     it('should call onError with UNKNOWN_ERROR', (done) => {
@@ -182,10 +184,8 @@ describe('BaseChart', () => {
                 status: ErrorStates.UNKNOWN_ERROR,
                 options: expect.any(Object)
             });
-            done();
-        });
+        }, done);
     });
-
 
     it('should call onError with NO_DATA', (done) => {
         const onError = jest.fn();
@@ -202,8 +202,7 @@ describe('BaseChart', () => {
                 status: ErrorStates.NO_DATA,
                 options: expect.any(Object)
             });
-            done();
-        });
+        }, done);
     });
 
     it('should use default onError when is not provided', (done) => {
@@ -218,8 +217,7 @@ describe('BaseChart', () => {
                 options: expect.any(Object)
             });
             global.console.error = origin;
-            done();
-        });
+        }, done);
     });
 
     it('should reload data when dataSource changed', (done) => {
@@ -233,21 +231,21 @@ describe('BaseChart', () => {
         }, () => {
             postpone(() => {
                 expect(initChartDataLoading).toHaveBeenCalledTimes(2);
-                done();
-            });
+            }, done);
         });
     });
 
     it('should trigger initDataLoading on props change', (done) => {
         const wrapper = createComponent(createProps());
-        wrapper.node.initDataLoading = jest.fn();
+        const node: any = wrapper.getNode();
+        node.initDataLoading = jest.fn();
 
         wrapper.setProps({
             dataSource: {
                 getFingerprint: () => 'asdf'
             }
         }, () => {
-            expect(wrapper.node.initDataLoading).toHaveBeenCalledTimes(1);
+            expect(node.initDataLoading).toHaveBeenCalledTimes(1);
             done();
         });
     });
@@ -259,7 +257,7 @@ describe('BaseChart', () => {
         postpone(() => {
             const config = wrapper.find(Visualization).prop('config');
             expect(config).toEqual({
-                type: 'line',
+                type: VisualizationTypes.LINE,
                 buckets: undefined,
                 legend: {
                     enabled: true,
@@ -267,8 +265,7 @@ describe('BaseChart', () => {
                     responsive: true
                 }
             });
-            done();
-        });
+        }, done);
     });
 
     it('should return config for AD', (done) => {
@@ -278,15 +275,14 @@ describe('BaseChart', () => {
         postpone(() => {
             const config = wrapper.find(Visualization).prop('config');
             expect(config).toEqual({
-                type: 'line',
+                type: VisualizationTypes.LINE,
                 buckets: undefined,
                 legend: {
                     enabled: true,
                     position: 'top'
                 }
             });
-            done();
-        });
+        }, done);
     });
 
     it('should detect stacked by category and move legend to right', (done) => {
@@ -315,7 +311,7 @@ describe('BaseChart', () => {
         postpone(() => {
             const config = wrapper.find(Visualization).prop('config');
             expect(config).toEqual({
-                type: 'line',
+                type: VisualizationTypes.LINE,
                 buckets: {
                     categories: [{
                         category: {
@@ -328,8 +324,7 @@ describe('BaseChart', () => {
                     position: 'right'
                 }
             });
-            done();
-        });
+        }, done);
     });
 
     it('should detect segment by category and move legend to right', (done) => {
@@ -358,7 +353,7 @@ describe('BaseChart', () => {
         postpone(() => {
             const config = wrapper.find(Visualization).prop('config');
             expect(config).toEqual({
-                type: 'line',
+                type: VisualizationTypes.LINE,
                 buckets: {
                     categories: [{
                         category: {
@@ -371,8 +366,7 @@ describe('BaseChart', () => {
                     position: 'right'
                 }
             });
-            done();
-        });
+        }, done);
     });
 
     it('should set new metadata when new metadtaSource came', (done) => {
@@ -389,8 +383,7 @@ describe('BaseChart', () => {
         }, () => {
             postpone(() => {
                 expect(getVisualizationMetadata).toHaveBeenCalledTimes(1);
-                done();
-            });
+            }, done);
         });
     });
 
@@ -405,7 +398,6 @@ describe('BaseChart', () => {
 
         postpone(() => {
             expect(loadingHandler).toHaveBeenCalled();
-            done();
-        });
+        }, done);
     });
 });
