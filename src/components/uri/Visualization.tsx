@@ -39,6 +39,9 @@ export interface IVisualizationProps extends IEvents {
     config?: IChartConfig;
     filters?: Afm.IFilter[];
     drillableItems?: IDrillableItem[];
+    height?: number;
+    minHeight?: number;
+    width?: number;
     uriResolver?: (projectId: string, uri?: string, identifier?: string) => Promise<string>;
 }
 
@@ -69,6 +72,9 @@ export class Visualization extends React.Component<IVisualizationProps, IVisuali
     static defaultProps = {
         onError: noop,
         filters: [],
+        height: null,
+        width: null,
+        minHeight: 400,
         uriResolver
     };
 
@@ -190,12 +196,38 @@ export class Visualization extends React.Component<IVisualizationProps, IVisuali
             return null;
         }
 
-        const { drillableItems, onError, onLoadingChanged, locale, config } = this.props;
+        const {
+            drillableItems,
+            onError,
+            onLoadingChanged,
+            locale,
+            config,
+            height,
+            width
+        } = this.props;
 
-        switch (type) {
-            case 'table':
-                return (
-                    <Table
+        // only use default minHeight if height is not set
+        const minHeight = height !== null ? null : this.props.minHeight;
+
+        const minHeightCls = minHeight !== null ? 'visualisation-has-minHeight' : '';
+
+        const minHeightStyle = minHeight !== null ? {
+            flex: '1 0 ' + minHeight + 'px',
+            display: 'flex',
+            height: minHeight,
+            flexDirection: 'column'
+        } : {};
+
+        const style = {
+            height,
+            width,
+            ...minHeightStyle
+        };
+
+        return <div style={{ display: 'flex', flexDirection: 'column', height: height !== null ? height : '100%' }}>
+            <div style={style} className={minHeightCls}>
+                { type === 'table'
+                    ? <Table
                         dataSource={dataSource}
                         metadataSource={metadataSource}
                         drillableItems={drillableItems}
@@ -203,10 +235,7 @@ export class Visualization extends React.Component<IVisualizationProps, IVisuali
                         onLoadingChanged={onLoadingChanged}
                         locale={locale}
                     />
-                );
-            default:
-                return (
-                    <BaseChart
+                    : <BaseChart
                         dataSource={dataSource}
                         metadataSource={metadataSource}
                         drillableItems={drillableItems}
@@ -216,7 +245,8 @@ export class Visualization extends React.Component<IVisualizationProps, IVisuali
                         locale={locale}
                         config={config}
                     />
-                );
-        }
+                }
+            </div>
+        </div>;
     }
 }
