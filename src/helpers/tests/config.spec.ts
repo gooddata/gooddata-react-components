@@ -11,7 +11,9 @@ describe('getLegendConfig', () => {
                 filters: []
             }
         },
-        meta: {}
+        meta: {
+            title: 'Test'
+        }
     };
     it('should return static response if environment is dashboards', () => {
         const expected = {
@@ -49,7 +51,7 @@ describe('getLegendConfig', () => {
                 }
             },
             meta: {}
-        } as VisualizationObject.IVisualizationObjectMetadata;
+        } as VisualizationObject.IVisualizationObject;
         const expected = {
             enabled: true,
             position: 'top'
@@ -81,7 +83,7 @@ describe('getLegendConfig', () => {
                 }
             },
             meta: {}
-        } as VisualizationObject.IVisualizationObjectMetadata;
+        } as VisualizationObject.IVisualizationObject;
         const expected = {
             enabled: true,
             position: 'right'
@@ -107,7 +109,7 @@ describe('getLegendConfig', () => {
                 }
             },
             meta: {}
-        } as VisualizationObject.IVisualizationObjectMetadata;
+        } as VisualizationObject.IVisualizationObject;
         const expected = {
             enabled: true,
             position: 'right'
@@ -136,7 +138,7 @@ describe('getConfig', () => {
                 buckets
             },
             meta: {}
-        } as VisualizationObject.IVisualizationObjectMetadata;
+        } as VisualizationObject.IVisualizationObject;
         const type = 'line';
         const environment = 'dashboards';
         const expected = {

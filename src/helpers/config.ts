@@ -14,7 +14,7 @@ export interface IVisConfig {
 }
 
 export function getLegendConfig(
-    metadata: VisualizationObject.IVisualizationObjectMetadata,
+    metadata: VisualizationObject.IVisualizationObject,
     environment: string): ILegendConfig {
     if (environment === 'dashboards') {
         return {
@@ -41,13 +41,13 @@ export function getLegendConfig(
 }
 
 export function getConfig(
-        metadata:  VisualizationObject.IVisualizationObjectMetadata,
+        metadata:  VisualizationObject.IVisualizationObject,
         type: string,
         environment: string): IVisConfig {
     const legendConfig = getLegendConfig(metadata, environment);
     return {
         type,
-        buckets: get<VisualizationObject.IVisualizationObjectMetadata,
+        buckets: get<VisualizationObject.IVisualizationObject,
             VisualizationObject.IBuckets>(metadata, 'content.buckets'),
         legend: legendConfig
     };

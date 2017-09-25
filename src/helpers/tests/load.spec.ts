@@ -50,7 +50,7 @@ class InvalidMetadataSource {
     getFingerprint: () => '{}';
 }
 
-export function getMdObject(customConfig = {}):VisualizationObject.IVisualizationObject {
+export function getMdObject(customConfig = {}):VisualizationObject.IVisualizationObjectContent {
     return {
         type: 'line',
         buckets: {
@@ -292,7 +292,7 @@ describe('initTableDataLoading', () => {
                 direction: 'asc'
             }]
         };
-        const md: VisualizationObject.IVisualizationObject = {
+        const md: VisualizationObject.IVisualizationObjectContent = {
             type: 'table',
             buckets: {
                 measures: [
@@ -367,7 +367,9 @@ describe('initTableDataLoading', () => {
         expectedMDcontent.buckets.categories[0].category.sort = null;
         const expectedMD = {
             content: expectedMDcontent,
-            meta: {}
+            meta: {
+                title: 'Test'
+            }
         };
 
         expect(ds.getData).toHaveBeenCalledWith(expectedTransformation);
@@ -516,7 +518,12 @@ describe('initChartDataLoading', () => {
         const ds = new MockedDataSource(executionResult);
         const expectedResult = {
             result: executionResult,
-            metadata: { content: mdObject, meta: {} }
+            metadata: {
+                content: mdObject,
+                meta: {
+                    title: 'Test'
+                }
+            }
         };
         const result = await initChartDataLoading(ds, mds, {});
 

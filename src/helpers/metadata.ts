@@ -29,12 +29,12 @@ export interface ISorting {
 }
 
 export interface IUpdateSortingResult {
-    updatedMetadata: VisualizationObject.IVisualizationObjectMetadata;
+    updatedMetadata: VisualizationObject.IVisualizationObject;
     updatedSorting: ISorting;
 }
 
 export function updateSorting(
-    metadata: VisualizationObject.IVisualizationObjectMetadata,
+    metadata: VisualizationObject.IVisualizationObject,
     sortingInfo: ISorting): IUpdateSortingResult {
     const { sorting, change } = sortingInfo;
     const updatedMetadata = cloneDeep(metadata);

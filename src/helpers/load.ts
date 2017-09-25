@@ -23,7 +23,7 @@ export interface IError {
 
 export interface IResult {
     result: ExecutorResult.ISimpleExecutorResult;
-    metadata?: VisualizationObject.IVisualizationObjectMetadata;
+    metadata?: VisualizationObject.IVisualizationObject;
 }
 
 export interface ITableResult extends IResult {
@@ -48,8 +48,8 @@ function handleExecutionError(reason: IError) {
     }
 }
 
-function decorateMetrics(visObj: VisualizationObject.IVisualizationObjectMetadata):
-    VisualizationObject.IVisualizationObjectMetadata {
+function decorateMetrics(visObj: VisualizationObject.IVisualizationObject):
+    VisualizationObject.IVisualizationObject {
     const updatedVisObj = cloneDeep(visObj);
     updatedVisObj.content.buckets.measures = updatedVisObj.content.buckets.measures.map((measure, index) => {
         measure.measure.generatedId = `m${index + 1}`;
@@ -62,7 +62,7 @@ function decorateMetrics(visObj: VisualizationObject.IVisualizationObjectMetadat
 function getChartData(
     dataSource: DataSource.IDataSource,
     transformation: Transformation.ITransformation,
-    metadata: VisualizationObject.IVisualizationObjectMetadata = undefined
+    metadata: VisualizationObject.IVisualizationObject = undefined
 ): Promise<IResult>  {
     return dataSource.getData(transformation).then((result) => {
         if (result.isEmpty) {
@@ -113,7 +113,7 @@ function getTableData(
     dataSource: DataSource.IDataSource,
     transformation: Transformation.ITransformation,
     sorting: ISorting,
-    metadata?: VisualizationObject.IVisualizationObjectMetadata
+    metadata?: VisualizationObject.IVisualizationObject
 ) {
     return dataSource.getData(transformation).then((result) => {
         if (result.isEmpty) {
