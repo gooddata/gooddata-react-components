@@ -10,6 +10,7 @@ import {
     Transformation,
     TransformationUtils
 } from '@gooddata/data-layer';
+import { ISimpleExecutorResult } from '@gooddata/data-layer/dist/interfaces/ExecutorResult';
 
 import { ErrorCodes, ErrorStates } from '../constants/errorStates';
 
@@ -60,7 +61,7 @@ function decorateMetrics(visObj: VisualizationObject.IVisualizationObject):
 }
 
 function getChartData(
-    dataSource: DataSource.IDataSource,
+    dataSource: DataSource.IDataSource<ISimpleExecutorResult>,
     transformation: Transformation.ITransformation,
     metadata: VisualizationObject.IVisualizationObject = undefined
 ): Promise<IResult>  {
@@ -77,7 +78,7 @@ function getChartData(
 }
 
 export function initChartDataLoading(
-    dataSource: DataSource.IDataSource,
+    dataSource: DataSource.IDataSource<ISimpleExecutorResult>,
     metadataSource: MetadataSource.IMetadataSource,
     externalTransformation: Transformation.ITransformation
 ): Promise<IResult> {
@@ -110,7 +111,7 @@ function applySorting(
 }
 
 function getTableData(
-    dataSource: DataSource.IDataSource,
+    dataSource: DataSource.IDataSource<ISimpleExecutorResult>,
     transformation: Transformation.ITransformation,
     sorting: ISorting,
     metadata?: VisualizationObject.IVisualizationObject
@@ -146,7 +147,7 @@ function getMetadataObjectWithSortingApplied(metadata, sorting?: ISorting) {
 }
 
 export function initTableDataLoading(
-        dataSource: DataSource.IDataSource,
+        dataSource: DataSource.IDataSource<ISimpleExecutorResult>,
         metadataSource?: MetadataSource.IMetadataSource,
         externalTransformation?: Transformation.ITransformation,
         userSorting?: ISorting

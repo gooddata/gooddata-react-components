@@ -4,6 +4,7 @@ import noop = require('lodash/noop');
 import isEqual = require('lodash/isEqual');
 import identity = require('lodash/identity');
 import { Afm, DataSource, MetadataSource, UriMetadataSource, UriAdapter } from '@gooddata/data-layer';
+import { ISimpleExecutorResult } from '@gooddata/data-layer/dist/interfaces/ExecutorResult';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/switchMap';
@@ -44,7 +45,7 @@ export interface IVisualizationProps extends IEvents {
 
 export interface IVisualizationExecInfo {
     type: string;
-    dataSource: DataSource.IDataSource;
+    dataSource: DataSource.IDataSource<ISimpleExecutorResult>;
     metadataSource: MetadataSource.IMetadataSource;
 }
 
@@ -76,7 +77,7 @@ export class Visualization extends React.Component<IVisualizationProps, IVisuali
     private type: string;
     private uriAdapter: UriAdapter;
     private metadataSource: MetadataSource.IMetadataSource;
-    private dataSource: DataSource.IDataSource;
+    private dataSource: DataSource.IDataSource<ISimpleExecutorResult>;
 
     private subscription: Subscription;
     private subject: Subject<Promise<IVisualizationExecInfo>>;

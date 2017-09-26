@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@gooddata/data-layer@3.1.2-vaclavbohac-doc-upgrade-tslint-2017-09-25T11-59-18-341Z":
-  version "3.1.2-vaclavbohac-doc-upgrade-tslint-2017-09-25T11-59-18-341Z"
-  resolved "https://registry.yarnpkg.com/@gooddata/data-layer/-/data-layer-3.1.2-vaclavbohac-doc-upgrade-tslint-2017-09-25T11-59-18-341Z.tgz#11a1f8100ce69b2e7d232ebd4fcfa41bb767d1dc"
+"@gooddata/data-layer@3.1.2-vaclavbohac-doc-upgrade-tslint-2017-09-26T10-32-15-104Z":
+  version "3.1.2-vaclavbohac-doc-upgrade-tslint-2017-09-26T10-32-15-104Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/data-layer/-/data-layer-3.1.2-vaclavbohac-doc-upgrade-tslint-2017-09-26T10-32-15-104Z.tgz#106bbd7fa2735e1dbc2853a697bf8e6014863e9e"
   dependencies:
     json-stable-stringify "1.0.1"
     lodash "4.17.4"
@@ -3293,7 +3293,7 @@ hawk@~6.0.2:
     sntp "2.x.x"
 
 highcharts@4.2.5:
-  version v4.2.5
+  version "4.2.5"
   resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-4.2.5.tgz#f18bbda5ca326fdff7d816c94814fe8509cec969"
 
 hmac-drbg@^1.0.0:

@@ -5,17 +5,21 @@ import {
 
 import { ErrorStates } from '../src/constants/errorStates';
 
-export class DataSourceMock implements DataSource.IDataSource {
-    private returnValue;
+export class DataSourceMock<T> implements DataSource.IDataSource<T> {
+    private returnValue: T;
+
     constructor(returnValue) {
         this.returnValue = returnValue;
     }
-    getData() {
+
+    getData(): Promise<T> {
         return Promise.resolve(this.returnValue);
     }
+
     getAfm() {
         return {};
     }
+
     getFingerprint() {
         return '{}';
     }

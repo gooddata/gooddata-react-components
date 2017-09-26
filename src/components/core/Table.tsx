@@ -12,6 +12,7 @@ import {
     Transformation,
     VisualizationObject
 } from '@gooddata/data-layer';
+import { ISimpleExecutorResult } from '@gooddata/data-layer/dist/interfaces/ExecutorResult';
 
 import { IntlWrapper } from './base/IntlWrapper';
 import { IEvents, ILoadingState } from '../../interfaces/Events';
@@ -28,7 +29,7 @@ import { IntlTranslationsProvider } from './base/TranslationsProvider';
 import { IExecutorResult } from './base/BaseChart';
 
 export interface ITableProps extends IEvents {
-    dataSource: DataSource.IDataSource;
+    dataSource: DataSource.IDataSource<ISimpleExecutorResult>;
     metadataSource?: MetadataSource.IMetadataSource;
     transformation?: Transformation.ITransformation;
     locale?: string;
@@ -255,7 +256,7 @@ export class Table extends React.Component<ITableProps, ITableState> {
     }
 
     private initDataLoading(
-                dataSource: DataSource.IDataSource,
+                dataSource: DataSource.IDataSource<ISimpleExecutorResult>,
                 metadataSource: MetadataSource.IMetadataSource,
                 transformation: Transformation.ITransformation,
                 sorting = null

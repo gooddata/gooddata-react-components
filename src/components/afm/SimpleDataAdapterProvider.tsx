@@ -3,6 +3,7 @@ import * as sdk from 'gooddata';
 
 import isEqual = require('lodash/isEqual');
 import omit = require('lodash/omit');
+import { ISimpleExecutorResult } from '@gooddata/data-layer/dist/interfaces/ExecutorResult';
 
 import {
     Afm,
@@ -28,14 +29,14 @@ export interface ISimpleDataAdapterProviderProps {
 }
 
 export interface ISimpleDataAdapterProviderInjectedProps {
-    dataSource: DataSource.IDataSource;
+    dataSource: DataSource.IDataSource<ISimpleExecutorResult>;
     metadataSource: MetadataSource.IMetadataSource;
 }
 
 export interface ISimpleDataAdapterProviderState {
     type: VisTypes;
     adapter: SimpleExecutorAdapter;
-    dataSource: DataSource.IDataSource;
+    dataSource: DataSource.IDataSource<ISimpleExecutorResult>;
     metadataSource: MetadataSource.IMetadataSource;
 }
 
@@ -120,7 +121,7 @@ export function simpleDataAdapterProvider <T>(
             return this.prepareDataSourceCancellable.promise.catch(this.handleError);
         }
 
-        prepareMDSource(dataSource: DataSource.IDataSource,
+        prepareMDSource(dataSource: DataSource.IDataSource<ISimpleExecutorResult>,
                         type: VisTypes, afm: Afm.IAfm,
                         transformation: Transformation.ITransformation) {
 
