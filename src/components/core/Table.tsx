@@ -12,6 +12,7 @@ import {
     Transformation,
     VisualizationObject
 } from '@gooddata/data-layer';
+import { ISimpleExecutorResult } from '@gooddata/data-layer/dist/interfaces/ExecutorResult';
 
 import { IntlWrapper } from './base/IntlWrapper';
 import { IEvents, ILoadingState } from '../../interfaces/Events';
@@ -28,7 +29,7 @@ import { IntlTranslationsProvider } from './base/TranslationsProvider';
 import { IExecutorResult } from './base/BaseChart';
 
 export interface ITableProps extends IEvents {
-    dataSource: DataSource.IDataSource;
+    dataSource: DataSource.IDataSource<ISimpleExecutorResult>;
     metadataSource?: MetadataSource.IMetadataSource;
     transformation?: Transformation.ITransformation;
     locale?: string;
@@ -44,7 +45,7 @@ export interface ITableProps extends IEvents {
 export interface ITableState {
     error: string;
     result: ExecutorResult.ISimpleExecutorResult;
-    metadata: VisualizationObject.IVisualizationObjectMetadata;
+    metadata: VisualizationObject.IVisualizationObject;
     isLoading: boolean;
     sorting: ISorting;
     page: number;
@@ -255,7 +256,7 @@ export class Table extends React.Component<ITableProps, ITableState> {
     }
 
     private initDataLoading(
-                dataSource: DataSource.IDataSource,
+                dataSource: DataSource.IDataSource<ISimpleExecutorResult>,
                 metadataSource: MetadataSource.IMetadataSource,
                 transformation: Transformation.ITransformation,
                 sorting = null
@@ -270,7 +271,7 @@ export class Table extends React.Component<ITableProps, ITableState> {
             if (DataSourceUtils.dataSourcesMatch(this.props.dataSource, dataSource)) {
                 const executionResult = get<IExecutorResult, ExecutorResult.ISimpleExecutorResult>(result, 'result');
                 const metadata = get<IExecutorResult,
-                    VisualizationObject.IVisualizationObjectMetadata>(result, 'metadata');
+                    VisualizationObject.IVisualizationObject>(result, 'metadata');
                 const sorting = get<IExecutorResult, ISorting>(result, 'sorting');
                 this.setState({
                     result: executionResult,

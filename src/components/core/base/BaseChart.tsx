@@ -28,7 +28,7 @@ import { ISimpleDataAdapterProviderInjectedProps } from '../../afm/SimpleDataAda
 export type ChartTypes = 'line' | 'bar' | 'column' | 'pie';
 
 export interface IExecutorResult {
-    metadata: VisualizationObject.IVisualizationObjectMetadata;
+    metadata: VisualizationObject.IVisualizationObject;
     result: ExecutorResult.ISimpleExecutorResult;
     sorting?: ISorting;
 }
@@ -68,7 +68,7 @@ export interface IBaseChartProps extends IChartProps {
 export interface IBaseChartState {
     error: string;
     result: ExecutorResult.ISimpleExecutorResult;
-    metadata: VisualizationObject.IVisualizationObjectMetadata;
+    metadata: VisualizationObject.IVisualizationObject;
     isLoading: boolean;
 }
 
@@ -228,7 +228,7 @@ export class BaseChart extends React.Component<IBaseChartProps, IBaseChartState>
             if (DataSourceUtils.dataSourcesMatch(this.props.dataSource, dataSource)) {
                 const executionResult = get<IExecutorResult, ExecutorResult.ISimpleExecutorResult>(result, 'result');
                 const metadata = get<IExecutorResult,
-                    VisualizationObject.IVisualizationObjectMetadata>(result, 'metadata');
+                    VisualizationObject.IVisualizationObject>(result, 'metadata');
                 this.setState({
                     metadata,
                     result: executionResult
