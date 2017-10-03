@@ -70,8 +70,8 @@
     "prepublish": "rm -rf dist && tsc && cp -rf src/translations/ dist/translations/ && yarn build-css",
     "tslint": "./node_modules/tslint/bin/tslint --type-check --project tsconfig.base.json --format verbose './{src,stories}/**/*.{ts,tsx}'",
     "tslint-ci": "mkdir -p ./ci/results && ./node_modules/tslint/bin/tslint --config tslint.json --format checkstyle --out ./ci/results/tslint-results.xml './{src,stories}/**/*.{ts,tsx}'",
-    "validate": "tsc -p tsconfig.validate.json --noEmit && yarn tslint",
-    "validate-ci": "tsc -p tsconfig.validate.json --noEmit && yarn tslint-ci",
+    "validate": "tsc -p tsconfig.base.json --noEmit && yarn tslint",
+    "validate-ci": "tsc -p tsconfig.base.json --noEmit && yarn tslint-ci",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "build-storybook": "build-storybook -c .storybook -o dist-storybook"
   },
