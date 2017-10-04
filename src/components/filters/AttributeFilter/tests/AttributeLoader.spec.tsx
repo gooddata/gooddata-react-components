@@ -36,16 +36,13 @@ describe('AttributeLoader', () => {
         });
 
         expect(wrapper.isEmptyRender()).toEqual(true);
-        postpone(
-            () => {
-                expect(wrapper.isEmptyRender()).toEqual(false);
-                expect(metadata.getObjectUri).toHaveBeenCalledTimes(0);
-                expect(metadata.getObjectDetails).toHaveBeenCalledTimes(1);
-                expect(wrapper.find('.s-is-using-uri')).toHaveLength(1);
-                expect(wrapper.text()).toEqual('Attribute');
-            },
-            done()
-        );
+        postpone(() => {
+            expect(wrapper.isEmptyRender()).toEqual(false);
+            expect(metadata.getObjectUri).toHaveBeenCalledTimes(0);
+            expect(metadata.getObjectDetails).toHaveBeenCalledTimes(1);
+            expect(wrapper.find('.s-is-using-uri')).toHaveLength(1);
+            expect(wrapper.text()).toEqual('Attribute');
+        }, done);
     });
 
     it('should load attribute defined by identifier', (done) => {
@@ -58,16 +55,13 @@ describe('AttributeLoader', () => {
         });
 
         expect(wrapper.isEmptyRender()).toEqual(true);
-        postpone(
-            () => {
-                expect(wrapper.isEmptyRender()).toEqual(false);
-                expect(metadata.getObjectUri).toHaveBeenCalledTimes(1);
-                expect(metadata.getObjectDetails).toHaveBeenCalledTimes(1);
-                expect(wrapper.find('.s-is-using-identifier')).toHaveLength(1);
-                expect(wrapper.text()).toEqual('Attribute');
-            },
-            done()
-        );
+        postpone(() => {
+            expect(wrapper.isEmptyRender()).toEqual(false);
+            expect(metadata.getObjectUri).toHaveBeenCalledTimes(1);
+            expect(metadata.getObjectDetails).toHaveBeenCalledTimes(1);
+            expect(wrapper.find('.s-is-using-identifier')).toHaveLength(1);
+            expect(wrapper.text()).toEqual('Attribute');
+        }, done);
     });
 
     it('should load another attribute on prop change', (done) => {
@@ -80,29 +74,23 @@ describe('AttributeLoader', () => {
         });
 
         expect(wrapper.isEmptyRender()).toEqual(true);
-        postpone(
-            () => {
-                expect(wrapper.isEmptyRender()).toEqual(false);
-                expect(metadata.getObjectUri).toHaveBeenCalledTimes(1);
-                expect(metadata.getObjectDetails).toHaveBeenCalledTimes(1);
-                expect(wrapper.text()).toEqual('Attribute');
+        postpone(() => {
+            expect(wrapper.isEmptyRender()).toEqual(false);
+            expect(metadata.getObjectUri).toHaveBeenCalledTimes(1);
+            expect(metadata.getObjectDetails).toHaveBeenCalledTimes(1);
+            expect(wrapper.text()).toEqual('Attribute');
 
-                wrapper.setProps({
-                    projectId: '1',
-                    metadata,
-                    identifier: ATTRIBUTE_DISPLAY_FORM_IDENTIFIER_2
-                });
+            wrapper.setProps({
+                projectId: '1',
+                metadata,
+                identifier: ATTRIBUTE_DISPLAY_FORM_IDENTIFIER_2
+            });
 
-                postpone(
-                    () => {
-                        expect(metadata.getObjectUri).toHaveBeenCalledTimes(2);
-                        expect(metadata.getObjectDetails).toHaveBeenCalledTimes(2);
-                        expect(wrapper.text()).toEqual('Attribute 2');
-                    },
-                    done()
-                );
-            },
-            done()
-        );
+            postpone(() => {
+                expect(metadata.getObjectUri).toHaveBeenCalledTimes(2);
+                expect(metadata.getObjectDetails).toHaveBeenCalledTimes(2);
+                expect(wrapper.text()).toEqual('Attribute 2');
+            }, done);
+        }, done);
     });
 });

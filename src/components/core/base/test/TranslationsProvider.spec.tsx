@@ -35,13 +35,10 @@ describe('TranslationsProvider', () => {
         const wrapper = createComponent({ result });
         const translationsProviderProps = wrapper.find(Visualization).props() as ITranslationsComponentProps;
 
-        postpone(
-            () => {
-                expect(translationsProviderProps.data).toEqual(result);
-                expect(translationsProviderProps.numericSymbols).toEqual(numericSymbols);
-            },
-            done()
-        );
+        postpone(() => {
+            expect(translationsProviderProps.data).toEqual(result);
+            expect(translationsProviderProps.numericSymbols).toEqual(numericSymbols);
+        }, done);
     });
 
     it('shouldn\'t change reesponse which does not cointain headers or rawData', (done) => {
@@ -49,12 +46,9 @@ describe('TranslationsProvider', () => {
         const wrapper = createComponent({ result });
         const translationsProviderProps = wrapper.find(Visualization).props() as ITranslationsComponentProps;
 
-        postpone(
-            () => {
-                expect(translationsProviderProps.data).toEqual(result);
-            },
-            done()
-        );
+        postpone(() => {
+            expect(translationsProviderProps.data).toEqual(result);
+        }, done);
     });
 
     it('should replace empty attribute values', (done) => {
@@ -115,11 +109,8 @@ describe('TranslationsProvider', () => {
         const wrapper = createComponent({ result });
         const translationsProviderProps = wrapper.find(Visualization).props() as ITranslationsComponentProps;
 
-        postpone(
-            () => {
-                expect(translationsProviderProps.data).toEqual(expected);
-            },
-            done()
-        );
+        postpone(() => {
+            expect(translationsProviderProps.data).toEqual(expected);
+        }, done);
     });
 });

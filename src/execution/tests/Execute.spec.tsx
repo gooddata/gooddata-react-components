@@ -47,13 +47,10 @@ describe('Execute', () => {
         const child = createStatelessChild();
         createComponent(child);
 
-        postpone(
-            () => {
-                expect(child).toHaveBeenLastCalledWith({ result: data });
-                expect(child).toHaveBeenCalledTimes(1);
-            },
-            done()
-        );
+        postpone(() => {
+            expect(child).toHaveBeenLastCalledWith({ result: data });
+            expect(child).toHaveBeenCalledTimes(1);
+        }, done);
     });
 
     it('should dispatch loading before and after execution', (done) => {
@@ -63,12 +60,9 @@ describe('Execute', () => {
             onLoadingChanged
         });
 
-        postpone(
-            () => {
-                expect(onLoadingChanged).toHaveBeenCalledTimes(2);
-            },
-            done()
-        );
+        postpone(() => {
+            expect(onLoadingChanged).toHaveBeenCalledTimes(2);
+        }, done);
     });
 
     it('should not dispatch execution for same AFM', (done) => {
@@ -79,11 +73,8 @@ describe('Execute', () => {
             afm
         });
 
-        postpone(
-            () => {
-                expect(child).toHaveBeenCalledTimes(1);
-            },
-            done()
-        );
+        postpone(() => {
+            expect(child).toHaveBeenCalledTimes(1);
+        }, done);
     });
 });

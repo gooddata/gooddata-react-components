@@ -35,17 +35,14 @@ describe('SimpleDataAdapterProvider', () => {
     it('should prepare datasource and metadataSource', (done) => {
         const wrapper = createComponent(Table, VisualizationTypes.TABLE);
 
-        postpone(
-            () => {
-                const table = wrapper.find(Table);
-                expect(table.length).toEqual(1);
+        postpone(() => {
+            const table = wrapper.find(Table);
+            expect(table.length).toEqual(1);
 
-                const tableProps = table.props() as ISimpleDataAdapterProviderInjectedProps;
-                expect(tableProps.dataSource).toBeDefined();
-                expect(tableProps.metadataSource).toBeDefined();
-            },
-            done()
-        );
+            const tableProps = table.props() as ISimpleDataAdapterProviderInjectedProps;
+            expect(tableProps.dataSource).toBeDefined();
+            expect(tableProps.metadataSource).toBeDefined();
+        }, done);
     });
 
     it('should recreate DS and MDS when projects differ', (done) => {
@@ -57,26 +54,20 @@ describe('SimpleDataAdapterProvider', () => {
             transformation: {}
         };
 
-        postpone(
-            () => {
-                const table = wrapper.find(Table);
-                const tableProps = table.props() as ISimpleDataAdapterProviderInjectedProps;
-                const oldDs = tableProps.dataSource;
-                const oldMds = tableProps.metadataSource;
-                wrapper.setProps(newProps, () => {
-                    postpone(
-                        () => {
-                            expect(table.length).toEqual(1);
-                            expect(tableProps.dataSource).not.toBe(oldDs);
-                            expect(tableProps.metadataSource).not.toBe(oldMds);
+        postpone(() => {
+            const table = wrapper.find(Table);
+            const tableProps = table.props() as ISimpleDataAdapterProviderInjectedProps;
+            const oldDs = tableProps.dataSource;
+            const oldMds = tableProps.metadataSource;
+            wrapper.setProps(newProps, () => {
+                postpone(() => {
+                    expect(table.length).toEqual(1);
+                    expect(tableProps.dataSource).not.toBe(oldDs);
+                    expect(tableProps.metadataSource).not.toBe(oldMds);
 
-                        },
-                        done()
-                    );
-                });
-            },
-            done()
-        );
+                }, done);
+            });
+        }, done);
     });
 
     it('should recreate DS and MDS when afm changes', (done) => {
@@ -88,25 +79,19 @@ describe('SimpleDataAdapterProvider', () => {
             transformation: {}
         };
 
-        postpone(
-            () => {
-                const table = wrapper.find(Table);
-                const tableProps = table.props() as ISimpleDataAdapterProviderInjectedProps;
-                const oldDs = tableProps.dataSource;
-                const oldMds = tableProps.metadataSource;
-                wrapper.setProps(newProps, () => {
-                    postpone(
-                        () => {
-                            expect(table.length).toEqual(1);
-                            expect(tableProps.dataSource).not.toBe(oldDs);
-                            expect(tableProps.metadataSource).not.toBe(oldMds);
-                        },
-                        done()
-                    );
-                });
-            },
-            done()
-        );
+        postpone(() => {
+            const table = wrapper.find(Table);
+            const tableProps = table.props() as ISimpleDataAdapterProviderInjectedProps;
+            const oldDs = tableProps.dataSource;
+            const oldMds = tableProps.metadataSource;
+            wrapper.setProps(newProps, () => {
+                postpone(() => {
+                    expect(table.length).toEqual(1);
+                    expect(tableProps.dataSource).not.toBe(oldDs);
+                    expect(tableProps.metadataSource).not.toBe(oldMds);
+                }, done);
+            });
+        }, done);
     });
 
     it('should recreate MDS when transformation changes', (done) => {
@@ -125,25 +110,19 @@ describe('SimpleDataAdapterProvider', () => {
             }
         };
 
-        postpone(
-            () => {
-                const table = wrapper.find(Table);
-                const tableProps = table.props() as ISimpleDataAdapterProviderInjectedProps;
-                const oldDs = tableProps.dataSource;
-                const oldMds = tableProps.metadataSource;
-                wrapper.setProps(newProps, () => {
-                    postpone(
-                        () => {
-                            expect(table.length).toEqual(1);
-                            expect(tableProps.dataSource).toBe(oldDs);
-                            expect(tableProps.metadataSource).not.toBe(oldMds);
-                        },
-                        done()
-                    );
-                });
-            },
-            done()
-        );
+        postpone(() => {
+            const table = wrapper.find(Table);
+            const tableProps = table.props() as ISimpleDataAdapterProviderInjectedProps;
+            const oldDs = tableProps.dataSource;
+            const oldMds = tableProps.metadataSource;
+            wrapper.setProps(newProps, () => {
+                postpone(() => {
+                    expect(table.length).toEqual(1);
+                    expect(tableProps.dataSource).toBe(oldDs);
+                    expect(tableProps.metadataSource).not.toBe(oldMds);
+                }, done);
+            });
+        }, done);
     });
 
     it('should recreate DS and MDS only once when all props change', (done) => {
@@ -165,59 +144,41 @@ describe('SimpleDataAdapterProvider', () => {
             }
         };
 
-        postpone(
-            () => {
-                const node: any = wrapper.getNode();
-                const prepareDataSourceSpy = jest.spyOn(node, 'prepareDataSource');
-                const prepareMDSourceSpy = jest.spyOn(node, 'prepareMDSource');
-                wrapper.setProps(newProps, () => {
-                    postpone(
-                        () => {
-                            expect(prepareDataSourceSpy).toHaveBeenCalledTimes(1);
-                            expect(prepareMDSourceSpy).toHaveBeenCalledTimes(1);
-                        },
-                        done()
-                    );
-                });
-            },
-            done()
-        );
+        postpone(() => {
+            const node: any = wrapper.getNode();
+            const prepareDataSourceSpy = jest.spyOn(node, 'prepareDataSource');
+            const prepareMDSourceSpy = jest.spyOn(node, 'prepareMDSource');
+            wrapper.setProps(newProps, () => {
+                postpone(() => {
+                    expect(prepareDataSourceSpy).toHaveBeenCalledTimes(1);
+                    expect(prepareMDSourceSpy).toHaveBeenCalledTimes(1);
+                }, done);
+            });
+        }, done);
     });
 
     it('should not render component if DS is missing', (done) => {
         const wrapper = createComponent(Table, VisualizationTypes.TABLE);
 
-        postpone(
-            () => {
-                wrapper.setState({ dataSource: null }, () => {
-                    postpone(
-                        () => {
-                            expect(wrapper.find(Table).length).toEqual(0);
-                        },
-                        done()
-                    );
-                });
-            },
-            done()
-        );
+        postpone(() => {
+            wrapper.setState({ dataSource: null }, () => {
+                postpone(() => {
+                    expect(wrapper.find(Table).length).toEqual(0);
+                }, done);
+            });
+        }, done);
     });
 
     it('should not render component if MDS is missing', (done) => {
         const wrapper = createComponent(Table, VisualizationTypes.TABLE);
 
-        postpone(
-            () => {
-                wrapper.setState({ metadataSource: null }, () => {
-                    postpone(
-                        () => {
-                            expect(wrapper.find(Table).length).toEqual(0);
-                        },
-                        done()
-                    );
-                });
-            },
-            done
-        );
+        postpone(() => {
+            wrapper.setState({ metadataSource: null }, () => {
+                postpone(() => {
+                    expect(wrapper.find(Table).length).toEqual(0);
+                }, done);
+            });
+        }, done);
     });
 
     it('should cancel promise when unmounting', (done) => {
@@ -229,13 +190,10 @@ describe('SimpleDataAdapterProvider', () => {
         node.prepareDataSourceCancellable = { cancel: cancelDS };
         node.prepareMetadataSourceCancellable = { cancel: cancelMDS };
 
-        postpone(
-            () => {
-                wrapper.unmount();
-                expect(cancelDS).toHaveBeenCalled();
-                expect(cancelMDS).toHaveBeenCalled();
-            },
-            done()
-        );
+        postpone(() => {
+            wrapper.unmount();
+            expect(cancelDS).toHaveBeenCalled();
+            expect(cancelMDS).toHaveBeenCalled();
+        }, done);
     });
 });
