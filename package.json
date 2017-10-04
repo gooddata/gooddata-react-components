@@ -49,7 +49,7 @@
   "dependencies": {
     "@gooddata/data-layer": "4.0.0",
     "@gooddata/goodstrap": "53.0.1",
-    "@gooddata/indigo-visualizations": "0.12.0-ocetnik-doc-types-2017-09-29T09-57-59-724Z",
+    "@gooddata/indigo-visualizations": "0.13.0",
     "classnames": "2.2.5",
     "gooddata": "4.1.0",
     "lodash": "4.17.4",
