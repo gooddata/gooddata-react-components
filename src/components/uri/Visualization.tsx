@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as sdk from 'gooddata';
+import * as GoodData from 'gooddata';
 import noop = require('lodash/noop');
 import isEqual = require('lodash/isEqual');
 import identity = require('lodash/identity');
@@ -49,7 +49,7 @@ export interface IVisualizationProps extends IEvents {
 
 export interface IVisualizationExecInfo {
     type: string;
-    dataSource: DataSource.IDataSource<sdk.ISimpleExecutorResult>;
+    dataSource: DataSource.IDataSource<GoodData.ISimpleExecutorResult>;
     metadataSource: MetadataSource.IMetadataSource;
 }
 
@@ -66,7 +66,7 @@ function uriResolver(projectId: string, uri?: string, identifier?: string): Prom
         return Promise.reject('Neither uri or identifier specified');
     }
 
-    return sdk.md.getObjectUri(projectId, identifier);
+    return GoodData.md.getObjectUri(projectId, identifier);
 }
 
 export class Visualization extends React.Component<IVisualizationProps, IVisualizationState> {
@@ -82,7 +82,7 @@ export class Visualization extends React.Component<IVisualizationProps, IVisuali
     private type: string;
     private uriAdapter: UriAdapter;
     private metadataSource: MetadataSource.IMetadataSource;
-    private dataSource: DataSource.IDataSource<sdk.ISimpleExecutorResult>;
+    private dataSource: DataSource.IDataSource<GoodData.ISimpleExecutorResult>;
 
     private subscription: Subscription;
     private subject: Subject<Promise<IVisualizationExecInfo>>;
@@ -118,7 +118,7 @@ export class Visualization extends React.Component<IVisualizationProps, IVisuali
     public componentDidMount() {
         const { projectId, uri, identifier, filters } = this.props;
 
-        this.uriAdapter = new UriAdapter(sdk, projectId);
+        this.uriAdapter = new UriAdapter(GoodData, projectId);
         this.visualizationUri = uri;
 
         this.prepareDataSources({
@@ -208,7 +208,7 @@ export class Visualization extends React.Component<IVisualizationProps, IVisuali
                 const attributeFilters = getAttributeFilters(filters);
                 return this.uriAdapter.createDataSource({ uri: this.visualizationUri, attributeFilters, dateFilter })
                     .then((dataSource) => {
-                        this.metadataSource = this.metadataSource || new UriMetadataSource(sdk, visualizationUri);
+                        this.metadataSource = this.metadataSource || new UriMetadataSource(GoodData, visualizationUri);
 
                         return this.metadataSource.getVisualizationMetadata()
                             .then(({ metadata }) => {

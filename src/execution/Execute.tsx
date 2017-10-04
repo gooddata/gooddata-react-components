@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as sdk from 'gooddata';
+import * as GoodData from 'gooddata';
 import get = require('lodash/get');
 import isEqual = require('lodash/isEqual');
 import { Afm, DataTable, SimpleExecutorAdapter, Transformation } from '@gooddata/data-layer';
@@ -7,7 +7,7 @@ import { Afm, DataTable, SimpleExecutorAdapter, Transformation } from '@gooddata
 import { ErrorStates } from '../constants/errorStates';
 import { IEvents } from '../interfaces/Events';
 
-export type IDataTableFactory = (projectId: string) => DataTable<sdk.ISimpleExecutorResult>;
+export type IDataTableFactory = (projectId: string) => DataTable<GoodData.ISimpleExecutorResult>;
 
 export interface IExecuteProps extends IEvents {
     afm: Afm.IAfm;
@@ -18,11 +18,11 @@ export interface IExecuteProps extends IEvents {
 }
 
 export interface IExecuteState {
-    result: sdk.ISimpleExecutorResult;
+    result: GoodData.ISimpleExecutorResult;
 }
 
-function dataTableFactory(projectId: string): DataTable<sdk.ISimpleExecutorResult> {
-    return new DataTable(new SimpleExecutorAdapter(sdk, projectId));
+function dataTableFactory(projectId: string): DataTable<GoodData.ISimpleExecutorResult> {
+    return new DataTable(new SimpleExecutorAdapter(GoodData, projectId));
 }
 
 export class Execute extends React.Component<IExecuteProps, IExecuteState> {
@@ -30,7 +30,7 @@ export class Execute extends React.Component<IExecuteProps, IExecuteState> {
         dataTableFactory
     };
 
-    private dataTable: DataTable<sdk.ISimpleExecutorResult>;
+    private dataTable: DataTable<GoodData.ISimpleExecutorResult>;
 
     public constructor(props: IExecuteProps) {
         super(props);
@@ -43,7 +43,7 @@ export class Execute extends React.Component<IExecuteProps, IExecuteState> {
 
         this.dataTable = props.dataTableFactory(props.projectId);
         this.dataTable.onData((result) => {
-            if (result && (result as sdk.ISimpleExecutorResult).isEmpty) {
+            if (result && (result as GoodData.ISimpleExecutorResult).isEmpty) {
                 onError({ status: ErrorStates.NO_DATA });
             } else {
                 this.setState({ result });

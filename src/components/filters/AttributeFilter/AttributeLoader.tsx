@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as sdk from 'gooddata';
+import * as GoodData from 'gooddata';
 import { IAttributeDisplayForm } from './model';
 
 const { PropTypes } = React;
@@ -73,7 +73,7 @@ export class AttributeLoader extends React.PureComponent<IAttributeLoaderProps, 
     public static defaultProps: Partial<IAttributeLoaderProps> = {
         uri: null,
         identifier: null,
-        metadata: sdk.md
+        metadata: GoodData.md
     };
 
     constructor(props: IAttributeLoaderProps) {

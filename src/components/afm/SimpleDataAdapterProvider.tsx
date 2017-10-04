@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as sdk from 'gooddata';
+import * as GoodData from 'gooddata';
 
 import isEqual = require('lodash/isEqual');
 import omit = require('lodash/omit');
@@ -29,14 +29,14 @@ export interface ISimpleDataAdapterProviderProps {
 }
 
 export interface ISimpleDataAdapterProviderInjectedProps {
-    dataSource: DataSource.IDataSource<sdk.ISimpleExecutorResult>;
+    dataSource: DataSource.IDataSource<GoodData.ISimpleExecutorResult>;
     metadataSource: MetadataSource.IMetadataSource;
 }
 
 export interface ISimpleDataAdapterProviderState {
     type: VisType;
     adapter: SimpleExecutorAdapter;
-    dataSource: DataSource.IDataSource<sdk.ISimpleExecutorResult>;
+    dataSource: DataSource.IDataSource<GoodData.ISimpleExecutorResult>;
     metadataSource: MetadataSource.IMetadataSource;
 }
 
@@ -69,7 +69,7 @@ export function simpleDataAdapterProvider<T>(
         public componentDidMount() {
             const { projectId, afm, transformation } = this.props;
             this.prepareDataSource(this.prepareAdapter(projectId), afm)
-                .then((dataSource: DataSource.IDataSource<sdk.ISimpleExecutorResult>) => {
+                .then((dataSource: DataSource.IDataSource<GoodData.ISimpleExecutorResult>) => {
                     this.prepareMDSource(dataSource, this.state.type, afm, transformation);
                 });
         }
@@ -78,7 +78,7 @@ export function simpleDataAdapterProvider<T>(
             const { projectId, afm, transformation } = nextProps;
             if (projectId !== this.props.projectId || !isEqual(afm, this.props.afm)) {
                 this.prepareDataSource(this.prepareAdapter(projectId), afm)
-                    .then((dataSource: DataSource.IDataSource<sdk.ISimpleExecutorResult>) => {
+                    .then((dataSource: DataSource.IDataSource<GoodData.ISimpleExecutorResult>) => {
                         this.prepareMDSource(dataSource, this.state.type, afm, transformation);
                     });
 
@@ -117,7 +117,7 @@ export function simpleDataAdapterProvider<T>(
         }
 
         private prepareAdapter(projectId: string) {
-            const adapter = new SimpleExecutorAdapter(sdk, projectId);
+            const adapter = new SimpleExecutorAdapter(GoodData, projectId);
             this.setState({
                 adapter
             });
@@ -142,7 +142,7 @@ export function simpleDataAdapterProvider<T>(
         }
 
         private prepareMDSource(
-            dataSource: DataSource.IDataSource<sdk.ISimpleExecutorResult>,
+            dataSource: DataSource.IDataSource<GoodData.ISimpleExecutorResult>,
             type: VisType,
             afm: Afm.IAfm,
             transformation: Transformation.ITransformation
@@ -157,7 +157,7 @@ export function simpleDataAdapterProvider<T>(
             );
 
             this.prepareMetadataSourceCancellable.promise
-                .then((result: sdk.ISimpleExecutorResult) => {
+                .then((result: GoodData.ISimpleExecutorResult) => {
                         const md = Converters.toVisObj(type, afm, transformation, result.headers);
                         const metadataSource = new SimpleMetadataSource(md, {});
 

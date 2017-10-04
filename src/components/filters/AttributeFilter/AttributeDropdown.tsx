@@ -5,7 +5,7 @@ import Dropdown, { DropdownButton } from '@gooddata/goodstrap/lib/Dropdown/Dropd
 import { string as stringUtils } from '@gooddata/js-utils';
 import DataSource from '@gooddata/goodstrap/lib/DataSource/DataSource';
 import { injectIntl, intlShape, InjectedIntlProps } from 'react-intl';
-import * as sdk from 'gooddata';
+import * as GoodData from 'gooddata';
 import * as classNames from 'classnames';
 import last = require('lodash/last');
 import pick = require('lodash/pick');
@@ -50,7 +50,8 @@ export interface IValidElementsItem {
 }
 
 export interface IAttributeMetadata {
-    getValidElements: (projectId: string, objectId: string, options: Object) => Promise<sdk.IValidElementsResponse>;
+    getValidElements: (projectId: string, objectId: string, options: Object) =>
+        Promise<GoodData.IValidElementsResponse>;
 }
 
 export interface IAttributeDropdownProps {
@@ -109,13 +110,13 @@ export function loadAttributeElements(
     };
 
     return metadata.getValidElements(projectId, objectId, options)
-        .then((res: sdk.IValidElementsResponse) => {
+        .then((res: GoodData.IValidElementsResponse) => {
             const { items, paging: { total } } = res.validElements;
             return {
                 data: {
                     offset,
                     limit,
-                    items: items.map((item: sdk.IElement) => pick(item.element, 'uri', 'title')),
+                    items: items.map((item: GoodData.IElement) => pick(item.element, 'uri', 'title')),
                     totalCount: parseInt(total, 10)
                 }
             };
@@ -159,7 +160,7 @@ export class AttributeDropdownWrapped
         fullscreenOnMobile: false,
         isUsingIdentifier: false,
 
-        metadata: sdk.md,
+        metadata: GoodData.md,
         getListItem: () => (<AttributeFilterItem />),
         getListLoading: getDefaultListLoading,
         getListError: getDefaultListError,

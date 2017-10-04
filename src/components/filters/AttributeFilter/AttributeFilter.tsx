@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as sdk from 'gooddata';
+import * as GoodData from 'gooddata';
 import pick = require('lodash/pick');
 
 import { IntlWrapper } from '../../core/base/IntlWrapper';
@@ -59,7 +59,7 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps, 
         identifier: null,
         projectId: null,
         locale: 'en-US',
-        metadata: sdk.md,
+        metadata: GoodData.md,
 
         FilterLoading: DefaultFilterLoading,
         FilterError: DefaultFilterError
