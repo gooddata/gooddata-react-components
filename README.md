@@ -67,3 +67,4 @@ Report bugs and features on our [issues page](https://github.com/gooddata/goodda
 Copyright (C) 2007-2017, GoodData(R) Corporation. All rights reserved.
 
 For more information, please see [LICENSE](https://github.com/gooddata/gooddata-react-components/blob/master/LICENSE)
+
