@@ -45,8 +45,8 @@
   },
   "dependencies": {
     "@gooddata/data-layer": "4.0.1",
-    "@gooddata/goodstrap": "53.0.1",
-    "@gooddata/indigo-visualizations": "0.13.0",
+    "@gooddata/goodstrap": "53.0.1-martin.mosko-mms-bb-332-2017-10-11T11-56-01-929Z",
+    "@gooddata/indigo-visualizations": "0.13.0-martin.mosko-mms-bb-332-2017-10-11T12-50-24-110Z",
     "@gooddata/js-utils": "0.9.0",
     "classnames": "2.2.5",
     "gooddata": "4.1.0",
