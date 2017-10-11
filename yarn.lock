@@ -10,9 +10,9 @@
     lodash "4.17.4"
     rxjs "5.4.3"
 
-"@gooddata/goodstrap@53.0.1":
-  version "53.0.1"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-53.0.1.tgz#ec63334c3005d16ff2b29ea17beac74f54bdafe4"
+"@gooddata/goodstrap@53.0.1-martin.mosko-mms-bb-332-2017-10-11T11-56-01-929Z":
+  version "53.0.1-martin.mosko-mms-bb-332-2017-10-11T11-56-01-929Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-53.0.1-martin.mosko-mms-bb-332-2017-10-11T11-56-01-929Z.tgz#d06ccf1ac6b8349c1c501da0b020343c68e2c738"
   dependencies:
     "@gooddata/js-utils" "0.7.1"
     classnames "2.2.5"
@@ -26,7 +26,7 @@
     lodash "4.17.4"
     moment "2.17.1"
     moment-timezone "0.5.11"
-    react-day-picker "3.1.1"
+    react-day-picker "6.2.1"
     react-dnd "2.1.4"
     react-document-title "2.0.3"
     react-intl "2.2.3"
@@ -36,11 +36,11 @@
     react-textarea-autosize "4.0.5"
     rxjs "5.4.3"
 
-"@gooddata/indigo-visualizations@0.13.0":
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/indigo-visualizations/-/indigo-visualizations-0.13.0.tgz#26148982da0b74bd965a7c56e0c829200955bb3a"
+"@gooddata/indigo-visualizations@0.13.0-martin.mosko-mms-bb-332-2017-10-11T12-50-24-110Z":
+  version "0.13.0-martin.mosko-mms-bb-332-2017-10-11T12-50-24-110Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/indigo-visualizations/-/indigo-visualizations-0.13.0-martin.mosko-mms-bb-332-2017-10-11T12-50-24-110Z.tgz#53712e68a9fe0694276bb29d1cadde388ec944e2"
   dependencies:
-    "@gooddata/goodstrap" "53.0.1"
+    "@gooddata/goodstrap" "53.0.1-martin.mosko-mms-bb-332-2017-10-11T11-56-01-929Z"
     "@gooddata/js-utils" "0.7.1"
     "@gooddata/numberjs" "3.0.0"
     classnames "2.2.5"
@@ -5654,9 +5654,12 @@ react-addons-test-utils@15.3.2:
   version "15.3.2"
   resolved "https://registry.yarnpkg.com/react-addons-test-utils/-/react-addons-test-utils-15.3.2.tgz#c09a44f583425a4a9c1b38444d7a6c3e6f0f41f6"
 
-react-day-picker@3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-3.1.1.tgz#7fa385dc7b424cee3eb09696e1918e6b18abafdb"
+react-day-picker@6.2.1:
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-6.2.1.tgz#fc22b809db792386d1468d3f46d725ad91e04db9"
+  dependencies:
+    object-assign "^4.1.1"
+    prop-types "^15.6.0"
 
 react-dnd@2.1.4:
   version "2.1.4"
