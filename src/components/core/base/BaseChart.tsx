@@ -28,7 +28,7 @@ import { IntlTranslationsProvider } from './TranslationsProvider';
 import { ISimpleDataAdapterProviderInjectedProps } from '../../afm/SimpleDataAdapterProvider';
 import { getVisualizationOptions } from '../../../helpers/options';
 
-export type ChartType = 'line' | 'bar' | 'column' | 'pie';
+export type ChartType = 'line' | 'bar' | 'column' | 'pie' | 'table';
 
 export interface IExecutorResult {
     metadata: VisualizationObject.IVisualizationObject;
