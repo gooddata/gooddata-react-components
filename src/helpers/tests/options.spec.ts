@@ -1,37 +1,47 @@
+import { AFM } from '@gooddata/typings';
 import { getVisualizationOptions } from '../options';
-import { Afm } from '@gooddata/data-layer';
 
 describe('getVisualizationOptions', () => {
-    function createAfm(measures: Afm.IMeasure[]): Afm.IAfm {
+    function createAfm(measures: AFM.IMeasure[]): AFM.IAfm {
         return  {
             measures
         };
     }
 
-    function createDateFilter(): Afm.IDateFilter {
+    function createDateFilter(): AFM.IRelativeDateFilter {
         return {
-            id: 'foo',
-            type: 'date',
-            intervalType: 'relative',
-            between: [-1, -1],
-            granularity: 'year'
+            relativeDateFilter: {
+                dataSet: {
+                    identifier: 'foo'
+                },
+                from: -1,
+                to: -1,
+                granularity: 'GDC.time.year'
+            }
         };
     }
 
-    function createAttributeFilter(): Afm.IPositiveAttributeFilter {
+    function createAttributeFilter(): AFM.IPositiveAttributeFilter {
         return {
-            id: 'foo',
-            type: 'attribute',
-            in: []
+            positiveAttributeFilter: {
+                displayForm: {
+                    identifier: 'foo'
+                },
+                in: []
+            }
         };
     }
 
-    function createMeasure(filters: Afm.IFilter[]): Afm.IMeasure {
+    function createMeasure(filters: AFM.FilterItem[]): AFM.IMeasure {
         return {
-            id: 'foo',
+            localIdentifier: 'foo',
             definition: {
-                baseObject: { id: 'bar' },
-                filters
+                measure: {
+                    item: {
+                        identifier: 'bar'
+                    },
+                    filters
+                }
             }
         };
     }

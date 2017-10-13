@@ -1,8 +1,8 @@
-import { Afm } from '@gooddata/data-layer';
+import { AFM } from '@gooddata/typings';
 import { VisType, VisElementType } from '../constants/visualizationTypes';
 
 export interface IDrillEvent {
-    executionContext: Afm.IAfm;
+    executionContext: AFM.IAfm;
     drillContext: {
         type: VisType;
         element: VisElementType;

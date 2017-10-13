@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@gooddata/data-layer@4.0.2":
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/@gooddata/data-layer/-/data-layer-4.0.2.tgz#048825e55233629cc04ef0df408790cf5dd170d2"
+"@gooddata/data-layer@4.0.3-pavelzgdc-new-afm-2017-11-20T15-53-27-011Z":
+  version "4.0.3-pavelzgdc-new-afm-2017-11-20T15-53-27-011Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/data-layer/-/data-layer-4.0.3-pavelzgdc-new-afm-2017-11-20T15-53-27-011Z.tgz#2e9731ba6e452c1c9ccbe54d842798adb62a23f2"
   dependencies:
     json-stable-stringify "1.0.1"
     lodash "4.17.4"
@@ -36,13 +36,14 @@
     react-textarea-autosize "4.0.5"
     rxjs "5.4.3"
 
-"@gooddata/indigo-visualizations@0.16.0":
-  version "0.16.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/indigo-visualizations/-/indigo-visualizations-0.16.0.tgz#a90020a39d24754c56ad9d0a7732599e8b26664e"
+"@gooddata/indigo-visualizations@0.16.0-ocetnik-doc-new-afm-2017-11-15T13-48-16-907Z":
+  version "0.16.0-ocetnik-doc-new-afm-2017-11-15T13-48-16-907Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/indigo-visualizations/-/indigo-visualizations-0.16.0-ocetnik-doc-new-afm-2017-11-15T13-48-16-907Z.tgz#d10502ea14133c3d8228a42b115fec405f5da8ab"
   dependencies:
     "@gooddata/goodstrap" "53.0.1"
     "@gooddata/js-utils" "0.7.1"
     "@gooddata/numberjs" "3.0.0"
+    "@gooddata/typings" "0.0.1-vaclavbohac-init-2017-10-06T12-12-51-885Z"
     classnames "2.2.5"
     fixed-data-table-2 "0.7.13"
     highcharts "4.2.5"
@@ -70,19 +71,33 @@
     moment "2.17.1"
     moment-timezone "0.5.11"
 
-"@gooddata/mock-js@0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/mock-js/-/mock-js-0.1.0.tgz#485284b2380902791c07f680b6809261dc04b0c5"
+"@gooddata/mock-js@0.1.1-pavelzgdc-vaclavbohac-transform-api-2017-11-13T12-50-45-579Z":
+  version "0.1.1-pavelzgdc-vaclavbohac-transform-api-2017-11-13T12-50-45-579Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/mock-js/-/mock-js-0.1.1-pavelzgdc-vaclavbohac-transform-api-2017-11-13T12-50-45-579Z.tgz#421938e51714be5c427255a7d9de18c15a17a19f"
   dependencies:
+    "@gooddata/typings" "0.0.1-vaclavbohac-pzb-header-items-2017-11-09T16-09-36-030Z"
     body-parser "1.17.1"
     es6-promise "4.1.0"
     express "4.15.2"
     express-session "1.15.2"
+    invariant "2.2.2"
     lodash "4.17.4"
 
 "@gooddata/numberjs@3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@gooddata/numberjs/-/numberjs-3.0.0.tgz#9d646f1f9c05614d18e08ac5024b2ba2f7139396"
+
+"@gooddata/typings@0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@gooddata/typings/-/typings-0.0.1.tgz#38f7326f9bd2522f272eb2696a28aaf1fb7cea56"
+
+"@gooddata/typings@0.0.1-vaclavbohac-init-2017-10-06T12-12-51-885Z":
+  version "0.0.1-vaclavbohac-init-2017-10-06T12-12-51-885Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/typings/-/typings-0.0.1-vaclavbohac-init-2017-10-06T12-12-51-885Z.tgz#4814f70329d4c8bf7ff3471f9fb373cbb2b0bc01"
+
+"@gooddata/typings@0.0.1-vaclavbohac-pzb-header-items-2017-11-09T16-09-36-030Z":
+  version "0.0.1-vaclavbohac-pzb-header-items-2017-11-09T16-09-36-030Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/typings/-/typings-0.0.1-vaclavbohac-pzb-header-items-2017-11-09T16-09-36-030Z.tgz#355c1ee17f5a0affd29ab02410986027c782ae84"
 
 "@hypnosphi/fuse.js@^3.0.9":
   version "3.0.9"
@@ -3201,16 +3216,18 @@ globule@^1.0.0:
     lodash "~4.17.4"
     minimatch "~3.0.2"
 
-gooddata@4.3.1:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/gooddata/-/gooddata-4.3.1.tgz#d26e399f63c7c266e9be82bc2de6de07ec69c554"
+gooddata@4.3.1-pavelzgdc-pzb-execute-afm-2017-11-20T10-36-56-807Z:
+  version "4.3.1-pavelzgdc-pzb-execute-afm-2017-11-20T10-36-56-807Z"
+  resolved "https://registry.yarnpkg.com/gooddata/-/gooddata-4.3.1-pavelzgdc-pzb-execute-afm-2017-11-20T10-36-56-807Z.tgz#cbd4499d251784d277acf48e7c647dc070455c98"
   dependencies:
+    "@gooddata/typings" "0.0.1"
     es6-promise "3.0.2"
     fetch-cookie "0.4.0"
     invariant "2.2.2"
     isomorphic-fetch "2.2.1"
     lodash "4.17.4"
     md5 "2.2.1"
+    qs "6.5.1"
 
 graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6:
   version "4.1.11"
@@ -3315,7 +3332,7 @@ hawk@~6.0.2:
     sntp "2.x.x"
 
 highcharts@4.2.5:
-  version v4.2.5
+  version "4.2.5"
   resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-4.2.5.tgz#f18bbda5ca326fdff7d816c94814fe8509cec969"
 
 hmac-drbg@^1.0.0:
