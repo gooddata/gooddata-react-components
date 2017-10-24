@@ -26,6 +26,7 @@ import { TablePropTypes, Requireable } from '../../proptypes/Table';
 import { ErrorStates } from '../../constants/errorStates';
 import { VisualizationEnvironment } from '../uri/Visualization';
 import { getVisualizationOptions } from '../../helpers/options';
+import { ITotal } from '../../interfaces/Totals';
 import { convertErrors, checkEmptyResult } from '../../helpers/errorHandlers';
 import { ISubject } from '../../helpers/async';
 
@@ -39,6 +40,8 @@ export interface ITableProps extends IEvents {
     environment?: VisualizationEnvironment;
     stickyHeaderOffset?: number;
     drillableItems?: IDrillableItem[];
+    totals?: ITotal[];
+    totalsEditAllowed?: boolean;
     afterRender?: Function;
     pushData?: Function;
     visualizationProperties?: IVisualizationProperties;
@@ -75,6 +78,8 @@ export class Table extends React.Component<ITableProps, ITableState> {
         environment: 'none',
         drillableItems: [],
         onFiredDrillEvent: noop,
+        totals: [],
+        totalsEditAllowed: false,
         visualizationProperties: null
     };
 
@@ -99,6 +104,7 @@ export class Table extends React.Component<ITableProps, ITableState> {
         this.onError = this.onError.bind(this);
         this.onMore = this.onMore.bind(this);
         this.onLess = this.onLess.bind(this);
+        this.onTotalsEdit = this.onTotalsEdit.bind(this);
 
         this.subject = createSubject<Execution.IExecutionResponses>((result) => {
             this.setState({
@@ -170,6 +176,14 @@ export class Table extends React.Component<ITableProps, ITableState> {
         });
     }
 
+    public onTotalsEdit(totals: ITotal[]) {
+        this.props.pushData({
+            properties: {
+                totals
+            }
+        });
+    }
+
     public render() {
         if (!this.canRender()) {
             return null;
@@ -215,7 +229,9 @@ export class Table extends React.Component<ITableProps, ITableState> {
             stickyHeaderOffset,
             environment,
             resultSpec,
-            onFiredDrillEvent
+            onFiredDrillEvent,
+            totals,
+            totalsEditAllowed
         } = this.props;
         const { result, sortItems } = this.state;
         const {
@@ -244,6 +260,9 @@ export class Table extends React.Component<ITableProps, ITableState> {
                             onDataTooLarge={onDataTooLarge}
                             tableRenderer={tableRenderer}
                             onFiredDrillEvent={onFiredDrillEvent}
+                            totals={totals}
+                            totalsEditAllowed={totalsEditAllowed}
+                            onTotalsEdit={this.onTotalsEdit}
                         />
                     )}
                 </IntlTranslationsProvider>

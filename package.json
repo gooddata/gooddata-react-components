@@ -47,7 +47,7 @@
   "dependencies": {
     "@gooddata/data-layer": "4.0.3-pavelzgdc-new-afm-2017-11-20T15-53-27-011Z",
     "@gooddata/goodstrap": "53.0.1",
-    "@gooddata/indigo-visualizations": "0.16.0-ocetnik-doc-new-afm-2017-11-15T13-48-16-907Z",
+    "@gooddata/indigo-visualizations": "0.16.0-petrjanu-pja-bb-334-ttedit-2017-11-15T19-57-10-125Z",
     "@gooddata/js-utils": "0.9.0",
     "classnames": "2.2.5",
     "gooddata": "4.3.1-pavelzgdc-pzb-execute-afm-2017-11-20T10-36-56-807Z",
