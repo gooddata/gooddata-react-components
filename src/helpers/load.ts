@@ -48,11 +48,21 @@ function handleExecutionError(reason: IError) {
     }
 }
 
-function decorateMetrics(visObj: VisualizationObject.IVisualizationObject):
-    VisualizationObject.IVisualizationObject {
+function getLocalIdentifier(
+    item: VisualizationObject.IMeasure,
+    index: number
+): string {
+    // reuse identifier provided by AD
+    // and fallback when vis. object provided from KD without localIdentifiers
+    return get(item, ['measure', 'localIdentifier'], `m${index + 1}`);
+}
+
+function decorateMetrics(
+    visObj: VisualizationObject.IVisualizationObject,
+): VisualizationObject.IVisualizationObject {
     const updatedVisObj = cloneDeep(visObj);
     updatedVisObj.content.buckets.measures = updatedVisObj.content.buckets.measures.map((measure, index) => {
-        measure.measure.generatedId = `m${index + 1}`;
+        measure.measure.localIdentifier = getLocalIdentifier(measure, index);
         return measure;
     });
 
@@ -133,7 +143,6 @@ function getMetadataObjectWithSortingApplied(
     sorting?: ISorting
 ) {
     const decoratedMD = decorateMetrics(metadata);
-
     if (!get(sorting, 'change')) {
         return {
             metadata: decoratedMD,

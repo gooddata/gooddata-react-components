@@ -5,20 +5,20 @@ import { VisualizationObject, Transformation } from '@gooddata/data-layer';
 import { ISortingChange } from './sorting';
 
 interface IMeasureInfo {
-    generatedId: string;
+    localIdentifier: string;
     isPoP: boolean;
 }
 
 function getMeasureInfo(id: string): IMeasureInfo {
     if (id.endsWith('_pop')) {
         return {
-            generatedId: id.split('_')[0],
+            localIdentifier: id.split('_')[0],
             isPoP: true
         };
     }
 
     return {
-        generatedId: id,
+        localIdentifier: id,
         isPoP: false
     };
 }
@@ -39,6 +39,7 @@ export function updateSorting(
 ): IUpdateSortingResult {
     const { sorting, change } = sortingInfo;
     const updatedMetadata = cloneDeep(metadata);
+
     const buckets = updatedMetadata.content.buckets;
     const { column, direction } = sorting;
     const { type } = change;
@@ -47,10 +48,10 @@ export function updateSorting(
     let sort: VisualizationObject.IMeasureSort | string;
 
     if (type === 'metric') {
-        const { generatedId, isPoP } = getMeasureInfo(column);
+        const { localIdentifier, isPoP } = getMeasureInfo(column);
         const measures = get(buckets, 'measures', []);
         const measure: VisualizationObject.IMeasure = measures
-            .find(item => item.measure.generatedId === generatedId);
+            .find(item => item.measure.localIdentifier === localIdentifier);
 
         bucketItem = get<typeof measure.measure>(measure, 'measure');
         // Sort direction needs to be fixed in data-layer
@@ -58,6 +59,10 @@ export function updateSorting(
         sort = { direction } as VisualizationObject.IMeasureSort;
         if (isPoP) {
             sort.sortByPoP = true;
+        }
+        // handle remove of PoP same as removed column
+        if (isPoP && !get(bucketItem, 'showPoP', false)) {
+            bucketItem = null;
         }
     } else {
         const categories = get(buckets, 'categories', []);
