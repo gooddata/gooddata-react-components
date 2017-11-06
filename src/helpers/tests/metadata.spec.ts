@@ -13,7 +13,7 @@ describe('updateSorting', () => {
             showPoP: false,
             title: 'Measure M1',
             measureFilters: [],
-            generatedId: 'm1'
+            localIdentifier: 'm1'
         }
     };
 
@@ -25,7 +25,7 @@ describe('updateSorting', () => {
             showPoP: false,
             title: 'Measure M1 sorted ASC',
             measureFilters: [],
-            generatedId: 'm1-sorted-asc',
+            localIdentifier: 'm1-sorted-asc',
             sort: {
                 direction: 'asc'
             }
@@ -40,7 +40,7 @@ describe('updateSorting', () => {
             showPoP: true,
             title: 'Measure with PoP',
             measureFilters: [],
-            generatedId: 'm1_pop'
+            localIdentifier: 'm1'
         }
     };
 
@@ -125,7 +125,7 @@ describe('updateSorting', () => {
                             measures: [
                                 {
                                     measure: {
-                                        generatedId: 'm1',
+                                        localIdentifier: 'm1',
                                         measureFilters: [],
                                         objectUri: '/gdc/md/project-id/obj/object-id',
                                         showInPercent: false,
@@ -160,8 +160,7 @@ describe('updateSorting', () => {
 
     it('should update sort info on PoP metric', () => {
         metadata.content.buckets.measures = [
-            MEASURE_WITH_POP,
-            MEASURE_M1
+            MEASURE_WITH_POP
         ];
 
         metadata.content.buckets.categories = [
@@ -209,28 +208,16 @@ describe('updateSorting', () => {
                             measures: [
                                 {
                                     measure: {
-                                        generatedId: 'm1_pop',
+                                        localIdentifier: 'm1',
                                         measureFilters: [],
                                         objectUri: '/gdc/md/project-id/obj/object-id-pop',
                                         showInPercent: false,
                                         showPoP: true,
-                                        sort: null,
-                                        title: 'Measure with PoP',
-                                        type: 'metric'
-                                    }
-                                },
-                                {
-                                    measure: {
-                                        generatedId: 'm1',
-                                        measureFilters: [],
-                                        objectUri: '/gdc/md/project-id/obj/object-id',
-                                        showInPercent: false,
-                                        showPoP: false,
                                         sort: {
                                             direction: 'desc',
                                             sortByPoP: true
                                         },
-                                        title: 'Measure M1',
+                                        title: 'Measure with PoP',
                                         type: 'metric'
                                     }
                                 }
@@ -308,7 +295,7 @@ describe('updateSorting', () => {
                             measures: [
                                 {
                                     measure: {
-                                        generatedId: 'm1-sorted-asc',
+                                        localIdentifier: 'm1-sorted-asc',
                                         measureFilters: [],
                                         objectUri: '/gdc/md/project-id/obj/object-id-sorted-asc',
                                         showInPercent: false,

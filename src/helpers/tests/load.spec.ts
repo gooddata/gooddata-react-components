@@ -363,7 +363,7 @@ describe('initTableDataLoading', () => {
         const result = await initTableDataLoading(ds, mds, transformation, sorting);
 
         const expectedMDcontent: VisualizationObject.IVisualizationObjectContent = cloneDeep(md);
-        expectedMDcontent.buckets.measures[0].measure.generatedId = 'm1';
+        expectedMDcontent.buckets.measures[0].measure.localIdentifier = 'm1';
         expectedMDcontent.buckets.measures[0].measure.sort = {
             direction: 'desc'
         };
