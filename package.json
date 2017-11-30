@@ -35,6 +35,7 @@
     "acorn-object-spread": "1.0.0",
     "chromedriver": "2.29.2",
     "enzyme": "2.8.0",
+    "gemini": "4.18.1",
     "grunt": "1.0.1",
     "grunt-grizzly": "0.15.0",
     "jest": "21.0.0",
