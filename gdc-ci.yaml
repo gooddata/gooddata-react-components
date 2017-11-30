@@ -6,3 +6,6 @@ dist:
   - yarn build-storybook
 rpm-build:
   - yarn build-storybook
+gemini-tests:
+  - yarn build-storybook
+  - ci-run-gemini-tests
