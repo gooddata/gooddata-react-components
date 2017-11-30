@@ -8,6 +8,7 @@ import { CUSTOM_COLORS } from './data/colors';
 import { onErrorHandler } from './mocks';
 import '../styles/scss/charts.scss';
 import '../styles/scss/table.scss';
+import { screenshotWrap } from './utils/wrap';
 
 const defaultFilter: AFM.IAbsoluteDateFilter = {
     absoluteDateFilter: {
@@ -83,22 +84,26 @@ class DynamicVisualization extends React.Component<any, any> {
 
 storiesOf('Visualization', module)
     .add('table example', () => (
-        <div style={{ width: 800, height: 400 }}>
-            <Visualization
-                projectId="myproject"
-                uri={'/gdc/md/myproject/obj/1001'}
-                onError={onErrorHandler}
-            />
-        </div>
+        screenshotWrap(
+            <div style={{ width: 800, height: 400 }}>
+                <Visualization
+                    projectId="myproject"
+                    uri={'/gdc/md/myproject/obj/1001'}
+                    onError={onErrorHandler}
+                />
+            </div>
+        )
     ))
     .add('table example with identifier', () => (
-        <div style={{ width: 800, height: 400 }}>
-            <Visualization
-                projectId="myproject"
-                identifier="1001"
-                onError={onErrorHandler}
-            />
-        </div>
+        screenshotWrap(
+            <div style={{ width: 800, height: 400 }}>
+                <Visualization
+                    projectId="myproject"
+                    identifier="1001"
+                    onError={onErrorHandler}
+                />
+            </div>
+        )
     ))
     .add('table with eventing', () => (
         <div style={{ width: 800, height: 400 }}>
