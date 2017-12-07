@@ -4,6 +4,7 @@ import { action } from '@storybook/addon-actions';
 
 import { AttributeFilter } from '../src/components/filters/AttributeFilter/AttributeFilter';
 import '../styles/scss/attributeFilter.scss';
+import { screenshotWrap } from './utils/wrap';
 
 const attributeFilterWithUri = {
     uri: '/gdc/md/storybook/obj/3.df',
@@ -21,13 +22,15 @@ const attributeFilterWithIdentifier = {
 
 storiesOf('AttributeFilter', module)
     .add('with uri', () => (
-        <div style={{ minHeight: 500 }}>
-            <AttributeFilter
-                {...attributeFilterWithUri}
-            />
-            <span style={{ display: 'inline-block', width: 208 }} />
-            <AttributeFilter
-                {...attributeFilterWithIdentifier}
-            />
-        </div>
+        screenshotWrap(
+            <div style={{ minHeight: 500 }}>
+                <AttributeFilter
+                    {...attributeFilterWithUri}
+                />
+                <span style={{ display: 'inline-block', width: 208 }} />
+                <AttributeFilter
+                    {...attributeFilterWithIdentifier}
+                />
+            </div>
+        )
     ));
