@@ -49,6 +49,7 @@
     "@gooddata/goodstrap": "53.0.1",
     "@gooddata/indigo-visualizations": "1.0.0",
     "@gooddata/js-utils": "0.9.0",
+    "@gooddata/test-storybook": "0.1.0-ocetnik-doc-test-storybook-2017-12-07T15-01-25-484Z",
     "classnames": "2.2.5",
     "gooddata": "4.4.0",
     "lodash": "4.17.4",
@@ -71,7 +72,8 @@
     "validate": "tsc -p tsconfig.base.json --noEmit && yarn tslint",
     "validate-ci": "tsc -p tsconfig.base.json --noEmit && yarn tslint-ci",
     "storybook": "start-storybook -p 9001 -c .storybook",
-    "build-storybook": "build-storybook -c .storybook -o dist-storybook"
+    "build-storybook": "build-storybook -c .storybook -o dist-storybook",
+    "test-storybook": "test-storybook"
   },
   "typings": "dist/index.d.ts",
   "jest": {
