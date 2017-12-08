@@ -87,9 +87,9 @@
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@gooddata/numberjs/-/numberjs-3.0.0.tgz#9d646f1f9c05614d18e08ac5024b2ba2f7139396"
 
-"@gooddata/test-storybook@0.1.0-ocetnik-doc-test-storybook-2017-12-07T15-21-09-852Z":
-  version "0.1.0-ocetnik-doc-test-storybook-2017-12-07T15-21-09-852Z"
-  resolved "https://registry.yarnpkg.com/@gooddata/test-storybook/-/test-storybook-0.1.0-ocetnik-doc-test-storybook-2017-12-07T15-21-09-852Z.tgz#491ff9eff1d9383c52c6beac316e311d62eea164"
+"@gooddata/test-storybook@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@gooddata/test-storybook/-/test-storybook-0.1.0.tgz#57b0a1be67c5cb9222ed3bb9feb37cb6f0934592"
   dependencies:
     acorn "5.1.1"
     acorn-jsx "4.0.1"

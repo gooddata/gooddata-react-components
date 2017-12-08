@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
+import { screenshotWrap } from '@gooddata/test-storybook';
 
 import { AttributeFilter } from '../src/components/filters/AttributeFilter/AttributeFilter';
 import '../styles/scss/attributeFilter.scss';
@@ -21,13 +22,15 @@ const attributeFilterWithIdentifier = {
 
 storiesOf('AttributeFilter', module)
     .add('with uri', () => (
-        <div style={{ minHeight: 500 }}>
-            <AttributeFilter
-                {...attributeFilterWithUri}
-            />
-            <span style={{ display: 'inline-block', width: 208 }} />
-            <AttributeFilter
-                {...attributeFilterWithIdentifier}
-            />
-        </div>
+        screenshotWrap(
+            <div style={{ minHeight: 500 }}>
+                <AttributeFilter
+                    {...attributeFilterWithUri}
+                />
+                <span style={{ display: 'inline-block', width: 208 }} />
+                <AttributeFilter
+                    {...attributeFilterWithIdentifier}
+                />
+            </div>
+        )
     ));
