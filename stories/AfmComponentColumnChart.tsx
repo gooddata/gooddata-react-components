@@ -34,4 +34,29 @@ storiesOf('AFM components - ColumnChart', module)
                 />
             </div>
         )
-    ));
+    ))
+    .add('chart.reflow()', () => {
+        let reflowTrigger: Function;
+        const getReflowTrigger = (fnc: Function) => { reflowTrigger = fnc; };
+        const reflow = () => { reflowTrigger(); };
+
+        let outerDiv: any;
+        const resizeToggle = () => {
+            outerDiv.style.width = (outerDiv.style.width === '500px') ? '100%' : '500px';
+        };
+
+        return (
+            <div>
+                <button onClick={reflow}>call reflowTrigger()</button>
+                <button onClick={resizeToggle}>toggle size</button>
+                <div style={{ width: '100%', height: '500px' }} ref={(o) => { outerDiv = o; }}>
+                    <ColumnChart
+                        projectId="storybook"
+                        afm={AFM_ONE_MEASURE_ONE_ATTRIBUTE}
+                        config={{ colors: CUSTOM_COLORS, getReflowTrigger }}
+                        onError={onErrorHandler}
+                    />
+                </div>
+            </div>
+        );
+    });
