@@ -36,6 +36,7 @@ export interface IChartConfig {
         series?: number,
         categories?: number
     };
+    getReflowTrigger?: (reflowTrigger: Function) => void;
 }
 
 export interface ICommonChartProps extends IEvents {

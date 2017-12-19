@@ -182,4 +182,29 @@ storiesOf('Visualization', module)
                 <DynamicVisualization />
             </div>
         )
-    ));
+    ))
+    .add('chart.reflow()', () => {
+        let reflowTrigger: Function;
+        const getReflowTrigger = (fnc: Function) => { reflowTrigger = fnc; };
+        const reflow = () => { reflowTrigger(); };
+
+        let outerDiv: any;
+        const resizeToggle = () => {
+            outerDiv.style.width = (outerDiv.style.width === '500px') ? '100%' : '500px';
+        };
+
+        return (
+            <div>
+                <button onClick={reflow}>call reflowTrigger()</button>
+                <button onClick={resizeToggle}>toggle size</button>
+                <div style={{ width: '100%', height: '500px' }} ref={(o) => { outerDiv = o; }}>
+                    <Visualization
+                        projectId="myproject"
+                        uri={'/gdc/md/myproject/obj/1002'}
+                        onError={onErrorHandler}
+                        config={{ getReflowTrigger }}
+                    />
+                </div>
+            </div>
+        );
+    });
