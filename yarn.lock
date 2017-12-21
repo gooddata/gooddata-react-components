@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@gooddata/data-layer@^5.0.3":
-  version "5.0.4"
-  resolved "https://registry.yarnpkg.com/@gooddata/data-layer/-/data-layer-5.0.4.tgz#b166c4ef82a9ff3049094ea6b23dd1bf8583e580"
+"@gooddata/data-layer@5.0.4-pbenes-visualization-object-2018-02-13T09-22-23-894Z":
+  version "5.0.4-pbenes-visualization-object-2018-02-13T09-22-23-894Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/data-layer/-/data-layer-5.0.4-pbenes-visualization-object-2018-02-13T09-22-23-894Z.tgz#70b093c313cd7846b4e7ca2b3f53b393aabcf606"
   dependencies:
     json-stable-stringify "^1.0.1"
     lodash "^4.17.4"
@@ -36,9 +36,9 @@
     react-textarea-autosize "4.0.5"
     rxjs "5.4.3"
 
-"@gooddata/goodstrap@^53.0.1":
-  version "53.1.2"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-53.1.2.tgz#e4c93f4b82662af1dd7326b14b49c4d1afea2372"
+"@gooddata/goodstrap@53.2.0-pbenes-visualization-object-2018-02-13T09-24-37-497Z":
+  version "53.2.0-pbenes-visualization-object-2018-02-13T09-24-37-497Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-53.2.0-pbenes-visualization-object-2018-02-13T09-24-37-497Z.tgz#5d43ec3a6d19615ba7b7e5ad36c850b3f63c3e76"
   dependencies:
     "@gooddata/js-utils" "0.7.1"
     classnames "2.2.5"
@@ -52,7 +52,7 @@
     lodash "4.17.4"
     moment "2.18.1"
     moment-timezone "0.5.11"
-    react-day-picker "6.2.1"
+    react-day-picker "7.0.7"
     react-dnd "2.1.4"
     react-document-title "2.0.3"
     react-intl "2.2.3"
@@ -97,12 +97,13 @@
     moment "2.17.1"
     moment-timezone "0.5.11"
 
-"@gooddata/mock-js@0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@gooddata/mock-js/-/mock-js-0.3.1.tgz#5ac85e93dce70cc2786e91c08a742381388ad672"
+"@gooddata/mock-js@0.3.1-pbenes-visualization-object-2018-02-13T09-27-08-127Z":
+  version "0.3.1-pbenes-visualization-object-2018-02-13T09-27-08-127Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/mock-js/-/mock-js-0.3.1-pbenes-visualization-object-2018-02-13T09-27-08-127Z.tgz#068972bc62bfc13bb314a5f13732a27f74a5db49"
   dependencies:
-    "@gooddata/typings" "0.0.5"
+    "@gooddata/typings" "0.0.6-pbenes-visualization-object-2018-02-13T09-18-00-042Z"
     "@types/seedrandom" "2.4.27"
+    "@types/uuid" "3.4.3"
     body-parser "1.17.1"
     es6-promise "4.1.0"
     express "4.15.2"
@@ -111,6 +112,7 @@
     lodash "4.17.4"
     moment "2.20.0"
     seedrandom "2.4.3"
+    uuid "3.1.0"
 
 "@gooddata/numberjs@3.0.0":
   version "3.0.0"
@@ -132,17 +134,9 @@
     lodash "4.17.4"
     node-glob "1.2.0"
 
-"@gooddata/typings@0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@gooddata/typings/-/typings-0.0.4.tgz#cc2a625010a15ee2dbe698caaa35b518dd33f1fd"
-
-"@gooddata/typings@0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@gooddata/typings/-/typings-0.0.5.tgz#a9335c2f0abb1e14edaa53705f1d9ef7514dea88"
-
-"@gooddata/typings@0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@gooddata/typings/-/typings-0.0.6.tgz#2fbad0e5b3f26821b7a03701521d61573ef02309"
+"@gooddata/typings@0.0.6-pbenes-visualization-object-2018-02-13T09-18-00-042Z":
+  version "0.0.6-pbenes-visualization-object-2018-02-13T09-18-00-042Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/typings/-/typings-0.0.6-pbenes-visualization-object-2018-02-13T09-18-00-042Z.tgz#8ffbdcc53694fc806284197d7d036ef45c58849c"
 
 "@storybook/addon-actions@3.2.18", "@storybook/addon-actions@^3.2.6":
   version "3.2.18"
@@ -343,13 +337,13 @@
   version "0.3.29"
   resolved "https://registry.yarnpkg.com/@types/mkdirp/-/mkdirp-0.3.29.tgz#7f2ad7ec55f914482fc9b1ec4bb1ae6028d46066"
 
+"@types/node@*", "@types/node@7.0.8":
+  version "7.0.8"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.8.tgz#25e4dd804b630c916ae671233e6d71f6ce18124a"
+
 "@types/node@6.0.66":
   version "6.0.66"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.66.tgz#5680b74a6135d33d4c00447e7c3dc691a4601625"
-
-"@types/node@7.0.8":
-  version "7.0.8"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.8.tgz#25e4dd804b630c916ae671233e6d71f6ce18124a"
 
 "@types/prop-types@15.5.2":
   version "15.5.2"
@@ -393,6 +387,12 @@
   dependencies:
     "@types/react" "*"
     "@types/webpack-env" "*"
+
+"@types/uuid@3.4.3":
+  version "3.4.3"
+  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-3.4.3.tgz#121ace265f5569ce40f4f6d0ff78a338c732a754"
+  dependencies:
+    "@types/node" "*"
 
 "@types/webpack-env@*":
   version "1.13.3"
@@ -3810,11 +3810,11 @@ globule@^1.0.0:
     lodash "~4.17.4"
     minimatch "~3.0.2"
 
-gooddata@^4.5.1:
-  version "4.5.1"
-  resolved "https://registry.yarnpkg.com/gooddata/-/gooddata-4.5.1.tgz#3cb018496e1d6e2d9f613680822471cd679030b4"
+gooddata@4.5.0-pbenes-visualization-object-2018-02-13T09-20-14-375Z:
+  version "4.5.0-pbenes-visualization-object-2018-02-13T09-20-14-375Z"
+  resolved "https://registry.yarnpkg.com/gooddata/-/gooddata-4.5.0-pbenes-visualization-object-2018-02-13T09-20-14-375Z.tgz#0c03e72bbbfc1b7ed00edfdd2f7c2266bbea9573"
   dependencies:
-    "@gooddata/typings" "0.0.4"
+    "@gooddata/typings" "0.0.6-pbenes-visualization-object-2018-02-13T09-18-00-042Z"
     es6-promise "3.0.2"
     fetch-cookie "0.4.0"
     invariant "2.2.2"
@@ -3980,7 +3980,7 @@ header-case@^1.0.0:
     upper-case "^1.1.3"
 
 highcharts@4.2.5:
-  version "4.2.5"
+  version v4.2.5
   resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-4.2.5.tgz#f18bbda5ca326fdff7d816c94814fe8509cec969"
 
 hmac-drbg@^1.0.0:
@@ -5495,11 +5495,11 @@ moment@2.17.1:
   version "2.17.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.17.1.tgz#fed9506063f36b10f066c8b59a144d7faebe1d82"
 
-moment@2.18.1:
+moment@2.18.1, "moment@>= 2.6.0":
   version "2.18.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.18.1.tgz#c36193dd3ce1c2eed2adb7c802dbbc77a81b1c0f"
 
-moment@2.20.0, "moment@>= 2.6.0":
+moment@2.20.0:
   version "2.20.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.20.0.tgz#53396358994dd3a551e966a66af715ecb6c30ad0"
 
@@ -6446,17 +6446,9 @@ postcss@^5.0.10, postcss@^5.0.11, postcss@^5.0.12, postcss@^5.0.13, postcss@^5.0
     source-map "^0.5.6"
     supports-color "^3.2.3"
 
-postcss@^6.0.0, postcss@^6.0.1, postcss@^6.0.15:
+postcss@^6.0.0, postcss@^6.0.1, postcss@^6.0.14, postcss@^6.0.15:
   version "6.0.16"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-6.0.16.tgz#112e2fe2a6d2109be0957687243170ea5589e146"
-  dependencies:
-    chalk "^2.3.0"
-    source-map "^0.6.1"
-    supports-color "^5.1.0"
-
-postcss@^6.0.14:
-  version "6.0.17"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-6.0.17.tgz#e259a051ca513f81e9afd0c21f7f82eda50c65c5"
   dependencies:
     chalk "^2.3.0"
     source-map "^0.6.1"
@@ -6665,9 +6657,9 @@ react-day-picker@3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-3.1.1.tgz#7fa385dc7b424cee3eb09696e1918e6b18abafdb"
 
-react-day-picker@6.2.1:
-  version "6.2.1"
-  resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-6.2.1.tgz#fc22b809db792386d1468d3f46d725ad91e04db9"
+react-day-picker@7.0.7:
+  version "7.0.7"
+  resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-7.0.7.tgz#4af30404ebb19125ff5f9f2d62e6204b4e68f119"
   dependencies:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
@@ -8164,13 +8156,13 @@ utils-merge@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
 
+uuid@3.1.0, uuid@^3.0.0, uuid@^3.0.1, uuid@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.1.0.tgz#3dd3d3e790abc24d7b0d3a034ffababe28ebbc04"
+
 uuid@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-2.0.3.tgz#67e2e863797215530dff318e5bf9dcebfd47b21a"
-
-uuid@^3.0.0, uuid@^3.0.1, uuid@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.1.0.tgz#3dd3d3e790abc24d7b0d3a034ffababe28ebbc04"
 
 validate-npm-package-license@^3.0.1:
   version "3.0.1"

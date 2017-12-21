@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as gooddata from 'gooddata';
 
-import { VisualizationObject } from '@gooddata/data-layer';
+import { VisualizationObject } from '@gooddata/typings';
 
 export interface IFetchProps {
     uri: string;
