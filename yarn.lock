@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@gooddata/data-layer@5.0.0-alpha3":
-  version "5.0.0-alpha3"
-  resolved "https://registry.yarnpkg.com/@gooddata/data-layer/-/data-layer-5.0.0-alpha3.tgz#92c530787827d19f135c22113f5ed46949329d27"
+"@gooddata/data-layer@5.0.0-vaclavbohac-date-filter-dup-2018-01-08T16-19-40-262Z":
+  version "5.0.0-vaclavbohac-date-filter-dup-2018-01-08T16-19-40-262Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/data-layer/-/data-layer-5.0.0-vaclavbohac-date-filter-dup-2018-01-08T16-19-40-262Z.tgz#3be95896e3e00421b55bd565fc4c4ac5d939d9cc"
   dependencies:
     json-stable-stringify "1.0.1"
     lodash "4.17.4"
@@ -91,9 +91,9 @@
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@gooddata/numberjs/-/numberjs-3.1.0.tgz#0e200a833296815ff040a073adf015b7699ce8c9"
 
-"@gooddata/test-storybook@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/test-storybook/-/test-storybook-1.0.0.tgz#fe406727773b54fecfe2c3b2cbc74c674d975364"
+"@gooddata/test-storybook@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@gooddata/test-storybook/-/test-storybook-1.0.1.tgz#b21767db7b165b9636b8fd9d4a30bb9bc181f496"
   dependencies:
     acorn "5.1.1"
     acorn-jsx "4.0.1"
@@ -3642,7 +3642,7 @@ hawk@~6.0.2:
     sntp "2.x.x"
 
 highcharts@4.2.5:
-  version v4.2.5
+  version "4.2.5"
   resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-4.2.5.tgz#f18bbda5ca326fdff7d816c94814fe8509cec969"
 
 hmac-drbg@^1.0.0:
