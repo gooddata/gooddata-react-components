@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { IntlProvider, addLocaleData } from 'react-intl';
 
-// check if this is the right place to register all supported languages
 import * as deLocaleData from 'react-intl/locale-data/de';
 import * as esLocaleData from 'react-intl/locale-data/es';
 import * as enLocaleData from 'react-intl/locale-data/en';

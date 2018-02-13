@@ -28,7 +28,7 @@ import { getVisualizationOptions } from '../../helpers/options';
 import { convertErrors, checkEmptyResult } from '../../helpers/errorHandlers';
 import { ISubject } from '../../helpers/async';
 import { IIndexedTotalItem } from '../../interfaces/Totals';
-import { convertToIndexedTotals, convertToTotals } from '../../helpers/TotalsConvertor';
+import { convertToIndexedTotals, convertToTotals } from '../../helpers/TotalsConverter';
 
 export { Requireable };
 

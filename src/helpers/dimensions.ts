@@ -47,7 +47,7 @@ function getTableDimensions(mdObject: VisualizationObject.IVisualizationObjectCo
     }];
 }
 
-function getLocalIdentifierFromAttribute(attribute: VisualizationObject.IVisualizationAttribute) {
+function getLocalIdentifierFromAttribute(attribute: VisualizationObject.IVisualizationAttribute): string {
     return attribute.visualizationAttribute.localIdentifier;
 }
 
