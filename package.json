@@ -13,9 +13,9 @@
     "LICENSE"
   ],
   "devDependencies": {
-    "@gooddata/mock-js": "0.3.1-pbenes-visualization-object-2018-02-13T09-27-08-127Z",
+    "@gooddata/mock-js": "0.3.1-pbenes-visualization-object-2018-02-14T08-22-43-979Z",
     "@gooddata/test-storybook": "1.1.0",
-    "@gooddata/typings": "0.0.6-pbenes-visualization-object-2018-02-13T09-18-00-042Z",
+    "@gooddata/typings": "0.0.6-pbenes-visualization-object-2018-02-14T08-13-59-519Z",
     "@storybook/addon-actions": "3.2.18",
     "@storybook/addon-options": "3.2.6",
     "@storybook/react": "3.2.6",
@@ -46,13 +46,13 @@
     "typescript": "2.3.3"
   },
   "dependencies": {
-    "@gooddata/data-layer": "5.0.4-pbenes-visualization-object-2018-02-13T09-22-23-894Z",
-    "@gooddata/goodstrap": "53.2.0-pbenes-visualization-object-2018-02-13T09-24-37-497Z",
+    "@gooddata/data-layer": "5.0.4-pbenes-visualization-object-2018-02-14T08-18-21-551Z",
+    "@gooddata/goodstrap": "53.2.0-pbenes-visualization-object-2018-02-14T08-20-35-805Z",
     "@gooddata/indigo-visualizations": "^1.1.11",
     "@gooddata/js-utils": "^0.9.0",
     "@gooddata/numberjs": "^3.1.2",
     "classnames": "^2.2.5",
-    "gooddata": "4.5.0-pbenes-visualization-object-2018-02-13T09-20-14-375Z",
+    "gooddata": "4.5.0-pbenes-visualization-object-2018-02-14T08-16-10-962Z",
     "lodash": "^4.17.4",
     "prop-types": "^15.6.0",
     "react-intl": "^2.2.3",
