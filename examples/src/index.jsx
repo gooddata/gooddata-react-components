@@ -35,7 +35,7 @@ export class App extends React.Component {
             .then((isLoggedIn) => {
                 this.setState({ isLoggedIn, errorMessage: null });
                 if (!isLoggedIn && typeof window !== 'undefined') {
-                    window.location.href = '/account.html';
+                    window.location.href = `/account.html?lastUrl=${window.location.pathname}`;
                 }
             })
             .catch((errorMessage) => {
