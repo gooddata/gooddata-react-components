@@ -54,6 +54,7 @@
     "@gooddata/goodstrap": "53.1.2",
     "@gooddata/react-components": "3.0.10",
     "gooddata": "4.5.1",
+    "node-sass": "^4.7.2",
     "prop-types": "15.6.0",
     "react": "15.3.2",
     "react-code-toggle": "0.1.1",
