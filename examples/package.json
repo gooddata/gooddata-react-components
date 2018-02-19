@@ -66,6 +66,7 @@
     "prop-types": "15.6.0",
     "react": "15.3.2",
     "react-code-toggle": "0.1.1",
+    "react-datepicker": "^1.1.0",
     "react-dom": "15.3.2",
     "react-helmet": "5.2.0",
     "react-router-dom": "4.2.2",

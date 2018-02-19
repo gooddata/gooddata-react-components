@@ -10,6 +10,7 @@ export const franchiseFeesInitialFranchiseFeeIdentifier = get(catalog, 'measures
 export const franchiseFeesIdentifierOngoingRoyalty = get(catalog, 'measures[$ Franchise Fees (Ongoing Royalty)].identifier');
 
 export const monthDateIdentifier = get(catalog, 'dateDataSets[Date (Date)].attributes[Month (Date)].displayForms[Short (Jan) (Date)].identifier');
+export const dateDatasetIdentifier = get(catalog, 'dateDataSets[Date (Date)].identifier');
 
 export const locationResortIdentifier = get(catalog, 'attributes[Location Resort].defaultDisplayForm.identifier');
 export const employeeNameIdentifier = get(catalog, 'attributes[Employee Name].defaultDisplayForm.identifier');

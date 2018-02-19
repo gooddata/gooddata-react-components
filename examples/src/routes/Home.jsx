@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { version } from '../../package.json';
+import { key, catalog } from '../utils/catalog';
 
 import ExampleWithSource from '../utils/ExampleWithSource';
 
@@ -17,6 +18,9 @@ export const Home = () => (<div>
     <h1>GoodData examples for React Components v{version}</h1>
 
     <p>You can find <a href="https://github.com/gooddata/gooddata-react-components">GoodData React Component</a> examples here.</p>
+
+    <h1>{key}</h1>
+    <pre>{JSON.stringify(catalog, null, '  ')}</pre>
 
     <h2>KPI</h2>
     <ExampleWithSource for={KpiExample} source={KpiExampleSRC} />

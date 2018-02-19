@@ -4,6 +4,7 @@ import Home from './Home';
 import Kpi from './Kpi';
 import Visualization from './Visualization';
 import Execute from './Execute';
+import DatePicker from './DatePicker';
 
 export const routes = [
     { path: '/', title: 'Examples', Component: Home, exact: true },
@@ -11,7 +12,8 @@ export const routes = [
     { path: '/kpi', title: 'KPIs', Component: Kpi },
     { path: '/visualization', title: 'Visualization', Component: Visualization },
     { path: '/attribute-filter-components', title: 'Attribute Filter Components', Component: AttributeFilter },
-    { path: '/execute', title: 'Execute', Component: Execute }
+    { path: '/execute', title: 'Execute', Component: Execute },
+    { path: '/date-picker', title: 'Date Picker', Component: DatePicker }
 ];
 
 export const components = routes.map(r => r.component);
