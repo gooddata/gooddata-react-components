@@ -9,8 +9,8 @@ import {
 
 
 import '@gooddata/goodstrap/lib/theme-indigo.scss';
-import Header from './components/Header';
-import LoginOverlay from './components/LoginOverlay';
+import Header from './components/utils/Header';
+import LoginOverlay from './components/utils/LoginOverlay';
 
 import { routes, navigation } from './routes/_list';
 
@@ -70,11 +70,12 @@ export class App extends React.Component {
                         logoutAction={this.logout}
                     />
                     <main style={{ padding: 20 }}>
-                        {routes.map(({ path, Component, exact }) => (<Route
+                        {routes.map(({ path, Component, data, exact }) => (<Route
                             key={path}
                             exact={exact}
                             path={path}
                             component={Component}
+                            data={data}
                         />))}
                     </main>
                     <LoginOverlay onLogin={this.onUserLogin} isLoggedIn={isLoggedIn} />

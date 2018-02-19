@@ -7,8 +7,8 @@ import '@gooddata/react-components/styles/css/main.css';
 import 'react-datepicker/dist/react-datepicker.css';
 
 
-import { Loading } from './Loading';
-import { Error } from './Error';
+import { Loading } from './utils/Loading';
+import { Error } from './utils/Error';
 import { totalSalesIdentifier, monthDateIdentifier, dateDatasetIdentifier, projectId } from '../utils/fixtures';
 
 const { ColumnChart } = AfmComponents;

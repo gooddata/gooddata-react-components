@@ -1,5 +1,5 @@
 import React from 'react';
-import ExampleWithSource from '../utils/ExampleWithSource';
+import ExampleWithSource from '../components/utils/ExampleWithSource';
 
 import DatePickerExample from '../components/DatePickerExample';
 import DatePickerExampleSRC from '!raw-loader!../components/DatePickerExample'; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first

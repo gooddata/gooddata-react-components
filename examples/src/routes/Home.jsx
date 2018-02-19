@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { version } from '../../package.json';
 import { key, catalog } from '../utils/catalog';
 
-import ExampleWithSource from '../utils/ExampleWithSource';
+import ExampleWithSource from '../components/utils/ExampleWithSource';
 
 import KpiExample from '../components/KpiExample';
 import VisualizationTable from '../components/VisualizationTableExample';

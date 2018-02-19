@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { NavLink, Link, withRouter } from 'react-router-dom';
 
-const favicon = require('../static/favicon.ico');
+const favicon = require('../../static/favicon.ico');
 
 class Header extends React.Component {
     render() {

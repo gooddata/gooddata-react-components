@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ExampleWithSource from '../utils/ExampleWithSource';
+import ExampleWithSource from '../components/utils/ExampleWithSource';
 
 import VisualizationColumnChart from '../components/VisualizationColumnChartExample';
 import VisualizationTable from '../components/VisualizationTableExample';

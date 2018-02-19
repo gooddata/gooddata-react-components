@@ -1,5 +1,5 @@
 import React from 'react';
-import ExampleWithSource from '../utils/ExampleWithSource';
+import ExampleWithSource from '../components/utils/ExampleWithSource';
 
 import BarChartExample from '../components/BarChartExample';
 import ColumnChartExample from '../components/ColumnChartExample';
@@ -24,7 +24,7 @@ export const BasicComponents = () => (<div>
     <h2>Column chart</h2>
     <ExampleWithSource for={ColumnChartExample} source={ColumnChartExampleSRC} />
 
-    <h2>Line chart</h2>
+    <h2>Line chart with custom colors</h2>
     <ExampleWithSource for={LineChartExample} source={LineChartExampleSRC} />
 
     <h2>Pie chart</h2>

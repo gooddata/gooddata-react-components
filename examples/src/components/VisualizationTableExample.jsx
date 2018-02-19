@@ -3,8 +3,8 @@ import '@gooddata/react-components/styles/css/main.css';
 import { Visualization } from '@gooddata/react-components';
 
 import { projectId, tableVisualizationIdentifier } from '../utils/fixtures';
-import { Loading } from './Loading';
-import { Error } from './Error';
+import { Loading } from './utils/Loading';
+import { Error } from './utils/Error';
 
 export class VisualizationTable extends Component {
     render() {

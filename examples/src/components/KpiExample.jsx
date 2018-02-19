@@ -3,8 +3,8 @@ import { Kpi } from '@gooddata/react-components';
 import '@gooddata/react-components/styles/css/main.css';
 
 import { totalSalesIdentifier, projectId } from '../utils/fixtures';
-import { Loading } from './Loading';
-import { Error } from './Error';
+import { Loading } from './utils/Loading';
+import { Error } from './utils/Error';
 
 export class KpiExample extends Component {
     render() {

@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import { Execute } from '@gooddata/react-components';
 
 import { totalSalesIdentifier, projectId } from '../utils/fixtures';
-import { Loading } from './Loading';
-import { Error } from './Error';
+import { Loading } from './utils/Loading';
+import { Error } from './utils/Error';
 
 export class ExecuteExample extends Component {
     constructor(props) {
