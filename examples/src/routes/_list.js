@@ -6,9 +6,11 @@ import Kpi from './Kpi';
 import Visualization from './Visualization';
 import Execute from './Execute';
 import DatePicker from './DatePicker';
+import ResizableChart from './ResizableChart';
 
 export const advancedUseCasesRoutes = [
-    { path: '/advanced-use-cases/date-picker', title: 'Date Picker', Component: DatePicker }
+    { path: '/advanced-use-cases/date-picker', title: 'Date Picker', Component: DatePicker },
+    { path: '/advanced-use-cases/resizable-chart', title: 'Resizable Chart', Component: ResizableChart }
 ];
 
 export const mainRoutes = [
