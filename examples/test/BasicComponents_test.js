@@ -34,7 +34,7 @@ test('Line chart should render', async (t) => {
         .expect(chart.textContent);
 });
 
-test.only('Line chart should have custom colors', async (t) => {
+test('Line chart should have custom colors', async (t) => {
     const legendIcons = Selector('.s-line-chart .series-icon');
     const CUSTOM_COLORS = [
         'rgb(195, 49, 73)',

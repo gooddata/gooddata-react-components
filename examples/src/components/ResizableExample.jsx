@@ -8,6 +8,16 @@ import { Error } from './utils/Error';
 import { projectId, totalSalesIdentifier, locationResortIdentifier } from '../utils/fixtures';
 
 export class ResizableExample extends Component {
+    constructor() {
+        super();
+        this.state = { size: [500, 400] };
+    }
+
+    resize(size) {
+        this.setState({ size });
+    }
+
+
     render() {
         const afm = {
             measures: [
@@ -34,26 +44,30 @@ export class ResizableExample extends Component {
                 }
             ]
         };
+        const [width, height] = this.state.size;
 
         return (
-            <Measure bounds>
-                {({ measureRef, contentRect }) => (
-                    <div
-                        ref={measureRef}
-                        style={{ width: 600, height: 300, resize: 'both', overflow: 'auto', border: '1px silver solid', padding: '0 5px 5px 0' }}
-                        className="s-responsive-vis"
-                    >
-                        <AfmComponents.BarChart
-                            width={contentRect.bounds.width}
-                            height={contentRect.bounds.height}
-                            projectId={projectId}
-                            afm={afm}
-                            LoadingComponent={Loading}
-                            ErrorComponent={Error}
-                        />
-                    </div>
-                )}
-            </Measure>
+            <div>
+                <button onClick={() => this.setState({ size: [500, 400] })}>500x400</button>
+                <button onClick={() => this.setState({ size: [800, 200] })} className="s-resize-800x200">800x200</button>
+
+                <div style={{ width, height }} className="s-resizable-vis">
+                    <Measure bounds>
+                        {({ measureRef, contentRect }) => (
+                            <div ref={measureRef} style={{ width: '100%', height: '100%' }}>
+                                <AfmComponents.BarChart
+                                    width={contentRect.bounds.width}
+                                    height={contentRect.bounds.height}
+                                    projectId={projectId}
+                                    afm={afm}
+                                    LoadingComponent={Loading}
+                                    ErrorComponent={Error}
+                                />
+                            </div>
+                        )}
+                    </Measure>
+                </div>
+            </div>
         );
     }
 }
