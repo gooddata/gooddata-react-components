@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { AttributeElements } from '@gooddata/react-components';
+import { EmployeeItem } from '../components/GlobalFiltersComponents/EmployeeItem';
 import { employeeNameIdentifier, projectId } from '../utils/fixtures';
 
 
@@ -10,10 +11,16 @@ export default class GlobalFilters extends React.Component {
         this.state = {
             selectedEmployeeIndex: 0
         }
+
+        this.selectEmployee = this.selectEmployee.bind(this);
     }
 
-    selectEmployee() {
-        
+    selectEmployee(index) {
+        console.log('selected index:', index);
+
+        this.setState({
+            selectedEmployeeIndex: index
+        });
     }
 
     render() {
@@ -33,18 +40,39 @@ export default class GlobalFilters extends React.Component {
                     }
 
                     .sidebar {
-                        min-width: 200px;
-                        padding: 5px;
-                        background: #000;
+                        padding: 10px;
                     }
 
                     .content {
-                        width: 100%;
-                        background: gray;
                     }
 
-                    .selected {
-                        background: white;
+
+                    ul {
+                        list-style-type: none;
+                        padding: 0;
+                    }
+
+                    .sidebar :global(.employee-item) {
+                        padding: 10px;
+                        margin: 0 -10px;
+                        border-right-width: 1px;
+                        border-right-style: solid;
+                        border-right-color: #dde4eb;
+                        color: #6d7680;
+                        transition: border-right-color 200ms ease-out, color 200ms ease-out;
+                        cursor: pointer;
+                    }
+
+                    .sidebar :global(.employee-item:hover) {
+                        border-right-color: #6d7680;
+                        border-right-width: 3px;
+                        color: #000000;
+                    }
+
+                    .sidebar :global(.employee-item.selected-employee-item) {
+                        border-right-color: #14b2e2;
+                        border-right-width: 3px;
+                        color: #000000;
                     }
                 `}</style>
                 <div className="sidebar">
@@ -57,12 +85,13 @@ export default class GlobalFilters extends React.Component {
                                 <ul>
 
                                         {validElements ? validElements.items.map((item, index) => (
-                                            <li
-                                                key={item.element.uri}
+                                            <EmployeeItem
+                                                key={index}
+                                                text={item.element.title}
                                                 uri={item.element.uri}
-                                                className={selectedEmployeeIndex === index ? 'selected' : ''}
-                                                onClick={this.selectEmployee}
-                                            >{item.element.title}</li>
+                                                index={index}
+                                                isSelected={selectedEmployeeIndex === index}
+                                                onClick={this.selectEmployee} />
                                         )) : null}
                                 </ul>
                             );
