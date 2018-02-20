@@ -2,106 +2,90 @@ import * as React from 'react';
 import { AttributeElements } from '@gooddata/react-components';
 import { EmployeeItem } from '../components/GlobalFiltersComponents/EmployeeItem';
 import { employeeNameIdentifier, projectId } from '../utils/fixtures';
+import { Layout } from '../components/utils/Layout';
+import { Loading } from '../components/utils/Loading';
+import { Error } from '../components/utils/Error';
 
-
-export default class GlobalFilters extends React.Component {
+export class GlobalFiltersXXX extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            selectedEmployeeIndex: 0
-        }
+            selectedEmployeeUri: props.validElements.items[0].element.uri
+        };
 
         this.selectEmployee = this.selectEmployee.bind(this);
+        this.setDefaultSelection = this.setDefaultSelection.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.validElements !== this.props.validElements) {
+            this.setDefaultSelection(nextProps);
+        }
+    }
+
+    setDefaultSelection(props) {
+        this.setState({
+            selectedEmployeeUri: props.validElements.items[0].element.uri
+        });
     }
 
     selectEmployee(index) {
         console.log('selected index:', index);
 
         this.setState({
-            selectedEmployeeIndex: index
+            selectedEmployeeUri: index
         });
     }
 
     render() {
-        const { selectedEmployeeIndex } = this.state;
-
-        return (
-            <div className="wrapper">
-                { /*language=CSS*/ }
-                <style jsx>{`
-                    .wrapper {
-                        display: grid;
-                        grid-template-columns: 200px auto;
-                        grid-template-rows: auto;
-                        justify-content: stretch;
-                        justify-items: stretch;
-                        flex: 1;
-                    }
-
-                    .sidebar {
-                        padding: 10px;
-                    }
-
-                    .content {
-                    }
+        const { selectedEmployeeUri } = this.state;
+        const { validElements } = this.props;
 
 
-                    ul {
-                        list-style-type: none;
-                        padding: 0;
-                    }
+        const sidebar = (<div>
+            <style jsx>{`
+                ul {
+                    list-style-type: none;
+                    padding: 0;
+                    margin: 0 0 20px 0;
+                }
+            `}</style>
+            <ul>
+                {validElements ? validElements.items.map(item => (
+                    <EmployeeItem
+                        key={item.element.uri}
+                        label={item.element.title}
+                        uri={item.element.uri}
+                        isSelected={selectedEmployeeUri === item.element.uri}
+                        onClick={this.selectEmployee}
+                    />
+                )) : null}
+            </ul>
+        </div>);
 
-                    .sidebar :global(.employee-item) {
-                        padding: 10px;
-                        margin: 0 -10px;
-                        border-right-width: 1px;
-                        border-right-style: solid;
-                        border-right-color: #dde4eb;
-                        color: #6d7680;
-                        transition: border-right-color 200ms ease-out, color 200ms ease-out;
-                        cursor: pointer;
-                    }
-
-                    .sidebar :global(.employee-item:hover) {
-                        border-right-color: #6d7680;
-                        border-right-width: 3px;
-                        color: #000000;
-                    }
-
-                    .sidebar :global(.employee-item.selected-employee-item) {
-                        border-right-color: #14b2e2;
-                        border-right-width: 3px;
-                        color: #000000;
-                    }
-                `}</style>
-                <div className="sidebar">
-                    <AttributeElements identifier={employeeNameIdentifier} projectId={projectId} options={{ limit: 20 }}>
-                        {({ validElements, error }) => {
-                            if (error) {
-                                return <div>{error}</div>;
-                            }
-                            return (
-                                <ul>
-
-                                        {validElements ? validElements.items.map((item, index) => (
-                                            <EmployeeItem
-                                                key={index}
-                                                text={item.element.title}
-                                                uri={item.element.uri}
-                                                index={index}
-                                                isSelected={selectedEmployeeIndex === index}
-                                                onClick={this.selectEmployee} />
-                                        )) : null}
-                                </ul>
-                            );
-                        }}
-                    </AttributeElements>
-                </div>
-                <div className="content">
-
-                </div>
-            </div>
-        )
+        return (<Layout sidebar={sidebar} >
+            <h1>Profile of {validElements.items.find(item => item.element.uri === selectedEmployeeUri).element.title}</h1>
+        </Layout>);
     }
 }
+
+export const GlobalFilters = () => (
+    <AttributeElements identifier={employeeNameIdentifier} projectId={projectId} options={{ limit: 20 }}>
+        {({ validElements, error, isLoading }) => {
+            console.log('AttributeElements');
+            console.log('validElements', validElements);
+            console.log('error', error);
+            console.log('isLoading', isLoading);
+            if (error) {
+                return <Error error={{ status: '400', message: error }} />;
+            }
+            if (isLoading) {
+                return <Loading />;
+            }
+            return <GlobalFiltersXXX validElements={validElements} />;
+        }}
+    </AttributeElements>
+);
+
+export default GlobalFilters;

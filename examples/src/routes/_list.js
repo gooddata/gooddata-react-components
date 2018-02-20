@@ -8,11 +8,13 @@ import Visualization from './Visualization';
 import Execute from './Execute';
 import DatePicker from './DatePicker';
 import ResizableChart from './ResizableChart';
+import DynamicMeasures from './DynamicMeasures';
 
 export const advancedUseCasesRoutes = [
     { path: '/advanced/date-picker', title: 'Date Picker', Component: DatePicker },
     { path: '/advanced/resizable', title: 'Resizable Chart', Component: ResizableChart },
-    { path: '/advanced/global-filters', title: 'Global Filters', Component: GlobalFilters}
+    { path: '/advanced/global-filters', title: 'Global Filters', Component: GlobalFilters },
+    { path: '/advanced/dynamic-measures', title: 'Dynamic Measures', Component: DynamicMeasures }
 ];
 
 const AdvancedUseCasesWithProps = props => AdvancedUseCases({ ...props, advancedUseCasesRoutes });

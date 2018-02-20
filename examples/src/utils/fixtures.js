@@ -18,3 +18,5 @@ export const employeeNameIdentifier = get(catalog, 'attributes[Employee Name].de
 export const tableVisualizationIdentifier = get(catalog, 'visualizations[Table report Labor Costs Vs Scheduled Costs].identifier');
 export const columnVisualizationIdentifier = get(catalog, 'visualizations[Sales over Time].identifier');
 export const franchiseFeesVisualizationIdentifier = get(catalog, 'visualizations[Franchise Fees].identifier');
+
+export const franchiseFeesTag = 'franchise_fees';

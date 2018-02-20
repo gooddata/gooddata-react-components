@@ -104,7 +104,7 @@ export class DatePickerExample extends Component {
                         from: from.format(dateFormat),
                         to: to.format(dateFormat)
                     }
-                },
+                }
             ]
         };
 
@@ -138,16 +138,16 @@ export class DatePickerExample extends Component {
                 </label>
                 <hr />
                 <div style={{ height: 300 }} className="s-date-picker-chart">
-                { error ? <Error error={ { status: "400", message: error} } /> : (
-                    <ColumnChart
-                    projectId={projectId}
-                    afm={afm}
-                    onLoadingChanged={this.onLoadingChanged}
-                    onError={this.onError}
-                    LoadingComponent={Loading}
-                    ErrorComponent={Error}
-                    />
-                ) }
+                    {error
+                        ? <Error error={{ status: '400', message: error }} />
+                        : (<ColumnChart
+                            projectId={projectId}
+                            afm={afm}
+                            onLoadingChanged={this.onLoadingChanged}
+                            onError={this.onError}
+                            LoadingComponent={Loading}
+                            ErrorComponent={Error}
+                        />)}
                 </div>
                 <hr />
             </div>
