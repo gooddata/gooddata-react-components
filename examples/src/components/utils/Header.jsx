@@ -21,6 +21,12 @@ class Header extends React.Component {
         ));
 
         return (<div className="page">
+            { /*language=CSS*/ }
+            <style jsx>{`
+                .gd-header {
+                    flex: 0;
+                }
+            `}</style>
             <Helmet>
                 <title>{title}</title>
                 <meta charSet="utf-8" />

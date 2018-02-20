@@ -63,7 +63,30 @@ export class App extends React.Component {
 
         return (
             <Router>
-                <div>
+                <div className="main-wrapper">
+                    { /*language=CSS*/ }
+                    <style jsx>{`
+                        :global(html, body, .root) {
+                            height: 100%;
+                        }
+
+                        :global(.main-wrapper) {
+                            display: flex;
+                            height: 100%;
+                            flex-direction: column;
+                            justify-content: flex-start;
+                            align-items: stretch;
+                        }
+
+                        main {
+                            flex: 1;
+                            overflow: auto;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: flex-start;
+                            align-items: stretch;
+                        }
+                    `}</style>
                     <Header
                         navigation={navigation}
                         isUserLoggedIn={isLoggedIn}
@@ -86,5 +109,6 @@ export class App extends React.Component {
 }
 
 const root = document.createElement('div');
+root.className = 'root';
 document.body.appendChild(root);
 ReactDOM.render(<App />, root);

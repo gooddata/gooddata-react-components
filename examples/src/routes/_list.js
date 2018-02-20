@@ -1,6 +1,7 @@
 import AdvancedUseCases from './AdvancedUseCases';
 import AttributeFilter from './AttributeFilter';
 import BasicComponents from './BasicComponents';
+import GlobalFilters from './GlobalFilters';
 import Home from './Home';
 import Kpi from './Kpi';
 import Visualization from './Visualization';
@@ -10,7 +11,8 @@ import ResizableChart from './ResizableChart';
 
 export const advancedUseCasesRoutes = [
     { path: '/advanced/date-picker', title: 'Date Picker', Component: DatePicker },
-    { path: '/advanced/resizable', title: 'Resizable Chart', Component: ResizableChart }
+    { path: '/advanced/resizable', title: 'Resizable Chart', Component: ResizableChart },
+    { path: '/advanced/global-filters', title: 'Global Filters', Component: GlobalFilters}
 ];
 
 const AdvancedUseCasesWithProps = props => AdvancedUseCases({ ...props, advancedUseCasesRoutes });

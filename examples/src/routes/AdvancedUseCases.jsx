@@ -5,7 +5,13 @@ import { Link } from 'react-router-dom';
 
 export const AdvacedUseCases = ({ advancedUseCasesRoutes, match, location: { pathname } }) => {
     return (
-        <div>
+        <div className="wrapper">
+            { /*language=CSS*/ }
+            <style jsx>{`
+                .wrapper {
+                    flex: 0;
+                }
+            `}</style>
             <div className="gd-tabs">
                 <Link to={match.path} className={`gd-tab${pathname === match.path ? ' is-active' : ''}`}>Overview</Link>
                 {advancedUseCasesRoutes.map(
