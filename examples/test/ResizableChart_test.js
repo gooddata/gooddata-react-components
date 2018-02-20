@@ -4,7 +4,7 @@ import { loginUsingGreyPages } from './utils/helpers';
 
 fixture('Resizable chart')
     .page(config.hostname)
-    .beforeEach(loginUsingGreyPages(`${config.hostname}/advanced-use-cases/resizable-chart`));
+    .beforeEach(loginUsingGreyPages(`${config.hostname}/advanced/resizable`));
 
 test('Resizable chart could be resized', async (t) => {
     const chart = Selector('.s-resizable-vis svg');

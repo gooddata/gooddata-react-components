@@ -9,9 +9,11 @@ import DatePicker from './DatePicker';
 import ResizableChart from './ResizableChart';
 
 export const advancedUseCasesRoutes = [
-    { path: '/advanced-use-cases/date-picker', title: 'Date Picker', Component: DatePicker },
-    { path: '/advanced-use-cases/resizable-chart', title: 'Resizable Chart', Component: ResizableChart }
+    { path: '/advanced/date-picker', title: 'Date Picker', Component: DatePicker },
+    { path: '/advanced/resizable', title: 'Resizable Chart', Component: ResizableChart }
 ];
+
+const AdvancedUseCasesWithProps = props => AdvancedUseCases({ ...props, advancedUseCasesRoutes });
 
 export const mainRoutes = [
     { path: '/', title: 'Examples', Component: Home, exact: true },
@@ -20,10 +22,7 @@ export const mainRoutes = [
     { path: '/visualization', title: 'Visualization', Component: Visualization },
     { path: '/attribute-filter-components', title: 'Attribute Filter Components', Component: AttributeFilter },
     { path: '/execute', title: 'Execute', Component: Execute },
-    { path: '/advanced-use-cases', title: 'Advanced Use Cases', Component: (props) => AdvancedUseCases({
-        ...props,
-        advancedUseCasesRoutes
-    })},
+    { path: '/advanced', title: 'Advanced Use Cases', Component: AdvancedUseCasesWithProps }
 ];
 
 export const routes = [
@@ -31,7 +30,7 @@ export const routes = [
     ...advancedUseCasesRoutes
 ];
 
-export const components = routes.map(r => r.component);
+const components = routes.map(r => r.component);
 
 export const navigation = mainRoutes.map(({ path, title }) => ({
     href: path,
