@@ -18,6 +18,7 @@ export class KpiExample extends Component {
                         vertical-align: bottom;
                         line-height: 1.2em;
                         font-weight: 700;
+                        width: 300px;
                     }
                 `}</style>
                 <Kpi

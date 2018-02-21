@@ -17,17 +17,17 @@ export const Visualization = () => (<div>
 
     <hr className="separator" />
 
-    <h2>Visualization Column Chart</h2>
+    <h2 id="column-chart">Visualization Column Chart</h2>
     <ExampleWithSource for={VisualizationColumnChartExample} source={VisualizationColumnChartExampleSRC} />
 
     <hr className="separator" />
 
-    <h2>Table</h2>
+    <h2 id="table">Table</h2>
     <ExampleWithSource for={VisualizationTableExample} source={VisualizationTableExampleSRC} />
 
     <hr className="separator" />
 
-    <h2>Custom Visualization</h2>
+    <h2 id="custom">Custom Visualization</h2>
     <p>Using <a href="https://github.com/recharts/recharts">Recharts library</a></p>
     <ExampleWithSource for={CustomVisualizationExample} source={CustomVisualizationExampleSRC} />
 

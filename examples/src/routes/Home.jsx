@@ -3,33 +3,58 @@ import { Link } from 'react-router-dom';
 
 import { version } from '../../package.json';
 import { key } from '../utils/catalog';
-
-import ExampleWithSource from '../components/utils/ExampleWithSource';
+import { projectId } from '../utils/fixtures';
 
 import KpiExample from '../components/KpiExample';
 import VisualizationTable from '../components/VisualizationTableExample';
 import ColumnChartExample from '../components/ColumnChartExample';
-
-import KpiExampleSRC from '!raw-loader!../components/KpiExample'; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
-import VisualizationTableSRC from '!raw-loader!../components/VisualizationTableExample'; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
-import ColumnChartExampleSRC from '!raw-loader!../components/ColumnChartExample'; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
+import DynamicMeasuresExample from '../components/DynamicMeasuresExample';
 
 export const Home = () => (<div>
     <h1>GoodData examples for React Components v{version}</h1>
-    <p style={{ color: '#AAA', marginTop: -10 }}>Connected to &quot;{key}&quot; backend.</p>
+    <p style={{ color: '#AAA', marginTop: -10 }}>Connected to &quot;{key}&quot; backend. Project id: {projectId}</p>
 
     <p>You can find <a href="https://github.com/gooddata/gooddata-react-components">GoodData React Component</a> examples here.</p>
 
-    <h2>KPI</h2>
-    <ExampleWithSource for={KpiExample} source={KpiExampleSRC} />
+    <hr className="separator" />
 
-    <h2>Column Chart</h2>
-    <ExampleWithSource for={ColumnChartExample} source={ColumnChartExampleSRC} />
-    <p><Link to="/basic-components">All basic component examples</Link></p>
+    <div className="showcase" >
+        {/* language=CSS */}
+        <style jsx>{`
+            .showcase {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+                grid-column-gap: 40px;
+                grid-row-gap: 40px;
+                justify-content: flex-start;
+            }
+            .span-line {
+                grid-column-start: 1;
+                grid-column-end: -1;
+            }
+        `}</style>
+        <div>
+            <h2><Link to="/kpi" >KPI</Link></h2>
+            <KpiExample />
+        </div>
+        <div>
+            <h2><Link to="/basic-components#column-chart" >Column Chart</Link></h2>
+            <ColumnChartExample />
+            <p><Link to="/basic-components">All basic component examples</Link></p>
+        </div>
+        <div>
+            <h2><Link to="/visualization#table" >Table</Link></h2>
+            <VisualizationTable />
+            <p><Link to="/visualization">All visualization examples</Link></p>
+        </div>
+        <div className="span-line">
+            <h2><Link to="/advanced/dynamic-measures" >Dynamic Measures (Advanced Use Case)</Link></h2>
+            <DynamicMeasuresExample />
+            <p><Link to="/advanced/">Mode advanced use cases</Link></p>
+        </div>
+    </div>
 
-    <h2>Table</h2>
-    <ExampleWithSource for={VisualizationTable} source={VisualizationTableSRC} />
-    <p><Link to="/visualization">All visualization examples</Link></p>
+    <hr className="separator" />
 
 </div>);
 

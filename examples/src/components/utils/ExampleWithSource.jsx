@@ -20,13 +20,23 @@ export class ExampleWithSource extends React.Component {
     }
 
     render() {
+        const { hidden } = this.state;
         const Component = this.props.for;
+
+        const iconClassName = hidden ? 'icon-navigatedown' : 'icon-navigateup';
 
         return (
             <div className="example-with-source">
+                <style jsx>{`
+                    .source {
+                        margin: 20px 0;
+                    }
+                `}</style>
                 <Component />
-                <button className="button-link" onClick={this.toggle}>toggle source</button>
-                {this.state.hidden ? '' : (
+                <div className="source">
+                    <button className={`button button-secondary button-dropdown icon-right ${iconClassName}`} onClick={this.toggle}>source</button>
+                </div>
+                {hidden ? '' : (
                     <SyntaxHighlighter language="jsx" style={okaidia}>{this.props.source}</SyntaxHighlighter>
                 )}
             </div>

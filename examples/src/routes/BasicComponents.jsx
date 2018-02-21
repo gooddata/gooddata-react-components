@@ -22,27 +22,27 @@ export const BasicComponents = () => (<div>
 
     <hr className="separator" />
 
-    <h2>Bar chart</h2>
+    <h2 id="bar-chart">Bar chart</h2>
     <ExampleWithSource for={BarChartExample} source={BarChartExampleSRC} />
 
     <hr className="separator" />
 
-    <h2>Column chart</h2>
+    <h2 id="column-chart">Column chart</h2>
     <ExampleWithSource for={ColumnChartExample} source={ColumnChartExampleSRC} />
 
     <hr className="separator" />
 
-    <h2>Line chart with custom colors</h2>
+    <h2 id="line-chart">Line chart with custom colors</h2>
     <ExampleWithSource for={LineChartExample} source={LineChartExampleSRC} />
 
     <hr className="separator" />
 
-    <h2>Pie chart</h2>
+    <h2 id="pie-chart">Pie chart</h2>
     <ExampleWithSource for={PieChartExample} source={PieChartExampleSRC} />
 
     <hr className="separator" />
 
-    <h2>Table</h2>
+    <h2 id="table">Table</h2>
     <ExampleWithSource for={TableExample} source={TableExampleSRC} />
 
 </div>);
