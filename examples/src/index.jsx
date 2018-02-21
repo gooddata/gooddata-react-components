@@ -64,10 +64,18 @@ export class App extends React.Component {
         return (
             <Router>
                 <div className="main-wrapper">
-                    { /*language=CSS*/ }
+                    {/* language=CSS */}
                     <style jsx>{`
-                        :global(html, body, .root) {
+                        :global(html),
+                        :global(body),
+                        :global(.root) {
                             height: 100%;
+                        }
+
+                        :global(hr.separator) {
+                            border: 1px solid #EEE;
+                            border-width: 1px 0 0 0;
+                            margin: 20px 0;
                         }
 
                         :global(.main-wrapper) {

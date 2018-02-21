@@ -116,15 +116,10 @@ export class DatePickerExample extends Component {
                         vertical-align: top;
                         margin-right: 20px;
                     }
-                    hr {
-                        border: 1px solid #EEE;
-                        border-width: 1px 0 0 0;
-                        margin: 20px 0;
-                    }
                     h4 {
                         margin-bottom: 0;
                     }
-                    :global(.gd-input-field) {
+                    label :global(.gd-input-field) {
                         min-width: 212px;
                     }
                 `}</style>
@@ -136,7 +131,7 @@ export class DatePickerExample extends Component {
                     <h4>To</h4>
                     <DatePicker className="gd-input-field" selected={to} onChange={this.onToChange} />
                 </label>
-                <hr />
+                <hr className="separator" />
                 <div style={{ height: 300 }} className="s-date-picker-chart">
                     {error
                         ? <Error error={{ status: '400', message: error }} />
@@ -149,7 +144,7 @@ export class DatePickerExample extends Component {
                             ErrorComponent={Error}
                         />)}
                 </div>
-                <hr />
+                <hr className="separator" />
             </div>
         );
     }

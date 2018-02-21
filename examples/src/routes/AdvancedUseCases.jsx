@@ -10,6 +10,7 @@ export const AdvacedUseCases = ({ advancedUseCasesRoutes, match, location: { pat
             <style jsx>{`
                 .wrapper {
                     flex: 0;
+                    margin-bottom: 20px;
                 }
             `}</style>
             <div className="gd-tabs">

@@ -59,7 +59,7 @@ module.exports = ({ gdc = 'https://staging3.intgdc.com', link = false, basepath 
         output: {
             filename: '[name].bundle.js',
             path: path.resolve(__dirname, 'dist'),
-            publicPath: '/'
+            publicPath: `${basepath}/`
         },
         node: {
             __filename: true

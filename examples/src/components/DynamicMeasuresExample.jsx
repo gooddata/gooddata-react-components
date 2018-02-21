@@ -1,96 +1,61 @@
 import React, { Component } from 'react';
 import { AfmComponents } from '@gooddata/react-components';
-import PropTypes from 'prop-types';
 import * as GD from 'gooddata';
 
 import '@gooddata/react-components/styles/css/main.css';
 
+import { Layout } from './utils/Layout';
 import { Loading } from './utils/Loading';
 import { Error } from './utils/Error';
+import { SidebarItem } from './utils/SidebarItem';
 import {
     monthDateIdentifier,
     projectId,
-    franchiseFeesTag,
-    franchiseFeesIdentifier,
-    franchiseFeesAdRoyaltyIdentifier,
-    franchiseFeesInitialFranchiseFeeIdentifier,
-    franchiseFeesIdentifierOngoingRoyalty
+    franchiseFeesTag
 } from '../utils/fixtures';
 
-const franchiseFeesMeasureIdentifiers = [
-    franchiseFeesIdentifier,
-    franchiseFeesAdRoyaltyIdentifier,
-    franchiseFeesInitialFranchiseFeeIdentifier,
-    franchiseFeesIdentifierOngoingRoyalty
-];
-
-const { ColumnChart } = AfmComponents;
-
-export class AttributeFilterItem extends Component {
-    static propTypes = {
-        title: PropTypes.string.isRequired,
-        uri: PropTypes.string.isRequired
-    };
-
-    onChange(uri) {
-        // eslint-disable-next-line no-console
-        return event => console.log('AttributeFilterItem onChange', uri, event.target.value === 'on');
-    }
-
-    render() {
-        const { title, uri } = this.props;
-        return (
-            <label className="gd-list-item s-attribute-filter-list-item" style={{ display: 'inline-flex' }}>
-                <input type="checkbox" className="gd-input-checkbox" onChange={this.onChange(uri)} />
-                <span>{title}</span>
-            </label>
-        );
-    }
-}
+const { LineChart, ColumnChart } = AfmComponents;
 
 export class DynamicMeasuresExample extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            measures: null,
+            measureList: null,
             error: null
         };
 
-        this.onMeasuresChange = this.onMeasuresChange.bind(this);
+        this.onMeasureChange = this.onMeasureChange.bind(this);
     }
 
     componentWillMount() {
         GD.xhr.get(`/gdc/md/${projectId}/tags/${franchiseFeesTag}`).then(
             (response) => {
-                console.log('tags success', response);
                 if (!response.entries.length) {
                     return this.setState({
-                        measures: null,
+                        measureList: null,
                         error: {
                             status: '404',
                             message: `No measures with tag ${franchiseFeesTag}. Please check your project.
-                                Measures with identifiers ${franchiseFeesMeasureIdentifiers.join(', ')} should have assigned tag ${franchiseFeesTag}.`
+                                Franchise fees measures should have assigned the tag ${franchiseFeesTag}.`
                         }
                     });
                 }
                 return this.setState({
-                    measures: response.entries,
+                    measureList: response.entries.map(entry => ({ ...entry, isSelected: true })),
                     error: null
                 });
             }
         ).catch((error) => {
-            console.error('tags Error', error);
             this.setState({
-                measures: null,
-                error: { status: '400', message: `Error while requesting measures by tag ${franchiseFeesTag}` }
+                measureList: null,
+                error: { status: '400', message: `Error while requesting measures by tag ${franchiseFeesTag}. ${JSON.stringify(error)}` }
             });
         });
     }
 
-    onMeasuresChange(measureIdentifier, value) {
-        console.log('onMeasuresChange measure, value', measureIdentifier, value);
+    onMeasureChange(measureIdentifier) {
         const { measureList } = this.state;
-        const updatedMeasure = measureList.find(measure => (measure.identifier === measureIdentifier));
+        const updatedMeasure = measureList.find(measure => (measure.link === measureIdentifier));
         const updatedMeasureIndex = measureList.indexOf(updatedMeasure);
         const updatedMeasures = [...measureList];
         updatedMeasures[updatedMeasureIndex] = {
@@ -104,19 +69,15 @@ export class DynamicMeasuresExample extends Component {
     }
 
     getMeasureDefinition(measureItem) {
-        console.log('measureItem', measureItem);
-
         return {
-            localIdentifier: 'totalSales',
+            localIdentifier: measureItem.link.split('/').reverse()[0],
             definition: {
                 measure: {
                     item: {
-                        identifier: measureItem.identifier
-                    },
-                    aggregation: 'sum'
+                        uri: measureItem.link
+                    }
                 }
             },
-            alias: '$ Total Sales',
             format: '#,##0'
         };
     }
@@ -124,57 +85,94 @@ export class DynamicMeasuresExample extends Component {
     render() {
         const { measureList, error } = this.state;
 
-        const measures = measureList.filter(measure => measure.isSelected).map(this.getMeasureDefinition);
+        if (error) {
+            return <Error error={{ status: '400', message: error }} />;
+        }
 
-        const afm = {
-            measures,
-            attributes: [
-                {
-                    displayForm: {
-                        identifier: monthDateIdentifier
-                    },
-                    localIdentifier: 'month'
-                }
-            ]
-        };
+        const loadingBlock = <div style={{ height: '100%', minHeight: 300, display: 'flex', justifyContent: 'center', alignItems: 'center' }}><Loading /></div>;
 
-        return (
-            <div className="s-date-picker">
-                <style jsx>{`
-                    label {
-                        display: inline-block;
-                        vertical-align: top;
-                        margin-right: 20px;
-                    }
-                    hr {
-                        border: 1px solid #EEE;
-                        border-width: 1px 0 0 0;
-                        margin: 20px 0;
-                    }
-                    h4 {
-                        margin-bottom: 0;
-                    }
-                    :global(.gd-input-field) {
-                        min-width: 212px;
-                    }
-                `}</style>
-                <pre>
-                    { JSON.stringify(measureList, null, '  ') }
-                </pre>
-                <hr />
-                <div style={{ height: 300 }} className="s-date-picker-chart">
-                    {error ? <Error error={{ status: '400', message: error }} /> : (
-                        <ColumnChart
+        const sidebar = measureList
+            ? (<ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
+                {measureList.map(({ title, link, isSelected }) => (
+                    <SidebarItem
+                        key={link}
+                        label={title}
+                        id={link}
+                        isSelected={isSelected}
+                        onClick={this.onMeasureChange}
+                    />
+                ))}
+            </ul>)
+            : loadingBlock;
+
+        const config = { legend: { position: 'bottom' } };
+        let content = loadingBlock;
+
+        if (measureList) {
+            const selectedMeasures = measureList.filter(measure => measure.isSelected);
+            const measures = selectedMeasures.map(this.getMeasureDefinition);
+
+            if (selectedMeasures.length) {
+                const lineChartAfm = {
+                    measures,
+                    attributes: [
+                        {
+                            displayForm: {
+                                identifier: monthDateIdentifier
+                            },
+                            localIdentifier: 'month'
+                        }
+                    ]
+                };
+                const columnChartAfm = {
+                    measures
+                };
+
+                content = (<div className="graph-wrapper">
+                    <style jsx>{`
+                        .graph-wrapper {
+                            display: flex;
+                        }
+                        .graph-line {
+                            flex-basis: 60%;
+                            margin-right: 20px;
+                        }
+                    `}</style>
+                    <div style={{ height: 300 }} className="graph graph-line s-dynamic-line-chart">
+                        <LineChart
                             projectId={projectId}
-                            afm={afm}
+                            afm={lineChartAfm}
                             onLoadingChanged={this.onLoadingChanged}
                             onError={this.onError}
                             LoadingComponent={Loading}
                             ErrorComponent={Error}
+                            config={config}
                         />
-                    )}
-                </div>
-                <hr />
+                    </div>
+                    <div style={{ height: 300 }} className="graph graph-column s-dynamic-column-chart">
+                        <ColumnChart
+                            projectId={projectId}
+                            afm={columnChartAfm}
+                            onLoadingChanged={this.onLoadingChanged}
+                            onError={this.onError}
+                            LoadingComponent={Loading}
+                            ErrorComponent={Error}
+                            config={config}
+                        />
+                    </div>
+                </div>);
+            } else {
+                content = <Error error={{ status: '400', message: 'Please select at least one measure' }} />;
+            }
+        }
+
+        return (
+            <div className="s-dynamic-measures">
+                <hr className="separator" />
+                <Layout sidebar={sidebar} >
+                    {content}
+                </Layout>
+                <hr className="separator" />
             </div>
         );
     }

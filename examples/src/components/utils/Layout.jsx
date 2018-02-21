@@ -19,6 +19,8 @@ export const Layout = ({ sidebar, children }) => (
 
             .sidebar {
                 padding: 20px;
+                padding-right: 19px;
+                border-right: 1px solid #dde4eb;
             }
 
             .content {
