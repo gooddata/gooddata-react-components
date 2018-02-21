@@ -21,7 +21,7 @@ export class EmployeeItem extends React.Component {
     }
 
     onItemClick() {
-        this.props.onClick(this.props.uri);
+        this.props.onClick(this.props.uri, this.props.index);
     }
 
     render() {
