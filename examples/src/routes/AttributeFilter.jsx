@@ -10,7 +10,7 @@ import AttributeElementsExampleSRC from '!raw-loader!../components/AttributeElem
 
 
 export const AttributeFilter = () => (<div>
-    <h1>Attribute Filter Components</h1>
+    <h1>Attribute Filter Components Example</h1>
 
     <p>These examples illustrate usage of Attribute Filter components.</p>
 
