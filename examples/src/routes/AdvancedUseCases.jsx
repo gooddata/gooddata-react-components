@@ -6,11 +6,14 @@ import { Link } from 'react-router-dom';
 export const AdvacedUseCases = ({ advancedUseCasesRoutes, match, location: { pathname } }) => {
     return (
         <div className="wrapper">
-            { /*language=CSS*/ }
+            {/* language=CSS */}
             <style jsx>{`
                 .wrapper {
                     flex: 0;
                     margin-bottom: 20px;
+                }
+                .text {
+                    margin-top: 40px;
                 }
             `}</style>
             <div className="gd-tabs">
@@ -23,9 +26,8 @@ export const AdvacedUseCases = ({ advancedUseCasesRoutes, match, location: { pat
                     )
                 )}
             </div>
-
             {match.isExact ? (
-                <div>
+                <div className="text" >
                     <h1>Advanced Use Cases</h1>
                     <p>Here you can find a list of some more advanced use cases of UI SDK. For example combining
                         multiple components or making existing components more dynamic.</p>

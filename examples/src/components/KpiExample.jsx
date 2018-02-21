@@ -11,21 +11,21 @@ export class KpiExample extends Component {
         return (
             <div className="kpi">
                 <style jsx>{`
-                    height: 60px;
-                    margin: 10px 0;
-                    font-size: 50px;
-                    white-space: nowrap;
-                    vertical-align: bottom;
-                    font-weight: 700;
-                    `}</style>
-                <span className="kpi-value">
-                    <Kpi
-                        projectId={projectId}
-                        measure={totalSalesIdentifier}
-                        LoadingComponent={Loading}
-                        ErrorComponent={Error}
-                    />
-                </span>
+                    .kpi {
+                        margin: 10px 0;
+                        font-size: 50px;
+                        white-space: nowrap;
+                        vertical-align: bottom;
+                        line-height: 1.2em;
+                        font-weight: 700;
+                    }
+                `}</style>
+                <Kpi
+                    projectId={projectId}
+                    measure={totalSalesIdentifier}
+                    LoadingComponent={Loading}
+                    ErrorComponent={Error}
+                />
             </div>
         );
     }

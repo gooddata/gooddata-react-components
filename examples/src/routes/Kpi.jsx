@@ -9,6 +9,8 @@ export const Kpi = () => (<div>
 
     <p>This is an example of KPI component use case.</p>
 
+    <hr className="separator" />
+
     <ExampleWithSource for={KpiExample} source={KpiExampleSRC} />
 </div>);
 

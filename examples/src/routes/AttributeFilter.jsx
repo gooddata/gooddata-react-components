@@ -14,8 +14,12 @@ export const AttributeFilter = () => (<div>
 
     <p>These examples illustrate usage of Attribute Filter components.</p>
 
+    <hr className="separator" />
+
     <h2>Attribute Filter</h2>
     <ExampleWithSource for={AttributeFilterExample} source={AttributeFilterExampleSRC} />
+
+    <hr className="separator" />
 
     <h2>Custom Attribute Filter using Attribute Elements component</h2>
     <ExampleWithSource for={AttributeElementsExample} source={AttributeElementsExampleSRC} />

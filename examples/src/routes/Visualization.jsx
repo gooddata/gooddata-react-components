@@ -15,11 +15,17 @@ export const Visualization = () => (<div>
 
     <p>These are examples of generic Visualization component use cases.</p>
 
+    <hr className="separator" />
+
     <h2>Visualization Column Chart</h2>
     <ExampleWithSource for={VisualizationColumnChartExample} source={VisualizationColumnChartExampleSRC} />
 
+    <hr className="separator" />
+
     <h2>Table</h2>
     <ExampleWithSource for={VisualizationTableExample} source={VisualizationTableExampleSRC} />
+
+    <hr className="separator" />
 
     <h2>Custom Visualization</h2>
     <p>Using <a href="https://github.com/recharts/recharts">Recharts library</a></p>

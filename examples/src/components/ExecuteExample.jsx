@@ -59,7 +59,7 @@ export class ExecuteExample extends Component {
         if (isLoading) {
             return <Loading />;
         }
-        return (<blockquote>
+        return (<div>
             <style jsx>{`
                 .kpi {
                     height: 60px;
@@ -74,7 +74,7 @@ export class ExecuteExample extends Component {
             <p className="kpi s-execute-kpi">{result.executionResult.executionResult.data[0]}</p>
             <p>Full execution response and result as JSON:</p>
             <pre>{JSON.stringify({ result, isLoading, error }, null, '  ')}</pre>
-        </blockquote>);
+        </div>);
     }
 
     render() {

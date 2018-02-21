@@ -51,6 +51,8 @@ export class ResizableExample extends Component {
                 <button onClick={() => this.setState({ size: [500, 400] })} className="button button-secondary">500x400</button>
                 <button onClick={() => this.setState({ size: [800, 200] })} className="button button-secondary s-resize-800x200">800x200</button>
 
+                <hr className="separator" />
+
                 <div style={{ width, height }} className="s-resizable-vis">
                     <Measure bounds>
                         {({ measureRef, contentRect }) => (
@@ -67,6 +69,8 @@ export class ResizableExample extends Component {
                         )}
                     </Measure>
                 </div>
+
+                <hr className="separator" />
             </div>
         );
     }

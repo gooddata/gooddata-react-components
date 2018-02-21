@@ -10,6 +10,8 @@ export const Kpi = () => (<div>
 
     <p>This is an example of custom Execute component use case.</p>
 
+    <hr className="separator" />
+
     <ExampleWithSource for={ExecuteExample} source={ExecuteExampleSRC} />
 </div>);
 
