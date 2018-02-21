@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { NavLink, Link, withRouter } from 'react-router-dom';
 
-const favicon = require('../static/favicon.ico');
+const favicon = require('../../static/favicon.ico');
 
 class Header extends React.Component {
     render() {
@@ -21,6 +21,12 @@ class Header extends React.Component {
         ));
 
         return (<div className="page">
+            { /*language=CSS*/ }
+            <style jsx>{`
+                .gd-header {
+                    flex: 0;
+                }
+            `}</style>
             <Helmet>
                 <title>{title}</title>
                 <meta charSet="utf-8" />

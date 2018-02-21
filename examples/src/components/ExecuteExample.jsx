@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import { Execute } from '@gooddata/react-components';
 
 import { totalSalesIdentifier, projectId } from '../utils/fixtures';
-import { Loading } from './Loading';
-import { Error } from './Error';
+import { Loading } from './utils/Loading';
+import { Error } from './utils/Error';
 
 export class ExecuteExample extends Component {
     constructor(props) {
@@ -59,7 +59,7 @@ export class ExecuteExample extends Component {
         if (isLoading) {
             return <Loading />;
         }
-        return (<blockquote>
+        return (<div>
             <style jsx>{`
                 .kpi {
                     height: 60px;
@@ -74,7 +74,7 @@ export class ExecuteExample extends Component {
             <p className="kpi s-execute-kpi">{result.executionResult.executionResult.data[0]}</p>
             <p>Full execution response and result as JSON:</p>
             <pre>{JSON.stringify({ result, isLoading, error }, null, '  ')}</pre>
-        </blockquote>);
+        </div>);
     }
 
     render() {
