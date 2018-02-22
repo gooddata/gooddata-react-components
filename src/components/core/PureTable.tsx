@@ -1,28 +1,33 @@
 import * as React from 'react';
 import noop = require('lodash/noop');
+
 import {
     ResponsiveTable,
     Table as IndigoTable,
     TableTransformation
 } from '@gooddata/indigo-visualizations';
-import { AFM, Execution, VisualizationObject } from '@gooddata/typings';
+import { AFM, VisualizationObject } from '@gooddata/typings';
 
 import { IntlWrapper } from './base/IntlWrapper';
-import { IntlTranslationsProvider, ITranslationsComponentProps } from './base/TranslationsProvider';
+import {
+    IntlTranslationsProvider,
+    ITranslationsComponentProps
+} from './base/TranslationsProvider';
 import { fixEmptyHeaderItems } from './base/utils/fixEmptyHeaderItems';
 import { IVisualizationProperties } from '../../interfaces/VisualizationProperties';
-import { TablePropTypes, Requireable } from '../../proptypes/Table';
-
-import { ErrorStates } from '../../constants/errorStates';
+import { TablePropTypes } from '../../proptypes/Table';
 import { VisualizationEnvironment } from '../uri/Visualization';
 import { IIndexedTotalItem } from '../../interfaces/Totals';
 import { convertToIndexedTotals, convertToTotals } from '../../helpers/TotalsConverter';
 
-export { Requireable };
+import {
+    ICommonVisualizationProps,
+    visualizationLoadingHOC,
+    ILoadingInjectedProps,
+    commonDefaultprops
+} from './base/VisualizationLoadingHOC';
 
-import { IBaseVisualizationProps, IBaseVisualizationState, BaseVisualization } from './base/BaseVisualization';
-
-export interface ITableProps extends IBaseVisualizationProps {
+export interface ITableProps extends ICommonVisualizationProps {
     height?: number;
     maxHeight?: number;
     environment?: VisualizationEnvironment;
@@ -33,53 +38,35 @@ export interface ITableProps extends IBaseVisualizationProps {
     visualizationProperties?: IVisualizationProperties;
 }
 
-export interface ITableState extends IBaseVisualizationState {
+export interface ITableState {
     page: number;
 }
 
 const ROWS_PER_PAGE_IN_RESPONSIVE_TABLE = 9;
 
-export type ITableDataPromise = Promise<Execution.IExecutionResponses>;
-
-const defaultErrorHandler = (error: any) => {
-    if (error && error.status !== ErrorStates.OK) {
-        console.error(error); // tslint:disable-line:no-console
-    }
-};
-
-export class PureTable extends BaseVisualization<ITableProps, ITableState> {
-    public static defaultProps: Partial<ITableProps> = {
-        resultSpec: {},
-        onError: defaultErrorHandler,
-        onLoadingChanged: noop,
-        ErrorComponent: null,
-        LoadingComponent: null,
-        afterRender: noop,
-        pushData: noop,
+class SimpleTable extends React.Component<ITableProps & ILoadingInjectedProps, ITableState> {
+    public static defaultProps: Partial<ITableProps & ILoadingInjectedProps> = {
+        ...commonDefaultprops,
         stickyHeaderOffset: 0,
         height: null,
         maxHeight: null,
-        locale: 'en-US',
         environment: 'none',
-        drillableItems: [],
         totals: [],
         totalsEditAllowed: false,
         onTotalsEdit: noop,
-        onFiredDrillEvent: noop,
-        visualizationProperties: null
+        visualizationProperties: null,
+        onDataTooLarge: noop
     };
 
     public static propTypes = TablePropTypes;
 
-    constructor(props: ITableProps) {
+    constructor(props: ITableProps & ILoadingInjectedProps) {
         super(props);
 
         this.onSortChange = this.onSortChange.bind(this);
         this.onMore = this.onMore.bind(this);
         this.onLess = this.onLess.bind(this);
         this.onTotalsEdit = this.onTotalsEdit.bind(this);
-
-        this.initSubject();
     }
 
     public componentWillMount() {
@@ -119,7 +106,7 @@ export class PureTable extends BaseVisualization<ITableProps, ITableState> {
         });
     }
 
-    protected renderVisualization(): JSX.Element {
+    public render(): JSX.Element {
         const tableRenderer = this.getTableRenderer();
         return this.renderTable(tableRenderer);
     }
@@ -164,18 +151,15 @@ export class PureTable extends BaseVisualization<ITableProps, ITableState> {
             resultSpec,
             onFiredDrillEvent,
             totals,
-            totalsEditAllowed
-        } = this.props;
-        const { result } = this.state;
-        const {
+            totalsEditAllowed,
             executionResponse,
             executionResult
-        } = (result as Execution.IExecutionResponses);
+        } = this.props;
 
         // Short term solution (See BB-641)
         const indexedTotals = convertToIndexedTotals(totals, dataSource.getAfm(), resultSpec);
 
-        const onDataTooLarge = environment === 'dashboards' ? this.onDataTooLarge : noop;
+        const onDataTooLarge = environment === 'dashboards' ? this.props.onDataTooLarge : noop;
         return (
             <IntlWrapper locale={locale}>
                 <IntlTranslationsProvider>
@@ -207,3 +191,5 @@ export class PureTable extends BaseVisualization<ITableProps, ITableState> {
         );
     }
 }
+
+export const PureTable = visualizationLoadingHOC(SimpleTable);

@@ -16,7 +16,7 @@ jest.mock('@gooddata/indigo-visualizations', () => ({
 }));
 
 import { Headline } from '../Headline';
-import { IBaseVisualizationState, IBaseVisualizationProps } from '../base/BaseVisualization';
+import { ICommonVisualizationProps } from '../base/VisualizationLoadingHOC';
 
 import { ErrorStates } from '../../../constants/errorStates';
 import { IDrillableItem } from '../../../interfaces/DrillEvents';
@@ -25,11 +25,11 @@ describe('Headline', () => {
     const afterRenderMock = jest.fn();
     const drillableItemsMock: IDrillableItem[] = [];
 
-    const createComponent = (props: IBaseVisualizationProps) => {
-        return mount<IBaseVisualizationProps, IBaseVisualizationState>(<Headline {...props} />);
+    const createComponent = (props: ICommonVisualizationProps) => {
+        return mount<ICommonVisualizationProps>(<Headline {...props} />);
     };
 
-    const createProps = (customProps = {}): IBaseVisualizationProps => {
+    const createProps = (customProps = {}): ICommonVisualizationProps => {
         return {
             dataSource: oneMeasureDataSource,
             afterRender: afterRenderMock,

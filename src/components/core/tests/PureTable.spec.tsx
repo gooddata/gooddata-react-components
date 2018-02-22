@@ -164,38 +164,48 @@ describe('PureTable', () => {
     });
 
     it('should not render responsive table when result is not available', () => {
-        const props = createProps();
+        const dataSource = delayedTooLargeDataSource;
+        const props = createProps({
+            dataSource,
+            LoadingComponent
+        });
+
         const wrapper = createComponent(props);
 
         return delay().then(() => {
-            expect(wrapper.find(TableTransformation).length).toBe(1);
-            wrapper.setState({ result: null }, () => {
-                expect(wrapper.find(TableTransformation).length).toBe(0);
-            });
+            expect(wrapper.find(TableTransformation).length).toBe(0);
         });
     });
 
     it('should not render responsive table when table is still loading', () => {
-        const props = createProps();
+        let onLoadingChanged;
+        const startedLoading = new Promise((resolve) => {
+            onLoadingChanged = resolve;
+        });
+        const dataSource = delayedTooLargeDataSource;
+        const props = createProps({
+            onLoadingChanged,
+            dataSource,
+            LoadingComponent
+        });
+
         const wrapper = createComponent(props);
 
-        return delay().then(() => {
-            expect(wrapper.find(TableTransformation).length).toBe(1);
-            wrapper.setState({ isLoading: true }, () => {
-                expect(wrapper.find(TableTransformation).length).toBe(0);
-            });
+        return startedLoading.then(() => {
+            expect(wrapper.find(TableTransformation).length).toBe(0);
         });
     });
 
     it('should not render responsive table when error is set', () => {
-        const props = createProps();
+        const onError = jest.fn();
+        const props = createProps({
+            onError,
+            dataSource: tooLargeDataSource
+        });
         const wrapper = createComponent(props);
 
         return delay().then(() => {
-            expect(wrapper.find(TableTransformation).length).toBe(1);
-            wrapper.setState({ error: ErrorStates.UNKNOWN_ERROR }, () => {
-                expect(wrapper.find(TableTransformation).length).toBe(0);
-            });
+            expect(wrapper.find(TableTransformation).length).toBe(0);
         });
     });
 

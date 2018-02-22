@@ -1,17 +1,26 @@
 import * as React from 'react';
 import noop = require('lodash/noop');
-import { Execution } from '@gooddata/typings';
-import { Visualization } from '@gooddata/indigo-visualizations';
 
-import { IBaseVisualizationProps, IBaseVisualizationState, BaseVisualization } from './BaseVisualization';
+import { Visualization } from '@gooddata/indigo-visualizations';
 
 import { IntlWrapper } from './IntlWrapper';
 import { IVisualizationProperties } from '../../../interfaces/VisualizationProperties';
 import { ChartType } from '../../../constants/visualizationTypes';
-import { ErrorStates } from '../../../constants/errorStates';
-import { IntlTranslationsProvider, ITranslationsComponentProps } from './TranslationsProvider';
+import {
+    IntlTranslationsProvider,
+    ITranslationsComponentProps
+} from './TranslationsProvider';
 import { IDataSourceProviderInjectedProps } from '../../afm/DataSourceProvider';
 import { fixEmptyHeaderItems } from './utils/fixEmptyHeaderItems';
+import {
+    ICommonVisualizationProps,
+    visualizationLoadingHOC,
+    ILoadingInjectedProps,
+    commonDefaultprops
+} from './VisualizationLoadingHOC';
+import { ChartPropTypes, Requireable } from '../../../proptypes/Chart';
+
+export { Requireable };
 
 export interface ILegendConfig {
     enabled?: boolean;
@@ -28,7 +37,7 @@ export interface IChartConfig {
     };
 }
 
-export interface ICommonChartProps extends IBaseVisualizationProps {
+export interface ICommonChartProps extends ICommonVisualizationProps {
     config?: IChartConfig;
     height?: number;
     environment?: string;
@@ -42,55 +51,29 @@ export interface IBaseChartProps extends IChartProps {
     visualizationComponent?: React.ComponentClass<any>; // for testing
 }
 
-const defaultErrorHandler = (error: any) => {
-    if (error && error.status !== ErrorStates.OK) {
-        console.error(error); // tslint:disable-line:no-console
-    }
-};
-
-export class BaseChart extends BaseVisualization<IBaseChartProps, IBaseVisualizationState> {
-    public static defaultProps: Partial<IBaseChartProps> = {
-        resultSpec: {},
-        onError: defaultErrorHandler,
-        ErrorComponent: null,
-        LoadingComponent: null,
-        onLoadingChanged: noop,
-        pushData: noop,
-        drillableItems: [],
-        onFiredDrillEvent: noop,
+export class StatelessBaseChart extends React.Component<IBaseChartProps & ILoadingInjectedProps> {
+    public static defaultProps: Partial<IBaseChartProps & ILoadingInjectedProps> = {
+        ...commonDefaultprops,
+        onDataTooLarge: noop,
         config: {},
         visualizationProperties: null,
         visualizationComponent: Visualization
     };
 
-    constructor(props: IBaseChartProps) {
-        super(props);
+    public static propTypes = ChartPropTypes;
 
-        this.onNegativeValues = this.onNegativeValues.bind(this);
-
-        this.initSubject();
-    }
-
-    public componentWillUnmount() {
-        this.subject.unsubscribe();
-        this.onLoadingChanged = noop;
-        this.onError = noop;
-        this.initDataLoading = noop;
-    }
-
-    protected renderVisualization(): JSX.Element {
-        const { result } = this.state;
+    public render(): JSX.Element {
         const {
             afterRender,
             height,
             locale,
             config,
-            type
-        } = this.props;
-        const {
+            type,
             executionResponse,
-            executionResult
-        } = (result as Execution.IExecutionResponses);
+            executionResult,
+            onDataTooLarge,
+            onNegativeValues
+        } = this.props;
 
         return (
             <IntlWrapper locale={locale}>
@@ -112,8 +95,8 @@ export class BaseChart extends BaseVisualization<IBaseChartProps, IBaseVisualiza
                                 height={height}
                                 config={{ ...config, type }}
                                 afterRender={afterRender}
-                                onDataTooLarge={this.onDataTooLarge}
-                                onNegativeValues={this.onNegativeValues}
+                                onDataTooLarge={onDataTooLarge}
+                                onNegativeValues={onNegativeValues}
                                 drillableItems={this.props.drillableItems}
                                 onFiredDrillEvent={this.props.onFiredDrillEvent}
                                 numericSymbols={translationProps.numericSymbols}
@@ -124,8 +107,6 @@ export class BaseChart extends BaseVisualization<IBaseChartProps, IBaseVisualiza
             </IntlWrapper>
         );
     }
-
-    private onNegativeValues() {
-        this.onError(ErrorStates.NEGATIVE_VALUES);
-    }
 }
+
+export const BaseChart = visualizationLoadingHOC(StatelessBaseChart);
