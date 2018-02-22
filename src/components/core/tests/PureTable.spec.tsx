@@ -7,7 +7,11 @@ import {
     TableTransformation,
     ResponsiveTable,
     LoadingComponent,
-    ErrorComponent
+    ErrorComponent,
+    oneMeasureDataSource,
+    tooLargeDataSource,
+    delayedTooLargeDataSource,
+    executionObjectWithTotalsDataSource
 } from '../../tests/mocks';
 
 // Replace this with optional prop
@@ -16,44 +20,14 @@ jest.mock('@gooddata/indigo-visualizations', () => ({
     ResponsiveTable
 }));
 
-import { IDataSource } from '../../../interfaces/DataSource';
 import { PureTable, ITableProps, ITableState } from '../PureTable';
 import { ErrorStates } from '../../../constants/errorStates';
 import {
     oneMeasureResponse,
-    oneMeasureAfm,
-    tooLargeResponse,
-    executionObjectWithTotals,
-    responseWithTotals
+    executionObjectWithTotals
 } from '../../../execution/fixtures/ExecuteAfm.fixtures';
 import { AFM } from '@gooddata/typings';
 import { IIndexedTotalItem } from '../../../interfaces/Totals';
-
-const oneMeasureDataSource: IDataSource = {
-    getData: () => Promise.resolve(oneMeasureResponse),
-    getAfm: () => oneMeasureAfm,
-    getFingerprint: () => JSON.stringify(oneMeasureResponse)
-};
-
-const executionObjectWithTotalsDataSource: IDataSource = {
-    getData: () => Promise.resolve(responseWithTotals),
-    getAfm: () => executionObjectWithTotals.execution.afm,
-    getFingerprint: () => JSON.stringify(responseWithTotals)
-};
-
-const tooLargeDataSource: IDataSource = {
-    getData: () => Promise.reject(tooLargeResponse),
-    getAfm: () => ({}),
-    getFingerprint: () => JSON.stringify(tooLargeDataSource)
-};
-const delayedTooLargeDataSource: IDataSource = {
-    // tslint:disable-next-line:variable-name
-    getData: () => (new Promise((_resolve, reject) => {
-        setTimeout(reject(tooLargeResponse), 20);
-    })),
-    getAfm: () => ({}),
-    getFingerprint: () => JSON.stringify(tooLargeDataSource)
-};
 
 describe('PureTable', () => {
     const createComponent = (props: ITableProps) => {
@@ -190,38 +164,48 @@ describe('PureTable', () => {
     });
 
     it('should not render responsive table when result is not available', () => {
-        const props = createProps();
+        const dataSource = delayedTooLargeDataSource;
+        const props = createProps({
+            dataSource,
+            LoadingComponent
+        });
+
         const wrapper = createComponent(props);
 
         return delay().then(() => {
-            expect(wrapper.find(TableTransformation).length).toBe(1);
-            wrapper.setState({ result: null }, () => {
-                expect(wrapper.find(TableTransformation).length).toBe(0);
-            });
+            expect(wrapper.find(TableTransformation).length).toBe(0);
         });
     });
 
     it('should not render responsive table when table is still loading', () => {
-        const props = createProps();
+        let onLoadingChanged;
+        const startedLoading = new Promise((resolve) => {
+            onLoadingChanged = resolve;
+        });
+        const dataSource = delayedTooLargeDataSource;
+        const props = createProps({
+            onLoadingChanged,
+            dataSource,
+            LoadingComponent
+        });
+
         const wrapper = createComponent(props);
 
-        return delay().then(() => {
-            expect(wrapper.find(TableTransformation).length).toBe(1);
-            wrapper.setState({ isLoading: true }, () => {
-                expect(wrapper.find(TableTransformation).length).toBe(0);
-            });
+        return startedLoading.then(() => {
+            expect(wrapper.find(TableTransformation).length).toBe(0);
         });
     });
 
     it('should not render responsive table when error is set', () => {
-        const props = createProps();
+        const onError = jest.fn();
+        const props = createProps({
+            onError,
+            dataSource: tooLargeDataSource
+        });
         const wrapper = createComponent(props);
 
         return delay().then(() => {
-            expect(wrapper.find(TableTransformation).length).toBe(1);
-            wrapper.setState({ error: ErrorStates.UNKNOWN_ERROR }, () => {
-                expect(wrapper.find(TableTransformation).length).toBe(0);
-            });
+            expect(wrapper.find(TableTransformation).length).toBe(0);
         });
     });
 
