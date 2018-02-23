@@ -2,45 +2,19 @@
 # yarn lockfile v1
 
 
-"@gooddata/data-layer@6.0.0-alpha3":
-  version "6.0.0-alpha3"
-  resolved "https://registry.yarnpkg.com/@gooddata/data-layer/-/data-layer-6.0.0-alpha3.tgz#767e284ce8052891263dfbc3e476a22a093d6c83"
+"@gooddata/data-layer@6.0.0-ocetnik-doc-upgrade-dependencies-2018-02-23T15-10-42-960Z":
+  version "6.0.0-ocetnik-doc-upgrade-dependencies-2018-02-23T15-10-42-960Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/data-layer/-/data-layer-6.0.0-ocetnik-doc-upgrade-dependencies-2018-02-23T15-10-42-960Z.tgz#72a34f626a5a11e5f81b6b7d7971d01630f23dc4"
   dependencies:
     json-stable-stringify "^1.0.1"
-    lodash "^4.17.4"
+    lodash "4.17.4"
     rxjs "^5.5.6"
 
-"@gooddata/goodstrap@53.0.1":
-  version "53.0.1"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-53.0.1.tgz#ec63334c3005d16ff2b29ea17beac74f54bdafe4"
+"@gooddata/goodstrap@54.0.0-ocetnik-doc-upgrade-dependencies-2018-02-23T14-19-48-138Z":
+  version "54.0.0-ocetnik-doc-upgrade-dependencies-2018-02-23T14-19-48-138Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-54.0.0-ocetnik-doc-upgrade-dependencies-2018-02-23T14-19-48-138Z.tgz#aed8623dc84f9319a9f74aa85d22af8c566c810b"
   dependencies:
-    "@gooddata/js-utils" "0.7.1"
-    classnames "2.2.5"
-    custom-event "1.0.1"
-    fixed-data-table-2 "0.7.13"
-    foundation-sites "5.5.3"
-    immutable "3.8.1"
-    invariant "2.2.2"
-    jquery "2.1.4"
-    kefir "3.7.1"
-    lodash "4.17.4"
-    moment "2.17.1"
-    moment-timezone "0.5.11"
-    react-day-picker "3.1.1"
-    react-dnd "2.1.4"
-    react-document-title "2.0.3"
-    react-intl "2.2.3"
-    react-native-listener "1.0.2"
-    react-portal "3.0.0"
-    react-responsive "1.2.6"
-    react-textarea-autosize "4.0.5"
-    rxjs "5.4.3"
-
-"@gooddata/goodstrap@54.0.0-alpha2":
-  version "54.0.0-alpha2"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-54.0.0-alpha2.tgz#88fd3d7672b5f00306f2c06a32cf6b44ebd2ab94"
-  dependencies:
-    "@gooddata/js-utils" "0.7.1"
+    "@gooddata/js-utils" "0.9.0"
     classnames "2.2.5"
     custom-event "1.0.1"
     fixed-data-table-2 "0.7.13"
@@ -55,40 +29,32 @@
     react-day-picker "7.0.7"
     react-dnd "2.1.4"
     react-document-title "2.0.3"
-    react-intl "2.2.3"
+    react-intl "2.4.0"
     react-native-listener "1.0.2"
     react-portal "3.0.0"
     react-responsive "1.2.6"
     react-textarea-autosize "4.0.5"
-    rxjs "5.4.3"
+    rxjs "5.5.6"
 
-"@gooddata/indigo-visualizations@^1.1.11":
-  version "1.1.11"
-  resolved "https://registry.yarnpkg.com/@gooddata/indigo-visualizations/-/indigo-visualizations-1.1.11.tgz#b16c22c479825101bd0971083c96233e488bb6e2"
+"@gooddata/indigo-visualizations@1.2.0-ocetnik-doc-upgrade-dependencies-2018-02-23T14-25-09-114Z":
+  version "1.2.0-ocetnik-doc-upgrade-dependencies-2018-02-23T14-25-09-114Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/indigo-visualizations/-/indigo-visualizations-1.2.0-ocetnik-doc-upgrade-dependencies-2018-02-23T14-25-09-114Z.tgz#adf1caf9cf83e327149be07b8a944954aa9187fa"
   dependencies:
-    "@gooddata/goodstrap" "53.0.1"
-    "@gooddata/js-utils" "0.7.1"
-    "@gooddata/numberjs" "3.0.0"
+    "@gooddata/goodstrap" "54.0.0-ocetnik-doc-upgrade-dependencies-2018-02-23T14-19-48-138Z"
+    "@gooddata/js-utils" "0.9.0"
+    "@gooddata/numberjs" "3.1.2"
     classnames "2.2.5"
     fixed-data-table-2 "0.7.13"
     highcharts "4.2.5"
     invariant "2.2.2"
     lodash "4.17.4"
     nodelist-foreach-polyfill "1.2.0"
-    react-intl "2.2.3"
-    react-measure "1.3.1"
-    rxjs "5.4.3"
+    react-intl "2.4.0"
+    react-measure "2.0.2"
+    react-textfit "1.1.0"
+    rxjs "5.5.6"
 
-"@gooddata/js-utils@0.7.1":
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/@gooddata/js-utils/-/js-utils-0.7.1.tgz#5b382dbf37b61b387951b8e58e8580f9f75a28ee"
-  dependencies:
-    js-cookie "2.1.4"
-    lodash "4.17.4"
-    moment "2.17.1"
-    moment-timezone "0.5.11"
-
-"@gooddata/js-utils@^0.9.0":
+"@gooddata/js-utils@0.9.0", "@gooddata/js-utils@^0.9.0":
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/@gooddata/js-utils/-/js-utils-0.9.0.tgz#ac630fde7d2fad8c3d328519255e31446df6fb34"
   dependencies:
@@ -114,11 +80,7 @@
     seedrandom "2.4.3"
     uuid "3.1.0"
 
-"@gooddata/numberjs@3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/numberjs/-/numberjs-3.0.0.tgz#9d646f1f9c05614d18e08ac5024b2ba2f7139396"
-
-"@gooddata/numberjs@^3.1.2":
+"@gooddata/numberjs@3.1.2", "@gooddata/numberjs@^3.1.2":
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/@gooddata/numberjs/-/numberjs-3.1.2.tgz#82dd26486edeb21de37cfe538915f93cd403e801"
 
@@ -1732,10 +1694,6 @@ base@^0.11.1:
     mixin-deep "^1.2.0"
     pascalcase "^0.1.1"
 
-batch-processor@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/batch-processor/-/batch-processor-1.0.0.tgz#75c95c32b748e0850d10c2b168f6bdbe9891ace8"
-
 bcrypt-pbkdf@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/bcrypt-pbkdf/-/bcrypt-pbkdf-1.0.1.tgz#63bc5dcb61331b92bc05fd528953c33462a06f8d"
@@ -2910,12 +2868,6 @@ electron-to-chromium@^1.2.7, electron-to-chromium@^1.3.30:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.30.tgz#9666f532a64586651fc56a72513692e820d06a80"
   dependencies:
     electron-releases "^2.1.0"
-
-element-resize-detector@^1.1.9:
-  version "1.1.12"
-  resolved "https://registry.yarnpkg.com/element-resize-detector/-/element-resize-detector-1.1.12.tgz#8b3fd6eedda17f9c00b360a0ea2df9927ae80ba2"
-  dependencies:
-    batch-processor "^1.0.0"
 
 elliptic@^6.0.0:
   version "6.4.0"
@@ -4179,31 +4131,15 @@ intl-format-cache@^2.0.5:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/intl-format-cache/-/intl-format-cache-2.1.0.tgz#04a369fecbfad6da6005bae1f14333332dcf9316"
 
-intl-messageformat-parser@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/intl-messageformat-parser/-/intl-messageformat-parser-1.2.0.tgz#5906b7f953ab7470e0dc8549097b648b991892ff"
-
 intl-messageformat-parser@1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/intl-messageformat-parser/-/intl-messageformat-parser-1.4.0.tgz#b43d45a97468cadbe44331d74bb1e8dea44fc075"
-
-intl-messageformat@1.3.0, intl-messageformat@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/intl-messageformat/-/intl-messageformat-1.3.0.tgz#f7d926aded7a3ab19b2dc601efd54e99a4bd4eae"
-  dependencies:
-    intl-messageformat-parser "1.2.0"
 
 intl-messageformat@^2.0.0, intl-messageformat@^2.1.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/intl-messageformat/-/intl-messageformat-2.2.0.tgz#345bcd46de630b7683330c2e52177ff5eab484fc"
   dependencies:
     intl-messageformat-parser "1.4.0"
-
-intl-relativeformat@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/intl-relativeformat/-/intl-relativeformat-1.3.0.tgz#893dc7076fccd380cf091a2300c380fa57ace45b"
-  dependencies:
-    intl-messageformat "1.3.0"
 
 intl-relativeformat@^2.0.0:
   version "2.1.0"
@@ -6493,7 +6429,7 @@ process-nextick-args@~1.0.6:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-1.0.7.tgz#150e20b756590ad3f91093f25a4f2ad8bff30ba3"
 
-process@^0.11.10:
+process@^0.11.10, process@^0.11.9:
   version "0.11.10"
   resolved "https://registry.yarnpkg.com/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
 
@@ -6665,10 +6601,6 @@ react-addons-test-utils@15.3.2:
   version "15.3.2"
   resolved "https://registry.yarnpkg.com/react-addons-test-utils/-/react-addons-test-utils-15.3.2.tgz#c09a44f583425a4a9c1b38444d7a6c3e6f0f41f6"
 
-react-day-picker@3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-3.1.1.tgz#7fa385dc7b424cee3eb09696e1918e6b18abafdb"
-
 react-day-picker@7.0.7:
   version "7.0.7"
   resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-7.0.7.tgz#4af30404ebb19125ff5f9f2d62e6204b4e68f119"
@@ -6740,16 +6672,7 @@ react-inspector@^2.2.2:
     babel-runtime "^6.26.0"
     is-dom "^1.0.9"
 
-react-intl@2.2.3:
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-2.2.3.tgz#8eebb03cddc38b337ed22fab78037ab53a594270"
-  dependencies:
-    intl-format-cache "^2.0.5"
-    intl-messageformat "^1.3.0"
-    intl-relativeformat "^1.3.0"
-    invariant "^2.1.1"
-
-react-intl@^2.2.3:
+react-intl@2.4.0, react-intl@^2.2.3:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-2.4.0.tgz#66c14dc9df9a73b2fbbfbd6021726e80a613eb15"
   dependencies:
@@ -6758,12 +6681,13 @@ react-intl@^2.2.3:
     intl-relativeformat "^2.0.0"
     invariant "^2.1.1"
 
-react-measure@1.3.1:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/react-measure/-/react-measure-1.3.1.tgz#c9bd8f2164587351fa107a94f6b102711dbdf8b0"
+react-measure@2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-measure/-/react-measure-2.0.2.tgz#072a9a5fafc01dfbadc1fa5fb09fc351037f636c"
   dependencies:
-    element-resize-detector "^1.1.9"
     get-node-dimensions "^1.2.0"
+    prop-types "^15.5.10"
+    resize-observer-polyfill "^1.4.2"
 
 react-modal@^2.2.4:
   version "2.4.1"
@@ -6821,6 +6745,13 @@ react-style-proptype@^3.0.0:
 react-textarea-autosize@4.0.5:
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/react-textarea-autosize/-/react-textarea-autosize-4.0.5.tgz#55379f6a6fa575fc87d1b8de2756e57e3b6c995d"
+
+react-textfit@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-textfit/-/react-textfit-1.1.0.tgz#088855580f2e7aad269efc81b734bf636877d0e1"
+  dependencies:
+    process "^0.11.9"
+    prop-types "^15.5.10"
 
 react-transition-group@^1.1.2:
   version "1.2.1"
@@ -7125,6 +7056,10 @@ require-main-filename@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/require-main-filename/-/require-main-filename-1.0.1.tgz#97f717b69d48784f5f526a6c5aa8ffdda055a4d1"
 
+resize-observer-polyfill@^1.4.2:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/resize-observer-polyfill/-/resize-observer-polyfill-1.5.0.tgz#660ff1d9712a2382baa2cad450a4716209f9ca69"
+
 resolve-dir@^1.0.0, resolve-dir@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/resolve-dir/-/resolve-dir-1.0.1.tgz#79a40644c362be82f26effe739c9bb5382046f43"
@@ -7169,13 +7104,7 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^2.0.0"
     inherits "^2.0.1"
 
-rxjs@5.4.3:
-  version "5.4.3"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-5.4.3.tgz#0758cddee6033d68e0fd53676f0f3596ce3d483f"
-  dependencies:
-    symbol-observable "^1.0.1"
-
-rxjs@^5.5.6:
+rxjs@5.5.6, rxjs@^5.5.6:
   version "5.5.6"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-5.5.6.tgz#e31fb96d6fd2ff1fd84bcea8ae9c02d007179c02"
   dependencies:
