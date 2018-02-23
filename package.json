@@ -46,14 +46,14 @@
     "typescript": "2.3.3"
   },
   "dependencies": {
-    "@gooddata/data-layer": "6.0.0-alpha3",
-    "@gooddata/goodstrap": "54.0.0-alpha2",
-    "@gooddata/indigo-visualizations": "^1.1.11",
+    "@gooddata/data-layer": "6.0.0-ocetnik-doc-upgrade-dependencies-2018-02-23T15-10-42-960Z",
+    "@gooddata/goodstrap": "54.0.0-ocetnik-doc-upgrade-dependencies-2018-02-23T14-19-48-138Z",
+    "@gooddata/indigo-visualizations": "1.2.0-ocetnik-doc-upgrade-dependencies-2018-02-23T14-25-09-114Z",
     "@gooddata/js-utils": "^0.9.0",
     "@gooddata/numberjs": "^3.1.2",
     "classnames": "^2.2.5",
     "gooddata": "5.0.0-alpha1",
-    "lodash": "^4.17.4",
+    "lodash": "4.17.4",
     "prop-types": "^15.6.0",
     "react-intl": "^2.2.3",
     "rxjs": "^5.5.6"
