@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@gooddata/data-layer@6.0.0-alpha3":
-  version "6.0.0-alpha3"
-  resolved "https://registry.yarnpkg.com/@gooddata/data-layer/-/data-layer-6.0.0-alpha3.tgz#767e284ce8052891263dfbc3e476a22a093d6c83"
+"@gooddata/data-layer@6.0.0-vaclavbohac-afm-vo-conversion-2018-02-23T14-48-24-866Z":
+  version "6.0.0-vaclavbohac-afm-vo-conversion-2018-02-23T14-48-24-866Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/data-layer/-/data-layer-6.0.0-vaclavbohac-afm-vo-conversion-2018-02-23T14-48-24-866Z.tgz#3f607a85f4a78bd999e4ad91c806c0e3a9b40307"
   dependencies:
     json-stable-stringify "^1.0.1"
     lodash "^4.17.4"

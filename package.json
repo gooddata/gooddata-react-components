@@ -46,7 +46,7 @@
     "typescript": "2.3.3"
   },
   "dependencies": {
-    "@gooddata/data-layer": "6.0.0-alpha3",
+    "@gooddata/data-layer": "6.0.0-vaclavbohac-afm-vo-conversion-2018-02-23T14-48-24-866Z",
     "@gooddata/goodstrap": "54.0.0-alpha2",
     "@gooddata/indigo-visualizations": "^1.1.11",
     "@gooddata/js-utils": "^0.9.0",

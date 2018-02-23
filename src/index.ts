@@ -3,7 +3,7 @@ import * as VisEvents from './interfaces/Events';
 import CatalogHelper from './helpers/CatalogHelper';
 import { isEmptyResult } from './helpers/errorHandlers';
 import { BaseChart, ILegendConfig } from './components/core/base/BaseChart';
-import { Table } from './components/core/Table';
+import { Table as CoreTable } from './components/core/Table';
 import { Kpi } from './components/simple/Kpi';
 import { Visualization, VisualizationEnvironment } from './components/uri/Visualization';
 import { ErrorStates, ErrorCodes } from './constants/errorStates';
@@ -18,19 +18,27 @@ import { generateDimensions } from './helpers/dimensions';
 import * as BucketNames from './constants/bucketNames';
 import * as PoPHelper from './helpers/popHelper';
 
+import { BarChart } from './components/BarChart';
+import { ColumnChart } from './components/ColumnChart';
+import { LineChart } from './components/LineChart';
+import { PieChart } from './components/PieChart';
+import { Table } from './components/Table';
+
 const CoreComponents = {
-    Table,
+    Table: CoreTable,
     BaseChart
 };
 
 export {
     AfmComponents,
-    AttributeFilter,
     AttributeElements,
+    AttributeFilter,
+    BarChart,
     BucketNames,
-    CoreComponents,
     CatalogHelper,
     ChartType,
+    ColumnChart,
+    CoreComponents,
     ErrorCodes,
     ErrorStates,
     Execute,
@@ -40,8 +48,11 @@ export {
     isEmptyResult,
     IVisualizationProperties,
     Kpi,
+    LineChart,
+    PieChart,
     PoPHelper,
     PropTypes,
+    Table,
     VisEvents,
     Visualization,
     VisualizationEnvironment,
