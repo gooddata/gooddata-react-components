@@ -10,6 +10,7 @@ export interface ITableProps extends ICommonChartProps {
     projectId: string;
     measures: VisualizationObject.BucketItem[];
     attributes?: VisualizationObject.IVisualizationAttribute[];
+    totals?: VisualizationObject.IVisualizationTotal[];
     filters?: VisualizationObject.VisualizationObjectFilter[];
 }
 
@@ -30,7 +31,8 @@ export function Table(props: ITableProps): JSX.Element {
     const buckets: VisualizationObject.IBucket[] = [
         {
             localIdentifier: 'measures',
-            items: props.measures || []
+            items: props.measures || [],
+            totals: props.totals || []
         },
         {
             localIdentifier: 'attributes',
