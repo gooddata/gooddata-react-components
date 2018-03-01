@@ -81,6 +81,29 @@ export class TableExample extends Component {
             }
         ];
 
+        const totals = [
+            {
+                measureIdentifier: 'franchiseFeesIdentifier',
+                type: 'avg',
+                attributeIdentifier: 'month'
+            },
+            {
+                measureIdentifier: 'franchiseFeesAdRoyaltyIdentifier',
+                type: 'avg',
+                attributeIdentifier: 'month'
+            },
+            {
+                measureIdentifier: 'franchiseFeesInitialFranchiseFeeIdentifier',
+                type: 'avg',
+                attributeIdentifier: 'month'
+            },
+            {
+                measureIdentifier: 'franchiseFeesIdentifierOngoingRoyalty',
+                type: 'avg',
+                attributeIdentifier: 'month'
+            }
+        ];
+
         const attributes = [
             {
                 visualizationAttribute: {
@@ -92,49 +115,13 @@ export class TableExample extends Component {
             }
         ];
 
-        const resultSpec = {
-            dimensions: [
-                {
-                    itemIdentifiers: ['month'],
-                    totals: [
-                        {
-                            measureIdentifier: 'franchiseFeesIdentifier',
-                            type: 'avg',
-                            attributeIdentifier: 'month'
-                        },
-                        {
-                            measureIdentifier: 'franchiseFeesAdRoyaltyIdentifier',
-                            type: 'avg',
-                            attributeIdentifier: 'month'
-                        },
-                        {
-                            measureIdentifier: 'franchiseFeesInitialFranchiseFeeIdentifier',
-                            type: 'avg',
-                            attributeIdentifier: 'month'
-                        },
-                        {
-                            measureIdentifier: 'franchiseFeesIdentifierOngoingRoyalty',
-                            type: 'avg',
-                            attributeIdentifier: 'month'
-                        }
-                    ]
-                },
-                {
-                    itemIdentifiers: ['measureGroup']
-                }
-            ]
-        };
-
         return (
             <div style={{ height: 300 }} className="s-table">
                 <Table
                     projectId={projectId}
                     measures={measures}
                     attributes={attributes}
-                    resultSpec={resultSpec}
-                    totals={[
-                        { type: 'avg', outputMeasureIndexes: [0, 1, 2, 3], alias: 'AVG' }
-                    ]}
+                    totals={totals}
                     onLoadingChanged={this.onLoadingChanged}
                     onError={this.onError}
                     LoadingComponent={Loading}
