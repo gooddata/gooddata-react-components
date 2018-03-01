@@ -123,7 +123,10 @@ export class AttributeElements extends React.PureComponent<IAttributeElementsPro
             error: null
         };
 
-        this.sdk = props.sdk || createSdk();
+        const sdk = props.sdk || createSdk();
+        this.sdk = sdk.clone();
+        this.sdk.xhr.setSdkPackage('@gooddata/react-components', require('../../../../package.json').version);
+        this.sdk.xhr.setSdkComponent(this.constructor.name, props);
 
         this.loadMore = this.loadMore.bind(this);
     }
@@ -134,7 +137,9 @@ export class AttributeElements extends React.PureComponent<IAttributeElementsPro
 
     public componentWillReceiveProps(nextProps: IAttributeElementsProps) {
         if (nextProps.sdk && this.sdk !== nextProps.sdk) {
-            this.sdk = nextProps.sdk;
+            this.sdk = nextProps.sdk.clone();
+            this.sdk.xhr.setSdkPackage('@gooddata/react-components', require('../../../../package.json').version);
+            this.sdk.xhr.setSdkComponent(this.constructor.name, nextProps);
         }
 
         if (this.props.uri !== nextProps.uri ||

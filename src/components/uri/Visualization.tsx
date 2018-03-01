@@ -154,7 +154,11 @@ export class VisualizationWrapped
             error: null
         };
 
-        this.sdk = props.sdk || createSdk();
+        const sdk = props.sdk || createSdk();
+        this.sdk = sdk.clone();
+        this.sdk.xhr.setSdkPackage('@gooddata/react-components', require('../../../package.json').version);
+        this.sdk.xhr.setSdkComponent(this.constructor.name, props);
+
         this.visualizationUri = props.uri;
 
         this.subject = createSubject<IVisualizationExecInfo>(
@@ -203,7 +207,9 @@ export class VisualizationWrapped
 
     public componentWillReceiveProps(nextProps: IVisualizationProps & InjectedIntlProps) {
         if (nextProps.sdk && this.sdk !== nextProps.sdk) {
-            this.sdk = nextProps.sdk;
+            this.sdk = nextProps.sdk.clone();
+            this.sdk.xhr.setSdkPackage('@gooddata/react-components', require('../../../package.json').version);
+            this.sdk.xhr.setSdkComponent(this.constructor.name, nextProps);
         }
         const hasInvalidResolvedUri = this.hasChangedProps(nextProps, ['uri', 'projectId', 'identifier']);
         const hasInvalidDatasource = hasInvalidResolvedUri || this.hasChangedProps(nextProps, ['filters']);
