@@ -5,12 +5,14 @@ import { Table as CoreTable } from './core/Table';
 import { ICommonChartProps } from './core/base/BaseChart';
 import { dataSourceProvider } from './afm/DataSourceProvider';
 import { convertBucketsToAFM } from '../helpers/conversion';
+import { getTableDimensions } from '../helpers/dimensions';
 
 export interface ITableProps extends ICommonChartProps {
     projectId: string;
     measures: VisualizationObject.BucketItem[];
     attributes?: VisualizationObject.IVisualizationAttribute[];
     totals?: VisualizationObject.IVisualizationTotal[];
+    totalsEditAllowed?: boolean;
     filters?: VisualizationObject.VisualizationObjectFilter[];
 }
 
@@ -44,6 +46,8 @@ export function Table(props: ITableProps): JSX.Element {
         <Component
             projectId={props.projectId}
             afm={convertBucketsToAFM(buckets)}
+            resultSpec={{ dimensions: getTableDimensions(buckets) }}
+            totalsEditAllowed={props.totalsEditAllowed ? props.totalsEditAllowed : false}
         />
     );
 }

@@ -5,6 +5,8 @@ import { LineChart as CoreLineChart } from './core/LineChart';
 import { ICommonChartProps } from './core/base/BaseChart';
 import { dataSourceProvider } from './afm/DataSourceProvider';
 import { convertBucketsToAFM } from '../helpers/conversion';
+import { generateStackedDimensions } from '../helpers/dimensions';
+import { isStackedChart } from '../helpers/stacks';
 
 export interface ILineChartProps extends ICommonChartProps {
     projectId: string;
@@ -25,28 +27,10 @@ function generateDefaultDimensions(afm: AFM.IAfm): AFM.IDimension[] {
     ];
 }
 
-function generateStackedDimensions(afm: AFM.IAfm): AFM.IDimension[] {
-    return [
-        {
-            itemIdentifiers: ['measureGroup', afm.attributes[0].localIdentifier]
-        },
-        {
-            itemIdentifiers: (afm.attributes || []).map((a => a.localIdentifier))
-        }
-    ];
-}
-
-// TODO: Move to helpers
-function isStackedChart(buckets: VisualizationObject.IBucket[]): boolean {
-    return buckets.some((bucket) => {
-        return bucket.localIdentifier === 'stacks' && bucket.items.length > 0;
-    });
-}
-
 function getStackingResultSpec(buckets: VisualizationObject.IBucket[]): AFM.IResultSpec {
     if (isStackedChart(buckets)) {
         return {
-            dimensions: generateStackedDimensions(convertBucketsToAFM(buckets))
+            dimensions: generateStackedDimensions(buckets)
         };
     }
 
