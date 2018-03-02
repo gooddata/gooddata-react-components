@@ -73,7 +73,10 @@ export function dataSourceProvider<T>(
                 resultSpec: null
             };
 
-            this.sdk = props.sdk || createSdk();
+            const sdk = props.sdk || createSdk();
+            this.sdk = sdk.clone();
+            this.sdk.xhr.setSdkPackage('@gooddata/react-components', require('../../../package.json').version);
+            this.sdk.xhr.setSdkComponent(InnerComponent.name, props);
 
             this.subject = createSubject<IDataSource>((dataSource) => {
                 this.setState({
@@ -95,7 +98,9 @@ export function dataSourceProvider<T>(
             }
 
             if (sdk && sdk !== this.sdk) {
-                this.sdk = sdk;
+                this.sdk = nextProps.sdk.clone();
+                this.sdk.xhr.setSdkPackage('@gooddata/react-components', require('../../../package.json').version);
+                this.sdk.xhr.setSdkComponent(this.constructor.name, nextProps);
             }
 
             if (

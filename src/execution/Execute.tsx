@@ -72,7 +72,10 @@ export class Execute extends React.Component<IExecuteProps, IExecuteState> {
 
         const { onError, onLoadingChanged } = props;
 
-        this.sdk = props.sdk || createSdk();
+        const sdk = props.sdk || createSdk();
+        this.sdk = sdk.clone();
+        this.sdk.xhr.setSdkPackage('@gooddata/react-components', require('../../package.json').version);
+        this.sdk.xhr.setSdkComponent(this.constructor.name, props);
 
         this.dataTable = props.dataTableFactory(this.sdk, props.projectId);
         this.dataTable.onData((result: Execution.IExecutionResponses) => {
@@ -111,7 +114,9 @@ export class Execute extends React.Component<IExecuteProps, IExecuteState> {
 
     public componentWillReceiveProps(nextProps: IExecuteProps) {
         if (nextProps.sdk && this.sdk !== nextProps.sdk) {
-            this.sdk = nextProps.sdk;
+            this.sdk = nextProps.sdk.clone();
+            this.sdk.xhr.setSdkPackage('@gooddata/react-components', require('../../package.json').version);
+            this.sdk.xhr.setSdkComponent(this.constructor.name, nextProps);
         }
         if (this.hasPropsChanged(nextProps, ['afm', 'resultSpec'])) {
             this.runExecution(nextProps);

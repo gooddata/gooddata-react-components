@@ -65,13 +65,17 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps, 
     constructor(props: IAttributeFilterProps) {
         super(props);
 
-        this.sdk = props.sdk || createSdk();
+        const sdk = props.sdk || createSdk();
+        this.sdk = sdk.clone();
+        this.sdk.xhr.setSdkPackage('@gooddata/react-components', require('../../../../package.json').version);
+        this.sdk.xhr.setSdkComponent(this.constructor.name, props);
     }
 
     public componentWillReceiveProps(nextProps: IAttributeFilterProps) {
         if (nextProps.sdk && this.sdk !== nextProps.sdk) {
-            this.sdk = nextProps.sdk;
-        }
+            this.sdk = nextProps.sdk.clone();
+            this.sdk.xhr.setSdkPackage('@gooddata/react-components', require('../../../../package.json').version);
+            this.sdk.xhr.setSdkComponent(this.constructor.name, nextProps);        }
     }
 
     public render() {
