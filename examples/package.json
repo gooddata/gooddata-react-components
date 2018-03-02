@@ -60,8 +60,8 @@
   },
   "dependencies": {
     "@gooddata/goodstrap": "53.1.2",
-    "@gooddata/react-components": "4.0.0-alpha3",
-    "gooddata": "4.5.1",
+    "@gooddata/react-components": "4.0.1-pavelzgdc-pzb-647-telemetry-2018-03-02T10-33-48-891Z",
+    "gooddata": "5.0.0-pavelzgdc-pzb-647-telemetrie-2018-03-02T10-05-36-276Z",
     "moment": "2.20.1",
     "prop-types": "15.6.0",
     "react": "15.3.2",
