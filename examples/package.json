@@ -61,7 +61,7 @@
   "dependencies": {
     "@gooddata/data-layer": "7.0.0-alpha0",
     "@gooddata/goodstrap": "53.1.2",
-    "@gooddata/react-components": "4.0.0-alpha3",
+    "@gooddata/react-components": "5.0.0-pavelzgdc-pzb-verifikace-2018-03-08T14-17-35-083Z",
     "gooddata": "6.0.0-alpha0",
     "moment": "2.20.1",
     "prop-types": "15.6.0",

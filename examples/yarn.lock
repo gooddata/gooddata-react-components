@@ -54,14 +54,6 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@gooddata/data-layer@6.0.0-alpha1":
-  version "6.0.0-alpha1"
-  resolved "https://registry.yarnpkg.com/@gooddata/data-layer/-/data-layer-6.0.0-alpha1.tgz#3042cfe5f70df8a8647ffdd1716efc3c7abdd06f"
-  dependencies:
-    json-stable-stringify "^1.0.1"
-    lodash "^4.17.4"
-    rxjs "^5.5.6"
-
 "@gooddata/data-layer@7.0.0-alpha0":
   version "7.0.0-alpha0"
   resolved "https://registry.yarnpkg.com/@gooddata/data-layer/-/data-layer-7.0.0-alpha0.tgz#d9ac06c4cc37eca6210e59016031a7a10ae4ec33"
@@ -148,9 +140,9 @@
     react-textarea-autosize "4.0.5"
     rxjs "5.4.3"
 
-"@gooddata/indigo-visualizations@^1.1.11":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/indigo-visualizations/-/indigo-visualizations-1.2.0.tgz#4ca67d50815b5e43d9ab90d96b29fed039f6cf57"
+"@gooddata/indigo-visualizations@^1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@gooddata/indigo-visualizations/-/indigo-visualizations-1.3.2.tgz#3127dafc4bbdce34f900b7b7214be7a417936a38"
   dependencies:
     "@gooddata/goodstrap" "53.0.1"
     "@gooddata/js-utils" "0.7.1"
@@ -192,17 +184,17 @@
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/@gooddata/numberjs/-/numberjs-3.1.2.tgz#82dd26486edeb21de37cfe538915f93cd403e801"
 
-"@gooddata/react-components@4.0.0-alpha3":
-  version "4.0.0-alpha3"
-  resolved "https://registry.yarnpkg.com/@gooddata/react-components/-/react-components-4.0.0-alpha3.tgz#86dac0ff7633cd31dee3aad020e3229dd7a80cf5"
+"@gooddata/react-components@5.0.0-pavelzgdc-pzb-verifikace-2018-03-08T14-17-35-083Z":
+  version "5.0.0-pavelzgdc-pzb-verifikace-2018-03-08T14-17-35-083Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/react-components/-/react-components-5.0.0-pavelzgdc-pzb-verifikace-2018-03-08T14-17-35-083Z.tgz#c09d75d642fa137c07d1b99512f37e8038b3ac75"
   dependencies:
-    "@gooddata/data-layer" "6.0.0-alpha1"
+    "@gooddata/data-layer" "7.0.0-alpha0"
     "@gooddata/goodstrap" "54.0.0-alpha2"
-    "@gooddata/indigo-visualizations" "^1.1.11"
+    "@gooddata/indigo-visualizations" "^1.3.2"
     "@gooddata/js-utils" "^0.9.0"
     "@gooddata/numberjs" "^3.1.2"
     classnames "^2.2.5"
-    gooddata "5.0.0-alpha1"
+    gooddata "6.0.0-alpha0"
     lodash "^4.17.4"
     prop-types "^15.6.0"
     react-intl "^2.2.3"
@@ -3572,19 +3564,6 @@ gooddata@4.3.0:
     isomorphic-fetch "2.2.1"
     lodash "4.17.4"
     md5 "2.2.1"
-
-gooddata@5.0.0-alpha1:
-  version "5.0.0-alpha1"
-  resolved "https://registry.yarnpkg.com/gooddata/-/gooddata-5.0.0-alpha1.tgz#6b1799b363e221cf35bef736ed9263392f93a586"
-  dependencies:
-    "@gooddata/typings" "1.0.0"
-    es6-promise "3.0.2"
-    fetch-cookie "0.4.0"
-    invariant "2.2.2"
-    isomorphic-fetch "2.2.1"
-    lodash "4.17.4"
-    md5 "2.2.1"
-    qs "6.5.1"
 
 gooddata@6.0.0-alpha0:
   version "6.0.0-alpha0"

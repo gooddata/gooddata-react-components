@@ -1,7 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import * as GD from 'gooddata';
+import GD from 'gooddata';
 
 export const title = 'Sign in to GoodData platform';
 

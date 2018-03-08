@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-closing-tag-location */
 import React, { Component } from 'react';
 import { AfmComponents } from '@gooddata/react-components';
-import * as GD from 'gooddata';
+import GD from 'gooddata';
 
 import '@gooddata/react-components/styles/css/main.css';
 
