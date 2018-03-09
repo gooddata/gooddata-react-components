@@ -9,6 +9,7 @@ import { convertBucketsToAFM } from '../helpers/conversion';
 
 export interface IHeadlineBucketProps {
     measure: VisualizationObject.IMeasure;
+    secondaryMeasure?: VisualizationObject.IMeasure;
     filters?: VisualizationObject.VisualizationObjectFilter[];
 }
 
@@ -22,7 +23,7 @@ export function Headline(props: IHeadlineProps): JSX.Element {
     const buckets = [
         {
             localIdentifier: 'measures',
-            items: [props.measure]
+            items: props.secondaryMeasure ? [props.measure, props.secondaryMeasure] : [props.measure]
         }
     ];
 

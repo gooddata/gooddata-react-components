@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 
 import { delay } from '../../tests/utils';
 import {
-    oneMeasureDataSource
+    oneMeasureOneDimensionDataSource
 } from '../../tests/mocks';
 
 import { Headline } from '../Headline';
@@ -12,25 +12,31 @@ import { HeadlineTransformation } from '@gooddata/indigo-visualizations';
 import { IDataSourceProviderInjectedProps } from '../../afm/DataSourceProvider';
 
 describe('Headline', () => {
-    const createComponent = () => {
+    function createComponent(props: ICommonVisualizationProps & IDataSourceProviderInjectedProps) {
         return mount<Partial<ICommonVisualizationProps & IDataSourceProviderInjectedProps>>((
             <Headline
-                dataSource={oneMeasureDataSource}
+                {...props}
                 afterRender={jest.fn()}
                 drillableItems={[]}
-                resultSpec={{}}
+                resultSpec={{
+                    dimensions: [
+                        { itemIdentifiers: ['measureGroup'] }
+                    ]
+                }}
             />
         ));
-    };
+    }
 
     it('should render HeadlineTransformation and pass down given props and props from execution', () => {
-        const wrapper = createComponent();
+        const wrapper = createComponent({
+            dataSource: oneMeasureOneDimensionDataSource
+        });
 
         return delay().then(() => {
             wrapper.update();
-            const renderdHeadlineTrans = wrapper.find(HeadlineTransformation);
+            const renderedHeadlineTrans = wrapper.find(HeadlineTransformation);
             const wrapperProps = wrapper.props();
-            expect(renderdHeadlineTrans.props()).toMatchObject({
+            expect(renderedHeadlineTrans.props()).toMatchObject({
                 executionRequest: {
                     afm: wrapperProps.dataSource.getAfm(),
                     resultSpec: wrapperProps.resultSpec
