@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 
 import { delay } from '../../tests/utils';
 import {
-    oneMeasureDataSource
+    oneMeasureOneDimensionDataSource
 } from '../../tests/mocks';
 
 import { Headline } from '../Headline';
@@ -11,19 +11,25 @@ import { ICommonVisualizationProps } from '../base/VisualizationLoadingHOC';
 import { HeadlineTransformation } from '@gooddata/indigo-visualizations';
 
 describe('Headline', () => {
-    const createComponent = () => {
+    const createComponent = (props: ICommonVisualizationProps) => {
         return mount<Partial<ICommonVisualizationProps>>((
             <Headline
-                dataSource={oneMeasureDataSource}
+                {...props}
                 afterRender={jest.fn()}
                 drillableItems={[]}
-                resultSpec={{}}
+                resultSpec={{
+                    dimensions: [
+                        { itemIdentifiers: ['measureGroup'] }
+                    ]
+                }}
             />
         ));
     };
 
     it('should render HeadlineTransformation and pass down given props and props from execution', () => {
-        const wrapper = createComponent();
+        const wrapper = createComponent({
+            dataSource: oneMeasureOneDimensionDataSource
+        });
 
         return delay().then(() => {
             wrapper.update();
@@ -41,4 +47,5 @@ describe('Headline', () => {
             });
         });
     });
+
 });
