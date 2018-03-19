@@ -29,6 +29,8 @@ import { PieChart } from './components/PieChart';
 import { Table } from './components/Table';
 import { Headline } from './components/Headline';
 
+import { GoodDataProvider } from './helpers/GoodDataProvider';
+
 const CoreComponents = {
     BaseChart,
     Headline: CoreHeadline,
@@ -49,6 +51,7 @@ export {
     ErrorStates,
     Execute,
     generateDimensions,
+    GoodDataProvider,
     Headline,
     IBaseChartProps,
     ICommonVisualizationProps,

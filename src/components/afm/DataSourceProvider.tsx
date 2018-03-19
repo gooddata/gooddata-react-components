@@ -12,6 +12,7 @@ import { AfmPropTypesShape, ResultSpecPropTypesShape } from '@gooddata/indigo-vi
 import { IDataSource } from '../../interfaces/DataSource';
 import { ISubject } from '../../helpers/async';
 import { setTelemetryHeaders } from '../../helpers/utils';
+import { IGoodDataProviderContext } from '../../helpers/GoodDataProvider';
 
 export type IAdapterFactory = (sdk: ISdk, projectId: string) => IAdapter<Execution.IExecutionResponses>;
 
@@ -64,19 +65,23 @@ export function dataSourceProvider<T>(
             resultSpec: ResultSpecPropTypesShape
         };
 
+        public static contextTypes = {
+            gooddata: PropTypes.object
+        };
+
         private adapter: IAdapter<Execution.IExecutionResponses>;
         private subject: ISubject<IDataSourceInfoPromise>;
         private sdk: ISdk;
 
-        constructor(props: IDataSourceProviderProps) {
-            super(props);
+        constructor(props: IDataSourceProviderProps, context: IGoodDataProviderContext) {
+            super(props, context);
 
             this.state = {
                 dataSource: null,
                 resultSpec: null
             };
 
-            const sdk = props.sdk || createSdk();
+            const sdk = props.sdk || this.context.gooddata || createSdk();
             this.sdk = sdk.clone();
             setTelemetryHeaders(this.sdk, componentName, props);
 

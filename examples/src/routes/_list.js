@@ -11,6 +11,7 @@ import DatePicker from './DatePicker';
 import ResponsiveChart from './ResponsiveChart';
 import DynamicMeasures from './DynamicMeasures';
 import CustomLegend from './CustomLegend';
+import Cors from './Cors';
 
 export const advancedUseCasesRoutes = [
     { path: '/advanced/global-filters', title: 'Global Filters', Component: GlobalFilters },
@@ -29,6 +30,7 @@ export const mainRoutes = [
     { path: '/visualization', title: 'Visualization', Component: Visualization },
     { path: '/attribute-filter-components', title: 'Attribute Filter Components', Component: AttributeFilter },
     { path: '/execute', title: 'Execute', Component: Execute },
+    { path: '/cors', pathMatch: 'full', title: 'Dealing with CORS', Component: Cors },
     { path: '/advanced', pathMatch: 'full', redirectTo: advancedUseCasesRoutes[0].path, title: 'Advanced Use Cases', Component: AdvancedUseCasesWithProps }
 ];
 

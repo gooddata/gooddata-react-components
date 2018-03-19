@@ -174,4 +174,26 @@ describe('DataSourceProvider', () => {
         expect(sdk.config.setRequestHeader.mock.calls[1])
             .toEqual(['X-GDC-JS-SDK-COMP-PROPS', 'afm,projectId,resultSpec,sdk']);
     });
+
+    it('should use gooddata-js sdk from context if provided', () => {
+        const sdk: any = {
+            clone: jest.fn(() => sdk),
+            config: {
+                setJsPackage: jest.fn(),
+                setRequestHeader: jest.fn()
+            }
+        };
+
+        const defaultProps = {
+            afm: {},
+            projectId: 'projid',
+            resultSpec: {}
+        };
+
+        const defaultDimension = () => [{ itemIdentifiers: ['x'] }];
+        const WrappedTable = dataSourceProvider(Table, defaultDimension, 'DummyNameInMocks');
+        mount(<WrappedTable {...defaultProps} />, { context: { gooddata: sdk } });
+
+        expect(sdk.clone).toHaveBeenCalled();
+    });
 });
