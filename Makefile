@@ -1,6 +1,9 @@
 include docker/.config
 DOCKER_REGISTRY=docker-registry.na.intgdc.com
 SOURCES_FILE=gooddata-react-components-web.tar.gz
+
+EXAMPLES_SOURCES_FILE=gooddata-react-components-examples.tar.gz
+
 # NPM_AUTH_TOKEN variable will be taken from CI env variables
 .PHONY: dist
 dist: clean
@@ -17,8 +20,12 @@ dist: clean
 .PHONY: tarball
 tarball: dist
 	tar czvf specs/$(SOURCES_FILE) dist-storybook/
+	tar czvf specs/$(EXAMPLES_SOURCES_FILE) examples/dist/ httpd/
 
 .PHONY: clean
 clean:
 	rm -rf dist
 	rm -f $(SOURCES_FILE)
+
+	rm -rf examples/dist
+	rm -f $(EXAMPLES_SOURCES_FILE)
