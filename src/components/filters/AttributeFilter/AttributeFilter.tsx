@@ -82,6 +82,8 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps, 
     public render() {
         const { locale, projectId, uri, identifier } = this.props;
         const { md } = this.sdk;
+        // tslint:disable-next-line:no-console
+        console.log('updated version!');
         return (
             <IntlWrapper locale={locale}>
                 <AttributeLoader uri={uri} identifier={identifier} projectId={projectId} metadata={md}>
