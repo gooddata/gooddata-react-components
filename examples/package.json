@@ -5,6 +5,7 @@
   "description": "GoodData ReactComponents examples",
   "main": "index.js",
   "scripts": {
+    "heroku-start": "ls -la && ls -la dist/ && node server.js",
     "build": "yarn prepare && NODE_ENV=production webpack",
     "dist": "yarn build",
     "prepare": "cd .. && yarn prepublish && cd examples",
@@ -64,6 +65,7 @@
     "@gooddata/goodstrap": "55.0.0-alpha5",
     "@gooddata/react-components": "5.0.0-alpha20",
     "isomorphic-fetch": "^2.2.1",
+    "grunt-grizzly": "^0.15.0",
     "moment": "2.20.1",
     "prop-types": "15.6.0",
     "react": "15.6.2",

@@ -89,7 +89,9 @@
     "validate-ci": "tsc -p tsconfig.base.json --noEmit && yarn tslint-ci",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "build-storybook": "build-storybook -c .storybook -o dist-storybook",
-    "test-storybook": "test-storybook"
+    "test-storybook": "test-storybook",
+    "postinstall": "cd examples && yarn install --pure-lockfile && yarn build",
+    "start": "cd examples && yarn heroku-start --port $PORT"
   },
   "typings": "dist/index.d.ts",
   "test-storybook": {
