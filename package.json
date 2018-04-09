@@ -13,7 +13,7 @@
     "LICENSE"
   ],
   "devDependencies": {
-    "@gooddata/mock-js": "1.0.0-alpha4",
+    "@gooddata/mock-js": "1.0.0-vojty-remove-moment-2018-04-09T08-07-22-061Z",
     "@gooddata/test-storybook": "1.1.1",
     "@gooddata/typings": "2.0.0-alpha0",
     "@storybook/addon-actions": "3.2.18",
