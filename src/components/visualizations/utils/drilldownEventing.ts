@@ -60,6 +60,7 @@ export function getClickableElementNameByChartType(type: any) {
             return 'bar';
         case VisualizationTypes.PIE:
         case VisualizationTypes.TREEMAP:
+        case VisualizationTypes.DONUT:
             return 'slice';
         case VisualizationTypes.TABLE:
             return 'cell';
