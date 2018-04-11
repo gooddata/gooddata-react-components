@@ -54,8 +54,9 @@ export const isColumnChart = isEqual(VisualizationTypes.COLUMN);
 export const isBarChart = isEqual(VisualizationTypes.BAR);
 export const isLineChart = isEqual(VisualizationTypes.LINE);
 export const isPieChart = isEqual(VisualizationTypes.PIE);
+export const isDonutChart = isEqual(VisualizationTypes.DONUT);
+export const isPieOrDonutChart = (type: string) => isPieChart(type) || isDonutChart(type);
 export const isAreaChart = isEqual(VisualizationTypes.AREA);
-export const isDoughnutChart = isEqual(VisualizationTypes.DOUGHNUT);
 export const isHeadline = isEqual(VisualizationTypes.HEADLINE);
 export const isChartSupported = (type: string) => includes(VisualizationTypes, type);
 export const stringifyChartTypes = () => Object.keys(VisualizationTypes).reduce((acc, type) => {

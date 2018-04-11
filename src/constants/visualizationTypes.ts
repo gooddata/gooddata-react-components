@@ -4,13 +4,13 @@ export const VisualizationTypes = {
     COLUMN: 'column' as 'column',
     LINE: 'line' as 'line',
     PIE: 'pie' as 'pie',
+    DONUT: 'donut' as 'donut',
     TABLE: 'table' as 'table',
     HEADLINE: 'headline' as 'headline',
-    AREA: 'area' as 'area',
-    DOUGHNUT: 'doughnut' as 'doughnut'
+    AREA: 'area' as 'area'
 };
 
-export type ChartType = 'bar' | 'column' | 'pie' | 'line' | 'area';
+export type ChartType = 'bar' | 'column' | 'pie' | 'donut' | 'line' | 'area';
 export type VisType = ChartType | 'table' | 'headline';
 export type ChartElementType = 'slice' | 'bar' | 'point';
 export type VisElementType = ChartElementType | 'cell' | 'primaryValue' | 'secondaryValue';

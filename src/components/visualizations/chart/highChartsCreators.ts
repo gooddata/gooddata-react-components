@@ -17,6 +17,7 @@ import { getBarConfiguration } from './highcharts/barConfiguration';
 import { getColumnConfiguration } from './highcharts/columnConfiguration';
 import { getCustomizedConfiguration } from './highcharts/customConfiguration';
 import { getPieConfiguration } from './highcharts/pieConfiguration';
+import { getDonutConfiguration } from './highcharts/donutConfiguration';
 import { getAreaConfiguration } from './highcharts/areaConfiguration';
 import { VisualizationTypes } from '../../../constants/visualizationTypes';
 
@@ -25,6 +26,7 @@ const chartConfigurationMap = {
     [VisualizationTypes.BAR]: getBarConfiguration,
     [VisualizationTypes.COLUMN]: getColumnConfiguration,
     [VisualizationTypes.PIE]: getPieConfiguration,
+    [VisualizationTypes.DONUT]: getDonutConfiguration,
     [VisualizationTypes.AREA]: getAreaConfiguration
 };
 
