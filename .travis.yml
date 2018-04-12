@@ -3,6 +3,7 @@ cache: yarn
 node_js:
   - "8.9.4"
 before_script:
+  - npm whoami
   - yarn install --pure-lockfile
   - yarn check --integrity
 script:
