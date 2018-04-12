@@ -80,9 +80,9 @@
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/@gooddata/numberjs/-/numberjs-3.1.2.tgz#82dd26486edeb21de37cfe538915f93cd403e801"
 
-"@gooddata/test-storybook@1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@gooddata/test-storybook/-/test-storybook-1.1.2.tgz#dcc729d82738c062f1164cd6d457bbf2c6fedddd"
+"@gooddata/test-storybook@1.1.2-peterlacko-one-2815-increase-timeout-2018-04-12T11-50-40-242Z":
+  version "1.1.2-peterlacko-one-2815-increase-timeout-2018-04-12T11-50-40-242Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/test-storybook/-/test-storybook-1.1.2-peterlacko-one-2815-increase-timeout-2018-04-12T11-50-40-242Z.tgz#826e4930fe51b6a50913279dc1b0e4b99c00f317"
   dependencies:
     acorn "5.1.1"
     acorn-jsx "4.0.1"
