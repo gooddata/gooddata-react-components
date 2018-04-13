@@ -5,15 +5,16 @@ import { ChartPropTypes, Requireable } from '../../proptypes/Chart';
 
 export { Requireable };
 
-export class AreaChart extends React.Component<IChartProps, null> {
+export class BubbleChart extends React.Component<IChartProps, null> {
     public static propTypes = ChartPropTypes;
 
     public render() {
         return (
             <BaseChart
-                type="area"
+                type="bubble"
                 {...this.props}
             />
         );
     }
 }
+ 

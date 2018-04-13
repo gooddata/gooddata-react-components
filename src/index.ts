@@ -29,8 +29,22 @@ import { ColumnChart } from './components/ColumnChart';
 import { LineChart } from './components/LineChart';
 import { AreaChart } from './components/AreaChart';
 import { PieChart } from './components/PieChart';
+import { DonutChart } from './components/DonutChart';
 import { Table } from './components/Table';
 import { Headline } from './components/Headline';
+import { ColumnLineChart } from './components/ColumnLineChart';
+import { ColumnAreaChart } from './components/ColumnAreaChart';
+import { TreeMapChart } from './components/TreeMapChart';
+import { WordCloudChart } from './components/WordCloudChart';
+import { ScatterChart } from './components/ScatterChart';
+import { HeatMapChart } from './components/HeatMapChart';
+import { BulletChart } from './components/BulletChart';
+import { BubbleChart } from './components/BubbleChart';
+import { WaterfallChart } from './components/WaterfallChart';
+import { FunnelChart } from './components/FunnelChart';
+import { HistogramChart } from './components/HistogramChart';
+import { ParetoChart } from './components/ParetoChart';
+
 import Chart, { ILegendConfig } from './components/visualizations/chart/Chart';
 import ChartTransformation from './components/visualizations/chart/ChartTransformation';
 
@@ -73,6 +87,19 @@ export {
     LineChart,
     AreaChart,
     PieChart,
+    DonutChart,
+    ColumnLineChart,
+    ColumnAreaChart,
+    TreeMapChart,
+    WordCloudChart,
+    ScatterChart,
+    BulletChart,
+    HeatMapChart,
+    BubbleChart,
+    WaterfallChart,
+    FunnelChart,
+    HistogramChart,
+    ParetoChart,
     PoPHelper,
     PropTypes,
     Table,

@@ -1,28 +1,28 @@
 import * as React from 'react';
-import { omit, get } from 'lodash';
+import { omit } from 'lodash';
 import { Subtract } from 'utility-types';
 import { VisualizationObject, AFM } from '@gooddata/typings';
 
-import { AreaChart as AfmAreaChart } from './afm/AreaChart';
+import { WaterfallChart as AfmWaterfallChart } from './afm/WaterfallChart';
 import { ICommonChartProps } from './core/base/BaseChart';
 import { convertBucketsToAFM } from '../helpers/conversion';
 import { generateStackedDimensions } from '../helpers/dimensions';
 import { isStackedChart } from '../helpers/stacks';
 
-export interface IAreaChartBucketProps extends ICommonChartProps {
+export interface IWaterfallChartBucketProps {
     measures: VisualizationObject.BucketItem[];
-    viewBy?: VisualizationObject.IVisualizationAttribute[];
-    stackBy?: VisualizationObject.IVisualizationAttribute[];
+    trendBy?: VisualizationObject.IVisualizationAttribute;
+    segmentBy?: VisualizationObject.IVisualizationAttribute;
     filters?: VisualizationObject.VisualizationObjectFilter[];
 }
 
-export interface IAreaChartProps extends ICommonChartProps, IAreaChartBucketProps {
+export interface IWaterfallChartProps extends ICommonChartProps, IWaterfallChartBucketProps {
     projectId: string;
 }
 
-type IAreaChartNonBucketProps = Subtract<IAreaChartProps, IAreaChartBucketProps>;
+type IWaterfallChartNonBucketProps = Subtract<IWaterfallChartProps, IWaterfallChartBucketProps>;
 
-export interface IAreaChartProps extends ICommonChartProps {
+export interface IWaterfallChartProps extends ICommonChartProps {
     projectId: string;
 }
 
@@ -32,7 +32,7 @@ function generateDefaultDimensions(afm: AFM.IAfm): AFM.IDimension[] {
             itemIdentifiers: ['measureGroup']
         },
         {
-            itemIdentifiers: get(afm, 'attributes', []).map(a => a.localIdentifier)
+            itemIdentifiers: (afm.attributes || []).map(a => a.localIdentifier)
         }
     ];
 }
@@ -49,31 +49,27 @@ function getStackingResultSpec(buckets: VisualizationObject.IBucket[]): AFM.IRes
     };
 }
 
-/**
- * [AreaChart](http://sdk.gooddata.com/gdc-ui-sdk-doc/docs/next/area_chart_component.html)
- * is a component with bucket props measures, viewBy, stacksBy, filters
- */
-export function AreaChart(props: IAreaChartProps): JSX.Element {
+export function WaterfallChart(props: IWaterfallChartProps): JSX.Element {
     const buckets: VisualizationObject.IBucket[] = [
         {
             localIdentifier: 'measures',
-            items: get(props, 'measures', [])
+            items: props.measures || []
         },
         {
             localIdentifier: 'attributes',
-            items: get(props, 'viewBy', [])
+            items: props.trendBy ? [props.trendBy] : []
         },
         {
             localIdentifier: 'stacks',
-            items: get(props, 'stackBy', [])
+            items: props.segmentBy ? [props.segmentBy] : []
         }
     ];
 
     const newProps
-        = omit<IAreaChartProps, IAreaChartNonBucketProps>(props, ['measures', 'viewBy', 'stackBy', 'filters']);
+        = omit<IWaterfallChartProps, IWaterfallChartNonBucketProps>(props, ['measures', 'trendBy', 'segmentBy', 'filters']);
 
     return (
-        <AfmAreaChart
+        <AfmWaterfallChart
             {...newProps}
             projectId={props.projectId}
             afm={convertBucketsToAFM(buckets, props.filters)}

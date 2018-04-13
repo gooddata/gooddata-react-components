@@ -1,28 +1,28 @@
 import * as React from 'react';
-import { omit, get } from 'lodash';
+import { omit } from 'lodash';
 import { Subtract } from 'utility-types';
 import { VisualizationObject, AFM } from '@gooddata/typings';
 
-import { AreaChart as AfmAreaChart } from './afm/AreaChart';
+import { BulletChart as AfmBulletChart } from './afm/BulletChart';
 import { ICommonChartProps } from './core/base/BaseChart';
 import { convertBucketsToAFM } from '../helpers/conversion';
 import { generateStackedDimensions } from '../helpers/dimensions';
 import { isStackedChart } from '../helpers/stacks';
 
-export interface IAreaChartBucketProps extends ICommonChartProps {
+export interface IBulletChartBucketProps {
     measures: VisualizationObject.BucketItem[];
-    viewBy?: VisualizationObject.IVisualizationAttribute[];
-    stackBy?: VisualizationObject.IVisualizationAttribute[];
+    trendBy?: VisualizationObject.IVisualizationAttribute;
+    segmentBy?: VisualizationObject.IVisualizationAttribute;
     filters?: VisualizationObject.VisualizationObjectFilter[];
 }
 
-export interface IAreaChartProps extends ICommonChartProps, IAreaChartBucketProps {
+export interface IBulletChartProps extends ICommonChartProps, IBulletChartBucketProps {
     projectId: string;
 }
 
-type IAreaChartNonBucketProps = Subtract<IAreaChartProps, IAreaChartBucketProps>;
+type IBulletChartNonBucketProps = Subtract<IBulletChartProps, IBulletChartBucketProps>;
 
-export interface IAreaChartProps extends ICommonChartProps {
+export interface IBulletChartProps extends ICommonChartProps {
     projectId: string;
 }
 
@@ -32,7 +32,7 @@ function generateDefaultDimensions(afm: AFM.IAfm): AFM.IDimension[] {
             itemIdentifiers: ['measureGroup']
         },
         {
-            itemIdentifiers: get(afm, 'attributes', []).map(a => a.localIdentifier)
+            itemIdentifiers: (afm.attributes || []).map(a => a.localIdentifier)
         }
     ];
 }
@@ -49,31 +49,27 @@ function getStackingResultSpec(buckets: VisualizationObject.IBucket[]): AFM.IRes
     };
 }
 
-/**
- * [AreaChart](http://sdk.gooddata.com/gdc-ui-sdk-doc/docs/next/area_chart_component.html)
- * is a component with bucket props measures, viewBy, stacksBy, filters
- */
-export function AreaChart(props: IAreaChartProps): JSX.Element {
+export function BulletChart(props: IBulletChartProps): JSX.Element {
     const buckets: VisualizationObject.IBucket[] = [
         {
             localIdentifier: 'measures',
-            items: get(props, 'measures', [])
+            items: props.measures || []
         },
         {
             localIdentifier: 'attributes',
-            items: get(props, 'viewBy', [])
+            items: props.trendBy ? [props.trendBy] : []
         },
         {
             localIdentifier: 'stacks',
-            items: get(props, 'stackBy', [])
+            items: props.segmentBy ? [props.segmentBy] : []
         }
     ];
 
     const newProps
-        = omit<IAreaChartProps, IAreaChartNonBucketProps>(props, ['measures', 'viewBy', 'stackBy', 'filters']);
+        = omit<IBulletChartProps, IBulletChartNonBucketProps>(props, ['measures', 'trendBy', 'segmentBy', 'filters']);
 
     return (
-        <AfmAreaChart
+        <AfmBulletChart
             {...newProps}
             projectId={props.projectId}
             afm={convertBucketsToAFM(buckets, props.filters)}

@@ -48,11 +48,60 @@ export function getTableDimensions(buckets: VisualizationObject.IBucket[]): AFM.
     }];
 }
 
+export function getTreeMapDimensions(buckets: VisualizationObject.IBucket[]): AFM.IDimension[] {
+    const attributes: VisualizationObject.IBucket = buckets
+        .find(bucket => bucket.localIdentifier === VIEW || bucket.localIdentifier === 'attributes');
+
+    const measures: VisualizationObject.IBucket = buckets
+        .find(bucket => bucket.localIdentifier === MEASURES);
+
+    const attributesItemIdentifiers = get(attributes, 'items', [])
+        .map((a: VisualizationObject.IVisualizationAttribute) =>
+            a.visualizationAttribute.localIdentifier);
+
+    const measuresItemIdentifiers =
+        measures && measures.items && measures.items.length ? [MEASUREGROUP] : [];
+
+    const totals = getDimensionTotals(attributes);
+    const totalsProp = totals.length ? { totals } : {};
+
+    return [{
+        itemIdentifiers: attributesItemIdentifiers,
+        ...totalsProp
+    }, {
+        itemIdentifiers: measuresItemIdentifiers
+    }];
+}
+
 function getLocalIdentifierFromAttribute(attribute: VisualizationObject.IVisualizationAttribute): string {
     return attribute.visualizationAttribute.localIdentifier;
 }
 
 function getPieDimensions(mdObject: VisualizationObject.IVisualizationObjectContent): AFM.IDimension[] {
+    const view = mdObject.buckets.find(bucket => bucket.localIdentifier === VIEW);
+
+    if (view && view.items.length) {
+        return [
+            {
+                itemIdentifiers: [MEASUREGROUP]
+            },
+            {
+                itemIdentifiers: view.items.map(getLocalIdentifierFromAttribute)
+            }
+        ];
+    }
+
+    return [
+        {
+            itemIdentifiers: []
+        },
+        {
+            itemIdentifiers: [MEASUREGROUP]
+        }
+    ];
+}
+
+function getDonutDimensions(mdObject: VisualizationObject.IVisualizationObjectContent): AFM.IDimension[] {
     const view = mdObject.buckets.find(bucket => bucket.localIdentifier === VIEW);
 
     if (view && view.items.length) {
@@ -106,6 +155,107 @@ function getBarDimensions(mdObject: VisualizationObject.IVisualizationObjectCont
             itemIdentifiers: ((view && view.items || [])
                 .map(getLocalIdentifierFromAttribute))
                 .concat([MEASUREGROUP])
+        }
+    ];
+}
+
+function getScatterDimensions(mdObject: VisualizationObject.IVisualizationObjectContent): AFM.IDimension[] {
+    const view: VisualizationObject.IBucket = mdObject.buckets
+            .find(bucket => bucket.localIdentifier === VIEW);
+
+    const stack: VisualizationObject.IBucket = mdObject.buckets
+        .find(bucket => bucket.localIdentifier === STACK);
+
+    const hasNoStacks = !stack || !stack.items || stack.items.length === 0;
+
+    if (hasNoStacks) {
+        return [
+            {
+                itemIdentifiers: (view && view.items || [])
+                    .map(getLocalIdentifierFromAttribute)
+            },
+            {
+                itemIdentifiers: [MEASUREGROUP]
+            }
+        ];
+    }
+
+    return [
+        {
+            itemIdentifiers: (view && view.items || [])
+                .map(getLocalIdentifierFromAttribute)
+                .concat((stack && stack.items || [])
+                .map(getLocalIdentifierFromAttribute))
+        },
+        {
+            itemIdentifiers: [MEASUREGROUP]
+        }
+    ];
+}
+
+function getBubbleDimensions(mdObject: VisualizationObject.IVisualizationObjectContent): AFM.IDimension[] {
+    const view: VisualizationObject.IBucket = mdObject.buckets
+            .find(bucket => bucket.localIdentifier === VIEW);
+
+    const stack: VisualizationObject.IBucket = mdObject.buckets
+        .find(bucket => bucket.localIdentifier === STACK);
+
+    const hasNoStacks = !stack || !stack.items || stack.items.length === 0;
+
+    if (hasNoStacks) {
+        return [
+            {
+                itemIdentifiers: (view && view.items || [])
+                    .map(getLocalIdentifierFromAttribute)
+            },
+            {
+                itemIdentifiers: [MEASUREGROUP]
+            }
+        ];
+    }
+
+    return [
+        {
+            itemIdentifiers: (view && view.items || [])
+                .map(getLocalIdentifierFromAttribute)
+                .concat((stack && stack.items || [])
+                .map(getLocalIdentifierFromAttribute))
+        },
+        {
+            itemIdentifiers: [MEASUREGROUP]
+        }
+    ];
+}
+
+function getHeatMapDimensions(mdObject: VisualizationObject.IVisualizationObjectContent): AFM.IDimension[] {
+    const view: VisualizationObject.IBucket = mdObject.buckets
+            .find(bucket => bucket.localIdentifier === VIEW);
+
+    const stack: VisualizationObject.IBucket = mdObject.buckets
+        .find(bucket => bucket.localIdentifier === STACK);
+
+    const hasNoStacks = !stack || !stack.items || stack.items.length === 0;
+
+    if (hasNoStacks) {
+        return [
+            {
+                itemIdentifiers: (view && view.items || [])
+                    .map(getLocalIdentifierFromAttribute)
+            },
+            {
+                itemIdentifiers: [MEASUREGROUP]
+            }
+        ];
+    }
+
+    return [
+        {
+            itemIdentifiers: (view && view.items || [])
+                .map(getLocalIdentifierFromAttribute)
+        },
+        {
+            itemIdentifiers: (stack && stack.items || [])
+                .map(getLocalIdentifierFromAttribute).concat([MEASUREGROUP])
         }
     ];
 }
@@ -165,17 +315,39 @@ export function generateDimensions(
     type: VisType
 ): AFM.IDimension[] {
     switch (type) {
+        case VisualizationTypes.TREEMAP: {
+            return getTreeMapDimensions(mdObject.buckets);
+        }
         case VisualizationTypes.TABLE: {
             return getTableDimensions(mdObject.buckets);
         }
+
+        case VisualizationTypes.BULLET:
+        case VisualizationTypes.WATERFALL:
+        case VisualizationTypes.FUNNEL:
+        case VisualizationTypes.SCATTER:
+          return getScatterDimensions(mdObject);
+
+       case VisualizationTypes.BUBBLE:
+          return getBubbleDimensions(mdObject);
+        case VisualizationTypes.PARETO:
+        case VisualizationTypes.HISTOGRAM:
+        case VisualizationTypes.WORDCLOUD:
         case VisualizationTypes.PIE: {
             return getPieDimensions(mdObject);
+        }
+        case VisualizationTypes.DONUT: {
+            return getDonutDimensions(mdObject);
         }
         case VisualizationTypes.LINE: {
             return getLineDimensions(mdObject);
         }
+        case VisualizationTypes.HEATMAP:
+            return getHeatMapDimensions(mdObject);
         case VisualizationTypes.BAR:
         case VisualizationTypes.AREA:
+        case VisualizationTypes.COLUMNLINE:
+        case VisualizationTypes.COLUMNAREA:
         case VisualizationTypes.COLUMN: {
             return getBarDimensions(mdObject);
         }

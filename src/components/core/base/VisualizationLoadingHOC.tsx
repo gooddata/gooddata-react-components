@@ -3,7 +3,8 @@ import * as React from 'react';
 import noop = require('lodash/noop');
 import isEqual = require('lodash/isEqual');
 import { DataLayer } from '@gooddata/gooddata-js';
-import { AFM, Execution } from '@gooddata/typings';
+// hack +VisuaizationObject
+import { AFM, Execution, VisualizationObject } from '@gooddata/typings';
 import { ErrorStates } from '../../../constants/errorStates';
 import { IEvents, ILoadingState } from '../../../interfaces/Events';
 import { IDrillableItem } from '../../../interfaces/DrillEvents';
@@ -20,6 +21,8 @@ import { ErrorComponent, IErrorProps } from '../../simple/ErrorComponent';
 
 export type IExecutionDataPromise = Promise<Execution.IExecutionResponses>;
 
+// hack +mdObject
+
 export interface ICommonVisualizationProps extends IEvents {
     locale?: string;
     drillableItems?: IDrillableItem[];
@@ -28,6 +31,7 @@ export interface ICommonVisualizationProps extends IEvents {
     ErrorComponent?: React.ComponentType<IErrorProps>;
     LoadingComponent?: React.ComponentType<ILoadingProps>;
     visualizationProperties?: IVisualizationProperties;
+    mdObject?: VisualizationObject.IVisualizationObjectContent;
 }
 
 export interface ILoadingInjectedProps {
