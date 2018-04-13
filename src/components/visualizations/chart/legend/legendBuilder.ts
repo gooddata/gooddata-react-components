@@ -1,7 +1,7 @@
 // (C) 2007-2018 GoodData Corporation
 import pick = require('lodash/pick');
 import { RIGHT } from './PositionTypes';
-import { isAreaChart, isPieChart } from '../../utils/common';
+import { isAreaChart, isPieOrDonutChart } from '../../utils/common';
 
 export const DEFAULT_LEGEND_CONFIG = {
     enabled: true,
@@ -17,13 +17,13 @@ export function shouldLegendBeEnabled(chartOptions: any) {
     const isStacked = !isAreaChartWithOneSerie && Boolean(stacking);
 
     const isPieChartWithMoreThanOneCategory =
-        (isPieChart(type) && chartOptions.data.series[0].data.length > 1);
+        (isPieOrDonutChart(type) && chartOptions.data.series[0].data.length > 1);
 
     return hasMoreThanOneSeries || isPieChartWithMoreThanOneCategory || isStacked;
 }
 
 export function getLegendItems(chartOptions: any) {
-    const legendDataSource = isPieChart(chartOptions.type)
+    const legendDataSource = isPieOrDonutChart(chartOptions.type)
         ? chartOptions.data.series[0].data
         : chartOptions.data.series;
     return legendDataSource.map((legendDataSourceItem: any) =>
