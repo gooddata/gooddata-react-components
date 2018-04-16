@@ -168,7 +168,8 @@ export function generateDimensions(
         case VisualizationTypes.TABLE: {
             return getTableDimensions(mdObject.buckets);
         }
-        case VisualizationTypes.PIE: {
+        case VisualizationTypes.PIE:
+        case VisualizationTypes.DONUT: {
             return getPieDimensions(mdObject);
         }
         case VisualizationTypes.LINE: {

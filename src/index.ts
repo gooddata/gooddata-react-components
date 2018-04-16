@@ -30,6 +30,7 @@ import { ColumnChart } from './components/ColumnChart';
 import { LineChart } from './components/LineChart';
 import { AreaChart } from './components/AreaChart';
 import { PieChart } from './components/PieChart';
+import { DonutChart } from './components/DonutChart';
 import { Table } from './components/Table';
 import { Headline } from './components/Headline';
 import Chart, { ILegendConfig } from './components/visualizations/chart/Chart';
@@ -76,6 +77,7 @@ export {
     LineChart,
     AreaChart,
     PieChart,
+    DonutChart,
     PoPHelper,
     PropTypes,
     RuntimeError,
