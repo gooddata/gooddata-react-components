@@ -16,7 +16,9 @@ import {
     getDrillableSeries,
     customEscape,
     generateTooltipFn,
-    getChartOptions
+    getChartOptions,
+    generateTooltipHeatMapFn,
+    getHeatMapChartOptions
 } from '../chartOptionsBuilder';
 import { DEFAULT_CATEGORIES_LIMIT } from '../highcharts/commonConfiguration';
 
@@ -1566,6 +1568,124 @@ describe('chartOptionsBuilder', () => {
                 }];
 
                 expect(chartOptions.xAxes).toEqual(expectedAxes);
+            });
+        });
+
+        describe('HeatMap configuration', () => {
+            const viewBy = {
+                formOf: {
+                    name: 'viewAttr'
+                },
+                items: [{
+                    attributeHeaderItem: {
+                        name: 'viewHeader'
+                    }
+                }]
+            };
+
+            const stackBy = {
+                formOf: {
+                    name: 'stackAttr'
+                },
+                items: [{
+                    attributeHeaderItem: {
+                        name: 'stackHeader'
+                    }
+                }]
+            };
+
+            describe('generateTooltipHeatMapFn', () => {
+                const point = {
+                    value: 300,
+                    x: 0,
+                    y: 0,
+                    series: {
+                        name: 'name',
+                        userOptions: {
+                            dataLabels: {
+                                formatGD: 'abcd'
+                            }
+                        }
+                    }
+                };
+
+                it('should generate correct tooltip', () => {
+                    const tooltipFn = generateTooltipHeatMapFn(viewBy, stackBy);
+                    const expectedResult =
+            `<table class=\"tt-values\"><tr>
+                <td class=\"title\">stackAttr</td>
+                <td class=\"value\">stackHeader</td>
+            </tr>\n<tr>
+                <td class=\"title\">viewAttr</td>
+                <td class=\"value\">viewHeader</td>
+            </tr>\n<tr>
+                <td class=\"title\">name</td>
+                <td class=\"value\">abcd</td>
+            </tr></table>`;
+
+                    expect(tooltipFn(point)).toEqual(expectedResult);
+                });
+            });
+
+            describe('getHeatMapChartOptions', () => {
+                const executionResultData = [
+                    [ 10, 12 ],
+                    [ 20, 30 ]
+                ];
+                const measureGroup = {
+                    items: [
+                        {
+                            format: 'format',
+                            measureHeaderItem: {
+                                name: 'name'
+                            }
+                        }
+                    ]
+                };
+                const type = 'heatmap';
+                const yAxes = [] as any;
+                const xAxes = [] as any;
+
+                it('should generate correct series with enabled data labels', () => {
+                    const chartOptions = getHeatMapChartOptions(
+                        executionResultData, measureGroup, viewBy, stackBy, type, xAxes, yAxes
+                    );
+                    const expectedSeries = [{
+                        borderWidth: 1,
+                        data: [
+                            [0, 0, 10],
+                            [1, 0, 12],
+                            [0, 1, 20],
+                            [1, 1, 30]
+                        ],
+                        dataLabels: {
+                            enabled: true,
+                            formatGD: undefined as any
+                        },
+                        legendIndex: 0,
+                        name: 'name',
+                        turboThreshold: 0,
+                        yAxis: 0
+                    }];
+
+                    expect(chartOptions.data.series).toEqual(expectedSeries);
+                });
+
+                it('should generate valid categories', () => {
+                    const chartOptions = getHeatMapChartOptions(
+                        executionResultData, measureGroup, viewBy, stackBy, type, xAxes, yAxes
+                    );
+                    const expectedCategories = [['viewHeader'], ['stackHeader']];
+                    expect(chartOptions.data.categories).toEqual(expectedCategories);
+                });
+
+                it('should generate categories with empty strings', () => {
+                    const chartOptions = getHeatMapChartOptions(
+                        executionResultData, measureGroup, null, null, type, xAxes, yAxes
+                    );
+                    const expectedCategories = [[''], ['']];
+                    expect(chartOptions.data.categories).toEqual(expectedCategories);
+                });
             });
         });
     });
