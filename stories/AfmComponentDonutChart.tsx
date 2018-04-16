@@ -1,18 +1,25 @@
+// (C) 2007-2018 GoodData Corporation
 import * as React from 'react';
 import { storiesOf } from '@storybook/react';
 import { screenshotWrap } from '@gooddata/test-storybook';
 
-import { DonutChart } from '../src';
+import { DonutChart } from '../src/components/afm/DonutChart';
+import {
+    AFM_ONE_MEASURE_ONE_ATTRIBUTE,
+    AFM_TWO_MEASURES,
+    AFM_ONE_RENAMED_MEASURE_ONE_RENAMED_ATTRIBUTE,
+    AFM_TWO_MEASURES_ONE_ATTRIBUTE
+} from './data/afmComponentProps';
 import { onErrorHandler } from './mocks';
-import { ATTRIBUTE_1, ATTRIBUTE_1_WITH_ALIAS, MEASURE_1, MEASURE_1_WITH_ALIAS, MEASURE_2 } from './data/componentProps';
+import '../styles/scss/charts.scss';
 
-storiesOf('Core components/DonutChart', module)
+storiesOf('AFM components/DonutChart', module)
     .add('two measures', () => (
         screenshotWrap(
             <div style={{ width: 400, height: 400 }}>
                 <DonutChart
                     projectId="storybook"
-                    measures={[MEASURE_1, MEASURE_2]}
+                    afm={AFM_TWO_MEASURES}
                     onError={onErrorHandler}
                     LoadingComponent={null}
                     ErrorComponent={null}
@@ -25,8 +32,7 @@ storiesOf('Core components/DonutChart', module)
             <div style={{ width: 400, height: 400 }}>
                 <DonutChart
                     projectId="storybook"
-                    measures={[MEASURE_1]}
-                    viewBy={ATTRIBUTE_1}
+                    afm={AFM_ONE_MEASURE_ONE_ATTRIBUTE}
                     onError={onErrorHandler}
                     LoadingComponent={null}
                     ErrorComponent={null}
@@ -34,13 +40,12 @@ storiesOf('Core components/DonutChart', module)
             </div>
         )
     ))
-    .add('one measure with alias, one attribute with alias', () => (
+    .add('renamed measure and renamed attribute', () => (
         screenshotWrap(
             <div style={{ width: 400, height: 400 }}>
                 <DonutChart
                     projectId="storybook"
-                    measures={[MEASURE_1_WITH_ALIAS]}
-                    viewBy={ATTRIBUTE_1_WITH_ALIAS}
+                    afm={AFM_ONE_RENAMED_MEASURE_ONE_RENAMED_ATTRIBUTE}
                     onError={onErrorHandler}
                     LoadingComponent={null}
                     ErrorComponent={null}
@@ -53,12 +58,23 @@ storiesOf('Core components/DonutChart', module)
             <div style={{ width: 400, height: 400 }}>
                 <DonutChart
                     projectId="storybook"
-                    measures={[MEASURE_1]}
-                    viewBy={ATTRIBUTE_1}
+                    afm={AFM_ONE_MEASURE_ONE_ATTRIBUTE}
                     config={{ legend: { position: 'bottom' } }}
                     onError={onErrorHandler}
                     LoadingComponent={null}
                     ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
+    .add('error', () => (
+        screenshotWrap(
+            <div style={{ width: 400, height: 400, display: 'flex', flexDirection: 'column' }}>
+                <DonutChart
+                    projectId="storybook"
+                    afm={AFM_TWO_MEASURES_ONE_ATTRIBUTE}
+                    config={{ legend: { position: 'bottom' } }}
+                    LoadingComponent={null}
                 />
             </div>
         )
