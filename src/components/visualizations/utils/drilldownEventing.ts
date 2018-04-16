@@ -53,6 +53,7 @@ export function getClickableElementNameByChartType(type: any) {
     switch (type) {
         case VisualizationTypes.LINE:
         case VisualizationTypes.AREA:
+        case VisualizationTypes.SCATTER:
             return 'point';
         case VisualizationTypes.COLUMN:
         case VisualizationTypes.BAR:
