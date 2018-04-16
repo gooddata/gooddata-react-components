@@ -80,3 +80,4 @@ Report bugs and features on our [issues page](https://github.com/gooddata/goodda
 (C) 2007-2018 GoodData Corporation
 
 For more information, please see [LICENSE](https://github.com/gooddata/gooddata-react-components/blob/master/LICENSE)
+
