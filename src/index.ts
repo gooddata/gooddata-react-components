@@ -44,6 +44,7 @@ import { WaterfallChart } from './components/WaterfallChart';
 import { FunnelChart } from './components/FunnelChart';
 import { HistogramChart } from './components/HistogramChart';
 import { ParetoChart } from './components/ParetoChart';
+import { DualAxisChart } from './components/DualAxisChart';
 
 import Chart, { ILegendConfig } from './components/visualizations/chart/Chart';
 import ChartTransformation from './components/visualizations/chart/ChartTransformation';
@@ -89,6 +90,7 @@ export {
     PieChart,
     DonutChart,
     ColumnLineChart,
+    DualAxisChart,
     ColumnAreaChart,
     TreeMapChart,
     WordCloudChart,

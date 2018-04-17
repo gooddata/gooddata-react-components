@@ -347,6 +347,7 @@ export function generateDimensions(
         case VisualizationTypes.BAR:
         case VisualizationTypes.AREA:
         case VisualizationTypes.COLUMNLINE:
+        case VisualizationTypes.DUALAXIS:
         case VisualizationTypes.COLUMNAREA:
         case VisualizationTypes.COLUMN: {
             return getBarDimensions(mdObject);

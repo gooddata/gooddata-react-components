@@ -24,13 +24,15 @@ export const VisualizationTypes = {
     WORDCLOUD: 'wordcloud' as 'wordcloud',
     WATERFALL: 'waterfall' as 'waterfall',
     HISTOGRAM: 'histogram' as 'histogram',
-    PARETO: 'pareto' as 'pareto'
+    PARETO: 'pareto' as 'pareto',
+    DUALAXIS: 'dualaxis' as 'dualaxis'
 };
 
 export type ChartType = 'bar' | 'column' | 'pie' | 'line' | 'doughnut' |
     'combo' | 'donut' | 'column-line' | 'column-area' | 'area' |
     'area-line' | 'bullet' | 'funnel' | 'sankey' | 'scatter' | 'bubble' |
-    'treemap' | 'heatmap' | 'wordcloud' | 'waterfall' | 'histogram' | 'pareto';
+    'treemap' | 'heatmap' | 'wordcloud' | 'waterfall' | 'histogram' | 'pareto' |
+    'dualaxis';
 export type VisType = ChartType | 'table' | 'headline';
 export type ChartElementType = 'slice' | 'bar' | 'point';
 export type VisElementType = ChartElementType | 'cell' | 'primaryValue' | 'secondaryValue';
