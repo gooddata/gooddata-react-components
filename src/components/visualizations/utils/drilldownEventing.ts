@@ -61,6 +61,7 @@ export function getClickableElementNameByChartType(type: any) {
         case VisualizationTypes.PIE:
         case VisualizationTypes.TREEMAP:
         case VisualizationTypes.DONUT:
+        case VisualizationTypes.FUNNEL:
             return 'slice';
         case VisualizationTypes.TABLE:
             return 'cell';

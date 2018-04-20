@@ -99,11 +99,14 @@ export function isDrillable(drillableItems: IDrillableItem[],
 export function getClickableElementNameByChartType(type: VisType): VisElementType {
     switch (type) {
         case VisualizationTypes.LINE:
+        case VisualizationTypes.AREA:
+        case VisualizationTypes.SCATTER:
             return 'point';
         case VisualizationTypes.COLUMN:
         case VisualizationTypes.BAR:
             return 'bar';
         case VisualizationTypes.PIE:
+        case VisualizationTypes.FUNNEL:
             return 'slice';
         case VisualizationTypes.TABLE:
             return 'cell';
