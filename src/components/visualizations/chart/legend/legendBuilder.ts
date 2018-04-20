@@ -36,7 +36,7 @@ export function getLegendItems(chartOptions: any) {
 }
 
 export default function getLegend(legendConfig: any = {}, chartOptions: any) {
-    if (isScatterPlot(chartOptions.type)) { // TODO: refactor
+    if (isScatterPlot(chartOptions.type) || isTreemap(chartOptions.type)) { // TODO: refactor
         set(legendConfig, 'position', 'right');
     }
 
