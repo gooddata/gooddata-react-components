@@ -155,6 +155,33 @@ class DynamicChart extends React.Component<any, any> {
 }
 
 storiesOf('Internal/HighCharts/ChartTransformation', module)
+    .add('Scatterplot with two measures and one attribute', () => {
+        const dataSet = {
+            ...fixtures.scatterPlotWith2MetricsAndAttribute
+        };
+        const dataLarge = () => { throw new Error('Data too large'); };
+
+        return screenshotWrap(
+            wrap(
+                <ChartTransformation
+                    drillableItems={[]}
+                    config={{
+                        type: 'scatter',
+                        legend: {
+                            enabled: true,
+                            position: 'right'
+                        },
+                        legendLayout: 'horizontal',
+                        colors: fixtures.customPalette,
+                        mdObject: fixtures.scatterPlotWith2MetricsAndAttributeMdObject.mdObject
+                    }}
+                    {...dataSet}
+                    onDataTooLarge={dataLarge}
+                    onNegativeValues={null}
+                />
+            )
+        );
+    })
     .add('Column chart with one measure and no attributes', () => {
         const dataSet = {
             ...fixtures.barChartWithSingleMeasureAndNoAttributes
@@ -532,6 +559,22 @@ storiesOf('Internal/HighCharts/ChartTransformation', module)
                         },
                         legendLayout: 'horizontal',
                         colors: fixtures.customPalette
+                    }}
+                    {...dataSet}
+                    onDataTooLarge={identity}
+                />
+            )
+        );
+    })
+    .add('Dual axis line/line chart with one metric on each axis', () => {
+        const dataSet: any = fixtures.barChartWith2MetricsAndViewByAttribute;
+
+        return screenshotWrap(
+            wrap(
+                <ChartTransformation
+                    config={{
+                        type: 'dual',
+                        mdObject: fixtures.barChartWith2MetricsAndViewByAttributeMd.mdObject
                     }}
                     {...dataSet}
                     onDataTooLarge={identity}

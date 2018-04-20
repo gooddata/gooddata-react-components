@@ -10,6 +10,8 @@ import isEmpty = require('lodash/isEmpty');
 import compact = require('lodash/compact');
 import cloneDeep = require('lodash/cloneDeep');
 import every = require('lodash/every');
+import styleVariables from '../../styles/variables';
+import { IAxis } from '../chartOptionsBuilder';
 
 import * as numberJS from '@gooddata/numberjs';
 import { VisualizationTypes } from '../../../../constants/visualizationTypes';
@@ -19,7 +21,9 @@ import {
     isLineChart,
     isAreaChart,
     isBarChart,
-    isColumnChart
+    isDualChart,
+    isColumnChart,
+    isScatterPlot
 } from '../../utils/common';
 
 const {
@@ -42,17 +46,22 @@ const TOOLTIP_VERTICAL_OFFSET = 14;
 const escapeAngleBrackets = (str: any) => str && str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 function getTitleConfiguration(chartOptions: any) {
-    return {
-        yAxis: {
-            title: {
-                text: escapeAngleBrackets(get(chartOptions, 'title.y', ''))
-            }
-        },
-        xAxis: {
-            title: {
-                text: escapeAngleBrackets(get(chartOptions, 'title.x', ''))
-            }
+    const { yAxes = [], xAxes = [] }: { yAxes: IAxis[], xAxes: IAxis[] } = chartOptions;
+    const yAxis = yAxes.map((axis: IAxis) => (axis ? {
+        title: {
+            text: escapeAngleBrackets(get(axis, 'label', ''))
         }
+    } : {}));
+
+    const xAxis = xAxes.map((axis: IAxis) => (axis ? {
+        title: {
+            text: escapeAngleBrackets(get(axis, 'label', ''))
+        }
+    } : {}));
+
+    return {
+        yAxis,
+        xAxis
     };
 }
 
@@ -62,14 +71,15 @@ function formatAsPercent() {
 }
 
 function getShowInPercentConfiguration(chartOptions: any) {
-    const { showInPercent } = chartOptions;
+    const { showInPercent, yAxes = [] }: { showInPercent: boolean; yAxes: IAxis[] } = chartOptions;
+    const yAxis = yAxes.map(() => ({
+        labels: {
+            formatter: formatAsPercent
+        }
+    }));
 
     return showInPercent ? {
-        yAxis: {
-            labels: {
-                formatter: formatAsPercent
-            }
-        }
+        yAxis
     } : {};
 }
 
@@ -173,7 +183,8 @@ function formatTooltip(chartType: any, stacking: any, tooltipCallback: any) {
         return false;
     }
 
-    const dataPointEnd = (isLineChart(chartType) || isAreaChart(chartType))
+    const dataPointEnd = (isLineChart(chartType)
+        || isAreaChart(chartType) || isDualChart(chartType) || isScatterPlot(chartType))
         ? this.point.plotX
         : getDataPointEnd(
             chartType,
@@ -183,7 +194,9 @@ function formatTooltip(chartType: any, stacking: any, tooltipCallback: any) {
             stacking
         );
 
-    const dataPointHeight = (isLineChart(chartType) || isAreaChart(chartType)) ? 0 : this.point.shapeArgs.height;
+    const ignorePointHeight = isLineChart(chartType)
+        || isAreaChart(chartType) || isDualChart(chartType) || isScatterPlot(chartType);
+    const dataPointHeight = ignorePointHeight ? 0 : this.point.shapeArgs.height;
 
     const arrowPosition = getArrowHorizontalPosition(
         chartType,
@@ -267,7 +280,8 @@ function getTooltipConfiguration(chartOptions: any) {
 }
 
 function getLabelsConfiguration(chartOptions: any) {
-    const style = chartOptions.stacking ? {
+    const { stacking, yAxes = [] }: {stacking: boolean; yAxes: IAxis[]} = chartOptions;
+    const style = stacking ? {
         color: '#ffffff',
         textShadow: '0 0 1px #000000'
     } : {
@@ -275,11 +289,15 @@ function getLabelsConfiguration(chartOptions: any) {
         textShadow: 'none'
     };
 
-    const drilldown = chartOptions.stacking ? {
+    const drilldown = stacking ? {
         activeDataLabelStyle: {
             color: '#ffffff'
         }
     } : {};
+
+    const yAxis = yAxes.map((axis: any) => ({
+        defaultFormat: get(axis, 'format')
+    }));
 
     return {
         drilldown,
@@ -299,14 +317,18 @@ function getLabelsConfiguration(chartOptions: any) {
                 }
             }
         },
-        yAxis: {
-            defaultFormat: get(chartOptions, 'title.yFormat')
-        }
+        yAxis
     };
 }
 
 function getStackingConfiguration(chartOptions: any) {
-    const { stacking } = chartOptions;
+    const { stacking, yAxes = [] }: { stacking: boolean; yAxes: IAxis[] } = chartOptions;
+
+    const yAxis = yAxes.map(() => ({
+        stackLabels: {
+            formatter: stackLabelFormatter
+        }
+    }));
 
     return stacking ? {
         plotOptions: {
@@ -314,11 +336,7 @@ function getStackingConfiguration(chartOptions: any) {
                 stacking
             }
         },
-        yAxis: {
-            stackLabels: {
-                formatter: stackLabelFormatter
-            }
-        }
+        yAxis
     } : {};
 }
 
@@ -353,15 +371,23 @@ function getDataConfiguration(chartOptions: any) {
     const data = chartOptions.data || EMPTY_DATA;
     const series = getSeries(data.series, chartOptions.colorPalette);
     const categories = map(data.categories, escapeAngleBrackets);
+    const { type } = chartOptions;
+
+    switch (type) {
+        case VisualizationTypes.SCATTER:
+            return {
+                series
+            };
+    }
 
     return {
         series,
-        xAxis: {
+        xAxis: [{
             labels: {
                 enabled: !isEmpty(compact(categories))
             },
             categories
-        }
+        }]
     };
 }
 
@@ -372,7 +398,9 @@ function getHoverStyles(chartOptions: any, config: any) {
         default:
             throw new Error(`Undefined chart type "${chartOptions.type}".`);
 
+        case VisualizationTypes.DUAL:
         case VisualizationTypes.LINE:
+        case VisualizationTypes.SCATTER:
         case VisualizationTypes.AREA:
             seriesMapFn = (seriesOrig) => {
                 const series = cloneDeep(seriesOrig);
@@ -399,7 +427,6 @@ function getHoverStyles(chartOptions: any, config: any) {
                 return series;
             };
             break;
-
         case VisualizationTypes.PIE:
             seriesMapFn = (seriesOrig) => {
                 const series = cloneDeep(seriesOrig);
@@ -430,20 +457,86 @@ function getHoverStyles(chartOptions: any, config: any) {
 
 function getGridConfiguration(chartOptions: any) {
     const gridEnabled = get(chartOptions, 'grid.enabled', true);
+    const { yAxes = [] }: { yAxes: IAxis[] } = chartOptions;
+    const yAxis = yAxes.map(() => ({
+        gridLineWidth: 0
+    }));
 
     if (!gridEnabled) {
         return {
-            yAxis: {
-                gridLineWidth: 0
-            }
+            yAxis
         };
     }
 
     return {};
 }
 
+function getAxesConfiguration(chartOptions: any) {
+    return {
+        yAxis: get(chartOptions, 'yAxes', []).map((axis: any) => {
+            if (!axis) {
+                return {
+                    visible: false
+                };
+            }
+
+            return {
+                gridLineColor: '#ebebeb',
+                labels: {
+                    style: {
+                        color: styleVariables.gdColorStateBlank,
+                        font: '12px Avenir, "Helvetica Neue", Arial, sans-serif'
+                    }
+                },
+                title: {
+                    margin: 15,
+                    style: {
+                        color: styleVariables.gdColorLink,
+                        font: '14px Avenir, "Helvetica Neue", Arial, sans-serif'
+                    }
+                },
+                opposite: axis.opposite
+            };
+        }),
+        xAxis: get(chartOptions, 'xAxes', []).map((axis: any) => {
+            if (!axis) {
+                return {
+                    visible: false
+                };
+            }
+
+            return {
+                lineColor: '#d5d5d5',
+
+                // hide ticks on x axis
+                minorTickLength: 0,
+                tickLength: 0,
+
+                // padding of maximum value
+                maxPadding: 0.05,
+
+                labels: {
+                    style: {
+                        color: styleVariables.gdColorStateBlank,
+                        font: '12px Avenir, "Helvetica Neue", Arial, sans-serif'
+                    },
+                    autoRotation: [-90]
+                },
+                title: {
+                    margin: 10,
+                    style: {
+                        color: styleVariables.gdColorLink,
+                        font: '14px Avenir, "Helvetica Neue", Arial, sans-serif'
+                    }
+                }
+            };
+        })
+    };
+}
+
 export function getCustomizedConfiguration(chartOptions: any) {
     const configurators = [
+        getAxesConfiguration,
         getTitleConfiguration,
         getStackingConfiguration,
         getShowInPercentConfiguration,

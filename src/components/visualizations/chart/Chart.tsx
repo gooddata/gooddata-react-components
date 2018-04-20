@@ -30,6 +30,11 @@ export interface IChartConfig {
     limits?: IChartLimits;
     stacking?: boolean;
     grid?: any;
+    mdObject?: any;
+    yFormat?: string;
+    yLabel?: string;
+    xLabel?: string;
+    xFormat?: string;
 }
 
 export interface IChartProps {

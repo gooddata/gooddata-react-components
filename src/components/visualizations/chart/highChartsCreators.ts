@@ -18,6 +18,7 @@ import { getColumnConfiguration } from './highcharts/columnConfiguration';
 import { getCustomizedConfiguration } from './highcharts/customConfiguration';
 import { getPieConfiguration } from './highcharts/pieConfiguration';
 import { getAreaConfiguration } from './highcharts/areaConfiguration';
+import { getScatterConfiguration } from './highcharts/scatterConfiguration';
 import { VisualizationTypes } from '../../../constants/visualizationTypes';
 
 const chartConfigurationMap = {
@@ -25,7 +26,9 @@ const chartConfigurationMap = {
     [VisualizationTypes.BAR]: getBarConfiguration,
     [VisualizationTypes.COLUMN]: getColumnConfiguration,
     [VisualizationTypes.PIE]: getPieConfiguration,
-    [VisualizationTypes.AREA]: getAreaConfiguration
+    [VisualizationTypes.AREA]: getAreaConfiguration,
+    [VisualizationTypes.DUAL]: getLineConfiguration, // dual chart is line/line chart
+    [VisualizationTypes.SCATTER]: getScatterConfiguration
 };
 
 export function getHighchartsOptions(chartOptions: any, drillConfig: any) {
