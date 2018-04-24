@@ -36,16 +36,6 @@ module.exports = ({ gdc = defaultBackend, link = false, basepath = '' } = {}) =>
         }
     };
 
-    const resolve = {
-        extensions: ['.js', '.jsx'],
-        alias: link ? {
-            react: path.resolve(__dirname, '../node_modules/react'),
-            'react-dom': path.resolve(__dirname, '../node_modules/react-dom'),
-            '@gooddata/react-components/styles': path.resolve(__dirname, '../styles/'),
-            '@gooddata/react-components': path.resolve(__dirname, '../dist/')
-        } : {}
-    };
-
     const plugins = [
         new CleanWebpackPlugin(['dist']),
         new HtmlWebpackPlugin({
@@ -146,7 +136,6 @@ module.exports = ({ gdc = defaultBackend, link = false, basepath = '' } = {}) =>
             compress: true,
             port: 8999,
             proxy
-        },
-        resolve
+        }
     };
 };

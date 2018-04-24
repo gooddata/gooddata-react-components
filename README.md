@@ -48,24 +48,24 @@ $ yarn validate
 #### Storybook visual regression tests
 Visual regression testing for Storybook is provided by [@gooddata/test-storybook](https://github.com/gooddata/gdc-client-utils/tree/master/test-storybook) package.
 
-### Deployment
-```
-git checkout master && git pull upstream master --tags
-npm version [major|minor|patch] -m "Release v%s"
-npm publish
-git push upstream master --tags
-```
+
 
 ### Examples
-For more details see [examples/README.md](./examples/README.md)
+A showcase of what is possible to do with [@gooddata/react-components](https://github.com/gooddata/gooddata-react-components).
 ```
-cd examples
-yarn install
-yarn dev
+yarn examples
 ```
 
 ## Contributing
 Report bugs and features on our [issues page](https://github.com/gooddata/gooddata-react-components/issues).
+
+#### GD-internal-notes - deployment
+```
+git checkout master && git pull upstream master --tags
+yarn version
+npm publish
+git push upstream master --tags
+```
 
 ## Changelog
 - see [CHANGELOG.md](CHANGELOG.md)
