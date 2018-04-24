@@ -54,7 +54,8 @@ export class Execute extends React.Component<IExecuteProps, IExecuteState> {
     public static defaultProps: Partial<IExecuteProps> = {
         dataTableFactory,
         onError: noop,
-        onLoadingChanged: noop
+        onLoadingChanged: noop,
+        onLoadingFinish: noop
     };
 
     private dataTable: DataTable<Execution.IExecutionResponses>;
@@ -68,7 +69,7 @@ export class Execute extends React.Component<IExecuteProps, IExecuteState> {
             error: null
         };
 
-        const { onError, onLoadingChanged } = props;
+        const { onError, onLoadingChanged, onLoadingFinish } = props;
 
         this.dataTable = props.dataTableFactory(props.projectId);
         this.dataTable.onData((result: Execution.IExecutionResponses) => {
@@ -77,6 +78,7 @@ export class Execute extends React.Component<IExecuteProps, IExecuteState> {
                 isLoading: false
             });
             onLoadingChanged({ isLoading: false });
+            onLoadingFinish({ result });
         });
 
         this.dataTable.onError((error: Execution.IError) => {
