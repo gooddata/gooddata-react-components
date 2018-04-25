@@ -7,6 +7,7 @@ export interface ILoadingState {
 
 export type OnError = (error: object) => void;
 export type OnLoadingChanged = (loadingState: ILoadingState) => void;
+export type onLoadingFinish = (result: object) => void;
 export type OnFiredDrillEvent = (param: IDrillEvent) => void | boolean;
 
 export interface ILegendItem {
@@ -24,5 +25,6 @@ export type OnLegendReady = (data: ILegendData) => void;
 export interface IEvents {
     onError?: OnError;
     onLoadingChanged?: OnLoadingChanged;
+    onLoadingFinish?: onLoadingFinish;
     onFiredDrillEvent?: OnFiredDrillEvent;
 }
