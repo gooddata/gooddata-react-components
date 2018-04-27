@@ -20,9 +20,9 @@ const backendShortcuts = {
 const defaultBackend = backendShortcuts.developer;
 
 
-module.exports = (env, args) => {
+module.exports = (env) => {
     const basePath = env ? env.basePath : '';
-    const backendParam = args['_'] ? args['_'][0] : undefined;
+    const backendParam = env ? env.backend : undefined;
     const backendUri = backendShortcuts[backendParam] || backendParam || defaultBackend;
     console.log('Backend URI: ', backendUri); // eslint-disable-line no-console
 

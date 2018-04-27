@@ -1,14 +1,6 @@
 // (C) 2007-2018 GoodData Corporation
 
-
-const backendUri = BACKEND_URI; // eslint-disable-line no-undef
-console.log('The /gdc proxy is connected to: ', backendUri); // eslint-disable-line no-console
-if (!backendUri) {
-    throw new Exception('BACKEND_URI must be defined - see examples/webpack.config.js');
-}
-
-
-const backendToProjectId = {
+const demoProject = {
     'https://secure.gooddata.com': 'k26dtejorcqlqf11crn6imbeevp2q4kg',
     'https://staging3.intgdc.com': 'kytra720hke4d84e8ozohoz7uycn53mi',
     'https://staging2.intgdc.com': 'ws7pxsamkx8o0t1s7kfvkj5o41uwcmqg',
@@ -16,9 +8,18 @@ const backendToProjectId = {
     'https://client-demo-be.na.intgdc.com': '',
     'https://developer.na.intgdc.com': ''
 };
-export const projectId = backendToProjectId[backendUri];
+
+const backendUri = BACKEND_URI; // eslint-disable-line no-undef
+const demoProjectId = demoProject[backendUri];
+if (!demoProjectId) {
+    throw new Exception('demoProjectId must be defined');
+}
+
+console.log('The /gdc proxy is connected to: ', backendUri, ' with projectId: ', demoProjectId); // eslint-disable-line no-console
 
 
+// your projectId would be probably static (you may ignore the code above)
+export const projectId = demoProjectId;
 export const averageCheckSizeByServer = 'afewRzGAersh';
 export const averageDailyTotalSales = 'aagJGHg1bxap';
 export const columnVisualizationIdentifier = 'acFJltTsifSQ';
