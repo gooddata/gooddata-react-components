@@ -19,6 +19,7 @@ console.log('The /gdc proxy is connected to: ', backendUri, ' with projectId: ',
 
 
 // your projectId would be probably static (you may ignore the code above)
+export const backendUriOnlyInfo = backendUri;
 export const projectId = demoProjectId;
 export const averageCheckSizeByServer = 'afewRzGAersh';
 export const averageDailyTotalSales = 'aagJGHg1bxap';

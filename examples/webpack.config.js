@@ -27,8 +27,6 @@ module.exports = (env) => {
     const backendUri = backendShortcuts[backendParam] || backendParam || defaultBackend;
     console.log('Backend URI: ', backendUri); // eslint-disable-line no-console
 
-    console.log('a',basePath);
-
     const isProduction = process.env.NODE_ENV === 'production';
 
     const proxy = {

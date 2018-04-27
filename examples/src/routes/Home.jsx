@@ -4,7 +4,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { version } from '../../../package.json';
-import { projectId, backendUri } from '../utils/fixtures';
+import { projectId, backendUriOnlyInfo } from '../utils/fixtures';
 
 import KpiExample from '../components/KpiExample';
 import VisualizationTable from '../components/VisualizationTableExample';
@@ -16,7 +16,7 @@ export const Home = () => (
     <div>
         <h1>GoodData.UI examples v{version}</h1>
         <p style={{ color: '#AAA', marginTop: -10 }}>
-            Connected to &quot;{backendUri}&quot; backend. Project id: {projectId}
+            Connected to &quot;{backendUriOnlyInfo}&quot; backend. Project id: {projectId}
         </p>
 
         <p>Here are the examples of <a href="https://github.com/gooddata/gooddata-react-components">GoodData.UI React Components</a>.</p>

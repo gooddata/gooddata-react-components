@@ -119,7 +119,7 @@
     "storybook": "start-storybook -p 9001 -c .storybook",
     "storybook-build": "storybook-build -c .storybook -o storybook-dist",
     "storybook-test": "storybook-test",
-    "examples?": "echo You may add URL or sec,secure,stg,stg2,stg3,demo,developer, ie.: yarn examples secure",
+    "examples?": "echo You may add sec,secure,stg,stg2,stg3,demo,developer or URL, ie: yarn examples secure",
     "examples": "bash scripts/run-examples.sh",
     "examples-build": "bash scripts/build-examples.sh",
     "examples-server": "node examples/server.js",
