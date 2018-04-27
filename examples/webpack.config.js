@@ -18,7 +18,7 @@ const backendShortcuts = {
     developer: 'https://developer.na.gooddata.com'
 };
 
-const defaultBackend = backendShortcuts.secure;
+const defaultBackend = backendShortcuts.developer;
 
 
 module.exports = (env) => {

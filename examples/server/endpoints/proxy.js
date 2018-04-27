@@ -12,9 +12,11 @@ module.exports = (app, sdk, { domain }) => {
             }
 
             // White labeled resources are based on host header
-            //proxyReq.setHeader('host', 'localhost:8999');
+            //proxyReq.setHeader('host', domain.replace(/^https?:\/\//, '').replace(/\/$/, ''));
             proxyReq.setHeader('referer', domain);
             proxyReq.setHeader('origin', null);
+
+            //console.log("Proxying ", domain, proxyReq.path, proxyReq.query);
         }
     }));
 };

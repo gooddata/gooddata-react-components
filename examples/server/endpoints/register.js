@@ -1,9 +1,10 @@
 const { pick } = require('lodash');
+const bodyParser = require('body-parser');
 
 const ALREADY_REGISTERED_ERROR_CODE = 'gdc1052';
 
 module.exports = (app, sdk, { username, password }) => {
-    app.post('/gdc-register', (req, res) => {
+    app.post('/gdc-register', bodyParser.json(), (req, res) => {
         const { body } = req;
         if (!body) {
             return res.status(400).send('Missing body');

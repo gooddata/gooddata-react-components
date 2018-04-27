@@ -1,7 +1,7 @@
-
+const bodyParser = require('body-parser');
 
 module.exports = (app, sdk, { username, password, projectId, userRole }) => {
-    app.post('/gdc-assign-project', (req, res) => {
+    app.post('/gdc-assign-project', bodyParser.json(), (req, res) => {
         const { body } = req;
         if (!body) {
             return res.status(400).send('Missing body');

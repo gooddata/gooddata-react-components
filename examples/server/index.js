@@ -1,22 +1,20 @@
+const { factory } = require('@gooddata/gooddata-js');
 const https = require('https');
 const fs = require('fs');
 const express = require('express');
-const bodyParser = require('body-parser');
-const { factory } = require('@gooddata/gooddata-js');
 
 const proxy = require('./endpoints/proxy');
 const register = require('./endpoints/register');
 const assignProject = require('./endpoints/assignProject');
 const staticFiles = require('./endpoints/staticFiles');
 
-require('dotenv').config();
-// TODO validate env variables
+require('dotenv').config(); // TODO validate env variables
 
 const config = {
     port: process.env.PORT || 3009,
     serveFrom: __dirname + '/../dist/',
     https: process.env.HTTPS,
-    domain: process.env.DOMAIN || 'https://secure.gooddata.com',
+    domain: process.env.DOMAIN || 'https://developer.na.gooddata.com',
     username: process.env.USERNAME,
     password: process.env.PASSWORD,
     projectId: process.env.PROJECT_ID,
@@ -29,7 +27,6 @@ const app = express();
 const sdk = factory();
 
 sdk.config.setCustomDomain(config.domain);
-app.use(bodyParser.json());
 
 const endpoints = [
     register,
