@@ -12,15 +12,17 @@ const demoProject = {
 const backendUri = BACKEND_URI; // eslint-disable-line no-undef
 const demoProjectId = demoProject[backendUri];
 if (!demoProjectId) {
-    throw new Error('demoProjectId must be defined');
+    console.error(`[fixtures.js] ProjectId for backend "${backendUri}" is not in `, demoProject); // eslint-disable-line no-console
 }
 
 console.log('The /gdc proxy is connected to: ', backendUri, ' with projectId: ', demoProjectId); // eslint-disable-line no-console
 
 
 // your projectId would be probably static (you may ignore the code above)
+
 export const backendUriOnlyInfo = backendUri;
 export const projectId = demoProjectId;
+
 export const averageCheckSizeByServer = 'afewRzGAersh';
 export const averageDailyTotalSales = 'aagJGHg1bxap';
 export const columnVisualizationIdentifier = 'acFJltTsifSQ';

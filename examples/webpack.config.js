@@ -18,11 +18,11 @@ const backendShortcuts = {
     developer: 'https://developer.na.intgdc.com'
 };
 
-const defaultBackend = backendShortcuts.developer;
+const defaultBackend = backendShortcuts.secure;
 
 
 module.exports = (env) => {
-    const basePath = env.basePath || '';
+    const basePath = env && env.basePath || '';
     const backendParam = env ? env.backend : '';
     const backendUri = backendShortcuts[backendParam] || backendParam || defaultBackend;
     console.log('Backend URI: ', backendUri); // eslint-disable-line no-console
@@ -119,7 +119,7 @@ module.exports = (env) => {
         plugins,
         output: {
             filename: '[name].[hash].js',
-            path: path.resolve(__dirname, 'dist'),
+            path: path.join(__dirname, 'dist'),
             publicPath: `${basePath}/`
         },
         devtool: isProduction ? false : 'cheap-module-eval-source-map',
@@ -155,7 +155,7 @@ module.exports = (env) => {
             historyApiFallback: true,
             compress: true,
             port: 8999,
-            stats: { chunks: false, assets: false, modules: false },
+            stats: { chunks: false, assets: false, modules: false, hash: false, version: false },
             proxy
         },
         resolve

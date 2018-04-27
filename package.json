@@ -106,11 +106,11 @@
     "tslint": "'./{src,stories}/**/*.{ts,tsx}'"
   },
   "scripts": {
-    "test": "jest --watch",
+    "prepublish": "bash scripts/build.sh --no-examples",
     "build": "bash scripts/build.sh",
-    "dev": "bash scripts/build.sh --dev-watch",
     "build-dev": "bash scripts/build.sh --dev",
-    "prepublish": "bash scripts/build.sh",
+    "dev": "bash scripts/build.sh --dev-watch",
+    "test": "jest --watch",
     "run-tslint": "tslint -p tsconfig.base.json",
     "tslint": "yarn run-tslint -t verbose $npm_package_config_tslint",
     "tslint-ci": "mkdir -p ./ci/results && yarn run-tslint -t checkstyle -o ./ci/results/tslint-results.xml $npm_package_config_tslint",
@@ -119,10 +119,10 @@
     "storybook": "start-storybook -p 9001 -c .storybook",
     "storybook-build": "storybook-build -c .storybook -o storybook-dist",
     "storybook-test": "storybook-test",
-    "examples?": "echo You may add sec,secure,stg,stg2,stg3,demo,developer or URL, ie: yarn examples secure",
+    "examples?": "# You may add sec,secure,stg,stg2,stg3,demo,developer or URL, ie: yarn examples secure",
     "examples": "bash scripts/run-examples.sh",
     "examples-build": "bash scripts/build-examples.sh",
-    "examples-server": "node examples/server.js",
+    "examples-serve": "node examples/server.js",
     "examples-testcafe": "testcafe chrome --assertion-timeout 5000 -S -s examples/_screenshots examples/test/**/**/*_test*",
     "examples-testcafe-docker": "testcafe 'chrome:headless --no-sandbox' --assertion-timeout 5000 -S -s examples/_screenshots examples/test/**/**/*_test*"
   },

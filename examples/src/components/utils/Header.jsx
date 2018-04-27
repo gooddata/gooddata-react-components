@@ -7,7 +7,7 @@ import { NavLink, Link, withRouter } from 'react-router-dom';
 
 const favicon = require('../../static/favicon.ico');
 
-const appName = 'GoodData SDK Examples';
+const appName = 'GoodData.UI Examples';
 
 class Header extends React.Component {
     render() {
@@ -40,7 +40,7 @@ class Header extends React.Component {
                 </Helmet>
                 <div className="gd-header header-6 is-loaded">
                     <Link to="/" className="gd-header-logo gd-header-measure">
-                        <img src="https://secure.gooddata.com/images/header/logo.png" alt={pageTitle} />
+                        <img src="https://secure.gooddata.com/images/header/logo.png" alt={appName} />
                     </Link>
                     <div className="gd-header-stretch gd-header-menu-wrapper">
                         <div className="gd-header-menu gd-header-menu-horizontal">

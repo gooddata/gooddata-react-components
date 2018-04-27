@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 
+echo "$ yarn build"
+yarn build
 
+
+echo "$ cd examples"
 cd examples
 
-NODE_ENV=production webpack
+PARAMS=$@
+if [ ! -z "$1" ]; then # if first argument is not empty
+    PARAMS="--env.backend=$1 ${@:2}"
+fi
 
-
-echo TODOOO
+echo "$ NODE_ENV=production webpack --progress $PARAMS"
+NODE_ENV=production webpack --progress $PARAMS
