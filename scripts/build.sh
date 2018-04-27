@@ -19,7 +19,6 @@ build-dev(){
 }
 
 build-dev-watch(){
-    pwd
     rm -rf dist
     mkdir dist
     cp -rf src/translations/ dist/translations/
