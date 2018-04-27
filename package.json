@@ -119,8 +119,9 @@
     "storybook": "start-storybook -p 9001 -c .storybook",
     "storybook-build": "storybook-build -c .storybook -o storybook-dist",
     "storybook-test": "storybook-test",
+    "examples?": "echo You may add URL or sec,secure,stg,stg2,stg3,demo,developer, ie.: yarn examples secure",
     "examples": "bash scripts/run-examples.sh",
-    "examples-build": "cd examples; NODE_ENV=production webpack",
+    "examples-build": "bash scripts/build-examples.sh",
     "examples-server": "node examples/server.js",
     "examples-testcafe": "testcafe chrome --assertion-timeout 5000 -S -s examples/_screenshots examples/test/**/**/*_test*",
     "examples-testcafe-docker": "testcafe 'chrome:headless --no-sandbox' --assertion-timeout 5000 -S -s examples/_screenshots examples/test/**/**/*_test*"

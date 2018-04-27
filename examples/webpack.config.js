@@ -17,12 +17,13 @@ const backendShortcuts = {
     demo: 'https://client-demo-be.na.intgdc.com',
     developer: 'https://developer.na.intgdc.com'
 };
+
 const defaultBackend = backendShortcuts.developer;
 
 
 module.exports = (env) => {
     const basePath = env ? env.basePath : '';
-    const backendParam = env ? env.backend : undefined;
+    const backendParam = env ? env.backend : '';
     const backendUri = backendShortcuts[backendParam] || backendParam || defaultBackend;
     console.log('Backend URI: ', backendUri); // eslint-disable-line no-console
 
