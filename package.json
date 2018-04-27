@@ -107,7 +107,13 @@
   },
   "scripts": {
     "test": "jest --watch",
-    "build": "bash scripts/build",
+    "build": "bash scripts/build.sh",
+    "dev": "bash scripts/build.sh --dev-watch",
+    "build-dev": "bash scripts/build.sh --dev",
+    "prepublish": "bash scripts/build.sh",
+    "run-tslint": "tslint -p tsconfig.base.json",
+    "tslint": "yarn run-tslint -t verbose $npm_package_config_tslint",
+    "tslint-ci": "mkdir -p ./ci/results && yarn run-tslint -t checkstyle -o ./ci/results/tslint-results.xml $npm_package_config_tslint",
     "validate": "tsc -p tsconfig.base.json --noEmit && yarn tslint && eslint --ext .jsx,.js examples/src examples/test",
     "validate-ci": "tsc -p tsconfig.base.json --noEmit && yarn tslint-ci",
     "storybook": "start-storybook -p 9001 -c .storybook",
@@ -118,13 +124,7 @@
     "examples-server": "node examples/server.js",
     "examples-testcafe": "testcafe chrome --assertion-timeout 5000 -S -s _screenshots test/**/**/*_test*",
     "examples-testcafe-ci": "testcafe chromium --assertion-timeout 5000 -S -s _screenshots test/**/**/*_test*",
-    "examples-testcafe-docker": "testcafe 'chrome:headless --no-sandbox' --assertion-timeout 5000 -S -s _screenshots test/**/**/*_test*",
-    "prepublish": "yarn build",
-    "dev": "yarn build watch",
-    "build-dev": "yarn build dev",
-    "run-tslint": "tslint -p tsconfig.base.json",
-    "tslint": "yarn run-tslint -t verbose $npm_package_config_tslint",
-    "tslint-ci": "mkdir -p ./ci/results && yarn run-tslint -t checkstyle -o ./ci/results/tslint-results.xml $npm_package_config_tslint"
+    "examples-testcafe-docker": "testcafe 'chrome:headless --no-sandbox' --assertion-timeout 5000 -S -s _screenshots test/**/**/*_test*"
   },
   "typings": "dist/index.d.ts",
   "test-storybook": {
