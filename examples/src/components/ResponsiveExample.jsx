@@ -16,7 +16,6 @@ export class ResponsiveExample extends Component {
         this.setState({ size });
     }
 
-
     render() {
         const afm = {
             measures: [
@@ -54,7 +53,7 @@ export class ResponsiveExample extends Component {
 
                 <div style={{ width, height }} className="s-resizable-vis">
                     <Measure>
-                        {(dimensions) => (
+                        {dimensions => (
                             <div style={{ width: '100%', height: '100%' }}>
                                 <AfmComponents.BarChart
                                     width={dimensions.width}

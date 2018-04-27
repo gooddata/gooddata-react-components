@@ -16,7 +16,7 @@ class Header extends React.Component {
         const currentRoute = (href !== undefined && routes.find(link => (link.path === BASEPATH + href))) || null;
         const pageTitle = currentRoute === null || currentRoute.title === appName
             ? appName
-            :`${currentRoute.title} | ${appName}`;
+            : `${currentRoute.title} | ${appName}`;
 
         const navigationElements = mainRoutes.map(({ path, title, exact = false }) => (
             <li key={path}>
