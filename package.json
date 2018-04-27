@@ -123,7 +123,6 @@
     "examples-build": "cd examples; NODE_ENV=production webpack",
     "examples-server": "node examples/server.js",
     "examples-testcafe": "testcafe chrome --assertion-timeout 5000 -S -s examples/_screenshots examples/test/**/**/*_test*",
-    "examples-testcafe-ci": "testcafe chromium --assertion-timeout 5000 -S -s examples/_screenshots examples/test/**/**/*_test*",
     "examples-testcafe-docker": "testcafe 'chrome:headless --no-sandbox' --assertion-timeout 5000 -S -s examples/_screenshots examples/test/**/**/*_test*"
   },
   "typings": "dist/index.d.ts",
