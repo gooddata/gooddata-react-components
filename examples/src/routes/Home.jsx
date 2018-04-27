@@ -16,7 +16,7 @@ export const Home = () => (
     <div>
         <h1>GoodData.UI examples v{version}</h1>
         <p style={{ color: '#AAA', marginTop: -10 }}>
-            Connected to &quot;{backendUriOnlyInfo}&quot; backend. Project id: {projectId}
+            Connected to {backendUriOnlyInfo} backend, project id used: {projectId}
         </p>
 
         <p>Here are the examples of <a href="https://github.com/gooddata/gooddata-react-components">GoodData.UI React Components</a>.</p>

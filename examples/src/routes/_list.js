@@ -30,7 +30,7 @@ export const advancedUseCasesRoutes = [
 const AdvancedUseCasesWithProps = props => AdvancedUseCases({ ...props, advancedUseCasesRoutes });
 
 export const mainRoutes = [
-    { path: '/', title: 'Examples', Component: Home, exact: true },
+    { path: '/', title: 'GoodData.UI Examples', Component: Home, exact: true },
     { path: '/basic-components', title: 'Basic Components', Component: BasicComponents },
     { path: '/kpi', title: 'KPIs', Component: Kpi },
     { path: '/visualization', title: 'Visualization', Component: Visualization },
