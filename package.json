@@ -122,9 +122,11 @@
     "examples?": "# You may add sec,secure,stg,stg2,stg3,demo,developer or URL, ie: yarn examples secure",
     "examples": "bash scripts/run-examples.sh",
     "examples-build": "bash scripts/build-examples.sh",
-    "examples-serve": "node examples/server.js",
+    "examples-server": "node examples/server/index.js",
     "examples-testcafe": "testcafe chrome --assertion-timeout 5000 -S -s examples/_screenshots examples/test/**/**/*_test*",
-    "examples-testcafe-docker": "testcafe 'chrome:headless --no-sandbox' --assertion-timeout 5000 -S -s examples/_screenshots examples/test/**/**/*_test*"
+    "examples-testcafe-docker": "testcafe 'chrome:headless --no-sandbox' --assertion-timeout 5000 -S -s examples/_screenshots examples/test/**/**/*_test*",
+    "postinstall": "yarn examples-build developer && cd examples/server && yarn install --pure-lockfile",
+    "start": "yarn examples-server"
   },
   "typings": "dist/index.d.ts",
   "test-storybook": {

@@ -15,7 +15,7 @@ const backendShortcuts = {
     stg2: 'https://staging2.intgdc.com',
     stg3: 'https://staging3.intgdc.com',
     demo: 'https://client-demo-be.na.intgdc.com',
-    developer: 'https://developer.na.intgdc.com'
+    developer: 'https://developer.na.gooddata.com'
 };
 
 const defaultBackend = backendShortcuts.secure;

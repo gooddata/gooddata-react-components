@@ -6,7 +6,7 @@ const demoProject = {
     'https://staging2.intgdc.com': 'ws7pxsamkx8o0t1s7kfvkj5o41uwcmqg',
     'https://staging.intgdc.com': '',
     'https://client-demo-be.na.intgdc.com': '',
-    'https://developer.na.intgdc.com': ''
+    'https://developer.na.gooddata.com': 'xms7ga4tf3g3nzucd8380o2bev8oeknp'
 };
 
 const backendUri = BACKEND_URI; // eslint-disable-line no-undef
