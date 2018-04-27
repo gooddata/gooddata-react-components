@@ -22,10 +22,12 @@ const defaultBackend = backendShortcuts.developer;
 
 
 module.exports = (env) => {
-    const basePath = env ? env.basePath : '';
+    const basePath = env.basePath || '';
     const backendParam = env ? env.backend : '';
     const backendUri = backendShortcuts[backendParam] || backendParam || defaultBackend;
     console.log('Backend URI: ', backendUri); // eslint-disable-line no-console
+
+    console.log('a',basePath);
 
     const isProduction = process.env.NODE_ENV === 'production';
 

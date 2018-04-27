@@ -12,7 +12,7 @@ const demoProject = {
 const backendUri = BACKEND_URI; // eslint-disable-line no-undef
 const demoProjectId = demoProject[backendUri];
 if (!demoProjectId) {
-    throw new Exception('demoProjectId must be defined');
+    throw new Error('demoProjectId must be defined');
 }
 
 console.log('The /gdc proxy is connected to: ', backendUri, ' with projectId: ', demoProjectId); // eslint-disable-line no-console
@@ -47,6 +47,8 @@ export const monthDateIdentifier = 'date.abm81lMifn6q';
 export const tableVisualizationIdentifier = 'aatFRvXBdilm';
 export const totalSalesIdentifier = 'aa7ulGyKhIE5';
 
+
+/* eslint-disable max-len */
 
 // import { get } from 'lodash';
 // import { catalog } from './catalog';

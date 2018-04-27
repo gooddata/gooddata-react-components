@@ -15,7 +15,9 @@ import DynamicMeasuresExample from '../components/DynamicMeasuresExample';
 export const Home = () => (
     <div>
         <h1>GoodData.UI examples v{version}</h1>
-        {/*<p style={{ color: '#AAA', marginTop: -10 }}>Connected to &quot;{backendUri}&quot; backend. Project id: {projectId}</p>*/}
+        <p style={{ color: '#AAA', marginTop: -10 }}>
+            Connected to &quot;{backendUri}&quot; backend. Project id: {projectId}
+        </p>
 
         <p>Here are the examples of <a href="https://github.com/gooddata/gooddata-react-components">GoodData.UI React Components</a>.</p>
         <p>Explore the top menu to see different use cases that feature sample code and interactive examples.</p>
