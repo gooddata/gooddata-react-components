@@ -45,6 +45,10 @@ module.exports = (env) => {
                 proxyReq.setHeader('referer', backendUri);
                 proxyReq.setHeader('origin', null);
             }
+        },
+        '/gdc-register': {
+            target: 'localhost:3009/gdc-register',
+            secure: false
         }
     };
 

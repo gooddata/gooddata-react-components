@@ -41,7 +41,7 @@ module.exports = (app, sdk, { username, password }) => {
 
             console.log(err); // Log other errors to console
             return res.status(400).json({
-                message: 'Unknown error'
+                message: err
             });
         });
     });
