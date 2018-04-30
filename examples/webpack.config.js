@@ -22,7 +22,7 @@ const defaultBackend = backendShortcuts.developer;
 
 
 module.exports = (env) => {
-    const basePath = env && env.basePath || '';
+    const basePath = env && env.basePath || ''; // eslint-disable-line no-mixed-operators
     const backendParam = env ? env.backend : '';
     const backendUri = backendShortcuts[backendParam] || backendParam || defaultBackend;
     console.log('Backend URI: ', backendUri); // eslint-disable-line no-console

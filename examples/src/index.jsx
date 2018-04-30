@@ -6,26 +6,27 @@ import sdk from '@gooddata/gooddata-js';
 
 import {
     BrowserRouter as Router,
-    Route
+    Route,
+    Redirect,
+    Switch
 } from 'react-router-dom';
 
 
 import '@gooddata/goodstrap/lib/theme-indigo.scss';
 import Header from './components/utils/Header';
-import LoginOverlay from './components/utils/LoginOverlay';
 import { CustomError } from './components/utils/CustomError';
+import CustomLoading from './components/utils/CustomLoading';
 
-import { routes, mainRoutes } from './routes/_list';
+import { routes, userRoutes, mainRoutes } from './routes/_list';
 
 export class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoggedIn: true,
+            isLoggedIn: null,
+            isLoadingUserState: true,
             errorMessage: null
         };
-        this.isUserLoggedIn = this.isUserLoggedIn.bind(this);
-        this.onUserLogin = this.onUserLogin.bind(this);
         this.logout = this.logout.bind(this);
     }
 
@@ -33,9 +34,10 @@ export class App extends React.Component {
         this.isUserLoggedIn();
     }
 
-    onUserLogin(isLoggedIn, errorMessage) {
+    onUserLogin = (isLoggedIn, errorMessage) => {
         this.setState({
-            isLoggedIn
+            isLoggedIn,
+            isLoadingUserState: false
         });
 
         if (errorMessage) {
@@ -43,27 +45,76 @@ export class App extends React.Component {
         }
     }
 
-    isUserLoggedIn() {
-        sdk.user.isLoggedIn()
+    isUserLoggedIn = () => {
+        this.setState({
+            isLoadingUserState: true
+        });
+        return sdk.user.isLoggedIn()
             .then((isLoggedIn) => {
-                this.setState({ isLoggedIn, errorMessage: null });
+                return this.onUserLogin(isLoggedIn, null);
             })
             .catch((errorMessage) => {
-                this.setState({ errorMessage });
+                return this.onUserLogin(false, errorMessage);
             });
     }
 
     logout() {
+        this.setState({
+            isLoadingUserState: true
+        });
         sdk.user.logout().then(() => {
             this.setState({
-                isLoggedIn: false
+                isLoggedIn: false,
+                isLoadingUserState: false
+            });
+        }).catch(() => {
+            this.setState({
+                isLoadingUserState: false
             });
         });
     }
 
+    renderContent = () => {
+        const { isLoggedIn, isLoadingUserState } = this.state;
+        if (isLoadingUserState) {
+            return (
+                <CustomLoading height="100%" />
+            );
+        }
+        return (<div style={{}}>
+            <Switch>
+                {userRoutes.map(({ title, path, Component, redirectTo, ...routeProps }) => (<Route
+                    key={path}
+                    path={path}
+                    component={() => <Component isLoggedIn={isLoggedIn} />}
+                    {...routeProps}
+                />))}
+                {isLoggedIn === false && <Route component={() => (
+                    <Redirect to={{
+                        pathname: '/login',
+                        state: {
+                            redirectUriAfterLogin: '/'
+                        }
+                    }}
+                    />
+                )}
+                />}
+            </Switch>
+            {
+                routes.map(({ title, path, Component, redirectTo, ...routeProps }) => (
+                    <Route
+                        key={path}
+                        path={path}
+                        component={Component}
+                        {...routeProps}
+                    />))
+            }
+        </div>
+        );
+    }
+
     render() {
         const { isLoggedIn, errorMessage } = this.state;
-
         return (
             <Router basename={BASEPATH}>
                 <div className="main-wrapper">
@@ -96,6 +147,8 @@ export class App extends React.Component {
                             flex-direction: column;
                             justify-content: flex-start;
                             align-items: stretch;
+                            padding: 20px;
+                            flex: 1 0 auto;
                         }
                     `}</style>
                     <Header
@@ -108,15 +161,9 @@ export class App extends React.Component {
                         ? <CustomError error={{ status: '403', message: errorMessage }} />
                         : null
                     }
-                    <main style={{ padding: 20 }}>
-                        {routes.map(({ title, path, Component, redirectTo, ...routeProps }) => (<Route
-                            key={path}
-                            path={path}
-                            component={Component}
-                            {...routeProps}
-                        />))}
+                    <main>
+                        {this.renderContent()}
                     </main>
-                    <LoginOverlay onLogin={this.onUserLogin} isLoggedIn={isLoggedIn} />
                 </div>
             </Router>
         );

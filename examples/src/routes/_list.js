@@ -15,6 +15,8 @@ import ParentFilter from './ParentFilter';
 import LoadingAndError from './LoadingAndError';
 import MultipleDomains from './MultipleDomains';
 import DrillWithExternalData from './DrillWithExternalData';
+import Registration from './Registration';
+import Login from './Login';
 
 export const advancedUseCasesRoutes = [
     { path: '/advanced/global-filters', title: 'Global Filters', Component: GlobalFilters },
@@ -39,10 +41,19 @@ export const mainRoutes = [
     { path: '/advanced', pathMatch: 'full', redirectTo: advancedUseCasesRoutes[0].path, title: 'Advanced Use Cases', Component: AdvancedUseCasesWithProps }
 ];
 
+export const hiddenPaths = [
+    { path: '/multiple-domains', title: 'Multiple Domains', Component: MultipleDomains }
+];
+
+export const userRoutes = [
+    { path: '/login', title: 'Login', Component: Login },
+    { path: '/registration', title: 'Registration', Component: Registration }
+];
+
 export const routes = [
     ...mainRoutes,
     ...advancedUseCasesRoutes,
-    { path: '/multiple-domains', title: 'Multiple Domains', Component: MultipleDomains }
+    ...hiddenPaths
 ];
 
 const components = routes.map(r => r.component);
