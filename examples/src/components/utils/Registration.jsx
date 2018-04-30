@@ -3,6 +3,7 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { withRouter, Redirect, Link } from 'react-router-dom';
 import sdk from '@gooddata/gooddata-js';
+import { has } from 'lodash';
 import { withFormik } from 'formik';
 import Yup from 'yup';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -23,6 +24,15 @@ export const DisplayFormikState = props => (
     </div>
 );
 
+export const errorMap = {
+    gdc1051: 'password',
+    gdc1052: 'email'
+};
+
+export const transformApiError = ({ errorCode, message }) => (
+    has(errorMap, errorCode) ? { [errorMap[errorCode]]: message } : null
+);
+
 export const RegistrationForm = (props) => {
     const {
         values,
@@ -34,28 +44,16 @@ export const RegistrationForm = (props) => {
         handleBlur,
         handleSubmit,
         setFieldValue,
+        setStatus,
         redirectUri,
         isLoggedIn
     } = props;
 
-    // FOR TESTING (avoids redirect) ---
-
-    if (status.response) {
-        console.log('status.response', status.response);
-        return <div>Response</div>;
-    }
-
-    if (isLoggedIn) {
-        console.log('Logged in');
-        return <div>Logged in</div>;
-    }
-    // --- FOR TESTING
-
     if (status.response) {
         return (<Redirect to={{
-            pathname: redirectUri,
+            pathname: '/login',
             state: {
-                login: values.login,
+                username: values.email,
                 password: values.password
             }
         }}
@@ -93,6 +91,13 @@ export const RegistrationForm = (props) => {
                     setFieldValue('termsOfUse', true);
                 }}
             >Prefill
+            </button>
+            <button
+                type="button"
+                onClick={() => {
+                    setStatus({ response: true });
+                }}
+            >Fake response
             </button>
             <div>
                 <label className="gd-input">
@@ -244,12 +249,6 @@ export const RegistrationForm = (props) => {
                 </p>
             </div>
 
-            <div className="form-actions" >
-                <button disabled={isSubmitting} className={`button button-primary button-important${isSubmitting ? ' disabled' : ''}`} tabIndex="-1" type="submit">
-                    Register
-                </button>
-            </div>
-
             {status.isLoading && (<CustomLoading label="Registering..." height={100} />)}
             {status.error && (
                 <div className="gd-message error">
@@ -258,6 +257,13 @@ export const RegistrationForm = (props) => {
                     <p>You can try resubmitting the registration form or <Link to="/login" >logging in manually</Link></p>
                 </div>
             )}
+
+            <div className="form-actions" >
+                <button disabled={isSubmitting} className={`button button-primary button-important${isSubmitting ? ' disabled' : ''}`} tabIndex="-1" type="submit">
+                    Register
+                </button>
+            </div>
+
 
             <pre>
                 Status:
@@ -278,6 +284,7 @@ RegistrationForm.propTypes = {
     handleBlur: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     setFieldValue: PropTypes.func.isRequired,
+    setStatus: PropTypes.func.isRequired,
     redirectUri: PropTypes.string,
     isLoggedIn: PropTypes.bool
 };
@@ -325,23 +332,22 @@ export const Registration = withFormik({
         },
         {
             setSubmitting,
-            setStatus
+            setStatus,
+            setErrors
         }
     ) => {
         setStatus({
             error: null,
             isLoading: true
         });
-        sdk.xhr.post('/gdc-register', {
+        sdk.xhr.post('/api-register', {
             data: {
-                accountSetting: {
-                    login: email,
-                    password,
-                    email,
-                    verifyPassword: password, // TEST
-                    firstName,
-                    lastName
-                }
+                login: email,
+                password,
+                email,
+                verifyPassword: password, // TEST
+                firstName,
+                lastName
             }
         }).then(
             (response) => {
@@ -350,14 +356,27 @@ export const Registration = withFormik({
                 setStatus({ response });
             }
         ).catch((error) => {
-            setStatus({
-                error: {
-                    message: 'Registration error',
-                    description: JSON.stringify(error)
-                },
-                response: true, // REMOVE
+            console.dir(error);
+            const status = {
+                response: null,
                 isLoading: false
-            });
+            };
+            if (error.responseBody) {
+                const errorResponse = JSON.parse(error.responseBody);
+                const errors = transformApiError(errorResponse); // Try to assign errors to input fields
+                if (errors) {
+                    setErrors(errors);
+                    status.error = null;
+                }
+            }
+            if (status.error !== null) {
+                // if not possible to pair errors to inputs, render error message above submit button
+                status.error = {
+                    message: 'Registration error',
+                    description: error.message
+                };
+            }
+            setStatus(status);
             setSubmitting(false);
         });
     },

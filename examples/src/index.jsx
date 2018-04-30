@@ -37,12 +37,9 @@ export class App extends React.Component {
     onUserLogin = (isLoggedIn, errorMessage) => {
         this.setState({
             isLoggedIn,
-            isLoadingUserState: false
+            isLoadingUserState: false,
+            errorMessage
         });
-
-        if (errorMessage) {
-            this.setState({ errorMessage: errorMessage.message });
-        }
     }
 
     isUserLoggedIn = () => {
@@ -76,24 +73,37 @@ export class App extends React.Component {
 
     renderContent = () => {
         const { isLoggedIn, isLoadingUserState } = this.state;
+        const flexWrapperStyles = {
+            flex: '1 0 auto',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            alignItems: 'stretch'
+        };
         if (isLoadingUserState) {
             return (
-                <CustomLoading height="100%" />
+                <div
+                    style={{
+                        ...flexWrapperStyles,
+                        justifyContent: 'center'
+                    }}
+                ><CustomLoading height={null} /></div>
             );
         }
-        return (<div style={{}}>
+        return (<div style={flexWrapperStyles}>
             <Switch>
                 {userRoutes.map(({ title, path, Component, redirectTo, ...routeProps }) => (<Route
                     key={path}
                     path={path}
-                    component={() => <Component isLoggedIn={isLoggedIn} />}
+                    component={() => <Component isLoggedIn={isLoggedIn} onLogin={this.onUserLogin} />}
                     {...routeProps}
                 />))}
                 {isLoggedIn === false && <Route component={() => (
                     <Redirect to={{
                         pathname: '/login',
                         state: {
-                            redirectUriAfterLogin: '/'
+                            redirectUriAfterLogin: '/',
+                            defaultRoute: true
                         }
                     }}
                     />
@@ -141,14 +151,13 @@ export class App extends React.Component {
                         }
 
                         main {
-                            flex: 1;
+                            flex: 1 1 auto;
                             overflow: auto;
                             display: flex;
                             flex-direction: column;
                             justify-content: flex-start;
                             align-items: stretch;
                             padding: 20px;
-                            flex: 1 0 auto;
                         }
                     `}</style>
                     <Header

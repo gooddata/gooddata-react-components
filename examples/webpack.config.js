@@ -5,6 +5,7 @@ const CircularDependencyPlugin = require('circular-dependency-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const webpack = require('webpack');
+const getConfig = require('./server/utils/getConfig');
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
@@ -21,13 +22,37 @@ const backendShortcuts = {
 const defaultBackend = backendShortcuts.developer;
 
 
-module.exports = (env) => {
+module.exports = async (env) => {
     const basePath = env && env.basePath || ''; // eslint-disable-line no-mixed-operators
     const backendParam = env ? env.backend : '';
     const backendUri = backendShortcuts[backendParam] || backendParam || defaultBackend;
     console.log('Backend URI: ', backendUri); // eslint-disable-line no-console
 
     const isProduction = process.env.NODE_ENV === 'production';
+
+    const serverConfig = await getConfig()
+        .catch((reason) => {
+            // eslint-disable-next-line no-console
+            console.warn(`Invalid server config: ${reason}. You need to setup Node env variables USERNAME and PASSWORD
+            for platform domain admin account in order for registration to work.
+            See examples/server/.env.sample and use it as a template for .env
+            that should be created in root of this repo (not in examples/server).
+            You can still use examples, but the proxy to examples server will be disabled and therefore registration will not work.`);
+        });
+
+    console.log('resolve serverConfig', serverConfig);
+
+    // TODO: backendUri should be the same as serverConfig.domain, but serverConfig might not be available
+    const serverProxy = serverConfig ? {
+        '/api-register': {
+            target: `https://localhost:${serverConfig.port}/gdc-register`,
+            secure: false,
+            pathRewrite: { '^/api-register': '' },
+            onProxyReq: () => {
+                console.log('Client req /api-register proxy to', `https://localhost:${serverConfig.port}/gdc-register`);
+            }
+        }
+    } : {};
 
     const proxy = {
         '/gdc': {
@@ -46,11 +71,10 @@ module.exports = (env) => {
                 proxyReq.setHeader('origin', null);
             }
         },
-        '/gdc-register': {
-            target: 'localhost:3009/gdc-register',
-            secure: false
-        }
+        ...serverProxy
     };
+
+    console.log('proxy', proxy);
 
     const resolve = {
         extensions: ['.js', '.jsx'],

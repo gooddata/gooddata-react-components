@@ -12,6 +12,7 @@ class Login extends React.Component {
         onLogin: PropTypes.func,
         redirectUri: PropTypes.string,
         username: PropTypes.string,
+        location: PropTypes.object.isRequired,
         password: PropTypes.string,
         isLoggedIn: PropTypes.bool
     }
@@ -30,6 +31,7 @@ class Login extends React.Component {
         this.state = {
             username: props.username,
             password: props.password,
+            autoLoginAttempted: false,
             isLoggedIn: false,
             isLoading: false,
             error: null
@@ -37,11 +39,17 @@ class Login extends React.Component {
     }
 
     componentWillMount() {
-        const { username, password } = this.props;
-        if (username && password) {
+        const { location: { state: { username, password } } } = this.props;
+        const { autoLoginAttempted } = this.state;
+        console.log('this.props.location', this.props.location);
+        console.log('autoLoginAttempted', autoLoginAttempted);
+        console.log('username', username);
+        console.log('password', password);
+        if (username && password && !autoLoginAttempted) {
             this.setState({
                 username,
-                password
+                password,
+                autoLoginAttempted: true
             });
             this.login(username, password);
         }
@@ -73,6 +81,7 @@ class Login extends React.Component {
             .then(() => {
                 this.setState({
                     isLoggedIn: true,
+                    isLoading: false,
                     error: null
                 });
                 this.props.onLogin(true, null);
@@ -81,11 +90,13 @@ class Login extends React.Component {
                 }
             })
             .catch((error) => {
+                console.log('login error', error);
                 this.setState({
                     isLoggedIn: false,
+                    isLoading: false,
+                    autoLoginAttempted: true,
                     error: 'Wrong username and/or password'
                 });
-                this.props.onLogin(false, error);
             });
     }
 
@@ -137,7 +148,17 @@ class Login extends React.Component {
         const { isLoading, isLoggedIn } = this.state;
         console.log('this.props.isLoggedIn', this.props.isLoggedIn);
         if (isLoading) {
-            return <CustomLoading />;
+            return (<div
+                style={{
+                    flex: '1 0 auto',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'stretch'
+                }}
+            >
+                <CustomLoading height={null} />
+            </div>);
         }
         if (isLoggedIn || this.props.isLoggedIn) {
             return <Redirect to={this.props.redirectUri} />;

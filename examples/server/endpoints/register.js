@@ -5,6 +5,7 @@ const ALREADY_REGISTERED_ERROR_CODE = 'gdc1052';
 
 module.exports = (app, sdk, { username, password }) => {
     app.post('/gdc-register', bodyParser.json(), (req, res) => {
+        console.log('Server req /gdc-register');
         const { body } = req;
         if (!body) {
             return res.status(400).send('Missing body');
@@ -29,19 +30,21 @@ module.exports = (app, sdk, { username, password }) => {
                 });
             });
         }).catch((err) => {
+            console.log(err); // Log other errors to console
             if (err.responseBody) {
                 const response = JSON.parse(err.responseBody);
-                if (response.error.errorCode === ALREADY_REGISTERED_ERROR_CODE) {
+                console.log('error response:', response);
+                const { message, errorCode } = response.error;
+                if (message) {
                     return res.status(400).json({
-                        message: response.error.message,
-                        errorCode: 'gdc1052'
+                        message,
+                        errorCode
                     });
                 }
             }
 
-            console.log(err); // Log other errors to console
             return res.status(400).json({
-                message: err
+                message: 'unknown error'
             });
         });
     });
