@@ -7,6 +7,7 @@ import { AFM, Execution } from '@gooddata/typings';
 import * as Highcharts from '@types/highcharts';
 import { IDrillableItem, IDrillEventIntersectionElement } from '../../../interfaces/DrillEvents';
 import { VisElementType, VisType, VisualizationTypes } from '../../../constants/visualizationTypes';
+import { isComboChart } from './common';
 
 export interface IDrillableItemLocalId extends IDrillableItem {
     localIdentifier: AFM.Identifier;
@@ -100,13 +101,19 @@ export function getClickableElementNameByChartType(type: VisType): VisElementTyp
     switch (type) {
         case VisualizationTypes.LINE:
         case VisualizationTypes.AREA:
+        case VisualizationTypes.DUAL:
+        case VisualizationTypes.SCATTER:
             return 'point';
         case VisualizationTypes.COLUMN:
         case VisualizationTypes.BAR:
             return 'bar';
         case VisualizationTypes.PIE:
+        case VisualizationTypes.TREEMAP:
+        case VisualizationTypes.DONUT:
+        case VisualizationTypes.FUNNEL:
             return 'slice';
         case VisualizationTypes.TABLE:
+        case VisualizationTypes.HEATMAP:
             return 'cell';
         default:
             invariant(false, `Unknown visualization type: ${type}`);
@@ -168,10 +175,15 @@ const chartClickDebounced = debounce((drillConfig: IDrillConfig, event: IHighcha
                                       target: EventTarget, chartType: VisType) => {
     const { afm, onFiredDrillEvent } = drillConfig;
 
+    let usedChartType = chartType;
+    if (isComboChart(chartType)) {
+        usedChartType = get(event, ['point', 'series', 'options', 'type'], chartType);
+    }
+
     const data = {
         executionContext: afm,
         drillContext: isGroupHighchartsDrillEvent(event) ?
-            composeDrillContextGroup(event, chartType) : composeDrillContextPoint(event, chartType)
+            composeDrillContextGroup(event, usedChartType) : composeDrillContextPoint(event, usedChartType)
     };
 
     fireEvent(onFiredDrillEvent, data, target);

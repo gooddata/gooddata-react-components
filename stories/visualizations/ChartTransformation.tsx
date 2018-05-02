@@ -155,6 +155,65 @@ class DynamicChart extends React.Component<any, any> {
 }
 
 storiesOf('Internal/HighCharts/ChartTransformation', module)
+    .add('Bubble chart with three measures and one attribute', () => {
+        const dataSet = {
+            ...fixtures.bubbleChartWith3MetricsAndAttribute
+        };
+        const dataLarge = () => { throw new Error('Data too large'); };
+
+        return screenshotWrap(
+            wrap(
+                <ChartTransformation
+                    drillableItems={[]}
+                    config={{
+                        type: 'bubble',
+                        legend: {
+                            enabled: true,
+                            position: 'right'
+                        },
+                        legendLayout: 'horizontal',
+                        colors: fixtures.customPalette,
+                        mdObject: fixtures.bubbleChartWith3MetricsAndAttributeMd.mdObject
+                    }}
+                    {...dataSet}
+                    onDataTooLarge={dataLarge}
+                    onNegativeValues={null}
+                />
+            )
+        );
+    })
+    .add('Scatterplot with two measures and one attribute', () => {
+        const dataSet = {
+            ...fixtures.scatterPlotWith2MetricsAndAttribute
+        };
+        const dataLarge = () => { throw new Error('Data too large'); };
+
+        return screenshotWrap(
+            wrap(
+                <ChartTransformation
+                    drillableItems={[
+                        {
+                            uri: dataSet.executionResponse.dimensions[1]
+                                .headers[0].measureGroupHeader.items[1].measureHeaderItem.uri
+                        }
+                    ]}
+                    config={{
+                        type: 'scatter',
+                        legend: {
+                            enabled: true,
+                            position: 'right'
+                        },
+                        legendLayout: 'horizontal',
+                        colors: fixtures.customPalette,
+                        mdObject: fixtures.scatterPlotWith2MetricsAndAttributeMdObject.mdObject
+                    }}
+                    {...dataSet}
+                    onDataTooLarge={dataLarge}
+                    onNegativeValues={null}
+                />
+            )
+        );
+    })
     .add('Column chart with one measure and no attributes', () => {
         const dataSet = {
             ...fixtures.barChartWithSingleMeasureAndNoAttributes
@@ -532,6 +591,281 @@ storiesOf('Internal/HighCharts/ChartTransformation', module)
                         },
                         legendLayout: 'horizontal',
                         colors: fixtures.customPalette
+                    }}
+                    {...dataSet}
+                    onDataTooLarge={identity}
+                />
+            )
+        );
+    })
+    .add('Funnel chart view viewBy attribute', () => {
+        const dataSet = fixtures.barChartWithViewByAttribute;
+
+        return screenshotWrap(
+            wrap(
+                <ChartTransformation
+                    drillableItems={[
+                        {
+                            uri: dataSet.executionResult
+                                .headerItems[VIEW_BY_DIMENSION_INDEX][0][0].attributeHeaderItem.uri
+                        }
+                    ]}
+                    config={{
+                        type: 'funnel',
+                        legendLayout: 'horizontal',
+                        colors: fixtures.customPalette
+                    }}
+                    {...dataSet}
+                    onDataTooLarge={identity}
+                />
+            )
+        );
+    })
+    .add('Funnel chart with measures only', () => {
+        const dataSet = fixtures.pieChartWithMetricsOnly;
+
+        return screenshotWrap(
+            wrap(
+                <ChartTransformation
+                    drillableItems={[
+                        {
+                            uri: dataSet.executionResponse.dimensions[VIEW_BY_DIMENSION_INDEX]
+                                .headers[0].measureGroupHeader.items[1].measureHeaderItem.uri
+                        }
+                    ]}
+                    config={{
+                        type: 'funnel',
+                        legendLayout: 'horizontal',
+                        colors: fixtures.customPalette
+                    }}
+                    {...dataSet}
+                    onDataTooLarge={identity}
+                />
+            )
+        );
+    })
+    .add('Funnel chart view viewBy attribute with empty value', () => {
+        const dataSet: any = immutableSet(fixtures.barChartWithViewByAttribute, 'executionResult.data[0][0]', null);
+
+        return screenshotWrap(
+            wrap(
+                <ChartTransformation
+                    drillableItems={[
+                        {
+                            uri: dataSet.executionResult
+                                .headerItems[VIEW_BY_DIMENSION_INDEX][0][0].attributeHeaderItem.uri
+                        }
+                    ]}
+                    config={{
+                        type: 'funnel',
+                        legendLayout: 'horizontal',
+                        colors: fixtures.customPalette
+                    }}
+                    {...dataSet}
+                    onDataTooLarge={identity}
+                />
+            )
+        );
+    })
+    .add('Treemap with viewBy attribute', () => {
+        const dataSet = fixtures.barChartWithViewByAttribute;
+
+        return screenshotWrap(
+            wrap(
+                <ChartTransformation
+                    drillableItems={[
+                        {
+                            uri: dataSet.executionResult
+                                .headerItems[VIEW_BY_DIMENSION_INDEX][0][0].attributeHeaderItem.uri
+                        }
+                    ]}
+                    config={{
+                        type: 'treemap',
+                        colors: fixtures.customPalette
+                    }}
+                    {...dataSet}
+                    onDataTooLarge={identity}
+                />
+            )
+        );
+    })
+    .add('Treemap with measures only', () => {
+        const dataSet = fixtures.pieChartWithMetricsOnly;
+
+        return screenshotWrap(wrap(
+            <ChartTransformation
+                drillableItems={[{
+                    uri: dataSet.executionResponse.dimensions[VIEW_BY_DIMENSION_INDEX]
+                        .headers[0].measureGroupHeader.items[1].measureHeaderItem.uri
+                }]}
+                config={{
+                    type: 'treemap',
+                    colors: fixtures.customPalette
+                }}
+                {...dataSet}
+                onDataTooLarge={identity}
+            />
+            )
+        );
+    })
+    .add('Treemap with viewBy attribute with empty value', () => {
+        const dataSet: any = immutableSet(fixtures.barChartWithViewByAttribute, 'executionResult.data[0][0]', null);
+
+        return screenshotWrap(wrap(
+            <ChartTransformation
+                drillableItems={[{
+                    uri: dataSet.executionResult
+                        .headerItems[VIEW_BY_DIMENSION_INDEX][0][0].attributeHeaderItem.uri
+                }]}
+                config={{
+                    type: 'treemap',
+                    colors: fixtures.customPalette
+                }}
+                {...dataSet}
+                onDataTooLarge={identity}
+            />
+            )
+        );
+    })
+    .add('Dual axis line/line chart with one metric on each axis', () => {
+        const dataSet: any = fixtures.barChartWith2MetricsAndViewByAttribute;
+
+        return screenshotWrap(
+            wrap(
+                <ChartTransformation
+                    drillableItems={[
+                        {
+                            uri: dataSet.executionResponse.dimensions[0]
+                                .headers[0].measureGroupHeader.items[0].measureHeaderItem.uri
+                        }
+                    ]}
+                    config={{
+                        type: 'dual',
+                        mdObject: fixtures.barChartWith2MetricsAndViewByAttributeMd.mdObject
+                    }}
+                    {...dataSet}
+                    onDataTooLarge={identity}
+                />
+            )
+        );
+    })
+   .add('Donut chart view viewBy attribute', () => {
+        const dataSet = fixtures.barChartWithViewByAttribute;
+
+        return screenshotWrap(
+            wrap(
+                <ChartTransformation
+                    drillableItems={[
+                        {
+                            uri: dataSet.executionResult
+                                .headerItems[VIEW_BY_DIMENSION_INDEX][0][0].attributeHeaderItem.uri
+                        }
+                    ]}
+                    config={{
+                        type: 'donut',
+                        legend: {
+                            enabled: true,
+                            position: 'left'
+                        },
+                        legendLayout: 'horizontal',
+                        colors: fixtures.customPalette
+                    }}
+                    {...dataSet}
+                    onDataTooLarge={identity}
+                />
+            )
+        );
+    })
+    .add('Donut chart with measures only', () => {
+        const dataSet = fixtures.pieChartWithMetricsOnly;
+
+        return screenshotWrap(
+            wrap(
+                <ChartTransformation
+                    drillableItems={[
+                        {
+                            uri: dataSet.executionResponse.dimensions[VIEW_BY_DIMENSION_INDEX]
+                                .headers[0].measureGroupHeader.items[1].measureHeaderItem.uri
+                        }
+                    ]}
+                    config={{
+                        type: 'donut',
+                        legend: {
+                            enabled: true,
+                            position: 'left'
+                        },
+                        legendLayout: 'horizontal',
+                        colors: fixtures.customPalette
+                    }}
+                    {...dataSet}
+                    onDataTooLarge={identity}
+                />
+            )
+        );
+    })
+    .add('Donut chart view viewBy attribute with empty value', () => {
+        const dataSet: any = immutableSet(fixtures.barChartWithViewByAttribute, 'executionResult.data[0][0]', null);
+
+        return screenshotWrap(
+            wrap(
+                <ChartTransformation
+                    drillableItems={[
+                        {
+                            uri: dataSet.executionResult
+                                .headerItems[VIEW_BY_DIMENSION_INDEX][0][0].attributeHeaderItem.uri
+                        }
+                    ]}
+                    config={{
+                        type: 'donut',
+                        legend: {
+                            enabled: true,
+                            position: 'left'
+                        },
+                        legendLayout: 'horizontal',
+                        colors: fixtures.customPalette
+                    }}
+                    {...dataSet}
+                    onDataTooLarge={identity}
+                />
+            )
+        );
+    })
+    .add('Combo chart with one metric on each chart', () => {
+        const dataSet: any = fixtures.comboWithTwoMeasuresAndViewByAttribute;
+
+        return screenshotWrap(
+            wrap(
+                <ChartTransformation
+                    config={{
+                        type: 'combo',
+                        mdObject: fixtures.comboWithTwoMeasuresAndViewByAttributeMdObject
+                    }}
+                    {...dataSet}
+                    onDataTooLarge={identity}
+                    drillableItems={[
+                        {
+                            uri: dataSet.executionResult
+                                .headerItems[VIEW_BY_DIMENSION_INDEX][0][4].attributeHeaderItem.uri
+                        }
+                    ]}
+                />
+            )
+        );
+    })
+    .add('Heat map with one metric and two attributes', () => {
+        const dataSet: any = fixtures.barChartWithStackByAndViewByAttributes;
+
+        return screenshotWrap(
+            wrap(
+                <ChartTransformation
+                    drillableItems={[
+                        {
+                            uri: dataSet.executionResult
+                                .headerItems[VIEW_BY_DIMENSION_INDEX][0][0].attributeHeaderItem.uri
+                        }
+                    ]}
+                    config={{
+                        type: 'heatmap'
                     }}
                     {...dataSet}
                     onDataTooLarge={identity}
