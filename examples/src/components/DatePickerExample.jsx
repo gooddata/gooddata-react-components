@@ -47,7 +47,7 @@ export class DatePickerExample extends Component {
         };
         newState[prop] = value;
 
-        if (newState.to >= newState.from) {
+        if (newState.to.isSameOrAfter(newState.from)) {
             this.setState(newState);
         } else {
             this.setState({
