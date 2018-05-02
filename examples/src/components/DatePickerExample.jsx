@@ -3,7 +3,6 @@
 import React, { Component } from 'react';
 import { AfmComponents, ErrorComponent } from '@gooddata/react-components';
 import DatePicker from 'react-datepicker';
-import moment from 'moment';
 
 import '@gooddata/react-components/styles/css/main.css';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -13,14 +12,16 @@ import { totalSalesIdentifier, monthDateIdentifier, dateDatasetIdentifier, proje
 
 const { ColumnChart } = AfmComponents;
 
-const dateFormat = 'YYYY-MM-DD';
-
 export class DatePickerExample extends Component {
     constructor(props) {
         super(props);
+
+        const from = new Date('2017-01-01').toISOString().slice(0, 10);
+        const to = new Date('2017-12-31').toISOString().slice(0, 10);
+
         this.state = {
-            from: moment('2017-01-01', dateFormat),
-            to: moment('2017-12-31', dateFormat),
+            from,
+            to,
             error: null
         };
 
@@ -46,7 +47,7 @@ export class DatePickerExample extends Component {
         };
         newState[prop] = value;
 
-        if (newState.to.isSameOrAfter(newState.from)) {
+        if (newState.to >= newState.from) {
             this.setState(newState);
         } else {
             this.setState({
@@ -98,8 +99,8 @@ export class DatePickerExample extends Component {
                         dataSet: {
                             identifier: dateDatasetIdentifier
                         },
-                        from: from.format(dateFormat),
-                        to: to.format(dateFormat)
+                        from,
+                        to
                     }
                 }
             ]

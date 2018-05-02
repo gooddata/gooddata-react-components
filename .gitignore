@@ -38,3 +38,5 @@ coverage
 junit.xml
 
 test-storybook/
+
+.env
