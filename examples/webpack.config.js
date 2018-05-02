@@ -51,6 +51,14 @@ module.exports = async (env) => {
             onProxyReq: () => {
                 console.log('Client req /api-register proxy to', `https://localhost:${serverConfig.port}/gdc-register`);
             }
+        },
+        '/api-assign-project': {
+            target: `https://localhost:${serverConfig.port}/gdc-assign-project`,
+            secure: false,
+            pathRewrite: { '^/api-assign-project': '' },
+            onProxyReq: () => {
+                console.log('Client req /api-assign-project proxy to', `https://localhost:${serverConfig.port}/gdc-assign-project`);
+            }
         }
     } : {};
 
@@ -60,13 +68,15 @@ module.exports = async (env) => {
             secure: false,
             cookieDomainRewrite: '',
             onProxyReq: (proxyReq) => {
+                console.log('proxy', '/gdc', proxyReq.path);
                 if (proxyReq.method === 'DELETE' && !proxyReq.getHeader('content-length')) {
                     // Only set content-length to zero if not already specified
                     proxyReq.setHeader('content-length', '0');
                 }
 
                 // White labeled resources are based on host header
-                proxyReq.setHeader('host', 'localhost:8999');
+                console.log('backendUri', backendUri);
+                proxyReq.setHeader('host', backendUri.split('/')[2]);
                 proxyReq.setHeader('referer', backendUri);
                 proxyReq.setHeader('origin', null);
             }

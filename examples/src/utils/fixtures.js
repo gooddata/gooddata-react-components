@@ -17,7 +17,6 @@ if (!demoProjectId) {
 
 console.log('The /gdc proxy is connected to: ', backendUri, ' with projectId: ', demoProjectId); // eslint-disable-line no-console
 
-
 // your projectId would be probably static (you may ignore the code above)
 
 export const backendUriOnlyInfo = backendUri;

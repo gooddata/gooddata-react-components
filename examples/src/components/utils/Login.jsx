@@ -6,6 +6,7 @@ import { withRouter, Redirect } from 'react-router-dom';
 import sdk from '@gooddata/gooddata-js';
 import CustomLoading from './CustomLoading';
 import CustomError from './CustomError';
+import { projectId } from '../../utils/fixtures';
 
 class Login extends React.Component {
     static propTypes = {
@@ -33,6 +34,7 @@ class Login extends React.Component {
             password: props.password,
             autoLoginAttempted: false,
             isLoggedIn: false,
+            isProjectAssigned: null,
             isLoading: false,
             error: null
         };
@@ -45,7 +47,9 @@ class Login extends React.Component {
         console.log('autoLoginAttempted', autoLoginAttempted);
         console.log('username', username);
         console.log('password', password);
-        if (username && password && !autoLoginAttempted) {
+        if (this.props.isLoggedIn) {
+            this.checkProjectAvailability(null);
+        } else if (username && password && !autoLoginAttempted) {
             this.setState({
                 username,
                 password,
@@ -73,21 +77,71 @@ class Login extends React.Component {
         this.login(username, password);
     }
 
+    setErrorCheckingProjectAvailability = (error) => {
+        this.setState({
+            error: `Could not confirm demo project availability. Examples might not have access to the demo project with id ${projectId}.
+            You can try logging out and logging back in. ${error}`,
+            isProjectAssigned: null
+        });
+    }
+
+    checkProjectAvailability = (newProfileUri) => {
+        console.log('checkingAvailability', projectId);
+        return (
+            newProfileUri
+                ? Promise.resolve(newProfileUri)
+                : sdk.user.getAccountInfo()
+                    .then((accountInfo) => {
+                        console.log('accountInfo', accountInfo);
+                        return accountInfo.profileUri;
+                    })
+        )
+            .then((profileUri) => {
+                const userId = profileUri.split('/').reverse()[0];
+                return sdk.project.getProjects(userId)
+                    .then((projects) => {
+                        console.log('projects', projects);
+                        // find project
+                        const isProjectAssigned = projects.some((project) => {
+                            return project.links.metadata.split('/').reverse()[0] === projectId;
+                        });
+                        this.setState({
+                            error: null,
+                            isProjectAssigned
+                        });
+                        if (!isProjectAssigned) {
+                            console.log('assignProject');
+                            return sdk.xhr.post('/api-assign-project', {
+                                data: {
+                                    user: profileUri
+                                }
+                            });
+                        }
+                        console.log('project already available');
+                        return Promise.resolve();
+                    })
+            })
+            .catch((error) => {
+                console.log('getAccountInfo error', error);
+                this.setErrorCheckingProjectAvailability(error);
+            });
+    }
+
     login = (username, password) => {
         this.setState({
             isLoading: true
         });
         sdk.user.login(username, password)
-            .then(() => {
+            .then((userData) => {
+                console.log('userData', userData);
                 this.setState({
                     isLoggedIn: true,
                     isLoading: false,
                     error: null
                 });
                 this.props.onLogin(true, null);
-                if (typeof window !== 'undefined') {
-                    window.location.reload();
-                }
+
+                this.checkProjectAvailability(userData.userLogin.profile);
             })
             .catch((error) => {
                 console.log('login error', error);
@@ -138,30 +192,38 @@ class Login extends React.Component {
         );
     }
 
-    renderError = () => {
-        return (
-            <div className="gd-message" style={{ display: 'block', margin: '5px 0' }}>{this.state.error}</div>
-        );
-    }
-
     render() {
-        const { isLoading, isLoggedIn } = this.state;
+        const { isLoading, isProjectAssigned, error } = this.state;
         console.log('this.props.isLoggedIn', this.props.isLoggedIn);
-        if (isLoading) {
-            return (<div
-                style={{
-                    flex: '1 0 auto',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'stretch'
-                }}
-            >
-                <CustomLoading height={null} />
-            </div>);
+        const isLoggedIn = this.state.isLoggedIn || this.props.isLoggedIn;
+        const verticalCenterStyle = {
+            flex: '1 0 auto',
+            display: 'flex',
+            maxWidth: '600px',
+            margin: '0 auto',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'stretch'
+        };
+        if (isLoggedIn) {
+            if (error) {
+                console.log('loggedIn error', error);
+                return <div style={verticalCenterStyle} ><CustomError message={error} /></div>;
+            }
+            if (isProjectAssigned) {
+                console.log('project is assigned, redirrecting');
+                return <Redirect to={this.props.redirectUri} />;
+            }
+            if (isProjectAssigned === false) {
+                console.log('project is not assinged, assigning');
+                return <div style={verticalCenterStyle} ><CustomLoading height={null} label="Assigning demo project&hellip;" /></div>;
+            }
+            console.log('checking project availability');
+            return <div style={verticalCenterStyle} ><CustomLoading height={null} label="Checking demo availability&hellip;" /></div>;
         }
-        if (isLoggedIn || this.props.isLoggedIn) {
-            return <Redirect to={this.props.redirectUri} />;
+        if (isLoading) {
+            console.log('loading');
+            return <div style={verticalCenterStyle} ><CustomLoading height={null} label="Logging in&hellip;" /></div>;
         }
         return this.renderLogInForm();
     }
