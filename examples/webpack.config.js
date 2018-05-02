@@ -5,7 +5,7 @@ const CircularDependencyPlugin = require('circular-dependency-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const webpack = require('webpack');
-const getConfig = require('./server/utils/getConfig');
+const getConfig = require('./server/src/utils/getConfig');
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
