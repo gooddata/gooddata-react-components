@@ -154,7 +154,6 @@ module.exports = async (env) => {
         node: {
             __filename: true
         },
-        devtool: isProduction ? false : 'cheap-module-eval-source-map',
         module: {
             rules: [
                 {
