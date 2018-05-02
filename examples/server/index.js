@@ -7,6 +7,7 @@ const proxy = require('./endpoints/proxy');
 const register = require('./endpoints/register');
 const assignProject = require('./endpoints/assignProject');
 const staticFiles = require('./endpoints/staticFiles');
+const forceHttps = require('./endpoints/forceHttps');
 const getConfig = require('./utils/getConfig');
 
 async function runServer() {
@@ -25,6 +26,7 @@ async function runServer() {
     sdk.config.setCustomDomain(config.domain);
 
     const endpoints = [
+        forceHttps,
         register,
         assignProject,
         proxy,
