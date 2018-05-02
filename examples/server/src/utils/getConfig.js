@@ -18,7 +18,7 @@ const configSchema = yup.object().shape({
 module.exports = () => {
     const config = configSchema.cast({
         port: process.env.PORT,
-        serveFrom: `${__dirname}/../dist/`,
+        serveFrom: `${__dirname}/../../../dist/`,
         https: process.env.HTTPS,
         domain: process.env.DOMAIN,
         username: process.env.USERNAME,
