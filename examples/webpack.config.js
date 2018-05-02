@@ -5,7 +5,6 @@ const CircularDependencyPlugin = require('circular-dependency-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const webpack = require('webpack');
-const getConfig = require('./server/src/utils/getConfig');
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
@@ -30,38 +29,6 @@ module.exports = async (env) => {
 
     const isProduction = process.env.NODE_ENV === 'production';
 
-    const serverConfig = await getConfig()
-        .catch((reason) => {
-            // eslint-disable-next-line no-console
-            console.warn(`Invalid server config: ${reason}. You need to setup Node env variables USERNAME and PASSWORD
-            for platform domain admin account in order for registration to work.
-            See examples/server/.env.sample and use it as a template for .env
-            that should be created in root of this repo (not in examples/server).
-            You can still use examples, but the proxy to examples server will be disabled and therefore registration will not work.`);
-        });
-
-    console.log('resolve serverConfig', serverConfig);
-
-    // TODO: backendUri should be the same as serverConfig.domain, but serverConfig might not be available
-    const serverProxy = serverConfig ? {
-        '/api-register': {
-            target: `https://localhost:${serverConfig.port}/gdc-register`,
-            secure: false,
-            pathRewrite: { '^/api-register': '' },
-            onProxyReq: () => {
-                console.log('Client req /api-register proxy to', `https://localhost:${serverConfig.port}/gdc-register`);
-            }
-        },
-        '/api-assign-project': {
-            target: `https://localhost:${serverConfig.port}/gdc-assign-project`,
-            secure: false,
-            pathRewrite: { '^/api-assign-project': '' },
-            onProxyReq: () => {
-                console.log('Client req /api-assign-project proxy to', `https://localhost:${serverConfig.port}/gdc-assign-project`);
-            }
-        }
-    } : {};
-
     const proxy = {
         '/gdc': {
             target: backendUri,
@@ -81,10 +48,24 @@ module.exports = async (env) => {
                 proxyReq.setHeader('origin', null);
             }
         },
-        ...serverProxy
+        '/api-register': {
+            target: `https://localhost:3009/gdc-register`,
+            secure: false,
+            pathRewrite: { '^/api-register': '' },
+            onProxyReq: () => {
+                console.log('Client req /api-register proxy to', `https://localhost:3009/gdc-register`);
+            }
+        },
+        '/api-assign-project': {
+            target: `https://localhost:3009/gdc-assign-project`,
+            secure: false,
+            pathRewrite: { '^/api-assign-project': '' },
+            onProxyReq: () => {
+                console.log('Client req /api-assign-project proxy to', `https://localhost:3009/gdc-assign-project`);
+            }
+        }
     };
 
-    console.log('proxy', proxy);
 
     const resolve = {
         extensions: ['.js', '.jsx'],
@@ -113,7 +94,7 @@ module.exports = async (env) => {
         })
     ];
 
-    if (process.env.NODE_ENV === 'production') {
+    if (isProduction) {
         const uglifyOptions = {
             mangle: true,
             compress: {
