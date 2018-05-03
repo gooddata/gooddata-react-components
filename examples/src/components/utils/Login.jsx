@@ -107,7 +107,13 @@ class Login extends React.Component {
                                 data: {
                                     user: profileUri
                                 }
-                            });
+                            })
+                                .then(() => {
+                                    this.setState({
+                                        error: null,
+                                        isProjectAssigned: true
+                                    });
+                                });
                         }
                         return Promise.resolve();
                     });
