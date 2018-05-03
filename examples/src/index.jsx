@@ -48,10 +48,10 @@ export class App extends React.Component {
         });
         return sdk.user.isLoggedIn()
             .then((isLoggedIn) => {
-                return this.onUserLogin(isLoggedIn, null);
+                this.onUserLogin(isLoggedIn, null);
             })
             .catch((errorMessage) => {
-                return this.onUserLogin(false, errorMessage);
+                this.onUserLogin(false, errorMessage);
             });
     }
 
@@ -87,7 +87,7 @@ export class App extends React.Component {
                         ...flexWrapperStyles,
                         justifyContent: 'center'
                     }}
-                ><CustomLoading height={null} /></div>
+                ><CustomLoading height={null} label="Checking if user is already logged in&hellip;" /></div>
             );
         }
         return (<div style={flexWrapperStyles}>

@@ -41,7 +41,7 @@ class Login extends React.Component {
     }
 
     componentWillMount() {
-        const { location: { state: { username, password } } } = this.props;
+        const { location: { state: { username, password } = {} } } = this.props;
         const { autoLoginAttempted } = this.state;
         if (this.props.isLoggedIn) {
             this.checkProjectAvailability(null);
