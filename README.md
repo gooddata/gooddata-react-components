@@ -1,5 +1,5 @@
-# GoodData React Components
-> React.js components for building visualizations on top of GoodData platform
+# GoodData.UI
+> A React-based JavaScript library for building data-driven applications
 
 ## Getting started
 - [Documentation](http://sdk.gooddata.com/gdc-ui-sdk-doc/)
