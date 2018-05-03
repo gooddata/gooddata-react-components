@@ -10,7 +10,7 @@ const staticFiles = require('./endpoints/staticFiles');
 const redirectToHttps = require('./endpoints/redirectToHttps');
 
 const config = {
-    port: process.env.PORT,
+    port: process.env.PORT || 3009,
     serveFrom: `${__dirname}/../../dist/`,
     https: process.env.HTTPS,
     domain: process.env.DOMAIN || 'https://developer.na.gooddata.com/',
@@ -36,7 +36,7 @@ const app = express();
 endpoints.forEach(handler => handler(app, sdk, config));
 
 if (config.https) {
-    // Generate key and cert in root folder: openssl req -newkey rsa:2048 -nodes -keyout server.key -x509 -days 365 -out server.crt
+    // Generate in root folder: openssl req -newkey rsa:2048 -nodes -keyout server.key -x509 -days 365 -out server.crt
     const options = {
         key: fs.readFileSync('./server.key'),
         cert: fs.readFileSync('./server.crt'),

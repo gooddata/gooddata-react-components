@@ -340,7 +340,7 @@ export const Registration = withFormik({
             error: null,
             isLoading: true
         });
-        sdk.xhr.post('/api-register', {
+        sdk.xhr.post('/api/register', {
             data: {
                 login: email,
                 password,

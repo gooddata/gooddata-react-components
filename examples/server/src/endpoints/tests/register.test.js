@@ -38,14 +38,14 @@ function createApp(sdk = createSdk()) {
 describe('assignProject', () => {
     it('should return 400 for request without body', () => {
         return request(createApp())
-            .post('/gdc-register')
+            .post('/api/register')
             .send()
             .expect(400);
     });
 
     it('should return 400 if required values are not provided', () => {
         return request(createApp())
-            .post('/gdc-register')
+            .post('/api/register')
             .send({ foo: 'bar' })
             .expect(400);
     });
@@ -60,7 +60,7 @@ describe('assignProject', () => {
             lastName: 'Pravdac'
         };
         return request(createApp(sdkMock))
-            .post('/gdc-register')
+            .post('/api/register')
             .send(data)
             .expect(201)
             .then(() => {
@@ -96,7 +96,7 @@ describe('assignProject', () => {
             lastName: 'Pravdac'
         };
         return request(createApp(sdkMock))
-            .post('/gdc-register')
+            .post('/api/register')
             .send(data)
             .expect(400)
             .then((res) => {

@@ -16,7 +16,7 @@ class Login extends React.Component {
         location: PropTypes.object.isRequired,
         password: PropTypes.string,
         isLoggedIn: PropTypes.bool
-    }
+    };
 
     static defaultProps = {
         onLogin: () => {},
@@ -24,7 +24,7 @@ class Login extends React.Component {
         username: '',
         password: '',
         isLoggedIn: null
-    }
+    };
 
     constructor(props) {
         super(props);
@@ -111,7 +111,7 @@ class Login extends React.Component {
                         });
                         if (!isProjectAssigned) {
                             console.log('assignProject');
-                            return sdk.xhr.post('/api-assign-project', {
+                            return sdk.xhr.post('/api/assign-project', {
                                 data: {
                                     user: profileUri
                                 }

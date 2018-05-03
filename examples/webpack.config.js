@@ -48,20 +48,11 @@ module.exports = async (env) => {
                 proxyReq.setHeader('origin', null);
             }
         },
-        '/api-register': {
-            target: `https://localhost:3009/gdc-register`,
+        '/api': {
+            target: 'http://localhost:3009',
             secure: false,
-            pathRewrite: { '^/api-register': '' },
-            onProxyReq: () => {
-                console.log('Client req /api-register proxy to', `https://localhost:3009/gdc-register`);
-            }
-        },
-        '/api-assign-project': {
-            target: `https://localhost:3009/gdc-assign-project`,
-            secure: false,
-            pathRewrite: { '^/api-assign-project': '' },
-            onProxyReq: () => {
-                console.log('Client req /api-assign-project proxy to', `https://localhost:3009/gdc-assign-project`);
+            onProxyReq: (req) => {
+                console.log(`Proxy ${req.path} to http://localhost:3009 (use /examples/server)`);
             }
         }
     };

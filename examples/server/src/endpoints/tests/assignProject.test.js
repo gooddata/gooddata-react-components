@@ -32,14 +32,14 @@ function createApp(sdk = createSdk()) {
 describe('assignProject', () => {
     it('should return 400 for request without body', () => {
         return request(createApp())
-            .post('/gdc-assign-project')
+            .post('/api/assign-project')
             .send()
             .expect(400);
     });
 
     it('should return 400 if user is not provided', () => {
         return request(createApp())
-            .post('/gdc-assign-project')
+            .post('/api/assign-project')
             .send({ foo: 'bar' })
             .expect(400);
     });
@@ -47,7 +47,7 @@ describe('assignProject', () => {
     it('should call sdk.user.login and post user to project', () => {
         const sdkMock = createSdk();
         return request(createApp(sdkMock))
-            .post('/gdc-assign-project')
+            .post('/api/assign-project')
             .send({ user: '6f56e9d96c3bfdf09b65e26314a33c95' })
             .expect(200)
             .then(() => {

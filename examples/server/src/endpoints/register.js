@@ -4,8 +4,13 @@ const bodyParser = require('body-parser');
 const ALREADY_REGISTERED_ERROR_CODE = 'gdc1052';
 
 module.exports = (app, sdk, { username, password }) => {
-    app.post('/gdc-register', bodyParser.json(), (req, res) => {
-        console.log('Server req /gdc-register');
+    if (!username || !password) {
+        console.warn(`Set up USERNAME and PASSWORD for the /api/register endpoint to work.`)
+    }
+
+    app.post('/api/register', bodyParser.json(), (req, res) => {
+        // eslint-disable-next-line no-console
+        console.log('Server req /api/register');
         const { body } = req;
         if (!body) {
             return res.status(400).send('Missing body');
