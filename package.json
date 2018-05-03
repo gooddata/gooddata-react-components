@@ -111,7 +111,7 @@
     "tslint": "'./{src,stories}/**/*.{ts,tsx}'"
   },
   "scripts": {
-    "postinstall": "cd examples/server; yarn install --pure-lockfile; cd ../..",
+    "postinstall": "cd examples/server; yarn install --pure-lockfile; cd ../..; rm -r examples/node_modules 2>/dev/null; true",
     "prepublish": "bash scripts/build.sh --no-examples",
     "build": "bash scripts/build.sh",
     "build-dev": "bash scripts/build.sh --dev",
