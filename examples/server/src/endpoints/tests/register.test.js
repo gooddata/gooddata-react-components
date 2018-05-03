@@ -23,9 +23,11 @@ function createSdk() {
 }
 
 const config = {
-    username: 'foo',
-    password: 'bar',
-    projectId: 'projectId',
+    domainAdmin: {
+        username: 'foo',
+        password: 'bar'
+    },
+    projectIdToAssign: 'projectId',
     userRole: 3
 };
 

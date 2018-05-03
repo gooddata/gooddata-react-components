@@ -11,8 +11,8 @@ module.exports = (app, sdk, { domain }) => {
                 proxyReq.setHeader('content-length', '0');
             }
 
-            // White labeled resources are based on host header
-            proxyReq.setHeader('host', domain.replace(/^https?:\/\//, '').replace(/\/+$/, ''));
+            const domainUrl = new URL(domain);
+            proxyReq.setHeader('host', domainUrl.hostname); // White labeled resources are based on host header
             proxyReq.setHeader('referer', domain);
             proxyReq.setHeader('origin', null);
 

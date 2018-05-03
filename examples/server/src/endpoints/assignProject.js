@@ -1,8 +1,8 @@
 const bodyParser = require('body-parser');
 
-module.exports = (app, sdk, { username, password, projectId, userRole }) => {
-    if (!username || !password || !projectId) {
-        console.warn('Set up USERNAME, PASSWORD and PROJECT_ID for the /api/assign-project endpoint to work.');
+module.exports = (app, sdk, { domainAdmin, projectIdToAssign, userRole }) => {
+    if (!domainAdmin.username || !domainAdmin.password || !projectIdToAssign) {
+        console.warn('Set up DOMAIN_ADMIN_USERNAME/PASSWORD and PROJECT_ID_TO_ASSIGN for the /api/assign-project endpoint to work.');
     }
 
     app.post('/api/assign-project', bodyParser.json(), (req, res) => {
@@ -17,20 +17,23 @@ module.exports = (app, sdk, { username, password, projectId, userRole }) => {
             return res.status(400).send(`Missing parameters: ${missingKeys.join(', ')}`);
         }
 
-        return sdk.user.login(username, password).then(() => {
-            return sdk.xhr.post(`/gdc/projects/${projectId}/users`, {
+        return sdk.user.login(domainAdmin.username, domainAdmin.password).then(() => {
+            return sdk.xhr.post(`/gdc/projects/${projectIdToAssign}/users`, {
                 body: JSON.stringify({
                     user: {
                         content: {
                             status: 'ENABLED',
-                            userRoles: [`/gdc/projects/${projectId}/roles/${userRole}`]
+                            userRoles: [`/gdc/projects/${projectIdToAssign}/roles/${userRole}`]
                         },
                         links: {
                             self: body.user
                         }
                     }
                 })
-            }).then(() => {
+            }).then((result) => {
+                // eslint-disable-next-line no-console
+                console.log('POST ',result.response.url, ' >>> ', result.getData());
+
                 return res.status(200).json({
                     status: 'success'
                 });

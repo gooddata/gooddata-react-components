@@ -1,9 +1,9 @@
 const { pick } = require('lodash');
 const bodyParser = require('body-parser');
 
-module.exports = (app, sdk, { username, password }) => {
-    if (!username || !password) {
-        console.warn('Set up USERNAME and PASSWORD for the /api/register endpoint to work.');
+module.exports = (app, sdk, { domainAdmin }) => {
+    if (!domainAdmin.username || !domainAdmin.password) {
+        console.warn('Set up DOMAIN_ADMIN_USERNAME/PASSWORD for the /api/register endpoint to work.');
     }
 
     app.post('/api/register', bodyParser.json(), (req, res) => {
@@ -19,16 +19,17 @@ module.exports = (app, sdk, { username, password }) => {
             return res.status(400).send(`Missing parameters: ${missingKeys.join(', ')}`);
         }
 
-        return sdk.user.login(username, password).then(() => {
+        return sdk.user.login(domainAdmin.username, domainAdmin.password).then(() => {
             const params = {
                 accountSetting: pick(body, keys)
             };
             return sdk.xhr.post('/gdc/account/domains/developer/users', {
                 body: JSON.stringify(params)
             }).then((result) => {
-                const responseBody = JSON.parse(result.responseBody);
+                console.log('POST ',result.response.url, ' >>> ', result.getData());
+
                 res.status(201).json({
-                    uri: responseBody.uri
+                    uri: result.getData().uri
                 });
             });
         }).catch((err) => {

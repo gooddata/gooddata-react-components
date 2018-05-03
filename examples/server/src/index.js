@@ -2,6 +2,7 @@ const { factory } = require('@gooddata/gooddata-js');
 const https = require('https');
 const fs = require('fs');
 const express = require('express');
+require('dotenv').config();
 
 const proxy = require('./endpoints/proxy');
 const register = require('./endpoints/register');
@@ -10,13 +11,15 @@ const staticFiles = require('./endpoints/staticFiles');
 const redirectToHttps = require('./endpoints/redirectToHttps');
 
 const config = {
-    port: process.env.PORT || 3009,
     serveFrom: `${__dirname}/../../dist/`,
-    https: process.env.HTTPS,
+    port: process.env.PORT || 3009,
+    https: process.env.HTTPS || false,
     domain: process.env.DOMAIN || 'https://developer.na.gooddata.com/',
-    username: process.env.USERNAME,
-    password: process.env.PASSWORD,
-    projectId: process.env.PROJECT_ID,
+    domainAdmin: {
+        username: process.env.DOMAIN_ADMIN_USERNAME,
+        password: process.env.DOMAIN_ADMIN_PASSWORD
+    },
+    projectIdToAssign: process.env.PROJECT_ID_TO_ASSIGN,
     userRole: process.env.USER_ROLE || 3
 };
 console.log(`Examples-node-server config: ${JSON.stringify(config, false, '\t')}`); // eslint-disable-line no-console
@@ -29,8 +32,7 @@ const endpoints = [
     staticFiles
 ];
 
-const sdk = factory();
-sdk.config.setCustomDomain(config.domain);
+const sdk = factory({ domain: config.domain });
 
 const app = express();
 endpoints.forEach(handler => handler(app, sdk, config));
