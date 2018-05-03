@@ -1,4 +1,5 @@
 const proxy = require('http-proxy-middleware');
+const url = require('url');
 
 module.exports = (app, sdk, { domain }) => {
     app.use('/gdc', proxy({
@@ -11,7 +12,7 @@ module.exports = (app, sdk, { domain }) => {
                 proxyReq.setHeader('content-length', '0');
             }
 
-            const domainUrl = new URL(domain);
+            const domainUrl = url.parse(domain);
             proxyReq.setHeader('host', domainUrl.hostname); // White labeled resources are based on host header
             proxyReq.setHeader('referer', domain);
             proxyReq.setHeader('origin', null);
