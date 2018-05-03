@@ -9,17 +9,17 @@ const demoProject = {
     'https://developer.na.gooddata.com': 'xms7ga4tf3g3nzucd8380o2bev8oeknp'
 };
 
-const backendUri = BACKEND_URI; // eslint-disable-line no-undef
-const demoProjectId = demoProject[backendUri];
+const backendUrl = BACKEND_URL; // eslint-disable-line no-undef
+const demoProjectId = demoProject[backendUrl];
 if (!demoProjectId) {
-    console.error(`[fixtures.js] ProjectId for backend "${backendUri}" is not in `, demoProject); // eslint-disable-line no-console
+    console.error(`[fixtures.js] ProjectId for backend "${backendUrl}" is not in `, demoProject); // eslint-disable-line no-console
 }
 
-console.log('The /gdc proxy is connected to: ', backendUri, ' with projectId: ', demoProjectId); // eslint-disable-line no-console
+console.log('The /gdc proxy is connected to: ', backendUrl, ' with projectId: ', demoProjectId); // eslint-disable-line no-console
 
 // your projectId would be probably static (you may ignore the code above)
 
-export const backendUriOnlyInfo = backendUri;
+export const backendUrlForInfo = backendUrl;
 export const projectId = demoProjectId;
 
 export const averageCheckSizeByServer = 'afewRzGAersh';

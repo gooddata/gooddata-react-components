@@ -2,7 +2,7 @@ const bodyParser = require('body-parser');
 
 module.exports = (app, sdk, { username, password, projectId, userRole }) => {
     if (!username || !password || !projectId) {
-        console.warn(`Set up USERNAME, PASSWORD and PROJECT_ID for the /api/assign-project endpoint to work.`)
+        console.warn('Set up USERNAME, PASSWORD and PROJECT_ID for the /api/assign-project endpoint to work.');
     }
 
     app.post('/api/assign-project', bodyParser.json(), (req, res) => {

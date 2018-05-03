@@ -24,14 +24,14 @@ const defaultBackend = backendShortcuts.developer;
 module.exports = async (env) => {
     const basePath = env && env.basePath || ''; // eslint-disable-line no-mixed-operators
     const backendParam = env ? env.backend : '';
-    const backendUri = backendShortcuts[backendParam] || backendParam || defaultBackend;
-    console.log('Backend URI: ', backendUri); // eslint-disable-line no-console
+    const backendUrl = backendShortcuts[backendParam] || backendParam || defaultBackend;
+    console.log('Backend URI: ', backendUrl); // eslint-disable-line no-console
 
     const isProduction = process.env.NODE_ENV === 'production';
 
     const proxy = {
         '/gdc': {
-            target: backendUri,
+            target: backendUrl,
             secure: false,
             cookieDomainRewrite: '',
             onProxyReq: (proxyReq) => {
@@ -41,10 +41,8 @@ module.exports = async (env) => {
                     proxyReq.setHeader('content-length', '0');
                 }
 
-                // White labeled resources are based on host header
-                console.log('backendUri', backendUri);
-                proxyReq.setHeader('host', backendUri.split('/')[2]);
-                proxyReq.setHeader('referer', backendUri);
+                proxyReq.setHeader('host', backendUrl.split('/')[2]); // White labeled resources are based on host header
+                proxyReq.setHeader('referer', backendUrl);
                 proxyReq.setHeader('origin', null);
             }
         },
@@ -76,7 +74,7 @@ module.exports = async (env) => {
             failOnError: true
         }),
         new webpack.DefinePlugin({
-            BACKEND_URI: JSON.stringify(backendUri),
+            BACKEND_URL: JSON.stringify(backendUrl),
             BASEPATH: JSON.stringify(basePath),
             'process.env': {
                 // This has effect on the react lib size

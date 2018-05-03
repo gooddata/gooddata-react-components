@@ -1,16 +1,13 @@
 const { pick } = require('lodash');
 const bodyParser = require('body-parser');
 
-const ALREADY_REGISTERED_ERROR_CODE = 'gdc1052';
-
 module.exports = (app, sdk, { username, password }) => {
     if (!username || !password) {
-        console.warn(`Set up USERNAME and PASSWORD for the /api/register endpoint to work.`)
+        console.warn('Set up USERNAME and PASSWORD for the /api/register endpoint to work.');
     }
 
     app.post('/api/register', bodyParser.json(), (req, res) => {
-        // eslint-disable-next-line no-console
-        console.log('Server req /api/register');
+        console.log('Server req /api/register'); // eslint-disable-line no-console
         const { body } = req;
         if (!body) {
             return res.status(400).send('Missing body');
@@ -35,10 +32,12 @@ module.exports = (app, sdk, { username, password }) => {
                 });
             });
         }).catch((err) => {
-            console.log(err); // Log other errors to console
+            // Log other errors to console
+            console.log(err); // eslint-disable-line no-console
+
             if (err.responseBody) {
                 const response = JSON.parse(err.responseBody);
-                console.log('error response:', response);
+                console.log('error response:', response); // eslint-disable-line no-console
                 const { message, errorCode } = response.error;
                 if (message) {
                     return res.status(400).json({
