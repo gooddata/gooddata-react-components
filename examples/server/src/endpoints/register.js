@@ -36,15 +36,7 @@ module.exports = (app, sdk, { username, password }) => {
             console.log(err); // eslint-disable-line no-console
 
             if (err.responseBody) {
-                const response = JSON.parse(err.responseBody);
-                console.log('error response:', response); // eslint-disable-line no-console
-                const { message, errorCode } = response.error;
-                if (message) {
-                    return res.status(400).json({
-                        message,
-                        errorCode
-                    });
-                }
+                return res.status(400).send(err.responseBody);
             }
 
             return res.status(400).json({

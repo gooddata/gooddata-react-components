@@ -38,8 +38,13 @@ module.exports = (app, sdk, { username, password, projectId, userRole }) => {
         }).catch((err) => {
             // eslint-disable-next-line no-console
             console.log(err); // Log all errors to console
+
+            if (err.responseBody) {
+                return res.status(400).send(err.responseBody);
+            }
+
             return res.status(400).json({
-                message: 'Unknown error'
+                message: 'unknown error'
             });
         });
     });

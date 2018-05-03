@@ -19,7 +19,7 @@ const config = {
     projectId: process.env.PROJECT_ID,
     userRole: process.env.USER_ROLE || 3
 };
-console.log(`Examples-node-server config: ${JSON.stringify(config)}`); // eslint-disable-line no-console
+console.log(`Examples-node-server config: ${JSON.stringify(config, false, '\t')}`); // eslint-disable-line no-console
 
 const endpoints = [
     redirectToHttps,
