@@ -168,7 +168,7 @@ class Login extends React.Component {
                     <img src="https://secure.gooddata.com/images/logo-new.png" alt="GoodData" style={{ height: 70 }} />
                 </div>
                 <form onSubmit={this.onSubmit}>
-                    <h1 style={{ textAlign: 'center', padding: 10 }}>Sign in to GoodData platform</h1>
+                    <h1 style={{ textAlign: 'center', padding: 10 }}>Sign in to the GoodData platform</h1>
                     <div className="gd-input" style={{ margin: '5px 0' }}>
                         <label htmlFor="email">e-mail</label>
                         <input className="gd-input-field s-login-input-username" type="email" name="email" value={username} onChange={this.onUsernameChange} />
