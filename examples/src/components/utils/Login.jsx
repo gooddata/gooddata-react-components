@@ -43,10 +43,6 @@ class Login extends React.Component {
     componentWillMount() {
         const { location: { state: { username, password } } } = this.props;
         const { autoLoginAttempted } = this.state;
-        console.log('this.props.location', this.props.location);
-        console.log('autoLoginAttempted', autoLoginAttempted);
-        console.log('username', username);
-        console.log('password', password);
         if (this.props.isLoggedIn) {
             this.checkProjectAvailability(null);
         } else if (username && password && !autoLoginAttempted) {
@@ -86,13 +82,11 @@ class Login extends React.Component {
     }
 
     checkProjectAvailability = (newProfileUri) => {
-        console.log('checkingAvailability', projectId);
         return (
             newProfileUri
                 ? Promise.resolve(newProfileUri)
                 : sdk.user.getAccountInfo()
                     .then((accountInfo) => {
-                        console.log('accountInfo', accountInfo);
                         return accountInfo.profileUri;
                     })
         )
@@ -100,7 +94,6 @@ class Login extends React.Component {
                 const userId = profileUri.split('/').reverse()[0];
                 return sdk.project.getProjects(userId)
                     .then((projects) => {
-                        console.log('projects', projects);
                         // find project
                         const isProjectAssigned = projects.some((project) => {
                             return project.links.metadata.split('/').reverse()[0] === projectId;
@@ -110,19 +103,16 @@ class Login extends React.Component {
                             isProjectAssigned
                         });
                         if (!isProjectAssigned) {
-                            console.log('assignProject');
                             return sdk.xhr.post('/api/assign-project', {
                                 data: {
                                     user: profileUri
                                 }
                             });
                         }
-                        console.log('project already available');
                         return Promise.resolve();
-                    })
+                    });
             })
             .catch((error) => {
-                console.log('getAccountInfo error', error);
                 this.setErrorCheckingProjectAvailability(error);
             });
     }
@@ -133,7 +123,6 @@ class Login extends React.Component {
         });
         sdk.user.login(username, password)
             .then((userData) => {
-                console.log('userData', userData);
                 this.setState({
                     isLoggedIn: true,
                     isLoading: false,
@@ -144,12 +133,11 @@ class Login extends React.Component {
                 this.checkProjectAvailability(userData.userLogin.profile);
             })
             .catch((error) => {
-                console.log('login error', error);
                 this.setState({
                     isLoggedIn: false,
                     isLoading: false,
                     autoLoginAttempted: true,
-                    error: 'Wrong username and/or password'
+                    error: `Login error. Probably wrong username and/or password. ${error}`
                 });
             });
     }
@@ -194,7 +182,6 @@ class Login extends React.Component {
 
     render() {
         const { isLoading, isProjectAssigned, error } = this.state;
-        console.log('this.props.isLoggedIn', this.props.isLoggedIn);
         const isLoggedIn = this.state.isLoggedIn || this.props.isLoggedIn;
         const verticalCenterStyle = {
             flex: '1 0 auto',
@@ -207,22 +194,17 @@ class Login extends React.Component {
         };
         if (isLoggedIn) {
             if (error) {
-                console.log('loggedIn error', error);
                 return <div style={verticalCenterStyle} ><CustomError message={error} /></div>;
             }
             if (isProjectAssigned) {
-                console.log('project is assigned, redirrecting');
                 return <Redirect to={this.props.redirectUri} />;
             }
             if (isProjectAssigned === false) {
-                console.log('project is not assinged, assigning');
                 return <div style={verticalCenterStyle} ><CustomLoading height={null} label="Assigning demo project&hellip;" /></div>;
             }
-            console.log('checking project availability');
             return <div style={verticalCenterStyle} ><CustomLoading height={null} label="Checking demo availability&hellip;" /></div>;
         }
         if (isLoading) {
-            console.log('loading');
             return <div style={verticalCenterStyle} ><CustomLoading height={null} label="Logging in&hellip;" /></div>;
         }
         return this.renderLogInForm();

@@ -9,27 +9,12 @@ import Yup from 'yup';
 import ReCAPTCHA from 'react-google-recaptcha';
 import CustomLoading from './CustomLoading';
 
-export const DisplayFormikState = props => (
-    <div style={{ margin: '1rem 0' }}>
-        <pre
-            style={{
-                background: '#f6f8fa',
-                fontSize: '.65rem',
-                padding: '.5rem'
-            }}
-        >
-            <strong>props</strong> ={' '}
-            {JSON.stringify(props, null, 2)}
-        </pre>
-    </div>
-);
-
 export const errorMap = {
     gdc1051: 'password',
     gdc1052: 'email'
 };
 
-export const transformApiError = ({ errorCode, message }) => (
+export const transformApiError = ({ errorCode, message } = {}) => (
     has(errorMap, errorCode) ? { [errorMap[errorCode]]: message } : null
 );
 
@@ -44,7 +29,6 @@ export const RegistrationForm = (props) => {
         handleBlur,
         handleSubmit,
         setFieldValue,
-        setStatus,
         redirectUri,
         isLoggedIn
     } = props;
@@ -79,26 +63,6 @@ export const RegistrationForm = (props) => {
                     margin-top: 10px;
                 }
           `}</style>
-            <button
-                type="button"
-                onClick={() => {
-                    setFieldValue('email', 'xxxxxx123123@gmail.com');
-                    setFieldValue('firstName', 'xxx');
-                    setFieldValue('lastName', 'xxx');
-                    setFieldValue('password', '1234567');
-                    setFieldValue('company', 'xxx');
-                    setFieldValue('captcha', 'xxx');
-                    setFieldValue('termsOfUse', true);
-                }}
-            >Prefill
-            </button>
-            <button
-                type="button"
-                onClick={() => {
-                    setStatus({ response: true });
-                }}
-            >Fake response
-            </button>
             <div>
                 <label className="gd-input">
                     First name*
@@ -263,14 +227,6 @@ export const RegistrationForm = (props) => {
                     Register
                 </button>
             </div>
-
-
-            <pre>
-                Status:
-                {JSON.stringify(status, null, 2)}
-            </pre>
-
-            <DisplayFormikState {...props} />
         </form>
     );
 };
@@ -284,7 +240,6 @@ RegistrationForm.propTypes = {
     handleBlur: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     setFieldValue: PropTypes.func.isRequired,
-    setStatus: PropTypes.func.isRequired,
     redirectUri: PropTypes.string,
     isLoggedIn: PropTypes.bool
 };
@@ -345,25 +300,23 @@ export const Registration = withFormik({
                 login: email,
                 password,
                 email,
-                verifyPassword: password, // TEST
+                verifyPassword: password,
                 firstName,
                 lastName
             }
         }).then(
             (response) => {
-                console.log('Registration success', response);
                 setSubmitting(false);
                 setStatus({ response });
             }
         ).catch((error) => {
-            console.dir(error);
             const status = {
                 response: null,
                 isLoading: false
             };
             if (error.responseBody) {
                 const errorResponse = JSON.parse(error.responseBody);
-                const errors = transformApiError(errorResponse); // Try to assign errors to input fields
+                const errors = transformApiError(errorResponse.error); // Try to assign errors to input fields
                 if (errors) {
                     setErrors(errors);
                     status.error = null;
@@ -383,6 +336,4 @@ export const Registration = withFormik({
     displayName: 'RegistrationForm' // helps with React DevTools
 })(RegistrationForm);
 
-
 export default withRouter(Registration);
-
