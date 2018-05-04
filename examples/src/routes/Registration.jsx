@@ -15,7 +15,7 @@ export const Registration = props => (
           `}</style>
         <h1>Registration</h1>
 
-        <p>Please register your GoodData account in order to see GoodData UI components live.</p>
+        <p>Please create a GoodData developer account in order to see GoodData.UI examples.</p>
 
         <hr className="separator" />
 

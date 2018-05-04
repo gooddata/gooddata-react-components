@@ -3,8 +3,6 @@ import AdvancedUseCases from './AdvancedUseCases';
 import AttributeFilter from './AttributeFilter';
 import BasicComponents from './BasicComponents';
 import GlobalFilters from './GlobalFilters';
-import Home from './Home';
-import Kpi from './Kpi';
 import Visualization from './Visualization';
 import Execute from './Execute';
 import DatePicker from './DatePicker';
@@ -32,12 +30,10 @@ export const advancedUseCasesRoutes = [
 const AdvancedUseCasesWithProps = props => AdvancedUseCases({ ...props, advancedUseCasesRoutes });
 
 export const mainRoutes = [
-    { path: '/', title: 'GoodData.UI Examples', Component: Home, exact: true },
-    { path: '/basic-components', title: 'Basic Components', Component: BasicComponents },
-    { path: '/kpi', title: 'KPIs', Component: Kpi },
-    { path: '/visualization', title: 'Visualization', Component: Visualization },
+    { path: '/', title: 'Basic Components', Component: BasicComponents, exact: true },
+    { path: '/visualization', title: 'Visualization Component', Component: Visualization },
     { path: '/attribute-filter-components', title: 'Attribute Filter Components', Component: AttributeFilter },
-    { path: '/execute', title: 'Execute', Component: Execute },
+    { path: '/execute', title: 'Execute Component', Component: Execute },
     { path: '/advanced', pathMatch: 'full', redirectTo: advancedUseCasesRoutes[0].path, title: 'Advanced Use Cases', Component: AdvancedUseCasesWithProps }
 ];
 

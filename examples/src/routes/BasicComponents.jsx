@@ -9,6 +9,7 @@ import AreaChartExample from '../components/AreaChartExample';
 import StackedAreaChartExample from '../components/StackedAreaChartExample';
 import PieChartExample from '../components/PieChartExample';
 import TableExample from '../components/TableExample';
+import KpiExample from '../components/KpiExample';
 
 import BarChartExampleSRC from '!raw-loader!../components/BarChartExample'; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import ColumnChartExampleSRC from '!raw-loader!../components/ColumnChartExample'; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
@@ -17,6 +18,7 @@ import AreaChartExampleSRC from '!raw-loader!../components/AreaChartExample'; //
 import StackedAreaChartExampleSRC from '!raw-loader!../components/StackedAreaChartExample'; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import PieChartExampleSRC from '!raw-loader!../components/PieChartExample'; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import TableExampleSRC from '!raw-loader!../components/TableExample'; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
+import KpiExampleSRC from '!raw-loader!../components/KpiExample'; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 
 export const title = 'Basic Components';
 
@@ -57,6 +59,9 @@ export const BasicComponents = () => (
         <h2 id="table">Table</h2>
         <ExampleWithSource for={TableExample} source={TableExampleSRC} />
 
+        <h2 id="kpi">KPI</h2>
+        <p>The KPI component has different interface than the components above. It takes only one measure.</p>
+        <ExampleWithSource for={KpiExample} source={KpiExampleSRC} />
     </div>
 );
 
