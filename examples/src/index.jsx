@@ -110,7 +110,7 @@ export class App extends React.Component {
                 )}
                 />}
             </Switch>
-            {
+            {isLoggedIn === true &&
                 routes.map(({ title, path, Component, redirectTo, ...routeProps }) => (
                     <Route
                         key={path}
