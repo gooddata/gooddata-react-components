@@ -136,6 +136,16 @@ export class App extends React.Component {
                             height: 100%;
                         }
 
+                        :global(body) {
+                            background-color: #fafafa;
+                        }
+
+                        :global(*),
+                        :global(::before),
+                        :global(::after) {
+                            box-sizing: border-box;
+                        }
+
                         :global(hr.separator) {
                             border: 1px solid #EEE;
                             border-width: 1px 0 0 0;
@@ -147,7 +157,34 @@ export class App extends React.Component {
                             height: 100%;
                             flex-direction: column;
                             justify-content: flex-start;
-                            align-items: stretch;
+                            align-items: center;
+                        }
+
+                        :global(h1),
+                        :global(h2),
+                        :global(h3) {
+                            color: black;
+                        }
+
+                        :global(h1) {
+                            font-weight: bold;
+                            font-size: 50px;
+                            line-height: 50px;
+                        }
+
+                        :global(h2) {
+                            font-weight: normal;
+                            font-size: 40px;
+                            line-height: 55px;
+                        }
+
+                        :global(h3) {
+                            font-weight: bold;
+                            font-size: 24px;
+                        }
+
+                        :global(p) {
+                            max-width: 800px;
                         }
 
                         main {
@@ -157,6 +194,8 @@ export class App extends React.Component {
                             flex-direction: column;
                             justify-content: flex-start;
                             align-items: stretch;
+                            width: 100%;
+                            max-width: 1400px;
                             padding: 20px;
                         }
                     `}</style>

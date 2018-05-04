@@ -30,30 +30,38 @@ export const Home = () => (
                 .showcase {
                     display: grid;
                     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-                    grid-column-gap: 40px;
-                    grid-row-gap: 40px;
+                    grid-column-gap: 20px;
+                    grid-row-gap: 20px;
                     justify-content: flex-start;
+                    margin-top: 30px;
                 }
+
+                .showcase-item {
+                    padding: 20px;
+                    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+                    background-color: white;
+                }
+
                 .span-line {
                     grid-column-start: 1;
                     grid-column-end: -1;
                 }
             `}</style>
-            <div>
+            <div className="showcase-item">
                 <h2><Link to="/kpi" >KPI</Link></h2>
                 <KpiExample />
             </div>
-            <div>
+            <div className="showcase-item">
                 <h2><Link to="/basic-components#column-chart" >Column Chart</Link></h2>
                 <ColumnChartExample />
                 <p><Link to="/basic-components">All basic component examples</Link></p>
             </div>
-            <div>
+            <div className="showcase-item">
                 <h2><Link to="/visualization#table" >Table</Link></h2>
                 <VisualizationTable />
                 <p><Link to="/visualization">All visualization examples</Link></p>
             </div>
-            <div className="span-line">
+            <div className="span-line showcase-item">
                 <h2><Link to="/advanced/dynamic-measures" >Dynamic Measures (Advanced Use Case)</Link></h2>
                 <DynamicMeasuresExample />
                 <p><Link to="/advanced">More advanced use cases</Link></p>

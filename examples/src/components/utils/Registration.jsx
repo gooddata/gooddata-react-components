@@ -55,12 +55,20 @@ export const RegistrationForm = (props) => {
                     max-width: 400px;
                     margin: 0 auto;
                 }
+
                 form > div {
                     margin: 20px 0;
                 }
+
                 .error {
                     display: block;
                     margin-top: 10px;
+                }
+
+                .gd-input input {
+                    display: block;
+                    margin-top: 5px;
+                    color: #6d7680;
                 }
           `}</style>
             <div>

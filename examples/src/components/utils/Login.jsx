@@ -2,7 +2,7 @@
 /* eslint-disable react/jsx-closing-tag-location */
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { withRouter, Redirect } from 'react-router-dom';
+import { withRouter, Link, Redirect } from 'react-router-dom';
 import sdk from '@gooddata/gooddata-js';
 import CustomLoading from './CustomLoading';
 import CustomError from './CustomError';
@@ -155,31 +155,47 @@ class Login extends React.Component {
                 {/* language=CSS */}
                 <style jsx>{`
                     .Login {
-                        max-width: 600px;
+                        max-width: 400px;
                         margin: 20px auto;
                         flex: 1 0 auto;
                         display: flex;
                         flex-direction: column;
                         justify-content: center;
                         align-items: center;
+                        text-align: center;
+                    }
+
+                    form > div {
+                        margin: 20px 0;
+                    }
+
+                    label {
+                        display: block;
+                        margin-bottom: 5px;
+                        color: #6d7680;
+                        text-align: left;
                     }
                 `}</style>
-                <div style={{ textAlign: 'center' }}>
-                    <img src="https://secure.gooddata.com/images/logo-new.png" alt="GoodData" style={{ height: 70 }} />
-                </div>
+                <img src="https://secure.gooddata.com/images/logo-new.png" alt="GoodData" style={{ height: 70 }} />
                 <form onSubmit={this.onSubmit}>
-                    <h1 style={{ textAlign: 'center', padding: 10 }}>Sign in to the GoodData platform</h1>
-                    <div className="gd-input" style={{ margin: '5px 0' }}>
-                        <label htmlFor="email">e-mail</label>
+                    <h1>Sign in to the Live&nbsp;Examples</h1>
+                    <div className="gd-input">
+                        <label htmlFor="email">E-mail</label>
                         <input className="gd-input-field s-login-input-username" type="email" name="email" value={username} onChange={this.onUsernameChange} />
                     </div>
-                    <div className="gd-input" style={{ margin: '5px 0' }}>
-                        <label htmlFor="password">password</label>
+                    <div className="gd-input">
+                        <label htmlFor="password">Password</label>
                         <input className="gd-input-field s-login-input-password" type="password" name="password" value={password} onChange={this.onPasswordChange} />
                     </div>
                     {error && <CustomError message={error} />}
-                    <div className="gd-input" style={{ margin: '5px 0', textAlign: 'center' }}>
+                    <div className="gd-input buttons">
                         <button type="submit" className="button button-primary button-important submit-button s-login-submit">Sign in</button>
+                        <Link
+                            className="button button-link"
+                            to={{
+                                pathname: '/registration'
+                            }}
+                        ><span>Register</span></Link>
                     </div>
                 </form>
             </div>
