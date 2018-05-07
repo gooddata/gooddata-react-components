@@ -9,7 +9,7 @@ fixture('Visualization') // eslint-disable-line no-undef
 
 test('Chart visualization should render', async (t) => {
     const loading = Selector('.s-loading');
-    const chart = Selector('.s-visualization-chart svg');
+    const chart = Selector('.s-visualization-chart svg', { timeout: 20000 });
     await t
         .expect(loading.exists).ok()
         .expect(chart.exists)
@@ -20,7 +20,7 @@ test('Chart visualization should render', async (t) => {
 
 test('Custom visualization should render', async (t) => {
     const loading = Selector('.s-loading');
-    const chart = Selector('.s-visualization-custom .recharts-surface');
+    const chart = Selector('.s-visualization-custom .recharts-surface', { timeout: 20000 });
     const legend = Selector('.s-visualization-custom .recharts-legend-wrapper');
     await t
         .expect(loading.exists).ok()
@@ -32,7 +32,7 @@ test('Custom visualization should render', async (t) => {
 
 test('Table visualization should render', async (t) => {
     const loading = Selector('.s-loading');
-    const table = Selector('.s-visualization-table .indigo-table-component');
+    const table = Selector('.s-visualization-table .indigo-table-component', { timeout: 20000 });
     const tableHeader = Selector('.s-visualization-table .table-header');
     await t
         .expect(loading.exists).ok()

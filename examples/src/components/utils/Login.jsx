@@ -125,7 +125,11 @@ LoginFormUncontrolled.propTypes = {
     handleBlur: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     isLoading: PropTypes.bool.isRequired,
-    apiError: PropTypes.string.isRequired
+    apiError: PropTypes.string
+};
+
+LoginFormUncontrolled.defaultProps = {
+    apiError: null
 };
 
 export const LoginForm = withFormik({
