@@ -2,6 +2,7 @@ const bodyParser = require('body-parser');
 
 module.exports = (app, sdk, { domainAdmin, projectIdToAssign, userRole }) => {
     if (!domainAdmin.username || !domainAdmin.password || !projectIdToAssign) {
+        // eslint-disable-next-line no-console
         console.warn('Set up DOMAIN_ADMIN_USERNAME/PASSWORD and PROJECT_ID_TO_ASSIGN for the /api/assign-project endpoint to work.');
     }
 
@@ -32,7 +33,7 @@ module.exports = (app, sdk, { domainAdmin, projectIdToAssign, userRole }) => {
                 })
             }).then((result) => {
                 // eslint-disable-next-line no-console
-                console.log('POST ',result.response.url, ' >>> ', result.getData());
+                console.log('POST', result.response.url, '>>>', result.getData());
 
                 return res.status(200).json({
                     status: 'success'

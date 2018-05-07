@@ -37,7 +37,7 @@ export const RegistrationForm = (props) => {
         return (<Redirect to={{
             pathname: '/login',
             state: {
-                username: values.email,
+                email: values.email,
                 password: values.password
             }
         }}

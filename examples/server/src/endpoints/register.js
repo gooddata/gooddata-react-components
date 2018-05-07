@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 
 module.exports = (app, sdk, { domainAdmin }) => {
     if (!domainAdmin.username || !domainAdmin.password) {
+        // eslint-disable-next-line no-console
         console.warn('Set up DOMAIN_ADMIN_USERNAME/PASSWORD for the /api/register endpoint to work.');
     }
 
@@ -26,7 +27,8 @@ module.exports = (app, sdk, { domainAdmin }) => {
             return sdk.xhr.post('/gdc/account/domains/developer/users', {
                 body: JSON.stringify(params)
             }).then((result) => {
-                console.log('POST ',result.response.url, ' >>> ', result.getData());
+                // eslint-disable-next-line no-console
+                console.log('POST', result.response.url, '>>>', result.getData());
 
                 res.status(201).json({
                     uri: result.getData().uri

@@ -4,15 +4,169 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { withRouter, Link, Redirect } from 'react-router-dom';
 import sdk from '@gooddata/gooddata-js';
+import { withFormik } from 'formik';
+import Yup from 'yup';
 import CustomLoading from './CustomLoading';
 import CustomError from './CustomError';
 import { projectId } from '../../utils/fixtures';
+
+export const LoginFormUncontrolled = (props) => {
+    const {
+        values,
+        touched,
+        errors,
+        isSubmitting,
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        isLoading,
+        apiError
+    } = props;
+    return (<div className="Login" >
+        {/* language=CSS */}
+        <style jsx>{`
+            .Login {
+                max-width: 400px;
+                margin: 20px auto;
+                flex: 1 0 auto;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+
+            form > div {
+                margin: 20px 0;
+            }
+
+            .error {
+                display: block;
+                margin-top: 10px;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 5px;
+                color: #6d7680;
+                text-align: left;
+            }
+        `}</style>
+        <img src="https://secure.gooddata.com/images/logo-new.png" alt="GoodData" style={{ height: 70 }} />
+        <form onSubmit={handleSubmit}>
+            <h1>Sign in to the Live&nbsp;Examples</h1>
+
+            <div className="gd-input">
+                <label htmlFor="email">E-mail</label>
+                <input
+                    className={`gd-input-field s-login-input-email ${errors.email && touched.email ? ' has-error' : ''}`}
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={values.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    autoComplete="e-mail"
+                />
+                {
+                    errors.email && touched.email && (
+                        <div className="gd-message error">
+                            {errors.email}
+                        </div>
+                    )
+                }
+            </div>
+            <div className="gd-input">
+                <label htmlFor="password">Password</label>
+                <input
+                    className={`gd-input-field s-login-input-password ${errors.password && touched.password ? ' has-error' : ''}`}
+                    type="password"
+                    name="password"
+                    id="password"
+                    value={values.password}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    autoComplete="password"
+                />
+                {
+                    errors.password && touched.password && (
+                        <div className="gd-message error">
+                            {errors.password}
+                        </div>
+                    )
+                }
+            </div>
+            {apiError && !isLoading && <CustomError height={null} message={apiError} />}
+            {isLoading && <CustomLoading height={null} label="Logging in&hellip;" />}
+            <div className="gd-input buttons">
+                <button
+                    type="submit"
+                    className={`button button-primary button-important submit-button s-login-submit${(isSubmitting || isLoading) ? ' disabled' : ''}`}
+                    disabled={isSubmitting || isLoading}
+                    tabIndex="-1"
+                >Sign in</button>
+                <Link
+                    className="button button-link"
+                    to={{
+                        pathname: '/registration'
+                    }}
+                ><span>Register</span></Link>
+            </div>
+        </form>
+    </div>);
+};
+
+LoginFormUncontrolled.propTypes = {
+    values: PropTypes.object.isRequired,
+    touched: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired,
+    isSubmitting: PropTypes.bool.isRequired,
+    handleChange: PropTypes.func.isRequired,
+    handleBlur: PropTypes.func.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
+    isLoading: PropTypes.bool.isRequired,
+    apiError: PropTypes.string.isRequired
+};
+
+export const LoginForm = withFormik({
+    mapPropsToValues: ({ email = '', password = '' }) => ({
+        email,
+        password
+    }),
+    validationSchema: Yup.object().shape({
+        email: Yup.string()
+            .email('Invalid e-mail address')
+            .required('E-mail is required'),
+        password: Yup.string()
+            .min(7, 'Password must be at least 7 characters long')
+            .required('Password is required')
+    }),
+    handleSubmit: (
+        {
+            email,
+            password
+        },
+        {
+            props: { logIn },
+            setSubmitting
+        }
+    ) => {
+        logIn(email, password)
+            .then(() => {
+                setSubmitting(false);
+            })
+            .catch(() => {
+                setSubmitting(false);
+            });
+    },
+    displayName: 'LoginForm' // helps with React DevTools
+})(LoginFormUncontrolled);
 
 class Login extends React.Component {
     static propTypes = {
         onLogin: PropTypes.func,
         redirectUri: PropTypes.string,
-        username: PropTypes.string,
+        email: PropTypes.string,
         location: PropTypes.object.isRequired,
         password: PropTypes.string,
         isLoggedIn: PropTypes.bool
@@ -21,7 +175,7 @@ class Login extends React.Component {
     static defaultProps = {
         onLogin: () => {},
         redirectUri: '/',
-        username: '',
+        email: '',
         password: '',
         isLoggedIn: null
     };
@@ -30,7 +184,7 @@ class Login extends React.Component {
         super(props);
 
         this.state = {
-            username: props.username,
+            email: props.email,
             password: props.password,
             autoLoginAttempted: false,
             isLoggedIn: false,
@@ -41,36 +195,18 @@ class Login extends React.Component {
     }
 
     componentWillMount() {
-        const { location: { state: { username, password } = {} } } = this.props;
+        const { location: { state: { email, password } = {} } } = this.props;
         const { autoLoginAttempted } = this.state;
         if (this.props.isLoggedIn) {
             this.checkProjectAvailability(null);
-        } else if (username && password && !autoLoginAttempted) {
+        } else if (email && password && !autoLoginAttempted) {
             this.setState({
-                username,
+                email,
                 password,
                 autoLoginAttempted: true
             });
-            this.login(username, password);
+            this.logIn(email, password);
         }
-    }
-
-    onUsernameChange = (e) => {
-        this.setState({
-            username: e.target.value
-        });
-    }
-
-    onPasswordChange = (e) => {
-        this.setState({
-            password: e.target.value
-        });
-    }
-
-    onSubmit = (e) => {
-        e.preventDefault();
-        const { username, password } = this.state;
-        this.login(username, password);
     }
 
     setErrorCheckingProjectAvailability = (error) => {
@@ -123,11 +259,13 @@ class Login extends React.Component {
             });
     }
 
-    login = (username, password) => {
+    logIn = (email, password) => {
         this.setState({
-            isLoading: true
+            isLoading: true,
+            email,
+            password
         });
-        sdk.user.login(username, password)
+        return sdk.user.login(email, password)
             .then((userData) => {
                 this.setState({
                     isLoggedIn: true,
@@ -136,74 +274,21 @@ class Login extends React.Component {
                 });
                 this.props.onLogin(true, null);
 
-                this.checkProjectAvailability(userData.userLogin.profile);
+                return this.checkProjectAvailability(userData.userLogin.profile);
             })
             .catch((error) => {
                 this.setState({
                     isLoggedIn: false,
                     isLoading: false,
                     autoLoginAttempted: true,
-                    error: `Login error. Probably wrong username and/or password. ${error}`
+                    error: `${error} Wrong email or password.`
                 });
+                return error;
             });
     }
 
-    renderLogInForm = () => {
-        const { username, password, error } = this.state;
-        return (
-            <div className="Login" >
-                {/* language=CSS */}
-                <style jsx>{`
-                    .Login {
-                        max-width: 400px;
-                        margin: 20px auto;
-                        flex: 1 0 auto;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: center;
-                        align-items: center;
-                        text-align: center;
-                    }
-
-                    form > div {
-                        margin: 20px 0;
-                    }
-
-                    label {
-                        display: block;
-                        margin-bottom: 5px;
-                        color: #6d7680;
-                        text-align: left;
-                    }
-                `}</style>
-                <img src="https://secure.gooddata.com/images/logo-new.png" alt="GoodData" style={{ height: 70 }} />
-                <form onSubmit={this.onSubmit}>
-                    <h1>Sign in to the Live&nbsp;Examples</h1>
-                    <div className="gd-input">
-                        <label htmlFor="email">E-mail</label>
-                        <input className="gd-input-field s-login-input-username" type="email" name="email" value={username} onChange={this.onUsernameChange} />
-                    </div>
-                    <div className="gd-input">
-                        <label htmlFor="password">Password</label>
-                        <input className="gd-input-field s-login-input-password" type="password" name="password" value={password} onChange={this.onPasswordChange} />
-                    </div>
-                    {error && <CustomError message={error} />}
-                    <div className="gd-input buttons">
-                        <button type="submit" className="button button-primary button-important submit-button s-login-submit">Sign in</button>
-                        <Link
-                            className="button button-link"
-                            to={{
-                                pathname: '/registration'
-                            }}
-                        ><span>Register</span></Link>
-                    </div>
-                </form>
-            </div>
-        );
-    }
-
     render() {
-        const { isLoading, isProjectAssigned, error } = this.state;
+        const { isLoading, isProjectAssigned, email, password, error } = this.state;
         const isLoggedIn = this.state.isLoggedIn || this.props.isLoggedIn;
         const verticalCenterStyle = {
             flex: '1 0 auto',
@@ -226,10 +311,13 @@ class Login extends React.Component {
             }
             return <div style={verticalCenterStyle} ><CustomLoading height={null} label="Checking demo availability&hellip;" /></div>;
         }
-        if (isLoading) {
-            return <div style={verticalCenterStyle} ><CustomLoading height={null} label="Logging in&hellip;" /></div>;
-        }
-        return this.renderLogInForm();
+        return (<LoginForm
+            email={email}
+            password={password}
+            apiError={error}
+            logIn={this.logIn}
+            isLoading={isLoading}
+        />);
     }
 }
 

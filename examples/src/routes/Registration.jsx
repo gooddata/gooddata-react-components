@@ -12,7 +12,7 @@ export const Registration = props => (
                     margin-left: auto;
                     text-align: center;
                 }
-          `}</style>
+      `}</style>
         <h1>Registration</h1>
 
         <p>Please create a GoodData developer account in order to see GoodData.UI examples.</p>
