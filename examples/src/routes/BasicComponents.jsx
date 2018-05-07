@@ -1,5 +1,8 @@
 // (C) 2007-2018 GoodData Corporation
 import React from 'react';
+
+import { version } from '../../../package.json';
+import { projectId, backendUrlForInfo } from '../utils/fixtures';
 import ExampleWithSource from '../components/utils/ExampleWithSource';
 
 import BarChartExample from '../components/BarChartExample';
@@ -20,13 +23,19 @@ import PieChartExampleSRC from '!raw-loader!../components/PieChartExample'; // e
 import TableExampleSRC from '!raw-loader!../components/TableExample'; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import KpiExampleSRC from '!raw-loader!../components/KpiExample'; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 
-export const title = 'Basic Components';
-
 export const BasicComponents = () => (
     <div>
-        <h1>{title}</h1>
+        <h1>GoodData.UI examples v{version}</h1>
+        <p style={{ color: '#AAA', marginTop: -10 }}>
+            Connected to {backendUrlForInfo} backend, project id used: {projectId}
+        </p>
 
-        <p>These components get measures and attributes, execute it and render data as a chart or table.</p>
+        <h2>BasicComponents</h2>
+
+        <p>
+            These components accept measures and attributes,
+            perform the execution and render data as a chart, table or KPI.
+        </p>
 
         <hr className="separator" />
 

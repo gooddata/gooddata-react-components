@@ -65,8 +65,6 @@ export class ResponsiveExample extends Component {
                         )}
                     </Measure>
                 </div>
-
-                <hr className="separator" />
             </div>
         );
     }

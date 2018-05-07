@@ -140,7 +140,6 @@ export class DatePickerExample extends Component {
                             onError={this.onError}
                         />)}
                 </div>
-                <hr className="separator" />
             </div>
         );
     }
