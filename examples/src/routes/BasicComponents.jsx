@@ -30,7 +30,7 @@ export const BasicComponents = () => (
             Connected to {backendUrlForInfo} backend, project id used: {projectId}
         </p>
 
-        <h2>BasicComponents</h2>
+        <h2>Basic Components</h2>
 
         <p>
             These components accept measures and attributes,
