@@ -1,7 +1,6 @@
 // (C) 2007-2018 GoodData Corporation
 import React from 'react';
 
-import { version } from '../../../package.json';
 import { projectId, backendUrlForInfo } from '../utils/fixtures';
 import ExampleWithSource from '../components/utils/ExampleWithSource';
 
@@ -25,16 +24,15 @@ import KpiExampleSRC from '!raw-loader!../components/KpiExample'; // eslint-disa
 
 export const BasicComponents = () => (
     <div>
-        <h1>GoodData.UI examples v{version}</h1>
         <p style={{ color: '#AAA', marginTop: -10 }}>
             Connected to {backendUrlForInfo} backend, project id used: {projectId}
         </p>
 
-        <h2>Basic Components</h2>
+        <h1>Basic Components</h1>
 
         <p>
-            These components accept measures and attributes,
-            perform the execution and render data as a chart, table or KPI.
+            The following components accept measures and attributes,
+            perform the execution, and render data as a chart, table or KPI.
         </p>
 
         <hr className="separator" />
@@ -52,10 +50,10 @@ export const BasicComponents = () => (
         <h2 id="line-chart">Line chart with custom colors</h2>
         <ExampleWithSource for={LineChartExample} source={LineChartExampleSRC} />
 
-        <h2 id="area-chart">Area Chart</h2>
+        <h2 id="area-chart">Area chart</h2>
         <ExampleWithSource for={AreaChartExample} source={AreaChartExampleSRC} />
 
-        <h2 id="stacked-area-chart">Stacked Area Chart</h2>
+        <h2 id="stacked-area-chart">Stacked area chart</h2>
         <ExampleWithSource for={StackedAreaChartExample} source={StackedAreaChartExampleSRC} />
 
         <hr className="separator" />
@@ -69,7 +67,7 @@ export const BasicComponents = () => (
         <ExampleWithSource for={TableExample} source={TableExampleSRC} />
 
         <h2 id="kpi">KPI</h2>
-        <p>The KPI component has different interface than the components above. It takes only one measure.</p>
+        <p>The interface of the KPI component is different compared to the components above. It takes only one measure.</p>
         <ExampleWithSource for={KpiExample} source={KpiExampleSRC} />
     </div>
 );

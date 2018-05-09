@@ -55,6 +55,7 @@ export const LoginFormUncontrolled = (props) => {
         <img src="https://secure.gooddata.com/images/logo-new.png" alt="GoodData" style={{ height: 70 }} />
         <form onSubmit={handleSubmit}>
             <h1>Sign in to the Live&nbsp;Examples</h1>
+            <p>Accessing Live Examples requires a unique one-time <Link to='/registration'>registration</Link> even if you already have a GoodData account.</p>
 
             <div className="gd-input">
                 <label htmlFor="email">E-mail</label>
