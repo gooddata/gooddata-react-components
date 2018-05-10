@@ -28,6 +28,7 @@ export interface IExecuteProps extends IEvents {
     children?: any;
     sdk?: SDK;
     dataTableFactory?: IDataTableFactory; // only for tests
+    telemetryComponentName?: string;
 }
 
 export interface IExecuteState {
@@ -54,7 +55,9 @@ export class Execute extends React.Component<IExecuteProps, IExecuteState> {
     public static defaultProps: Partial<IExecuteProps> = {
         dataTableFactory,
         onError: noop,
-        onLoadingChanged: noop
+        onLoadingChanged: noop,
+        onLoadingFinish: noop,
+        telemetryComponentName: 'Execute'
     };
 
     private dataTable: DataLayer.DataTable<Execution.IExecutionResponses>;
@@ -72,7 +75,7 @@ export class Execute extends React.Component<IExecuteProps, IExecuteState> {
 
         const sdk = props.sdk || createSdk();
         this.sdk = sdk.clone();
-        setTelemetryHeaders(this.sdk, 'Execute', props);
+        setTelemetryHeaders(this.sdk, this.props.telemetryComponentName, props);
         this.initDataTable(props);
     }
 
@@ -83,7 +86,7 @@ export class Execute extends React.Component<IExecuteProps, IExecuteState> {
     public componentWillReceiveProps(nextProps: IExecuteProps) {
         if (nextProps.sdk && this.sdk !== nextProps.sdk) {
             this.sdk = nextProps.sdk.clone();
-            setTelemetryHeaders(this.sdk, 'Execute', nextProps);
+            setTelemetryHeaders(this.sdk, this.props.telemetryComponentName, nextProps);
             this.initDataTable(nextProps);
         }
         if (this.hasPropsChanged(nextProps, ['sdk', 'projectId', 'afm', 'resultSpec'])) {
@@ -131,7 +134,7 @@ export class Execute extends React.Component<IExecuteProps, IExecuteState> {
     }
 
     private initDataTable(props: IExecuteProps) {
-        const { onError, onLoadingChanged, projectId } = props;
+        const { onError, onLoadingChanged, onLoadingFinish, projectId } = props;
         this.dataTable = props.dataTableFactory(this.sdk, projectId);
         this.dataTable.onData((result: Execution.IExecutionResponses) => {
             this.setState({
@@ -139,6 +142,7 @@ export class Execute extends React.Component<IExecuteProps, IExecuteState> {
                 isLoading: false
             });
             onLoadingChanged({ isLoading: false });
+            onLoadingFinish({ result });
         });
 
         this.dataTable.onError((error) => {
