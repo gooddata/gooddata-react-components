@@ -6,7 +6,7 @@ import { range, cloneDeep } from 'lodash';
 import { screenshotWrap } from '@gooddata/test-storybook';
 import { AFM, Execution } from '@gooddata/typings';
 
-import { IntlWrapper } from '../../src/components/core/base/IntlWrapper';
+import { wrap } from '../utils/wrap';
 import { TableTransformation } from '../../src/components/visualizations/table/TableTransformation';
 import { IResponsiveTableProps, ResponsiveTable } from '../../src/components/visualizations/table/ResponsiveTable';
 import { IIndexedTotalItem } from '../../src/interfaces/Totals';
@@ -25,13 +25,7 @@ import {
     EXECUTION_RESULT_2A_3M
 } from '../../src/components/visualizations/table/fixtures/2attributes3measures';
 
-const tableWrap = (component: JSX.Element) => (
-    <IntlWrapper locale="en-US">
-        <div>
-            {component}
-        </div>
-    </IntlWrapper>
-);
+const tableWrap = (component: JSX.Element) => wrap(component, '100%', '100%');
 
 function generateExecutionRequest() {
     // no needed exact executionRequest for these storybook usages where is no sorting
