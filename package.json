@@ -14,7 +14,7 @@
   ],
   "devDependencies": {
     "@gooddata/mock-js": "1.0.0-alpha4",
-    "@gooddata/test-storybook": "1.2.0",
+    "@gooddata/test-storybook": "1.2.1-ocetnik-doc-upgrade-backstop-2018-05-11T09-24-55-549Z",
     "@gooddata/typings": "2.0.0-alpha2",
     "@storybook/addon-actions": "3.4.0",
     "@storybook/addon-options": "3.4.0",
