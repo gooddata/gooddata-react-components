@@ -18,11 +18,11 @@
     qs "6.5.1"
     rxjs "^5.5.6"
 
-"@gooddata/goodstrap@55.0.0-alpha8":
-  version "55.0.0-alpha8"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-55.0.0-alpha8.tgz#942d8efbbe17eeb72ab916d6cf903421ecff0656"
+"@gooddata/goodstrap@55.0.0-bertold8-FET-41-2018-05-11T11-40-46-301Z":
+  version "55.0.0-bertold8-FET-41-2018-05-11T11-40-46-301Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-55.0.0-bertold8-FET-41-2018-05-11T11-40-46-301Z.tgz#f5ed5c0d4bc2213ba48e046dd6417bd712b4aedb"
   dependencies:
-    "@gooddata/js-utils" "^2.0.0"
+    "@gooddata/js-utils" "^2.0.1"
     classnames "2.2.5"
     custom-event "1.0.1"
     fixed-data-table-2 "0.7.17"
@@ -31,14 +31,14 @@
     invariant "2.2.2"
     jquery "2.1.4"
     kefir "3.7.1"
-    lodash "4.17.4"
-    moment "2.18.1"
+    lodash "^4.17.4"
+    moment "2.22.0"
     moment-timezone "0.5.11"
     prop-types "15.6.0"
     react-day-picker "7.0.7"
     react-dnd "2.5.4"
     react-document-title "2.0.3"
-    react-intl "2.4.0"
+    react-intl "^2.4.0"
     react-native-listener "1.0.2"
     react-portal "3.1.0"
     react-responsive "3.0.0"
@@ -46,7 +46,7 @@
     react-transition-group "1.2.1"
     rxjs "^5.5.6"
 
-"@gooddata/js-utils@^2.0.0", "@gooddata/js-utils@^2.0.1":
+"@gooddata/js-utils@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@gooddata/js-utils/-/js-utils-2.0.1.tgz#46290cba9cb1e5f1c5e97e6860b5b1ef943ee779"
   dependencies:
@@ -6321,15 +6321,11 @@ moment-timezone@0.5.11:
   dependencies:
     moment ">= 2.6.0"
 
-moment@2.18.1:
-  version "2.18.1"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.18.1.tgz#c36193dd3ce1c2eed2adb7c802dbbc77a81b1c0f"
-
 moment@2.20.0:
   version "2.20.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.20.0.tgz#53396358994dd3a551e966a66af715ecb6c30ad0"
 
-"moment@>= 2.6.0":
+moment@2.22.0, "moment@>= 2.6.0":
   version "2.22.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.0.tgz#7921ade01017dd45186e7fee5f424f0b8663a730"
 
@@ -7826,7 +7822,7 @@ react-inspector@^2.2.2:
     babel-runtime "^6.26.0"
     is-dom "^1.0.9"
 
-react-intl@2.4.0, react-intl@^2.4.0:
+react-intl@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-2.4.0.tgz#66c14dc9df9a73b2fbbfbd6021726e80a613eb15"
   dependencies:
