@@ -1,6 +1,7 @@
 // (C) 2007-2018 GoodData Corporation
 import * as React from 'react';
 import noop = require('lodash/noop');
+import get = require('lodash/get');
 
 import { Visualization } from '../../visualizations/Visualization';
 import { IChartConfig } from '../../visualizations/chart/Chart';
@@ -62,7 +63,8 @@ export class StatelessBaseChart extends BaseVisualization<IBaseChartProps & ILoa
             visualizationProperties
         } = this.props;
 
-        const fullConfig = { ...config, ...visualizationProperties, type };
+        const controlProperties = get(visualizationProperties, 'properties.controls');
+        const fullConfig = { ...config, ...visualizationProperties, ...controlProperties, type };
 
         return (
             <IntlWrapper locale={locale}>

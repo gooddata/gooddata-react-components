@@ -43,6 +43,7 @@ export interface ILoadingInjectedProps {
 export interface IVisualizationLoadingState {
     error?: string;
     result?: Execution.IExecutionResponses;
+    resultSpec?: AFM.IResultSpec;
     isLoading: boolean;
 }
 
