@@ -54,20 +54,23 @@ export function isGroupHighchartsDrillEvent(event: IHighchartsChartDrilldownEven
     return !!event.points;
 }
 
-function getPoPMeasureIdentifier(measure: AFM.IMeasure): AFM.Identifier {
-    return get<string>(measure, ['definition', 'popMeasure', 'measureIdentifier']);
+function getDerivedMeasureIdentifier(measure: AFM.IMeasure): AFM.Identifier {
+    const measureDefinition = get<string>(measure, ['definition', 'popMeasure'])
+        || get<string>(measure, ['definition', 'previousPeriodMeasure']);
+    return get<string>(measureDefinition, ['measureIdentifier']);
 }
 
 function findMeasureByIdentifier(afm: AFM.IAfm, localIdentifier: AFM.Identifier) {
     return (afm.measures || []).find((m: AFM.IMeasure) => m.localIdentifier === localIdentifier);
 }
 
+// TODO BB-849 - rewrite unit test
 export function getMeasureUriOrIdentifier(afm: AFM.IAfm, localIdentifier: AFM.Identifier): IDrillableItem {
     let measure = findMeasureByIdentifier(afm, localIdentifier);
     if (measure) {
-        const popMeasureIdentifier = getPoPMeasureIdentifier(measure);
-        if (popMeasureIdentifier) {
-            measure = findMeasureByIdentifier(afm, popMeasureIdentifier);
+        const derivedMeasureIdentifier = getDerivedMeasureIdentifier(measure);
+        if (derivedMeasureIdentifier) {
+            measure = findMeasureByIdentifier(afm, derivedMeasureIdentifier);
         }
         return {
             uri: get<string>(measure, ['definition', 'measure', 'item', 'uri']),
@@ -85,9 +88,11 @@ function isHeaderDrillable(drillableItems: IDrillableItem[], header: IDrillableI
     );
 }
 
-export function isDrillable(drillableItems: IDrillableItem[],
-                            header: IDrillableItemLocalId | IDrillableItem,
-                            afm: AFM.IAfm) {
+export function isDrillable(
+    drillableItems: IDrillableItem[],
+    header: IDrillableItemLocalId | IDrillableItem,
+    afm: AFM.IAfm
+) {
     // This works only for non adhoc metric & attributes
     // because adhoc metrics don't have uri & identifier
     const isDrillablePureHeader = isHeaderDrillable(drillableItems, header);
@@ -176,7 +181,8 @@ function composeDrillContextPoint({ point }: IHighchartsChartDrilldownEvent, cha
 }
 
 const chartClickDebounced = debounce((drillConfig: IDrillConfig, event: IHighchartsChartDrilldownEvent,
-                                      target: EventTarget, chartType: VisType) => {
+    target: EventTarget, chartType: VisType
+) => {
     const { afm, onFiredDrillEvent } = drillConfig;
 
     let usedChartType = chartType;
@@ -193,10 +199,12 @@ const chartClickDebounced = debounce((drillConfig: IDrillConfig, event: IHighcha
     fireEvent(onFiredDrillEvent, data, target);
 });
 
-export function chartClick(drillConfig: IDrillConfig,
-                           event: IHighchartsChartDrilldownEvent,
-                           target: EventTarget,
-                           chartType: VisType) {
+export function chartClick(
+    drillConfig: IDrillConfig,
+    event: IHighchartsChartDrilldownEvent,
+    target: EventTarget,
+    chartType: VisType
+) {
     chartClickDebounced(drillConfig, event, target, chartType);
 }
 

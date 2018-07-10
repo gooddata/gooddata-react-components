@@ -4,7 +4,8 @@ import { visualizationObjects } from '../../../__mocks__/fixtures';
 
 describe('popHelper', () => {
     describe('fillPoPTitlesAndAliases', () => {
-        it('should set title of PoP measure based on master measure title when master measure is NOT renamed', () => {
+        it('should set title of derived measures based on master measure title when master measure is NOT ' +
+            'renamed', () => {
             const visContentWithPoP = visualizationObjects.find(chart =>
                 chart.visualizationObject.meta.title === 'PoP'
             ).visualizationObject.content;
@@ -36,12 +37,30 @@ describe('popHelper', () => {
                                 }
                             }
                         }
+                    },
+                    {
+                        measure: {
+                            localIdentifier: 'm1_previous_period',
+                            title: '# Accounts with AD Query - testing pop title',
+                            definition: {
+                                previousPeriodMeasure: {
+                                    measureIdentifier: 'm1',
+                                    dateDataSets: [{
+                                        dataSet: {
+                                            uri: '/gdc/md/myproject/obj/921'
+                                        },
+                                        periodsAgo: 1
+                                    }]
+                                }
+                            }
+                        }
                     }
                 ]
             );
         });
 
-        it('should set title of PoP measure based on master measure alias when master measure is renamed', () => {
+        it('should set title of derived measures based on master measure alias when master measure is ' +
+            'renamed', () => {
             const visContentWithPoP = visualizationObjects.find(chart =>
                 chart.visualizationObject.meta.title === 'PoP alias test'
             ).visualizationObject.content;
@@ -74,13 +93,30 @@ describe('popHelper', () => {
                                 }
                             }
                         }
+                    },
+                    {
+                        measure: {
+                            localIdentifier: 'm1_previous_period',
+                            title: 'AD Queries - testing pop title',
+                            definition: {
+                                previousPeriodMeasure: {
+                                    measureIdentifier: 'm1',
+                                    dateDataSets: [{
+                                        dataSet: {
+                                            uri: '/gdc/md/myproject/obj/921'
+                                        },
+                                        periodsAgo: 1
+                                    }]
+                                }
+                            }
+                        }
                     }
                 ]
             );
         });
 
-        // tslint:disable-next-line:max-line-length
-        it('should set title of PoP measure based on master measure title even when master measure is located in a different bucket', () => {
+        it('should set title of derived measures based on master measure title even when master measure is ' +
+            'located in a different bucket', () => {
             const headlineWithPoP = visualizationObjects.find(visualizationObject =>
                 visualizationObject.visualizationObject.meta.title === 'pop headline test'
             ).visualizationObject.content;
@@ -120,6 +156,23 @@ describe('popHelper', () => {
                                 }
                             }
                         }
+                    },
+                    {
+                        measure: {
+                            localIdentifier: 'fdd41e4ca6224cd2b5ecce15fdabf062_previous_period',
+                            title: 'Sum of Email Clicks - testing pop title',
+                            definition: {
+                                previousPeriodMeasure: {
+                                    measureIdentifier: 'fdd41e4ca6224cd2b5ecce15fdabf062',
+                                    dateDataSets: [{
+                                        dataSet: {
+                                            uri: '/gdc/md/yrungi0zwpoud7h1kmh6ldhp0vgkpi41/obj/921'
+                                        },
+                                        periodsAgo: 1
+                                    }]
+                                }
+                            }
+                        }
                     }
                 ]
             );
@@ -132,9 +185,14 @@ describe('popHelper', () => {
             expect(popSuffix).toEqual(' - SP year ago');
         });
 
-        it('should return formatted suffix for overPeriodMeasureDefinition', () => {
-            const popSuffix = getPoPSuffix('overPeriodMeasureDefinition', 'en-US');
+        it('should return formatted suffix for overPeriodMeasure', () => {
+            const popSuffix = getPoPSuffix('overPeriodMeasure', 'en-US');
             expect(popSuffix).toEqual(' - SP year ago');
+        });
+
+        it('should return formatted suffix for previousPeriodMeasure', () => {
+            const popSuffix = getPoPSuffix('previousPeriodMeasure', 'en-US');
+            expect(popSuffix).toEqual(' - previous period');
         });
     });
 });

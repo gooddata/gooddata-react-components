@@ -1,10 +1,8 @@
 // (C) 2007-2018 GoodData Corporation
 import * as React from 'react';
-import { SDK, factory as createSdk, DataLayer, ApiResponse } from '@gooddata/gooddata-js';
-import noop = require('lodash/noop');
-import isEqual = require('lodash/isEqual');
-import { AFM, VisualizationObject, VisualizationClass, Localization } from '@gooddata/typings';
-import { injectIntl, intlShape, InjectedIntlProps } from 'react-intl';
+import { ApiResponse, DataLayer, factory as createSdk, SDK } from '@gooddata/gooddata-js';
+import { AFM, Localization, VisualizationClass, VisualizationObject } from '@gooddata/typings';
+import { InjectedIntlProps, injectIntl, intlShape } from 'react-intl';
 
 import { IntlWrapper } from '../core/base/IntlWrapper';
 import { BaseChart } from '../core/base/BaseChart';
@@ -12,22 +10,21 @@ import { IChartConfig } from '../visualizations/chart/Chart';
 import { SortableTable } from '../core/SortableTable';
 import { Headline } from '../core/Headline';
 import { IEvents, OnLegendReady } from '../../interfaces/Events';
-import { VisualizationPropType, Requireable } from '../../proptypes/Visualization';
-import { VisualizationTypes, VisType } from '../../constants/visualizationTypes';
+import { Requireable, VisualizationPropType } from '../../proptypes/Visualization';
+import { VisType, VisualizationTypes } from '../../constants/visualizationTypes';
 import { IDataSource } from '../../interfaces/DataSource';
 import { ISubject } from '../../helpers/async';
 import { getVisualizationTypeFromVisualizationClass } from '../../helpers/visualizationType';
 import * as MdObjectHelper from '../../helpers/MdObjectHelper';
-import { fillPoPTitlesAndAliases, getPoPSuffix } from '../../helpers/popHelper';
-import { LoadingComponent, ILoadingProps } from '../simple/LoadingComponent';
+import { fillPoPTitlesAndAliases } from '../../helpers/popHelper';
+import { ILoadingProps, LoadingComponent } from '../simple/LoadingComponent';
 import { ErrorComponent, IErrorProps } from '../simple/ErrorComponent';
-import {
-    IDrillableItem,
-    generateDimensions,
-    RuntimeError
-} from '../../';
+import { generateDimensions, IDrillableItem, RuntimeError } from '../../';
 import { setTelemetryHeaders } from '../../helpers/utils';
 import { convertErrors, generateErrorMap, IErrorMap } from '../../helpers/errorHandlers';
+import noop = require('lodash/noop');
+import isEqual = require('lodash/isEqual');
+import DerivedMeasureTitleSuffixFactory from '../../factory/DerivedMeasureTitleSuffixFactory';
 
 export { Requireable };
 
@@ -283,7 +280,7 @@ export class VisualizationWrapped
         }
         if (isLoading || !dataSource) {
             return LoadingComponent
-                ? <LoadingComponent/>
+                ? <LoadingComponent />
                 : null;
         }
 
@@ -355,9 +352,10 @@ export class VisualizationWrapped
                 return this.props.fetchVisualizationClass(
                     this.sdk, visualizationClassUri
                 ).then((visualizationClass) => {
-                    const popSuffix = getPoPSuffix('popMeasureDefinition', this.props.locale);
-                    const { afm, resultSpec } = toAfmResultSpec(fillPoPTitlesAndAliases(
-                        mdObject.content, popSuffix));
+
+                    const suffixFactory = new DerivedMeasureTitleSuffixFactory(this.props.locale);
+                    const processedVisualizationObject = fillPoPTitlesAndAliases(mdObject.content, suffixFactory);
+                    const { afm, resultSpec } = toAfmResultSpec(processedVisualizationObject);
 
                     const mdObjectTotals = MdObjectHelper.getTotals(mdObject);
 
@@ -397,7 +395,7 @@ export class Visualization extends React.PureComponent<IVisualizationProps> {
     public render() {
         return (
             <IntlWrapper locale={this.props.locale}>
-                <IntlVisualization {...this.props}/>
+                <IntlVisualization {...this.props} />
             </IntlWrapper>
         );
     }

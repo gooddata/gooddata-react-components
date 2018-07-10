@@ -1,4 +1,4 @@
-import { VisualizationObject, VisualizationClass } from '@gooddata/typings';
+import { VisualizationClass, VisualizationObject } from '@gooddata/typings';
 
 export const visualizationObjects: [{ visualizationObject: VisualizationObject.IVisualizationObject }] = [
     {
@@ -285,6 +285,22 @@ export const visualizationObjects: [{ visualizationObject: VisualizationObject.I
                                         }
                                     }
                                 }
+                            },
+                            {
+                                measure: {
+                                    localIdentifier: 'm1_previous_period',
+                                    definition: {
+                                        previousPeriodMeasure: {
+                                            measureIdentifier: 'm1',
+                                            dateDataSets: [{
+                                                dataSet: {
+                                                    uri: '/gdc/md/myproject/obj/921'
+                                                },
+                                                periodsAgo: 1
+                                            }]
+                                        }
+                                    }
+                                }
                             }
                         ]
                     },
@@ -362,6 +378,21 @@ export const visualizationObjects: [{ visualizationObject: VisualizationObject.I
                                 }
                             }
                         }
+                    }, {
+                        measure: {
+                            localIdentifier: 'fdd41e4ca6224cd2b5ecce15fdabf062_previous_period',
+                            definition: {
+                                previousPeriodMeasure: {
+                                    measureIdentifier: 'fdd41e4ca6224cd2b5ecce15fdabf062',
+                                    dateDataSets: [{
+                                        dataSet: {
+                                            uri: '/gdc/md/yrungi0zwpoud7h1kmh6ldhp0vgkpi41/obj/921'
+                                        },
+                                        periodsAgo: 1
+                                    }]
+                                }
+                            }
+                        }
                     }]
                 }],
                 filters: [{
@@ -425,6 +456,22 @@ export const visualizationObjects: [{ visualizationObject: VisualizationObject.I
                                             popAttribute: {
                                                 uri: '/gdc/md/myproject/obj/1514'
                                             }
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                measure: {
+                                    localIdentifier: 'm1_previous_period',
+                                    definition: {
+                                        previousPeriodMeasure: {
+                                            measureIdentifier: 'm1',
+                                            dateDataSets: [{
+                                                dataSet: {
+                                                    uri: '/gdc/md/myproject/obj/921'
+                                                },
+                                                periodsAgo: 1
+                                            }]
                                         }
                                     }
                                 }

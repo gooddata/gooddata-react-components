@@ -44,7 +44,6 @@ import { HeatMap } from './components/HeatMap';
 import Chart, { ILegendConfig } from './components/visualizations/chart/Chart';
 import ChartTransformation from './components/visualizations/chart/ChartTransformation';
 import { RuntimeError } from './errors/RuntimeError';
-import { IMeasureDefinitionType } from './interfaces/MeasureDefinitionType';
 
 /**
  * CoreComponents
@@ -96,7 +95,6 @@ export {
     DonutChart,
     HeatMap,
     PoPHelper,
-    IMeasureDefinitionType,
     PropTypes,
     RuntimeError,
     Table,
