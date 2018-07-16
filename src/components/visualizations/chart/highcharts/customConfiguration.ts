@@ -706,6 +706,26 @@ function getAxesConfiguration(chartOptions: any) {
     };
 }
 
+function getChartMargin(chartOptions: any) {
+    const rotation = Number(get(chartOptions, 'xAxisProps.rotation', '0'));
+
+    if (!isNaN(rotation) && isRotationInRange(rotation, 10, 70)) {
+        if (isBarChart(chartOptions.type)) {
+            return {
+                chart: {
+                    marginBottom: 200
+                }
+            };
+        }
+
+        return {
+            chart: {
+                marginLeft: 200
+            }
+        };
+    }
+}
+
 export function getCustomizedConfiguration(chartOptions: any) {
     const configurators = [
         getAxesConfiguration,
@@ -717,7 +737,8 @@ export function getCustomizedConfiguration(chartOptions: any) {
         getDataConfiguration,
         getTooltipConfiguration,
         getHoverStyles,
-        getGridConfiguration
+        getGridConfiguration,
+        getChartMargin
     ];
 
     const commonData = configurators.reduce((config: any, configurator: any) => {
