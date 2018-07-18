@@ -517,7 +517,7 @@ export const visualizationObjects: [{ visualizationObject: VisualizationObject.I
                 contributor: '/gdc/account/profile/johndoe'
             }
         }
-    },
+    }
 ];
 
 export const visualizationClasses: [{ visualizationClass: VisualizationClass.IVisualizationClass }] = [

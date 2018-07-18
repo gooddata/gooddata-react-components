@@ -21,7 +21,8 @@ import {
     generateTooltipHeatMapFn,
     generateTooltipXYFn,
     IPoint,
-    getBubbleChartSeries
+    getBubbleChartSeries,
+    isDerivedMeasure
 } from '../chartOptionsBuilder';
 import { DEFAULT_CATEGORIES_LIMIT } from '../highcharts/commonConfiguration';
 import { generateChartOptions } from './helper';
@@ -237,6 +238,20 @@ describe('chartOptionsBuilder', () => {
             ).toEqual(true);
         });
 
+        it('should return false if measureItem was defined as a previousPeriodMeasure', () => {
+            const measureItem = fixtures
+                .barChartWithPreviousPeriodMeasure
+                .executionResponse
+                .dimensions[STACK_BY_DIMENSION_INDEX]
+                .headers[0]
+                .measureGroupHeader
+                .items[0];
+            const { afm } = fixtures.barChartWithPreviousPeriodMeasure.executionRequest;
+            expect(
+                isPopMeasure(measureItem, afm)
+            ).toEqual(false);
+        });
+
         it('should return false if measureItem was defined as a simple measure', () => {
             const measureItem = fixtures
                 .barChartWithPopMeasureAndViewByAttribute
@@ -249,6 +264,51 @@ describe('chartOptionsBuilder', () => {
 
             expect(
                 isPopMeasure(measureItem, afm)
+            ).toEqual(false);
+        });
+    });
+
+    describe('isDerivedMeasure', () => {
+        it('should return true if measureItem was defined as a popMeasure', () => {
+            const measureItem = fixtures
+                .barChartWithPopMeasureAndViewByAttribute
+                .executionResponse
+                .dimensions[STACK_BY_DIMENSION_INDEX]
+                .headers[0]
+                .measureGroupHeader
+                .items[0];
+            const { afm } = fixtures.barChartWithPopMeasureAndViewByAttribute.executionRequest;
+            expect(
+                isDerivedMeasure(measureItem, afm)
+            ).toEqual(true);
+        });
+
+        it('should return true if measureItem was defined as a previousPeriodMeasure', () => {
+            const measureItem = fixtures
+                .barChartWithPreviousPeriodMeasure
+                .executionResponse
+                .dimensions[STACK_BY_DIMENSION_INDEX]
+                .headers[0]
+                .measureGroupHeader
+                .items[0];
+            const { afm } = fixtures.barChartWithPreviousPeriodMeasure.executionRequest;
+            expect(
+                isDerivedMeasure(measureItem, afm)
+            ).toEqual(true);
+        });
+
+        it('should return false if measureItem was defined as a simple measure', () => {
+            const measureItem = fixtures
+                .barChartWithPopMeasureAndViewByAttribute
+                .executionResponse
+                .dimensions[STACK_BY_DIMENSION_INDEX]
+                .headers[0]
+                .measureGroupHeader
+                .items[1];
+            const { afm } = fixtures.barChartWithPopMeasureAndViewByAttribute.executionRequest;
+
+            expect(
+                isDerivedMeasure(measureItem, afm)
             ).toEqual(false);
         });
     });
@@ -372,7 +432,20 @@ describe('chartOptionsBuilder', () => {
             expect(updatedPalette).toEqual(['rgb(173,173,173)', 'rgb(50,50,50)']);
         });
 
-        it('should rotate colors from original palete and generate lighter PoP colors', () => {
+        it('should return a palette with a lighter color for each previous period based on it`s source measure', () => {
+            const [measureGroup, viewByAttribute, stackByAttribute] =
+                getMVS(fixtures.barChartWithPreviousPeriodMeasure);
+            const { afm } = fixtures.barChartWithPreviousPeriodMeasure.executionRequest;
+            const type = 'column';
+
+            const customPalette = ['rgb(50,50,50)', 'rgb(100,100,100)', 'rgb(150,150,150)', 'rgb(200,200,200)'];
+            const updatedPalette =
+                getColorPalette(customPalette, measureGroup, viewByAttribute, stackByAttribute, afm, type);
+
+            expect(updatedPalette).toEqual(['rgb(173,173,173)', 'rgb(50,50,50)']);
+        });
+
+        it('should rotate colors from original palette and generate lighter PoP colors', () => {
             const [measureGroup, viewByAttribute, stackByAttribute] =
                 getMVS(fixtures.barChartWith6PopMeasuresAndViewByAttribute);
             const { afm } = fixtures.barChartWith6PopMeasuresAndViewByAttribute.executionRequest;

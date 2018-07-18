@@ -12,10 +12,6 @@ import BucketItem = VisualizationObject.BucketItem;
 import IVisualizationObjectContent = VisualizationObject.IVisualizationObjectContent;
 import isMeasure = VisualizationObject.isMeasure;
 
-function getMasterMeasure(bucketItems: IMeasure[], measureIdentifier: string): IMeasure {
-    return bucketItems.find(bucketItem => get(bucketItem, ['measure', 'localIdentifier']) === measureIdentifier);
-}
-
 function getAllMeasureBucketItems(mdObject: IVisualizationObjectContent): IMeasure[] {
     const buckets = get<IBucket[]>(mdObject, 'buckets', []);
     const allBucketItems = flatMap<BucketItem>(buckets, bucket => bucket.items);
@@ -27,6 +23,30 @@ function getAllMeasureBucketItems(mdObject: IVisualizationObjectContent): IMeasu
 
         return measureItems;
     }, []);
+}
+
+function getMasterMeasureIdentifier(definition: IMeasureDefinitionType): string | null {
+    if (VisualizationObject.isPopMeasureDefinition(definition)) {
+        return definition.popMeasureDefinition.measureIdentifier;
+    } else if (VisualizationObject.isPreviousPeriodMeasureDefinition(definition)) {
+        return definition.previousPeriodMeasure.measureIdentifier;
+    } else {
+        return null;
+    }
+}
+
+function getMasterMeasure(bucketItems: IMeasure[], measureIdentifier: string): IMeasure {
+    return bucketItems.find(bucketItem => get(bucketItem, ['measure', 'localIdentifier']) === measureIdentifier);
+}
+
+function getDerivedMeasureTitleBase(masterMeasure: VisualizationObject.IMeasure): string {
+    const masterMeasureTitle = get<string>(masterMeasure, ['measure', 'title'], '');
+    const masterMeasureAlias = get<string>(masterMeasure, ['measure', 'alias']);
+
+    return masterMeasureAlias === undefined
+        ? masterMeasureTitle
+        : masterMeasureAlias;
+
 }
 
 /**
@@ -41,7 +61,6 @@ function getAllMeasureBucketItems(mdObject: IVisualizationObjectContent): IMeasu
  *
  * @internal
  */
-// TODO BB-849 - rewrite unit test
 export function fillPoPTitlesAndAliases(
     mdObject: IVisualizationObjectContent,
     suffixFactory: DerivedMeasureTitleSuffixFactory
@@ -55,7 +74,7 @@ export function fillPoPTitlesAndAliases(
             const { measure: { definition } } = bucketItem;
             const masterMeasureIdentifier = getMasterMeasureIdentifier(definition);
 
-            if (masterMeasureIdentifier !== null) {
+            if (masterMeasureIdentifier === null) {
                 return bucketItem;
             }
 
@@ -73,24 +92,4 @@ export function fillPoPTitlesAndAliases(
         });
 
     return modifiedMdObject;
-}
-
-function getMasterMeasureIdentifier(definition: IMeasureDefinitionType): string | null {
-    if (VisualizationObject.isPopMeasureDefinition(definition)) {
-        return definition.popMeasureDefinition.measureIdentifier;
-    } else if (VisualizationObject.isPreviousPeriodMeasureDefinition(definition)) {
-        return definition.previousPeriodMeasure.measureIdentifier;
-    } else {
-        return null;
-    }
-}
-
-function getDerivedMeasureTitleBase(masterMeasure: VisualizationObject.IMeasure): string {
-    const masterMeasureTitle = get<string>(masterMeasure, ['measure', 'title'], '');
-    const masterMeasureAlias = get<string>(masterMeasure, ['measure', 'alias']);
-
-    return masterMeasureAlias === undefined
-        ? masterMeasureTitle
-        : masterMeasureAlias;
-
 }

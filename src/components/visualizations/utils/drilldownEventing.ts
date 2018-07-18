@@ -54,7 +54,7 @@ export function isGroupHighchartsDrillEvent(event: IHighchartsChartDrilldownEven
     return !!event.points;
 }
 
-function getDerivedMeasureIdentifier(measure: AFM.IMeasure): AFM.Identifier {
+function getDerivedMeasureMasterMeasureLocalIdentifier(measure: AFM.IMeasure): AFM.Identifier {
     const measureDefinition = get<string>(measure, ['definition', 'popMeasure'])
         || get<string>(measure, ['definition', 'previousPeriodMeasure']);
     return get<string>(measureDefinition, ['measureIdentifier']);
@@ -64,13 +64,15 @@ function findMeasureByIdentifier(afm: AFM.IAfm, localIdentifier: AFM.Identifier)
     return (afm.measures || []).find((m: AFM.IMeasure) => m.localIdentifier === localIdentifier);
 }
 
-// TODO BB-849 - rewrite unit test
 export function getMeasureUriOrIdentifier(afm: AFM.IAfm, localIdentifier: AFM.Identifier): IDrillableItem {
     let measure = findMeasureByIdentifier(afm, localIdentifier);
     if (measure) {
-        const derivedMeasureIdentifier = getDerivedMeasureIdentifier(measure);
-        if (derivedMeasureIdentifier) {
-            measure = findMeasureByIdentifier(afm, derivedMeasureIdentifier);
+        const masterMeasureIdentifier = getDerivedMeasureMasterMeasureLocalIdentifier(measure);
+        if (masterMeasureIdentifier) {
+            measure = findMeasureByIdentifier(afm, masterMeasureIdentifier);
+        }
+        if (!measure) {
+            return null;
         }
         return {
             uri: get<string>(measure, ['definition', 'measure', 'item', 'uri']),
@@ -181,8 +183,7 @@ function composeDrillContextPoint({ point }: IHighchartsChartDrilldownEvent, cha
 }
 
 const chartClickDebounced = debounce((drillConfig: IDrillConfig, event: IHighchartsChartDrilldownEvent,
-    target: EventTarget, chartType: VisType
-) => {
+                                      target: EventTarget, chartType: VisType) => {
     const { afm, onFiredDrillEvent } = drillConfig;
 
     let usedChartType = chartType;
@@ -199,12 +200,10 @@ const chartClickDebounced = debounce((drillConfig: IDrillConfig, event: IHighcha
     fireEvent(onFiredDrillEvent, data, target);
 });
 
-export function chartClick(
-    drillConfig: IDrillConfig,
-    event: IHighchartsChartDrilldownEvent,
-    target: EventTarget,
-    chartType: VisType
-) {
+export function chartClick(drillConfig: IDrillConfig,
+                           event: IHighchartsChartDrilldownEvent,
+                           target: EventTarget,
+                           chartType: VisType) {
     chartClickDebounced(drillConfig, event, target, chartType);
 }
 

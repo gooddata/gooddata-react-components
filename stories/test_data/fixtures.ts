@@ -140,6 +140,14 @@ export const barChartWithPopMeasureAndViewByAttribute: any = {
         require('../test_data/bar_chart_with_pop_measure_and_view_by_attribute_result.json').executionResult
 };
 
+export const barChartWithPreviousPeriodMeasure: any = {
+    executionRequest: require('../test_data/bar_chart_with_previous_period_measure_request.json').execution,
+    executionResponse:
+        require('../test_data/bar_chart_with_previous_period_measure_response.json').executionResponse,
+    executionResult:
+        require('../test_data/bar_chart_with_previous_period_measure_result.json').executionResult
+};
+
 export const pieChartWithMetricsOnly: any = {
     executionRequest: require('../test_data/pie_chart_with_metrics_only_request.json').execution,
     executionResponse:
@@ -259,6 +267,7 @@ export default {
     barChartWithStackByAndViewByAttributes,
     barChartWithPopMeasureAndViewByAttribute,
     barChartWith6PopMeasuresAndViewByAttribute,
+    barChartWithPreviousPeriodMeasure,
     pieChartWithMetricsOnly,
     barChartWithNegativeAndZeroValues,
     headlineWithOneMeasure,

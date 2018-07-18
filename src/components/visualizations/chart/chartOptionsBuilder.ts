@@ -2,6 +2,17 @@
 import { colors2Object, numberFormat } from '@gooddata/numberjs';
 import * as invariant from 'invariant';
 import { AFM, Execution, VisualizationObject } from '@gooddata/typings';
+
+import range = require('lodash/range');
+import get = require('lodash/get');
+import includes = require('lodash/includes');
+import isEmpty = require('lodash/isEmpty');
+import compact = require('lodash/compact');
+import without = require('lodash/without');
+import escape = require('lodash/escape');
+import unescape = require('lodash/unescape');
+import isUndefined = require('lodash/isUndefined');
+import cloneDeep = require('lodash/cloneDeep');
 import { IChartConfig, IChartLimits } from './Chart';
 import {
     getAttributeElementIdFromAttributeElementUri,
@@ -24,23 +35,13 @@ import { getChartProperties } from './highcharts/helpers';
 import { getMeasureUriOrIdentifier, isDrillable } from '../utils/drilldownEventing';
 import { DEFAULT_COLOR_PALETTE, getLighterColor } from '../utils/color';
 import { isDataOfReasonableSize } from './highChartsCreators';
-import { PIE_CHART_LIMIT, STACK_BY_DIMENSION_INDEX, VIEW_BY_DIMENSION_INDEX } from './constants';
-import { VisType, VisualizationTypes } from '../../../constants/visualizationTypes';
+import { VIEW_BY_DIMENSION_INDEX, STACK_BY_DIMENSION_INDEX, PIE_CHART_LIMIT } from './constants';
+import { VisualizationTypes, VisType } from '../../../constants/visualizationTypes';
 import { MEASURES, SECONDARY_MEASURES, TERTIARY_MEASURES } from '../../../constants/bucketNames';
 
 import { DEFAULT_CATEGORIES_LIMIT } from './highcharts/commonConfiguration';
 import { getComboChartOptions } from './chartOptions/comboChartOptions';
 import { IDrillableItem } from '../../../interfaces/DrillEvents';
-import range = require('lodash/range');
-import get = require('lodash/get');
-import includes = require('lodash/includes');
-import isEmpty = require('lodash/isEmpty');
-import compact = require('lodash/compact');
-import without = require('lodash/without');
-import escape = require('lodash/escape');
-import unescape = require('lodash/unescape');
-import isUndefined = require('lodash/isUndefined');
-import cloneDeep = require('lodash/cloneDeep');
 
 const enableAreaChartStacking = (stacking: any) => {
     return stacking || isUndefined(stacking);
@@ -130,7 +131,7 @@ export function validateData(limits: IChartLimits = {}, chartOptions: any) {
     return {
         dataTooLarge: !isDataOfReasonableSize(chartOptions.data, getAdjustedLimits(type, limits)),
         hasNegativeValue: cannotShowNegativeValues(type)
-        && isNegativeValueIncluded(chartOptions.data.series)
+            && isNegativeValueIncluded(chartOptions.data.series)
     };
 }
 
@@ -141,7 +142,6 @@ export function isPopMeasure(measureItem: Execution.IMeasureHeaderItem, afm: AFM
     });
 }
 
-// TODO BB-849 - rewrite unit test
 export function isDerivedMeasure(measureItem: Execution.IMeasureHeaderItem, afm: AFM.IAfm) {
     return afm.measures.some((measure: AFM.IMeasure) => {
         const measureDefinition = get(measure, 'definition.popMeasure')
@@ -164,7 +164,6 @@ function findMeasureIndex(afm: AFM.IAfm, measureIdentifier: string): number {
     );
 }
 
-// TODO BB-849 write unit tests and fix existing
 function findParentMeasureIndex(afm: AFM.IAfm, measureItemIndex: number): number {
     const measureDefinition = afm.measures[measureItemIndex].definition;
 
@@ -186,7 +185,6 @@ export function isAttributeColorPalette(type: string, afm: AFM.IAfm, stackByAttr
     return stackByAttribute || (attributeChartSupported && afm.attributes && afm.attributes.length > 0);
 }
 
-// TODO BB-849 - update a unit test
 export function getColorPalette(
     colorPalette: string[] = DEFAULT_COLOR_PALETTE,
     measureGroup: Execution.IMeasureGroupHeader['measureGroupHeader'],
@@ -339,12 +337,12 @@ export function getHeatMapSeries(
         yAxis: 0,
         dataLabels: {
             enabled: ((!viewByAttribute || (viewByAttribute.items.length <= 6)) &&
-                (!stackByAttribute || (stackByAttribute.items.length <= 20))),
+                        (!stackByAttribute || (stackByAttribute.items.length <= 20))),
             formatGD: unwrap(measureGroup.items[0]).format
         },
         legendIndex: 0,
         borderWidth: ((!viewByAttribute || (viewByAttribute.items.length <= 30)) &&
-            (!stackByAttribute || (stackByAttribute.items.length <= 30))) ? 1 : 0
+                        (!stackByAttribute || (stackByAttribute.items.length <= 30))) ? 1 : 0
     }];
 }
 
@@ -362,26 +360,26 @@ export function getScatterPlotSeries(
     mdObject: VisualizationObject.IVisualizationObjectContent,
     colorPalette: string[]
 ) {
-    const primaryMeasuresBucketEmpty = isBucketEmpty(mdObject, MEASURES);
-    const secondaryMeasuresBucketEmpty = isBucketEmpty(mdObject, SECONDARY_MEASURES);
+        const primaryMeasuresBucketEmpty = isBucketEmpty(mdObject, MEASURES);
+        const secondaryMeasuresBucketEmpty = isBucketEmpty(mdObject, SECONDARY_MEASURES);
 
-    const data: ISeriesDataItem[] = executionResultData.map((seriesItem: string[], seriesIndex: number) => {
-        const values = seriesItem.map((value: string) => {
-            return parseValue(value);
+        const data: ISeriesDataItem[] = executionResultData.map((seriesItem: string[], seriesIndex: number) => {
+            const values = seriesItem.map((value: string) => {
+                return parseValue(value);
+            });
+
+            return {
+                x: !primaryMeasuresBucketEmpty ? values[0] : 0,
+                y: !secondaryMeasuresBucketEmpty ? (primaryMeasuresBucketEmpty ? values[0] : values[1]) : 0,
+                name: stackByAttribute ? stackByAttribute.items[seriesIndex].attributeHeaderItem.name : ''
+            };
         });
 
-        return {
-            x: !primaryMeasuresBucketEmpty ? values[0] : 0,
-            y: !secondaryMeasuresBucketEmpty ? (primaryMeasuresBucketEmpty ? values[0] : values[1]) : 0,
-            name: stackByAttribute ? stackByAttribute.items[seriesIndex].attributeHeaderItem.name : ''
-        };
-    });
-
-    return [{
-        color: colorPalette[0],
-        legendIndex: 0,
-        data
-    }];
+        return [{
+            color: colorPalette[0],
+            legendIndex: 0,
+            data
+        }];
 }
 
 function getCountOfEmptyBuckets(bucketEmptyFlags: boolean[] = []) {
@@ -523,12 +521,12 @@ export function generateTooltipXYFn(measures: any, stackByAttribute: any) {
 
         if (measures[0]) {
             textData.push([customEscape(measures[0].measureHeaderItem.name),
-                customEscape(formatValue(point.x, measures[0].measureHeaderItem.format).label)]);
+            customEscape(formatValue(point.x, measures[0].measureHeaderItem.format).label)]);
         }
 
         if (measures[1]) {
             textData.push([customEscape(measures[1].measureHeaderItem.name),
-                customEscape(formatValue(point.y, measures[1].measureHeaderItem.format).label)]);
+            customEscape(formatValue(point.y, measures[1].measureHeaderItem.format).label)]);
         }
 
         if (measures[2]) {
@@ -600,8 +598,7 @@ export function findInDimensionHeaders(dimensions: Execution.IResultDimension[],
 export function findMeasureGroupInDimensions(dimensions: Execution.IResultDimension[]) {
     return findInDimensionHeaders(dimensions,
         (headerType: string, header: Execution.IMeasureGroupHeader['measureGroupHeader'],
-            {}, headerIndex: number, headerCount: number
-        ) => {
+         {}, headerIndex: number, headerCount: number) => {
             const measureGroupHeader = headerType === 'measureGroupHeader' ? header : null;
             if (measureGroupHeader) {
                 invariant(headerIndex === headerCount - 1, 'MeasureGroup must be the last header in it\'s dimension');
@@ -674,12 +671,12 @@ export function getDrillableSeries(
             } else if (isBubbleChart(type)) {
                 measures = get(measureGroup, 'items', []).slice(0, 3).map(unwrap);
             } else {
-                // measureIndex is usually seriesIndex,
-                // except for stack by attribute and metricOnly pie or treemap chart it is looped-around pointIndex instead
-                // Looping around the end of items array only works when measureGroup is the last header on it's dimension
-                // We do not support setups with measureGroup before attributeHeaders
+            // measureIndex is usually seriesIndex,
+            // except for stack by attribute and metricOnly pie or treemap chart it is looped-around pointIndex instead
+            // Looping around the end of items array only works when measureGroup is the last header on it's dimension
+            // We do not support setups with measureGroup before attributeHeaders
                 const measureIndex = !stackByAttribute && !isMultiMeasureWithOnlyMeasures
-                    ? seriesIndex : pointIndex % measureGroup.items.length;
+                ? seriesIndex : pointIndex % measureGroup.items.length;
 
                 measures = [unwrap(measureGroup.items[measureIndex])];
             }
@@ -748,8 +745,7 @@ export function getDrillableSeries(
 }
 
 function getCategories(type: string, measureGroup: Execution.IMeasureGroupHeader['measureGroupHeader'],
-    viewByAttribute: any, stackByAttribute: any
-) {
+                       viewByAttribute: any, stackByAttribute: any) {
     if (isHeatMap(type)) {
         return [
             viewByAttribute ? viewByAttribute.items.map((item: any) => item.attributeHeaderItem.name) : [''],
@@ -795,10 +791,8 @@ function getStackingConfig(stackByAttribute: any, options: any) {
     return null;
 }
 
-function preprocessMeasureGroupItems(
-    measureGroup: Execution.IMeasureGroupHeader['measureGroupHeader'],
-    defaultValues: any
-): any[] {
+function preprocessMeasureGroupItems(measureGroup: Execution.IMeasureGroupHeader['measureGroupHeader'],
+                                     defaultValues: any): any[] {
     return measureGroup.items.map((item: Execution.IMeasureHeaderItem, index: number) => {
         const unwrapped = unwrap(item);
         return index ? {
@@ -812,8 +806,7 @@ function preprocessMeasureGroupItems(
 }
 
 function getXAxes(config: IChartConfig, measureGroup: Execution.IMeasureGroupHeader['measureGroupHeader'],
-    viewByAttribute: any
-): IAxis[] {
+                  viewByAttribute: any): IAxis[] {
     const { type, mdObject } = config;
     const measureGroupItems = preprocessMeasureGroupItems(measureGroup,
         { label: config.xLabel, format: config.xFormat });
@@ -849,8 +842,7 @@ function isPercentage(format: string) {
 }
 
 function getYAxes(config: IChartConfig, measureGroup: Execution.IMeasureGroupHeader['measureGroupHeader'],
-    stackByAttribute: any
-): IAxis[] {
+                  stackByAttribute: any): IAxis[] {
     const { type, mdObject } = config;
 
     const measureGroupItems = preprocessMeasureGroupItems(measureGroup,
@@ -984,8 +976,7 @@ export function getChartOptions(
 
     invariant(measureGroup, 'missing measureGroup');
 
-    const colorPalette =
-        getColorPalette(config.colors, measureGroup, viewByAttribute, stackByAttribute, afm, type);
+    const colorPalette = getColorPalette(config.colors, measureGroup, viewByAttribute, stackByAttribute, afm, type);
     const gridEnabled = get(config, 'grid.enabled', true);
     const stacking = getStackingConfig(stackByAttribute, config);
     const xAxes = getXAxes(config, measureGroup, viewByAttribute);
@@ -1020,9 +1011,7 @@ export function getChartOptions(
         const dataPoints = series[0].data;
         const indexSortOrder: number[] = [];
         const sortedDataPoints = dataPoints.sort((pointDataA: IPointData, pointDataB: IPointData) => {
-            if (pointDataA.y === pointDataB.y) {
-                return 0;
-            }
+            if (pointDataA.y === pointDataB.y) { return 0; }
             return pointDataB.y - pointDataA.y;
         }).map((dataPoint: IPointData, dataPointIndex: number) => {
             // Legend index equals original dataPoint index
