@@ -1,5 +1,5 @@
-import { Localization, VisualizationObject } from "@gooddata/typings";
-import IntlStore from "../helpers/IntlStore";
+import { Localization, VisualizationObject } from '@gooddata/typings';
+import IntlStore from '../helpers/IntlStore';
 import IMeasureDefinitionType = VisualizationObject.IMeasureDefinitionType;
 
 /**

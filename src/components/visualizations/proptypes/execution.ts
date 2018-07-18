@@ -98,7 +98,7 @@ const popMeasureDefinitionPropTypes = {
 };
 
 const dateDataSetsPropTypes = {
-    dataSet: PropTypes.shape(objQualifierPropTypes).isRequired,
+    dataSet: objQualifierPropTypes.isRequired,
     periodsAgo: PropTypes.number
 };
 
