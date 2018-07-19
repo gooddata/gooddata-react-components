@@ -243,6 +243,50 @@ export const barChartWith6PopMeasuresAndViewByAttribute = (() => {
     return dataSet;
 })();
 
+export const barChartWith6PreviousPeriodMeasures = (() => {
+    const n = 6;
+    let dataSet: any = immutableSet(
+        barChartWithPreviousPeriodMeasure,
+        'executionRequest.afm.measures',
+        range(n).reduce((result, measuresIndex) => {
+            const { measures } = barChartWithPreviousPeriodMeasure.executionRequest.afm;
+            const previousPeriodMeasure = cloneDeep(measures[0]);
+            const postfix = `_${measuresIndex}`;
+            previousPeriodMeasure.localIdentifier += postfix;
+            previousPeriodMeasure.definition.previousPeriodMeasure.measureIdentifier += postfix;
+            previousPeriodMeasure.definition.previousPeriodMeasure.dateDataSets.forEach((dateDataSet: any) => {
+                dateDataSet.dataSet.uri += postfix;
+            });
+            previousPeriodMeasure.alias += postfix;
+            const sourceMeasure = cloneDeep(measures[1]);
+            sourceMeasure.localIdentifier += postfix;
+            sourceMeasure.definition.measure.item.uri += postfix;
+            sourceMeasure.alias += postfix;
+            return result.concat([previousPeriodMeasure, sourceMeasure]);
+        }, []));
+    dataSet = immutableSet(
+        dataSet,
+        `executionResponse.dimensions[${STACK_BY_DIMENSION_INDEX}].headers[0].measureGroupHeader.items`,
+        repeatItemsNTimes(
+            dataSet.executionResponse.dimensions[STACK_BY_DIMENSION_INDEX].headers[0].measureGroupHeader.items, n)
+            .map((headerItem: any, headerItemIndex: any) => {
+                const postfix = `_${Math.floor(headerItemIndex / 2)}`;
+                return {
+                    measureHeaderItem: {
+                        ...headerItem.measureHeaderItem,
+                        localIdentifier: headerItem.measureHeaderItem.localIdentifier + postfix
+                    }
+                };
+            })
+    );
+    dataSet = immutableSet(
+        dataSet,
+        'executionResult.data',
+        repeatItemsNTimes(dataSet.executionResult.data, n)
+    );
+    return dataSet;
+})();
+
 export const customPalette = [
     '#FF69B4',
     '#d40606',
@@ -268,6 +312,7 @@ export default {
     barChartWithPopMeasureAndViewByAttribute,
     barChartWith6PopMeasuresAndViewByAttribute,
     barChartWithPreviousPeriodMeasure,
+    barChartWith6PreviousPeriodMeasures,
     pieChartWithMetricsOnly,
     barChartWithNegativeAndZeroValues,
     headlineWithOneMeasure,

@@ -17,8 +17,10 @@ describe('isDrillable', () => {
     const PURE_MEASURE_IDENTIFIER = 'MEASURE.identifier';
     const ADHOC_MEASURE_LOCAL_IDENTIFIER = 'm1';
     const ADHOC_MEASURE_URI = '/gdc/md/projectId/obj/2';
+    const DATE_DATA_SET_URI = '/gdc/md/projectId/obj/3';
     const ADHOC_MEASURE_IDENTIFIER = 'adhoc.measure.identifier';
     const ADHOC_MEASURE_POP_LOCAL_IDENTIFIER = 'm1_pop';
+    const ADHOC_MEASURE_PREVIOUS_PERIOD_LOCAL_IDENTIFIER = 'm1_previous_period';
 
     const drillableItems = [
         {
@@ -121,6 +123,42 @@ describe('isDrillable', () => {
                                 popAttribute: {
                                     uri: ADHOC_MEASURE_URI
                                 }
+                            }
+                        }
+                    }
+                ]
+            };
+            expect(
+                isDrillable(drillableItems, header, afm)
+            ).toEqual(true);
+        });
+
+        it('should detect previous period in AFM', () => {
+            const header = {
+                localIdentifier: ADHOC_MEASURE_PREVIOUS_PERIOD_LOCAL_IDENTIFIER
+            };
+            const afm = {
+                measures: [
+                    {
+                        localIdentifier: ADHOC_MEASURE_LOCAL_IDENTIFIER,
+                        definition: {
+                            measure: {
+                                item: {
+                                    uri: ADHOC_MEASURE_URI
+                                }
+                            }
+                        }
+                    }, {
+                        localIdentifier: ADHOC_MEASURE_PREVIOUS_PERIOD_LOCAL_IDENTIFIER,
+                        definition: {
+                            previousPeriodMeasure: {
+                                measureIdentifier: ADHOC_MEASURE_LOCAL_IDENTIFIER,
+                                dateDataSets: [{
+                                    dataSet: {
+                                        uri: DATE_DATA_SET_URI
+                                    },
+                                    periodsAgo: 1
+                                }]
                             }
                         }
                     }
