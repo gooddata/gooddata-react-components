@@ -129,7 +129,7 @@ describe('popHelper', () => {
     describe('getPoPSuffix', () => {
         it('should return formatted suffix for popMeasureDefinition', () => {
             const popSuffix = getPoPSuffix('popMeasureDefinition', 'en-US');
-            expect(popSuffix).toEqual(' - SP year ago');
+            expect(popSuffix).toEqual(' - previous year');
         });
 
         it('should return formatted suffix for overPeriodMeasureDefinition', () => {
