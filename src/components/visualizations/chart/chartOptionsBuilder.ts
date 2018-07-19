@@ -142,6 +142,15 @@ export function isPopMeasure(measureItem: Execution.IMeasureHeaderItem, afm: AFM
     });
 }
 
+export function isDerivedMeasure(measureItem: Execution.IMeasureHeaderItem, afm: AFM.IAfm) {
+    return afm.measures.some((measure: AFM.IMeasure) => {
+        const measureDefinition = get(measure, 'definition.popMeasure')
+            || get(measure, 'definition.previousPeriodMeasure');
+        const derivedMeasureIdentifier = measureDefinition ? measure.localIdentifier : null;
+        return derivedMeasureIdentifier && derivedMeasureIdentifier === measureItem.measureHeaderItem.localIdentifier;
+    });
+}
+
 export function normalizeColorToRGB(color: string) {
     const hexPattern = /#([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})/i;
     return color.replace(hexPattern, ({}, r: string, g: string, b: string) => {
@@ -149,15 +158,25 @@ export function normalizeColorToRGB(color: string) {
     });
 }
 
+function findMeasureIndex(afm: AFM.IAfm, measureIdentifier: string): number {
+    return afm.measures.findIndex(
+        (measure: AFM.IMeasure) => measure.localIdentifier === measureIdentifier
+    );
+}
+
 function findParentMeasureIndex(afm: AFM.IAfm, measureItemIndex: number): number {
     const measureDefinition = afm.measures[measureItemIndex].definition;
-    if (!AFM.isPopMeasureDefinition(measureDefinition)) {
-        return -1;
+
+    if (AFM.isPopMeasureDefinition(measureDefinition)) {
+        const sourceMeasureIdentifier = measureDefinition.popMeasure.measureIdentifier;
+        return findMeasureIndex(afm, sourceMeasureIdentifier);
     }
-    const sourceMeasureIdentifier = measureDefinition.popMeasure.measureIdentifier;
-    return afm.measures.findIndex(
-        (measure: AFM.IMeasure) => measure.localIdentifier === sourceMeasureIdentifier
-    );
+    if (AFM.isPreviousPeriodMeasureDefinition(measureDefinition)) {
+        const sourceMeasureIdentifier = measureDefinition.previousPeriodMeasure.measureIdentifier;
+        return findMeasureIndex(afm, sourceMeasureIdentifier);
+    }
+
+    return -1;
 }
 
 export function isAttributeColorPalette(type: string, afm: AFM.IAfm, stackByAttribute: any) {
@@ -173,7 +192,6 @@ export function getColorPalette(
     stackByAttribute: any,
     afm: AFM.IAfm,
     type: string
-
 ): string[] {
     if (isHeatMap(type)) {
         return [];
@@ -187,7 +205,7 @@ export function getColorPalette(
     let parentMeasuresCounter = 0;
 
     const paletteMeasures = range(measureGroup.items.length).map((measureItemIndex) => {
-        if (isPopMeasure(measureGroup.items[measureItemIndex], afm)) {
+        if (isDerivedMeasure(measureGroup.items[measureItemIndex], afm)) {
             return '';
         }
         const colorIndex = parentMeasuresCounter % colorPalette.length;
@@ -196,7 +214,7 @@ export function getColorPalette(
     });
 
     return paletteMeasures.map((color, measureItemIndex) => {
-        if (!isPopMeasure(measureGroup.items[measureItemIndex], afm)) {
+        if (!isDerivedMeasure(measureGroup.items[measureItemIndex], afm)) {
             return color;
         }
         const parentMeasureIndex = findParentMeasureIndex(afm, measureItemIndex);
@@ -312,7 +330,7 @@ export function getHeatMapSeries(
         });
     });
 
-    return[{
+    return [{
         name: measureGroup.items[0].measureHeaderItem.name,
         data,
         turboThreshold: 0,
@@ -957,8 +975,7 @@ export function getChartOptions(
 
     invariant(measureGroup, 'missing measureGroup');
 
-    const colorPalette =
-        getColorPalette(config.colors, measureGroup, viewByAttribute, stackByAttribute, afm, type);
+    const colorPalette = getColorPalette(config.colors, measureGroup, viewByAttribute, stackByAttribute, afm, type);
     const gridEnabled = get(config, 'grid.enabled', true);
     const stacking = getStackingConfig(stackByAttribute, config);
     const xAxes = getXAxes(config, measureGroup, viewByAttribute);
