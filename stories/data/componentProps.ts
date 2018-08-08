@@ -135,6 +135,15 @@ export const ATTRIBUTE_3: VisualizationObject.IVisualizationAttribute = {
     visualizationAttribute: {
         localIdentifier: 'a3',
         displayForm: {
+            uri: '/gdc/md/storybook/obj/3.df'
+        }
+    }
+};
+
+export const ATTRIBUTE_4: VisualizationObject.IVisualizationAttribute = {
+    visualizationAttribute: {
+        localIdentifier: 'a4',
+        displayForm: {
             uri: '/gdc/md/storybook/obj/6.df'
         }
     }
