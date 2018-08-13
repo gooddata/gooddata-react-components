@@ -87,6 +87,19 @@ function setContrastLabelsColor(chart: any) {
 }
 
 export function extendDataLabelColors(Highcharts: any) {
+    // Change the new Highcharts6 text outlines
+    Highcharts.setOptions({
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    style: {
+                        textOutline: false
+                    }
+                }
+            }
+        }
+    });
+
     Highcharts.Chart.prototype.callbacks.push((chart: any) => {
         const type = getChartType(chart);
 
