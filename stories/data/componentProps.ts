@@ -135,7 +135,7 @@ export const ATTRIBUTE_3: VisualizationObject.IVisualizationAttribute = {
     visualizationAttribute: {
         localIdentifier: 'a3',
         displayForm: {
-            uri: '/gdc/md/storybook/obj/3.df'
+            uri: '/gdc/md/storybook/obj/6.df'
         }
     }
 };
@@ -144,7 +144,16 @@ export const ATTRIBUTE_4: VisualizationObject.IVisualizationAttribute = {
     visualizationAttribute: {
         localIdentifier: 'a4',
         displayForm: {
-            uri: '/gdc/md/storybook/obj/6.df'
+            uri: '/gdc/md/storybook/obj/7.df'
+        }
+    }
+};
+
+export const ATTRIBUTE_5: VisualizationObject.IVisualizationAttribute = {
+    visualizationAttribute: {
+        localIdentifier: 'a5',
+        displayForm: {
+            uri: '/gdc/md/storybook/obj/3.df'
         }
     }
 };

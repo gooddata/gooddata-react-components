@@ -3,7 +3,7 @@ import * as React from 'react';
 import { storiesOf } from '@storybook/react';
 import { screenshotWrap } from '@gooddata/test-storybook';
 import {
-    ATTRIBUTE_3,
+    ATTRIBUTE_5,
     ATTRIBUTE_4,
     MEASURE_1,
     ATTRIBUTE_1,
@@ -65,7 +65,7 @@ storiesOf('NewHighCharts', module)
                         projectId="storybook"
                         measures={[MEASURE_1]}
                         trendBy={ATTRIBUTE_4}
-                        segmentBy={ATTRIBUTE_3}
+                        segmentBy={ATTRIBUTE_5}
                         afterRender={mHeat}
                     />,
                     3500,
@@ -125,7 +125,7 @@ storiesOf('NewHighCharts', module)
                     <BarChart
                         projectId="storybook"
                         measures={[MEASURE_1, MEASURE_2]}
-                        viewBy={ATTRIBUTE_3}
+                        viewBy={ATTRIBUTE_5}
                         stackBy={ATTRIBUTE_4}
                         onError={onErrorHandler}
                         LoadingComponent={null}
@@ -157,7 +157,7 @@ storiesOf('NewHighCharts', module)
                         projectId="storybook"
                         measures={[MEASURE_1_WITH_ALIAS, MEASURE_2, MEASURE_3]}
                         viewBy={[ATTRIBUTE_1, ATTRIBUTE_4]}
-                        stackBy={[ATTRIBUTE_3]}
+                        stackBy={[ATTRIBUTE_5]}
                         onError={onErrorHandler}
                         LoadingComponent={null}
                         ErrorComponent={null}
