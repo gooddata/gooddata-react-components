@@ -54,7 +54,7 @@ export function renderHeatmapCells(Highcharts: any) {
                         'stroke-width': series.borderWidth
                     } : {};
 
-                    pointAttr = point.pointAttr[point.selected ? 'select' : ''] || series.pointAttr[''];
+                    pointAttr = series.pointAttribs(point, point.selected ? 'select' : '') || series.pointAttr[''];
 
                     if (isNullValue) {
                         const canPadding = point.shapeArgs.width > 4 && point.shapeArgs.height > 4;
