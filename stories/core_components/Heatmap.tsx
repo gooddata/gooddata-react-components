@@ -8,6 +8,7 @@ import {
     ATTRIBUTE_1,
     ATTRIBUTE_2,
     MEASURE_1,
+    MEASURE_WITH_NULLS,
     ATTRIBUTE_1_WITH_ALIAS
 } from '../data/componentProps';
 import { GERMAN_SEPARATORS } from '../data/numberFormat';
@@ -112,6 +113,21 @@ storiesOf('Core components/Heatmap', module)
                     segmentBy={ATTRIBUTE_1}
                     trendBy={ATTRIBUTE_2}
                     config={{ legend: { position: 'top' } }}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    )
+    .add('with null value', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <Heatmap
+                    projectId="storybook"
+                    measures={[MEASURE_WITH_NULLS]}
+                    trendBy={ATTRIBUTE_1}
+                    segmentBy={ATTRIBUTE_2}
                     onError={onErrorHandler}
                     LoadingComponent={null}
                     ErrorComponent={null}

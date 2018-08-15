@@ -1631,9 +1631,141 @@ module.exports = {
                 }
             }
         },
-
+        {
+            "_description": "HeatMap with null values",
+            "execution": {
+                "execution": {
+                    "afm": {
+                        "measures": [{
+                            "localIdentifier": "m4",
+                            "definition": {
+                                "measure": {
+                                    "item": {
+                                        "uri": "/gdc/md/storybook/obj/9"
+                                    }
+                                }
+                            },
+                        }],
+                        "attributes": [
+                            {
+                                "displayForm": {
+                                    "uri": "/gdc/md/storybook/obj/4.df"
+                                },
+                                "localIdentifier": "a1"
+                            }, 
+                            {
+                                "displayForm": {
+                                    "uri": "/gdc/md/storybook/obj/5.df"
+                                },
+                                "localIdentifier": "a2"
+                            }
+                        ]
+                    },
+                    "resultSpec": {
+                        "dimensions": [{
+                            "itemIdentifiers": ["a2"]
+                        }, {
+                            "itemIdentifiers": ["a1", "measureGroup"]
+                        }]
+                    }
+                }
+            },
+            "executionResult": {
+                "executionResult": {
+                    "data": [
+                        [null, "3300000", null, null],
+                        ["3300000", null, null, "3300000"],
+                        ["3300000", null, "3300000", null]
+                    ],
+                    "paging": {
+                        "count": [3,4],
+                        "offset": [0,0],
+                        "total": [3,4]
+                    },
+                    "headerItems": [
+                        [
+                            [
+                                {
+                                    "attributeHeaderItem": {
+                                        "name": "low",
+                                        "uri": "/gdc/md/storybook/obj/5/elements?id=1"
+                                    }
+                                },
+                                {   
+                                    "attributeHeaderItem": {
+                                        "name": "medium",
+                                        "uri": "/gdc/md/storybook/obj/5/elements?id=2"
+                                    }
+                                },
+                                {   
+                                    "attributeHeaderItem": {
+                                        "name": "high",
+                                        "uri": "/gdc/md/storybook/obj/5/elements?id=3"
+                                    }
+                                }
+                            ]
+                        ],
+                        [
+                            [
+                                {
+                                    "attributeHeaderItem": {
+                                        "name": "Pink",
+                                        "uri": "/gdc/md/storybook/obj/4/elements?id=1"
+                                    }
+                                },
+                                {
+                                    "attributeHeaderItem": {
+                                        "name": "Red", 
+                                        "uri":"/gdc/md/storybook/obj/4/elements?id=2"
+                                    }
+                                },
+                                {
+                                    "attributeHeaderItem": {
+                                        "name": "Purple",
+                                        "uri": "/gdc/md/storybook/obj/4/elements?id=3"
+                                    }
+                                },
+                                {
+                                    "attributeHeaderItem": {
+                                        "name": "Salmon",
+                                        "uri": "/gdc/md/storybook/obj/4/elements?id=4"
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    "measureHeaderItem": {
+                                        "name": "Saved null",
+                                        "order": 0
+                                    }
+                                },
+                                {
+                                    "measureHeaderItem": {
+                                        "name": "Saved null",
+                                        "order": 0
+                                    }
+                                },
+                                {
+                                    "measureHeaderItem": {
+                                        "name": "Saved null",
+                                        "order": 0
+                                    }
+                                },
+                                {
+                                    "measureHeaderItem": {
+                                        "name": "Saved null",
+                                        "order": 0
+                                    }
+                                }
+                            ]
+                        ]
+                    ]
+                }
+            }
+        }
     ],
     visualizationClasses: [{
+
         title: 'Table',
         url: 'local:table'
     }, {
