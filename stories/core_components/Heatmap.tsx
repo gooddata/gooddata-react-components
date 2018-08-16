@@ -119,7 +119,7 @@ storiesOf('Core components/Heatmap', module)
                 />
             </div>
         )
-    )
+    ))
     .add('with null value', () => (
         screenshotWrap(
             <div style={wrapperStyle}>

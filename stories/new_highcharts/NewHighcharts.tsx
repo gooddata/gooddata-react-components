@@ -14,7 +14,7 @@ import {
 import { VIEW_BY_DIMENSION_INDEX } from '../../src/components/visualizations/chart/constants';
 
 import { BarChart } from '../../src/components/BarChart';
-import { HeatMap } from '../../src/components/HeatMap';
+import { Heatmap } from '../../src/components/Heatmap';
 import { Treemap } from '../../src/components/Treemap';
 import { AreaChart } from '../../src/components/AreaChart';
 import { ComboChart } from '../../src/components/ComboChart';
@@ -41,7 +41,7 @@ storiesOf('NewHighCharts', module)
 
     // Name measurings to bypass the lambda error
     // We do not re-render the charts to measure first render, therefore it shouldn't be a perf issue
-    const mHeat = () => measure('HeatMap');
+    const mHeat = () => measure('Heatmap');
     const mBubble = () => measure('BubbleChart');
     const mColumnChart = () => measure('ColumnChart');
     const mBarChart = () => measure('BarChart');
@@ -58,10 +58,10 @@ storiesOf('NewHighCharts', module)
 
     return screenshotWrap(
         <div>
-            <p>HeatMap</p>
+            <p>Heatmap</p>
             {
                 wrap(
-                    <HeatMap
+                    <Heatmap
                         projectId="storybook"
                         measures={[MEASURE_1]}
                         trendBy={ATTRIBUTE_4}

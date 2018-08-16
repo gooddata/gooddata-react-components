@@ -1765,7 +1765,6 @@ module.exports = {
         }
     ],
     visualizationClasses: [{
-
         title: 'Table',
         url: 'local:table'
     }, {
