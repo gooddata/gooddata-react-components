@@ -187,45 +187,6 @@ storiesOf('NewHighCharts', module)
                     />
                 )
             }
-            <p>FunnelChart</p>
-            {
-                wrap(
-                    <FunnelChart
-                        projectId="storybook"
-                        measures={[MEASURE_1]}
-                        viewBy={ATTRIBUTE_4}
-                        onLoadingChanged={this.onLoadingChanged}
-                        onError={this.onError}
-                        afterRender={mComboChart}
-                    />
-                )
-            }
-            <p>DonutChart</p>
-            {
-                wrap(
-                    <DonutChart
-                        projectId="storybook"
-                        measures={[MEASURE_1]}
-                        viewBy={ATTRIBUTE_4}
-                        onLoadingChanged={this.onLoadingChanged}
-                        onError={this.onError}
-                        afterRender={mComboChart}
-                    />
-                )
-            }
-            <p>PieChart</p>
-            {
-                wrap(
-                    <DonutChart
-                        projectId="storybook"
-                        measures={[MEASURE_1]}
-                        viewBy={ATTRIBUTE_4}
-                        onLoadingChanged={this.onLoadingChanged}
-                        onError={this.onError}
-                        afterRender={mComboChart}
-                    />
-                )
-            }
         </div>
     );
 }).add('Bloated dashboard test', () => {
@@ -475,6 +436,19 @@ storiesOf('NewHighCharts', module)
                         LoadingComponent={null}
                         ErrorComponent={null}
                         afterRender={mBarChart}
+                    />
+                )
+            }
+            <p>FunnelChart</p>
+            {
+                wrap(
+                    <FunnelChart
+                        projectId="storybook"
+                        measures={[MEASURE_1]}
+                        viewBy={ATTRIBUTE_4}
+                        onLoadingChanged={this.onLoadingChanged}
+                        onError={this.onError}
+                        afterRender={mComboChart}
                     />
                 )
             }
