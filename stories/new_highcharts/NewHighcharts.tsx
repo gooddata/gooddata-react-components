@@ -13,6 +13,7 @@ import {
 } from '../data/componentProps';
 import { VIEW_BY_DIMENSION_INDEX } from '../../src/components/visualizations/chart/constants';
 
+import { Visualization } from '../../src/components/visualizations/Visualization';
 import { BarChart } from '../../src/components/BarChart';
 import { Heatmap } from '../../src/components/Heatmap';
 import { Treemap } from '../../src/components/Treemap';
@@ -23,7 +24,7 @@ import { ColumnChart } from '../../src/components/ColumnChart';
 import { DualChart } from '../../src/components/DualChart';
 import { DonutChart } from '../../src/components/DonutChart';
 import { PieChart } from '../../src/components/PieChart';
-import { FunnelChart } from '../../src/components/FunnelChart';
+import { FunnelChart } from '../../src/index';
 import { ScatterPlot } from '../../src/components/ScatterPlot';
 import { LineChart } from '../../src/components/LineChart';
 import ChartTransformation from '../../src/components/visualizations/chart/ChartTransformation';
@@ -34,6 +35,40 @@ import identity = require('lodash/identity');
 
 import '../../styles/scss/charts.scss';
 import '../../styles/scss/table.scss';
+
+function getChart({
+    type = 'column',
+    legendEnabled = true,
+    legendPosition = 'top',
+    legendResponsive = false,
+    dataSet = fixtures.barChartWithoutAttributes,
+    colors,
+    width,
+    height,
+    minHeight,
+    minWidth,
+    chartHeight,
+    chartWidth,
+    key
+}: any) {
+    return wrap((
+        <ChartTransformation
+            config={{
+                type,
+                legend: {
+                    enabled: legendEnabled,
+                    position: legendPosition,
+                    responsive: legendResponsive
+                },
+                colors
+            }}
+            height={chartHeight}
+            width={chartWidth}
+            {...dataSet}
+            onDataTooLarge={identity}
+        />
+    ), height, width, minHeight, minWidth, key);
+}
 
 storiesOf('NewHighCharts', module)
 .add('Performance test', () => {
@@ -189,7 +224,7 @@ storiesOf('NewHighCharts', module)
             }
         </div>
     );
-}).add('Bloated dashboard test', () => {
+}).add('Bloated dashboard test', () => { // last minute add, forgive me the copy&paste
     const measurings: any[] = [];
     const startTime = performance.now();
 
@@ -209,6 +244,18 @@ storiesOf('NewHighCharts', module)
     const mTreeMap = () => measure('TreeMap');
     const mAreaChart = () => measure('AreaChart');
     const mComboChart = () => measure('ComboChart');
+    const mLineChart = () => measure('LineChart');
+    const mColumnChart2 = () => measure('ColumnChart2');
+    const mDualChart = () => measure('DualChart');
+    const mDonutChart = () => measure('DonutChart');
+    const mPieChart = () => measure('PieChart');
+    const mScatterPlot = () => measure('ScatterPlot');
+    const mBubble2 = () => measure('BubbleChart2');
+    const mFunnelChart = () => measure('FunnelChart');
+    const mLineChart2 = () => measure('LineChart2');
+    const mResizeChart = () => measure('ResizeChart');
+    const mColumnChart3 = () => measure('ColumnChart3');
+    const mAreaChartDisabledStack = () => measure('AreaChartDisabledStack');
 
     const dataSet1 = {
         ...fixtures.bubbleChartWith3MetricsAndAttribute
@@ -350,7 +397,7 @@ storiesOf('NewHighCharts', module)
                         onError={onErrorHandler}
                         LoadingComponent={null}
                         ErrorComponent={null}
-                        afterRender={mBarChart}
+                        afterRender={mLineChart}
                     />
                 )
             }
@@ -364,7 +411,7 @@ storiesOf('NewHighCharts', module)
                         onError={onErrorHandler}
                         LoadingComponent={null}
                         ErrorComponent={null}
-                        afterRender={mBarChart}
+                        afterRender={mColumnChart2}
                     />
                 )
             }
@@ -375,11 +422,11 @@ storiesOf('NewHighCharts', module)
                         projectId="storybook"
                         leftAxisMeasure={MEASURE_1}
                         rightAxisMeasure={MEASURE_2}
-                        trendBy={ATTRIBUTE_4}
+                        trendBy={ATTRIBUTE_1}
                         onError={onErrorHandler}
                         LoadingComponent={null}
                         ErrorComponent={null}
-                        afterRender={mBarChart}
+                        afterRender={mDualChart}
                     />
                 )
             }
@@ -393,6 +440,7 @@ storiesOf('NewHighCharts', module)
                         onError={onErrorHandler}
                         LoadingComponent={null}
                         ErrorComponent={null}
+                        afterRender={mDonutChart}
                     />
                 )
             }
@@ -405,6 +453,7 @@ storiesOf('NewHighCharts', module)
                         onError={onErrorHandler}
                         LoadingComponent={null}
                         ErrorComponent={null}
+                        afterRender={mPieChart}
                     />
                 )
             }
@@ -419,7 +468,7 @@ storiesOf('NewHighCharts', module)
                         onError={onErrorHandler}
                         LoadingComponent={null}
                         ErrorComponent={null}
-                        afterRender={mBarChart}
+                        afterRender={mScatterPlot}
                     />
                 )
             }
@@ -435,7 +484,7 @@ storiesOf('NewHighCharts', module)
                         onError={onErrorHandler}
                         LoadingComponent={null}
                         ErrorComponent={null}
-                        afterRender={mBarChart}
+                        afterRender={mBubble2}
                     />
                 )
             }
@@ -445,11 +494,72 @@ storiesOf('NewHighCharts', module)
                     <FunnelChart
                         projectId="storybook"
                         measures={[MEASURE_1]}
-                        viewBy={ATTRIBUTE_4}
+                        viewBy={ATTRIBUTE_1}
                         onLoadingChanged={this.onLoadingChanged}
                         onError={this.onError}
-                        afterRender={mComboChart}
+                        afterRender={mFunnelChart}
                     />
+                )
+            }
+            <p>Line chart</p>
+            {
+                wrap(
+                    <LineChart
+                        projectId="storybook"
+                        measures={[MEASURE_2]}
+                        trendBy={ATTRIBUTE_5}
+                        onError={onErrorHandler}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                        afterRender={mLineChart2}
+                    />
+                )
+            }
+            <p>ColumnChart</p>
+            {
+                wrap(
+                    <ColumnChart
+                        projectId="storybook"
+                        measures={[MEASURE_2]}
+                        viewBy={ATTRIBUTE_4}
+                        onError={onErrorHandler}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                        afterRender={mColumnChart3}
+                    />
+                )
+            }
+            <p>Resize window to 867px or less</p>
+            {
+                screenshotWrap(
+                    getChart({
+                        legendPosition: 'right',
+                        legendResponsive: true,
+                        dataSet: fixtures.barChartWith60MetricsAndViewByAttribute,
+                        width: '100%',
+                        height: '100%',
+                        minHeight: 300,
+                        chartHeight: 300,
+                        afterRender: mResizeChart
+                    })
+                )
+            }
+            <p>Area chart with disabled stacking</p>
+            {
+                screenshotWrap(
+                    wrap(
+                        <Visualization
+                            {...fixtures.areaChartWith3MetricsAndViewByAttribute}
+                            config={{
+                                type: 'area',
+                                stacking: false,
+                                legend: {
+                                    position: 'top'
+                                }
+                            }}
+                            afterRender={mAreaChartDisabledStack}
+                        />
+                    )
                 )
             }
         </div>
