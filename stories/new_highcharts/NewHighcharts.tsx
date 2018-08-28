@@ -49,7 +49,8 @@ function getChart({
     minWidth,
     chartHeight,
     chartWidth,
-    key
+    key,
+    afterRender
 }: any) {
     return wrap((
         <ChartTransformation
@@ -66,6 +67,7 @@ function getChart({
             width={chartWidth}
             {...dataSet}
             onDataTooLarge={identity}
+            afterRender={afterRender}
         />
     ), height, width, minHeight, minWidth, key);
 }
@@ -238,10 +240,12 @@ storiesOf('NewHighCharts', module)
     // Name measurings to bypass the lambda error
     // We do not re-render the charts to measure first render, therefore it shouldn't be a perf issue
     const mHeat = () => measure('Heatmap');
+    const mHeat2 = () => measure('Heatmap2');
     const mBubble = () => measure('BubbleChart');
     const mColumnChart = () => measure('ColumnChart');
     const mBarChart = () => measure('BarChart');
     const mTreeMap = () => measure('TreeMap');
+    const mTreeMap2 = () => measure('TreeMap2');
     const mAreaChart = () => measure('AreaChart');
     const mComboChart = () => measure('ComboChart');
     const mLineChart = () => measure('LineChart');
@@ -560,6 +564,36 @@ storiesOf('NewHighCharts', module)
                             afterRender={mAreaChartDisabledStack}
                         />
                     )
+                )
+            }
+            <p>Heatmap 2</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_1]}
+                        trendBy={ATTRIBUTE_5}
+                        segmentBy={ATTRIBUTE_4}
+                        afterRender={mHeat2}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Tree map 2</p>
+            {
+                wrap(
+                    <Treemap
+                        projectId="storybook"
+                        measures={[MEASURE_1, MEASURE_2]}
+                        segmentBy={ATTRIBUTE_5}
+                        onError={onErrorHandler}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                        afterRender={mTreeMap2}
+                    />,
+                    1000,
+                    '100%'
                 )
             }
         </div>
