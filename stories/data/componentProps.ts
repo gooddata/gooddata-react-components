@@ -158,6 +158,123 @@ export const ATTRIBUTE_5: VisualizationObject.IVisualizationAttribute = {
     }
 };
 
+export const ATTRIBUTE_8: VisualizationObject.IVisualizationAttribute = {
+    visualizationAttribute: {
+        localIdentifier: 'a4',
+        displayForm: {
+            uri: '/gdc/md/storybook/obj/8.df'
+        }
+    }
+};
+
+export const ATTRIBUTE_9: VisualizationObject.IVisualizationAttribute = {
+    visualizationAttribute: {
+        localIdentifier: 'a4',
+        displayForm: {
+            uri: '/gdc/md/storybook/obj/9.df'
+        }
+    }
+};
+
+export const ATTRIBUTE_10: VisualizationObject.IVisualizationAttribute = {
+    visualizationAttribute: {
+        localIdentifier: 'a4',
+        displayForm: {
+            uri: '/gdc/md/storybook/obj/10.df'
+        }
+    }
+};
+
+export const ATTRIBUTE_11: VisualizationObject.IVisualizationAttribute = {
+    visualizationAttribute: {
+        localIdentifier: 'a4',
+        displayForm: {
+            uri: '/gdc/md/storybook/obj/11.df'
+        }
+    }
+};
+
+export const ATTRIBUTE_12: VisualizationObject.IVisualizationAttribute = {
+    visualizationAttribute: {
+        localIdentifier: 'a4',
+        displayForm: {
+            uri: '/gdc/md/storybook/obj/12.df'
+        }
+    }
+};
+
+export const ATTRIBUTE_13: VisualizationObject.IVisualizationAttribute = {
+    visualizationAttribute: {
+        localIdentifier: 'a4',
+        displayForm: {
+            uri: '/gdc/md/storybook/obj/13.df'
+        }
+    }
+};
+
+export const ATTRIBUTE_14: VisualizationObject.IVisualizationAttribute = {
+    visualizationAttribute: {
+        localIdentifier: 'a4',
+        displayForm: {
+            uri: '/gdc/md/storybook/obj/14.df'
+        }
+    }
+};
+
+export const ATTRIBUTE_15: VisualizationObject.IVisualizationAttribute = {
+    visualizationAttribute: {
+        localIdentifier: 'a4',
+        displayForm: {
+            uri: '/gdc/md/storybook/obj/15.df'
+        }
+    }
+};
+
+export const ATTRIBUTE_16: VisualizationObject.IVisualizationAttribute = {
+    visualizationAttribute: {
+        localIdentifier: 'a4',
+        displayForm: {
+            uri: '/gdc/md/storybook/obj/16.df'
+        }
+    }
+};
+
+export const ATTRIBUTE_17: VisualizationObject.IVisualizationAttribute = {
+    visualizationAttribute: {
+        localIdentifier: 'a4',
+        displayForm: {
+            uri: '/gdc/md/storybook/obj/17.df'
+        }
+    }
+};
+
+export const ATTRIBUTE_18: VisualizationObject.IVisualizationAttribute = {
+    visualizationAttribute: {
+        localIdentifier: 'a4',
+        displayForm: {
+            uri: '/gdc/md/storybook/obj/18.df'
+        }
+    }
+};
+
+export const ATTRIBUTE_19: VisualizationObject.IVisualizationAttribute = {
+    visualizationAttribute: {
+        localIdentifier: 'a4',
+        displayForm: {
+            uri: '/gdc/md/storybook/obj/19.df'
+        }
+    }
+};
+
+export const ATTRIBUTE_20: VisualizationObject.IVisualizationAttribute = {
+    visualizationAttribute: {
+        localIdentifier: 'a4',
+        displayForm: {
+            uri: '/gdc/md/storybook/obj/20.df'
+        }
+    }
+};
+
 export const TOTAL_M1_A1: VisualizationObject.IVisualizationTotal = {
     measureIdentifier: MEASURE_1.measure.localIdentifier,
     type: 'sum',

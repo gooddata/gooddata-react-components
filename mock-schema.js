@@ -41,6 +41,76 @@ module.exports = {
                 "elements": ["Stock Market", "Manufacturing Activity", "Inventory Levels", "Retail Sales", "Building Permits", "Housing Market", "GDP", "Income and Wages", "Unemployment Rate", "Inflation", "Currency Strength", "Interest Rates", "Corporate Profits"," Balance of Trade", "Bureaucracy", "Corruption level", "Freedom of the press", "Tariffs", "Trade control", "Education Law", "Anti-trust law", "Employment law", "Discrimination law", "Data protection law", "Environmental Law", "Health and safety law", "Competition regulation", "Regulation and deregulation", "Tax policy", "Government stability", "Trade unions and agreements", "Import restrictions", "Patents", "Consumer protection", "Environmental regulation"]
             },
             {
+                "identifier": "7",
+                "title": "Factors",
+                "elements": ["Stock Market", "Manufacturing Activity", "Inventory Levels", "Retail Sales", "Building Permits", "Housing Market", "GDP", "Income and Wages", "Unemployment Rate", "Inflation", "Currency Strength", "Interest Rates", "Corporate Profits"," Balance of Trade", "Bureaucracy", "Corruption level", "Freedom of the press", "Tariffs", "Trade control", "Education Law", "Anti-trust law", "Employment law", "Discrimination law", "Data protection law", "Environmental Law", "Health and safety law", "Competition regulation", "Regulation and deregulation", "Tax policy", "Government stability", "Trade unions and agreements", "Import restrictions", "Patents", "Consumer protection", "Environmental regulation"]
+            },
+            {
+                "identifier": "8",
+                "title": "Factors",
+                "elements": ["Stock Market", "Manufacturing Activity", "Inventory Levels", "Retail Sales", "Building Permits", "Housing Market", "GDP", "Income and Wages", "Unemployment Rate", "Inflation", "Currency Strength", "Interest Rates", "Corporate Profits"," Balance of Trade", "Bureaucracy", "Corruption level", "Freedom of the press", "Tariffs", "Trade control", "Education Law", "Anti-trust law", "Employment law", "Discrimination law", "Data protection law", "Environmental Law", "Health and safety law", "Competition regulation", "Regulation and deregulation", "Tax policy", "Government stability", "Trade unions and agreements", "Import restrictions", "Patents", "Consumer protection", "Environmental regulation"]
+            },
+            {
+                "identifier": "9",
+                "title": "Factors",
+                "elements": ["Stock Market", "Manufacturing Activity", "Inventory Levels", "Retail Sales", "Building Permits", "Housing Market", "GDP", "Income and Wages", "Unemployment Rate", "Inflation", "Currency Strength", "Interest Rates", "Corporate Profits"," Balance of Trade", "Bureaucracy", "Corruption level", "Freedom of the press", "Tariffs", "Trade control", "Education Law", "Anti-trust law", "Employment law", "Discrimination law", "Data protection law", "Environmental Law", "Health and safety law", "Competition regulation", "Regulation and deregulation", "Tax policy", "Government stability", "Trade unions and agreements", "Import restrictions", "Patents", "Consumer protection", "Environmental regulation"]
+            },
+            {
+                "identifier": "10",
+                "title": "Factors",
+                "elements": ["Stock Market", "Manufacturing Activity", "Inventory Levels", "Retail Sales", "Building Permits", "Housing Market", "GDP", "Income and Wages", "Unemployment Rate", "Inflation", "Currency Strength", "Interest Rates", "Corporate Profits"," Balance of Trade", "Bureaucracy", "Corruption level", "Freedom of the press", "Tariffs", "Trade control", "Education Law", "Anti-trust law", "Employment law", "Discrimination law", "Data protection law", "Environmental Law", "Health and safety law", "Competition regulation", "Regulation and deregulation", "Tax policy", "Government stability", "Trade unions and agreements", "Import restrictions", "Patents", "Consumer protection", "Environmental regulation"]
+            },
+            {
+                "identifier": "11",
+                "title": "Factors",
+                "elements": ["Stock Market", "Manufacturing Activity", "Inventory Levels", "Retail Sales", "Building Permits", "Housing Market", "GDP", "Income and Wages", "Unemployment Rate", "Inflation", "Currency Strength", "Interest Rates", "Corporate Profits"," Balance of Trade", "Bureaucracy", "Corruption level", "Freedom of the press", "Tariffs", "Trade control", "Education Law", "Anti-trust law", "Employment law", "Discrimination law", "Data protection law", "Environmental Law", "Health and safety law", "Competition regulation", "Regulation and deregulation", "Tax policy", "Government stability", "Trade unions and agreements", "Import restrictions", "Patents", "Consumer protection", "Environmental regulation"]
+            },
+            {
+                "identifier": "12",
+                "title": "Factors",
+                "elements": ["Stock Market", "Manufacturing Activity", "Inventory Levels", "Retail Sales", "Building Permits", "Housing Market", "GDP", "Income and Wages", "Unemployment Rate", "Inflation", "Currency Strength", "Interest Rates", "Corporate Profits"," Balance of Trade", "Bureaucracy", "Corruption level", "Freedom of the press", "Tariffs", "Trade control", "Education Law", "Anti-trust law", "Employment law", "Discrimination law", "Data protection law", "Environmental Law", "Health and safety law", "Competition regulation", "Regulation and deregulation", "Tax policy", "Government stability", "Trade unions and agreements", "Import restrictions", "Patents", "Consumer protection", "Environmental regulation"]
+            },
+            {
+                "identifier": "13",
+                "title": "Factors",
+                "elements": ["Stock Market", "Manufacturing Activity", "Inventory Levels", "Retail Sales", "Building Permits", "Housing Market", "GDP", "Income and Wages", "Unemployment Rate", "Inflation", "Currency Strength", "Interest Rates", "Corporate Profits"," Balance of Trade", "Bureaucracy", "Corruption level", "Freedom of the press", "Tariffs", "Trade control", "Education Law", "Anti-trust law", "Employment law", "Discrimination law", "Data protection law", "Environmental Law", "Health and safety law", "Competition regulation", "Regulation and deregulation", "Tax policy", "Government stability", "Trade unions and agreements", "Import restrictions", "Patents", "Consumer protection", "Environmental regulation"]
+            },
+            {
+                "identifier": "14",
+                "title": "Factors",
+                "elements": ["Stock Market", "Manufacturing Activity", "Inventory Levels", "Retail Sales", "Building Permits", "Housing Market", "GDP", "Income and Wages", "Unemployment Rate", "Inflation", "Currency Strength", "Interest Rates", "Corporate Profits"," Balance of Trade", "Bureaucracy", "Corruption level", "Freedom of the press", "Tariffs", "Trade control", "Education Law", "Anti-trust law", "Employment law", "Discrimination law", "Data protection law", "Environmental Law", "Health and safety law", "Competition regulation", "Regulation and deregulation", "Tax policy", "Government stability", "Trade unions and agreements", "Import restrictions", "Patents", "Consumer protection", "Environmental regulation"]
+            },
+            {
+                "identifier": "15",
+                "title": "Factors",
+                "elements": ["Stock Market", "Manufacturing Activity", "Inventory Levels", "Retail Sales", "Building Permits", "Housing Market", "GDP", "Income and Wages", "Unemployment Rate", "Inflation", "Currency Strength", "Interest Rates", "Corporate Profits"," Balance of Trade", "Bureaucracy", "Corruption level", "Freedom of the press", "Tariffs", "Trade control", "Education Law", "Anti-trust law", "Employment law", "Discrimination law", "Data protection law", "Environmental Law", "Health and safety law", "Competition regulation", "Regulation and deregulation", "Tax policy", "Government stability", "Trade unions and agreements", "Import restrictions", "Patents", "Consumer protection", "Environmental regulation"]
+            },
+            {
+                "identifier": "16",
+                "title": "Factors",
+                "elements": ["Stock Market", "Manufacturing Activity", "Inventory Levels", "Retail Sales", "Building Permits", "Housing Market", "GDP", "Income and Wages", "Unemployment Rate", "Inflation", "Currency Strength", "Interest Rates", "Corporate Profits"," Balance of Trade", "Bureaucracy", "Corruption level", "Freedom of the press", "Tariffs", "Trade control", "Education Law", "Anti-trust law", "Employment law", "Discrimination law", "Data protection law", "Environmental Law", "Health and safety law", "Competition regulation", "Regulation and deregulation", "Tax policy", "Government stability", "Trade unions and agreements", "Import restrictions", "Patents", "Consumer protection", "Environmental regulation"]
+            },
+            {
+                "identifier": "17",
+                "title": "Factors",
+                "elements": ["Stock Market", "Manufacturing Activity", "Inventory Levels", "Retail Sales", "Building Permits", "Housing Market", "GDP", "Income and Wages", "Unemployment Rate", "Inflation", "Currency Strength", "Interest Rates", "Corporate Profits"," Balance of Trade", "Bureaucracy", "Corruption level", "Freedom of the press", "Tariffs", "Trade control", "Education Law", "Anti-trust law", "Employment law", "Discrimination law", "Data protection law", "Environmental Law", "Health and safety law", "Competition regulation", "Regulation and deregulation", "Tax policy", "Government stability", "Trade unions and agreements", "Import restrictions", "Patents", "Consumer protection", "Environmental regulation"]
+            },
+            {
+                "identifier": "18",
+                "title": "Factors",
+                "elements": ["Stock Market", "Manufacturing Activity", "Inventory Levels", "Retail Sales", "Building Permits", "Housing Market", "GDP", "Income and Wages", "Unemployment Rate", "Inflation", "Currency Strength", "Interest Rates", "Corporate Profits"," Balance of Trade", "Bureaucracy", "Corruption level", "Freedom of the press", "Tariffs", "Trade control", "Education Law", "Anti-trust law", "Employment law", "Discrimination law", "Data protection law", "Environmental Law", "Health and safety law", "Competition regulation", "Regulation and deregulation", "Tax policy", "Government stability", "Trade unions and agreements", "Import restrictions", "Patents", "Consumer protection", "Environmental regulation"]
+            },
+            {
+                "identifier": "19",
+                "title": "Factors",
+                "elements": ["Stock Market", "Manufacturing Activity", "Inventory Levels", "Retail Sales", "Building Permits", "Housing Market", "GDP", "Income and Wages", "Unemployment Rate", "Inflation", "Currency Strength", "Interest Rates", "Corporate Profits"," Balance of Trade", "Bureaucracy", "Corruption level", "Freedom of the press", "Tariffs", "Trade control", "Education Law", "Anti-trust law", "Employment law", "Discrimination law", "Data protection law", "Environmental Law", "Health and safety law", "Competition regulation", "Regulation and deregulation", "Tax policy", "Government stability", "Trade unions and agreements", "Import restrictions", "Patents", "Consumer protection", "Environmental regulation"]
+            },
+            {
+                "identifier": "20",
+                "title": "Factors",
+                "elements": ["Stock Market", "Manufacturing Activity", "Inventory Levels", "Retail Sales", "Building Permits", "Housing Market", "GDP", "Income and Wages", "Unemployment Rate", "Inflation", "Currency Strength", "Interest Rates", "Corporate Profits"," Balance of Trade", "Bureaucracy", "Corruption level", "Freedom of the press", "Tariffs", "Trade control", "Education Law", "Anti-trust law", "Employment law", "Discrimination law", "Data protection law", "Environmental Law", "Health and safety law", "Competition regulation", "Regulation and deregulation", "Tax policy", "Government stability", "Trade unions and agreements", "Import restrictions", "Patents", "Consumer protection", "Environmental regulation"]
+            },
+            {
                 identifier: '4',
                 title: 'Colours',
                 elements: [

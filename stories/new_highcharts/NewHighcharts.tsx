@@ -3,8 +3,21 @@ import * as React from 'react';
 import { storiesOf } from '@storybook/react';
 import { screenshotWrap } from '@gooddata/test-storybook';
 import {
-    ATTRIBUTE_5,
     ATTRIBUTE_4,
+    ATTRIBUTE_5,
+    ATTRIBUTE_8,
+    ATTRIBUTE_9,
+    ATTRIBUTE_10,
+    ATTRIBUTE_11,
+    ATTRIBUTE_12,
+    ATTRIBUTE_13,
+    ATTRIBUTE_14,
+    ATTRIBUTE_15,
+    ATTRIBUTE_16,
+    ATTRIBUTE_17,
+    ATTRIBUTE_18,
+    ATTRIBUTE_19,
+    ATTRIBUTE_20,
     MEASURE_1,
     ATTRIBUTE_1,
     MEASURE_1_WITH_ALIAS,
@@ -586,13 +599,749 @@ storiesOf('NewHighCharts', module)
                     <Treemap
                         projectId="storybook"
                         measures={[MEASURE_1, MEASURE_2]}
-                        segmentBy={ATTRIBUTE_5}
+                        segmentBy={ATTRIBUTE_4}
                         onError={onErrorHandler}
                         LoadingComponent={null}
                         ErrorComponent={null}
                         afterRender={mTreeMap2}
                     />,
                     1000,
+                    '100%'
+                )
+            }
+        </div>
+    );
+}).add('Limit test', () => {
+    return screenshotWrap(
+        <div>
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_1, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_5}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_1, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_8}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_1, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_9}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_1, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_10}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_1, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_11}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_1, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_12}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_1, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_13}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_1, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_14}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_1, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_15}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_1, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_16}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_1, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_17}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_1, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_18}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_1, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_19}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_1, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_20}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_5}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_8}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_9}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_10}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_11}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_12}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_13}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_14}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_15}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_16}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_17}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_18}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_19}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_2]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_20}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_5}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_8}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_9}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_10}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_11}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_12}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_13}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_14}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_15}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_16}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_17}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_18}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_19}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_20}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1_WITH_ALIAS]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_5}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1_WITH_ALIAS]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_8}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1_WITH_ALIAS]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_9}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1_WITH_ALIAS]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_10}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1_WITH_ALIAS]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_11}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1_WITH_ALIAS]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_12}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1_WITH_ALIAS]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_13}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1_WITH_ALIAS]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_14}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1_WITH_ALIAS]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_15}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1_WITH_ALIAS]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_16}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1_WITH_ALIAS]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_17}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1_WITH_ALIAS]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_18}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1_WITH_ALIAS]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_19}
+                    />,
+                    3500,
+                    '100%'
+                )
+            }
+            <p>Heatmap</p>
+            {
+                wrap(
+                    <Heatmap
+                        projectId="storybook"
+                        measures={[MEASURE_3, MEASURE_1_WITH_ALIAS]}
+                        trendBy={ATTRIBUTE_4}
+                        segmentBy={ATTRIBUTE_20}
+                    />,
+                    3500,
                     '100%'
                 )
             }
