@@ -4,8 +4,14 @@ import cloneDeep = require('lodash/cloneDeep');
 import update = require('lodash/update');
 
 import { VisualizationTypes } from '../../constants/visualizationTypes';
-import { generateDimensions, getHeadlinesDimensions, getPivotTableDimensions } from '../dimensions';
+import {
+    generateDimensions,
+    getHeadlinesDimensions,
+    getPivotTableDimensions,
+    getGeneralDimensionsFromAFM
+} from '../dimensions';
 import { visualizationObjects } from '../../../__mocks__/fixtures';
+import { MEASURE_1, ATTRIBUTE_CITIES } from '../../../stories/data/afmComponentProps';
 
 function getVisualization(name: string): VisualizationObject.IVisualizationObjectContent {
     const uri = `/gdc/md/myproject/obj/${name}`;
@@ -633,5 +639,30 @@ describe('generateDimensions', () => {
             expect(generateDimensions(visualizationWithTotals, VisualizationTypes.TABLE))
                 .toEqual(expectedDimensions);
         });
+    });
+});
+
+describe('getGeneralDimensionsFromAFM', () => {
+    it('should return resultSpec dimensions for AFM with both measures and attributes', () => {
+        const afm = {
+            measures: [MEASURE_1],
+            attributes: [ATTRIBUTE_CITIES]
+        };
+        const expectedDimensions = [{ itemIdentifiers: ['a1'] }, { itemIdentifiers: ['measureGroup'] }];
+        expect(getGeneralDimensionsFromAFM(afm)).toEqual(expectedDimensions);
+    });
+    it('should return resultSpec dimensions for AFM with measures only', () => {
+        const afm = {
+            measures: [MEASURE_1]
+        };
+        const expectedDimensions = [{ itemIdentifiers: ['measureGroup'] }];
+        expect(getGeneralDimensionsFromAFM(afm)).toEqual(expectedDimensions);
+    });
+    it('should return resultSpec dimensions for AFM with attributes only', () => {
+        const afm = {
+            attributes: [ATTRIBUTE_CITIES]
+        };
+        const expectedDimensions = [{ itemIdentifiers: ['a1'] }];
+        expect(getGeneralDimensionsFromAFM(afm)).toEqual(expectedDimensions);
     });
 });
