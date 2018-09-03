@@ -41,6 +41,7 @@ $responsive-legend: 'only screen and (max-width: 767px)';
     }
 
     .series-item {
+        box-sizing: border-box;
         display: flex;
         align-items: center;
         font-family: $gd-font-primary;
@@ -128,7 +129,7 @@ $responsive-legend: 'only screen and (max-width: 767px)';
                 // refactor?
                 // stylelint-disable-next-line max-nesting-depth
                 .series-item {
-                    margin-left: 15px;
+                    padding-left: 15px;
                 }
             }
         }
