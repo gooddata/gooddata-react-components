@@ -54,7 +54,7 @@ function addMeasure(
             }
         }
     };
-    return update<VisualizationObject.IVisualizationObjectContent>(
+    return update(
         newVis, ['buckets', 0, 'items'], (measures: VisualizationObject.IMeasure[]
     ) => {
         measures.push(measure);
