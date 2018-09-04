@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { omit } from 'lodash';
-import { Subtract } from 'utility-types';
 import { VisualizationObject, AFM } from '@gooddata/typings';
 
 import { AreaChart as AfmAreaChart } from './afm/AreaChart';
@@ -21,8 +20,6 @@ export interface IAreaChartBucketProps extends ICommonChartProps {
 export interface IAreaChartProps extends ICommonChartProps, IAreaChartBucketProps {
     projectId: string;
 }
-
-type IAreaChartNonBucketProps = Subtract<IAreaChartProps, IAreaChartBucketProps>;
 
 export interface IAreaChartProps extends ICommonChartProps {
     projectId: string;
@@ -49,7 +46,7 @@ export function AreaChart(props: IAreaChartProps): JSX.Element {
     ];
 
     const newProps
-        = omit<IAreaChartProps, IAreaChartNonBucketProps>(props, ['measures', 'viewBy', 'stackBy', 'filters']);
+        = omit<IAreaChartProps, keyof IAreaChartBucketProps>(props, ['measures', 'viewBy', 'stackBy', 'filters']);
 
     return (
         <AfmAreaChart
