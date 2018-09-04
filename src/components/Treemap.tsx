@@ -1,7 +1,6 @@
 // (C) 2007-2018 GoodData Corporation
 import * as React from 'react';
 import { omit } from 'lodash';
-import { Subtract } from 'utility-types';
 import { VisualizationObject } from '@gooddata/typings';
 
 import { Treemap as AfmTreemap } from './afm/Treemap';
@@ -21,8 +20,6 @@ export interface ITreemapBucketProps {
 export interface ITreemapProps extends ICommonChartProps, ITreemapBucketProps {
     projectId: string;
 }
-
-type ITreemapNonBucketProps = Subtract<ITreemapProps, ITreemapBucketProps>;
 
 /**
  * [Treemap](http://sdk.gooddata.com/gdc-ui-sdk-doc/docs/treemap_component.html)
@@ -44,7 +41,7 @@ export function Treemap(props: ITreemapProps): JSX.Element {
         }
     ];
 
-    const newProps = omit<ITreemapProps, ITreemapNonBucketProps>(
+    const newProps = omit<ITreemapProps, keyof ITreemapBucketProps>(
         props, ['measures', 'viewBy', 'segmentBy', 'filters']
     );
 

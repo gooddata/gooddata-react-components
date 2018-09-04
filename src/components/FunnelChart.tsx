@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { omit } from 'lodash';
-import { Subtract } from 'utility-types';
 import { VisualizationObject, AFM } from '@gooddata/typings';
 
 import { FunnelChart as AfmFunnelChart } from './afm/FunnelChart';
@@ -21,8 +20,6 @@ export interface IFunnelChartProps extends ICommonChartProps, IFunnelChartBucket
     projectId: string;
 }
 
-type IFunnelChartNonBucketProps = Subtract<IFunnelChartProps, IFunnelChartBucketProps>;
-
 const generateFunnelDimensionsFromBuckets =
     (buckets: VisualizationObject.IBucket[]) => generateDefaultDimensionsForRoundChart(convertBucketsToAFM(buckets));
 /**
@@ -42,7 +39,7 @@ export function FunnelChart(props: IFunnelChartProps): JSX.Element {
     ];
 
     const newProps
-        = omit<IFunnelChartProps, IFunnelChartNonBucketProps>(props, ['measures', 'viewBy', 'filters']);
+        = omit<IFunnelChartProps, keyof IFunnelChartBucketProps>(props, ['measures', 'viewBy', 'filters']);
 
     return (
         <AfmFunnelChart

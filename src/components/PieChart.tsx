@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { omit } from 'lodash';
-import { Subtract } from 'utility-types';
 import { VisualizationObject, AFM } from '@gooddata/typings';
 
 import { PieChart as AfmPieChart } from './afm/PieChart';
@@ -20,8 +19,6 @@ export interface IPieChartBucketProps {
 export interface IPieChartProps extends ICommonChartProps, IPieChartBucketProps {
     projectId: string;
 }
-
-type IPieChartNonBucketProps = Subtract<IPieChartProps, IPieChartBucketProps>;
 
 const generatePieDimensionsFromBuckets =
     (buckets: VisualizationObject.IBucket[]) => generateDefaultDimensionsForRoundChart(convertBucketsToAFM(buckets));
@@ -43,7 +40,7 @@ export function PieChart(props: IPieChartProps): JSX.Element {
     ];
 
     const newProps
-        = omit<IPieChartProps, IPieChartNonBucketProps>(props, ['measures', 'viewBy', 'filters']);
+        = omit<IPieChartProps, keyof IPieChartBucketProps>(props, ['measures', 'viewBy', 'filters']);
 
     return (
         <AfmPieChart

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { omit } from 'lodash';
-import { Subtract } from 'utility-types';
 
 import { AFM, VisualizationObject } from '@gooddata/typings';
 
@@ -40,8 +39,6 @@ export interface IBubbleChartProps extends ICommonChartProps, IBubbleChartBucket
     projectId: string;
 }
 
-type IBubbleChartNonBucketProps = Subtract<IBubbleChartProps, IBubbleChartBucketProps>;
-
 /**
  * [BubbleChart](http://sdk.gooddata.com/gdc-ui-sdk-doc/)
  */
@@ -66,7 +63,7 @@ export function BubbleChart(props: IBubbleChartProps): JSX.Element {
     ];
 
     const newProps
-        = omit<IBubbleChartNonBucketProps, IBubbleChartProps>(props,
+        = omit<IBubbleChartProps, keyof IBubbleChartBucketProps>(props,
         ['xAxisMeasure', 'yAxisMeasure', 'size', 'viewBy', 'filters']);
 
     newProps.config = {

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { omit } from 'lodash';
-import { Subtract } from 'utility-types';
 import { VisualizationObject, AFM } from '@gooddata/typings';
 
 import { ComboChart as AfmComboChart } from './afm/ComboChart';
@@ -20,8 +19,6 @@ export interface IComboChartBucketProps {
 export interface IComboChartProps extends ICommonChartProps, IComboChartBucketProps {
     projectId: string;
 }
-
-type IComboChartNonBucketProps = Subtract<IComboChartProps, IComboChartBucketProps>;
 
 /**
  * [ComboChart](http://sdk.gooddata.com/gdc-ui-sdk-doc/docs/next/combo_chart_component.html)
@@ -44,7 +41,7 @@ export function ComboChart(props: IComboChartProps): JSX.Element {
     ];
 
     const newProps
-        = omit<IComboChartProps, IComboChartNonBucketProps>(
+        = omit<IComboChartProps, keyof IComboChartBucketProps>(
             props, ['columnMeasures', 'lineMeasures', 'viewBy', 'filters']
         );
     newProps.config = {

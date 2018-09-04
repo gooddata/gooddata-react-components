@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { omit } from 'lodash';
-import { Subtract } from 'utility-types';
 import { VisualizationObject, AFM } from '@gooddata/typings';
 
 import { LineChart as AfmLineChart } from './afm/LineChart';
@@ -20,8 +19,6 @@ export interface ILineChartBucketProps {
 export interface ILineChartProps extends ICommonChartProps, ILineChartBucketProps {
     projectId: string;
 }
-
-type ILineChartNonBucketProps = Subtract<ILineChartProps, ILineChartBucketProps>;
 
 export interface ILineChartProps extends ICommonChartProps {
     projectId: string;
@@ -48,7 +45,7 @@ export function LineChart(props: ILineChartProps): JSX.Element {
     ];
 
     const newProps
-        = omit<ILineChartProps, ILineChartNonBucketProps>(props, ['measures', 'trendBy', 'segmentBy', 'filters']);
+        = omit<ILineChartProps, keyof ILineChartBucketProps>(props, ['measures', 'trendBy', 'segmentBy', 'filters']);
 
     return (
         <AfmLineChart

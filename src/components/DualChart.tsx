@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { omit } from 'lodash';
-import { Subtract } from 'utility-types';
 import { VisualizationObject, AFM } from '@gooddata/typings';
 
 import { DualChart as AfmDualChart } from './afm/DualChart';
@@ -20,8 +19,6 @@ export interface IDualChartBucketProps {
 export interface IDualChartProps extends ICommonChartProps, IDualChartBucketProps {
     projectId: string;
 }
-
-type IDualChartNonBucketProps = Subtract<IDualChartProps, IDualChartBucketProps>;
 
 export interface IDualChartProps extends ICommonChartProps {
     projectId: string;
@@ -47,7 +44,7 @@ export function DualChart(props: IDualChartProps): JSX.Element {
         }
     ];
 
-    const newProps = omit<IDualChartProps, IDualChartNonBucketProps>(props,
+    const newProps = omit<IDualChartProps, keyof IDualChartBucketProps>(props,
         ['leftAxisMeasure', 'rightAxisMeasure', 'trendBy', 'filters']);
 
     newProps.config = {

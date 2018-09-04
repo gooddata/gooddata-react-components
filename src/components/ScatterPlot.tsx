@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { omit } from 'lodash';
-import { Subtract } from 'utility-types';
 import { VisualizationObject, AFM } from '@gooddata/typings';
 import { ScatterPlot as AfmScatterPlot } from './afm/ScatterPlot';
 import { ICommonChartProps } from './core/base/BaseChart';
@@ -20,8 +19,6 @@ export interface IScatterPlotBucketProps {
 export interface IScatterPlotProps extends ICommonChartProps, IScatterPlotBucketProps {
     projectId: string;
 }
-
-type IScatterPlotNonBucketProps = Subtract<IScatterPlotProps, IScatterPlotBucketProps>;
 
 const generateScatterDimensionsFromBuckets =
     (buckets: VisualizationObject.IBucket[]) => generateDefaultDimensionsForPointsCharts(convertBucketsToAFM(buckets));
@@ -47,7 +44,7 @@ export function ScatterPlot(props: IScatterPlotProps): JSX.Element {
     ];
 
     const newProps
-        = omit<IScatterPlotProps, IScatterPlotNonBucketProps>(props,
+        = omit<IScatterPlotProps, keyof IScatterPlotBucketProps>(props,
             ['xAxisMeasure', 'yAxisMeasure', 'attribute', 'filters']);
 
     newProps.config = {

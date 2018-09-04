@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { omit } from 'lodash';
-import { Subtract } from 'utility-types';
 import { VisualizationObject, AFM } from '@gooddata/typings';
 
 import { Heatmap as AfmHeatmap } from './afm/Heatmap';
@@ -20,8 +19,6 @@ export interface IHeatmapBucketProps {
 export interface IHeatmapProps extends ICommonChartProps, IHeatmapBucketProps {
     projectId: string;
 }
-
-type IHeatmapNonBucketProps = Subtract<IHeatmapProps, IHeatmapBucketProps>;
 
 export interface IHeatmapProps extends ICommonChartProps {
     projectId: string;
@@ -44,7 +41,7 @@ export function Heatmap(props: IHeatmapProps): JSX.Element {
     ];
 
     const newProps
-        = omit<IHeatmapProps, IHeatmapNonBucketProps>(props, ['measure', 'trendBy', 'segmentBy', 'filters']);
+        = omit<IHeatmapProps, keyof IHeatmapBucketProps>(props, ['measure', 'trendBy', 'segmentBy', 'filters']);
 
     return (
         <AfmHeatmap

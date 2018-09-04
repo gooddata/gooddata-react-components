@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { omit } from 'lodash';
-import { Subtract } from 'utility-types';
 import { VisualizationObject, AFM } from '@gooddata/typings';
 
 import { Table as AfmTable } from './afm/Table';
@@ -24,8 +23,6 @@ export interface ITableProps extends ICommonChartProps, ITableBucketProps {
     totalsEditAllowed?: boolean;
 }
 
-type ITableNonBucketProps = Subtract<ITableProps, ITableBucketProps>;
-
 /**
  * [Table](http://sdk.gooddata.com/gooddata-ui/docs/table_component.html)
  * is a component with bucket props measures, attributes, totals, filters
@@ -44,7 +41,7 @@ export function Table(props: ITableProps): JSX.Element {
     ];
 
     const newProps
-        = omit<ITableProps, ITableNonBucketProps>(props, ['measures', 'attributes', 'totals', 'filters']);
+        = omit<ITableProps, keyof ITableBucketProps>(props, ['measures', 'attributes', 'totals', 'filters']);
 
     return (
         <AfmTable

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { omit } from 'lodash';
-import { Subtract } from 'utility-types';
 import { VisualizationObject, AFM } from '@gooddata/typings';
 
 import { ColumnChart as AfmColumnChart } from './afm/ColumnChart';
@@ -20,8 +19,6 @@ export interface IColumnChartBucketProps {
 export interface IColumnChartProps extends ICommonChartProps, IColumnChartBucketProps {
     projectId: string;
 }
-
-type IColumnChartNonBucketProps = Subtract<IColumnChartProps, IColumnChartBucketProps>;
 
 /**
  * [ColumnChart](http://sdk.gooddata.com/gooddata-ui/docs/column_chart_component.html)
@@ -44,7 +41,7 @@ export function ColumnChart(props: IColumnChartProps): JSX.Element {
     ];
 
     const newProps
-        = omit<IColumnChartProps, IColumnChartNonBucketProps>(props, ['measures', 'viewBy', 'stackBy', 'filters']);
+        = omit<IColumnChartProps, keyof IColumnChartBucketProps>(props, ['measures', 'viewBy', 'stackBy', 'filters']);
 
     return (
         <AfmColumnChart

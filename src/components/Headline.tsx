@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { omit } from 'lodash';
-import { Subtract } from 'utility-types';
 import { VisualizationObject } from '@gooddata/typings';
 
 import { Headline as AfmHeadline } from './afm/Headline';
@@ -18,8 +17,6 @@ export interface IHeadlineProps extends ICommonChartProps, IHeadlineBucketProps 
     projectId: string;
 }
 
-type IHeadlineNonBucketProps = Subtract<IHeadlineProps, IHeadlineBucketProps>;
-
 /**
  * Headline
  * is a component with bucket props primaryMeasure, secondaryMeasure, filters
@@ -32,7 +29,8 @@ export function Headline(props: IHeadlineProps): JSX.Element {
         }
     ];
 
-    const newProps = omit<IHeadlineProps, IHeadlineNonBucketProps>(props, ['measure', 'filters']);
+    const newProps = omit<IHeadlineProps, keyof IHeadlineBucketProps>(props,
+        ['primaryMeasure', 'secondaryMeasure', 'filters']);
 
     return (
         <AfmHeadline

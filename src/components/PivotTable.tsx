@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { VisualizationObject, AFM } from '@gooddata/typings';
 import { omit } from 'lodash';
-import { Subtract } from 'utility-types';
 
 import { PivotTable as CorePivotTable } from './core/PivotTable';
 import { dataSourceProvider } from './afm/DataSourceProvider';
@@ -32,7 +31,6 @@ export interface ITableProps extends ICommonChartProps, ITableBucketProps {
     pageSize?: number;
 }
 
-type ITableNonBucketProps = Subtract<ITableProps, ITableBucketProps>;
 /**
  * TODO: Update link to documentation [PivotTable](http://sdk.gooddata.com/gooddata-ui/docs/table_component.html)
  * is a component with bucket props measures, rows, columns, totals, sortBy, filters
@@ -63,8 +61,8 @@ export function PivotTable(props: ITableProps): JSX.Element {
     const PivotTableWithDatasource = dataSourceProvider(CorePivotTable, getPivotTableDimensionsFromAfm, 'PivotTable');
 
     const newProps
-        = omit<ITableProps, ITableNonBucketProps>(props,
-            ['measures', 'attributes', 'rows', 'columns', 'totals', 'filters']);
+        = omit<ITableProps, keyof ITableBucketProps>(props,
+            ['measures', 'rows', 'columns', 'totals', 'filters']);
 
     return (
         <PivotTableWithDatasource
