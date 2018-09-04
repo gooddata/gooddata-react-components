@@ -1,6 +1,6 @@
 import { VisualizationObject, VisualizationClass } from '@gooddata/typings';
 
-export const visualizationObjects: [{ visualizationObject: VisualizationObject.IVisualizationObject }] = [
+export const visualizationObjects: Array<{ visualizationObject: VisualizationObject.IVisualizationObject }> = [
     {
         visualizationObject: {
             content: {
@@ -520,7 +520,7 @@ export const visualizationObjects: [{ visualizationObject: VisualizationObject.I
     }
 ];
 
-export const visualizationClasses: [{ visualizationClass: VisualizationClass.IVisualizationClass }] = [
+export const visualizationClasses: Array<{ visualizationClass: VisualizationClass.IVisualizationClass }> = [
     {
         visualizationClass: {
             content: {
