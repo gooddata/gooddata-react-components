@@ -1,7 +1,7 @@
 // (C) 2007-2018 GoodData Corporation
 @import '~@gooddata/goodstrap/lib/core/styles/themes/indigo/variables';
 
-$ag-icons-path: "~ag-grid/src/styles/balham-icons/";
+$ag-icons-path: '~ag-grid/src/styles/balham-icons/';
 
 $border-color: transparent;
 $font-size: 12px;
@@ -21,7 +21,7 @@ $cell-border-color: transparentize($gd-color-disabled, 0.5);
 @import '~ag-grid/src/styles/ag-grid';
 @import '~ag-grid/src/styles/ag-theme-balham';
 
-.gd-table {
+.gd-pivot-table {
     .ag-header-cell,
     .ag-header-group-cell,
     .ag-header-cell-resize {
