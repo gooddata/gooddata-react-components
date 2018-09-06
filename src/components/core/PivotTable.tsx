@@ -58,8 +58,6 @@ import {
 import { VisualizationTypes } from '../../constants/visualizationTypes';
 import { IColumnDefOptions, IGridCellEvent, IGridHeader, IGridRow } from '../../interfaces/AGGrid';
 
-import '../../../styles/scss/pivotTable.scss';
-
 export interface IPivotTableProps extends ICommonChartProps {
     resultSpec?: AFM.IResultSpec;
     dataSource: IDataSource;
@@ -461,7 +459,10 @@ export class PivotTableInner extends
         ) : null;
 
         return (
-            <div className="gd-table ag-theme-balham s-pivot-table" style={{ height: '100%', position: 'relative' }}>
+            <div
+                className="gd-table gd-pivot-table ag-theme-balham s-pivot-table"
+                style={{ height: '100%', position: 'relative' }}
+            >
                 {tableLoadingOverlay}
                 <AgGridReact
                     {...gridOptions}
