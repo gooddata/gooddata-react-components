@@ -63,7 +63,7 @@ import { VisualizationTypes } from '../../constants/visualizationTypes';
 import { IColumnDefOptions, IGridCellEvent, IGridHeader, IGridRow } from '../../interfaces/AGGrid';
 import * as invariant from 'invariant';
 
-import '../../../styles/scss/pivotTable.scss';
+// import '../../../styles/scss/pivotTable.scss'; // temporarily disable scss import which breaks AD build
 
 export interface IPivotTableProps extends ICommonChartProps {
     resultSpec?: AFM.IResultSpec;
