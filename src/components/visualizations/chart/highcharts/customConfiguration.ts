@@ -325,12 +325,31 @@ function level2LabelsFormatter(config?: IChartConfig) {
     return `${get(this, 'point.name')} (${formatLabel(get(this, 'point.value'), get(this, 'point.format'), config)})`;
 }
 
+function isNullOrUndefined(value: any) {
+    return value === null || value === undefined;
+}
+
 function labelFormatterBubble(config?: IChartConfig) {
     const value = get<number>(this, 'point.z');
     if (isNaN(value)) {
         return null;
     }
-    return formatLabel(value, get(this, 'point.format'), config);
+
+    const xAxisMin = get(this, 'series.xAxis.min');
+    const xAxisMax = get(this, 'series.xAxis.max');
+    const yAxisMin = get(this, 'series.yAxis.min');
+    const yAxisMax = get(this, 'series.yAxis.max');
+
+    if (
+        (!isNullOrUndefined(xAxisMax) && this.x > xAxisMax) ||
+        (!isNullOrUndefined(xAxisMin) && this.x < xAxisMin) ||
+        (!isNullOrUndefined(yAxisMax) && this.y > yAxisMax) ||
+        (!isNullOrUndefined(yAxisMin) && this.y < yAxisMin)
+    ) {
+        return '';
+    } else {
+        return formatLabel(value, get(this, 'point.format'), config);
+    }
 }
 
 function labelFormatterScatter() {
