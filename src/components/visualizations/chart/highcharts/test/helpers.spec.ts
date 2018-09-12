@@ -19,6 +19,11 @@ describe('helpers', () => {
             }
         };
 
+        const minmaxConfig: IChartConfig = {
+            xaxis: { min: '10', max: '20' },
+            yaxis: { min: '10', max: '20' }
+        };
+
         it('should return properties from config', () => {
             expect(getChartProperties(config, VisualizationTypes.COLUMN))
                 .toEqual({
@@ -32,6 +37,22 @@ describe('helpers', () => {
                 .toEqual({
                     yAxisProps: { rotation: '60', visible: false },
                     xAxisProps: { labelsEnabled: true }
+            });
+        });
+
+        it('should ignore min/max for attribute axis in bar chart', () => {
+            expect(getChartProperties(minmaxConfig, VisualizationTypes.BAR))
+                .toEqual({
+                    yAxisProps: {},
+                    xAxisProps: { min: '10', max: '20' }
+            });
+        });
+
+        it('should ignore min/max for attribute axis in colum chart', () => {
+            expect(getChartProperties(minmaxConfig, VisualizationTypes.COLUMN))
+                .toEqual({
+                    yAxisProps: { min: '10', max: '20' },
+                    xAxisProps: { }
             });
         });
     });

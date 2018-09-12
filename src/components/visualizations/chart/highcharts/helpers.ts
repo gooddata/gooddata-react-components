@@ -3,6 +3,7 @@ import flatten = require('lodash/flatten');
 import get = require('lodash/get');
 import map = require('lodash/map');
 import zip = require('lodash/zip');
+import omit = require('lodash/omit');
 import unzip = require('lodash/unzip');
 import initial = require('lodash/initial');
 import tail = require('lodash/tail');
@@ -68,10 +69,14 @@ export const isStacked = (chart: any) => {
     return false;
 };
 
+function removeMinMax(axisConfig: any) {
+    return omit(axisConfig, ['min', 'max']);
+}
+
 export function getChartProperties(config: IChartConfig, type: VisType) {
     return {
-        xAxisProps:  isBarChart(type) ? { ...config.yaxis } : { ...config.xaxis },
-        yAxisProps: isBarChart(type) ? { ...config.xaxis } : { ...config.yaxis }
+        xAxisProps:  isBarChart(type) ? { ...config.yaxis } : removeMinMax({ ...config.xaxis }),
+        yAxisProps: isBarChart(type) ? removeMinMax({ ...config.xaxis }) : { ...config.yaxis }
     };
 }
 
