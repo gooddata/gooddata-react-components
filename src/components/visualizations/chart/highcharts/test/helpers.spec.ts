@@ -43,16 +43,16 @@ describe('helpers', () => {
         it('should ignore min/max for attribute axis in bar chart', () => {
             expect(getChartProperties(minmaxConfig, VisualizationTypes.BAR))
                 .toEqual({
-                    yAxisProps: {},
-                    xAxisProps: { min: '10', max: '20' }
+                    yAxisProps: { min: '10', max: '20' },
+                    xAxisProps: {}
             });
         });
 
-        it('should ignore min/max for attribute axis in colum chart', () => {
-            expect(getChartProperties(minmaxConfig, VisualizationTypes.COLUMN))
+        it('should not ignore min/max for scatter plot', () => {
+            expect(getChartProperties(minmaxConfig, VisualizationTypes.SCATTER))
                 .toEqual({
                     yAxisProps: { min: '10', max: '20' },
-                    xAxisProps: { }
+                    xAxisProps: { min: '10', max: '20' }
             });
         });
     });

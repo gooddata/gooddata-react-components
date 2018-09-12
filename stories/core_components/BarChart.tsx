@@ -166,6 +166,10 @@ storiesOf('Core components/BarChart', module)
                     LoadingComponent={null}
                     ErrorComponent={null}
                     config={{
+                        yaxis: {
+                            min: '0',
+                            max: '1'
+                        },
                         xaxis: {
                             min: '100',
                             max: '600'

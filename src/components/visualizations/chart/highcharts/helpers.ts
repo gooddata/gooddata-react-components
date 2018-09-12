@@ -17,7 +17,7 @@ import sum = require('lodash/sum');
 import { ISeriesItem, ISeriesDataItem } from '../chartOptionsBuilder';
 import { VisualizationTypes, VisType } from '../../../../constants/visualizationTypes';
 import { IChartConfig } from '../Chart';
-import { isBarChart } from '../../utils/common';
+import { isBarChart, isOneOfTypes } from '../../utils/common';
 
 export interface IRectByPoints {
     left: number;
@@ -69,14 +69,21 @@ export const isStacked = (chart: any) => {
     return false;
 };
 
-function removeMinMax(axisConfig: any) {
+function removeMinMax(axisConfig: any, type: VisType) {
+    if (!isOneOfTypes(type, [VisualizationTypes.BAR, VisualizationTypes.COLUMN, VisualizationTypes.LINE])) {
+        return axisConfig;
+    }
+
     return omit(axisConfig, ['min', 'max']);
 }
 
 export function getChartProperties(config: IChartConfig, type: VisType) {
+    const xAxisProps = removeMinMax(isBarChart(type) ? { ...config.yaxis } : { ...config.xaxis }, type);
+    const yAxisProps = isBarChart(type) ? { ...config.xaxis } : { ...config.yaxis };
+
     return {
-        xAxisProps:  isBarChart(type) ? { ...config.yaxis } : removeMinMax({ ...config.xaxis }),
-        yAxisProps: isBarChart(type) ? removeMinMax({ ...config.xaxis }) : { ...config.yaxis }
+        xAxisProps,
+        yAxisProps
     };
 }
 
