@@ -67,9 +67,9 @@
     eslint-plugin-jsx-a11y "6.0.3"
     eslint-plugin-react "7.6.1"
 
-"@gooddata/gooddata-js@8.0.0":
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/gooddata-js/-/gooddata-js-8.0.0.tgz#995c0fa83ffbc33dbef2e86f1d9a58d6eceab97d"
+"@gooddata/gooddata-js@8.1.1-ocetnik-doc-measure-format-2018-09-18T10-49-42-974Z":
+  version "8.1.1-ocetnik-doc-measure-format-2018-09-18T10-49-42-974Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/gooddata-js/-/gooddata-js-8.1.1-ocetnik-doc-measure-format-2018-09-18T10-49-42-974Z.tgz#ddb5e7a5118af3cb13afe0f493aca1d89929e8bb"
   dependencies:
     "@gooddata/typings" "2.3.1"
     es6-promise "3.0.2"

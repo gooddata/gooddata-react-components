@@ -9,6 +9,7 @@ import { ICommonChartProps } from './core/base/BaseChart';
 import { convertBucketsToAFM } from '../helpers/conversion';
 import { getPivotTableDimensions } from '../helpers/dimensions';
 import { getResultSpec } from '../helpers/resultSpec';
+import { IPivotTableConfig } from '../interfaces/Table';
 
 import {
     MEASURES,
@@ -30,6 +31,7 @@ export interface ITableProps extends ICommonChartProps, ITableBucketProps {
     projectId: string;
     totalsEditAllowed?: boolean;
     pageSize?: number;
+    config?: IPivotTableConfig;
 }
 
 type ITableNonBucketProps = Subtract<ITableProps, ITableBucketProps>;
