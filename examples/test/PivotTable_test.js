@@ -25,9 +25,9 @@ fixture('Pivot Table') // eslint-disable-line no-undef
 
 test('should render all tables', async (t) => {
     await checkRender(t, '.s-measures-row-attributes-and-column-attributes', 'Alabama');
-    await checkRender(t, '.s-measures-and-column-attributes', '406006.57195');
+    await checkRender(t, '.s-measures-and-column-attributes', '406,007');
     await checkRender(t, '.s-measures-and-attributes', 'Alabama');
-    await checkRender(t, '.s-measures-only', '4214352.77185');
+    await checkRender(t, '.s-measures-only', '4,214,353');
     await checkRender(t, '.s-row-attributes-only', 'Alabama');
     await checkRender(t, '.s-error', null, null);
 });

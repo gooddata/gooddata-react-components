@@ -36,9 +36,10 @@ import {
 
 import { ICommonChartProps } from './base/BaseChart';
 import { IDataSource } from '../../interfaces/DataSource';
+import { IPivotTableConfig } from '../../interfaces/Table';
 import { BaseVisualization } from './base/BaseVisualization';
 
-import { getCellClassNames } from '../visualizations/table/utils/cell';
+import { getCellClassNames, getMeasureCellFormattedValue, getMeasureCellStyle } from '../../helpers/tableCell';
 
 import {
     IDrillableItem,
@@ -62,6 +63,7 @@ export interface IPivotTableProps extends ICommonChartProps {
     totalsEditAllowed?: boolean;
     getPage: IGetPage;
     pageSize?: number;
+    config?: IPivotTableConfig;
 }
 
 export interface IPivotTableState {
@@ -322,6 +324,8 @@ export class PivotTableInner extends
         const { columnDefs, rowData } = this.state;
         const { pageSize } = this.props;
 
+        const separators = get(this.props, 'config.separators', undefined);
+
         const gridOptions = {
             // Initial data
             columnDefs,
@@ -358,7 +362,15 @@ export class PivotTableInner extends
                     cellClass: this.getCellClass('gd-column-attribute-column')
                 },
                 [MEASURE_COLUMN]: {
-                    cellClass: this.getCellClass('gd-measure-column')
+                    cellClass: this.getCellClass('gd-measure-column'),
+                    valueFormatter: (params: any) => {
+                        const format = this.getMeasureFormat(params);
+                        return getMeasureCellFormattedValue(params.value, format, separators);
+                    },
+                    cellStyle: (params: any) => {
+                        const format = this.getMeasureFormat(params);
+                        return getMeasureCellStyle(params.value, format, separators, true);
+                    }
                 }
             },
 
@@ -393,6 +405,18 @@ export class PivotTableInner extends
                 />
             </div>
         );
+    }
+
+    private getMeasureFormat(params: any): string {
+        const headers = this.state.execution.executionResponse.dimensions[1].headers;
+        const header = headers[headers.length - 1];
+
+        if (Execution.isMeasureGroupHeader(header)) {
+            const measureIndex = params.colDef.measureIndex;
+            return header.measureGroupHeader.items[measureIndex].measureHeaderItem.format;
+        }
+
+        throw new Error(`Cannot get measure format from header ${header}`);
     }
 }
 
