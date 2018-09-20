@@ -1,6 +1,6 @@
 // (C) 2007-2018 GoodData Corporation
 export const VisualizationTypes = {
-    BAR: 'bar',
+    BAR: 'bar' as 'bar',
     COLUMN: 'column' as 'column',
     LINE: 'line' as 'line',
     PIE: 'pie' as 'pie',

@@ -66,14 +66,9 @@ export class ColorFactory {
 
 export interface IColorStrategy {
     getColorByIndex(index: number): string;
-    getColorPalette(): string[];
 }
-
 export abstract class ColorStrategy implements IColorStrategy {
     protected palette: HighChartColorPalette;
-    // may be use blanc constructor and this move to Init function
-    // it will be fine because than we could create proper interface for color strategy that cover also creation of item
-    // also hide items from constructor/init into private class members to simplify other methods
     constructor(
         colorPalette: ColorPalette,
         measureGroup: MeasureGroupType,
@@ -93,10 +88,6 @@ export abstract class ColorStrategy implements IColorStrategy {
         return this.palette[index];
     }
 
-    public getColorPalette(): string[] {
-        return this.palette;
-    }
-
     protected abstract createPalette(
         colorPalette: ColorPalette,
         measureGroup: MeasureGroupType,
@@ -107,15 +98,6 @@ export abstract class ColorStrategy implements IColorStrategy {
 }
 
 export class MetricColorStrategy extends ColorStrategy {
-    constructor(
-        colorPalette: ColorPalette,
-        measureGroup: MeasureGroupType,
-        viewByAttribute: any,
-        stackByAttribute: any,
-        afm: AFM.IAfm
-    ) {
-        super(colorPalette, measureGroup, viewByAttribute, stackByAttribute, afm);
-    }
 
     protected createPalette(
         colorPalette: ColorPalette,
@@ -151,15 +133,6 @@ export class MetricColorStrategy extends ColorStrategy {
 }
 
 export class AttributeColorStrategy extends ColorStrategy {
-    constructor(
-        colorPalette: ColorPalette,
-        measureGroup: MeasureGroupType,
-        viewByAttribute: any,
-        stackByAttribute: any,
-        afm: AFM.IAfm
-    ) {
-        super(colorPalette, measureGroup, viewByAttribute, stackByAttribute, afm);
-    }
 
     protected createPalette(
         colorPalette: ColorPalette,
@@ -174,14 +147,9 @@ export class AttributeColorStrategy extends ColorStrategy {
 }
 
 export class HeatMapColorStrategy extends ColorStrategy {
-    constructor(
-        colorPalette: ColorPalette,
-        measureGroup: MeasureGroupType,
-        viewByAttribute: any,
-        stackByAttribute: any,
-        afm: AFM.IAfm
-    ) {
-        super(colorPalette, measureGroup, viewByAttribute, stackByAttribute, afm);
+
+    public getColorByIndex(index: number): string {
+        return this.palette[index % this.palette.length];
     }
 
     protected createPalette(
@@ -196,16 +164,6 @@ export class HeatMapColorStrategy extends ColorStrategy {
 }
 
 export class TreeMapColorStrategy extends MetricColorStrategy {
-
-    constructor(
-        colorPalette: ColorPalette,
-        measureGroup: MeasureGroupType,
-        viewByAttribute: any,
-        stackByAttribute: any,
-        afm: AFM.IAfm
-    ) {
-        super(colorPalette, measureGroup, viewByAttribute, stackByAttribute, afm);
-    }
 
     protected createPalette(
         colorPalette: ColorPalette,

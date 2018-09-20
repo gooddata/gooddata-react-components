@@ -125,7 +125,6 @@ export interface IChartOptions {
     hasStackByAttribute?: boolean;
     hasViewByAttribute?: boolean;
     legendLayout?: string;
-    colorPalette?: string[];
     dualAxis?: boolean;
     xAxes?: any;
     yAxes?: any;
@@ -634,7 +633,7 @@ export function getTreemapStackedSeriesDataWithMeasures(
             id: `${index}`,
             name: measureGroupItem.measureHeaderItem.name,
             format: measureGroupItem.measureHeaderItem.format,
-            color: colorStrategy.getColorByIndex[index],
+            color: colorStrategy.getColorByIndex(index),
             showInLegend: true,
             legendIndex: index
         });
@@ -937,7 +936,7 @@ export function findInDimensionHeaders(dimensions: Execution.IResultDimension[],
 export function findMeasureGroupInDimensions(dimensions: Execution.IResultDimension[]) {
     return findInDimensionHeaders(dimensions,
         (headerType: string, header: Execution.IMeasureGroupHeader['measureGroupHeader'],
-        _dimensionIndex: number, headerIndex: number, headerCount: number) => {
+         _dimensionIndex: number, headerIndex: number, headerCount: number) => {
             const measureGroupHeader = headerType === 'measureGroupHeader' ? header : null;
             if (measureGroupHeader) {
                 invariant(headerIndex === headerCount - 1, 'MeasureGroup must be the last header in it\'s dimension');
@@ -1027,8 +1026,10 @@ export function getDrillableSeries(
                 measures = [unwrap(measureGroup.items[measureIndex])];
             } else {
                 // measureIndex is usually seriesIndex,
-                // except for stack by attribute and metricOnly pie or donut chart it is looped-around pointIndex instead
-                // Looping around the end of items array only works when measureGroup is the last header on it's dimension
+                // except for stack by attribute and metricOnly pie or donut chart
+                // it is looped-around pointIndex instead
+                // Looping around the end of items array only works when
+                // measureGroup is the last header on it's dimension
                 // We do not support setups with measureGroup before attributeHeaders
                 const measureIndex = !stackByAttribute && !isMultiMeasureWithOnlyMeasures
                     ? seriesIndex : pointIndex % measureGroup.items.length;
@@ -1317,13 +1318,12 @@ export function getHeatmapDataClasses(
     const safeMin = parseFloat(Number(min).toPrecision(HIGHCHARTS_PRECISION));
     const safeMax = parseFloat(Number(max).toPrecision(HIGHCHARTS_PRECISION));
     const dataClasses = [];
-    const colorPalette = colorStrategy.getColorPalette();
 
     if (min === max) {
         dataClasses.push({
             from: min,
             to: max,
-            color: colorPalette[DEFAULT_HEATMAP_COLOR_INDEX]
+            color: colorStrategy.getColorByIndex(DEFAULT_HEATMAP_COLOR_INDEX)
         });
     } else {
         const step = (safeMax - safeMin) / HEAT_MAP_CATEGORIES_COUNT;
@@ -1332,7 +1332,7 @@ export function getHeatmapDataClasses(
             dataClasses.push({
                 from: currentSum,
                 to: i === HEAT_MAP_CATEGORIES_COUNT - 1 ? safeMax : currentSum + step,
-                color: colorPalette[i % colorPalette.length]
+                color: colorStrategy.getColorByIndex(i)
             });
             currentSum += step;
         }
@@ -1535,7 +1535,6 @@ export function getChartOptions(
         return {
             type,
             stacking,
-            colorPalette: colorStrategy.getColorPalette(),
             xAxes,
             yAxes,
             legendLayout: config.legendLayout || 'horizontal',
@@ -1573,7 +1572,6 @@ export function getChartOptions(
             type,
             stacking,
             legendLayout: 'horizontal',
-            colorPalette: colorStrategy.getColorPalette(),
             yAxes,
             xAxes,
             data: {
@@ -1614,7 +1612,6 @@ export function getChartOptions(
             grid: {
                 enabled: false
             },
-            colorPalette: colorStrategy.getColorPalette(),
             colorAxis: {
                 dataClasses: getHeatmapDataClasses(series, colorStrategy)
             },
@@ -1651,7 +1648,6 @@ export function getChartOptions(
             stacking,
             hasViewByAttribute: Boolean(stackByAttribute),
             legendLayout: 'horizontal',
-            colorPalette: colorStrategy.getColorPalette(),
             yAxes,
             xAxes,
             data: {
@@ -1680,7 +1676,6 @@ export function getChartOptions(
         hasStackByAttribute: Boolean(stackByAttribute),
         hasViewByAttribute: Boolean(viewByAttribute),
         legendLayout: config.legendLayout || 'horizontal',
-        colorPalette: colorStrategy.getColorPalette(),
         xAxes,
         yAxes,
         data: {
