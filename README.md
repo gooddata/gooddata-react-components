@@ -71,3 +71,4 @@ Then open https://localhost:8999 and login using Live Examples account (you can 
 (C) 2007-2018 GoodData Corporation
 
 For more information, please see [LICENSE](https://github.com/gooddata/gooddata-react-components/blob/master/LICENSE)
+
