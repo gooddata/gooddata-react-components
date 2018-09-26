@@ -1,4 +1,4 @@
-[![npm version](https://badge.fury.io/js/%40gooddata%2Freact-components.svg)](https://www.npmjs.com/package/@gooddata/react-components) 
+[![npm version](https://badge.fury.io/js/%40gooddata%2Freact-components.svg)](https://www.npmjs.com/package/@gooddata/react-components)
 
 # GoodData.UI React components
 > A React-based JavaScript library for building data-driven applications
@@ -65,7 +65,7 @@ yarn examples
 Then open https://localhost:8999 and login using Live Examples account (you can [create one here](https://gooddata-examples.herokuapp.com/registration)).
 
 ## Changelog
-- see [CHANGELOG.md](CHANGELOG.md)
+see [CHANGELOG.md](CHANGELOG.md)
 
 ## License
 (C) 2007-2018 GoodData Corporation
