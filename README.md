@@ -57,7 +57,7 @@ heroku open
 ### Run Live Examples Locally
 To run *GoodData.UI Live Examples* locally:
 ```bash
-git clone <this-repository>
+git clone git@github.com:gooddata/gooddata-react-components.git
 cd  <repository-folder>
 yarn install --pure-lockfile
 yarn examples
