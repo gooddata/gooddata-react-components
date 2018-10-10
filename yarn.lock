@@ -119,11 +119,11 @@
     js-cookie "^2.1.4"
     lodash "^4.17.4"
 
-"@gooddata/mock-js@1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/mock-js/-/mock-js-1.5.0.tgz#e49824a697ce6ebdc401c1a05023e3cf85fe47ff"
+"@gooddata/mock-js@1.9.1-ocetnik-doc-measure-group-without-measure-in-afm-2018-10-10T12-20-06-521Z":
+  version "1.9.1-ocetnik-doc-measure-group-without-measure-in-afm-2018-10-10T12-20-06-521Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/mock-js/-/mock-js-1.9.1-ocetnik-doc-measure-group-without-measure-in-afm-2018-10-10T12-20-06-521Z.tgz#d723b80d5bb5256ba9c6494a8e700a620aefe7d4"
   dependencies:
-    "@gooddata/typings" "2.3.0"
+    "@gooddata/typings" "2.4.0"
     "@types/seedrandom" "2.4.27"
     "@types/uuid" "3.4.3"
     body-parser "1.17.1"
@@ -161,15 +161,15 @@
     tslint-eslint-rules "5.4.0"
     tslint-react "3.6.0"
 
-"@gooddata/typings@2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/typings/-/typings-2.3.0.tgz#d8768c153d0a198d3665de23cec8cc32068a5096"
-  dependencies:
-    lodash "4.17.4"
-
 "@gooddata/typings@2.3.1":
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/@gooddata/typings/-/typings-2.3.1.tgz#b8d1e7819b3ec3dab111dcefbf26e692bdabe41d"
+  dependencies:
+    lodash "4.17.4"
+
+"@gooddata/typings@2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@gooddata/typings/-/typings-2.4.0.tgz#0ad843f5c98cb21c5d3c7f526f8e4bcea9cd0f80"
   dependencies:
     lodash "4.17.4"
 

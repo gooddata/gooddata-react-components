@@ -14,7 +14,7 @@
   ],
   "devDependencies": {
     "@gooddata/eslint-config": "0.0.20",
-    "@gooddata/mock-js": "1.5.0",
+    "@gooddata/mock-js": "1.9.1-ocetnik-doc-measure-group-without-measure-in-afm-2018-10-10T12-20-06-521Z",
     "@gooddata/test-storybook": "1.3.0",
     "@gooddata/tslint-config": "0.0.13",
     "@storybook/addon-actions": "3.4.8",
