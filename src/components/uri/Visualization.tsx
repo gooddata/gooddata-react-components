@@ -8,7 +8,7 @@ import { injectIntl, intlShape, InjectedIntlProps } from 'react-intl';
 
 import { IntlWrapper } from '../core/base/IntlWrapper';
 import { BaseChart } from '../core/base/BaseChart';
-import { IChartConfig } from '../visualizations/chart/Chart';
+import { IChartConfig, IColorPalette } from '../visualizations/chart/Chart';
 import { SortableTable } from '../core/SortableTable';
 import { Headline } from '../core/Headline';
 import { IEvents, OnLegendReady } from '../../interfaces/Events';
@@ -29,6 +29,8 @@ import {
 import { setTelemetryHeaders } from '../../helpers/utils';
 import { convertErrors, generateErrorMap, IErrorMap } from '../../helpers/errorHandlers';
 import DerivedMeasureTitleSuffixFactory from '../../factory/DerivedMeasureTitleSuffixFactory';
+
+import { GdcContext } from '../GdcWrapper';
 
 export { Requireable };
 
@@ -200,6 +202,8 @@ export class VisualizationWrapped
 
     public componentDidMount() {
         const { projectId, uri, identifier, filters } = this.props;
+
+        // console.log(this.props.config.colorPalette);
 
         this.adapter = new ExecuteAfmAdapter(this.sdk, projectId);
         this.visualizationUri = uri;
@@ -407,7 +411,26 @@ export class Visualization extends React.PureComponent<IVisualizationProps> {
     public render() {
         return (
             <IntlWrapper locale={this.props.locale}>
-                <IntlVisualization {...this.props}/>
+                <GdcContext.Consumer>
+                    {(context) => {
+                        const colorPalette: IColorPalette = this.props.config && this.props.config.colorPalette
+                            ? this.props.config.colorPalette
+                            : context.colorPalette;
+
+                        const props = {
+                            ...this.props,
+                            config: {
+                                ...this.props.config,
+                                colorPalette
+                            }
+                        };
+
+                        return (
+                            <IntlVisualization {...props} />
+                        );
+                    }
+                }
+                </GdcContext.Consumer>
             </IntlWrapper>
         );
     }

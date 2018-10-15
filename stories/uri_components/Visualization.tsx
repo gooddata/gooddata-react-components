@@ -12,6 +12,8 @@ import '../../styles/scss/charts.scss';
 import '../../styles/scss/table.scss';
 import { GERMAN_SEPARATORS } from '../data/numberFormat';
 
+import GdcWrapper from '../../src/components/GdcWrapper';
+
 const defaultFilter: AFM.IAbsoluteDateFilter = {
     absoluteDateFilter: {
         dataSet: {
@@ -231,6 +233,22 @@ storiesOf('URI components', module)
                     LoadingComponent={null}
                     ErrorComponent={null}
                 />
+            </div>
+        )
+    ))
+    .add('custom color palette', () => (
+        screenshotWrap(
+            <div style={{ width: 800, height: 400 }}>
+                <GdcWrapper projectId="myproject">
+                    <Visualization
+                        projectId="myproject"
+                        uri={'/gdc/md/myproject/obj/1007'}
+                        onError={onErrorHandler}
+                        locale="en-US"
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                    />
+                </GdcWrapper>
             </div>
         )
     ))
