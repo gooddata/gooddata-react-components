@@ -21,6 +21,7 @@ import {
     DATA_LABELS_HIDDEN_CONFIG,
     DATA_LABELS_AUTO_CONFIG
 } from '../data/configProps';
+import { CUSTOM_COLOR_PALETTE } from '../data/colors';
 
 const wrapperStyle = { width: 400, height: 400 };
 
@@ -256,4 +257,31 @@ storiesOf('Core components/PieChart', module)
                 />
             </div>
         )
+    ))
+    .add('with custom colors', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <PieChart
+                    projectId="storybook"
+                    measures={[MEASURE_1]}
+                    viewBy={ATTRIBUTE_1}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                    config={{ colorPalette: CUSTOM_COLOR_PALETTE }}
+                />
+            </div>
+        )
+    ))
+    .add('with two measures and custom colors', () => (
+        <div style={wrapperStyle}>
+            <PieChart
+                projectId="storybook"
+                measures={[MEASURE_1, MEASURE_2]}
+                onError={onErrorHandler}
+                LoadingComponent={null}
+                ErrorComponent={null}
+                config={{ colorPalette: CUSTOM_COLOR_PALETTE }}
+            />
+        </div>
     ));

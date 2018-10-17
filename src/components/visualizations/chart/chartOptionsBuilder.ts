@@ -1424,6 +1424,7 @@ export function getChartOptions(
     if (isOneOfTypes(type, sortedByMeasureTypes)) {
         const dataPoints = series[0].data;
         const indexSortOrder: number[] = [];
+        const originalDataPoints = cloneDeep(dataPoints);
         const sortedDataPoints = dataPoints.sort((pointDataA: IPointData, pointDataB: IPointData) => {
             if (pointDataA.y === pointDataB.y) { return 0; }
             return pointDataB.y - pointDataA.y;
@@ -1433,7 +1434,7 @@ export function getChartOptions(
             return {
                 // after sorting, colors need to be reassigned in original order and legendIndex needs to be reset
                 ...dataPoint,
-                color: get(dataPoints[dataPoint.legendIndex], 'color'),
+                color: get(originalDataPoints[dataPointIndex], 'color'),
                 legendIndex: dataPointIndex
             };
         });
