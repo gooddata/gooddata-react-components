@@ -10,6 +10,32 @@ module.exports = {
         title: 'Storybook project v1',
         identifier: 'storybook'
     },
+    styleSettings: {
+        chartPalette: [
+            {
+                guid: 'red',
+                fill: {
+                    r: 255,
+                    g: 0,
+                    b: 0
+                }
+            }, {
+                guid: 'green',
+                fill: {
+                    r: 0,
+                    g: 255,
+                    b: 0
+                }
+            }, {
+                guid: 'blue',
+                fill: {
+                    r: 0,
+                    g: 0,
+                    b: 255
+                }
+            }
+        ]
+    },
     groups: [{
         metrics: [{
                 identifier: '1',
