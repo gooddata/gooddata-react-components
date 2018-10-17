@@ -51,11 +51,9 @@ export default class GdcWrapper extends React.PureComponent<IGdcWrapperProps, IG
         };
     }
 
-    public componentDidMount() {
-        this.sdk.project.getFeatureFlags(this.props.projectId)
-            .then(result => this.setState(
-                { colorPaletteEnabled: Boolean(result.enableColorPalette) },
-                this.getColorPalette));
+    public async componentDidMount() {
+        const featureFlags = await this.sdk.project.getFeatureFlags(this.props.projectId);
+        this.setState({ colorPaletteEnabled: Boolean(featureFlags.enableColorPalette) }, this.getColorPalette);
     }
 
     public render() {
@@ -67,10 +65,12 @@ export default class GdcWrapper extends React.PureComponent<IGdcWrapperProps, IG
         );
     }
 
-    private getColorPalette() {
+    private async getColorPalette() {
         if (this.state.colorPaletteEnabled) {
-            this.sdk.project.getColorPaletteWithGuids(this.props.projectId)
-            .then(result => result ? this.setState({ colorPalette: result }) : null);
+            const colorPalette = await this.sdk.project.getColorPaletteWithGuids(this.props.projectId);
+            if (colorPalette) {
+                this.setState({ colorPalette });
+            }
         }
     }
 }
