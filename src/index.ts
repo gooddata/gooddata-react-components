@@ -24,6 +24,7 @@ import * as PropTypes from './proptypes/index';
 import { generateDimensions } from './helpers/dimensions';
 import * as BucketNames from './constants/bucketNames';
 import * as OverTimeComparisonHelper from './helpers/overTimeComparisonHelper';
+import * as CacheUtils from './helpers/cacheUtils';
 import DerivedMeasureTitleSuffixFactory from './factory/DerivedMeasureTitleSuffixFactory';
 import { IDataSourceProviderInjectedProps } from './components/afm/DataSourceProvider';
 
@@ -99,6 +100,7 @@ export {
     DonutChart,
     Heatmap,
     OverTimeComparisonHelper,
+    CacheUtils,
     DerivedMeasureTitleSuffixFactory,
     PropTypes,
     RuntimeError,

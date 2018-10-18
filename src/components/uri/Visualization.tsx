@@ -1,6 +1,7 @@
 // (C) 2007-2018 GoodData Corporation
 import * as React from 'react';
-import { SDK, factory as createSdk, DataLayer, ApiResponse } from '@gooddata/gooddata-js';
+import { SDK, factory as createSdk, DataLayer, ApiResponse, IColorPalette } from '@gooddata/gooddata-js';
+import { CacheUtils } from '../../index';
 import noop = require('lodash/noop');
 import isEqual = require('lodash/isEqual');
 import { AFM, VisualizationObject, VisualizationClass, Localization } from '@gooddata/typings';
@@ -92,6 +93,7 @@ export interface IVisualizationState {
     totals: VisualizationObject.IVisualizationTotal[];
     error?: RuntimeError;
     mdObject?: VisualizationObject.IVisualizationObject;
+    colorPalette?: IColorPalette;
 }
 
 export interface IVisualizationExecInfo {
@@ -167,7 +169,8 @@ export class VisualizationWrapped
             resultSpec: null,
             totals: [],
             error: null,
-            mdObject: null
+            mdObject: null,
+            colorPalette: null
         };
 
         const sdk = props.sdk || createSdk();
@@ -209,6 +212,10 @@ export class VisualizationWrapped
             identifier,
             filters
         );
+
+        CacheUtils.getCachedData(projectId, CacheUtils.COLOR_PALETTE, this.sdk).then((result: IColorPalette) => {
+            this.setState({ colorPalette: result });
+        });
     }
 
     public componentWillUnmount() {
@@ -262,7 +269,7 @@ export class VisualizationWrapped
             LoadingComponent,
             ErrorComponent
         } = this.props;
-        const { resultSpec, type, totals, error, isLoading, mdObject } = this.state;
+        const { resultSpec, type, totals, error, isLoading, mdObject, colorPalette } = this.state;
         const mdObjectContent =  mdObject && mdObject.content;
         const properties = mdObjectContent
             && mdObjectContent.properties
@@ -270,6 +277,7 @@ export class VisualizationWrapped
         const finalConfig = {
             ...properties,
             ...config,
+            colorPalette,
             mdObject: mdObjectContent
         };
 
