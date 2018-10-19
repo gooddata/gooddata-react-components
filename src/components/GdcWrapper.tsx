@@ -1,8 +1,6 @@
 // (C) 2007-2018 GoodData Corporation
 import * as React from 'react';
 import { SDK, factory as createSdk } from '@gooddata/gooddata-js';
-
-// import { DEFAULT_COLOR_PALETTE } from './visualizations/utils/color';
 import { IColorPaletteItem, IColorPalette } from '../components/visualizations/chart/Chart';
 
 declare module 'react' {
@@ -22,12 +20,12 @@ declare module 'react' {
     function createContext<T>(defaultValue: T, calculateChangedBits?: (prev: T, next: T) => number): IContext<T>;
 }
 
-interface IGdcWrapperProps {
+export interface IGdcWrapperProps {
     sdk?: SDK;
     projectId?: string;
 }
 
-interface IGdcWrapperState {
+export interface IGdcWrapperState {
     colorPalette: IColorPaletteItem[];
     colorPaletteEnabled: boolean;
 }

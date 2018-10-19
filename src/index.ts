@@ -42,6 +42,7 @@ import { ScatterPlot } from './components/ScatterPlot';
 import { ComboChart } from './components/ComboChart';
 import { FunnelChart } from './components/FunnelChart';
 import { Heatmap } from './components/Heatmap';
+import GdcWrapper from './components/GdcWrapper';
 import Chart,
     { ILegendConfig, IChartConfig, IColorPalette, IColorPaletteItem } from './components/visualizations/chart/Chart';
 import ChartTransformation from './components/visualizations/chart/ChartTransformation';
@@ -78,6 +79,7 @@ export {
     ErrorComponent,
     Execute,
     generateDimensions,
+    GdcWrapper,
     Headline,
     IBaseChartProps,
     ICommonVisualizationProps,
