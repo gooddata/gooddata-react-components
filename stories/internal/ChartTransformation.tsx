@@ -52,6 +52,29 @@ function getChart({
     ), height, width, minHeight, minWidth, key);
 }
 
+function getDualAxesChart(
+    legendPosition = 'top',
+    type = 'column',
+    dataSet = fixtures.barChartWith3MetricsAndViewByAttribute,
+    config = fixtures.dualAxesChartWith3MetricsAndViewByAttributeConfig) {
+    return wrap(
+        <ChartTransformation
+            config={{
+                type,
+                legend: {
+                    enabled: true,
+                    position: legendPosition
+                },
+                legendLayout: 'horizontal',
+                colorPalette: fixtures.customPalette,
+                ...config
+            }}
+            {...dataSet}
+            onDataTooLarge={identity}
+        />
+    );
+}
+
 class DynamicChart extends React.Component<any, any> {
     private fixtures: any;
     private legendOptions: any;
@@ -459,6 +482,50 @@ storiesOf('Internal/HighCharts/ChartTransformation', module)
             )
         );
     })
+    .add('Column dual axes chart with 3 metrics and view by attribute', () => {
+        const dataSet = fixtures.barChartWith3MetricsAndViewByAttribute;
+
+        return screenshotWrap(
+            wrap(
+                <ChartTransformation
+                    config={{
+                        type: 'column',
+                        legend: {
+                            enabled: true,
+                            position: 'top'
+                        },
+                        legendLayout: 'horizontal',
+                        colorPalette: fixtures.customPalette,
+                        ...fixtures.dualAxesChartWith3MetricsAndViewByAttributeConfig
+                    }}
+                    {...dataSet}
+                    onDataTooLarge={identity}
+                />
+            )
+        );
+    })
+    .add('Column right axes chart with 2 metrics and view by attribute', () => {
+        const dataSet = fixtures.barChartWith2MetricsAndViewByAttribute;
+
+        return screenshotWrap(
+            wrap(
+                <ChartTransformation
+                    config={{
+                        type: 'column',
+                        legend: {
+                            enabled: true,
+                            position: 'top'
+                        },
+                        legendLayout: 'horizontal',
+                        colorPalette: fixtures.customPalette,
+                        ...fixtures.dualAxesChartWith2MetricsAndViewByAttributeConfig
+                    }}
+                    {...dataSet}
+                    onDataTooLarge={identity}
+                />
+            )
+        );
+    })
     .add('Bar chart with viewBy and stackBy attribute', () => {
         const dataSet = fixtures.barChartWithStackByAndViewByAttributes;
 
@@ -486,6 +553,50 @@ storiesOf('Internal/HighCharts/ChartTransformation', module)
             )
         );
     })
+    .add('Bar dual axes chart with 3 metrics and view by attribute', () => {
+        const dataSet = fixtures.barChartWith3MetricsAndViewByAttribute;
+
+        return screenshotWrap(
+            wrap(
+                <ChartTransformation
+                    config={{
+                        type: 'bar',
+                        legend: {
+                            enabled: true,
+                            position: 'top'
+                        },
+                        legendLayout: 'horizontal',
+                        colorPalette: fixtures.customPalette,
+                        ...fixtures.dualAxesChartWith3MetricsAndViewByAttributeConfig
+                    }}
+                    {...dataSet}
+                    onDataTooLarge={identity}
+                />
+            )
+        );
+    })
+    .add('Bar right axes chart with 2 metrics and view by attribute', () => {
+        const dataSet = fixtures.barChartWith2MetricsAndViewByAttribute;
+
+        return screenshotWrap(
+            wrap(
+                <ChartTransformation
+                    config={{
+                        type: 'bar',
+                        legend: {
+                            enabled: true,
+                            position: 'top'
+                        },
+                        legendLayout: 'horizontal',
+                        colorPalette: fixtures.customPalette,
+                        ...fixtures.dualAxesChartWith2MetricsAndViewByAttributeConfig
+                    }}
+                    {...dataSet}
+                    onDataTooLarge={identity}
+                />
+            )
+        );
+    })
     .add('Line chart with viewBy and stackBy attribute', () => {
         const dataSet = fixtures.barChartWithStackByAndViewByAttributes;
 
@@ -506,6 +617,50 @@ storiesOf('Internal/HighCharts/ChartTransformation', module)
                         },
                         legendLayout: 'horizontal',
                         colorPalette: fixtures.customPalette
+                    }}
+                    {...dataSet}
+                    onDataTooLarge={identity}
+                />
+            )
+        );
+    })
+    .add('Line dual axes chart with 3 metrics and view by attribute', () => {
+        const dataSet = fixtures.barChartWith3MetricsAndViewByAttribute;
+
+        return screenshotWrap(
+            wrap(
+                <ChartTransformation
+                    config={{
+                        type: 'line',
+                        legend: {
+                            enabled: true,
+                            position: 'top'
+                        },
+                        legendLayout: 'horizontal',
+                        colorPalette: fixtures.customPalette,
+                        ...fixtures.dualAxesChartWith3MetricsAndViewByAttributeConfig
+                    }}
+                    {...dataSet}
+                    onDataTooLarge={identity}
+                />
+            )
+        );
+    })
+    .add('Line right axes chart with 2 metrics and view by attribute', () => {
+        const dataSet = fixtures.barChartWith2MetricsAndViewByAttribute;
+
+        return screenshotWrap(
+            wrap(
+                <ChartTransformation
+                    config={{
+                        type: 'line',
+                        legend: {
+                            enabled: true,
+                            position: 'top'
+                        },
+                        legendLayout: 'horizontal',
+                        colorPalette: fixtures.customPalette,
+                        ...fixtures.dualAxesChartWith2MetricsAndViewByAttributeConfig
                     }}
                     {...dataSet}
                     onDataTooLarge={identity}
@@ -888,6 +1043,29 @@ storiesOf('Internal/HighCharts/ChartTransformation', module)
                     legendPosition: 'right',
                     dataSet: fixtures.barChartWith3MetricsAndViewByAttribute
                 })}
+            </div>
+        );
+    })
+    .add('Legend positions with dual axes column chart', () => {
+        const dataSet = fixtures.barChartWith18MetricsAndViewByAttribute;
+        const config  = fixtures.dualAxesChartWith18MetricsAndViewByAttributeConfig;
+
+        return screenshotWrap(
+            <div>
+                {getDualAxesChart('top', 'column', dataSet, config)}
+                {getDualAxesChart('bottom', 'column', dataSet, config)}
+                {getDualAxesChart('left', 'column', dataSet, config)}
+                {getDualAxesChart('right', 'column', dataSet, config)}
+            </div>
+        );
+    })
+    .add('Legend paging with dual axes bar chart', () => {
+        const dataSet = fixtures.barChartWith60MetricsAndViewByAttribute;
+        const config  = fixtures.dualAxesChartWith60MetricsAndViewByAttributeConfig;
+        return screenshotWrap(
+            <div>
+                {getDualAxesChart('left', 'bar', dataSet, config)}
+                {getDualAxesChart('right', 'bar', dataSet, config)}
             </div>
         );
     })

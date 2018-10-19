@@ -14,6 +14,11 @@ import { CUSTOM_COLORS } from '../data/colors';
 import { onErrorHandler } from '../mocks';
 import '../../styles/scss/charts.scss';
 import { GERMAN_SEPARATORS } from '../data/numberFormat';
+import { ATTRIBUTE_1, MEASURE_1, MEASURE_2, MEASURE_3 } from '../data/componentProps';
+import { getDualAxesBuckets, getDualAxesConfigProps } from '../../src/helpers/dualAxes';
+import { ATTRIBUTE } from '../../src/constants/bucketNames';
+import { VisualizationObject } from '@gooddata/typings';
+import { convertBucketsToAFM } from '../../src/helpers/conversion';
 
 const wrapperStyle = { width: 800, height: 400 };
 
@@ -84,4 +89,58 @@ storiesOf('AFM components/LineChart', module)
                 />
             </div>
         )
-    ));
+    ))
+    .add('dual axes with three measures and one attribute', () => {
+        const props: any = {
+            measures:           [MEASURE_3],
+            secondaryMeasures:  [MEASURE_1, MEASURE_2]
+        };
+
+        const buckets: VisualizationObject.IBucket[] = [
+            ...getDualAxesBuckets(props),
+            {
+                localIdentifier: ATTRIBUTE,
+                items: [ATTRIBUTE_1]
+            }
+        ];
+
+        return screenshotWrap(
+            <div style={wrapperStyle}>
+                <LineChart
+                    config={getDualAxesConfigProps(buckets)}
+                    projectId="storybook"
+                    afm={convertBucketsToAFM(buckets)}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        );
+    })
+    .add('only right axes with two measures and one attribute', () => {
+        const props: any = {
+            measures:           [],
+            secondaryMeasures:  [MEASURE_1, MEASURE_2]
+        };
+
+        const buckets: VisualizationObject.IBucket[] = [
+            ...getDualAxesBuckets(props),
+            {
+                localIdentifier: ATTRIBUTE,
+                items: [ATTRIBUTE_1]
+            }
+        ];
+
+        return screenshotWrap(
+            <div style={wrapperStyle}>
+                <LineChart
+                    config={getDualAxesConfigProps(buckets)}
+                    projectId="storybook"
+                    afm={convertBucketsToAFM(buckets)}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        );
+    });

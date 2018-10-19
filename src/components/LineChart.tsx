@@ -2,15 +2,17 @@
 import * as React from 'react';
 import { omit } from 'lodash';
 import { Subtract } from 'utility-types';
-import { VisualizationObject, AFM } from '@gooddata/typings';
+import { AFM, VisualizationObject } from '@gooddata/typings';
 
 import { LineChart as AfmLineChart } from './afm/LineChart';
 import { ICommonChartProps } from './core/base/BaseChart';
 import { convertBucketsToAFM } from '../helpers/conversion';
 import { getStackingResultSpec } from '../helpers/resultSpec';
-import { MEASURES, ATTRIBUTE, STACK } from '../constants/bucketNames';
+import { ATTRIBUTE, STACK } from '../constants/bucketNames';
+import { IDualAxesChartProps } from '../interfaces/DualAxes';
+import { getDualAxesBuckets, getDualAxesConfigProps } from '../helpers/dualAxes';
 
-export interface ILineChartBucketProps {
+export interface ILineChartBucketProps extends IDualAxesChartProps {
     measures: VisualizationObject.BucketItem[];
     trendBy?: VisualizationObject.IVisualizationAttribute;
     segmentBy?: VisualizationObject.IVisualizationAttribute;
@@ -34,10 +36,7 @@ export interface ILineChartProps extends ICommonChartProps {
  */
 export function LineChart(props: ILineChartProps): JSX.Element {
     const buckets: VisualizationObject.IBucket[] = [
-        {
-            localIdentifier: MEASURES,
-            items: props.measures || []
-        },
+        ...getDualAxesBuckets(props),
         {
             localIdentifier: ATTRIBUTE,
             items: props.trendBy ? [props.trendBy] : []
@@ -49,7 +48,15 @@ export function LineChart(props: ILineChartProps): JSX.Element {
     ];
 
     const newProps
-        = omit<ILineChartProps, ILineChartNonBucketProps>(props, ['measures', 'trendBy', 'segmentBy', 'filters']);
+        = omit<ILineChartProps, ILineChartNonBucketProps>(
+        props,
+        ['measures', 'secondaryMeasures', 'trendBy', 'segmentBy', 'filters']
+    );
+
+    newProps.config = {
+        ...newProps.config,
+        ...getDualAxesConfigProps(buckets)
+    };
 
     return (
         <AfmLineChart

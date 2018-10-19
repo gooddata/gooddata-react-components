@@ -49,13 +49,13 @@ export interface IChartConfig {
     stacking?: boolean;
     grid?: any;
     mdObject?: VisualizationObject.IVisualizationObjectContent;
-    yFormat?: string;
-    yLabel?: string;
-    xLabel?: string;
     xFormat?: string;
-    chart?: any;
+    yFormat?: string;
+    xLabel?: string;
+    yLabel?: string;
     xaxis?: IAxisConfig;
     yaxis?: IAxisConfig;
+    chart?: any;
     separators?: ISeparators;
     dataLabels?: IDataLabelsConfig;
 }

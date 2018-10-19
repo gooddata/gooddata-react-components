@@ -16,7 +16,8 @@ import {
     MEASURE_2_SORT_ITEM,
     MEASURE_WITH_FORMAT,
     ARITHMETIC_MEASURE_SIMPLE_OPERANDS,
-    ARITHMETIC_MEASURE_USING_ARITHMETIC
+    ARITHMETIC_MEASURE_USING_ARITHMETIC,
+    MEASURE_3
 } from '../data/componentProps';
 import { GERMAN_SEPARATORS } from '../data/numberFormat';
 import {
@@ -317,6 +318,36 @@ storiesOf('Core components/LineChart', module)
                         ARITHMETIC_MEASURE_SIMPLE_OPERANDS,
                         ARITHMETIC_MEASURE_USING_ARITHMETIC
                     ]}
+                    trendBy={ATTRIBUTE_1}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
+    .add('dual axes with three measures and one attribute', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <LineChart
+                    projectId="storybook"
+                    measures={[MEASURE_3]}
+                    secondaryMeasures={[MEASURE_1, MEASURE_2]}
+                    trendBy={ATTRIBUTE_1}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
+    .add('only right axes with two measures and one attribute', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <LineChart
+                    projectId="storybook"
+                    measures={[]}
+                    secondaryMeasures={[MEASURE_1, MEASURE_2]}
                     trendBy={ATTRIBUTE_1}
                     onError={onErrorHandler}
                     LoadingComponent={null}

@@ -2,15 +2,17 @@
 import * as React from 'react';
 import { omit } from 'lodash';
 import { Subtract } from 'utility-types';
-import { VisualizationObject, AFM } from '@gooddata/typings';
+import { AFM, VisualizationObject } from '@gooddata/typings';
 
 import { ColumnChart as AfmColumnChart } from './afm/ColumnChart';
 import { ICommonChartProps } from './core/base/BaseChart';
 import { convertBucketsToAFM } from '../helpers/conversion';
 import { getStackingResultSpec } from '../helpers/resultSpec';
-import { MEASURES, ATTRIBUTE, STACK } from '../constants/bucketNames';
+import { ATTRIBUTE, STACK } from '../constants/bucketNames';
+import { getDualAxesBuckets, getDualAxesConfigProps } from '../helpers/dualAxes';
+import { IDualAxesChartProps } from '../interfaces/DualAxes';
 
-export interface IColumnChartBucketProps {
+export interface IColumnChartBucketProps extends IDualAxesChartProps {
     measures: VisualizationObject.BucketItem[];
     viewBy?: VisualizationObject.IVisualizationAttribute;
     stackBy?: VisualizationObject.IVisualizationAttribute;
@@ -29,11 +31,9 @@ type IColumnChartNonBucketProps = Subtract<IColumnChartProps, IColumnChartBucket
  * is a component with bucket props measures, viewBy, stackBy, filters
  */
 export function ColumnChart(props: IColumnChartProps): JSX.Element {
+
     const buckets: VisualizationObject.IBucket[] = [
-        {
-            localIdentifier: MEASURES,
-            items: props.measures || []
-        },
+        ...getDualAxesBuckets(props),
         {
             localIdentifier: ATTRIBUTE,
             items: props.viewBy ? [props.viewBy] : []
@@ -44,8 +44,15 @@ export function ColumnChart(props: IColumnChartProps): JSX.Element {
         }
     ];
 
-    const newProps
-        = omit<IColumnChartProps, IColumnChartNonBucketProps>(props, ['measures', 'viewBy', 'stackBy', 'filters']);
+    const newProps = omit<IColumnChartProps, IColumnChartNonBucketProps>(
+        props,
+        ['measures', 'secondaryMeasures', 'viewBy', 'stackBy', 'filters']
+    );
+
+    newProps.config = {
+        ...newProps.config,
+        ...getDualAxesConfigProps(buckets)
+    };
 
     return (
         <AfmColumnChart

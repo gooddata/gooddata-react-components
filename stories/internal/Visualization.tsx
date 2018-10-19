@@ -337,4 +337,106 @@ storiesOf('Internal/Visualization', module)
                 />
             )
         );
+    })
+    .add('visualization dual axes column chart with 3 metrics and view by attribute', () => {
+        return screenshotWrap(
+            wrap(
+                <Visualization
+                    {...fixtures.barChartWith3MetricsAndViewByAttribute}
+                    config={{
+                        type: 'column',
+                        legend: {
+                            position: 'top'
+                        },
+                        ...fixtures.dualAxesChartWith3MetricsAndViewByAttributeConfig
+                    }}
+                    onDataTooLarge={noop}
+                />
+            )
+        );
+    })
+    .add('visualization right axes column chart with 2 metrics and view by attribute', () => {
+        return screenshotWrap(
+            wrap(
+                <Visualization
+                    {...fixtures.barChartWith2MetricsAndViewByAttribute}
+                    config={{
+                        type: 'column',
+                        legend: {
+                            position: 'top'
+                        },
+                        ...fixtures.dualAxesChartWith2MetricsAndViewByAttributeConfig
+                    }}
+                    onDataTooLarge={noop}
+                />
+            )
+        );
+    })
+    .add('visualization dual axes bar chart with 3 metrics and view by attribute', () => {
+        return screenshotWrap(
+            wrap(
+                <Visualization
+                    {...fixtures.barChartWith3MetricsAndViewByAttribute}
+                    config={{
+                        type: 'bar',
+                        legend: {
+                            position: 'top'
+                        },
+                        ...fixtures.dualAxesChartWith3MetricsAndViewByAttributeConfig
+                    }}
+                    onDataTooLarge={noop}
+                />
+            )
+        );
+    })
+    .add('visualization right axes bar chart with 2 metrics and view by attribute', () => {
+        return screenshotWrap(
+            wrap(
+                <Visualization
+                    {...fixtures.barChartWith2MetricsAndViewByAttribute}
+                    config={{
+                        type: 'bar',
+                        legend: {
+                            position: 'top'
+                        },
+                        ...fixtures.dualAxesChartWith2MetricsAndViewByAttributeConfig
+                    }}
+                    onDataTooLarge={noop}
+                />
+            )
+        );
+    })
+    .add('visualization dual axes line chart with 3 metrics and view by attribute', () => {
+        return screenshotWrap(
+            wrap(
+                <Visualization
+                    {...fixtures.barChartWith3MetricsAndViewByAttribute}
+                    config={{
+                        type: 'line',
+                        legend: {
+                            position: 'top'
+                        },
+                        ...fixtures.dualAxesChartWith3MetricsAndViewByAttributeConfig
+                    }}
+                    onDataTooLarge={noop}
+                />
+            )
+        );
+    })
+    .add('visualization right axes line chart with 2 metrics and view by attribute', () => {
+        return screenshotWrap(
+            wrap(
+                <Visualization
+                    {...fixtures.barChartWith2MetricsAndViewByAttribute}
+                    config={{
+                        type: 'line',
+                        legend: {
+                            position: 'top'
+                        },
+                        ...fixtures.dualAxesChartWith2MetricsAndViewByAttributeConfig
+                    }}
+                    onDataTooLarge={noop}
+                />
+            )
+        );
     });

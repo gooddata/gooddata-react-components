@@ -90,9 +90,16 @@ const unsupportedStackingTypes = [
     VisualizationTypes.BUBBLE
 ];
 
+export const supportedDualAxesChartTypes = [
+    VisualizationTypes.COLUMN,
+    VisualizationTypes.BAR,
+    VisualizationTypes.LINE
+];
+
 export interface IAxis {
     label: string;
     format?: string;
+    opposite?: boolean;
     seriesIndices?: number[];
 }
 
@@ -354,11 +361,14 @@ export function getHeatmapSeries(
 }
 
 function isBucketEmpty(mdObject: VisualizationObject.IVisualizationObjectContent, bucketName: string) {
-    const bucket = get(mdObject, 'buckets', [])
-        .find(bucket => bucket.localIdentifier === bucketName);
-
-    const bucketItems = get(bucket, 'items', []);
+    const bucketItems = getBucketItems(mdObject, bucketName);
     return isEmpty(bucketItems);
+}
+
+function getBucketItems(mdObject: VisualizationObject.IVisualizationObjectContent, bucketName: string) {
+    const bucket = get(mdObject, 'buckets', []).find(bucket => bucket.localIdentifier === bucketName);
+
+    return get(bucket, 'items', []);
 }
 
 export function getScatterPlotSeries(
@@ -1117,6 +1127,41 @@ function isPercentage(format: string) {
     return format.includes('%');
 }
 
+function createYAxisItem(
+    measureItems: any,
+    measureGroup: Execution.IMeasureGroupHeader['measureGroupHeader'],
+    defaultMeasureGroupItem: any) {
+
+    if (isEmpty(measureItems)) {
+        return null;
+    }
+
+    if (measureItems.length === 1) {
+        const measureGroupItem = getMeasureGroupItemFromMeasure(measureItems[0], get(measureGroup, 'items', []));
+        return {
+            label:  measureGroupItem.measureHeaderItem.name,
+            format: measureGroupItem.measureHeaderItem.format
+        };
+    }
+
+    return {
+        ...defaultMeasureGroupItem,
+        label: ''
+    };
+}
+
+function getMeasureGroupItemFromMeasure(measureItem: any, measureHeaderItems: Execution.IMeasureHeaderItem[]) {
+    return measureHeaderItems
+        .find(({ measureHeaderItem }: Execution.IMeasureHeaderItem) => {
+            if (isEmpty(measureHeaderItem)) {
+                return false;
+            }
+
+            const { localIdentifier } = measureHeaderItem;
+            return localIdentifier === measureItem.measure.localIdentifier;
+        });
+}
+
 function getYAxes(
     config: IChartConfig,
     measureGroup: Execution.IMeasureGroupHeader['measureGroupHeader'],
@@ -1181,6 +1226,29 @@ function getYAxes(
         yAxes = [{
             label: stackByAttribute ? stackByAttribute.formOf.name : ''
         }];
+    } else if (isOneOfTypes(type, supportedDualAxesChartTypes) && !isBucketEmpty(mdObject, SECONDARY_MEASURES)) {
+
+        const measureItems          = getBucketItems(mdObject, MEASURES);
+        const secondMeasureItems    = getBucketItems(mdObject, SECONDARY_MEASURES);
+
+        let firstAxis  = createYAxisItem(measureItems,       measureGroup, firstMeasureGroupItem);
+        let secondAxis = createYAxisItem(secondMeasureItems, measureGroup, firstMeasureGroupItem);
+
+        firstAxis = isEmpty(firstAxis) ? null : {
+            ...firstAxis,
+            percentageFormatKey,
+            opposite: false,
+            seriesIndices: range(0, measureItems.length)
+        };
+
+        secondAxis = isEmpty(secondAxis) ? null : {
+            ...secondAxis,
+            percentageFormatKey,
+            opposite: true,
+            seriesIndices: range(measureItems.length, measureItems.length + secondMeasureItems.length)
+        };
+
+        yAxes = compact([firstAxis, secondAxis]);
     } else {
         // if more than one measure and NOT dual, then have empty item name
         const nonDualMeasureAxis = hasMoreThanOneMeasure ? {

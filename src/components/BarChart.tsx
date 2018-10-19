@@ -2,15 +2,18 @@
 import * as React from 'react';
 import { omit } from 'lodash';
 import { Subtract } from 'utility-types';
-import { VisualizationObject, AFM } from '@gooddata/typings';
+import { AFM, VisualizationObject } from '@gooddata/typings';
 
 import { BarChart as AfmBarChart } from './afm/BarChart';
 import { ICommonChartProps } from './core/base/BaseChart';
 import { convertBucketsToAFM } from '../helpers/conversion';
 import { getStackingResultSpec } from '../helpers/resultSpec';
-import { MEASURES, ATTRIBUTE, STACK } from '../constants/bucketNames';
+import { ATTRIBUTE, STACK } from '../constants/bucketNames';
+import { IDualAxesChartProps } from '../interfaces/DualAxes';
+import { getDualAxesBuckets, getDualAxesConfigProps } from '../helpers/dualAxes';
+import { IColumnChartProps } from './ColumnChart';
 
-export interface IBarChartBucketProps {
+export interface IBarChartBucketProps extends IDualAxesChartProps {
     measures: VisualizationObject.BucketItem[];
     viewBy?: VisualizationObject.IVisualizationAttribute;
     stackBy?: VisualizationObject.IVisualizationAttribute;
@@ -30,10 +33,7 @@ type IBarChartNonBucketProps = Subtract<IBarChartProps, IBarChartBucketProps>;
  */
 export function BarChart(props: IBarChartProps): JSX.Element {
     const buckets: VisualizationObject.IBucket[] = [
-        {
-            localIdentifier: MEASURES,
-            items: props.measures || []
-        },
+        ...getDualAxesBuckets(props),
         {
             localIdentifier: ATTRIBUTE,
             items: props.viewBy ? [props.viewBy] : []
@@ -44,8 +44,15 @@ export function BarChart(props: IBarChartProps): JSX.Element {
         }
     ];
 
-    const newProps
-        = omit<IBarChartBucketProps, IBarChartNonBucketProps>(props, ['measures', 'viewBy', 'stackBy', 'filters']);
+    const newProps = omit<IColumnChartProps, IBarChartNonBucketProps>(
+        props,
+        ['measures', 'secondaryMeasures', 'viewBy', 'stackBy', 'filters']
+    );
+
+    newProps.config = {
+        ...newProps.config,
+        ...getDualAxesConfigProps(buckets)
+    };
 
     return (
         <AfmBarChart

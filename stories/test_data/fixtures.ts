@@ -1,9 +1,10 @@
 // (C) 2007-2018 GoodData Corporation
-import { range, cloneDeep } from 'lodash';
+import { cloneDeep, range } from 'lodash';
 import { VisualizationObject } from '@gooddata/typings';
 
 import { immutableSet, repeatItemsNTimes } from '../../src/components/visualizations/utils/common';
 import { STACK_BY_DIMENSION_INDEX } from '../../src/components/visualizations/chart/constants';
+import { MEASURES, SECONDARY_MEASURES } from '../../src/constants/bucketNames';
 
 export const barChartWithSingleMeasureAndNoAttributes: any = {
     executionRequest: require('../test_data/bar_chart_with_single_measure_and_no_attributes_request.json').execution,
@@ -22,6 +23,107 @@ export const barChartWithNegativeAndZeroValues: any = immutableSet(barChartWitho
     ['-116625456.54'],
     ['0']
 ]);
+
+const LOST_METRIC = {
+    measure: {
+        localIdentifier: 'lostMetric',
+        definition: {
+            measureDefinition: {
+                item: {
+                    uri: '/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1283'
+                }
+            }
+        }
+    }
+};
+
+const WON_METRIC = {
+    measure: {
+        localIdentifier: 'wonMetric',
+        definition: {
+            measureDefinition: {
+                item: {
+                    uri: '/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1284'
+                }
+            }
+        }
+    }
+};
+
+const EXPECTED_METRIC = {
+    measure: {
+        localIdentifier: 'expectedMetric',
+        definition: {
+            measureDefinition: {
+                item: {
+                    uri: '/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1285'
+                }
+            }
+        }
+    }
+};
+
+export const dualAxesChartWith3MetricsAndViewByAttributeConfig: any = {
+    mdObject: {
+        buckets: [
+            {
+                localIdentifier: MEASURES,
+                items: [LOST_METRIC]
+            },
+            {
+                localIdentifier: SECONDARY_MEASURES,
+                items: [WON_METRIC, EXPECTED_METRIC]
+            }
+        ]
+    }
+};
+
+export const dualAxesChartWith2MetricsAndViewByAttributeConfig: any = {
+    mdObject: {
+        buckets: [
+            {
+                localIdentifier: MEASURES,
+                items: []
+            },
+            {
+                localIdentifier: SECONDARY_MEASURES,
+                items: [LOST_METRIC, WON_METRIC]
+            }
+        ]
+    }
+};
+
+const dualAxesChartWith9Metrics = repeatItemsNTimes([LOST_METRIC, WON_METRIC, EXPECTED_METRIC], 3);
+export const dualAxesChartWith18MetricsAndViewByAttributeConfig: any = {
+    mdObject: {
+        buckets: [
+            {
+                localIdentifier: MEASURES,
+                items: dualAxesChartWith9Metrics
+            },
+            {
+                localIdentifier: SECONDARY_MEASURES,
+                items: dualAxesChartWith9Metrics
+            }
+        ]
+    }
+};
+
+const dualAxesChartWith27Metrics = repeatItemsNTimes([LOST_METRIC, WON_METRIC, EXPECTED_METRIC], 9);
+export const dualAxesChartWith60MetricsAndViewByAttributeConfig: any = {
+    mdObject: {
+        buckets: [
+            {
+                localIdentifier: MEASURES,
+                items: dualAxesChartWith27Metrics
+            },
+            {
+                localIdentifier: SECONDARY_MEASURES,
+                items: dualAxesChartWith27Metrics
+            }
+        ]
+    }
+};
 
 export const barChartWith3MetricsAndViewByAttribute: any = {
     executionRequest: require('../test_data/bar_chart_with_3_metrics_and_view_by_attribute_request.json').execution,

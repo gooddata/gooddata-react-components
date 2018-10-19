@@ -7,7 +7,8 @@ import inRange = require('lodash/inRange');
 
 import { IHeatmapLegendItem } from '../../typings/legend';
 import { LEFT, RIGHT, TOP, BOTTOM } from './PositionTypes';
-import { formatLegendLabel } from '../../utils/common';
+import { formatLegendLabel, isAreaChart, isOneOfTypes, isTreemap } from '../../utils/common';
+import { supportedDualAxesChartTypes } from '../chartOptionsBuilder';
 
 export const RESPONSIVE_ITEM_MIN_WIDTH = 200;
 export const RESPONSIVE_VISIBLE_ROWS = 2;
@@ -375,4 +376,56 @@ export function getHeatmapLegendConfiguration(
         boxes,
         position: finalPosition
     };
+}
+
+const LEGEND_TEXT = {
+    column:   ['Left:', 'Right:'],
+    line:     ['Left:', 'Right:'],
+    bar:      ['Bottom:', 'Top:']
+};
+
+export const LEGEND_AXIS_INDICATOR  = 'legendAxisIndicator';
+export const LEGEND_SEPARATOR       = 'legendSeparator';
+
+function separateLegendItems(series: any[]) {
+    return series.reduce((result: any, item: any) => {
+        // for now, it assumes that GDC chart only has 2 Y axes in maximum
+        // yAxis only takes 0 (left/bottom axis) or 1 (right/top axis)
+        const { yAxis } = item;
+        if (!yAxis) { // 0
+            result.itemsOnFirstAxis = result.itemsOnFirstAxis.concat(item);
+        } else {
+            result.itemsOnSecondAxis = result.itemsOnSecondAxis.concat(item);
+        }
+        return result;
+    }, {
+        itemsOnFirstAxis: [],
+        itemsOnSecondAxis: []
+    });
+}
+
+export function transformToDualAxesSeries(series: any[], chartType: string) {
+    const { itemsOnFirstAxis, itemsOnSecondAxis } = separateLegendItems(series);
+
+    if (!isOneOfTypes(chartType, supportedDualAxesChartTypes) ||
+        !itemsOnFirstAxis.length || !itemsOnSecondAxis.length) {
+        return series;
+    }
+
+    return [].concat(
+        { type: LEGEND_AXIS_INDICATOR, text: LEGEND_TEXT[chartType][0] },
+        itemsOnFirstAxis,
+        { type: LEGEND_SEPARATOR },
+        { type: LEGEND_AXIS_INDICATOR, text: LEGEND_TEXT[chartType][1] },
+        itemsOnSecondAxis
+    );
+}
+
+export function isStackedChart(chartOptions: any) {
+    const seriesLength = get(chartOptions, 'data.series.length');
+    const { type, stacking, hasStackByAttribute } = chartOptions;
+    const hasMoreThanOneSeries = seriesLength > 1;
+    const isAreaChartWithOneSerie = isAreaChart(type) && !hasMoreThanOneSeries && !hasStackByAttribute;
+
+    return !isAreaChartWithOneSerie && !isTreemap(type) && Boolean(stacking);
 }

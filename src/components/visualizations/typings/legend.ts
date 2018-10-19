@@ -17,6 +17,7 @@ export interface IBaseLegendItem {
     name: string;
     color: string; // in format rgb(20,178,226)
     legendIndex: number;
+    yAxis: number; // indicate belong to which Y axis, 0: left/bottom, 1: right/top
 }
 
 export interface IHeatmapLegendItem {
