@@ -21,6 +21,7 @@ import { IChartConfig, IChartLimits } from './Chart';
 import {
     getAttributeElementIdFromAttributeElementUri,
     isAreaChart,
+    isBarChart,
     isBubbleChart,
     isChartSupported,
     isComboChart,
@@ -90,9 +91,16 @@ const unsupportedStackingTypes = [
     VisualizationTypes.BUBBLE
 ];
 
+export const supportedDualAxesChartTypes = [
+    VisualizationTypes.COLUMN,
+    VisualizationTypes.BAR,
+    VisualizationTypes.LINE
+];
+
 export interface IAxis {
     label: string;
     format?: string;
+    opposite?: boolean;
     seriesIndices?: number[];
 }
 
@@ -125,6 +133,8 @@ export interface IChartOptions {
     grid?: any;
     xAxisProps?: any;
     yAxisProps?: any;
+    secondary_xAxisProps?: any;
+    secondary_yAxisProps?: any;
     title?: any;
     colorAxis?: Highcharts.ColorAxisOptions;
 }
@@ -1139,6 +1149,9 @@ function getYAxes(
     const hasMoreThanOneMeasure = measureGroupItems.length > 1;
     const noPrimaryMeasures = isBucketEmpty(mdObject, MEASURES);
 
+    const { measures : secondMeasures = [] } =
+        (isBarChart(type) ? config.secondary_xaxis : config.secondary_yaxis) || {};
+
     let yAxes: IAxis[] = [];
 
     if (isDualChart(type)) {
@@ -1181,6 +1194,32 @@ function getYAxes(
         yAxes = [{
             label: stackByAttribute ? stackByAttribute.formOf.name : ''
         }];
+    } else if (isOneOfTypes(type, supportedDualAxesChartTypes) &&
+                !isEmpty(measureGroupItems) &&
+                !isEmpty(secondMeasures)) {
+
+        const { measuresInFirstAxis, measuresInSecondAxis } = separateAxes(secondMeasures, measureGroup);
+
+        let firstAxis = createYAxisItem(measuresInFirstAxis, false);
+        let secondAxis = createYAxisItem(measuresInSecondAxis, true);
+
+        if (!isEmpty(firstAxis)) {
+            firstAxis = {
+                ...firstAxis,
+                percentageFormatKey,
+                seriesIndices: range(0, measuresInFirstAxis.length)
+            };
+        }
+        if (!isEmpty(secondAxis)) {
+            secondAxis = {
+                ...secondAxis,
+                percentageFormatKey,
+                seriesIndices: range(measuresInFirstAxis.length,
+                                     measuresInFirstAxis.length + measuresInSecondAxis.length)
+            };
+        }
+
+        yAxes = compact([firstAxis, secondAxis]);
     } else {
         // if more than one measure and NOT dual, then have empty item name
         const nonDualMeasureAxis = hasMoreThanOneMeasure ? {
@@ -1195,6 +1234,48 @@ function getYAxes(
     }
 
     return yAxes;
+}
+
+function separateAxes(measures: string[], measureGroup: Execution.IMeasureGroupHeader['measureGroupHeader']) {
+    return measureGroup.items
+        .reduce((result: any,
+                 { measureHeaderItem: { name, format, localIdentifier } }: Execution.IMeasureHeaderItem) => {
+
+            if (includes(measures, localIdentifier)) {
+                result.measuresInSecondAxis = result.measuresInSecondAxis.concat({
+                    name,
+                    format
+                });
+            } else {
+                result.measuresInFirstAxis = result.measuresInFirstAxis.concat({
+                    name,
+                    format
+                });
+            }
+            return result;
+        }, {
+            measuresInFirstAxis: [],
+            measuresInSecondAxis: []
+        });
+}
+
+function createYAxisItem(measuresInAxis: any[], opposite = false) {
+    switch (measuresInAxis.length) {
+        case 0:
+            return null;
+        case 1:
+            return {
+                label: measuresInAxis[0].name,
+                format: measuresInAxis[0].format,
+                opposite
+            };
+        default: // > 1
+            return {
+                label: '',
+                format: measuresInAxis[0].format,
+                opposite
+            };
+    }
 }
 
 function assignYAxes(series: any, yAxes: IAxis[]) {
@@ -1577,7 +1658,7 @@ export function getChartOptions(
         };
     }
 
-    const { xAxisProps, yAxisProps } = getChartProperties(config, type);
+    const { xAxisProps, yAxisProps, secondary_xAxisProps, secondary_yAxisProps } = getChartProperties(config, type);
 
     const tooltipFn = isTreemap(type) ? generateTooltipTreemapFn(viewByAttribute, stackByAttribute, config) :
         generateTooltipFn(viewByAttribute, type, config);
@@ -1601,7 +1682,9 @@ export function getChartOptions(
             enabled: gridEnabled
         },
         xAxisProps,
-        yAxisProps
+        yAxisProps,
+        secondary_xAxisProps,
+        secondary_yAxisProps
     };
 
     return chartOptions;
