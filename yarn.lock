@@ -112,9 +112,9 @@
     qs "6.5.1"
     rxjs "^5.5.6"
 
-"@gooddata/goodstrap@57.1.8":
-  version "57.1.8"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-57.1.8.tgz#f5caaf78b5468a453449e57f0ba5078962eec2ff"
+"@gooddata/goodstrap@57.1.8-strouhaljan-silver-black-theme-removal-2018-10-31T14-14-21-165Z":
+  version "57.1.8-strouhaljan-silver-black-theme-removal-2018-10-31T14-14-21-165Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-57.1.8-strouhaljan-silver-black-theme-removal-2018-10-31T14-14-21-165Z.tgz#8417dc74289bb61fd2fcd8d66caed8b6b0b9f3e1"
   dependencies:
     "@gooddata/js-utils" "^2.0.0"
     classnames "2.2.5"
