@@ -172,6 +172,7 @@ class SimpleTable extends
             afterRender,
             dataSource,
             drillableItems,
+            drillablePredicates,
             height,
             maxHeight,
             locale,
@@ -203,6 +204,7 @@ class SimpleTable extends
                             afterRender={afterRender}
                             config={{ stickyHeaderOffset, separators }}
                             drillableItems={drillableItems}
+                            drillablePredicates={drillablePredicates}
                             height={height}
                             maxHeight={maxHeight}
                             onDataTooLarge={onDataTooLarge}

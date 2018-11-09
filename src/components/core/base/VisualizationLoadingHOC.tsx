@@ -7,7 +7,7 @@ import { AFM, Execution } from '@gooddata/typings';
 
 import { ErrorStates } from '../../../constants/errorStates';
 import { IEvents, ILoadingState } from '../../../interfaces/Events';
-import { IDrillableItem } from '../../../interfaces/DrillEvents';
+import { IDrillableItem, IDrillablePredicate } from '../../../interfaces/DrillEvents';
 import { ISubject } from '../../../helpers/async';
 import { convertErrors, checkEmptyResult } from '../../../helpers/errorHandlers';
 import { IDataSourceProviderInjectedProps } from '../../afm/DataSourceProvider';
@@ -25,6 +25,7 @@ export type IExecutionDataPromise = Promise<Execution.IExecutionResponses>;
 export interface ICommonVisualizationProps extends IEvents {
     locale?: string;
     drillableItems?: IDrillableItem[];
+    drillablePredicates?: IDrillablePredicate[];
     afterRender?: () => void;
     pushData?: (data: IPushData) => void;
     ErrorComponent?: React.ComponentType<IErrorProps>;

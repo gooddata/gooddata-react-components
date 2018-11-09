@@ -12,7 +12,9 @@ import 'nodelist-foreach-polyfill';
 import Bubble from '@gooddata/goodstrap/lib/Bubble/Bubble';
 import BubbleHoverTrigger from '@gooddata/goodstrap/lib/Bubble/BubbleHoverTrigger';
 import { Subscription } from 'rxjs/Subscription';
-import { IDrillableItem } from '../../../interfaces/DrillEvents';
+
+import * as predicateFactory from '../../../predicateFactory';
+import { IDrillableItem, IDrillablePredicate } from '../../../interfaces/DrillEvents';
 import { OnFiredDrillEvent } from '../../../interfaces/Events';
 import {
     Align,
@@ -20,23 +22,24 @@ import {
     IPositions,
     IScrollEvent,
     isMeasureTableHeader,
-    ISortObj, OnSortChangeWithItem,
+    ISortObj,
+    OnSortChangeWithItem,
     SortDir,
     TableCell,
     TableHeader,
     TableRow
 } from '../../../interfaces/Table';
-
 import { TableSortBubbleContent } from './TableSortBubbleContent';
-
 import { getColumnAlign } from './utils/column';
 import { subscribeEvents } from '../utils/common';
 import { getCellClassNames, getCellStyleAndFormattedValue } from '../../../helpers/tableCell';
+import { getIntersectionForDrilling, getBackwardCompatibleRowForDrilling } from './utils/dataTransformation';
 import {
-    getIntersectionForDrilling,
-    getBackwardCompatibleRowForDrilling
-} from './utils/dataTransformation';
-import { cellClick, IDrillConfig, isDrillable } from '../utils/drilldownEventing';
+    cellClick,
+    IDrillConfig,
+    // isDrillable,
+    isDrillablePredicateMatched
+} from '../utils/drilldownEventing';
 import { createSortItem, getHeaderSortClassName, getNextSortDir } from './utils/sort';
 import { getFooterHeight, getFooterPositions, isFooterAtDefaultPosition, isFooterAtEdgePosition } from './utils/footer';
 import { updatePosition } from './utils/row';
@@ -118,6 +121,7 @@ export interface ITableVisualizationProps {
     containerMaxHeight?: number;
     afterRender?: Function;
     drillableItems?: IDrillableItem[];
+    drillablePredicates?: IDrillablePredicate[];
     executionRequest: AFM.IExecution;
     hasHiddenRows?: boolean;
     headers?: TableHeader[];
@@ -154,6 +158,7 @@ export class TableVisualizationClass
         containerHeight: null,
         containerMaxHeight: null,
         drillableItems: [],
+        drillablePredicates: [],
         hasHiddenRows: false,
         headers: [],
         onFiredDrillEvent: () => true,
@@ -468,7 +473,7 @@ export class TableVisualizationClass
             const rect: ClientRect = this.table.getBoundingClientRect();
 
             if (width !== rect.width || height !== rect.height) {
-                this.setState(pick(rect, 'width', 'height'));
+                this.setState(pick<{ width: number, height: number }, ClientRect>(rect, 'width', 'height'));
             }
         }
     }
@@ -756,10 +761,31 @@ export class TableVisualizationClass
     }
 
     private renderCell(headers: TableHeader[], columnIndex: number): (cellProps: CellProps) => JSX.Element {
-        const { executionRequest, drillableItems, onFiredDrillEvent, rows, separators } = this.props;
+        const {
+            executionRequest,
+            drillablePredicates,
+            drillableItems,
+            onFiredDrillEvent,
+            rows,
+            separators
+        } = this.props;
         const afm = executionRequest.execution.afm;
         const header: TableHeader = headers[columnIndex];
-        const drillable: boolean = isDrillable(drillableItems, header, afm);
+
+        // console.time('isDrillable');
+        // console.profile('isDrillable');
+        /* */
+        const legacyDrillablePredicates = predicateFactory.convertLegacyDrillableItems(drillableItems);
+        console.log('TableVisualization', { legacyDrillablePredicates, drillablePredicates });
+        const drillable = isDrillablePredicateMatched([
+            ...drillablePredicates,
+            ...legacyDrillablePredicates
+        ], header, afm);
+        /* * /
+        const drillable = isDrillable(drillableItems, header, afm);
+        /* */
+        // console.timeEnd('isDrillable');
+        // console.profileEnd('isDrillable');
 
         return (cellProps: CellProps) => {
             const rowIndex: number = cellProps.rowIndex;

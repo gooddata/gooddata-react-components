@@ -1,6 +1,7 @@
 // (C) 2007-2018 GoodData Corporation
 import { AFM, Execution } from '@gooddata/typings';
 import { VisType, VisElementType } from '../constants/visualizationTypes';
+import IAfm = AFM.IAfm;
 
 // IDrillEvent is a parameter of the onFiredDrillEvent is callback
 export interface IDrillEvent {
@@ -33,24 +34,32 @@ export interface IDrillEventPoint {
 export interface IDrillEventIntersectionElement {
     id: string;
     title: string;
-    header: {
+    header?: {
         uri: string;
         identifier: string;
     };
 }
 
-// Internal precursor to IDrillEventIntersectionElement
-// TODO: Refactor internal drilling functions and replace with IDrillEventIntersectionElement
-export interface IDrillableItem {
+// TODO BB-1127 Is it okay to rename base interface?
+export interface IDrillableItemSimple {
     uri?: string;
     identifier?: string;
-    title?: string;
+    title?: string; // FIXME This must not be here
 }
+
+export interface IDrillableItemComposedFrom {
+    composedFrom: IDrillableItemSimple[];
+}
+
+// Internal precursor to IDrillEventIntersectionElement
+// TODO: Refactor internal drilling functions and replace with IDrillEventIntersectionElement
+// XXX: BB-1127 This is only one SDK public interface
+export type IDrillableItem = IDrillableItemSimple | IDrillableItemComposedFrom;
 
 export type IDrillEventCallback = (event: IDrillEvent) => void | boolean;
 
 // Consider refactoring and removing this as a separate type
-export interface IDrillableItemLocalId extends IDrillableItem {
+export interface IDrillableItemLocalId extends IDrillableItemSimple {
     localIdentifier: AFM.Identifier;
 }
 
@@ -67,6 +76,13 @@ export interface IDrillIntersection {
     identifier: AFM.Identifier;
 }
 
+// TODO BB-1127 This must be renamed to isDrillItemLocalId
 export function isDrillableItemLocalId(item: IDrillItem): item is IDrillableItemLocalId {
     return (item as IDrillableItemLocalId).localIdentifier !== undefined;
 }
+
+export function isDrillableItemComposedFrom(item: IDrillableItem): item is IDrillableItemComposedFrom {
+    return (item as IDrillableItemComposedFrom).composedFrom !== undefined;
+}
+
+export type IDrillablePredicate = (header: IDrillableItem, afm: IAfm) => boolean;

@@ -10,6 +10,7 @@ import {
     IDrillEventIntersectionElement,
     IDrillItem,
     IDrillIntersection,
+    IDrillablePredicate,
     isDrillableItemLocalId
 } from '../../../interfaces/DrillEvents';
 import { VisElementType, VisType, VisualizationTypes } from '../../../constants/visualizationTypes';
@@ -93,6 +94,12 @@ export function isDrillable(drillableItems: IDrillableItem[],
     return !!(isDrillablePureHeader || isDrillableAdhocHeader);
 }
 
+export function isDrillablePredicateMatched(drillablePredicates: IDrillablePredicate[],
+                                            header: IDrillItem,
+                                            afm: AFM.IAfm): boolean {
+    return drillablePredicates.some((drillablePredicate: IDrillablePredicate) => drillablePredicate(header, afm));
+}
+
 export function getClickableElementNameByChartType(type: VisType): VisElementType {
     switch (type) {
         case VisualizationTypes.LINE:
@@ -132,14 +139,15 @@ function fireEvent(onFiredDrillEvent: OnFiredDrillEvent, data: any, target: Even
 
 function normalizeIntersectionElements(intersection: IDrillIntersection[]): IDrillEventIntersectionElement[] {
     return intersection.map(({ id, title, value, name, uri, identifier }) => {
-        return {
-            id,
-            title: title || value as string || name,
-            header: {
-                uri,
-                identifier
-            }
-        };
+       const intersection: IDrillEventIntersectionElement = {
+           id,
+           title: title || value as string || name
+       };
+       if (uri || identifier) {
+           intersection.header = { uri, identifier };
+       }
+       // TODO BB-1127 We add header here conditionally since AM does not have either uri or identifier. Consider searching header in afm by measure localIdentifier (id) and make decision based on measureDefinition type
+       return intersection;
     });
 }
 
