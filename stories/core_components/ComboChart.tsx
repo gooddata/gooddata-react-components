@@ -12,7 +12,8 @@ import {
     ATTRIBUTE_1_SORT_ITEM,
     MEASURE_2_SORT_ITEM,
     ARITHMETIC_MEASURE_SIMPLE_OPERANDS,
-    ARITHMETIC_MEASURE_USING_ARITHMETIC
+    ARITHMETIC_MEASURE_USING_ARITHMETIC,
+    ATTRIBUTE_1_WITH_ALIAS
 } from '../data/componentProps';
 import { GERMAN_SEPARATORS } from '../data/numberFormat';
 import { CUSTOM_COLOR_PALETTE_CONFIG } from '../data/configProps';
@@ -28,6 +29,35 @@ storiesOf('Core components/ComboChart', module)
                     columnMeasures={[MEASURE_1]}
                     lineMeasures={[MEASURE_2]}
                     viewBy={ATTRIBUTE_1}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
+    .add('one column measure, one renamed line measures, one attribute', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <ComboChart
+                    projectId="storybook"
+                    columnMeasures={[MEASURE_1]}
+                    lineMeasures={[MEASURE_2]}
+                    viewBy={ATTRIBUTE_1_WITH_ALIAS}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
+    .add('only bar', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <ComboChart
+                    projectId="storybook"
+                    columnMeasures={[MEASURE_1]}
+                    viewBy={ATTRIBUTE_1_WITH_ALIAS}
                     onError={onErrorHandler}
                     LoadingComponent={null}
                     ErrorComponent={null}

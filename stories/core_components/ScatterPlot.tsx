@@ -11,7 +11,8 @@ import {
     MEASURE_1,
     MEASURE_2,
     ATTRIBUTE_1_SORT_ITEM,
-    MEASURE_WITH_FORMAT
+    MEASURE_WITH_FORMAT,
+    ATTRIBUTE_1_WITH_ALIAS
 } from '../data/componentProps';
 import { GERMAN_SEPARATORS } from '../data/numberFormat';
 import {
@@ -19,6 +20,7 @@ import {
     DATA_LABELS_HIDDEN_CONFIG,
     DATA_LABELS_AUTO_CONFIG
 } from '../data/configProps';
+import { CUSTOM_COLORS } from '../data/colors';
 
 const wrapperStyle = { width: 800, height: 400 };
 
@@ -31,6 +33,21 @@ storiesOf('Core components/ScatterPlot', module)
                     xAxisMeasure={MEASURE_1}
                     yAxisMeasure={MEASURE_2}
                     attribute={ATTRIBUTE_1}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
+    .add('two measures and renamed attribute', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <ScatterPlot
+                    projectId="storybook"
+                    xAxisMeasure={MEASURE_1}
+                    yAxisMeasure={MEASURE_2}
+                    attribute={ATTRIBUTE_1_WITH_ALIAS}
                     onError={onErrorHandler}
                     LoadingComponent={null}
                     ErrorComponent={null}
@@ -122,6 +139,24 @@ storiesOf('Core components/ScatterPlot', module)
                             min: '500',
                             max: '950'
                         }
+                    }}
+                />
+            </div>
+        )
+    ))
+    .add('with custom colors', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <ScatterPlot
+                    projectId="storybook"
+                    xAxisMeasure={MEASURE_1}
+                    yAxisMeasure={MEASURE_2}
+                    attribute={ATTRIBUTE_1}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                    config={{
+                        colors: CUSTOM_COLORS
                     }}
                 />
             </div>

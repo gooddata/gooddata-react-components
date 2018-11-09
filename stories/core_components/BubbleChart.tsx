@@ -20,6 +20,7 @@ import {
     DATA_LABELS_HIDDEN_CONFIG,
     DATA_LABELS_AUTO_CONFIG
 } from '../data/configProps';
+import { CUSTOM_COLORS } from '../data/colors';
 const wrapperStyle = { width: 800, height: 400 };
 
 storiesOf('Core components/BubbleChart', module)
@@ -150,6 +151,44 @@ storiesOf('Core components/BubbleChart', module)
                             min: '750',
                             max: '950'
                         }
+                    }}
+                />
+            </div>
+        )
+    ))
+    .add('with custom colors', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BubbleChart
+                    projectId="storybook"
+                    xAxisMeasure={MEASURE_1}
+                    yAxisMeasure={MEASURE_2}
+                    size={MEASURE_3}
+                    viewBy={ATTRIBUTE_1}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                    config={{
+                        colors: CUSTOM_COLORS
+                    }}
+                />
+            </div>
+        )
+    ))
+    .add('without grid', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BubbleChart
+                    projectId="storybook"
+                    xAxisMeasure={MEASURE_1}
+                    yAxisMeasure={MEASURE_2}
+                    size={MEASURE_3}
+                    viewBy={ATTRIBUTE_1}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                    config={{
+                        grid: { enabled: false }
                     }}
                 />
             </div>

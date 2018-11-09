@@ -15,7 +15,8 @@ import {
     MEASURE_WITH_NULLS,
     ATTRIBUTE_1_SORT_ITEM,
     ARITHMETIC_MEASURE_SIMPLE_OPERANDS,
-    ARITHMETIC_MEASURE_USING_ARITHMETIC
+    ARITHMETIC_MEASURE_USING_ARITHMETIC,
+    ATTRIBUTE_1_WITH_ALIAS
 } from '../data/componentProps';
 import { GERMAN_SEPARATORS } from '../data/numberFormat';
 import {
@@ -23,6 +24,7 @@ import {
     DATA_LABELS_HIDDEN_CONFIG,
     DATA_LABELS_AUTO_CONFIG
 } from '../data/configProps';
+import { CUSTOM_COLORS } from '../data/colors';
 
 const wrapperStyle = { width: 800, height: 400 };
 
@@ -34,6 +36,20 @@ storiesOf('Core components/AreaChart', module)
                     projectId="storybook"
                     measures={[MEASURE_1, MEASURE_2]}
                     viewBy={ATTRIBUTE_1}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
+    .add('two measures, one renamed attribute, stack by default', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <AreaChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    viewBy={ATTRIBUTE_1_WITH_ALIAS}
                     onError={onErrorHandler}
                     LoadingComponent={null}
                     ErrorComponent={null}
@@ -219,6 +235,21 @@ storiesOf('Core components/AreaChart', module)
                             max: '1500'
                         }
                     }}
+                />
+            </div>
+        )
+    ))
+    .add('with custom colors', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <AreaChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    viewBy={ATTRIBUTE_1}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                    config={{ colors: CUSTOM_COLORS }}
                 />
             </div>
         )
