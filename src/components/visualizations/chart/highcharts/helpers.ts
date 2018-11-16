@@ -1,6 +1,7 @@
 // (C) 2007-2018 GoodData Corporation
 import flatten = require('lodash/flatten');
 import get = require('lodash/get');
+import pick = require('lodash/pick');
 import map = require('lodash/map');
 import zip = require('lodash/zip');
 import unzip = require('lodash/unzip');
@@ -52,6 +53,7 @@ export const getVisibleSeries = (chart: any) => chart.series && chart.series.fil
 export const getHiddenSeries = (chart: any) => chart.series && chart.series.filter((s: any) => !s.visible);
 export const getDataPoints = (series: ISeriesItem[]) => flatten(unzip(map(series, (s: any) => s.points)));
 export const getDataPointsOfVisibleSeries = (chart: any) => getDataPoints(getVisibleSeries(chart));
+
 export const getChartType = (chart: any): string => get<string>(chart, 'options.chart.type');
 export const isStacked = (chart: any) => {
     const chartType = getChartType(chart);
@@ -320,11 +322,23 @@ export interface IAxisRange {
     maxAxisValue: number;
 }
 
-export function getAxisRange(chart: any, axisName = 'yAxis'): IAxisRange {
-    return {
-        minAxisValue: get(chart, [axisName, 0, 'min'], 0),
-        maxAxisValue: get(chart, [axisName, 0, 'max'], 0)
-    };
+export interface IAxisRangeForAxes {
+    first?: IAxisRange;
+    second?: IAxisRange;
+}
+
+export function getAxisRangeForAxes(chart: any): IAxisRangeForAxes {
+    const yAxis: any = get(chart, 'yAxis', []);
+    return yAxis
+        .map((axis: any) => pick(axis, ['opposite', 'min', 'max']))
+        .map(({ opposite, min, max }: any) => ({ axis: opposite ? 'second' : 'first', min, max }))
+        .reduce((result: IAxisRangeForAxes, { axis, min, max }: any) => {
+            result[axis] = {
+                minAxisValue: min,
+                maxAxisValue: max
+            };
+            return result;
+        }, {});
 }
 
 export function pointInRange(pointValue: number, axisRange: IAxisRange): boolean {
