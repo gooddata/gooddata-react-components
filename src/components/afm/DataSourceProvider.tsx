@@ -11,6 +11,7 @@ import { AfmPropTypesShape, ResultSpecPropTypesShape } from '../visualizations/p
 import { IDataSource } from '../../interfaces/DataSource';
 import { ISubject } from '../../helpers/async';
 import { setTelemetryHeaders } from '../../helpers/utils';
+import { log } from '../../helpers/logger';
 
 export type IAdapterFactory = (sdk: SDK, projectId: string) => DataLayer.IAdapter<Execution.IExecutionResponses>;
 
@@ -157,6 +158,16 @@ export function dataSourceProvider<T>(
         }
 
         private prepareDataSource(afm: AFM.IAfm) {
+            log(this.sdk, this.props.projectId, 'object_logging', {
+                environment: 'GoodData.UI',
+                object_type: 'Embedded_SDK_Object',
+                log_type: 'Object',
+                object_id: 'TODO',
+                execution_context_id: 'TODO',
+                message_type: 'start_message',
+                start_timestamp: new Date().getTime()
+            });
+
             const promise = this.adapter.createDataSource(afm);
             this.subject.next(promise);
         }

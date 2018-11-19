@@ -103,6 +103,7 @@
     "@types/highcharts": "4.2.56",
     "ag-grid": "^18.0.1",
     "ag-grid-react": "^18.0.0",
+    "bluebird": "^3.5.3",
     "classnames": "^2.2.5",
     "custom-event": "^1.0.1",
     "fixed-data-table-2": "0.7.17",
