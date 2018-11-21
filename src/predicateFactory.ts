@@ -4,45 +4,51 @@ import {
     IDrillableItem,
     IDrillableItemSimple,
     IDrillablePredicate,
-    IDrillItem, isDrillableItemComposedFrom,
-    isDrillableItemLocalId
+    IDrillHeader,
+    isDrillableItemComposed,
+    isDrillHeaderLocalId,
+    isDrillableItemIdentifier,
+    isDrillableItemUri,
+    IDrillableItemComposed,
+    isDrillHeaderIdentifier,
+    isDrillHeaderUri
 } from './interfaces/DrillEvents';
 import { AFM } from '@gooddata/typings';
 
 export function isItemUri(uri: string) {
     // console.log('isItemUri.factory', uri);
     return (
-        header: IDrillItem,
+        header: IDrillHeader,
         afm: AFM.IAfm
     ): boolean => {
-        if (header.uri) {
+        if (isDrillHeaderUri(header)) {
             return header.uri && header.uri === uri;
         }
 
-        const afmHeader = isDrillableItemLocalId(header) ?
+        const afmHeader = isDrillHeaderLocalId(header) ?
             getMeasureUriOrIdentifier(afm, header.localIdentifier)
             : null;
 
-        return afmHeader && afmHeader.uri && afmHeader.uri === uri;
+        return afmHeader && isDrillHeaderUri(afmHeader) && afmHeader.uri === uri;
     };
 }
 
 export function isItemIdentifier(identifier: string) {
     // console.log('isItemIdentifier.factory', identifier);
     return (
-        header: IDrillItem,
+        header: IDrillHeader,
         afm: AFM.IAfm
     ): boolean => {
         // console.log('isItemIdentifier.tap', identifier);
-        if (header.identifier) {
+        if (isDrillHeaderIdentifier(header)) {
             return header.identifier && header.identifier === identifier;
         }
 
-        const afmHeader = isDrillableItemLocalId(header) ?
+        const afmHeader = isDrillHeaderLocalId(header) ?
             getMeasureUriOrIdentifier(afm, header.localIdentifier)
             : null;
 
-        return afmHeader && afmHeader.identifier && afmHeader.identifier === identifier;
+        return afmHeader && isDrillHeaderIdentifier(afmHeader) && afmHeader.identifier === identifier;
     };
 }
 
@@ -80,21 +86,24 @@ export function isIdentifierInArithmeticMeasureTree(identifier: string): IDrilla
     );
 }
 
-export function convertLegacyDrillableItems(drillableItems: IDrillableItem[]): any {
-    // TODO BB-1127 Use Type guards
+function convertComposedFromItems(composedFrom: IDrillableItemComposed['composedFrom']): IDrillablePredicate[] {
+    return composedFrom.map((composedDrillableItem: IDrillableItemSimple) => {
+        if (isDrillableItemUri(composedDrillableItem)) {
+            return isUriInArithmeticMeasureTree(composedDrillableItem.uri);
+        } else if (isDrillableItemIdentifier(composedDrillableItem)) {
+            return isIdentifierInArithmeticMeasureTree(composedDrillableItem.identifier);
+        }
+    });
+}
+
+export function convertLegacyDrillableItems(drillableItems: IDrillableItem[]): IDrillablePredicate[] {
     return drillableItems.reduce((acc: IDrillablePredicate[], drillableItem: IDrillableItem) => {
-        if (isDrillableItemComposedFrom(drillableItem)) {
-            const nestedDrillables = drillableItem.composedFrom.map((composedDrillableItem: IDrillableItemSimple) => {
-                if (composedDrillableItem.uri) {
-                    return isUriInArithmeticMeasureTree(composedDrillableItem.uri);
-                } else if (composedDrillableItem.identifier) {
-                    return isIdentifierInArithmeticMeasureTree(composedDrillableItem.identifier);
-                }
-            });
+        if (isDrillableItemComposed(drillableItem)) {
+            const nestedDrillables = convertComposedFromItems(drillableItem.composedFrom);
             return acc.concat(nestedDrillables);
-        } else if (drillableItem.uri) {
+        } else if (isDrillableItemUri(drillableItem)) {
             return acc.concat(isItemUri(drillableItem.uri));
-        } else if (drillableItem.identifier) {
+        } else if (isDrillableItemIdentifier(drillableItem)) {
             return acc.concat(isItemIdentifier(drillableItem.identifier));
         }
         return acc;
@@ -103,11 +112,11 @@ export function convertLegacyDrillableItems(drillableItems: IDrillableItem[]): a
 
 function isQualifierInArithmeticMeasureTree(predicate: IObjectQualifierPredicate): IDrillablePredicate {
     return (
-        header: IDrillItem,
+        header: IDrillHeader,
         afm: AFM.IAfm
     ): boolean => {
         const arithmeticMeasure = afm.measures.find(
-            measure => isDrillableItemLocalId(header) && measure.localIdentifier === header.localIdentifier
+            measure => isDrillHeaderLocalId(header) && measure.localIdentifier === header.localIdentifier
         );
 
         if (!arithmeticMeasure || !AFM.isArithmeticMeasureDefinition(arithmeticMeasure.definition)) {
@@ -120,7 +129,7 @@ function isQualifierInArithmeticMeasureTree(predicate: IObjectQualifierPredicate
     };
 }
 
-// TODO BB-1127 This should be moved to typings
+// TODO BB-1127 This should be moved to typings next to the isObjIdentifierUri function
 function isObjIdentifierQualifier(qualifier: AFM.ObjQualifier): qualifier is AFM.IObjIdentifierQualifier {
     return (qualifier as AFM.IObjIdentifierQualifier).identifier !== undefined;
 }

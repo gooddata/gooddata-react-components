@@ -9,7 +9,12 @@ import { AFM, Execution } from '@gooddata/typings';
 import { InjectedIntl } from 'react-intl';
 
 import { getMeasureUriOrIdentifier } from '../../utils/drilldownEventing';
-import { IDrillableItem, IDrillEvent, IDrillEventCallback } from '../../../../interfaces/DrillEvents';
+import {
+    IDrillableItem,
+    IDrillEvent,
+    IDrillEventCallback,
+    isDrillableItemIdentifier, isDrillableItemUri, isDrillHeaderIdentifier, isDrillHeaderUri
+} from '../../../../interfaces/DrillEvents';
 import { VisualizationTypes, VisElementType } from '../../../../constants/visualizationTypes';
 import { IHeadlineData, IHeadlineDataItem } from '../../../../interfaces/Headlines';
 
@@ -138,9 +143,10 @@ function isItemDrillable(measureLocalIdentifier: AFM.Identifier,
     }
     return drillableItems.some((drillableItem: IDrillableItem) => {
         // Check for defined values because undefined === undefined
-        const matchByIdentifier = drillableItem.identifier && measureIds.identifier &&
+        const matchByIdentifier = isDrillableItemIdentifier(drillableItem) && isDrillHeaderIdentifier(measureIds) &&
             drillableItem.identifier === measureIds.identifier;
-        const matchByUri = drillableItem.uri && measureIds.uri && drillableItem.uri === measureIds.uri;
+        const matchByUri = isDrillableItemUri(drillableItem) && isDrillHeaderUri(measureIds) &&
+            drillableItem.uri === measureIds.uri;
 
         return matchByUri || matchByIdentifier;
     });
@@ -205,8 +211,8 @@ export function buildDrillEventData(itemContext: IHeadlineDrillItemContext,
                     id: measureHeaderItem.localIdentifier,
                     title: measureHeaderItem.name,
                     header: {
-                        identifier: measureIds.identifier || '',
-                        uri: measureIds.uri || ''
+                        identifier: isDrillHeaderIdentifier(measureIds) && measureIds.identifier || '',
+                        uri: isDrillHeaderUri(measureIds) && measureIds.uri || ''
                     }
                 }
             ]

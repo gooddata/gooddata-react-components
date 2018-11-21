@@ -22,7 +22,7 @@ import {
 
 import * as fixtures from '../../../stories/test_data/fixtures';
 import { Execution, AFM } from '@gooddata/typings';
-import { IDrillItem } from '../../interfaces/DrillEvents';
+import { IDrillHeader } from '../../interfaces/DrillEvents';
 import { IGridHeader } from '../../interfaces/AGGrid';
 import { createIntlMock } from '../../components/visualizations/utils/intlUtils';
 
@@ -595,7 +595,7 @@ describe('assignDrillItemsAndType', () => {
         const currentHeader = fixtures.pivotTableWithColumnAndRowAttributes.executionResult.headerItems[1][2][0];
         const responseHeaders = fixtures.pivotTableWithColumnAndRowAttributes.executionResponse.dimensions[1].headers;
         const headerIndex = 0;
-        const drillItems: IDrillItem[] = [];
+        const drillItems: IDrillHeader[] = [];
         assignDrillItemsAndType(
             header,
             currentHeader,
@@ -619,7 +619,7 @@ describe('assignDrillItemsAndType', () => {
         const currentHeader = fixtures.pivotTableWithColumnAndRowAttributes.executionResult.headerItems[0][0][0];
         const responseHeaders = fixtures.pivotTableWithColumnAndRowAttributes.executionResponse.dimensions[0].headers;
         const headerIndex = 0;
-        const drillItems: IDrillItem[] = [];
+        const drillItems: IDrillHeader[] = [];
         assignDrillItemsAndType(
             header,
             currentHeader,

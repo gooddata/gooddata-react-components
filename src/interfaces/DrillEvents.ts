@@ -3,6 +3,92 @@ import { AFM, Execution } from '@gooddata/typings';
 import { VisType, VisElementType } from '../constants/visualizationTypes';
 import IAfm = AFM.IAfm;
 
+export interface IDrillableItemUri {
+    uri: string;
+}
+
+export interface IDrillableItemIdentifier {
+    identifier: string;
+}
+
+export type IDrillableItemSimple =
+    IDrillableItemUri |
+    IDrillableItemIdentifier |
+    (IDrillableItemUri & IDrillableItemIdentifier);
+
+export interface IDrillableItemComposed {
+    composedFrom: IDrillableItemSimple[];
+}
+
+export type IDrillableItem = IDrillableItemSimple | IDrillableItemComposed;
+
+export function isDrillableItemUri(item: IDrillableItem): item is IDrillableItemUri {
+    return (item as IDrillableItemUri).uri !== undefined;
+}
+
+export function isDrillableItemIdentifier(item: IDrillableItem): item is IDrillableItemIdentifier {
+    return (item as IDrillableItemIdentifier).identifier !== undefined;
+}
+
+export function isDrillableItemSimple(item: IDrillableItem): item is IDrillableItemSimple {
+    return isDrillableItemUri(item) || isDrillableItemIdentifier(item);
+}
+
+export function isDrillableItemComposed(item: IDrillableItem): item is IDrillableItemComposed {
+    return (item as IDrillableItemComposed).composedFrom !== undefined;
+}
+
+export type IDrillablePredicate = (header: IDrillHeader, afm: IAfm) => boolean;
+
+export type IDrillEventCallback = (event: IDrillEvent) => void | boolean;
+
+export interface IDrillHeaderIdentifier {
+    identifier: string;
+}
+
+export interface IDrillHeaderUri {
+    uri: string;
+}
+
+export type IDrillHeaderBasic = (
+        IDrillHeaderIdentifier |
+        IDrillHeaderUri |
+        (IDrillHeaderIdentifier & IDrillHeaderUri)
+    ) & { title?: string };
+
+export interface IDrillHeaderLocalId {
+    localIdentifier: AFM.Identifier;
+}
+
+export type IDrillHeader = IDrillHeaderBasic | IDrillHeaderLocalId;
+
+export function isDrillHeaderIdentifier(item: IDrillHeader): item is IDrillHeaderIdentifier {
+    return (item as IDrillHeaderIdentifier).identifier !== undefined;
+}
+
+export function isDrillHeaderUri(item: IDrillHeader): item is IDrillHeaderUri {
+    return (item as IDrillHeaderUri).uri !== undefined;
+}
+
+export function isDrillHeaderSimple(item: IDrillHeader): item is IDrillHeaderBasic {
+    return isDrillHeaderIdentifier(item) || isDrillHeaderUri(item);
+}
+
+export function isDrillHeaderLocalId(item: IDrillHeader): item is IDrillHeaderLocalId {
+    return (item as IDrillHeaderLocalId).localIdentifier !== undefined;
+}
+
+// Internal precursor to IDrillEventIntersectionElement
+// TODO: Refactor internal drilling functions and replace with IDrillEventIntersectionElement
+export interface IDrillIntersection {
+    id: string;
+    title?: string;
+    value?: Execution.DataValue;
+    name?: string;
+    uri: string;
+    identifier: AFM.Identifier;
+}
+
 // IDrillEvent is a parameter of the onFiredDrillEvent is callback
 export interface IDrillEvent {
     executionContext: AFM.IAfm;
@@ -39,50 +125,3 @@ export interface IDrillEventIntersectionElement {
         identifier: string;
     };
 }
-
-// TODO BB-1127 Is it okay to rename base interface?
-export interface IDrillableItemSimple {
-    uri?: string;
-    identifier?: string;
-    title?: string; // FIXME This must not be here
-}
-
-export interface IDrillableItemComposedFrom {
-    composedFrom: IDrillableItemSimple[];
-}
-
-// Internal precursor to IDrillEventIntersectionElement
-// TODO: Refactor internal drilling functions and replace with IDrillEventIntersectionElement
-// XXX: BB-1127 This is only one SDK public interface
-export type IDrillableItem = IDrillableItemSimple | IDrillableItemComposedFrom;
-
-export type IDrillEventCallback = (event: IDrillEvent) => void | boolean;
-
-// Consider refactoring and removing this as a separate type
-export interface IDrillableItemLocalId extends IDrillableItemSimple {
-    localIdentifier: AFM.Identifier;
-}
-
-export type IDrillItem = IDrillableItem | IDrillableItemLocalId;
-
-// Internal precursor to IDrillEventIntersectionElement
-// TODO: Refactor internal drilling functions and replace with IDrillEventIntersectionElement
-export interface IDrillIntersection {
-    id: string;
-    title?: string;
-    value?: Execution.DataValue;
-    name?: string;
-    uri: string;
-    identifier: AFM.Identifier;
-}
-
-// TODO BB-1127 This must be renamed to isDrillItemLocalId
-export function isDrillableItemLocalId(item: IDrillItem): item is IDrillableItemLocalId {
-    return (item as IDrillableItemLocalId).localIdentifier !== undefined;
-}
-
-export function isDrillableItemComposedFrom(item: IDrillableItem): item is IDrillableItemComposedFrom {
-    return (item as IDrillableItemComposedFrom).composedFrom !== undefined;
-}
-
-export type IDrillablePredicate = (header: IDrillableItem, afm: IAfm) => boolean;

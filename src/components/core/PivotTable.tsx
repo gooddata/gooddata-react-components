@@ -52,8 +52,10 @@ import {
     IDrillableItem,
     IDrillEvent,
     IDrillEventIntersectionElement,
-    isDrillableItemLocalId,
-    IDrillItem
+    isDrillHeaderLocalId,
+    IDrillHeader,
+    IDrillHeaderBasic,
+    isDrillHeaderUri, isDrillHeaderIdentifier
 } from '../../interfaces/DrillEvents';
 
 import {
@@ -106,8 +108,12 @@ export const getDrillRowData = (leafColumnDefs: ColDef[], rowData: {[key: string
             if (type === MEASURE_COLUMN) {
                 return [...drillRow, rowData[colDef.field]];
             }
-            const drillItem = get<any, IDrillableItem>(rowData, ['drillItemMap', colDef.field]);
-            if (drillItem && (type === COLUMN_ATTRIBUTE_COLUMN || type === ROW_ATTRIBUTE_COLUMN)) {
+            const drillItem = get<any, IDrillHeader>(rowData, ['drillItemMap', colDef.field]);
+            if (
+                drillItem &&
+                isDrillHeaderUri(drillItem) &&
+                (type === COLUMN_ATTRIBUTE_COLUMN || type === ROW_ATTRIBUTE_COLUMN)
+            ) {
                 return [...drillRow, {
                     // Unlike fields, drilling data should not be sanitized, because it is not used in HTML properties
                     id: getIdsFromUri(drillItem.uri, false)[1],
@@ -315,7 +321,7 @@ export const RowLoadingElement = (props: ICellRendererParams) => {
 };
 
 export const getDrillIntersection = (
-    drillItems: IDrillItem[],
+    drillItems: IDrillHeader[],
     afm: AFM.IAfm
 ): IDrillEventIntersectionElement[] => {
     // Drilling needs refactoring: all '' should be replaced by null (breaking change)
@@ -323,26 +329,27 @@ export const getDrillIntersection = (
         // 0..1 measure
         // 0..1 row attribute and row attribute value
         // 0..n column attribute and column attribute values
-    return drillItems.map((drillItem: IDrillItem) => {
-        const { identifier, uri, title } = drillItem;
+    return drillItems.map((drillItem: IDrillHeaderBasic) => {
+        const uri = isDrillHeaderUri(drillItem) ? drillItem.uri : '';
+        const identifier = isDrillHeaderIdentifier(drillItem) ? drillItem.identifier : '';
         return {
             // id: Measure localIdentifier or attribute identifier
             // Properties default to empty strings to maintain compatibility
-            id: isDrillableItemLocalId(drillItem) ? drillItem.localIdentifier : (identifier || ''),
-            title,
+            id: isDrillHeaderLocalId(drillItem) ? drillItem.localIdentifier : identifier,
+            title: drillItem.title,
             header: {
-                uri: isDrillableItemLocalId(drillItem)
+                uri: isDrillHeaderLocalId(drillItem)
                     ? get(
                         getMeasureUriOrIdentifier(afm, drillItem.localIdentifier),
                         'uri',
-                        uri || ''
-                    ) : uri || '',
-                identifier: isDrillableItemLocalId(drillItem)
+                        uri
+                    ) : uri,
+                identifier: isDrillHeaderLocalId(drillItem)
                     ? get(
                         getMeasureUriOrIdentifier(afm, drillItem.localIdentifier),
                         'identifier',
-                        identifier || ''
-                    ) : identifier || ''
+                        identifier
+                    ) : identifier
             }
         };
     });
@@ -416,7 +423,7 @@ export class PivotTableInner extends
             const drillItems = rowDrillItem ? [...colDef.drillItems, rowDrillItem] : colDef.drillItems;
             hasDrillableHeader = drillItems
                 .some(
-                    (drillItem: IDrillItem) => isDrillable(drillableItems, drillItem, afm)
+                    (drillItem: IDrillHeader) => isDrillable(drillableItems, drillItem, afm)
                 );
         }
 
@@ -500,11 +507,11 @@ export class PivotTableInner extends
 
         const { colDef, rowIndex } = cellEvent;
         const isRowTotal = get<IGridCellEvent, string>(cellEvent, ['data', 'type', ROW_TOTAL]);
-        const rowDrillItem = get<IGridCellEvent, IDrillableItem>(cellEvent, ['data', 'drillItemMap', colDef.field]);
-        const drillItems = rowDrillItem ? [...colDef.drillItems, rowDrillItem] : colDef.drillItems;
+        const rowDrillItem = get<IGridCellEvent, IDrillHeader>(cellEvent, ['data', 'drillItemMap', colDef.field]);
+        const drillItems: IDrillHeader[] = rowDrillItem ? [...colDef.drillItems, rowDrillItem] : colDef.drillItems;
         const drillableHeaders = drillItems
             .filter(
-                (drillItem: IDrillItem) => isDrillable(drillableItems, drillItem, afm)
+                (drillItem: IDrillHeader) => isDrillable(drillableItems, drillItem, afm)
             );
         if (isRowTotal || drillableHeaders.length === 0) {
             return false;
@@ -524,10 +531,7 @@ export class PivotTableInner extends
             }
         };
 
-        if (onFiredDrillEvent(drillEvent)) {
-            return true;
-        }
-        return false;
+        return onFiredDrillEvent(drillEvent);
     }
 
     public renderVisualization() {

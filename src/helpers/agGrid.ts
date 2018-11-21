@@ -6,7 +6,7 @@ import get = require('lodash/get');
 import zipObject = require('lodash/zipObject');
 
 import { unwrap } from './utils';
-import { IDrillItem } from '../interfaces/DrillEvents';
+import { IDrillHeader } from '../interfaces/DrillEvents';
 import { IGridHeader, IColumnDefOptions, IGridRow, IGridAdapterOptions } from '../interfaces/AGGrid';
 import { ColDef } from 'ag-grid';
 import { getTreeLeaves } from '../components/core/PivotTable';
@@ -98,7 +98,7 @@ export const assignDrillItemsAndType = (
     currentHeader: Execution.IResultHeaderItem,
     responseHeaders: Execution.IHeader[],
     headerIndex: number,
-    drillItems: IDrillItem[]
+    drillItems: IDrillHeader[]
 ) => {
     if (Execution.isAttributeHeaderItem(currentHeader)) {
         header.type = COLUMN_ATTRIBUTE_COLUMN;
@@ -136,7 +136,7 @@ export const getColumnHeaders = (
     headerValueStart = 0,
     headerValueEnd: number = undefined,
     fieldPrefix = '',
-    parentDrillItems: IDrillItem[] = []
+    parentDrillItems: IDrillHeader[] = []
 ) => {
     if (!resultHeaderDimension.length) {
         return [];
@@ -155,7 +155,7 @@ export const getColumnHeaders = (
             // attribute uri or identifier
             // attribute value uri
             // measure uri or identifier
-        const drillItems: IDrillItem[] = [...parentDrillItems];
+        const drillItems: IDrillHeader[] = [...parentDrillItems];
         const header: IGridHeader = {
             drillItems: [],
             ...headerToGrid(currentHeader, fieldPrefix),
@@ -201,7 +201,7 @@ export const getRowHeaders = (
             hide: true
         } : {};
         // attribute drill item
-        const drillableItem: IDrillItem = {
+        const drillableItem: IDrillHeader = {
             uri: attributeHeader.attributeHeader.uri,
             identifier: attributeHeader.attributeHeader.identifier,
             localIdentifier: attributeHeader.attributeHeader.localIdentifier,
@@ -244,7 +244,7 @@ export const getRow = (
         rowHeaders.forEach((rowHeader, rowHeaderIndex) => {
             const rowHeaderDataItem = rowHeaderData[rowHeaderIndex][rowIndex];
             // attribute value drill item
-            const rowHeaderDrillItem: IDrillItem = Execution.isAttributeHeaderItem(rowHeaderDataItem)
+            const rowHeaderDrillItem: IDrillHeader = Execution.isAttributeHeaderItem(rowHeaderDataItem)
                 ? {
                     uri: rowHeaderDataItem.attributeHeaderItem.uri,
                     title: rowHeaderDataItem.attributeHeaderItem.name

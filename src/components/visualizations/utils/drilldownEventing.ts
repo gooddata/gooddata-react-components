@@ -8,10 +8,13 @@ import * as Highcharts from 'highcharts';
 import {
     IDrillableItem,
     IDrillEventIntersectionElement,
-    IDrillItem,
+    IDrillHeader,
     IDrillIntersection,
     IDrillablePredicate,
-    isDrillableItemLocalId
+    isDrillHeaderLocalId,
+    isDrillableItemIdentifier,
+    isDrillableItemUri,
+    isDrillHeaderIdentifier, isDrillHeaderUri
 } from '../../../interfaces/DrillEvents';
 import { VisElementType, VisType, VisualizationTypes } from '../../../constants/visualizationTypes';
 import { isComboChart, isTreemap, isHeatmap } from './common';
@@ -55,7 +58,7 @@ function findMeasureByIdentifier(afm: AFM.IAfm, localIdentifier: AFM.Identifier)
     return (afm.measures || []).find((m: AFM.IMeasure) => m.localIdentifier === localIdentifier);
 }
 
-export function getMeasureUriOrIdentifier(afm: AFM.IAfm, localIdentifier: AFM.Identifier): IDrillableItem {
+export function getMeasureUriOrIdentifier(afm: AFM.IAfm, localIdentifier: AFM.Identifier): IDrillHeader {
     let measure = findMeasureByIdentifier(afm, localIdentifier);
     if (measure) {
         const masterMeasureIdentifier = getDerivedMeasureMasterMeasureLocalIdentifier(measure);
@@ -73,29 +76,32 @@ export function getMeasureUriOrIdentifier(afm: AFM.IAfm, localIdentifier: AFM.Id
     return null;
 }
 
-function isHeaderDrillable(drillableItems: IDrillableItem[], header: IDrillableItem) {
+function isHeaderDrillable(drillableItems: IDrillableItem[], header: IDrillHeader) {
     return drillableItems.some((drillableItem: IDrillableItem) =>
         // Check for defined values because undefined === undefined
-        (drillableItem.identifier && header.identifier && drillableItem.identifier === header.identifier) ||
-        (drillableItem.uri && header.uri && drillableItem.uri === header.uri)
+        (isDrillableItemIdentifier(drillableItem) && isDrillHeaderIdentifier(header) &&
+            drillableItem.identifier && drillableItem.identifier === header.identifier) ||
+        (isDrillableItemUri(drillableItem) && isDrillHeaderUri(header) &&
+            drillableItem.uri && drillableItem.uri === header.uri)
     );
 }
 
 export function isDrillable(drillableItems: IDrillableItem[],
-                            header: IDrillItem,
+                            header: IDrillHeader,
                             afm: AFM.IAfm) {
     // This works only for non adhoc metric & attributes
     // because adhoc metrics don't have uri & identifier
     const isDrillablePureHeader = isHeaderDrillable(drillableItems, header);
 
-    const afmHeader = isDrillableItemLocalId(header) ? getMeasureUriOrIdentifier(afm, header.localIdentifier) : null;
+    const afmHeader = isDrillHeaderLocalId(header) ? getMeasureUriOrIdentifier(afm, header.localIdentifier) : null;
+    // FIXME BB-1127
     const isDrillableAdhocHeader = afmHeader && isHeaderDrillable(drillableItems, afmHeader);
 
     return !!(isDrillablePureHeader || isDrillableAdhocHeader);
 }
 
 export function isDrillablePredicateMatched(drillablePredicates: IDrillablePredicate[],
-                                            header: IDrillItem,
+                                            header: IDrillHeader,
                                             afm: AFM.IAfm): boolean {
     return drillablePredicates.some((drillablePredicate: IDrillablePredicate) => drillablePredicate(header, afm));
 }
@@ -146,7 +152,9 @@ function normalizeIntersectionElements(intersection: IDrillIntersection[]): IDri
        if (uri || identifier) {
            intersection.header = { uri, identifier };
        }
-       // TODO BB-1127 We add header here conditionally since AM does not have either uri or identifier. Consider searching header in afm by measure localIdentifier (id) and make decision based on measureDefinition type
+       // TODO BB-1127 We add header here conditionally since AM does not have either uri or identifier.
+       // TODO -- Consider searching header in afm by measure localIdentifier (id) and make decision based on
+       // TODO -- measureDefinition type
        return intersection;
     });
 }
