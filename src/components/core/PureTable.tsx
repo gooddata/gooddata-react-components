@@ -6,6 +6,7 @@ import uniq = require('lodash/uniq');
 import { get } from 'lodash';
 
 import { AFM, VisualizationObject } from '@gooddata/typings';
+import * as predicateFactory from '../../predicateFactory';
 
 import { IntlWrapper } from './base/IntlWrapper';
 import {
@@ -172,7 +173,6 @@ class SimpleTable extends
             afterRender,
             dataSource,
             drillableItems,
-            drillablePredicates,
             height,
             maxHeight,
             locale,
@@ -186,11 +186,12 @@ class SimpleTable extends
         } = this.props;
 
         const separators = get(this.props, 'config.separators', undefined);
+        const drillablePredicates = predicateFactory.convertDrillableItemsToPredicates(drillableItems);
+        const onDataTooLarge = environment === 'dashboards' ? this.props.onDataTooLarge : noop;
 
         // Short term solution (See BB-641)
         const indexedTotals = convertToIndexedTotals(totals, dataSource.getAfm(), resultSpec);
 
-        const onDataTooLarge = environment === 'dashboards' ? this.props.onDataTooLarge : noop;
         return (
             <IntlWrapper locale={locale}>
                 <IntlTranslationsProvider>
@@ -203,7 +204,6 @@ class SimpleTable extends
                             }
                             afterRender={afterRender}
                             config={{ stickyHeaderOffset, separators }}
-                            drillableItems={drillableItems}
                             drillablePredicates={drillablePredicates}
                             height={height}
                             maxHeight={maxHeight}

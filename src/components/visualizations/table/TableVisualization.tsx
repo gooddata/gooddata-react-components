@@ -13,8 +13,7 @@ import Bubble from '@gooddata/goodstrap/lib/Bubble/Bubble';
 import BubbleHoverTrigger from '@gooddata/goodstrap/lib/Bubble/BubbleHoverTrigger';
 import { Subscription } from 'rxjs/Subscription';
 
-import * as predicateFactory from '../../../predicateFactory';
-import { IDrillableItem, IDrillablePredicate } from '../../../interfaces/DrillEvents';
+import { IDrillablePredicate } from '../../../interfaces/DrillEvents';
 import { OnFiredDrillEvent } from '../../../interfaces/Events';
 import {
     Align,
@@ -120,7 +119,6 @@ export interface IContainerProps {
 export interface ITableVisualizationProps {
     containerMaxHeight?: number;
     afterRender?: Function;
-    drillableItems?: IDrillableItem[];
     drillablePredicates?: IDrillablePredicate[];
     executionRequest: AFM.IExecution;
     hasHiddenRows?: boolean;
@@ -157,7 +155,6 @@ export class TableVisualizationClass
         afterRender: noop,
         containerHeight: null,
         containerMaxHeight: null,
-        drillableItems: [],
         drillablePredicates: [],
         hasHiddenRows: false,
         headers: [],
@@ -764,28 +761,13 @@ export class TableVisualizationClass
         const {
             executionRequest,
             drillablePredicates,
-            drillableItems,
             onFiredDrillEvent,
             rows,
             separators
         } = this.props;
         const afm = executionRequest.execution.afm;
         const header: TableHeader = headers[columnIndex];
-
-        // console.time('isDrillable');
-        // console.profile('isDrillable');
-        /* */
-        const legacyDrillablePredicates = predicateFactory.convertLegacyDrillableItems(drillableItems);
-        console.log('TableVisualization', { legacyDrillablePredicates, drillablePredicates });
-        const drillable = isDrillablePredicateMatched([
-            ...drillablePredicates,
-            ...legacyDrillablePredicates
-        ], header, afm);
-        /* * /
-        const drillable = isDrillable(drillableItems, header, afm);
-        /* */
-        // console.timeEnd('isDrillable');
-        // console.profileEnd('isDrillable');
+        const drillable = isDrillablePredicateMatched(drillablePredicates, header, afm);
 
         return (cellProps: CellProps) => {
             const rowIndex: number = cellProps.rowIndex;

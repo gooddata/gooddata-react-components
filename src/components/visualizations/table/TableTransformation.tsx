@@ -17,7 +17,7 @@ import { getHeaders, getRows, validateTableProportions, getTotalsWithData } from
 import { getSortInfo, getSortItem } from './utils/sort';
 
 import { IIndexedTotalItem, ITotalWithData } from '../../../interfaces/Totals';
-import { IDrillableItem, IDrillablePredicate } from '../../../interfaces/DrillEvents';
+import { IDrillablePredicate } from '../../../interfaces/DrillEvents';
 import { OnFiredDrillEvent } from '../../../interfaces/Events';
 
 export interface ITableTransformationProps {
@@ -26,7 +26,6 @@ export interface ITableTransformationProps {
     totalsEditAllowed?: boolean;
     onTotalsEdit?: (indexedTotals: IIndexedTotalItem[]) => void;
     config?: ITableTransformationConfig;
-    drillableItems?: IDrillableItem[];
     drillablePredicates?: IDrillablePredicate[];
     executionRequest: AFM.IExecution;
     executionResponse: Execution.IExecutionResponse;
@@ -52,7 +51,6 @@ export class TableTransformation extends React.Component<ITableTransformationPro
         totals: [],
         onTotalsEdit: noop,
         config: {},
-        drillableItems: [],
         drillablePredicates: [],
         onFiredDrillEvent: () => true,
         onSortChange: noop,
@@ -63,7 +61,6 @@ export class TableTransformation extends React.Component<ITableTransformationPro
     public render(): JSX.Element {
         const {
             config,
-            drillableItems,
             drillablePredicates,
             executionRequest,
             executionResponse,
@@ -98,7 +95,6 @@ export class TableTransformation extends React.Component<ITableTransformationPro
             totalsWithData,
             totalsEditAllowed,
             onTotalsEdit,
-            drillableItems,
             drillablePredicates,
             executionRequest,
             headers,

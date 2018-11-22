@@ -290,10 +290,8 @@ storiesOf('Core components/Table', module)
                     onError={onErrorHandler}
                     LoadingComponent={null}
                     ErrorComponent={null}
-                    // drillableItems={[
-                    //     { uri: '/gdc/md/storybook/obj/1' }
-                    // ]}
-                    drillablePredicates={[
+                    drillableItems={[
+                        { uri: '/gdc/md/storybook/obj/1' },
                         predicateFactory.isItemUri('/gdc/md/storybook/obj/1'),
                         predicateFactory.isUriInArithmeticMeasureTree('/gdc/md/storybook/obj/1'),
                         predicateFactory.isIdentifierInArithmeticMeasureTree('aagV61RmaPTt')

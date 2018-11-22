@@ -10,7 +10,7 @@ import { InjectedIntl } from 'react-intl';
 
 import { getMeasureUriOrIdentifier } from '../../utils/drilldownEventing';
 import {
-    IDrillableItem,
+    IDrillableItem, IDrillablePredicate,
     IDrillEvent,
     IDrillEventCallback,
     isDrillableItemIdentifier, isDrillableItemUri, isDrillHeaderIdentifier, isDrillHeaderUri
@@ -132,7 +132,7 @@ function findMeasureHeaderItem(localIdentifier: AFM.Identifier,
 }
 
 function isItemDrillable(measureLocalIdentifier: AFM.Identifier,
-                         drillableItems: IDrillableItem[],
+                         drillableItems: Array<IDrillableItem | IDrillablePredicate>,
                          executionRequest: AFM.IExecution['execution']): boolean {
     if (measureLocalIdentifier === undefined || measureLocalIdentifier === null) {
         return false;
@@ -162,7 +162,7 @@ function isItemDrillable(measureLocalIdentifier: AFM.Identifier,
  * @returns altered headlineData
  */
 export function applyDrillableItems(headlineData: IHeadlineData,
-                                    drillableItems: IDrillableItem[],
+                                    drillableItems: Array<IDrillableItem | IDrillablePredicate>,
                                     executionRequest: AFM.IExecution['execution']): IHeadlineData {
     const data = cloneDeep(headlineData);
     const { primaryItem, secondaryItem } = data;

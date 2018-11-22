@@ -3,7 +3,7 @@ import { Execution, AFM } from '@gooddata/typings';
 import * as React from 'react';
 import { InjectedIntlProps, injectIntl } from 'react-intl';
 import noop = require('lodash/noop');
-import { IDrillableItem, IDrillEventCallback } from '../../../interfaces/DrillEvents';
+import { IDrillableItem, IDrillablePredicate, IDrillEventCallback } from '../../../interfaces/DrillEvents';
 import Headline, { IHeadlineFiredDrillEventItemContext } from './Headline';
 import {
     applyDrillableItems,
@@ -18,7 +18,7 @@ export interface IHeadlineTransformationProps {
     executionResponse: Execution.IExecutionResponse;
     executionResult: Execution.IExecutionResult;
 
-    drillableItems?: IDrillableItem[];
+    drillableItems?: Array<IDrillableItem | IDrillablePredicate>;
     config?: IChartConfig;
 
     onFiredDrillEvent?: IDrillEventCallback;

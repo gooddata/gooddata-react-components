@@ -1,3 +1,5 @@
+import { IDrillablePredicate } from '../../../../interfaces/DrillEvents';
+
 // (C) 2007-2018 GoodData Corporation
 import {
     getChartOptions,
@@ -20,7 +22,7 @@ export function generateChartOptions(
         type: 'column',
         stacking: false
     },
-    drillableItems: IDrillableItem[] = []
+    drillableItems: Array<IDrillableItem | IDrillablePredicate> = []
 ): IChartOptions {
     const {
         executionRequest: { afm, resultSpec },

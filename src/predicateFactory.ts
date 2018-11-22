@@ -11,7 +11,7 @@ import {
     isDrillableItemUri,
     IDrillableItemComposed,
     isDrillHeaderIdentifier,
-    isDrillHeaderUri
+    isDrillHeaderUri, isDrillablePredicate
 } from './interfaces/DrillEvents';
 import { AFM } from '@gooddata/typings';
 
@@ -96,7 +96,9 @@ function convertComposedFromItems(composedFrom: IDrillableItemComposed['composed
     });
 }
 
-export function convertLegacyDrillableItems(drillableItems: IDrillableItem[]): IDrillablePredicate[] {
+export function convertDrillableItemsToPredicates(
+    drillableItems: Array<IDrillableItem | IDrillablePredicate>
+): IDrillablePredicate[] {
     return drillableItems.reduce((acc: IDrillablePredicate[], drillableItem: IDrillableItem) => {
         if (isDrillableItemComposed(drillableItem)) {
             const nestedDrillables = convertComposedFromItems(drillableItem.composedFrom);
@@ -105,6 +107,8 @@ export function convertLegacyDrillableItems(drillableItems: IDrillableItem[]): I
             return acc.concat(isItemUri(drillableItem.uri));
         } else if (isDrillableItemIdentifier(drillableItem)) {
             return acc.concat(isItemIdentifier(drillableItem.identifier));
+        } else if (isDrillablePredicate(drillableItem)) {
+            return acc.concat(drillableItem);
         }
         return acc;
     }, []);

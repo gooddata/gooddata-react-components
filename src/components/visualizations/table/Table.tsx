@@ -1,6 +1,7 @@
 // (C) 2007-2018 GoodData Corporation
 import * as React from 'react';
 import * as Measure from 'react-measure';
+import { IDrillablePredicate } from '../../../interfaces/DrillEvents';
 
 import { TableVisualization, ITableVisualizationProps } from './TableVisualization';
 
@@ -12,6 +13,7 @@ export interface IDimensions {
 export interface ITableProps extends ITableVisualizationProps {
     containerWidth?: number;
     containerHeight?: number;
+    drillablePredicates?: IDrillablePredicate[];
 }
 
 export class Table extends React.Component<ITableProps> {

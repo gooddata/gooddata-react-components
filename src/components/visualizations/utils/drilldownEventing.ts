@@ -76,7 +76,7 @@ export function getMeasureUriOrIdentifier(afm: AFM.IAfm, localIdentifier: AFM.Id
     return null;
 }
 
-function isHeaderDrillable(drillableItems: IDrillableItem[], header: IDrillHeader) {
+function isHeaderDrillable(drillableItems: Array<IDrillableItem | IDrillablePredicate>, header: IDrillHeader) {
     return drillableItems.some((drillableItem: IDrillableItem) =>
         // Check for defined values because undefined === undefined
         (isDrillableItemIdentifier(drillableItem) && isDrillHeaderIdentifier(header) &&
@@ -86,7 +86,7 @@ function isHeaderDrillable(drillableItems: IDrillableItem[], header: IDrillHeade
     );
 }
 
-export function isDrillable(drillableItems: IDrillableItem[],
+export function isDrillable(drillableItems: Array<IDrillableItem | IDrillablePredicate>,
                             header: IDrillHeader,
                             afm: AFM.IAfm) {
     // This works only for non adhoc metric & attributes

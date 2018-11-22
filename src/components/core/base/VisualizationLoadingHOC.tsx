@@ -24,8 +24,7 @@ export type IExecutionDataPromise = Promise<Execution.IExecutionResponses>;
 
 export interface ICommonVisualizationProps extends IEvents {
     locale?: string;
-    drillableItems?: IDrillableItem[];
-    drillablePredicates?: IDrillablePredicate[];
+    drillableItems?: Array<IDrillableItem | IDrillablePredicate>;
     afterRender?: () => void;
     pushData?: (data: IPushData) => void;
     ErrorComponent?: React.ComponentType<IErrorProps>;

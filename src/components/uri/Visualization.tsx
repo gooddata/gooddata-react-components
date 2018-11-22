@@ -5,6 +5,7 @@ import noop = require('lodash/noop');
 import isEqual = require('lodash/isEqual');
 import { AFM, VisualizationObject, VisualizationClass, Localization } from '@gooddata/typings';
 import { injectIntl, intlShape, InjectedIntlProps } from 'react-intl';
+import { IDrillablePredicate } from '../../interfaces/DrillEvents';
 import { IntlWrapper } from '../core/base/IntlWrapper';
 import { BaseChart } from '../core/base/BaseChart';
 import { IChartConfig, IColorPaletteItem } from '../../interfaces/Config';
@@ -69,7 +70,7 @@ export interface IVisualizationProps extends IEvents {
     locale?: Localization.ILocale;
     config?: IChartConfig;
     filters?: AFM.FilterItem[];
-    drillableItems?: IDrillableItem[];
+    drillableItems?: Array<IDrillableItem | IDrillablePredicate>;
     uriResolver?: (sdk: SDK, projectId: string, uri?: string, identifier?: string) => Promise<string>;
     fetchVisObject?: (sdk: SDK, visualizationUri: string) => Promise<VisualizationObject.IVisualizationObject>;
     fetchVisualizationClass?: (sdk: SDK, visualizationUri: string) => Promise<VisualizationClass.IVisualizationClass>;

@@ -40,6 +40,10 @@ export function isDrillableItemComposed(item: IDrillableItem): item is IDrillabl
 
 export type IDrillablePredicate = (header: IDrillHeader, afm: IAfm) => boolean;
 
+export function isDrillablePredicate(item: IDrillableItem | IDrillablePredicate): item is IDrillablePredicate {
+    return typeof item === 'function';
+}
+
 export type IDrillEventCallback = (event: IDrillEvent) => void | boolean;
 
 export interface IDrillHeaderIdentifier {

@@ -53,7 +53,7 @@ import {
     DEFAULT_DATA_POINTS_LIMIT
 } from './highcharts/commonConfiguration';
 import { getComboChartOptions } from './chartOptions/comboChartOptions';
-import { IDrillableItem } from '../../../interfaces/DrillEvents';
+import { IDrillableItem, IDrillablePredicate } from '../../../interfaces/DrillEvents';
 
 import { ColorFactory, IColorStrategy } from './colorFactory';
 import { IColorAssignment, IChartLimits, IChartConfig } from '../../../interfaces/Config';
@@ -916,7 +916,7 @@ export function getDrillContext(stackByItem: any, viewByItem: any, measures: AFM
 
 export function getDrillableSeries(
     series: any,
-    drillableItems: IDrillableItem[],
+    drillableItems: Array<IDrillableItem | IDrillablePredicate>,
     measureGroup: Execution.IMeasureGroupHeader['measureGroupHeader'],
     viewByAttribute: any,
     stackByAttribute: any,
@@ -1400,7 +1400,7 @@ export function getChartOptions(
     executionResultData: Execution.DataValue[][],
     unfilteredHeaderItems: Execution.IResultHeaderItem[][][],
     config: IChartConfig,
-    drillableItems: IDrillableItem[]
+    drillableItems: Array<IDrillableItem | IDrillablePredicate>
 ): IChartOptions {
     // Future version of API will return measures alongside attributeHeaderItems
     // we need to filter these out in order to stay compatible

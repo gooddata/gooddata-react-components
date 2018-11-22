@@ -19,7 +19,7 @@ import {
     stringifyChartTypes
 } from './utils/common';
 import { TableTransformation } from './table/TableTransformation';
-import { IDrillableItem } from '../../interfaces/DrillEvents';
+import { IDrillableItem, IDrillablePredicate } from '../../interfaces/DrillEvents';
 import ChartTransformation, { IExecutionRequest, renderHighCharts } from './chart/ChartTransformation';
 
 export interface IVisualizationProps {
@@ -31,7 +31,7 @@ export interface IVisualizationProps {
     executionRequest: IExecutionRequest;
     executionResponse: Execution.IExecutionResponse;
     executionResult: Execution.IExecutionResult;
-    drillableItems: IDrillableItem[];
+    drillableItems: Array<IDrillableItem | IDrillablePredicate>;
     locale?: string;
 
     onFiredDrillEvent?: OnFiredDrillEvent;

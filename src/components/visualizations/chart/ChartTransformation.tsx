@@ -19,7 +19,7 @@ import HighChartsRenderer, {
     renderChart as chartRenderer
 } from './HighChartsRenderer';
 import { OnFiredDrillEvent, OnLegendReady } from '../../../interfaces/Events';
-import { IDrillableItem } from '../../../interfaces/DrillEvents';
+import { IDrillableItem, IDrillablePredicate } from '../../../interfaces/DrillEvents';
 import { IChartConfig } from '../../../interfaces/Config';
 
 export function renderHighCharts(props: IHighChartsRendererProps) {
@@ -33,7 +33,7 @@ export interface IExecutionRequest {
 
 export interface IChartTransformationProps {
     config: IChartConfig;
-    drillableItems: IDrillableItem[];
+    drillableItems: Array<IDrillableItem | IDrillablePredicate>;
     height: number;
     width: number;
     locale: string;
