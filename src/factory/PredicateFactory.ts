@@ -1,5 +1,5 @@
 // (C) 2007-2018 GoodData Corporation
-import { getMeasureUriOrIdentifier } from './components/visualizations/utils/drilldownEventing';
+import { getMeasureUriOrIdentifier } from '../components/visualizations/utils/drilldownEventing';
 import {
     IDrillableItem,
     IDrillableItemSimple,
@@ -12,7 +12,7 @@ import {
     IDrillableItemComposed,
     isDrillHeaderIdentifier,
     isDrillHeaderUri, isDrillablePredicate
-} from './interfaces/DrillEvents';
+} from '../interfaces/DrillEvents';
 import { AFM } from '@gooddata/typings';
 
 export function isItemUri(uri: string) {

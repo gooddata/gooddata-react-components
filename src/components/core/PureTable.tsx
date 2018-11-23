@@ -7,7 +7,7 @@ import { get } from 'lodash';
 
 import { AFM, VisualizationObject } from '@gooddata/typings';
 import { IDrillablePredicate } from '../../interfaces/DrillEvents';
-import * as predicateFactory from '../../predicateFactory';
+import * as predicateFactory from '../../factory/PredicateFactory';
 
 import { IntlWrapper } from './base/IntlWrapper';
 import {

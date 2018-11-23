@@ -24,7 +24,7 @@ import { TotalCell } from '../totals/TotalCell';
 import InjectedIntlProps = ReactIntl.InjectedIntlProps;
 import { ITotalWithData } from '../../../../interfaces/Totals';
 import { withIntl, wrapWithIntl } from '../../utils/intlUtils';
-import * as predicateFactory from '../../../../predicateFactory';
+import * as predicateFactory from '../../../../factory/PredicateFactory';
 
 function getInstanceFromWrapper(wrapper: ReactWrapper<any>, component: any): any {
     return wrapper.find(component).childAt(0).instance();

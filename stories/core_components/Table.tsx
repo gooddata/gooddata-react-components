@@ -5,7 +5,7 @@ import { action } from '@storybook/addon-actions';
 import { screenshotWrap } from '@gooddata/test-storybook';
 
 import { Table } from '../../src';
-import * as predicateFactory from '../../src/predicateFactory';
+import * as predicateFactory from '../../src/factory/PredicateFactory';
 import { onErrorHandler } from '../mocks';
 import {
     ATTRIBUTE_1,
@@ -293,7 +293,7 @@ storiesOf('Core components/Table', module)
                     drillableItems={[
                         { uri: '/gdc/md/storybook/obj/1' },
                         predicateFactory.isItemUri('/gdc/md/storybook/obj/1'),
-                        predicateFactory.isUriInArithmeticMeasureTree('/gdc/md/storybook/obj/1'),
+                        predicateFactory.isUriInArithmeticMeasureTree('/gdc/md/storybook/obj/2'),
                         predicateFactory.isIdentifierInArithmeticMeasureTree('aagV61RmaPTt')
                     ]}
                 />
