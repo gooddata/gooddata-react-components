@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { noop, pick } from 'lodash';
 import { AFM, Execution } from '@gooddata/typings';
+import * as predicateFactory from '../../../factory/PredicateFactory';
 
 import {
     TableHeader,
@@ -17,7 +18,7 @@ import { getHeaders, getRows, validateTableProportions, getTotalsWithData } from
 import { getSortInfo, getSortItem } from './utils/sort';
 
 import { IIndexedTotalItem, ITotalWithData } from '../../../interfaces/Totals';
-import { IDrillablePredicate } from '../../../interfaces/DrillEvents';
+import { IDrillableItem, IDrillablePredicate } from '../../../interfaces/DrillEvents';
 import { OnFiredDrillEvent } from '../../../interfaces/Events';
 
 export interface ITableTransformationProps {
@@ -26,7 +27,7 @@ export interface ITableTransformationProps {
     totalsEditAllowed?: boolean;
     onTotalsEdit?: (indexedTotals: IIndexedTotalItem[]) => void;
     config?: ITableTransformationConfig;
-    drillablePredicates?: IDrillablePredicate[];
+    drillableItems?: Array<IDrillableItem | IDrillablePredicate>;
     executionRequest: AFM.IExecution;
     executionResponse: Execution.IExecutionResponse;
     executionResult: Execution.IExecutionResult;
@@ -51,7 +52,7 @@ export class TableTransformation extends React.Component<ITableTransformationPro
         totals: [],
         onTotalsEdit: noop,
         config: {},
-        drillablePredicates: [],
+        drillableItems: [],
         onFiredDrillEvent: () => true,
         onSortChange: noop,
         tableRenderer: renderDefaultTable,
@@ -61,7 +62,7 @@ export class TableTransformation extends React.Component<ITableTransformationPro
     public render(): JSX.Element {
         const {
             config,
-            drillablePredicates,
+            drillableItems,
             executionRequest,
             executionResponse,
             executionResult,
@@ -81,6 +82,8 @@ export class TableTransformation extends React.Component<ITableTransformationPro
         const headers: TableHeader[] = getHeaders(executionResponse);
         const rows: TableRow[] = getRows(executionResult);
         const totalsWithData: ITotalWithData[] = getTotalsWithData(totals, executionResult);
+
+        const drillablePredicates = predicateFactory.convertDrillableItemsToPredicates(drillableItems);
 
         validateTableProportions(headers, rows);
 

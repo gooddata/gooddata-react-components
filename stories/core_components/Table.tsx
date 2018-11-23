@@ -5,7 +5,6 @@ import { action } from '@storybook/addon-actions';
 import { screenshotWrap } from '@gooddata/test-storybook';
 
 import { Table } from '../../src';
-import * as predicateFactory from '../../src/factory/PredicateFactory';
 import { onErrorHandler } from '../mocks';
 import {
     ATTRIBUTE_1,
@@ -211,91 +210,6 @@ storiesOf('Core components/Table', module)
                     onError={onErrorHandler}
                     LoadingComponent={null}
                     ErrorComponent={null}
-                />
-            </div>
-        )
-    ))
-    .add('arithmetic measures with drilling', () => (
-        screenshotWrap(
-            <div style={wrapperStyle}>
-                <Table
-                    projectId="storybook"
-                    measures={[
-                        MEASURE_1,
-                        MEASURE_2,
-                        ARITHMETIC_MEASURE_SIMPLE_OPERANDS,
-                        ARITHMETIC_MEASURE_USING_ARITHMETIC,
-                        {
-                            measure: {
-                                localIdentifier: 'am3',
-                                definition: {
-                                    arithmeticMeasure: {
-                                        measureIdentifiers: ['m1', 'm1'],
-                                        operator: 'sum'
-                                    }
-                                },
-                                alias: 'm1 + m1'
-                            }
-                        },
-                        {
-                            measure: {
-                                localIdentifier: 'am4',
-                                definition: {
-                                    arithmeticMeasure: {
-                                        measureIdentifiers: ['am3', 'm1'],
-                                        operator: 'sum'
-                                    }
-                                },
-                                alias: 'am3 + m1'
-                            }
-                        },
-                        {
-                            measure: {
-                                localIdentifier: 'am5',
-                                definition: {
-                                    arithmeticMeasure: {
-                                        measureIdentifiers: ['am4', 'm2'],
-                                        operator: 'sum'
-                                    }
-                                },
-                                alias: 'am4 + m2'
-                            }
-                        },
-                        {
-                            measure: {
-                                localIdentifier: 'mid1',
-                                definition: {
-                                    measureDefinition: {
-                                        item: {
-                                            identifier: 'aagV61RmaPTt'
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        {
-                            measure: {
-                                localIdentifier: 'am6',
-                                definition: {
-                                    arithmeticMeasure: {
-                                        measureIdentifiers: ['m1', 'mid1'],
-                                        operator: 'sum'
-                                    }
-                                },
-                                alias: 'mid1 + m2'
-                            }
-                        }
-                    ]}
-                    attributes={[ATTRIBUTE_1]}
-                    onError={onErrorHandler}
-                    LoadingComponent={null}
-                    ErrorComponent={null}
-                    drillableItems={[
-                        { uri: '/gdc/md/storybook/obj/1' },
-                        predicateFactory.isItemUri('/gdc/md/storybook/obj/1'),
-                        predicateFactory.isUriInArithmeticMeasureTree('/gdc/md/storybook/obj/2'),
-                        predicateFactory.isIdentifierInArithmeticMeasureTree('aagV61RmaPTt')
-                    ]}
                 />
             </div>
         )

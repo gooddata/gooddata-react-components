@@ -4,8 +4,13 @@ import noop = require('lodash/noop');
 import { storiesOf } from '@storybook/react';
 import { action, decorateAction } from '@storybook/addon-actions';
 import { screenshotWrap } from '@gooddata/test-storybook';
+import {
+    EXECUTION_REQUEST_AM, EXECUTION_RESPONSE_AM, EXECUTION_RESULT_AM,
+    TABLE_HEADERS_AM
+} from '../../src/components/visualizations/table/fixtures/arithmericMeasures';
 
 import { Visualization } from '../../src/components/visualizations/Visualization';
+import * as predicateFactory from '../../src/factory/PredicateFactory';
 import { wrap } from '../utils/wrap';
 import * as fixtures from '../test_data/fixtures';
 import {
@@ -382,7 +387,7 @@ storiesOf('Internal/Drilldown', module)
             </div>
         );
     })
-    .add('Table', () => (
+    .add('Table (legacy drillable items)', () => (
         screenshotWrap(
             wrap(
                 <Visualization
@@ -411,6 +416,35 @@ storiesOf('Internal/Drilldown', module)
                             uri: TABLE_HEADERS_POP[2].uri,
                             identifier: TABLE_HEADERS_POP[2].localIdentifier
                         }
+                    ]}
+                />
+            )
+        )
+    ))
+    .add('Table with AM (drillable predicates + legacy drillable items)', () => (
+        screenshotWrap(
+            wrap(
+                <Visualization
+                    config={{ type: 'table' }}
+                    executionRequest={
+                        {
+                            afm: EXECUTION_REQUEST_AM.execution.afm,
+                            resultSpec: EXECUTION_REQUEST_AM.execution.resultSpec
+                        }
+                    }
+                    executionResponse={EXECUTION_RESPONSE_AM}
+                    executionResult={EXECUTION_RESULT_AM}
+                    onDataTooLarge={noop}
+                    onNegativeValues={noop}
+                    onLegendReady={noop}
+                    width={600}
+                    height={400}
+                    drillableItems={[
+                        { uri: TABLE_HEADERS_AM[0].uri },
+                        predicateFactory.isItemUri(TABLE_HEADERS_AM[1].uri),
+                        predicateFactory.isItemIdentifier(TABLE_HEADERS_AM[2].identifier),
+                        predicateFactory.isUriInArithmeticMeasureTree(TABLE_HEADERS_AM[0].uri),
+                        predicateFactory.isIdentifierInArithmeticMeasureTree(TABLE_HEADERS_AM[1].identifier)
                     ]}
                 />
             )

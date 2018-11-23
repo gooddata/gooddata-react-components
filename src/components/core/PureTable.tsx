@@ -4,10 +4,7 @@ import noop = require('lodash/noop');
 import difference = require('lodash/difference');
 import uniq = require('lodash/uniq');
 import { get } from 'lodash';
-
 import { AFM, VisualizationObject } from '@gooddata/typings';
-import { IDrillablePredicate } from '../../interfaces/DrillEvents';
-import * as predicateFactory from '../../factory/PredicateFactory';
 
 import { IntlWrapper } from './base/IntlWrapper';
 import {
@@ -40,7 +37,6 @@ export interface ITableProps extends ICommonVisualizationProps {
     totals?: VisualizationObject.IVisualizationTotal[];
     totalsEditAllowed?: boolean;
     onTotalsEdit?: (indexedTotals: IIndexedTotalItem[]) => void;
-    drillablePredicates?: IDrillablePredicate[];
 }
 
 export interface ITableState {
@@ -188,7 +184,6 @@ class SimpleTable extends
         } = this.props;
 
         const separators = get(this.props, 'config.separators', undefined);
-        const drillablePredicates = predicateFactory.convertDrillableItemsToPredicates(drillableItems);
         const onDataTooLarge = environment === 'dashboards' ? this.props.onDataTooLarge : noop;
 
         // Short term solution (See BB-641)
@@ -206,7 +201,7 @@ class SimpleTable extends
                             }
                             afterRender={afterRender}
                             config={{ stickyHeaderOffset, separators }}
-                            drillablePredicates={drillablePredicates}
+                            drillableItems={drillableItems}
                             height={height}
                             maxHeight={maxHeight}
                             onDataTooLarge={onDataTooLarge}
