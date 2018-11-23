@@ -6,6 +6,7 @@ import uniq = require('lodash/uniq');
 import { get } from 'lodash';
 
 import { AFM, VisualizationObject } from '@gooddata/typings';
+import { IDrillablePredicate } from '../../interfaces/DrillEvents';
 import * as predicateFactory from '../../predicateFactory';
 
 import { IntlWrapper } from './base/IntlWrapper';
@@ -39,6 +40,7 @@ export interface ITableProps extends ICommonVisualizationProps {
     totals?: VisualizationObject.IVisualizationTotal[];
     totalsEditAllowed?: boolean;
     onTotalsEdit?: (indexedTotals: IIndexedTotalItem[]) => void;
+    drillablePredicates?: IDrillablePredicate[];
 }
 
 export interface ITableState {

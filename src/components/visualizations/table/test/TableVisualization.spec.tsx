@@ -24,6 +24,7 @@ import { TotalCell } from '../totals/TotalCell';
 import InjectedIntlProps = ReactIntl.InjectedIntlProps;
 import { ITotalWithData } from '../../../../interfaces/Totals';
 import { withIntl, wrapWithIntl } from '../../utils/intlUtils';
+import * as predicateFactory from '../../../../predicateFactory';
 
 function getInstanceFromWrapper(wrapper: ReactWrapper<any>, component: any): any {
     return wrapper.find(component).childAt(0).instance();
@@ -139,7 +140,11 @@ describe('Table', () => {
 
         it('should bind onclick when cell drillable', () => {
             const wrapper: ReactWrapper<ITableVisualizationProps & InjectedIntlProps, ITableVisualizationState> =
-                renderTable({ drillableItems: [{ uri: '/gdc/md/project_id/obj/1st_measure_uri_id' }] });
+                renderTable({
+                    drillablePredicates: [
+                        predicateFactory.isItemUri('/gdc/md/project_id/obj/1st_measure_uri_id')
+                    ]
+                });
             const columns = wrapper.find(Table).prop('children');
             const cell = columns[1].props.cell({ rowIndex: 0, columnKey: 1 });
 
@@ -148,7 +153,11 @@ describe('Table', () => {
 
         it('should not bind onclick when cell not drillable', () => {
             const wrapper: ReactWrapper<ITableVisualizationProps & InjectedIntlProps, ITableVisualizationState> =
-                renderTable({ drillableItems: [{ uri: '/gdc/md/project_id/obj/unknown_measure_uri_id' }] });
+                renderTable({
+                    drillablePredicates: [
+                        predicateFactory.isItemUri('/gdc/md/project_id/obj/unknown_measure_uri_id')
+                    ]
+                });
             const columns = wrapper.find(Table).prop('children');
             const cell = columns[1].props.cell({ rowIndex: 0, columnKey: 1 });
             expect(cell.props).not.toHaveProperty('onClick', expect.any(Function));

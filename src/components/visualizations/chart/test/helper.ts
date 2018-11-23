@@ -1,5 +1,3 @@
-import { IDrillablePredicate } from '../../../../interfaces/DrillEvents';
-
 // (C) 2007-2018 GoodData Corporation
 import {
     getChartOptions,
@@ -14,7 +12,7 @@ import {
 } from '../constants';
 
 import * as fixtures from '../../../../../stories/test_data/fixtures';
-import { IDrillableItem } from '../../../../interfaces/DrillEvents';
+import { IDrillableItem, IDrillablePredicate } from '../../../../interfaces/DrillEvents';
 
 export function generateChartOptions(
     dataSet: any = fixtures.barChartWithStackByAndViewByAttributes,
