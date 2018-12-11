@@ -7,10 +7,11 @@ import {
     GridReadyEvent,
     ICellRendererParams,
     IDatasource,
-    IGetRowsParams
+    IGetRowsParams,
+    SortChangedEvent
 } from 'ag-grid';
 import { AgGridReact } from 'ag-grid-react';
-import { CellClassParams } from 'ag-grid/dist/lib/entities/colDef'; // this is not exported from ag-grid index
+import { CellClassParams } from 'ag-grid/dist/lib/entities/colDef';
 import * as classNames from 'classnames';
 import * as invariant from 'invariant';
 import * as React from 'react';
@@ -247,25 +248,14 @@ export const getGridDataSource = (
     resultSpec: AFM.IResultSpec,
     getPage: IGetPage,
     cancelPagePromises: () => void,
-    getExecution: () => Execution.IExecutionResponses,
     onSuccess: (execution: Execution.IExecutionResponses, columnDefs: IGridHeader[]) => void,
     getGridApi: () => any,
     intl: InjectedIntl,
     columnDefOptions: IColumnDefOptions = {}
 ): IDatasource => ({
-    getRows: ({ startRow, endRow, successCallback, sortModel }: IGetRowsParams) => {
-        const execution = getExecution();
-        // If execution is null, this means this is a fresh dataSource and we should ignore current sortModel
-        const resultSpecWithSorting = (sortModel.length > 0 && execution)
-            ? {
-                ...resultSpec,
-                // override sorting based on sortModel
-                sorts: getSortsFromModel(sortModel, execution)
-            }
-            : resultSpec;
-
+    getRows: ({ startRow, endRow, successCallback }: IGetRowsParams) => {
         const pagePromise = getPage(
-            resultSpecWithSorting,
+            resultSpec,
             // column limit defaults to SERVERSIDE_COLUMN_LIMIT (1000), because 1000 columns is hopefully enough.
             [endRow - startRow, undefined],
             // column offset defaults to 0, because we do not support horizontal paging yet
@@ -279,7 +269,7 @@ export const getGridDataSource = (
                     }
                     const { columnDefs, rowData, rowTotals } = executionToAGGridAdapter(
                         execution,
-                        resultSpecWithSorting,
+                        resultSpec,
                         intl,
                         {
                             addLoadingRenderer: 'loadingRenderer',
@@ -481,7 +471,6 @@ export class PivotTableInner extends
             resultSpec,
             getPage,
             cancelPagePromises,
-            this.getExecution,
             onSuccess,
             this.getGridApi,
             this.props.intl,
@@ -548,6 +537,28 @@ export class PivotTableInner extends
         return false;
     }
 
+    public sortChanged = (event: SortChangedEvent): void => {
+        const execution = this.getExecution();
+
+        invariant(execution !== undefined, 'changing sorts without prior execution cannot work');
+
+        const sortModel = event.columnApi.getAllColumns()
+            .filter(col => col.getSort() !== undefined && col.getSort() !== null)
+            .map((col) => ({ colId: col.getColId(), sort: col.getSort() } as ISortModelItem));
+
+        const sortItems = getSortsFromModel(sortModel, this.getExecution());
+
+        if (this.props.onSortChange !== undefined) {
+            this.props.onSortChange(sortItems);
+        }
+
+        this.props.pushData({
+            properties: {
+                sortItems
+            }
+        })
+    }
+
     public renderVisualization() {
         const { columnDefs, rowData } = this.state;
         const { pageSize } = this.props;
@@ -575,6 +586,7 @@ export class PivotTableInner extends
                 }
             },
             onCellClicked: this.cellClicked,
+            onSortChanged: this.sortChanged,
 
             // Basic options
             suppressMovableColumns: true,
