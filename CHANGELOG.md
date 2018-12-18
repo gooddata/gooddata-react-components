@@ -32,6 +32,7 @@ December 17, 2018
 - Discarded the indigo theme ([commit](https://github.com/gooddata/gooddata-react-components/commit/09e3324785e9e6fe98f3a18b5f6cd265a778625c))
 - Fixed the bug where a treemap did not assign colors properly by value ([commit](https://github.com/gooddata/gooddata-react-components/commit/4e1266c7d7a98d94c9159de28e3684d466126b90))
 - If an AttributeFilter component is defined by the identifier, then the onApply parameter will have this identifier as the value of the ID property. Otherwise, when the AttributeFilter is defined by the URI, the behavior does not change. ([commit](https://github.com/gooddata/gooddata-react-components/commit/cf9244719d172eb9e16385c513000ba3ee8a50e1))
+- This version is using new version of GoodStrap library without jQuery library
 
 ## 6.0.2
 
