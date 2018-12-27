@@ -17,7 +17,10 @@ import { VisualizationEnvironment } from '../uri/Visualization';
 import { IIndexedTotalItem } from '../../interfaces/Totals';
 import { convertToIndexedTotals, convertToTotals } from '../../helpers/TotalsConverter';
 import { IDataSourceProviderInjectedProps } from '../afm/DataSourceProvider';
-
+import {
+    exportHOC,
+    IExportConfigExtended
+} from './base/ExportHOC';
 import {
     ICommonVisualizationProps,
     visualizationLoadingHOC,
@@ -37,6 +40,7 @@ export interface ITableProps extends ICommonVisualizationProps {
     totals?: VisualizationObject.IVisualizationTotal[];
     totalsEditAllowed?: boolean;
     onTotalsEdit?: (indexedTotals: IIndexedTotalItem[]) => void;
+    exportConfig?: IExportConfigExtended;
 }
 
 export interface ITableState {
@@ -220,4 +224,4 @@ class SimpleTable extends
     }
 }
 
-export const PureTable = visualizationLoadingHOC(SimpleTable);
+export const PureTable = visualizationLoadingHOC(exportHOC(SimpleTable));

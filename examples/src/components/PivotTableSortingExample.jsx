@@ -48,6 +48,7 @@ export class PivotTableSortingExample extends Component {
         return (
             <div style={{ height: 300 }} className="s-pivot-table-sorting">
                 <PivotTable
+                    {...this.props}
                     projectId={projectId}
                     measures={measures}
                     rows={attributes}

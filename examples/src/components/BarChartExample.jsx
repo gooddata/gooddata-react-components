@@ -27,6 +27,7 @@ export class BarChartExample extends Component {
         return (
             <div style={{ height: 300 }} className="s-bar-chart">
                 <BarChart
+                    {...this.props}
                     projectId={projectId}
                     measures={[amount]}
                     viewBy={locationResort}

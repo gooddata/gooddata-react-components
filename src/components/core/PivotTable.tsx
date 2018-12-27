@@ -62,7 +62,10 @@ import { getMasterMeasureObjQualifier } from '../../helpers/afmHelper';
 
 import { ICommonChartProps } from './base/BaseChart';
 import { BaseVisualization } from './base/BaseVisualization';
-
+import {
+    exportHOC,
+    IExportConfigExtended
+} from './base/ExportHOC';
 import {
     commonDefaultProps,
     IGetPage,
@@ -81,6 +84,7 @@ export interface IPivotTableProps extends ICommonChartProps {
     cancelPagePromises?: () => void;
     pageSize?: number;
     config?: IPivotTableConfig;
+    exportConfig?: IExportConfigExtended;
 }
 
 export interface IPivotTableState {
@@ -721,4 +725,4 @@ export class PivotTableInner extends
     }
 }
 
-export const PivotTable = visualizationLoadingHOC(PivotTableInner, false);
+export const PivotTable = visualizationLoadingHOC(exportHOC(PivotTableInner), false);

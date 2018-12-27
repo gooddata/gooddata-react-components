@@ -19,6 +19,10 @@ import {
     ILoadingInjectedProps,
     commonDefaultProps
 } from './VisualizationLoadingHOC';
+import {
+    exportHOC,
+    IExportConfigExtended
+} from './ExportHOC';
 import { ChartPropTypes, Requireable } from '../../../proptypes/Chart';
 import { BaseVisualization } from './BaseVisualization';
 import { OnLegendReady } from '../../../interfaces/Events';
@@ -31,6 +35,7 @@ export interface ICommonChartProps extends ICommonVisualizationProps {
     height?: number;
     environment?: string;
     sdk?: SDK;
+    exportConfig?: IExportConfigExtended;
 }
 
 export type IChartProps = ICommonChartProps & IDataSourceProviderInjectedProps;
@@ -105,4 +110,4 @@ export class StatelessBaseChart extends BaseVisualization<IBaseChartProps & ILoa
     }
 }
 
-export const BaseChart = visualizationLoadingHOC(StatelessBaseChart);
+export const BaseChart = visualizationLoadingHOC(exportHOC(StatelessBaseChart));

@@ -133,9 +133,10 @@ export function dataSourceProvider<T>(
                 return null;
             }
 
+            // keep projectId in props for exporter
             const props = omit<any, IDataSourceProviderProps>(
                 this.props,
-                ['afm', 'projectId', 'resultSpec', 'adapterFactory']
+                ['afm', 'resultSpec', 'adapterFactory']
             );
             const resultSpec = addDefaultDimensions(this.props.afm, this.props.resultSpec, generateDefaultDimensions);
             return (

@@ -70,6 +70,7 @@ export class TableExample extends Component {
         return (
             <div style={{ height: 300 }} className="s-table">
                 <Table
+                    {...this.props}
                     projectId={projectId}
                     measures={measures}
                     attributes={attributes}
