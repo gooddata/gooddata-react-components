@@ -253,19 +253,6 @@ const sortingPresets = {
     }
 };
 
-const menuPresets = {
-    noMenu: {
-        label: 'No menu',
-        key: 'noMenu',
-        menuConfig: null
-    },
-    aggregations: {
-        label: 'Aggregations',
-        key: 'aggregations',
-        menuConfig: { aggregations: true }
-    }
-};
-
 export const getDrillableItems = (drillableKeys) => {
     return Object.keys(drillableKeys)
         .filter(itemKey => drillableKeys[itemKey])
@@ -281,23 +268,22 @@ export const getTotalItems = (totalKeys) => {
 export class PivotTableDrillingExample extends Component {
     constructor(props) {
         super(props);
-
         const drillingPresetKeys = {
             attributeValueCalifornia: true,
             measure: true,
             attributeMenuCategory: true,
             attributeValueJanuary: true
         };
-
+        const filterPresetKeys = {};
+        const totalPresetKeys = {};
         this.state = {
             bucketPresetKey: 'measuresColumnAndRowAttributes',
             drillEvent: null,
             drillingPresetKeys,
-            filterPresetKeys: {},
+            filterPresetKeys,
             drillableItems: getDrillableItems(drillingPresetKeys),
-            totalPresetKeys: {},
-            sortingPresetKey: 'noSort',
-            menuPresetKey: 'noMenu'
+            totalPresetKeys,
+            sortingPresetKey: 'noSort'
         };
     }
 
@@ -329,19 +315,16 @@ export class PivotTableDrillingExample extends Component {
             filterPresetKeys
         });
     }
+
     onBucketPresetChange = (bucketPresetKey) => {
         this.setState({
             bucketPresetKey
         });
     }
+
     onSortingPresetChange = (sortingPresetKey) => {
         this.setState({
             sortingPresetKey
-        });
-    }
-    onMenuPresetChange = (menuPresetKey) => {
-        this.setState({
-            menuPresetKey
         });
     }
 
@@ -362,8 +345,7 @@ export class PivotTableDrillingExample extends Component {
             drillableItems,
             drillingPresetKeys,
             filterPresetKeys,
-            totalPresetKeys,
-            menuPresetKey
+            totalPresetKeys
         } = this.state;
         const { bucketProps } = bucketPresets[bucketPresetKey];
         const { sortBy } = sortingPresets[sortingPresetKey];
@@ -471,20 +453,6 @@ export class PivotTableDrillingExample extends Component {
                         })
                     }
                 </div>
-                <div className="presets">
-                    Menu presets: {
-                        Object.keys(menuPresets).map((presetItemKey) => {
-                            const { key, label } = menuPresets[presetItemKey];
-                            return (<ElementWithParam
-                                key={key}
-                                className={`preset-option button button-secondary s-total-preset-${key} ${menuPresetKey === key ? ' is-active' : ''}`}
-                                onClick={this.onMenuPresetChange}
-                                params={[key]}
-                            >{label}</ElementWithParam>);
-                        })
-                    }
-                </div>
-
                 <div style={{ height: 300 }} className={`s-pivot-table-${bucketPresetKey}`} >
                     <PivotTable
                         projectId={projectId}
@@ -494,9 +462,6 @@ export class PivotTableDrillingExample extends Component {
                         drillableItems={drillableItems}
                         onFiredDrillEvent={this.onDrill}
                         sortBy={sortBy}
-                        config={{
-                            menu: menuPresets[menuPresetKey].menuConfig
-                        }}
                         totals={totals}
                     />
                 </div>

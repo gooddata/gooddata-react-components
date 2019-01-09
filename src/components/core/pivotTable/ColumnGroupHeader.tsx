@@ -1,48 +1,41 @@
 // (C) 2007-2018 GoodData Corporation
 import * as React from 'react';
 
-import { AFM, Execution } from '@gooddata/typings';
-import { IHeaderGroupParams, ColGroupDef } from 'ag-grid';
-import { IHeaderReactComp  } from 'ag-grid-react/lib/interfaces';
+import { IHeaderGroupParams } from 'ag-grid';
+import { IHeaderReactComp } from 'ag-grid-react/lib/interfaces';
 
 import HeaderCell, { ALIGN_LEFT } from './HeaderCell';
-import { IMenu, IMenuAggregationClickConfig } from '../../../interfaces/PivotTable';
 
-export interface IProps extends IHeaderGroupParams {
-    menu?: IMenu;
-    getColumnTotals: () => AFM.ITotalItem[];
-    getExecutionResponse: () => Execution.IExecutionResponse;
-    onMenuAggregationClick: (config: IMenuAggregationClickConfig) => void;
-    intl: ReactIntl.InjectedIntl;
+export interface IParams extends IHeaderGroupParams {
+    enableMenu: boolean;
 }
 
-export interface IColumnGroupDef extends ColGroupDef {
-    field?: string;
-}
+export default class ColumnGroupHeader
+  extends React.Component<IParams>
+  implements IHeaderReactComp {
 
-export default class ColumnGroupHeader extends React.Component<IProps> implements IHeaderReactComp {
-    public render() {
-        const { menu, intl } = this.props;
-        const columnGroupDef = this.props.columnGroup.getColGroupDef() as IColumnGroupDef;
-        const parent = this.props.columnGroup.getParent();
+  public onMenuClick = () => {
+      // tslint:disable-next-line no-console
+      console.log('menu clicked');
+  }
 
-        // do not show menu for the first group header and empty headers above row attribute column heders
-        const showMenu = !!parent && !!columnGroupDef.headerName;
+  public render() {
+      const { enableMenu } = this.props;
+      const columnGroupDef = this.props.columnGroup.getColGroupDef();
+      const parent = this.props.columnGroup.getParent();
+      // do not show menu for the first group header and empty headers above row attribute column headers
+      const showMenu = enableMenu && !!parent && !!columnGroupDef.headerName;
 
-        return (
-            <HeaderCell
-                className="s-pivot-table-column-group-header"
-                displayText={this.props.displayName}
-                enableSorting={false}
-                menuPosition={ALIGN_LEFT}
-                textAlign={ALIGN_LEFT}
-                menu={showMenu ? menu : null}
-                onMenuAggregationClick={this.props.onMenuAggregationClick}
-                colId={columnGroupDef.field}
-                getColumnTotals={this.props.getColumnTotals}
-                getExecutionResponse={this.props.getExecutionResponse}
-                intl={intl}
-            />
-        );
-    }
+      return (
+          <HeaderCell
+              displayText={this.props.displayName}
+              enableMenu={showMenu}
+              enableSorting={false}
+              menuPosition={ALIGN_LEFT}
+              textAlign={ALIGN_LEFT}
+              onMenuClick={this.onMenuClick}
+              className="s-pivot-table-column-group-header"
+          />
+      );
+  }
 }

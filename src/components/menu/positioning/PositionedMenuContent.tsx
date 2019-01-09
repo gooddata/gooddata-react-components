@@ -45,11 +45,13 @@ export default class PositionedMenuContent extends React.Component<
 
     public componentDidMount() {
         this.positionMenu();
-        this.addEventListeners();
+        window.addEventListener('resize', this.positionMenu);
+        window.addEventListener('scroll', this.positionMenu);
     }
 
     public componentWillUnmount() {
-        this.removeEventListeners();
+        window.removeEventListener('resize', this.positionMenu);
+        window.removeEventListener('scroll', this.positionMenu);
     }
 
     public render() {
@@ -65,16 +67,6 @@ export default class PositionedMenuContent extends React.Component<
                 {this.props.children}
             </div>
         );
-    }
-
-    private addEventListeners() {
-        window.addEventListener('resize', this.positionMenu);
-        window.addEventListener('scroll', this.positionMenu, true);
-    }
-
-    private removeEventListeners() {
-        window.removeEventListener('resize', this.positionMenu);
-        window.removeEventListener('scroll', this.positionMenu, true);
     }
 
     private setElMenu = (el: HTMLElement) => {
