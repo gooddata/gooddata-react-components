@@ -11,14 +11,14 @@ import { OnFiredDrillEvent } from '../../../interfaces/Events';
 import { TableRowForDrilling } from '../../../interfaces/Table';
 import { isComboChart, isHeatmap, isTreemap } from './common';
 
-export interface IHighchartsPointObject extends Highcharts.PointObject {
+export interface IHighchartsPointObject extends Highcharts.Point {
     drillContext: IDrillIntersection[];
     z?: number; // is missing in HCH's interface
     value?: number; // is missing in HCH's interface
 }
 
-export interface IHighchartsChartDrilldownEvent extends Highcharts.ChartDrilldownEvent {
-    point?: IHighchartsPointObject;
+export interface IHighchartsChartDrilldownEvent extends Highcharts.DrilldownEventObject {
+    point: IHighchartsPointObject;
     points?: IHighchartsPointObject[];
 }
 

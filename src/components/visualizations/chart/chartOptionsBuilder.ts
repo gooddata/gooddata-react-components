@@ -1269,7 +1269,7 @@ export const DEFAULT_HEATMAP_COLOR_INDEX = 1;
 export function getHeatmapDataClasses(
     series: any = [],
     colorStrategy: IColorStrategy
-    ): Highcharts.ColorAxisDataClass[] {
+    ): Highcharts.ColorAxisDataClassesOptions[] {
     const values: number[] = without(get(series, '0.data', []).map((item: any) => item.value), null, undefined, NaN);
 
     if (isEmpty(values)) {

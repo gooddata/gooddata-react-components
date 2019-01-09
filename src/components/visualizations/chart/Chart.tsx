@@ -35,7 +35,7 @@ export default class Chart extends React.Component<IChartProps> {
         domProps: {}
     };
 
-    private chart: Highcharts.ChartObject;
+    private chart: Highcharts.Chart;
     private chartRef: HTMLElement;
 
     public constructor(props: IChartProps) {
@@ -67,7 +67,7 @@ export default class Chart extends React.Component<IChartProps> {
         this.chartRef = ref;
     }
 
-    public getChart(): Highcharts.ChartObject {
+    public getChart(): Highcharts.Chart {
         if (!this.chart) {
             throw new Error('getChart() should not be called before the component is mounted');
         }

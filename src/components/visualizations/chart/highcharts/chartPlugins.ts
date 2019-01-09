@@ -2,7 +2,7 @@
 import autohideLabels from './plugins/autohideLabels/autohideLabels';
 import { extendDataLabelColors } from './plugins/dataLabelsColors';
 import { applyPointHaloOptions } from './plugins/pointHalo';
-import { renderHeatmapCells } from './plugins/renderHeatmapCells';
+// import { renderHeatmapCells } from './plugins/renderHeatmapCells';
 import { linearTickPositions } from './plugins/linearTickPositions';
 import { zeroAlignYAxis } from './plugins/zeroAlignYAxis';
 
@@ -36,7 +36,7 @@ export function initChartPlugins(Highcharts: any) {
     autohideLabels(Highcharts);
     extendDataLabelColors(Highcharts);
     applyPointHaloOptions(Highcharts);
-    renderHeatmapCells(Highcharts);
+    // renderHeatmapCells(Highcharts);
     linearTickPositions(Highcharts);
     zeroAlignYAxis(Highcharts);
 }
