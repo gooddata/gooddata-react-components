@@ -460,16 +460,6 @@
   dependencies:
     "@types/react" "*"
 
-"@types/geojson@*":
-  version "7946.0.2"
-  resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-7946.0.2.tgz#0bd0a01ef04e813c2b7580318da9e37c2eadea9c"
-
-"@types/highcharts@4.2.56":
-  version "4.2.56"
-  resolved "https://registry.yarnpkg.com/@types/highcharts/-/highcharts-4.2.56.tgz#79b7062f56364d951cbb82f762206f26d71aabff"
-  dependencies:
-    "@types/geojson" "*"
-
 "@types/invariant@2.2.29":
   version "2.2.29"
   resolved "https://registry.yarnpkg.com/@types/invariant/-/invariant-2.2.29.tgz#aa845204cd0a289f65d47e0de63a6a815e30cc66"
@@ -5432,13 +5422,10 @@ header-case@^1.0.0:
     no-case "^2.2.0"
     upper-case "^1.1.3"
 
-highcharts-pattern-fill@3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/highcharts-pattern-fill/-/highcharts-pattern-fill-3.0.3.tgz#d71923b39422d35b56cf886923b567e1d8edcf59"
-
-highcharts@4.2.5:
-  version "4.2.5"
-  resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-4.2.5.tgz#f18bbda5ca326fdff7d816c94814fe8509cec969"
+highcharts@7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-7.0.1.tgz#0c6ad096559aca723bc95276bce02b9790c444e8"
+  integrity sha512-dB+BuvIt6q2e4M0MgBClOA5FbNqfOpq/hoqQOLBVBSCqXOoCHd2fgEPFuruuyTf6KqiaIKjbRJ4JZd1fImEBYg==
 
 highlight-es@^1.0.0:
   version "1.0.3"

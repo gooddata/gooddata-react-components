@@ -2,7 +2,8 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
 
-import Chart, { Highcharts } from '../Chart';
+import Chart from '../Chart';
+import * as Highcharts from 'highcharts';
 
 jest.mock('highcharts', () => {
     return {
