@@ -1,6 +1,6 @@
 // (C) 2007-2018 GoodData Corporation
 import * as React from 'react';
-import { omit } from 'lodash';
+import { omit, isArray } from 'lodash';
 import { Subtract } from 'utility-types';
 import { VisualizationObject, AFM } from '@gooddata/typings';
 
@@ -12,7 +12,7 @@ import { MEASURES, ATTRIBUTE, STACK } from '../constants/bucketNames';
 
 export interface IColumnChartBucketProps {
     measures: VisualizationObject.BucketItem[];
-    viewBy?: VisualizationObject.IVisualizationAttribute;
+    viewBy?: VisualizationObject.IVisualizationAttribute | VisualizationObject.IVisualizationAttribute[];
     stackBy?: VisualizationObject.IVisualizationAttribute;
     filters?: VisualizationObject.VisualizationObjectFilter[];
     sortBy?: AFM.SortItem[];
@@ -29,6 +29,7 @@ type IColumnChartNonBucketProps = Subtract<IColumnChartProps, IColumnChartBucket
  * is a component with bucket props measures, viewBy, stackBy, filters
  */
 export function ColumnChart(props: IColumnChartProps): JSX.Element {
+    // TODO: only get first 2 attribute
     const buckets: VisualizationObject.IBucket[] = [
         {
             localIdentifier: MEASURES,
@@ -36,7 +37,7 @@ export function ColumnChart(props: IColumnChartProps): JSX.Element {
         },
         {
             localIdentifier: ATTRIBUTE,
-            items: props.viewBy ? [props.viewBy] : []
+            items: props.viewBy ? (isArray(props.viewBy) ? props.viewBy : [props.viewBy]) : []
         },
         {
             localIdentifier: STACK,

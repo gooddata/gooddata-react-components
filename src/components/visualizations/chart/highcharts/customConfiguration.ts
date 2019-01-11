@@ -4,7 +4,7 @@ import noop = require('lodash/noop');
 import set = require('lodash/set');
 import get = require('lodash/get');
 import merge = require('lodash/merge');
-import map = require('lodash/map');
+// import map = require('lodash/map');
 import partial = require('lodash/partial');
 import isEmpty = require('lodash/isEmpty');
 import compact = require('lodash/compact');
@@ -713,7 +713,9 @@ function getDataConfiguration(chartOptions: any) {
             return getHeatmapDataConfiguration(chartOptions);
     }
 
-    const categories = map(data.categories, escapeAngleBrackets);
+    // TODO: here
+    // const categories = map(data.categories, escapeAngleBrackets);
+    const { categories } = data;
 
     return {
         series,
@@ -875,10 +877,14 @@ function getGridConfiguration(chartOptions: any) {
 
 export function areAxisLabelsEnabled(chartOptions: any, axisPropsName: string, shouldCheckForEmptyCategories: boolean) {
     const data = chartOptions.data || EMPTY_DATA;
-    const { type } = chartOptions;
-    const categories = isHeatmap(type) ? data.categories : map(data.categories, escapeAngleBrackets);
+
+    // TODO: here
+    // const { type } = chartOptions;
+    // const categories = isHeatmap(type) ? data.categories : map(data.categories, escapeAngleBrackets);
+    const { categories } = data;
 
     const visible = get(chartOptions, `${axisPropsName}.visible`, true);
+
     const labelsEnabled = get(chartOptions, `${axisPropsName}.labelsEnabled`, true);
 
     const categoriesFlag = shouldCheckForEmptyCategories ? !isEmpty(compact(categories)) : true;
@@ -1014,6 +1020,7 @@ function getAxesConfiguration(chartOptions: any) {
             const maxProp = max ? { max: Number(max) } : {};
             const minProp = min ? { min: Number(min) } : {};
 
+            const areAttributesGrouped = get(chartOptions, 'areAttributesGrouped', false);
             const visible = get(chartOptions, axisPropsKey.concat('.visible'), true);
             const rotation = get(chartOptions, axisPropsKey.concat('.rotation'), 'auto');
             const rotationProp = rotation !== 'auto' ? { rotation: -Number(rotation) } : {};
@@ -1044,7 +1051,8 @@ function getAxesConfiguration(chartOptions: any) {
                     ...rotationProp
                 },
                 title: {
-                    enabled: visible,
+                    // should disable x axis title when 'View By 2 attributes'
+                    enabled: visible && !areAttributesGrouped,
                     margin: 10,
                     style: {
                         color: styleVariables.gdColorLink,

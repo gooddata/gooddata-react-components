@@ -1,6 +1,6 @@
 // (C) 2007-2018 GoodData Corporation
 import * as React from 'react';
-import { omit } from 'lodash';
+import { isArray, omit } from 'lodash';
 import { Subtract } from 'utility-types';
 import { VisualizationObject, AFM } from '@gooddata/typings';
 
@@ -12,7 +12,7 @@ import { MEASURES, ATTRIBUTE, STACK } from '../constants/bucketNames';
 
 export interface IBarChartBucketProps {
     measures: VisualizationObject.BucketItem[];
-    viewBy?: VisualizationObject.IVisualizationAttribute;
+    viewBy?: VisualizationObject.IVisualizationAttribute | VisualizationObject.IVisualizationAttribute[];
     stackBy?: VisualizationObject.IVisualizationAttribute;
     filters?: VisualizationObject.VisualizationObjectFilter[];
     sortBy?: AFM.SortItem[];
@@ -36,7 +36,7 @@ export function BarChart(props: IBarChartProps): JSX.Element {
         },
         {
             localIdentifier: ATTRIBUTE,
-            items: props.viewBy ? [props.viewBy] : []
+            items: props.viewBy ? (isArray(props.viewBy) ? props.viewBy : [props.viewBy]) : []
         },
         {
             localIdentifier: STACK,

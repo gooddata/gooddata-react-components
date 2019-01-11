@@ -50,6 +50,7 @@ import {
     HEATMAP_DATA_POINTS_LIMIT,
     PIE_CHART_LIMIT,
     STACK_BY_DIMENSION_INDEX,
+    VIEW_BY_ATTRIBUTES_LIMIT,
     VIEW_BY_DIMENSION_INDEX
 } from './constants';
 
@@ -127,6 +128,7 @@ export interface IChartOptions {
     stacking?: any;
     hasStackByAttribute?: boolean;
     hasViewByAttribute?: boolean;
+    areAttributesGrouped?: boolean;
     legendLayout?: string;
     dualAxis?: boolean;
     xAxes?: any;
@@ -1013,11 +1015,21 @@ export function getDrillableSeries(
     });
 }
 
+function getDistinctAttributeHeaderName(result: string[], item: any): string[] {
+    const { attributeHeaderItem: { name } } = item;
+    if (!includes(result, name)) {
+        result.push(name);
+    }
+    return result;
+}
+
 function getCategories(
     type: string,
     measureGroup: Execution.IMeasureGroupHeader['measureGroupHeader'],
-    viewByAttribute: any, stackByAttribute: any
-    ) {
+    viewByAttribute: any,
+    stackByAttribute: any,
+    groupByAttribute: any
+) {
     if (isHeatmap(type)) {
         return [
             viewByAttribute ? viewByAttribute.items.map((item: any) => item.attributeHeaderItem.name) : [''],
@@ -1026,6 +1038,16 @@ function getCategories(
     }
     if (isScatterPlot(type)) {
         return stackByAttribute ? stackByAttribute.items.map((item: any) => item.attributeHeaderItem.name) : [''];
+    }
+
+    if (groupByAttribute) {
+        const outsideAttributes = groupByAttribute.items.reduce(getDistinctAttributeHeaderName, []);
+        const insideAttributes  = viewByAttribute.items.reduce(getDistinctAttributeHeaderName, []);
+
+        return outsideAttributes.map((outsideAttribute: string) => ({
+            name: outsideAttribute,
+            categories: insideAttributes
+        }));
     }
 
     // Categories make up bar/slice labels in charts. These usually match view by attribute values.
@@ -1406,8 +1428,10 @@ export function getChartOptions(
 
     const { type, mdObject } = config;
     const { dimensions } = executionResponse;
+    const areAttributesGrouped = attributeHeaderItems[VIEW_BY_DIMENSION_INDEX].length === VIEW_BY_ATTRIBUTES_LIMIT;
     let viewByAttribute;
     let stackByAttribute;
+    let groupByAttribute = null;
 
     if (isTreemap(type)) {
         const {
@@ -1421,14 +1445,20 @@ export function getChartOptions(
         viewByAttribute = treemapViewByAttribute;
         stackByAttribute = treemapStackByAttribute;
     } else {
+        // TODO: explain here  more about 'indexInDimension'
         viewByAttribute = findAttributeInDimension(
             dimensions[VIEW_BY_DIMENSION_INDEX],
-            attributeHeaderItems[VIEW_BY_DIMENSION_INDEX]
+            attributeHeaderItems[VIEW_BY_DIMENSION_INDEX],
+            areAttributesGrouped ? 1 : undefined
         );
         stackByAttribute = findAttributeInDimension(
             dimensions[STACK_BY_DIMENSION_INDEX],
             attributeHeaderItems[STACK_BY_DIMENSION_INDEX]
         );
+    }
+
+    if (areAttributesGrouped) {
+        groupByAttribute = { items: attributeHeaderItems[VIEW_BY_DIMENSION_INDEX][0] };
     }
 
     const colorStrategy = ColorFactory.getColorStrategy(
@@ -1469,7 +1499,7 @@ export function getChartOptions(
 
     const series = assignYAxes(drillableSeries, yAxes);
 
-    let categories = getCategories(type, measureGroup, viewByAttribute, stackByAttribute);
+    let categories = getCategories(type, measureGroup, viewByAttribute, stackByAttribute, groupByAttribute);
 
     // Pie charts dataPoints are sorted by default by value in descending order
     if (isOneOfTypes(type, sortedByMeasureTypes)) {
@@ -1649,6 +1679,7 @@ export function getChartOptions(
         stacking,
         hasStackByAttribute: Boolean(stackByAttribute),
         hasViewByAttribute: Boolean(viewByAttribute),
+        areAttributesGrouped,
         legendLayout: config.legendLayout || 'horizontal',
         xAxes,
         yAxes,
