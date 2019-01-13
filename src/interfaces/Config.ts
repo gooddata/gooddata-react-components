@@ -65,7 +65,12 @@ export interface IChartLimits {
     dataPoints?: number;
 }
 
-export interface IChartConfig {
+export interface IMeasuresStackConfig {
+    stackMeasures?: boolean;
+    stackMeasuresToPercent?: boolean;
+}
+
+export interface IChartConfig extends IMeasuresStackConfig {
     colors?: string[];
     colorPalette?: IColorPalette;
     colorMapping?: IColorMapping[];

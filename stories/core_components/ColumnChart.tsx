@@ -24,32 +24,13 @@ import { CUSTOM_COLOR_PALETTE_CONFIG } from '../data/configProps';
 const wrapperStyle = { width: 800, height: 400 };
 
 storiesOf('Core components/ColumnChart', module)
-    .add('grouped attributes with two measures', () => (
+    .add('grouped attributes with two left measures', () => (
         screenshotWrap(
             <div style={wrapperStyle}>
                 <ColumnChart
                     projectId="storybook"
                     measures={[MEASURE_1, MEASURE_2]}
                     viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
-                    onError={onErrorHandler}
-                    LoadingComponent={null}
-                    ErrorComponent={null}
-                />
-            </div>
-        )
-    ))
-    .add('grouped attributes with one left and one right measure', () => (
-        screenshotWrap(
-            <div style={wrapperStyle}>
-                <ColumnChart
-                    projectId="storybook"
-                    measures={[MEASURE_1, MEASURE_2]}
-                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
-                    config={{
-                        secondary_yaxis: {
-                            measures: [MEASURE_2.measure.localIdentifier]
-                        }
-                    }}
                     onError={onErrorHandler}
                     LoadingComponent={null}
                     ErrorComponent={null}
@@ -122,6 +103,99 @@ storiesOf('Core components/ColumnChart', module)
                     measures={[MEASURE_1]}
                     viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
                     stackBy={ATTRIBUTE_3}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
+    .add('grouped attributes with \'Stack Measures\'', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <ColumnChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    config={{
+                        stackMeasures: true
+                    }}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
+    .add('grouped attributes with \'Stack by %\'', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <ColumnChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    config={{
+                        stackMeasuresToPercent: true
+                    }}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
+    .add('grouped attributes with dual axes', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <ColumnChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    config={{
+                        secondary_yaxis: {
+                            measures: [MEASURE_2.measure.localIdentifier]
+                        }
+                    }}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
+    .add('grouped attributes with dual axes and \'Stack Measures\'', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <ColumnChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2, MEASURE_3]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    config={{
+                        secondary_yaxis: {
+                            measures: [MEASURE_3.measure.localIdentifier]
+                        },
+                        stackMeasures: true
+                    }}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
+    .add('grouped attributes with dual axes and \'Stack by %\'', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <ColumnChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2, MEASURE_3]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    config={{
+                        secondary_yaxis: {
+                            measures: [MEASURE_3.measure.localIdentifier]
+                        },
+                        stackMeasuresToPercent: true
+                    }}
                     onError={onErrorHandler}
                     LoadingComponent={null}
                     ErrorComponent={null}

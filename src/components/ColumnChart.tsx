@@ -29,7 +29,7 @@ type IColumnChartNonBucketProps = Subtract<IColumnChartProps, IColumnChartBucket
  * is a component with bucket props measures, viewBy, stackBy, filters
  */
 export function ColumnChart(props: IColumnChartProps): JSX.Element {
-    // TODO: only get first 2 attribute
+    // TODO: only get first 2 attributes
     const buckets: VisualizationObject.IBucket[] = [
         {
             localIdentifier: MEASURES,

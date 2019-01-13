@@ -51,7 +51,9 @@ import {
     PIE_CHART_LIMIT,
     STACK_BY_DIMENSION_INDEX,
     VIEW_BY_ATTRIBUTES_LIMIT,
-    VIEW_BY_DIMENSION_INDEX
+    VIEW_BY_DIMENSION_INDEX,
+    PARENT_ATTRIBUTE_INDEX,
+    PRIMARY_ATTRIBUTE_INDEX
 } from './constants';
 
 import {
@@ -1445,11 +1447,10 @@ export function getChartOptions(
         viewByAttribute = treemapViewByAttribute;
         stackByAttribute = treemapStackByAttribute;
     } else {
-        // TODO: explain here  more about 'indexInDimension'
         viewByAttribute = findAttributeInDimension(
             dimensions[VIEW_BY_DIMENSION_INDEX],
             attributeHeaderItems[VIEW_BY_DIMENSION_INDEX],
-            areAttributesGrouped ? 1 : undefined
+            areAttributesGrouped ? PRIMARY_ATTRIBUTE_INDEX : undefined
         );
         stackByAttribute = findAttributeInDimension(
             dimensions[STACK_BY_DIMENSION_INDEX],
@@ -1458,7 +1459,7 @@ export function getChartOptions(
     }
 
     if (areAttributesGrouped) {
-        groupByAttribute = { items: attributeHeaderItems[VIEW_BY_DIMENSION_INDEX][0] };
+        groupByAttribute = { items: attributeHeaderItems[VIEW_BY_DIMENSION_INDEX][PARENT_ATTRIBUTE_INDEX] };
     }
 
     const colorStrategy = ColorFactory.getColorStrategy(
