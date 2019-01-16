@@ -8,4 +8,3 @@ export const HEATMAP_DATA_POINTS_LIMIT = 10000;
 export const VIEW_BY_ATTRIBUTES_LIMIT = 2;
 export const PARENT_ATTRIBUTE_INDEX = 0; // first attribute in 'View By' panel
 export const PRIMARY_ATTRIBUTE_INDEX = 1; // second attribute in 'View By' panel
-

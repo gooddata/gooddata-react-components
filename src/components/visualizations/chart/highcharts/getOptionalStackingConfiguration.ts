@@ -1,3 +1,4 @@
+// (C) 2007-2018 GoodData Corporation
 import partial = require('lodash/partial');
 import includes = require('lodash/includes');
 import set = require('lodash/set');
@@ -37,12 +38,12 @@ function handleDualAxes(isDualAxes: boolean, item: any) {
 
     return {
         ...item,
-        ...hcStackingConfig,
+        ...hcStackingConfig
     };
 }
 
 function getStackMeasuresConfiguration(chartOptions: any, config: any, chartConfig: IChartConfig = {}) {
-    const { stackMeasures = false, stackMeasuresToPercent = false} = chartConfig;
+    const { stackMeasures = false, stackMeasuresToPercent = false } = chartConfig;
     if (!stackMeasures && !stackMeasuresToPercent) {
         return {};
     }
@@ -94,5 +95,5 @@ export default function getOptionalStackingConfiguration(chartOptions: any, conf
     return includes(supportedOptionalStackingChartTypes, type) ? {
         ...getParentAttributeConfiguration(chartOptions, config),
         ...getStackMeasuresConfiguration(chartOptions, config, chartConfig)
-    }: {};
+    } : {};
 }

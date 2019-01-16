@@ -1,10 +1,11 @@
 // (C) 2007-2018 GoodData Corporation
 import * as cx from 'classnames';
 import noop = require('lodash/noop');
+import isString = require('lodash/isString');
 import set = require('lodash/set');
 import get = require('lodash/get');
 import merge = require('lodash/merge');
-// import map = require('lodash/map');
+import map = require('lodash/map');
 import partial = require('lodash/partial');
 import isEmpty = require('lodash/isEmpty');
 import compact = require('lodash/compact');
@@ -700,6 +701,19 @@ function getHeatmapDataConfiguration(chartOptions: any) {
     };
 }
 
+function escapeCategories(dataCategories: any) {
+    return map(dataCategories, (category: any) => {
+        if (isString(category)) {
+            return escapeAngleBrackets(category);
+        } else {
+            return {
+                ...category,
+                categories: map(category.categories, escapeAngleBrackets)
+            };
+        }
+    });
+}
+
 function getDataConfiguration(chartOptions: any) {
     const data = chartOptions.data || EMPTY_DATA;
     const series = getSeries(data.series);
@@ -716,8 +730,7 @@ function getDataConfiguration(chartOptions: any) {
     }
 
     // TODO: here
-    // const categories = map(data.categories, escapeAngleBrackets);
-    const { categories } = data;
+    const categories = escapeCategories(data.categories);
 
     return {
         series,
@@ -881,9 +894,8 @@ export function areAxisLabelsEnabled(chartOptions: any, axisPropsName: string, s
     const data = chartOptions.data || EMPTY_DATA;
 
     // TODO: here
-    // const { type } = chartOptions;
-    // const categories = isHeatmap(type) ? data.categories : map(data.categories, escapeAngleBrackets);
-    const { categories } = data;
+    const { type } = chartOptions;
+    const categories = isHeatmap(type) ? data.categories : escapeCategories(data.categories);
 
     const visible = get(chartOptions, `${axisPropsName}.visible`, true);
 
