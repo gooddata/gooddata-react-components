@@ -42,7 +42,8 @@ import {
     shouldXAxisStartOnTickOnBubbleScatter,
     shouldYAxisStartOnTickOnBubbleScatter
 } from '../highcharts/helpers';
-import stackMeasuresConfiguration from './stackMeasuresConfiguration';
+
+import getOptionalStackingConfiguration from './getOptionalStackingConfiguration';
 
 const {
     stripColors,
@@ -1080,7 +1081,7 @@ export function getCustomizedConfiguration(chartOptions: IChartOptions, chartCon
         getHoverStyles,
         getGridConfiguration,
         getLabelsConfiguration,
-        stackMeasuresConfiguration // must be after 'getDataConfiguration' to access 'series'
+        getOptionalStackingConfiguration // must be after 'getDataConfiguration' to access 'series'
     ];
 
     const commonData = configurators.reduce((config: any, configurator: any) => {

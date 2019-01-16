@@ -103,6 +103,12 @@ export const supportedDualAxesChartTypes = [
     VisualizationTypes.LINE
 ];
 
+export const supportedOptionalStackingChartTypes = [
+    VisualizationTypes.COLUMN,
+    VisualizationTypes.BAR,
+    VisualizationTypes.AREA
+];
+
 export interface IAxis {
     label: string;
     format?: string;

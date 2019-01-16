@@ -1,5 +1,9 @@
 import partial = require('lodash/partial');
+import includes = require('lodash/includes');
+import set = require('lodash/set');
 import { IChartConfig } from '../../../../interfaces/Config';
+import { VisualizationTypes } from '../../../../constants/visualizationTypes';
+import { supportedOptionalStackingChartTypes } from '../chartOptionsBuilder';
 
 const NORMAL_STACK = 'normal';
 const PERCENT_STACK = 'percent';
@@ -37,15 +41,15 @@ function handleDualAxes(isDualAxes: boolean, item: any) {
     };
 }
 
-export default function stackMeasuresConfiguration(chartOptions: any, config: any, chartConfig: IChartConfig = {}) {
+function getStackMeasuresConfiguration(chartOptions: any, config: any, chartConfig: IChartConfig = {}) {
     const { stackMeasures = false, stackMeasuresToPercent = false} = chartConfig;
     if (!stackMeasures && !stackMeasuresToPercent) {
         return {};
     }
 
     const { yAxes } = chartOptions;
-    const isDualAxes = yAxes.length === 2;
     const { series } = config;
+    const isDualAxes = yAxes.length === 2;
 
     const handlers: Function[] = [
         partial(handleStackMeasure, stackMeasures),
@@ -56,4 +60,39 @@ export default function stackMeasuresConfiguration(chartOptions: any, config: an
     return {
         series: series.map((item: any) => (handlers.reduce((result: any, handler: Function) => handler(result), item)))
     };
+}
+
+function getParentAttributeConfiguration(chartOptions: any, config: any) {
+
+    const { type } = chartOptions;
+    const { xAxis } = config;
+    const xAxisItem = xAxis[0]; // expect only one X axis
+
+    // parent attribute in X axis
+    const parentAttributeOptions = {};
+
+    // only apply font-weight to parent label
+    set(parentAttributeOptions, 'style', {
+        fontWeight: 'bold'
+    });
+
+    if (type === VisualizationTypes.BAR) {
+        // distance more 5px for two groups of attributes for bar chart
+        set(parentAttributeOptions, 'x', -5);
+    }
+
+    set(xAxisItem, 'labels.groupedOptions', [parentAttributeOptions]);
+
+    return {
+        xAxis: [xAxisItem]
+    };
+}
+
+export default function getOptionalStackingConfiguration(chartOptions: any, config: any, chartConfig: IChartConfig) {
+    const { type } = chartOptions;
+
+    return includes(supportedOptionalStackingChartTypes, type) ? {
+        ...getParentAttributeConfiguration(chartOptions, config),
+        ...getStackMeasuresConfiguration(chartOptions, config, chartConfig)
+    }: {};
 }
