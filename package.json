@@ -1,6 +1,6 @@
 {
   "name": "@gooddata/react-components",
-  "version": "6.2.0-alpha21",
+  "version": "6.2.0-no23reason-dho-rail-1252-lcm-uri-mapping-2019-01-22T15-44-32-650Z",
   "description": "GoodData React Components",
   "main": "dist/index.js",
   "repository": "git@github.com:gooddata/gooddata-react-components.git",
@@ -96,7 +96,7 @@
     "yup": "^0.24.1"
   },
   "dependencies": {
-    "@gooddata/gooddata-js": "11.0.0",
+    "@gooddata/gooddata-js": "11.1.0-no23reason-dho-rail-1252-lcm-uri-mapping-v2-2019-01-24T12-29-47-440Z",
     "@gooddata/goodstrap": "59.4.0",
     "@gooddata/js-utils": "3.3.0",
     "@gooddata/numberjs": "^3.1.2",
