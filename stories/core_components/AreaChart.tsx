@@ -15,7 +15,7 @@ import {
     MEASURE_WITH_NULLS,
     ATTRIBUTE_1_SORT_ITEM,
     ARITHMETIC_MEASURE_SIMPLE_OPERANDS,
-    ARITHMETIC_MEASURE_USING_ARITHMETIC
+    ARITHMETIC_MEASURE_USING_ARITHMETIC, MEASURE_3
 } from '../data/componentProps';
 import { GERMAN_SEPARATORS } from '../data/numberFormat';
 import {
@@ -27,6 +27,107 @@ import {
 const wrapperStyle = { width: 800, height: 400 };
 
 storiesOf('Core components/AreaChart', module)
+    .add('grouped attributes with two measures', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <AreaChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
+    .add('grouped attributes with 60-degree rotation setting on X axis', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <AreaChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    config={{
+                        xaxis: {
+                            rotation: '60'
+                        }
+                    }}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
+    .add('grouped attributes with hide-axis setting on X axis', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <AreaChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    config={{
+                        xaxis: {
+                            visible: false
+                        }
+                    }}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
+    .add('grouped attributes with stacking attribute', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <AreaChart
+                    projectId="storybook"
+                    measures={[MEASURE_1]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    stackBy={ATTRIBUTE_3}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
+    .add('grouped attributes with \'Stack Measures\'', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <AreaChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    config={{
+                        stackMeasures: true
+                    }}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
+    .add('grouped attributes with \'Stack to 100%\'', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <AreaChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    config={{
+                        stackMeasuresToPercent: true
+                    }}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
     .add('two measures, one attribute, stack by default', () => (
         screenshotWrap(
             <div style={wrapperStyle}>

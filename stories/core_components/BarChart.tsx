@@ -28,7 +28,7 @@ import { attributeItemNameMatch } from '../../src/factory/HeaderPredicateFactory
 const wrapperStyle = { width: 800, height: 400 };
 
 storiesOf('Core components/BarChart', module)
-    .add('grouped attributes with two measures', () => (
+    .add('grouped attributes with two bottom measures', () => (
         screenshotWrap(
             <div style={wrapperStyle}>
                 <BarChart
@@ -45,26 +45,7 @@ storiesOf('Core components/BarChart', module)
             </div>
         )
     ))
-    .add('grouped attributes with one left and one right measure', () => (
-        screenshotWrap(
-            <div style={wrapperStyle}>
-                <BarChart
-                    projectId="storybook"
-                    measures={[MEASURE_1, MEASURE_2]}
-                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
-                    config={{
-                        secondary_xaxis: {
-                            measures: [MEASURE_2.measure.localIdentifier]
-                        }
-                    }}
-                    onError={onErrorHandler}
-                    LoadingComponent={null}
-                    ErrorComponent={null}
-                />
-            </div>
-        )
-    ))
-    .add('grouped attributes with two right measures', () => (
+    .add('grouped attributes with two top measures', () => (
         screenshotWrap(
             <div style={wrapperStyle}>
                 <BarChart
@@ -76,21 +57,6 @@ storiesOf('Core components/BarChart', module)
                             measures: [MEASURE_1.measure.localIdentifier, MEASURE_2.measure.localIdentifier]
                         }
                     }}
-                    onError={onErrorHandler}
-                    LoadingComponent={null}
-                    ErrorComponent={null}
-                />
-            </div>
-        )
-    ))
-    .add('grouped attributes with stacking attribute', () => (
-        screenshotWrap(
-            <div style={wrapperStyle}>
-                <BarChart
-                    projectId="storybook"
-                    measures={[MEASURE_1]}
-                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
-                    stackBy={ATTRIBUTE_3}
                     onError={onErrorHandler}
                     LoadingComponent={null}
                     ErrorComponent={null}
@@ -128,6 +94,114 @@ storiesOf('Core components/BarChart', module)
                         yaxis: {
                             visible: false
                         }
+                    }}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
+    .add('grouped attributes with stacking attribute', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BarChart
+                    projectId="storybook"
+                    measures={[MEASURE_1]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    stackBy={ATTRIBUTE_3}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
+    .add('grouped attributes with \'Stack Measures\'', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BarChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    config={{
+                        stackMeasures: true
+                    }}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
+    .add('grouped attributes with \'Stack to 100%\'', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BarChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    config={{
+                        stackMeasuresToPercent: true
+                    }}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
+    .add('grouped attributes with dual axes', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BarChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    config={{
+                        secondary_xaxis: {
+                            measures: [MEASURE_2.measure.localIdentifier]
+                        }
+                    }}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
+    .add('grouped attributes with dual axes and \'Stack Measures\'', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BarChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2, MEASURE_3]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    config={{
+                        secondary_xaxis: {
+                            measures: [MEASURE_3.measure.localIdentifier]
+                        },
+                        stackMeasures: true
+                    }}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
+    .add('grouped attributes with dual axes and \'Stack by %\'', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BarChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2, MEASURE_3]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    config={{
+                        secondary_xaxis: {
+                            measures: [MEASURE_3.measure.localIdentifier]
+                        },
+                        stackMeasuresToPercent: true
                     }}
                     onError={onErrorHandler}
                     LoadingComponent={null}

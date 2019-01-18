@@ -127,7 +127,7 @@ storiesOf('Core components/ColumnChart', module)
             </div>
         )
     ))
-    .add('grouped attributes with \'Stack by %\'', () => (
+    .add('grouped attributes with \'Stack to 100%\'', () => (
         screenshotWrap(
             <div style={wrapperStyle}>
                 <ColumnChart
@@ -183,7 +183,7 @@ storiesOf('Core components/ColumnChart', module)
             </div>
         )
     ))
-    .add('grouped attributes with dual axes and \'Stack by %\'', () => (
+    .add('grouped attributes with dual axes and \'Stack to 100%\'', () => (
         screenshotWrap(
             <div style={wrapperStyle}>
                 <ColumnChart
