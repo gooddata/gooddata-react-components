@@ -183,6 +183,32 @@ storiesOf('Core components/ColumnChart', module)
             </div>
         )
     ))
+    .add('grouped attributes with dual axes and \'Stack Measures\' with min/max', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <ColumnChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2, MEASURE_3]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    config={{
+                        yaxis: {
+                            min: '100',
+                            max: '1000'
+                        },
+                        secondary_yaxis: {
+                            min: '200',
+                            max: '800',
+                            measures: [MEASURE_3.measure.localIdentifier]
+                        },
+                        stackMeasures: true
+                    }}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
     .add('grouped attributes with dual axes and \'Stack to 100%\'', () => (
         screenshotWrap(
             <div style={wrapperStyle}>
@@ -192,6 +218,32 @@ storiesOf('Core components/ColumnChart', module)
                     viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
                     config={{
                         secondary_yaxis: {
+                            measures: [MEASURE_3.measure.localIdentifier]
+                        },
+                        stackMeasuresToPercent: true
+                    }}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>
+        )
+    ))
+    .add('grouped attributes with dual axes and \'Stack to 100%\' with min/max', () => (
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <ColumnChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2, MEASURE_3]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    config={{
+                        yaxis: {
+                            min: '10',
+                            max: '90'
+                        },
+                        secondary_yaxis: {
+                            min: '200',
+                            max: '800',
                             measures: [MEASURE_3.measure.localIdentifier]
                         },
                         stackMeasuresToPercent: true
