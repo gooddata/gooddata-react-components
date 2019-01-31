@@ -15,7 +15,7 @@
   "devDependencies": {
     "@gooddata/eslint-config": "0.1.0",
     "@gooddata/mock-js": "1.19.1",
-    "@gooddata/test-storybook": "2.0.0",
+    "@gooddata/test-storybook": "2.0.0-pbenes-pb-par-2019-01-31T07-54-25-444Z",
     "@gooddata/tslint-config": "0.0.13",
     "@storybook/addon-actions": "3.4.10",
     "@storybook/addon-options": "3.4.10",
