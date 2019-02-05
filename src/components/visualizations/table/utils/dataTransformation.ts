@@ -2,8 +2,13 @@
 import { AFM, Execution } from '@gooddata/typings';
 import * as invariant from 'invariant';
 import { get, has, isEmpty, zip } from 'lodash';
-import { getMappingHeaderName } from '../../../../helpers/mappingHeader';
-import { ILegacyDrillIntersection } from '../../../../interfaces/DrillEvents';
+import {
+    getMappingHeaderIdentifier,
+    getMappingHeaderLocalIdentifier,
+    getMappingHeaderName,
+    getMappingHeaderUri
+} from '../../../../helpers/mappingHeader';
+import { IDrillEventIntersectionElement } from '../../../../interfaces/DrillEvents';
 import {
     IMappingHeader,
     isMappingHeaderAttribute,
@@ -145,23 +150,38 @@ export function validateTableProportions(headers: IMappingHeader[], rows: TableR
     );
 }
 
-export function getIntersectionForDrilling(afm: AFM.IAfm, header: IMappingHeader): ILegacyDrillIntersection {
+// TODO BB-1318 Intersection generator - Table
+export function getIntersectionForDrilling(afm: AFM.IAfm, header: IMappingHeader): IDrillEventIntersectionElement {
     if (isMappingHeaderAttribute(header)) {
         return {
-            id: header.attributeHeader.identifier,
-            identifier: header.attributeHeader.identifier,
-            uri: header.attributeHeader.uri,
-            title: getMappingHeaderName(header)
+            id: getMappingHeaderIdentifier(header),
+            title: getMappingHeaderName(header),
+            header: {
+                uri: getMappingHeaderUri(header),
+                identifier: getMappingHeaderIdentifier(header)
+            }
         };
     }
 
     if (isMappingHeaderMeasureItem(header)) {
-        return {
-            id: header.measureHeaderItem.localIdentifier,
-            identifier: '',
-            uri: get<string>(getMasterMeasureObjQualifier(afm, header.measureHeaderItem.localIdentifier), 'uri'),
+        const element = {
+            id: getMappingHeaderLocalIdentifier(header),
             title: getMappingHeaderName(header)
         };
+
+        const masterQualifier = getMasterMeasureObjQualifier(afm, getMappingHeaderLocalIdentifier(header));
+
+        if (masterQualifier.uri || masterQualifier.identifier) {
+            return {
+                ...element,
+                header: {
+                    uri: masterQualifier.uri || '',
+                    identifier: masterQualifier.identifier || ''
+                }
+            };
+        }
+
+        return element;
     }
 
     throw new Error(`Unknown mapping header type ${Object.keys(header)}`);

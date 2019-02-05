@@ -594,6 +594,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         }
 
         const leafColumnDefs = getTreeLeaves(columnDefs);
+        // TODO BB-1318 Drill context generator - Pivot Table
         const drillEvent: IDrillEvent = {
             executionContext: afm,
             drillContext: {
@@ -603,7 +604,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
                 rowIndex,
                 row: getDrillRowData(leafColumnDefs, cellEvent.data),
                 intersection: getDrillIntersection(drillItems, afm),
-                value: cellEvent.value ? cellEvent.value.toString() : null
+                value: cellEvent.value ? cellEvent.value.toString() : null // TODO BB-1318 I think we dont want to have this
             }
         };
 

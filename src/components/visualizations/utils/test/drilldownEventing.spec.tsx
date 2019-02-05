@@ -5,7 +5,8 @@ import {
     getClickableElementNameByChartType,
     chartClick,
     cellClick,
-    IHighchartsChartDrilldownEvent
+    IHighchartsChartDrilldownEvent,
+    IHighchartsPointObject
 } from '../drilldownEventing';
 import { VisualizationTypes } from '../../../../constants/visualizationTypes';
 
@@ -27,45 +28,38 @@ describe('Drilldown Eventing', () => {
             }
         ]
     };
-
-    const pointClickEventData = {
-        point: {
-            x: 1,
-            y: 2,
-            value: 678.00,
-            drillIntersection: [
-                {
-                    id: 'id',
-                    title: 'title',
-                    value: '123',
-                    name: 'name1',
+    const point: Partial<IHighchartsPointObject> = {
+        x: 1,
+        y: 2,
+        value: 678.00,
+        drillIntersection: [
+            {
+                id: 'id',
+                title: 'title',
+                header: {
                     identifier: 'identifier1',
-                    uri: 'uri1',
-                    some: 'nonrelevant data'
-                },
-                {
-                    id: 'id',
-                    title: 'title',
-                    value: '123',
-                    name: 'name2',
+                    uri: 'uri1'
+                }
+            },
+            {
+                id: 'id',
+                title: 'title',
+                header: {
                     identifier: 'identifier2',
                     uri: 'uri2'
-                },
-                {
-                    id: 'id',
-                    title: 'title',
-                    value: '123',
-                    name: 'name3',
+                }
+            },
+            {
+                id: 'id',
+                title: 'title',
+                header: {
                     identifier: 'identifier3',
                     uri: 'uri3'
                 }
-            ],
-            some: 'nonrelevant data'
-        }
+            }
+        ]
     };
-
-    const pointClickWitZEventData = cloneDeep(pointClickEventData);
-    (pointClickWitZEventData as any as IHighchartsChartDrilldownEvent).point.z = 12000;
+    const pointClickEventData = { point } as any as IHighchartsChartDrilldownEvent;
 
     it('should get clickable chart element name', () => {
         const fn = getClickableElementNameByChartType;
@@ -84,13 +78,14 @@ describe('Drilldown Eventing', () => {
     it('should call point drill context (non-group) when event.points given but null', () => {
         const drillConfig = { afm, onFiredDrillEvent: () => true };
         const target = { dispatchEvent: jest.fn() };
+        const pointClickEventDataWithNullPoints: IHighchartsChartDrilldownEvent = {
+            ...pointClickEventData,
+            points: null
+        };
 
         chartClick(
             drillConfig,
-            {
-                ...pointClickEventData,
-                points: null
-            } as any as IHighchartsChartDrilldownEvent,
+            pointClickEventDataWithNullPoints,
             target as any as EventTarget,
             VisualizationTypes.LINE
         );
@@ -107,7 +102,7 @@ describe('Drilldown Eventing', () => {
 
         chartClick(
             drillConfig,
-            pointClickEventData as any as IHighchartsChartDrilldownEvent,
+            pointClickEventData ,
             target as any as EventTarget,
             VisualizationTypes.LINE
         );
@@ -172,7 +167,7 @@ describe('Drilldown Eventing', () => {
 
         chartClick(
             drillConfig,
-            pointClickEventData as any as IHighchartsChartDrilldownEvent,
+            pointClickEventData,
             target as any as EventTarget,
             VisualizationTypes.TREEMAP
         );
@@ -185,7 +180,7 @@ describe('Drilldown Eventing', () => {
 
         chartClick(
             drillConfig,
-            pointClickEventData as any as IHighchartsChartDrilldownEvent,
+            pointClickEventData,
             target as any as EventTarget,
             VisualizationTypes.HEATMAP
         );
@@ -200,10 +195,13 @@ describe('Drilldown Eventing', () => {
     it('should correctly handle z coordinate of point', () => {
         const drillConfig = { afm, onFiredDrillEvent: () => true };
         const target = { dispatchEvent: jest.fn() };
+        const pointClickWitZEventData = cloneDeep(pointClickEventData);
+
+        pointClickWitZEventData.point.z = 12000;
 
         chartClick(
             drillConfig,
-            pointClickWitZEventData as any as IHighchartsChartDrilldownEvent,
+            pointClickWitZEventData,
             target as any as EventTarget,
             VisualizationTypes.BUBBLE
         );
@@ -269,7 +267,7 @@ describe('Drilldown Eventing', () => {
 
         chartClick(
             drillConfig,
-            pointClickEventData as any as IHighchartsChartDrilldownEvent,
+            pointClickEventData,
             target as any as EventTarget,
             VisualizationTypes.LINE
         );
@@ -285,7 +283,7 @@ describe('Drilldown Eventing', () => {
 
         chartClick(
             drillConfig,
-            pointClickEventData as any as IHighchartsChartDrilldownEvent,
+            pointClickEventData,
             target as any as EventTarget,
             VisualizationTypes.LINE
         );
@@ -302,7 +300,7 @@ describe('Drilldown Eventing', () => {
 
         chartClick(
             drillConfig,
-            pointClickEventData as any as IHighchartsChartDrilldownEvent,
+            pointClickEventData,
             target as any as EventTarget,
             VisualizationTypes.LINE
         );
@@ -316,28 +314,27 @@ describe('Drilldown Eventing', () => {
     it('should call fire event on label click', () => {
         const drillConfig = { afm, onFiredDrillEvent: () => true };
         const target = { dispatchEvent: jest.fn() };
-        const labelClickEventData = {
-            points: [{
-                x: 1,
-                y: 2,
-                drillIntersection: [
-                    {
-                        id: 'id',
-                        title: 'title',
-                        identifier: 'identifier1',
-                        uri: 'uri1',
-                        value: '123',
-                        name: 'name1',
-                        some: 'nonrelevant data'
-                    }
-                ],
-                some: 'nonrelevant data'
+        const clickedPoint: Partial<IHighchartsPointObject> = {
+            x: 1,
+            y: 2,
+            drillIntersection: [{
+                id: 'id',
+                title: 'title',
+                header: {
+                    identifier: 'identifier1',
+                    uri: 'uri1'
+                }
             }]
         };
+        const labelClickEventData = {
+            points: [
+                clickedPoint
+            ]
+        } as any as IHighchartsChartDrilldownEvent;
 
         chartClick(
             drillConfig,
-            labelClickEventData as any as IHighchartsChartDrilldownEvent,
+            labelClickEventData,
             target as any as EventTarget,
             VisualizationTypes.LINE
         );
@@ -391,15 +388,13 @@ describe('Drilldown Eventing', () => {
             rowIndex: 2,
             row: ['3'],
             intersection: [{
-                title: 'title1',
                 id: 'id1',
-                identifier: 'identifier1',
-                uri: 'uri1',
-                name: 'name1',
-                value: '123',
-                some: 'irrelevant data'
-            }],
-            some: 'nonrelevant data'
+                title: 'title1',
+                header: {
+                    identifier: 'identifier1',
+                    uri: 'uri1'
+                }
+            }]
         };
 
         cellClick(

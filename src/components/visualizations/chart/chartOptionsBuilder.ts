@@ -25,7 +25,7 @@ import { findAttributeInDimension, findMeasureGroupInDimensions } from '../../..
 import { isSomeHeaderPredicateMatched } from '../../../helpers/headerPredicate';
 import { unwrap } from '../../../helpers/utils';
 import { IChartConfig, IChartLimits, IColorAssignment } from '../../../interfaces/Config';
-import { ILegacyDrillIntersection } from '../../../interfaces/DrillEvents';
+import { IDrillEventIntersectionElement } from '../../../interfaces/DrillEvents';
 import { IHeaderPredicate } from '../../../interfaces/HeaderPredicate';
 import { IMappingHeader } from '../../../interfaces/MappingHeader';
 import { getLighterColor } from '../utils/color';
@@ -844,6 +844,7 @@ export function generateTooltipTreemapFn(viewByAttribute: any, stackByAttribute:
     };
 }
 
+// TODO BB-1318 Legacy interface should be replaced by MappingHeader
 export interface ILegacyMeasureHeader {
     uri: string; // header attribute value or measure uri
     identifier?: string;
@@ -861,16 +862,19 @@ export function isLegacyAttributeHeader(header: ILegacyHeader): header is ILegac
     return (header as ILegacyAttributeHeader).attribute !== undefined;
 }
 
-function createLegacyDrillIntersectionElement(header: ILegacyHeader, afm: AFM.IAfm): ILegacyDrillIntersection {
+// TODO BB-1318 Drill intersection generator - Visualization
+function createDrillIntersectionElement(header: ILegacyHeader, afm: AFM.IAfm): IDrillEventIntersectionElement {
     const { name } = header;
 
     if (isLegacyAttributeHeader(header)) {
         const { attribute, uri } = header;
         return {
             id: getAttributeElementIdFromAttributeElementUri(uri),
-            value: name,
-            uri: attribute.uri,
-            identifier: attribute.identifier
+            title: name,
+            header: {
+                uri: attribute.uri,
+                identifier: attribute.identifier
+            }
         };
     }
 
@@ -878,9 +882,11 @@ function createLegacyDrillIntersectionElement(header: ILegacyHeader, afm: AFM.IA
 
     return {
         id: localIdentifier,
-        value: name,
-        uri: get<string>(getMasterMeasureObjQualifier(afm, localIdentifier), 'uri'),
-        identifier
+        title: name,
+        header: {
+            uri: get<string>(getMasterMeasureObjQualifier(afm, localIdentifier), 'uri'),
+            identifier
+        }
     };
 }
 
@@ -889,10 +895,10 @@ export function getDrillIntersection(
     viewByItem: any,
     measures: any[],
     afm: AFM.IAfm
-): ILegacyDrillIntersection[] {
+): IDrillEventIntersectionElement[] {
     const headers = without([...measures, viewByItem, stackByItem], null);
 
-    return headers.map(header => createLegacyDrillIntersectionElement(header, afm));
+    return headers.map(header => createDrillIntersectionElement(header, afm));
 }
 
 function getViewBy(viewByAttribute: IUnwrappedAttributeHeadersWithItems, viewByIndex: number) {

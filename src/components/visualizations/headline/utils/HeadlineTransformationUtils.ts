@@ -201,9 +201,13 @@ export function buildDrillEventData(itemContext: IHeadlineDrillItemContext,
     const { identifier, uri } = measureIds;
 
     if (identifier || uri) {
-        intersection.header = { identifier, uri };
+        intersection.header = {
+            identifier: identifier || '',
+            uri: uri || ''
+        };
     }
 
+    // TODO BB-1318 Drill context generator - Headline
     return {
         executionContext: executionRequest.afm,
         drillContext: {
@@ -224,6 +228,7 @@ export function buildDrillEventData(itemContext: IHeadlineDrillItemContext,
  * @param drillEventData - The event data in {executionContext, drillContext} format.
  * @param target - The target where the built event must be dispatched.
  */
+// TODO BB-1318 This is duplicated, use function  in drilldownEventing.ts
 export function fireDrillEvent(drillEventFunction: IDrillEventCallback,
                                drillEventData: IDrillEvent,
                                target: EventTarget) {

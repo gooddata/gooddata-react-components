@@ -10,15 +10,14 @@ import {
     IDrillEvent,
     DrillEventContext,
     IDrillEventContextGroup,
-    IDrillEventIntersectionElement,
-    ILegacyDrillIntersection
+    IDrillEventIntersectionElement
 } from '../../../interfaces/DrillEvents';
 import { OnFiredDrillEvent } from '../../../interfaces/Events';
 import { TableRowForDrilling } from '../../../interfaces/Table';
 import { isComboChart, isHeatmap, isTreemap } from './common';
 
 export interface IHighchartsPointObject extends Highcharts.PointObject {
-    drillIntersection: ILegacyDrillIntersection[];
+    drillIntersection: IDrillEventIntersectionElement[];
     z?: number; // is missing in HCH's interface
     value?: number; // is missing in HCH's interface
 }
@@ -36,7 +35,7 @@ export interface ICellDrillEvent {
     columnIndex: number;
     rowIndex: number;
     row: TableRowForDrilling;
-    intersection: ILegacyDrillIntersection[];
+    intersection: IDrillEventIntersectionElement[];
 }
 
 export interface IDrillConfig {
@@ -81,23 +80,11 @@ function fireEvent(onFiredDrillEvent: OnFiredDrillEvent, data: IDrillEvent, targ
     }
 }
 
-function normalizeIntersectionElements(intersection: ILegacyDrillIntersection[]): IDrillEventIntersectionElement[] {
-    return intersection.map(({ id, title, value, name, uri, identifier }) => {
-       const intersection: IDrillEventIntersectionElement = {
-           id,
-           title: title || value as string || name
-       };
-       if (uri || identifier) {
-           intersection.header = { uri, identifier };
-       }
-       return intersection;
-    });
-}
-
 function composeDrillContextGroup(
     { points }: IHighchartsChartDrilldownEvent,
     chartType: VisType
 ): IDrillEventContextGroup {
+    // TODO BB-1318 Drill context generator - Visualization Group
     return {
         type: chartType,
         element: 'label',
@@ -105,7 +92,8 @@ function composeDrillContextGroup(
             return {
                 x: point.x,
                 y: point.y,
-                intersection: normalizeIntersectionElements(point.drillIntersection)
+                // TODO BB-1318 Intersection generator - Visualization group
+                intersection: point.drillIntersection
             };
         })
     };
@@ -121,13 +109,15 @@ function composeDrillContextPoint(
         x: point.x,
         y: point.y
     };
+    // TODO BB-1318 Drill context generator - Visualization point
     return {
         type: chartType,
         element: getClickableElementNameByChartType(chartType),
         ...xyProp,
         ...zProp,
         ...valueProp,
-        intersection: normalizeIntersectionElements(point.drillIntersection)
+        // TODO BB-1318 Intersection generator - Visualization point
+        intersection: point.drillIntersection
     };
 }
 
@@ -162,15 +152,19 @@ export function chartClick(drillConfig: IDrillConfig,
 export function cellClick(drillConfig: IDrillConfig, event: ICellDrillEvent, target: EventTarget) {
     const { afm, onFiredDrillEvent } = drillConfig;
     const { columnIndex, rowIndex, row, intersection } = event;
+
+    console.log('event', event);
+
     const data: IDrillEvent = {
         executionContext: afm,
+        // TODO BB-1318 Drill context generator - Table
         drillContext: {
             type: VisualizationTypes.TABLE,
             element: getClickableElementNameByChartType(VisualizationTypes.TABLE),
             columnIndex,
             rowIndex,
             row,
-            intersection: normalizeIntersectionElements(intersection)
+            intersection
         }
     };
 

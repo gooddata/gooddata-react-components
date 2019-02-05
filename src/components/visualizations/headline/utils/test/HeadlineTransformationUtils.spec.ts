@@ -531,7 +531,8 @@ describe('HeadlineTransformationUtils', () => {
                             id: 'm1',
                             title: 'Lost',
                             header: {
-                                uri: '/gdc/md/project_id/obj/1'
+                                uri: '/gdc/md/project_id/obj/1',
+                                identifier: ''
                             }
                         }
                     ]
@@ -574,7 +575,8 @@ describe('HeadlineTransformationUtils', () => {
                             id: 'm1',
                             title: 'Lost',
                             header: {
-                                identifier: 'metric.lost'
+                                identifier: 'metric.lost',
+                                uri: ''
                             }
                         }
                     ]
@@ -627,7 +629,8 @@ describe('HeadlineTransformationUtils', () => {
                             id: 'm2',
                             title: 'Found',
                             header: {
-                                uri: '/gdc/md/project_id/obj/2'
+                                uri: '/gdc/md/project_id/obj/2',
+                                identifier: ''
                             }
                         }
                     ]
