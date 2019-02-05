@@ -25,6 +25,7 @@ import {
 import { IIndexedTotalItem, ITotalWithData } from '../../../../interfaces/Totals';
 import { getAttributeElementIdFromAttributeElementUri } from '../../utils/common';
 import { getMasterMeasureObjQualifier } from '../../../../helpers/afmHelper';
+import { createDrillIntersectionElement } from '../../utils/drilldownEventing';
 import { AVAILABLE_TOTALS } from '../totals/utils';
 
 export function getHeaders(executionResponse: Execution.IExecutionResponse): IMappingHeader[] {
@@ -150,38 +151,24 @@ export function validateTableProportions(headers: IMappingHeader[], rows: TableR
     );
 }
 
-// TODO BB-1318 Intersection generator - Table
 export function getIntersectionForDrilling(afm: AFM.IAfm, header: IMappingHeader): IDrillEventIntersectionElement {
     if (isMappingHeaderAttribute(header)) {
-        return {
-            id: getMappingHeaderIdentifier(header),
-            title: getMappingHeaderName(header),
-            header: {
-                uri: getMappingHeaderUri(header),
-                identifier: getMappingHeaderIdentifier(header)
-            }
-        };
+        return createDrillIntersectionElement(
+            getMappingHeaderIdentifier(header),
+            getMappingHeaderName(header),
+            getMappingHeaderUri(header),
+            getMappingHeaderIdentifier(header)
+        );
     }
 
     if (isMappingHeaderMeasureItem(header)) {
-        const element = {
-            id: getMappingHeaderLocalIdentifier(header),
-            title: getMappingHeaderName(header)
-        };
-
         const masterQualifier = getMasterMeasureObjQualifier(afm, getMappingHeaderLocalIdentifier(header));
-
-        if (masterQualifier.uri || masterQualifier.identifier) {
-            return {
-                ...element,
-                header: {
-                    uri: masterQualifier.uri || '',
-                    identifier: masterQualifier.identifier || ''
-                }
-            };
-        }
-
-        return element;
+        return createDrillIntersectionElement(
+            getMappingHeaderLocalIdentifier(header),
+            getMappingHeaderName(header),
+            masterQualifier.uri,
+            masterQualifier.identifier
+        );
     }
 
     throw new Error(`Unknown mapping header type ${Object.keys(header)}`);

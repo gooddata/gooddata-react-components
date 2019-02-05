@@ -1,5 +1,5 @@
 // (C) 2007-2018 GoodData Corporation
-import { VisElementType } from '../../../../../constants/visualizationTypes';
+import { HeadlineElementType } from '../../../../../constants/visualizationTypes';
 import { IDrillEvent } from '../../../../../interfaces/DrillEvents';
 import { IHeadlineData } from '../../../../../interfaces/Headlines';
 import * as headerPredicateFactory from '../../../../../factory/HeaderPredicateFactory';
@@ -499,7 +499,7 @@ describe('HeadlineTransformationUtils', () => {
         it('should build expected drill event data from execution request made with metric uri', () => {
             const itemContext = {
                 localIdentifier: 'm1',
-                element: 'primaryValue' as VisElementType,
+                element: 'primaryValue' as HeadlineElementType,
                 value: '42'
             };
             const eventData = buildDrillEventData(
@@ -543,7 +543,7 @@ describe('HeadlineTransformationUtils', () => {
         it('should build expected drill event data from execution request made with metric identifier', () => {
             const itemContext = {
                 localIdentifier: 'm1',
-                element: 'primaryValue' as VisElementType,
+                element: 'primaryValue' as HeadlineElementType,
                 value: '42'
             };
             const eventData = buildDrillEventData(
@@ -587,7 +587,7 @@ describe('HeadlineTransformationUtils', () => {
         it('should build drill event data from execution for secondary value', () => {
             const itemContext = {
                 localIdentifier: 'm2',
-                element: 'secondaryValue' as VisElementType,
+                element: 'secondaryValue' as HeadlineElementType,
                 value: '12345678'
             };
             const eventData = buildDrillEventData(
@@ -642,7 +642,7 @@ describe('HeadlineTransformationUtils', () => {
             const itemContext = {
                 localIdentifier: 'abc',
                 uri: '/gdc/md/project_id/obj/2',
-                element: 'primaryValue' as VisElementType,
+                element: 'primaryValue' as HeadlineElementType,
                 value: '42'
             };
             expect(() => buildDrillEventData(

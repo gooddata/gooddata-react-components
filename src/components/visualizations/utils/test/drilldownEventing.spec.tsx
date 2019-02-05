@@ -6,7 +6,8 @@ import {
     chartClick,
     cellClick,
     IHighchartsChartDrilldownEvent,
-    IHighchartsPointObject
+    IHighchartsPointObject,
+    createDrillIntersectionElement
 } from '../drilldownEventing';
 import { VisualizationTypes } from '../../../../constants/visualizationTypes';
 
@@ -69,7 +70,6 @@ describe('Drilldown Eventing', () => {
         expect(fn(VisualizationTypes.PIE)).toBe('slice');
         expect(fn(VisualizationTypes.TREEMAP)).toBe('slice');
         expect(fn(VisualizationTypes.HEATMAP)).toBe('cell');
-        expect(fn(VisualizationTypes.TABLE)).toBe('cell');
         expect(() => {
             fn('headline'); // headline is not defined
         }).toThrowError();
@@ -435,6 +435,70 @@ describe('Drilldown Eventing', () => {
                     }
                 }]
             }
+        });
+    });
+
+    describe('createDrillIntersectionElement', () => {
+        it('should return null when id not provided', () => {
+            const element = createDrillIntersectionElement(undefined, 'title');
+
+            expect(element).toBe(null);
+        });
+
+        it('should return null when title not provided', () => {
+            const element = createDrillIntersectionElement('id', undefined);
+
+            expect(element).toBe(null);
+        });
+
+        it('should return intersection element with only id and title when no uri and identifier provided', () => {
+            const element = createDrillIntersectionElement('id', 'title');
+
+            expect(element).toEqual({
+                id: 'id',
+                title: 'title'
+            });
+        });
+
+        it('should return intersection element with header', () => {
+            const element = createDrillIntersectionElement('id', 'title', 'uri', 'identifier');
+
+            expect(element).toEqual({
+                id: 'id',
+                title: 'title',
+                header: {
+                    uri: 'uri',
+                    identifier: 'identifier'
+                }
+            });
+        });
+
+        // tslint:disable-next-line:max-line-length
+        it('should return intersection element with header with uri and empty identifier when only uri provided', () => {
+            const element = createDrillIntersectionElement('id', 'title', 'uri');
+
+            expect(element).toEqual({
+                id: 'id',
+                title: 'title',
+                header: {
+                    uri: 'uri',
+                    identifier: ''
+                }
+            });
+        });
+
+        // tslint:disable-next-line:max-line-length
+        it('should return intersection element with header with identifier and empty uri when only identifier provided', () => {
+            const element = createDrillIntersectionElement('id', 'title', undefined, 'identifier');
+
+            expect(element).toEqual({
+                id: 'id',
+                title: 'title',
+                header: {
+                    uri: '',
+                    identifier: 'identifier'
+                }
+            });
         });
     });
 });

@@ -44,6 +44,7 @@ import {
     parseValue,
     stringifyChartTypes
 } from '../utils/common';
+import { createDrillIntersectionElement } from '../utils/drilldownEventing';
 import { getComboChartOptions } from './chartOptions/comboChartOptions';
 
 import { ColorFactory, IColorStrategy } from './colorFactory';
@@ -862,32 +863,23 @@ export function isLegacyAttributeHeader(header: ILegacyHeader): header is ILegac
     return (header as ILegacyAttributeHeader).attribute !== undefined;
 }
 
-// TODO BB-1318 Drill intersection generator - Visualization
-function createDrillIntersectionElement(header: ILegacyHeader, afm: AFM.IAfm): IDrillEventIntersectionElement {
-    const { name } = header;
+function mapDrillIntersectionElement(header: ILegacyHeader, afm: AFM.IAfm): IDrillEventIntersectionElement {
+    const { name, localIdentifier } = header;
 
     if (isLegacyAttributeHeader(header)) {
         const { attribute, uri } = header;
-        return {
-            id: getAttributeElementIdFromAttributeElementUri(uri),
-            title: name,
-            header: {
-                uri: attribute.uri,
-                identifier: attribute.identifier
-            }
-        };
+
+        return createDrillIntersectionElement(
+            getAttributeElementIdFromAttributeElementUri(uri),
+            name,
+            attribute.uri,
+            attribute.identifier
+        );
     }
 
-    const { identifier = '', localIdentifier } = header;
+    const objectQualifier = getMasterMeasureObjQualifier(afm, localIdentifier);
 
-    return {
-        id: localIdentifier,
-        title: name,
-        header: {
-            uri: get<string>(getMasterMeasureObjQualifier(afm, localIdentifier), 'uri'),
-            identifier
-        }
-    };
+    return createDrillIntersectionElement(localIdentifier, name, objectQualifier.uri, objectQualifier.identifier);
 }
 
 export function getDrillIntersection(
@@ -898,7 +890,7 @@ export function getDrillIntersection(
 ): IDrillEventIntersectionElement[] {
     const headers = without([...measures, viewByItem, stackByItem], null);
 
-    return headers.map(header => createDrillIntersectionElement(header, afm));
+    return headers.map(header => mapDrillIntersectionElement(header, afm));
 }
 
 function getViewBy(viewByAttribute: IUnwrappedAttributeHeadersWithItems, viewByIndex: number) {

@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as classNames from 'classnames';
 import noop = require('lodash/noop');
 import { AFM } from '@gooddata/typings';
-import { VisElementType } from '../../../constants/visualizationTypes';
+import { HeadlineElementType, VisElementTypes } from '../../../constants/visualizationTypes';
 import ResponsiveText from '@gooddata/goodstrap/lib/ResponsiveText/ResponsiveText';
 import {
     IFormattedHeadlineDataItem,
@@ -16,7 +16,7 @@ import { IChartConfig } from '../../../interfaces/Config';
 export interface IHeadlineFiredDrillEventItemContext {
     localIdentifier: AFM.Identifier;
     value: string | null;
-    element: VisElementType;
+    element: HeadlineElementType;
 }
 
 export type IHeadlineFiredDrillEvent = (
@@ -102,7 +102,7 @@ export default class Headline extends React.Component<IHeadlineVisualizationProp
         });
     }
 
-    private fireDrillEvent(item: IHeadlineDataItem, elementName: VisElementType, elementTarget: HTMLElement) {
+    private fireDrillEvent(item: IHeadlineDataItem, elementName: HeadlineElementType, elementTarget: HTMLElement) {
         const { onFiredDrillEvent } = this.props;
 
         if (onFiredDrillEvent) {
@@ -119,13 +119,13 @@ export default class Headline extends React.Component<IHeadlineVisualizationProp
     private handleClickOnPrimaryItem(event: React.MouseEvent<HTMLElement>) {
         const { data: { primaryItem } } = this.props;
 
-        this.fireDrillEvent(primaryItem, 'primaryValue', event.target as HTMLElement);
+        this.fireDrillEvent(primaryItem, VisElementTypes.PRIMARY_VALUE, event.target as HTMLElement);
     }
 
     private handleClickOnSecondaryItem(event: React.MouseEvent<HTMLElement>) {
         const { data: { secondaryItem } } = this.props;
 
-        this.fireDrillEvent(secondaryItem, 'secondaryValue', event.target as HTMLElement);
+        this.fireDrillEvent(secondaryItem, VisElementTypes.SECONDARY_VALUE, event.target as HTMLElement);
     }
 
     private renderTertiaryItem() {

@@ -5,12 +5,21 @@ import { AFM } from '@gooddata/typings';
 import * as CustomEvent from 'custom-event';
 import * as Highcharts from 'highcharts';
 import * as invariant from 'invariant';
-import { VisElementType, VisType, VisualizationTypes } from '../../../constants/visualizationTypes';
+import {
+    ChartElementType,
+    VisElementTypes,
+    ChartType,
+    VisType,
+    VisualizationTypes
+} from '../../../constants/visualizationTypes';
 import {
     IDrillEvent,
     DrillEventContext,
     IDrillEventContextGroup,
-    IDrillEventIntersectionElement
+    IDrillEventIntersectionElement,
+    IDrillEventContextPoint,
+    IDrillEventContextTable,
+    IDrillPoint
 } from '../../../interfaces/DrillEvents';
 import { OnFiredDrillEvent } from '../../../interfaces/Events';
 import { TableRowForDrilling } from '../../../interfaces/Table';
@@ -43,24 +52,23 @@ export interface IDrillConfig {
     onFiredDrillEvent: OnFiredDrillEvent;
 }
 
-export function getClickableElementNameByChartType(type: VisType): VisElementType {
+export function getClickableElementNameByChartType(type: VisType): ChartElementType {
     switch (type) {
         case VisualizationTypes.LINE:
         case VisualizationTypes.AREA:
         case VisualizationTypes.SCATTER:
         case VisualizationTypes.BUBBLE:
-            return 'point';
+            return VisElementTypes.POINT;
         case VisualizationTypes.COLUMN:
         case VisualizationTypes.BAR:
-            return 'bar';
+            return VisElementTypes.BAR;
         case VisualizationTypes.PIE:
         case VisualizationTypes.TREEMAP:
         case VisualizationTypes.DONUT:
         case VisualizationTypes.FUNNEL:
-            return 'slice';
-        case VisualizationTypes.TABLE:
+            return VisElementTypes.SLICE;
         case VisualizationTypes.HEATMAP:
-            return 'cell';
+            return VisElementTypes.CELL;
         default:
             invariant(false, `Unknown visualization type: ${type}`);
             return null;
@@ -82,47 +90,50 @@ function fireEvent(onFiredDrillEvent: OnFiredDrillEvent, data: IDrillEvent, targ
 
 function composeDrillContextGroup(
     { points }: IHighchartsChartDrilldownEvent,
-    chartType: VisType
+    chartType: ChartType
 ): IDrillEventContextGroup {
-    // TODO BB-1318 Drill context generator - Visualization Group
+    const contextPoints: IDrillPoint[] = points.map((point: IHighchartsPointObject) => {
+        return {
+            x: point.x,
+            y: point.y,
+            intersection: point.drillIntersection
+        };
+    });
     return {
         type: chartType,
-        element: 'label',
-        points: points.map((point: IHighchartsPointObject) => {
-            return {
-                x: point.x,
-                y: point.y,
-                // TODO BB-1318 Intersection generator - Visualization group
-                intersection: point.drillIntersection
-            };
-        })
+        element: VisElementTypes.LABEL,
+        points: contextPoints
     };
 }
 
 function composeDrillContextPoint(
     { point }: IHighchartsChartDrilldownEvent,
-    chartType: VisType
-): DrillEventContext {
-    const zProp = isNaN(point.z) ? {} : { z: point.z };
-    const valueProp = (isTreemap(chartType) || isHeatmap(chartType)) ? { value: point.value.toString() } : {};
-    const xyProp = isTreemap(chartType) ? {} : {
-        x: point.x,
-        y: point.y
-    };
-    // TODO BB-1318 Drill context generator - Visualization point
-    return {
+    chartType: ChartType
+): IDrillEventContextPoint {
+    const context: IDrillEventContextPoint = {
         type: chartType,
         element: getClickableElementNameByChartType(chartType),
-        ...xyProp,
-        ...zProp,
-        ...valueProp,
-        // TODO BB-1318 Intersection generator - Visualization point
         intersection: point.drillIntersection
     };
+
+    if (!isTreemap(chartType)) {
+        context.x = point.x;
+        context.y = point.y;
+    }
+
+    if (!isNaN(point.z)) {
+        context.z = point.z;
+    }
+
+    if (isTreemap(chartType) || isHeatmap(chartType)) {
+        context.value =  point.value.toString();
+    }
+
+    return context;
 }
 
 const chartClickDebounced = debounce((drillConfig: IDrillConfig, event: IHighchartsChartDrilldownEvent,
-                                      target: EventTarget, chartType: VisType) => {
+                                      target: EventTarget, chartType: ChartType) => {
     const { afm, onFiredDrillEvent } = drillConfig;
 
     let usedChartType = chartType;
@@ -145,7 +156,7 @@ const chartClickDebounced = debounce((drillConfig: IDrillConfig, event: IHighcha
 export function chartClick(drillConfig: IDrillConfig,
                            event: IHighchartsChartDrilldownEvent,
                            target: EventTarget,
-                           chartType: VisType) {
+                           chartType: ChartType) {
     chartClickDebounced(drillConfig, event, target, chartType);
 }
 
@@ -153,20 +164,43 @@ export function cellClick(drillConfig: IDrillConfig, event: ICellDrillEvent, tar
     const { afm, onFiredDrillEvent } = drillConfig;
     const { columnIndex, rowIndex, row, intersection } = event;
 
-    console.log('event', event);
-
+    const drillContext: IDrillEventContextTable = {
+        type: VisualizationTypes.TABLE,
+        element: VisElementTypes.CELL,
+        columnIndex,
+        rowIndex,
+        row,
+        intersection
+    };
     const data: IDrillEvent = {
         executionContext: afm,
-        // TODO BB-1318 Drill context generator - Table
-        drillContext: {
-            type: VisualizationTypes.TABLE,
-            element: getClickableElementNameByChartType(VisualizationTypes.TABLE),
-            columnIndex,
-            rowIndex,
-            row,
-            intersection
-        }
+        drillContext
     };
 
     fireEvent(onFiredDrillEvent, data, target);
+}
+
+export function createDrillIntersectionElement(
+    id: string,
+    title: string,
+    uri?: string,
+    identifier?: string
+): IDrillEventIntersectionElement {
+    if (!id || !title) {
+        return null;
+    }
+
+    const element: IDrillEventIntersectionElement = {
+        id,
+        title
+    };
+
+    if (uri || identifier) {
+        element.header = {
+            uri: uri || '',
+            identifier: identifier || ''
+        };
+    }
+
+    return element;
 }
