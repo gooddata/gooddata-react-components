@@ -297,7 +297,7 @@ export const getAGGridDataSource = (
         return pagePromise
             .then((execution: Execution.IExecutionResponses | null) => {
                 if (!execution) {
-                    return null;
+                    return null; // bla
                 }
 
                 const { columnDefs, rowData, rowTotals } = executionToAGGridAdapter(
