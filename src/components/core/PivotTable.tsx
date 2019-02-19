@@ -912,7 +912,9 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         const headerHeight = (this.gridApi as any).headerRootComp.eHeaderContainer.clientHeight;
         const bodyHeight = rowCount * rowHeight;
         const footerHeight = aggregationCount * rowHeight;
-        const totalHeight = headerHeight + bodyHeight + footerHeight;
+        // make room preventively for the horizontal scroll bar to avoid it overlapping the last row data
+        const scrollBarSafetyArea = rowHeight / 2;
+        const totalHeight = headerHeight + bodyHeight + footerHeight + scrollBarSafetyArea;
 
         this.setState({
             desiredHeight: Math.min(totalHeight, maxHeight)
