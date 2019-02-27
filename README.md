@@ -1,4 +1,4 @@
-[![npm version](https://badge.fury.io/js/%40gooddata%2Freact-components.svg)](https://www.npmjs.com/package/@gooddata/react-components) 
+[![npm version](https://badge.fury.io/js/%40gooddata%2Freact-components.svg)](https://www.npmjs.com/package/@gooddata/react-components)
 
 # GoodData.UI React components
 > A React-based JavaScript library for building data-driven applications
@@ -19,7 +19,7 @@ $ npm install --save @gooddata/react-components
 ```
 
 
-## Contributing
+##  Contributing
 
 We welcome any contribution in form of [issues](https://github.com/gooddata/gooddata-react-components/issues) or [pull requests](https://github.com/gooddata/gooddata-react-components/pulls).
 These commands may come in handy while developing:
