@@ -332,3 +332,23 @@ $header-cell-resize-width: 20px;
         transform: rotate(180deg);
     }
 }
+
+.ag-floating-top {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+
+    .ag-row {
+        background-color: transparent;
+
+        .ag-cell {
+            background-color: #fff;
+
+            &.sticky,
+            &.gd-measure-column {
+                background-color: transparent;
+                color: transparent;
+            }
+        }
+    }
+}

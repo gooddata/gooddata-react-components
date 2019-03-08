@@ -9,7 +9,14 @@ function getRowHeight(gridApi: GridApi): number {
     return (gridApi as any).getModel().rowHeight;
 }
 
+function getPinnedTopRowNode(gridApi: any): HTMLElement | null {
+    return gridApi.rowRenderer.floatingTopRowComps[0]
+        ? gridApi.rowRenderer.floatingTopRowComps[0].bodyContainerComp.eContainer.parentNode.parentNode
+        : null;
+}
+
 export default {
     getHeaderHeight,
-    getRowHeight
+    getRowHeight,
+    getPinnedTopRowNode
 };
