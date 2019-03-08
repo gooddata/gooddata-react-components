@@ -9,14 +9,34 @@ function getRowHeight(gridApi: GridApi): number {
     return (gridApi as any).getModel().rowHeight;
 }
 
-function getPinnedTopRowNode(gridApi: any): HTMLElement | null {
-    return gridApi.rowRenderer.floatingTopRowComps[0]
-        ? gridApi.rowRenderer.floatingTopRowComps[0].bodyContainerComp.eContainer.parentNode.parentNode
+function getScrollTop(gridApi: GridApi): number {
+    return (gridApi as any).gridPanel.getVScrollPosition().top;
+}
+
+function getPinnedTopRow(gridApi: GridApi): any | null {
+    const pinnedTopRow = (gridApi as any).rowRenderer.floatingTopRowComps[0];
+    return pinnedTopRow ? pinnedTopRow : null;
+}
+
+function getPinnedTopRowNode(gridApi: GridApi): HTMLElement | null {
+    const pinnedTopRow = getPinnedTopRow(gridApi);
+    return pinnedTopRow
+        ? pinnedTopRow.bodyContainerComp.eContainer.parentNode.parentNode
+        : null;
+}
+
+function getPinnedTopRowAttributeNode(gridApi: GridApi, attributeId: string): HTMLElement | null {
+    const pinnedTopRow = getPinnedTopRow(gridApi);
+    return pinnedTopRow && pinnedTopRow.cellComps[attributeId]
+        ? pinnedTopRow.cellComps[attributeId].eGui
         : null;
 }
 
 export default {
     getHeaderHeight,
     getRowHeight,
-    getPinnedTopRowNode
+    getScrollTop,
+    getPinnedTopRow,
+    getPinnedTopRowNode,
+    getPinnedTopRowAttributeNode
 };

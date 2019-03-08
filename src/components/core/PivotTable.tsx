@@ -10,11 +10,8 @@ import {
     IGetRowsParams,
     SortChangedEvent,
     BodyScrollEvent,
-    ICellRendererComp,
-    ModelUpdatedEvent,
-    RowDataChangedEvent,
-    RowDataUpdatedEvent,
-    RowNode
+    RowNode,
+    // ViewportChangedEvent
 } from 'ag-grid';
 import { AgGridReact } from 'ag-grid-react';
 import { CellClassParams } from 'ag-grid/dist/lib/entities/colDef';
@@ -103,6 +100,7 @@ export interface IPivotTableState {
     columnTotals: AFM.ITotalItem[];
     agGridRerenderNumber: number;
     desiredHeight: number | undefined;
+    rowHeight: number | null;
     sortedByFirstAttribute: boolean;
 }
 
@@ -445,6 +443,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             columnTotals: cloneDeep(this.getColumnTotalsFromResultSpec(this.props.resultSpec)),
             agGridRerenderNumber: 1,
             desiredHeight: props.config.maxHeight,
+            rowHeight: this.getRowHeight(),
 
             sortedByFirstAttribute: true
         };
@@ -624,12 +623,15 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         this.gridApi.setPinnedTopRowData([{}]);
     }
 
-    public onModelUpdated = (params: ModelUpdatedEvent) => {
+    public onModelUpdated = () => {
+        // console.log('XX onModelUpdated()');
         this.setState({
             rowHeight: this.getRowHeight()
         });
 
         this.setStickyRowTop();
+
+        this.updateGroupHeader();
     }
 
     public setGridDataSource() {
@@ -743,51 +745,60 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         });
     }
 
+    public updateGroupHeader(): void {
+        console.log('XX updateGroupHeader()');
+        if (!this.gridApi) {
+            return;
+        }
+
+        const { dataSource } = this.props;
+
+        const scrollTop = ApiWrapper.getScrollTop(this.gridApi);
+
+        const firstVisibleRowIndex = Math.floor(scrollTop / this.state.rowHeight);
+
+        const isNextRowBoundary = this.groupingProvider.isGroupBoundary(firstVisibleRowIndex + 1);
+
+        const firstVisibleNode =
+            this.gridApi.getRenderedNodes().find((node: RowNode) => node.rowIndex === firstVisibleRowIndex);
+
+        const stickyRowData = firstVisibleNode && firstVisibleNode.data ? firstVisibleNode.data : {};
+
+        const attributesCount: number = dataSource.getAfm().attributes.length - 1;
+        const onlyAttributes = {};
+
+        const stickyRowDataKeys = Object.keys(stickyRowData);
+        for (let i = 0; i <= attributesCount; i++) {
+            onlyAttributes[stickyRowDataKeys[i]] = stickyRowData[stickyRowDataKeys[i]];
+        }
+
+        if (this.gridApi.getPinnedTopRow(0).data === onlyAttributes) {
+            return;
+        }
+
+        this.gridApi.setPinnedTopRowData([ onlyAttributes ]);
+
+        const floatingRow = ApiWrapper.getPinnedTopRow(this.gridApi);
+
+        if (isNextRowBoundary && floatingRow) {
+            Object.keys(onlyAttributes).forEach((attributeKey: string) => {
+                const cell = ApiWrapper.getPinnedTopRowAttributeNode(this.gridApi, attributeKey);
+                if (cell) {
+                    if (!this.groupingProvider.isRepeated(attributeKey, firstVisibleRowIndex + 1)) {
+                        cell.classList.add('sticky');
+                        // rowsByIndex[firstVisibleRowIndex].cellComps[attributeKey].eGui.classList.add('sticky');
+                    } else {
+                        cell.classList.remove('sticky');
+                        // rowsByIndex[firstVisibleRowIndex].cellComps[attributeKey].eGui.classList.remove('sticky');
+                    }
+                }
+            });
+        }
+    }
+
     public onBodyScroll = (event: BodyScrollEvent) => {
         if (event.direction === 'vertical') {
-            const scrollTop = event.top;
-
-            const firstVisibleRowIndex = Math.floor(scrollTop / this.state.rowHeight);
-
-            const isNextRowBoundary = this.groupingProvider.isGroupBoundary(firstVisibleRowIndex + 1);
-
-            const firstVisibleNode =
-                this.gridApi.getRenderedNodes().find((node: RowNode) => node.rowIndex === firstVisibleRowIndex);
-
-            console.log('XX firstVisibleNode', firstVisibleRowIndex, this.gridApi.getRenderedNodes(), firstVisibleNode);
-            const stickyRowData = firstVisibleNode ? firstVisibleNode.data : {};
-            const stickyRowDataKeys =
-                Object.keys(stickyRowData).filter((key: string) => /^a_(\d+_?)+(?!-m_\d+)$/.test(key));
-
-            const onlyAttributes = {};
-
-            stickyRowDataKeys.forEach((key: string) => onlyAttributes[key] = stickyRowData[key]);
-
-            const lastKey = stickyRowDataKeys[stickyRowDataKeys.length - 1];
-            delete onlyAttributes[lastKey];
-
-            this.gridApi.setPinnedTopRowData([ onlyAttributes ]);
-
-            const floatingRow = (this.gridApi as any).rowRenderer.floatingTopRowComps[0]
-                ? (this.gridApi as any).rowRenderer.floatingTopRowComps[0]
-                : null;
-
-            if (isNextRowBoundary && floatingRow) {
-                Object.keys(onlyAttributes).forEach((attributeKey: string) => {
-                    const cell = floatingRow.cellComps[attributeKey]
-                        ? floatingRow.cellComps[attributeKey].eGui
-                        : null;
-                    if (cell) {
-                        if (!this.groupingProvider.isRepeated(attributeKey, firstVisibleRowIndex + 1)) {
-                            cell.classList.add('sticky');
-                            // rowsByIndex[firstVisibleRowIndex].cellComps[attributeKey].eGui.classList.add('sticky');
-                        } else {
-                            cell.classList.remove('sticky');
-                            // rowsByIndex[firstVisibleRowIndex].cellComps[attributeKey].eGui.classList.remove('sticky');
-                        }
-                    }
-                });
-            }
+            this.updateGroupHeader();
         }
     }
 
@@ -849,6 +860,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             onGridReady: this.onGridReady,
             onModelUpdated: this.onModelUpdated,
             onBodyScroll: this.onBodyScroll,
+            // onViewportChanged: this.onViewportChanged,
 
             // this provides persistent row selection (if enabled)
             getRowNodeId,
