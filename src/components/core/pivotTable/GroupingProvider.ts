@@ -15,6 +15,7 @@ export interface IGroupingProvider {
     reset: () => void;
     isRepeated: (attributeId: string, rowIndex: number) => boolean;
     isGroupBoundary: (rowIndex: number) => boolean;
+    hasRepetitions: (attributeId: string) => boolean;
     processPage: (pageRows: IGridRow[], rowOffset: number, rowAttributeIDs: string[]) => void;
 }
 
@@ -24,6 +25,10 @@ class DefaultGroupingProvider implements IGroupingProvider {
     }
 
     public isGroupBoundary(_rowIndex: number) {
+        return false;
+    }
+
+    public hasRepetitions(_attributeId: string) {
         return false;
     }
 
@@ -63,6 +68,10 @@ class AttributeGroupingProvider implements IGroupingProvider {
     public isGroupBoundary(rowIndex: number) {
         return !!this.repetitionsCounts &&
             (this.repetitionsCounts[rowIndex] === undefined || this.repetitionsCounts[rowIndex] < this.maxRepetitions);
+    }
+
+    public hasRepetitions(attributeId: string) {
+        return Object.keys(this.itemRepetitions).indexOf(attributeId) < this.maxRepetitions;
     }
 
     public processPage(pageRows: IGridRow[], rowOffset: number, rowAttributeIDs: string[]) {

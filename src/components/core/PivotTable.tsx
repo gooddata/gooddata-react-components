@@ -100,7 +100,6 @@ export interface IPivotTableState {
     columnTotals: AFM.ITotalItem[];
     agGridRerenderNumber: number;
     desiredHeight: number | undefined;
-    rowHeight: number | null;
     sortedByFirstAttribute: boolean;
 }
 
@@ -415,6 +414,8 @@ interface ISortedByColumnIndexes {
     all: number[];
 }
 
+const DEFAULT_ROW_HEIGHT = 28;
+
 export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IPivotTableState> {
     public static defaultProps: Partial<IPivotTableInnerProps> = {
         ...commonDefaultProps,
@@ -431,6 +432,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     private gridApi: GridApi;
     private containerRef: HTMLDivElement;
     private groupingProvider: IGroupingProvider;
+    private lastScrollTop: number = 0;
 
     constructor(props: IPivotTableInnerProps) {
         super(props);
@@ -443,7 +445,6 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             columnTotals: cloneDeep(this.getColumnTotalsFromResultSpec(this.props.resultSpec)),
             agGridRerenderNumber: 1,
             desiredHeight: props.config.maxHeight,
-            rowHeight: this.getRowHeight(),
 
             sortedByFirstAttribute: true
         };
@@ -533,8 +534,6 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         const hiddenCell = !isPinnedRow && this.groupingProvider.isRepeated(attributeId, rowIndex);
         const rowSeparator = !hiddenCell && this.groupingProvider.isGroupBoundary(rowIndex);
 
-        const attributesCount = afm.attributes.length;
-        const isLastAttribute = colDef.index === attributesCount - 1;
         const className = classNames(
             classList,
             getCellClassNames(rowIndex, colDef.index, hasDrillableHeader),
@@ -542,8 +541,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             colDef.measureIndex !== undefined ? `gd-column-measure-${colDef.measureIndex}` : null,
             isRowTotal ? 'gd-row-total' : null,
             hiddenCell ? 'gd-cell-hide' : null,
-            rowSeparator ? 'gd-table-row-separator' : null,
-            isLastAttribute ? 'sticky' : null
+            rowSeparator ? 'gd-table-row-separator' : null
         );
         return className;
     }
@@ -624,14 +622,9 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     }
 
     public onModelUpdated = () => {
-        // console.log('XX onModelUpdated()');
-        this.setState({
-            rowHeight: this.getRowHeight()
-        });
-
         this.setStickyRowTop();
 
-        this.updateGroupHeader();
+        this.updateGroupHeader(0);
     }
 
     public setGridDataSource() {
@@ -745,29 +738,29 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         });
     }
 
-    public updateGroupHeader(): void {
-        if (!this.gridApi) {
+    public updateGroupHeader(scrollTop: number): void {
+        const lastRow = Math.trunc(this.lastScrollTop / DEFAULT_ROW_HEIGHT);
+        const thisRow = Math.trunc(scrollTop / DEFAULT_ROW_HEIGHT);
+        this.lastScrollTop = scrollTop;
+
+        if (!this.gridApi || lastRow === thisRow) {
             return;
         }
 
         const { dataSource } = this.props;
 
-        const scrollTop = ApiWrapper.getScrollTop(this.gridApi);
-
-        const firstVisibleRowIndex = Math.floor(scrollTop / this.state.rowHeight);
-
-        const isNextRowBoundary = this.groupingProvider.isGroupBoundary(firstVisibleRowIndex + 1);
+        const firstVisibleRowIndex = Math.floor(scrollTop / DEFAULT_ROW_HEIGHT);
 
         const firstVisibleNode =
             this.gridApi.getRenderedNodes().find((node: RowNode) => node.rowIndex === firstVisibleRowIndex);
 
         const stickyRowData = firstVisibleNode && firstVisibleNode.data ? firstVisibleNode.data : {};
 
-        const attributesCount: number = dataSource.getAfm().attributes.length - 1;
+        const attributesCount: number = dataSource.getAfm().attributes.length;
         const onlyAttributes = {};
 
         const stickyRowDataKeys = Object.keys(stickyRowData);
-        for (let i = 0; i <= attributesCount; i++) {
+        for (let i = 0; i < attributesCount; i++) {
             onlyAttributes[stickyRowDataKeys[i]] = stickyRowData[stickyRowDataKeys[i]];
         }
 
@@ -779,15 +772,15 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
         const floatingRow = ApiWrapper.getPinnedTopRow(this.gridApi);
 
-        if (isNextRowBoundary && floatingRow) {
+        if (floatingRow) {
             Object.keys(onlyAttributes).forEach((attributeKey: string) => {
                 const cell = ApiWrapper.getPinnedTopRowAttributeNode(this.gridApi, attributeKey);
                 if (cell) {
-                    if (!this.groupingProvider.isRepeated(attributeKey, firstVisibleRowIndex + 1)) {
-                        cell.classList.add('sticky');
-                        this.gridApi.rowRenderer.rowCompsByIndex[firstVisibleRowIndex].cellComps[attributeKey].eGui.classList.remove('gd-cell-hide'); 
+                    if (!this.groupingProvider.hasRepetitions(attributeKey) || !this.groupingProvider.isRepeated(attributeKey, firstVisibleRowIndex + 1)) {
+                        cell.classList.add('transparent');
+                        this.gridApi.rowRenderer.rowCompsByIndex[firstVisibleRowIndex].cellComps[attributeKey].eGui.classList.remove('gd-cell-hide');
                     } else {
-                        cell.classList.remove('sticky');
+                        cell.classList.remove('transparent');
                     }
                 }
             });
@@ -802,7 +795,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
     public onBodyScroll = (event: BodyScrollEvent) => {
         if (event.direction === 'vertical') {
-            this.updateGroupHeader();
+            this.updateGroupHeader(event.top);
         }
     }
 
@@ -931,7 +924,8 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             },
 
             // Custom CSS classes
-            rowClass: 'gd-table-row'
+            rowClass: 'gd-table-row',
+            rowHeight: DEFAULT_ROW_HEIGHT
         };
 
         // columnDefs are loaded with first page request. Show overlay loading before first page is available.
@@ -1047,14 +1041,6 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         this.setGridDataSource();
     }
 
-    private getRowHeight(): number {
-        const DEFAULT_ROW_HEIGHT = 28;
-
-        return this.gridApi
-            ? ApiWrapper.getRowHeight(this.gridApi)
-            : DEFAULT_ROW_HEIGHT;
-    }
-
     private setStickyRowTop(): void {
         const floatingRowNode = ApiWrapper.getPinnedTopRowNode(this.gridApi);
 
@@ -1075,11 +1061,10 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         if (!maxHeight) {
             return;
         }
-        const rowHeight = this.getRowHeight();
         const headerHeight = ApiWrapper.getHeaderHeight(this.gridApi);
         const leeway = 1; // add small room for error to avoid scrollbars that scroll one, two pixels
-        const bodyHeight = rowCount * rowHeight + leeway;
-        const footerHeight = aggregationCount * rowHeight;
+        const bodyHeight = rowCount * DEFAULT_ROW_HEIGHT + leeway;
+        const footerHeight = aggregationCount * DEFAULT_ROW_HEIGHT;
 
         // detect horizontal scroll bar and accommodate for it
         const actualWidth = this.containerRef && this.containerRef.scrollWidth;
