@@ -10,8 +10,7 @@ import {
     IGetRowsParams,
     SortChangedEvent,
     BodyScrollEvent,
-    RowNode,
-    // ViewportChangedEvent
+    RowNode
 } from 'ag-grid';
 import { AgGridReact } from 'ag-grid-react';
 import { CellClassParams } from 'ag-grid/dist/lib/entities/colDef';
@@ -776,9 +775,13 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             Object.keys(onlyAttributes).forEach((attributeKey: string) => {
                 const cell = ApiWrapper.getPinnedTopRowAttributeNode(this.gridApi, attributeKey);
                 if (cell) {
-                    if (!this.groupingProvider.hasRepetitions(attributeKey) || !this.groupingProvider.isRepeated(attributeKey, firstVisibleRowIndex + 1)) {
+                    if (
+                        !this.groupingProvider.hasRepetitions(attributeKey) ||
+                        !this.groupingProvider.isRepeated(attributeKey, firstVisibleRowIndex + 1)
+                    ) {
                         cell.classList.add('transparent');
-                        this.gridApi.rowRenderer.rowCompsByIndex[firstVisibleRowIndex].cellComps[attributeKey].eGui.classList.remove('gd-cell-hide');
+                        (this.gridApi as any).rowRenderer.rowCompsByIndex[firstVisibleRowIndex].
+                            cellComps[attributeKey].eGui.classList.remove('gd-cell-hide');
                     } else {
                         cell.classList.remove('transparent');
                     }
@@ -788,7 +791,8 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
         Object.keys(onlyAttributes).forEach((attributeKey: string) => {
             if (this.groupingProvider.isRepeated(attributeKey, firstVisibleRowIndex + 1)) {
-                this.gridApi.rowRenderer.rowCompsByIndex[firstVisibleRowIndex + 1].cellComps[attributeKey].eGui.classList.add('gd-cell-hide'); 
+                (this.gridApi as any).rowRenderer.rowCompsByIndex[firstVisibleRowIndex + 1].
+                    cellComps[attributeKey].eGui.classList.add('gd-cell-hide');
             }
         });
     }
