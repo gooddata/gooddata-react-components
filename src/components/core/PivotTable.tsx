@@ -746,7 +746,6 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     }
 
     public updateGroupHeader(): void {
-        console.log('XX updateGroupHeader()');
         if (!this.gridApi) {
             return;
         }
@@ -786,14 +785,19 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
                 if (cell) {
                     if (!this.groupingProvider.isRepeated(attributeKey, firstVisibleRowIndex + 1)) {
                         cell.classList.add('sticky');
-                        // rowsByIndex[firstVisibleRowIndex].cellComps[attributeKey].eGui.classList.add('sticky');
+                        this.gridApi.rowRenderer.rowCompsByIndex[firstVisibleRowIndex].cellComps[attributeKey].eGui.classList.remove('gd-cell-hide'); 
                     } else {
                         cell.classList.remove('sticky');
-                        // rowsByIndex[firstVisibleRowIndex].cellComps[attributeKey].eGui.classList.remove('sticky');
                     }
                 }
             });
         }
+
+        Object.keys(onlyAttributes).forEach((attributeKey: string) => {
+            if (this.groupingProvider.isRepeated(attributeKey, firstVisibleRowIndex + 1)) {
+                this.gridApi.rowRenderer.rowCompsByIndex[firstVisibleRowIndex + 1].cellComps[attributeKey].eGui.classList.add('gd-cell-hide'); 
+            }
+        });
     }
 
     public onBodyScroll = (event: BodyScrollEvent) => {
