@@ -10,6 +10,9 @@
     "src/**/*.spec.ts"
   ],
   "compilerOptions": {
-    "declaration": false
+    "declaration": false,
+
+    "noUnusedLocals": false,
+    "noUnusedVariables": false
   }
 }

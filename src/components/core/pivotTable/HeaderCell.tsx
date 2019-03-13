@@ -2,13 +2,17 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
 import { AFM, Execution } from '@gooddata/typings';
-import { IMenu, IMenuAggregationClickConfig } from '../../../interfaces/PivotTable';
 
-import { ItemsWrapper, Header, Item } from '@gooddata/goodstrap/lib/List/MenuList';
-import Menu from '../../menu/Menu';
+import { IMenu, IMenuAggregationClickConfig } from '../../../interfaces/PivotTable';
 import { IOnOpenedChangeParams } from '../../menu/MenuSharedTypes';
-import { getParsedFields } from '../../../helpers/agGrid';
+import { FIELD_TYPE_ATTRIBUTE, FIELD_TYPE_MEASURE, getParsedFields } from '../../../helpers/agGrid';
 import { AVAILABLE_TOTALS as renderedTotalTypesOrder } from '../../visualizations/table/totals/utils';
+import AggregationsMenu, {
+    getHeaderMeasureLocalIdentifiers,
+    getTotalsForAttributeHeader,
+    getTotalsForMeasureHeader,
+    ITotalForColumn
+} from './AggregationsMenu';
 
 export type AlignPositions = 'left' | 'right' | 'center';
 export const ALIGN_LEFT = 'left';
@@ -124,88 +128,39 @@ export default class HeaderCell extends React.Component<IProps, IState> {
         const columnTotals = this.props.getColumnTotals() || [];
         const measureGroupHeaderItems = measureGroupHeader.measureGroupHeader.items;
 
-        let turnedOnTotals: AFM.TotalType[] = [];
-        let localIdentifiers: string[] = [];
-        if (lastFieldType === 'm') {
-            const headerItemData: Execution.IMeasureHeaderItem['measureHeaderItem'] =
-                measureGroupHeaderItems[lastFieldId].measureHeaderItem;
+        const measureLocalIdentifiers =
+            getHeaderMeasureLocalIdentifiers(measureGroupHeaderItems, lastFieldType, lastFieldId);
+        if (measureLocalIdentifiers.length === 0) {
+            return null;
+        }
 
-            const localIdentifier = headerItemData.localIdentifier;
+        let turnedOnAttributes: ITotalForColumn[] = [];
+        if (lastFieldType === FIELD_TYPE_MEASURE) {
+            const measureLocalIdentifier = measureGroupHeaderItems[lastFieldId].measureHeaderItem.localIdentifier;
 
-            localIdentifiers = [localIdentifier];
-            turnedOnTotals = columnTotals
-                .filter(totalItem => totalItem.measureIdentifier === localIdentifier)
-                .map(totalItem => totalItem.type) as AFM.TotalType[];
-        } else if (lastFieldType === 'a') {
+            turnedOnAttributes = getTotalsForMeasureHeader(columnTotals, measureLocalIdentifier);
+
+        } else if (lastFieldType === FIELD_TYPE_ATTRIBUTE) {
             const isColumnAttribute = lastFieldValudId === null;
             if (isColumnAttribute) {
                 return null;
             }
 
-            localIdentifiers = measureGroupHeaderItems.map(i => i.measureHeaderItem.localIdentifier);
-            turnedOnTotals = renderedTotalTypesOrder
-                .filter((type) => {
-                    // Show checkmark for attribute aggregation only if all measure
-                    // locale identifiers have turned on aggregation
-                    const columnTotalsLength = columnTotals.filter((total: any) => total.type === type).length;
-                    return columnTotalsLength === localIdentifiers.length;
-                });
+            turnedOnAttributes = getTotalsForAttributeHeader(columnTotals, measureLocalIdentifiers);
         }
-
-        if (localIdentifiers.length === 0) {
-            return null;
-        }
-
-        const menuItems = renderedTotalTypesOrder.map((type) => {
-            const checked = turnedOnTotals.includes(type);
-
-            return (
-                <div
-                    className={'s-menu-aggregation-' + type}
-                    key={type}
-                >
-                    <Item
-                        // Performance impact of this lambda is negligible
-                        // tslint:disable-next-line: jsx-no-lambda
-                        onClick={() => this.menuItemClick({
-                            type,
-                            measureIdentifiers: localIdentifiers,
-                            attributeIdentifier: rowAttributeHeaders[0].attributeHeader.localIdentifier,
-                            include: !checked
-                        })}
-                        checked={checked}
-                    >
-                        {this.props.intl.formatMessage({ id: `visualizations.totals.dropdown.title.${type}` })}
-                    </Item>
-                </div>
-            );
-        });
 
         return (
-            <Menu
-                toggler={
-                    <svg className="menu-icon">
-                        <g transform="translate(4 3)">
-                            <path d="M0 0h8v2H0V0zm0 4h8v2H0V4zm0 4h8v2H0V8z" fill="currentColor" />
-                        </g>
-                    </svg>
-                }
-                togglerWrapperClassName={classNames('s-table-header-menu', 'gd-pivot-table-header-menu', {
-                    'gd-pivot-table-header-menu--show': this.state.isMenuButtonVisible,
-                    'gd-pivot-table-header-menu--hide': !this.state.isMenuButtonVisible,
-                    'gd-pivot-table-header-menu--open': this.state.isMenuOpen
-                })}
-                opened={this.state.isMenuOpen}
-                onOpenedChange={this.handleMenuOpenedChange}
-            >
-                <ItemsWrapper>
-                    <div className="s-table-header-menu-content">
-                        <Header>{this.props.intl.formatMessage({ id: 'visualizations.menu.aggregations' })}</Header>
-
-                        {menuItems}
-                    </div>
-                </ItemsWrapper>
-            </Menu>
+            <AggregationsMenu
+                intl={this.props.intl}
+                totalTypes={renderedTotalTypesOrder}
+                enabledTotalsForColumn={turnedOnAttributes}
+                measureLocalIdentifiers={measureLocalIdentifiers}
+                rowAttributeHeaders={rowAttributeHeaders}
+                isMenuOpen={this.state.isMenuOpen}
+                isMenuButtonVisible={this.state.isMenuButtonVisible}
+                handleMenuOpenedChange={this.handleMenuOpenedChange}
+                menuItemClick={this.menuItemClick}
+            />
         );
     }
 

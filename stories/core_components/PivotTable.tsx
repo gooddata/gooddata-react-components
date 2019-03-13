@@ -5,6 +5,7 @@ import { action } from '@storybook/addon-actions';
 import { screenshotWrap } from '@gooddata/test-storybook';
 
 import { PivotTable } from '../../src';
+import { IPivotTableConfig } from '../../src/interfaces/PivotTable';
 import { onErrorHandler } from '../mocks';
 
 import { GERMAN_SEPARATORS } from '../data/numberFormat';
@@ -12,6 +13,7 @@ import {
     ATTRIBUTE_1,
     ATTRIBUTE_1_WITH_ALIAS,
     ATTRIBUTE_2,
+    ATTRIBUTE_3,
     MEASURE_1,
     MEASURE_1_WITH_ALIAS,
     MEASURE_2,
@@ -349,4 +351,63 @@ storiesOf('Core components/PivotTable', module)
                 />
             </div>
         )
-    ));
+    ))
+    .add('BB-1410', () => {
+        const config: IPivotTableConfig = {
+            menu: {
+                aggregations: true,
+                subTotals: true
+            }
+        };
+
+        // const SUBTOTAL_M1_A2: VisualizationObject.IVisualizationTotal = {
+        //     measureIdentifier: MEASURE_1.measure.localIdentifier,
+        //     type: 'sum',
+        //     attributeIdentifier: ATTRIBUTE_2.visualizationAttribute.localIdentifier
+        // };
+
+        return screenshotWrap(
+            <div style={wrapperStyle} className="s-table">
+                <PivotTable
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    columns={[ATTRIBUTE_3]}
+                    rows={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    groupRows={true}
+                    totals={[
+                        {
+                            type: 'sum',
+                            measureIdentifier: 'm1',
+                            attributeIdentifier: 'a1'
+                        },
+                        {
+                            type: 'sum',
+                            measureIdentifier: 'm2',
+                            attributeIdentifier: 'a1'
+                        },
+
+                        {
+                            type: 'min',
+                            measureIdentifier: 'm1',
+                            attributeIdentifier: 'a2'
+                        },
+
+                        {
+                            type: 'max',
+                            measureIdentifier: 'm1',
+                            attributeIdentifier: 'a2'
+                        },
+                        {
+                            type: 'max',
+                            measureIdentifier: 'm2',
+                            attributeIdentifier: 'a2'
+                        }
+                    ]}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                    config={config}
+                />
+            </div>
+        );
+    });
