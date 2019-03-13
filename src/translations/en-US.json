@@ -303,5 +303,15 @@
       "value": "Aggregations",
       "comment": "",
       "limit": 0
+   },
+   "visualizations.menu.aggregations.rows": {
+      "value": "Rows",
+      "comment": "Heading of row attributes list aggregation submenu of Table component. Selecting an attribute enables aggregation on selected attribute (adds 'total' or 'subtotal' row in attribute column of table).",
+      "limit": 25
+   },
+   "visualizations.menu.aggregations.all-rows": {
+     "value": "All rows",
+     "comment": "First item of attributes list in aggregation submenu of Table component. Selecting this enables aggregation on first attribute (adding 'total' rows for all columns of table).",
+     "limit": 25
    }
 }
