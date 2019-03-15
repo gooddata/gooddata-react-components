@@ -1,0 +1,86 @@
+// (C) 2007-2018 GoodData Corporation
+import { mount } from 'enzyme';
+import * as React from 'react';
+import { createIntlMock } from '../../../visualizations/utils/intlUtils';
+import { IAggregationsMenuProps } from '../AggregationsMenu';
+import AggregationsSubMenu from '../AggregationsSubMenu';
+import { Item } from '@gooddata/goodstrap/lib/List/MenuList';
+
+describe('AggregationsSubMenu', () => {
+    const intlMock = createIntlMock();
+    const attributeHeaders = [
+        {
+            attributeHeader: {
+                formOf: {
+                    identifier: '1st_attr_local_identifier',
+                    name: 'Department',
+                    uri: '/gdc/md/project_id/obj/1st_attr_uri_id'
+                },
+                identifier: '1st_attr_df_identifier',
+                localIdentifier: '1st_attr_df_local_identifier',
+                name: 'Department Name',
+                uri: '/gdc/md/project_id/obj/1st_attr_df_uri_id'
+            }
+        },
+        {
+            attributeHeader: {
+                formOf: {
+                    identifier: '2nd_attr_local_identifier',
+                    name: 'Region',
+                    uri: '/gdc/md/project_id/obj/2nd_attr_uri_id'
+                },
+                identifier: '2nd_attr_df_identifier',
+                localIdentifier: '2nd_attr_df_local_identifier',
+                name: 'Region Area',
+                uri: '/gdc/md/project_id/obj/2nd_attr_df_uri_id'
+            }
+        }
+    ];
+
+    function render(customProps: Partial<IAggregationsMenuProps> = {}) {
+        const onAggregationSelect = jest.fn();
+        const component = mount(
+            <AggregationsSubMenu
+                intl={intlMock}
+                type="sum"
+                rowAttributeHeaders={attributeHeaders}
+                enabledTotalsForColumn={[]}
+                measureLocalIdentifiers={['m1']}
+                onAggregationSelect={onAggregationSelect}
+                toggler={<div>Open submenu</div>}
+                isMenuOpened={true}
+                {...customProps}
+            />);
+        return component;
+    }
+
+    it('should render closed submenu when isMenuOpened is set to false', () => {
+        const wrapper = render({ isMenuOpened: false });
+
+        expect(wrapper.find(Item).length).toBe(0);
+    });
+
+    it('should render submenu with attributes, first attribute as "All rows"', () => {
+        const wrapper = render();
+        const items = wrapper.find(Item);
+
+        expect(items.length).toBe(2);
+        expect(items.at(0).text()).toBe('All rows (1st_attr_df_local_identifier)');
+        expect(items.at(1).text()).toBe('Department Name (2nd_attr_df_local_identifier)');
+    });
+
+    it('should call onAggregationSelect callback when clicked on submenu item', () => {
+        const onAggregationSelect = jest.fn();
+        const wrapper = render({ onAggregationSelect });
+
+        wrapper.find(Item).at(1).simulate('click');
+
+        expect(onAggregationSelect).toHaveBeenCalledTimes(1);
+        expect(onAggregationSelect).toHaveBeenCalledWith({
+            attributeIdentifier: '2nd_attr_df_local_identifier',
+            include: true,
+            measureIdentifiers: ['m1'],
+            type: 'sum'
+        });
+    });
+});

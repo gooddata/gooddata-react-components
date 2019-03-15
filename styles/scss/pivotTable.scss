@@ -332,3 +332,13 @@ $header-cell-resize-width: 20px;
         transform: rotate(180deg);
     }
 }
+
+.aggregation-submenu {
+    .submenu-header-icon {
+        width: 15px;
+        height: 15px;
+        position: absolute;
+        right: 100%;
+        top: 0;
+    }
+}

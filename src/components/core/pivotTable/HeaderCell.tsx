@@ -5,20 +5,13 @@ import { AFM, Execution } from '@gooddata/typings';
 
 import { IMenu, IMenuAggregationClickConfig } from '../../../interfaces/PivotTable';
 import { IOnOpenedChangeParams } from '../../menu/MenuSharedTypes';
-import { FIELD_TYPE_ATTRIBUTE, FIELD_TYPE_MEASURE, getParsedFields } from '../../../helpers/agGrid';
-import { AVAILABLE_TOTALS as renderedTotalTypesOrder } from '../../visualizations/table/totals/utils';
-import AggregationsMenu, {
-    getHeaderMeasureLocalIdentifiers,
-    getTotalsForAttributeHeader,
-    getTotalsForMeasureHeader,
-    ITotalForColumn
-} from './AggregationsMenu';
+import AggregationsMenu from './AggregationsMenu';
 
 export type AlignPositions = 'left' | 'right' | 'center';
 export const ALIGN_LEFT = 'left';
 export const ALIGN_RIGHT = 'right';
 
-export interface IProps {
+export interface IHeaderCellProps {
     displayText: string;
     className?: string;
     enableSorting?: boolean;
@@ -35,14 +28,14 @@ export interface IProps {
     intl?: ReactIntl.InjectedIntl;
 }
 
-export interface IState {
+export interface IHeaderCellState {
     isMenuOpen: boolean;
     isMenuButtonVisible: boolean;
     currentSortDirection: AFM.SortDirection;
 }
 
-export default class HeaderCell extends React.Component<IProps, IState> {
-    public static defaultProps: Partial<IProps> = {
+export default class HeaderCell extends React.Component<IHeaderCellProps, IHeaderCellState> {
+    public static defaultProps: Partial<IHeaderCellProps> = {
         sortDirection: null,
         textAlign: ALIGN_LEFT,
         menuPosition: ALIGN_LEFT,
@@ -53,7 +46,7 @@ export default class HeaderCell extends React.Component<IProps, IState> {
         onSortClick: () => null
     };
 
-    public state: IState = {
+    public state: IHeaderCellState = {
         isMenuOpen: false,
         isMenuButtonVisible: false,
         currentSortDirection: null
@@ -65,7 +58,7 @@ export default class HeaderCell extends React.Component<IProps, IState> {
         });
     }
 
-    public componentWillReceiveProps(nextProps: IProps) {
+    public componentWillReceiveProps(nextProps: IHeaderCellProps) {
         if (nextProps.sortDirection !== this.props.sortDirection) {
             this.setState({
                 currentSortDirection: this.props.sortDirection
@@ -100,66 +93,16 @@ export default class HeaderCell extends React.Component<IProps, IState> {
             return null;
         }
 
-        // Because of Ag-grid react wrapper does not rerender the component when we pass
-        // new gridOptions we need to pull the data manually on each render
-        const executionResponse: Execution.IExecutionResponse = this.props.getExecutionResponse();
-        if (!executionResponse) {
-            return null;
-        }
-
-        const rowAttributeHeaders = executionResponse.dimensions[0].headers as Execution.IAttributeHeader[];
-        const isOneRowTable = rowAttributeHeaders.length === 0;
-        if (isOneRowTable) {
-            return null;
-        }
-
-        const dimensionHeader = executionResponse.dimensions[1].headers;
-        if (!dimensionHeader) {
-            return null;
-        }
-
-        const measureGroupHeader = dimensionHeader[dimensionHeader.length - 1] as Execution.IMeasureGroupHeader;
-        if (!measureGroupHeader || !Execution.isMeasureGroupHeader(measureGroupHeader)) {
-            return null;
-        }
-
-        const fields = getParsedFields(this.props.colId);
-        const [lastFieldType, lastFieldId, lastFieldValudId = null] = fields[fields.length - 1];
-        const columnTotals = this.props.getColumnTotals() || [];
-        const measureGroupHeaderItems = measureGroupHeader.measureGroupHeader.items;
-
-        const measureLocalIdentifiers =
-            getHeaderMeasureLocalIdentifiers(measureGroupHeaderItems, lastFieldType, lastFieldId);
-        if (measureLocalIdentifiers.length === 0) {
-            return null;
-        }
-
-        let turnedOnAttributes: ITotalForColumn[] = [];
-        if (lastFieldType === FIELD_TYPE_MEASURE) {
-            const measureLocalIdentifier = measureGroupHeaderItems[lastFieldId].measureHeaderItem.localIdentifier;
-
-            turnedOnAttributes = getTotalsForMeasureHeader(columnTotals, measureLocalIdentifier);
-
-        } else if (lastFieldType === FIELD_TYPE_ATTRIBUTE) {
-            const isColumnAttribute = lastFieldValudId === null;
-            if (isColumnAttribute) {
-                return null;
-            }
-
-            turnedOnAttributes = getTotalsForAttributeHeader(columnTotals, measureLocalIdentifiers);
-        }
-
         return (
             <AggregationsMenu
                 intl={this.props.intl}
-                totalTypes={renderedTotalTypesOrder}
-                enabledTotalsForColumn={turnedOnAttributes}
-                measureLocalIdentifiers={measureLocalIdentifiers}
-                rowAttributeHeaders={rowAttributeHeaders}
-                isMenuOpen={this.state.isMenuOpen}
+                isMenuOpened={this.state.isMenuOpen}
                 isMenuButtonVisible={this.state.isMenuButtonVisible}
-                handleMenuOpenedChange={this.handleMenuOpenedChange}
-                menuItemClick={this.menuItemClick}
+                colId={this.props.colId}
+                getExecutionResponse={this.props.getExecutionResponse}
+                getColumnTotals={this.props.getColumnTotals}
+                onMenuOpenedChange={this.handleMenuOpenedChange}
+                onAggregationSelect={this.menuItemClick}
             />
         );
     }

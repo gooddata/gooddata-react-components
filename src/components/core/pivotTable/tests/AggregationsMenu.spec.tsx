@@ -1,6 +1,19 @@
 // (C) 2007-2018 GoodData Corporation
-import { AFM } from '@gooddata/typings';
-import { getTotalsForMeasureHeader, getTotalsForAttributeHeader } from '../AggregationsMenu';
+import { AFM, Execution } from '@gooddata/typings';
+import { mount } from 'enzyme';
+import * as React from 'react';
+import { FIELD_TYPE_ATTRIBUTE, FIELD_TYPE_MEASURE } from '../../../../helpers/agGrid';
+import { EXECUTION_RESPONSE_2A_3M } from '../../../visualizations/table/fixtures/2attributes3measures';
+import { AVAILABLE_TOTALS } from '../../../visualizations/table/totals/utils';
+import { createIntlMock } from '../../../visualizations/utils/intlUtils';
+import AggregationsMenu, { IAggregationsMenuProps, TEST_API } from '../AggregationsMenu';
+import AggregationsSubMenu from '../AggregationsSubMenu';
+
+const {
+    getTotalsForMeasureHeader,
+    getTotalsForAttributeHeader,
+    getHeaderMeasureLocalIdentifiers
+} = TEST_API;
 
 describe('getTotalsForMeasureHeader', () => {
     it('should return empty totals for measure when no total defined', () => {
@@ -103,5 +116,154 @@ describe('getTotalsForAttributeHeader', () => {
                 attributes: ['a1']
             }
         ]);
+    });
+});
+
+describe('getHeaderMeasureLocalIdentifiers', () => {
+    describe('attribute header', () => {
+        const lastFieldType = FIELD_TYPE_ATTRIBUTE;
+        const lastFieldId = 'whatever';
+
+        it('should return empty list when no measure header items provided', () => {
+            const measureGroupHeaderItems: Execution.IMeasureHeaderItem[] = [];
+
+            expect(getHeaderMeasureLocalIdentifiers(measureGroupHeaderItems, lastFieldType, lastFieldId)).toEqual([]);
+        });
+
+        it('should return measure identifiers when multiple measure headers provided', () => {
+            const measureGroupHeaderItems: Execution.IMeasureHeaderItem[] = [
+                {
+                    measureHeaderItem: {
+                        localIdentifier: 'foo',
+                        name: '',
+                        format: ''
+                    }
+                },
+                {
+                    measureHeaderItem: {
+                        localIdentifier: 'bar',
+                        name: '',
+                        format: ''
+                    }
+                }
+            ];
+
+            expect(getHeaderMeasureLocalIdentifiers(measureGroupHeaderItems, lastFieldType, lastFieldId)).toEqual([
+                'foo',
+                'bar'
+            ]);
+        });
+    });
+
+    describe('measure header', () => {
+        const lastFieldType = FIELD_TYPE_MEASURE;
+        const lastFieldId = 0;
+        const measureGroupHeaderItems: Execution.IMeasureHeaderItem[] = [
+            {
+                measureHeaderItem: {
+                    localIdentifier: 'foo',
+                    name: '',
+                    format: ''
+                }
+            },
+            {
+                measureHeaderItem: {
+                    localIdentifier: 'bar',
+                    name: '',
+                    format: ''
+                }
+            }
+        ];
+
+        it('should throw error no measure header items provided', () => {
+            expect(
+                getHeaderMeasureLocalIdentifiers.bind(this, [], lastFieldType, lastFieldId)
+            ).toThrowError();
+        });
+
+        it('should throw error when uknown field type provided', () => {
+            expect(
+                getHeaderMeasureLocalIdentifiers.bind(this, measureGroupHeaderItems, 'X', lastFieldId)
+            ).toThrowError();
+        });
+
+        it('should return first measure identifier when multiple measure headers provided', () => {
+            expect(
+                getHeaderMeasureLocalIdentifiers(measureGroupHeaderItems, lastFieldType, lastFieldId)
+            ).toEqual([
+                'foo'
+            ]);
+        });
+    });
+});
+
+describe('AggregationsMenu', () => {
+    const intlMock = createIntlMock();
+    const attributeColumnId = 'a_6_2-m_1';
+    const getExecutionResponse = () => EXECUTION_RESPONSE_2A_3M;
+    const getColumnTotals = () => [] as AFM.ITotalItem[];
+    const onMenuOpenedChange = jest.fn();
+    const onAggregationSelect = jest.fn();
+
+    function render(customProps: Partial<IAggregationsMenuProps> = {}) {
+        const component = mount(
+            <AggregationsMenu
+                intl={intlMock}
+                isMenuOpened={true}
+                isMenuButtonVisible={true}
+                colId={attributeColumnId}
+                getExecutionResponse={getExecutionResponse}
+                getColumnTotals={getColumnTotals}
+                onMenuOpenedChange={onMenuOpenedChange}
+                onAggregationSelect={onAggregationSelect}
+                {...customProps}
+            />);
+        return component;
+    }
+
+    it('should render opened main menu', () => {
+        const wrapper = render();
+        const menu = wrapper.find('.s-table-header-menu');
+
+        expect(menu.length).toBe(1);
+        expect(menu.hasClass('gd-pivot-table-header-menu--open')).toBe(true);
+    });
+
+    it('should render main menu with all total items', () => {
+        const wrapper = render();
+
+        expect(wrapper.find('.s-menu-aggregation').length).toBe(AVAILABLE_TOTALS.length);
+    });
+
+    it('should render closed main menu when isMenuOpen is set to false', () => {
+        const wrapper = render({ isMenuOpened: false });
+
+        expect(wrapper.find('.s-table-header-menu').hasClass('gd-pivot-table-header-menu--open')).toBe(false);
+    });
+
+    it('should render visible main menu button', () => {
+        const wrapper = render();
+
+        expect(wrapper.find('.s-table-header-menu').hasClass('gd-pivot-table-header-menu--show')).toBe(true);
+    });
+
+    it('should render invisible visible main menu button', () => {
+        const wrapper = render({ isMenuButtonVisible: false });
+
+        expect(wrapper.find('.s-table-header-menu').hasClass('gd-pivot-table-header-menu--hide')).toBe(true);
+    });
+
+    it('should render submenu with correct props', () => {
+        const wrapper = render({ isMenuButtonVisible: false });
+        const subMenu = wrapper.find('.s-menu-aggregation-sum').find(AggregationsSubMenu);
+
+        expect(subMenu.props()).toMatchObject({
+            type: 'sum',
+            rowAttributeHeaders: [
+                expect.objectContaining({ attributeHeader: expect.anything() }),
+                expect.objectContaining({ attributeHeader: expect.anything() })
+            ],
+            enabledTotalsForColumn: []
+        });
     });
 });
