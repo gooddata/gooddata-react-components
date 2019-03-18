@@ -13,7 +13,7 @@ import { IOnOpenedChangeParams } from '../../menu/MenuSharedTypes';
 import { AVAILABLE_TOTALS } from '../../visualizations/table/totals/utils';
 import AggregationsSubMenu from './AggregationsSubMenu';
 
-export interface ITotalForColumn {
+export interface IColumnTotals {
     type: AFM.TotalType;
     attributes: string[];
 }
@@ -22,9 +22,9 @@ export interface ITotalForColumn {
 export function getTotalsForAttributeHeader(
     columnTotals: AFM.ITotalItem[],
     measureLocalIdentifiers: string[]
-): ITotalForColumn[] {
+): IColumnTotals[] {
 
-    const turnedOnAttributes: ITotalForColumn[] = [];
+    const turnedOnAttributes: IColumnTotals[] = [];
 
     const totalsList: AFM.TotalType[] = AVAILABLE_TOTALS
         .filter((type) => {
@@ -50,8 +50,8 @@ export function getTotalsForAttributeHeader(
 export function getTotalsForMeasureHeader(
     columnTotals: AFM.ITotalItem[],
     measureLocalIdentifier: string
-): ITotalForColumn[] {
-    const turnedOnAttributes: ITotalForColumn[] = [];
+): IColumnTotals[] {
+    const turnedOnAttributes: IColumnTotals[] = [];
 
     columnTotals.forEach((total: AFM.ITotalItem) => {
         if (total.measureIdentifier === measureLocalIdentifier) {
@@ -116,7 +116,6 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
             intl,
             colId,
             getExecutionResponse,
-            getColumnTotals,
             isMenuOpened,
             onMenuOpenedChange
         } = this.props;
@@ -146,31 +145,23 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
 
         const fields = getParsedFields(colId);
         const [lastFieldType, lastFieldId, lastFieldValudId = null] = fields[fields.length - 1];
+
         const isAttributeHeader = lastFieldType === FIELD_TYPE_ATTRIBUTE;
         const isColumnAttribute = lastFieldValudId === null;
-        const isMeasureHeader = lastFieldType === FIELD_TYPE_MEASURE;
+        if (isAttributeHeader && isColumnAttribute) {
+            return null;
+        }
+
         const measureLocalIdentifiers = getHeaderMeasureLocalIdentifiers(
             measureGroupHeader.measureGroupHeader.items,
             lastFieldType,
             lastFieldId
         );
-
         if (measureLocalIdentifiers.length === 0) {
             return null;
         }
 
-        if (isAttributeHeader && isColumnAttribute) {
-            return null;
-        }
-
-        let turnedOnAttributes: ITotalForColumn[] = [];
-        const columnTotals = getColumnTotals() || [];
-
-        if (isMeasureHeader) {
-            turnedOnAttributes = getTotalsForMeasureHeader(columnTotals, measureLocalIdentifiers[0]);
-        } else if (isAttributeHeader) {
-            turnedOnAttributes = getTotalsForAttributeHeader(columnTotals, measureLocalIdentifiers);
-        }
+        const totalsForHeader = this.getColumnTotals(measureLocalIdentifiers, isAttributeHeader);
 
         return (
             <Menu
@@ -189,11 +180,21 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
                 <ItemsWrapper>
                     <div className="s-table-header-menu-content">
                         <Header>{intl.formatMessage({ id: 'visualizations.menu.aggregations' })}</Header>
-                        {this.renderMainMenuItems(turnedOnAttributes, measureLocalIdentifiers, rowAttributeHeaders)}
+                        {this.renderMainMenuItems(totalsForHeader, measureLocalIdentifiers, rowAttributeHeaders)}
                     </div>
                 </ItemsWrapper>
             </Menu>
         );
+    }
+
+    private getColumnTotals(measureLocalIdentifiers: string[], isAttributeHeader: boolean): IColumnTotals[] {
+        const columnTotals = this.props.getColumnTotals() || [];
+
+        if (isAttributeHeader) {
+            return getTotalsForAttributeHeader(columnTotals, measureLocalIdentifiers);
+        }
+
+        return getTotalsForMeasureHeader(columnTotals, measureLocalIdentifiers[0]);
     }
 
     private getTogglerClassNames() {
@@ -225,41 +226,66 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
         );
     }
 
+    private getFirstAttributeIdentifier(rowAttributeHeaders: Execution.IAttributeHeader[]): string {
+        return rowAttributeHeaders.length && rowAttributeHeaders[0].attributeHeader.localIdentifier;
+    }
+
+    private isItemSelected(
+        type: AFM.TotalType,
+        columnTotals: IColumnTotals[],
+        firstAttributeIdentifier: string
+    ): boolean {
+        return columnTotals.some((total: IColumnTotals) => {
+            return total.type === type && total.attributes.includes(firstAttributeIdentifier);
+        });
+    }
+
+    private onItemClickFactory(
+        type: AFM.TotalType,
+        measureIdentifiers: string[],
+        rowAttributeHeaders: Execution.IAttributeHeader[],
+        isSelected: boolean
+    ): () => void {
+        return () => this.props.onAggregationSelect({
+            type,
+            measureIdentifiers,
+            include: !isSelected,
+            attributeIdentifier: rowAttributeHeaders[0].attributeHeader.localIdentifier
+        });
+    }
+
+    private getItemClassNames(type: AFM.TotalType, hasSubmenu: boolean): string {
+        return classNames(
+            { 'gd-aggregation-submenu': hasSubmenu },
+            's-menu-aggregation',
+            `s-menu-aggregation-${type}`
+        );
+    }
+
     private renderMainMenuItems(
-        enabledTotalsForColumn: ITotalForColumn[],
+        columnTotals: IColumnTotals[],
         measureLocalIdentifiers: string[],
         rowAttributeHeaders: Execution.IAttributeHeader[]
     ) {
         const { intl, onAggregationSelect, hasSubmenu } = this.props;
-        const firstAttributeIdentifier =
-            rowAttributeHeaders.length && rowAttributeHeaders[0].attributeHeader.localIdentifier;
+        const firstAttributeIdentifier = this.getFirstAttributeIdentifier(rowAttributeHeaders);
 
         return AVAILABLE_TOTALS.map((type: AFM.TotalType) => {
-            const isSelected = enabledTotalsForColumn.some((total: ITotalForColumn) => {
-                return total.type === type && total.attributes.includes(firstAttributeIdentifier);
-            });
-            const onClick = () => this.props.onAggregationSelect({
-                type,
-                measureIdentifiers: measureLocalIdentifiers,
-                attributeIdentifier: rowAttributeHeaders[0].attributeHeader.localIdentifier,
-                include: !isSelected
-            });
-            const itemClassNames = classNames(
-                { 'gd-aggregation-submenu': hasSubmenu },
-                's-menu-aggregation',
-                `s-menu-aggregation-${type}`
-            );
+            const isSelected = this.isItemSelected(type, columnTotals, firstAttributeIdentifier);
+            const onClick = this.onItemClickFactory(type, measureLocalIdentifiers, rowAttributeHeaders, isSelected);
+            const itemClassNames = this.getItemClassNames(type, hasSubmenu);
+            const renderSubmenu = hasSubmenu &&  rowAttributeHeaders.length;
 
             return (
                 <div className={itemClassNames} key={type}>
                     {
-                        hasSubmenu &&  rowAttributeHeaders.length
+                        renderSubmenu
                             ? (
                                 <AggregationsSubMenu
                                     intl={intl}
                                     type={type}
                                     rowAttributeHeaders={rowAttributeHeaders}
-                                    enabledTotalsForColumn={enabledTotalsForColumn}
+                                    enabledTotalsForColumn={columnTotals}
                                     measureLocalIdentifiers={measureLocalIdentifiers}
                                     onAggregationSelect={onAggregationSelect}
                                     toggler={this.renderMenuItemContent(type, onClick, isSelected, true)}
