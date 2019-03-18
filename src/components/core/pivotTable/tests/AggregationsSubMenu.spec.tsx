@@ -61,12 +61,16 @@ describe('AggregationsSubMenu', () => {
     });
 
     it('should render submenu with attributes, first attribute as "All rows"', () => {
-        const wrapper = render();
+        const wrapper = render({
+            intl: createIntlMock({
+                'visualizations.menu.aggregations.all-rows': 'all rows'
+            })
+        });
         const items = wrapper.find(Item);
 
         expect(items.length).toBe(2);
-        expect(items.at(0).text()).toBe('All rows (1st_attr_df_local_identifier)');
-        expect(items.at(1).text()).toBe('Department Name (2nd_attr_df_local_identifier)');
+        expect(items.at(0).text()).toBe('all rows');
+        expect(items.at(1).text()).toBe('Department Name');
     });
 
     it('should call onAggregationSelect callback when clicked on submenu item', () => {

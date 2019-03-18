@@ -356,15 +356,9 @@ storiesOf('Core components/PivotTable', module)
         const config: IPivotTableConfig = {
             menu: {
                 aggregations: true,
-                subTotals: true
+                aggregationsSubMenu: true
             }
         };
-
-        // const SUBTOTAL_M1_A2: VisualizationObject.IVisualizationTotal = {
-        //     measureIdentifier: MEASURE_1.measure.localIdentifier,
-        //     type: 'sum',
-        //     attributeIdentifier: ATTRIBUTE_2.visualizationAttribute.localIdentifier
-        // };
 
         return screenshotWrap(
             <div style={wrapperStyle} className="s-table">

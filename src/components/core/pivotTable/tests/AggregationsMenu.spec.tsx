@@ -211,6 +211,7 @@ describe('AggregationsMenu', () => {
                 intl={intlMock}
                 isMenuOpened={true}
                 isMenuButtonVisible={true}
+                hasSubmenu={false}
                 colId={attributeColumnId}
                 getExecutionResponse={getExecutionResponse}
                 getColumnTotals={getColumnTotals}
@@ -254,7 +255,7 @@ describe('AggregationsMenu', () => {
     });
 
     it('should render submenu with correct props', () => {
-        const wrapper = render({ isMenuButtonVisible: false });
+        const wrapper = render({ isMenuButtonVisible: false, hasSubmenu: true });
         const subMenu = wrapper.find('.s-menu-aggregation-sum').find(AggregationsSubMenu);
 
         expect(subMenu.props()).toMatchObject({

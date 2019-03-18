@@ -26,9 +26,8 @@ export default class AggregationsSubMenu extends React.Component<IAggregationsSu
     };
 
     public render() {
-        const { toggler, isMenuOpened } = this.props;
+        const { toggler, isMenuOpened, intl } = this.props;
 
-        // TODO BB-1410 Ad intl ro Rows text
         return (
             <SubMenu
                 toggler={toggler}
@@ -37,16 +36,7 @@ export default class AggregationsSubMenu extends React.Component<IAggregationsSu
             >
                 <ItemsWrapper>
                     <div className="s-table-header-submenu-content">
-                        <Header>
-                            <div className="submenu-header-icon">
-                                <svg>
-                                    <g transform="translate(4 3)">
-                                        <path d="M0 0h8v2H0V0zm0 4h8v2H0V4zm0 4h8v2H0V8z" fill="currentColor" />
-                                    </g>
-                                </svg>
-                            </div>
-                            Rows
-                        </Header>
+                        <Header>{intl.formatMessage({ id: 'visualizations.menu.aggregations.rows' })}</Header>
                         {this.renderSubMenuItems()}
                     </div>
                 </ItemsWrapper>
@@ -59,13 +49,14 @@ export default class AggregationsSubMenu extends React.Component<IAggregationsSu
             type,
             rowAttributeHeaders,
             enabledTotalsForColumn,
-            measureLocalIdentifiers
+            measureLocalIdentifiers,
+            intl
         } = this.props;
 
         return rowAttributeHeaders.map((_attributeHeader: Execution.IAttributeHeader, headerIndex: number) => {
             const attributeLocalIdentifier = rowAttributeHeaders[headerIndex].attributeHeader.localIdentifier;
             const attributeName = headerIndex === 0
-                ? 'All rows' // TODO BB-1410 Translation
+                ? intl.formatMessage({ id: 'visualizations.menu.aggregations.all-rows' })
                 : rowAttributeHeaders[headerIndex - 1].attributeHeader.name;
             const isSelected = enabledTotalsForColumn.some(
                 (total: ITotalForColumn) => total.type === type && total.attributes.includes(attributeLocalIdentifier)
@@ -77,7 +68,6 @@ export default class AggregationsSubMenu extends React.Component<IAggregationsSu
                 include: !isSelected
             });
 
-            // TODO BB-1410 Remove brackets with attribute identifier
             return (
                 <Item
                     // Performance impact of this lambda is negligible
@@ -86,7 +76,7 @@ export default class AggregationsSubMenu extends React.Component<IAggregationsSu
                     checked={isSelected}
                     key={attributeLocalIdentifier}
                 >
-                    {attributeName} ({attributeLocalIdentifier})
+                    {attributeName}
                 </Item>
             );
         });

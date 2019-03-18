@@ -4,7 +4,7 @@ import { AFM } from '@gooddata/typings';
 
 export interface IMenu {
     aggregations?: boolean;
-    subTotals?: boolean; // TODO BB-1410 How to name it?
+    aggregationsSubMenu?: boolean;
 }
 
 export interface IPivotTableConfig {

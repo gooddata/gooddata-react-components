@@ -100,8 +100,9 @@ function getHeaderMeasureLocalIdentifiers(
 
 export interface IAggregationsMenuProps {
     intl: ReactIntl.InjectedIntl;
-    isMenuOpened?: boolean;
-    isMenuButtonVisible?: boolean;
+    isMenuOpened: boolean;
+    isMenuButtonVisible: boolean;
+    hasSubmenu: boolean;
     colId: string;
     getExecutionResponse: () => any;
     getColumnTotals: () => any;
@@ -110,11 +111,6 @@ export interface IAggregationsMenuProps {
 }
 
 export default class AggregationsMenu extends React.Component<IAggregationsMenuProps> {
-    public static defaultProps: Partial<IAggregationsMenuProps> = {
-        isMenuOpened: false,
-        isMenuButtonVisible: true
-    };
-
     public render() {
         const {
             intl,
@@ -234,7 +230,7 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
         measureLocalIdentifiers: string[],
         rowAttributeHeaders: Execution.IAttributeHeader[]
     ) {
-        const { intl, onAggregationSelect } = this.props;
+        const { intl, onAggregationSelect, hasSubmenu } = this.props;
 
         return AVAILABLE_TOTALS.map((type: AFM.TotalType) => {
             const isSelected = enabledTotalsForColumn.some((total: ITotalForColumn) => {
@@ -247,7 +243,7 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
                 include: !isSelected
             });
             const itemClassNames = classNames(
-                'aggregation-submenu',
+                { 'gd-aggregation-submenu': hasSubmenu },
                 's-menu-aggregation',
                 `s-menu-aggregation-${type}`
             );
@@ -255,7 +251,7 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
             return (
                 <div className={itemClassNames} key={type}>
                     {
-                        rowAttributeHeaders.length
+                        hasSubmenu &&  rowAttributeHeaders.length
                             ? (
                                 <AggregationsSubMenu
                                     intl={intl}
