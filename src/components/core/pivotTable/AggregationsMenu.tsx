@@ -102,7 +102,7 @@ export interface IAggregationsMenuProps {
     intl: ReactIntl.InjectedIntl;
     isMenuOpened: boolean;
     isMenuButtonVisible: boolean;
-    hasSubmenu: boolean;
+    showSubmenu: boolean;
     colId: string;
     getExecutionResponse: () => any;
     getColumnTotals: () => any;
@@ -142,6 +142,8 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
         if (!measureGroupHeader || !Execution.isMeasureGroupHeader(measureGroupHeader)) {
             return null;
         }
+
+        console.log('colId', colId);
 
         const fields = getParsedFields(colId);
         const [lastFieldType, lastFieldId, lastFieldValudId = null] = fields[fields.length - 1];
@@ -265,7 +267,7 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
         measureLocalIdentifiers: string[],
         rowAttributeHeaders: Execution.IAttributeHeader[]
     ) {
-        const { intl, onAggregationSelect, hasSubmenu } = this.props;
+        const { intl, onAggregationSelect, showSubmenu } = this.props;
         const firstAttributeIdentifier = this.getFirstAttributeIdentifier(rowAttributeHeaders);
 
         return AVAILABLE_TOTALS.map((totalType: AFM.TotalType) => {
@@ -276,8 +278,8 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
                 rowAttributeHeaders,
                 isSelected
             );
-            const itemClassNames = this.getItemClassNames(totalType, hasSubmenu);
-            const renderSubmenu = hasSubmenu && rowAttributeHeaders.length > 0;
+            const itemClassNames = this.getItemClassNames(totalType, showSubmenu);
+            const renderSubmenu = showSubmenu && rowAttributeHeaders.length > 0;
             const toggler = this.renderMenuItemContent(totalType, onClick, isSelected, renderSubmenu);
 
             return (

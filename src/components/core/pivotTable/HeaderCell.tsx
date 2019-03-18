@@ -102,7 +102,7 @@ export default class HeaderCell extends React.Component<IHeaderCellProps, IHeade
                 colId={colId}
                 isMenuOpened={isMenuOpen}
                 isMenuButtonVisible={isMenuButtonVisible}
-                hasSubmenu={menu.aggregationsSubMenu}
+                showSubmenu={menu.aggregationsSubMenu}
                 getExecutionResponse={getExecutionResponse}
                 getColumnTotals={getColumnTotals}
                 onMenuOpenedChange={this.handleMenuOpenedChange}
