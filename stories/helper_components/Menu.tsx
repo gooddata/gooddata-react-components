@@ -449,10 +449,7 @@ storiesOf('Helper components/Menu', module)
         return screenshotWrap(
             <div
                 className="screenshot-target"
-                style={{
-                    // For screenshot tests
-                    minHeight: 500
-                }}
+                style={{ minHeight: 500 }}
             >
                 <AggregationsMenu
                     intl={intlMock}

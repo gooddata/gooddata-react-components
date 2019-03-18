@@ -41,7 +41,9 @@ import {
     ID_SEPARATOR,
     MEASURE_COLUMN,
     ROW_ATTRIBUTE_COLUMN,
-    ROW_TOTAL, FIELD_TYPE_MEASURE, FIELD_TYPE_ATTRIBUTE
+    ROW_TOTAL,
+    FIELD_TYPE_MEASURE,
+    FIELD_TYPE_ATTRIBUTE
 } from '../../helpers/agGrid';
 import { convertDrillableItemsToPredicates, isSomeHeaderPredicateMatched } from '../../helpers/headerPredicate';
 import {
