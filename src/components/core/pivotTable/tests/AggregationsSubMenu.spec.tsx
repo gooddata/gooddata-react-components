@@ -42,9 +42,9 @@ describe('AggregationsSubMenu', () => {
         const component = mount(
             <AggregationsSubMenu
                 intl={intlMock}
-                type="sum"
+                totalType="sum"
                 rowAttributeHeaders={attributeHeaders}
-                enabledTotalsForColumn={[]}
+                columnTotals={[]}
                 measureLocalIdentifiers={['m1']}
                 onAggregationSelect={onAggregationSelect}
                 toggler={<div>Open submenu</div>}

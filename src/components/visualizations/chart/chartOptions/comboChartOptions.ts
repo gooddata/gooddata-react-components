@@ -28,13 +28,13 @@ export function getComboChartOptions(
 
     if (measureBuckets[MEASURES]) {
         measureBuckets[MEASURES].forEach((measureIndex: number) => {
-            series[measureIndex].type = 'column';
+            series[measureIndex].totalType = 'column';
         });
     }
 
     if (measureBuckets[SECONDARY_MEASURES]) {
         measureBuckets[SECONDARY_MEASURES].forEach((measureIndex: number) => {
-            series[measureIndex].type = 'line';
+            series[measureIndex].totalType = 'line';
         });
     }
 

@@ -258,12 +258,12 @@ describe('AggregationsMenu', () => {
         const subMenu = wrapper.find('.s-menu-aggregation-sum').find(AggregationsSubMenu);
 
         expect(subMenu.props()).toMatchObject({
-            type: 'sum',
+            totalType: 'sum',
             rowAttributeHeaders: [
                 expect.objectContaining({ attributeHeader: expect.anything() }),
                 expect.objectContaining({ attributeHeader: expect.anything() })
             ],
-            enabledTotalsForColumn: []
+            columnTotals: []
         });
     });
 });

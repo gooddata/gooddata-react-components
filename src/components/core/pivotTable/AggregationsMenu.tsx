@@ -215,8 +215,6 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
     ) {
         return (
             <Item
-                // Performance impact of this lambda is negligible
-                // tslint:disable-next-line: jsx-no-lambda
                 onClick={onClick}
                 checked={isSelected}
                 subMenu={hasSubMenu}
@@ -231,34 +229,34 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
     }
 
     private isItemSelected(
-        type: AFM.TotalType,
+        totalType: AFM.TotalType,
         columnTotals: IColumnTotals[],
         firstAttributeIdentifier: string
     ): boolean {
         return columnTotals.some((total: IColumnTotals) => {
-            return total.type === type && total.attributes.includes(firstAttributeIdentifier);
+            return total.type === totalType && total.attributes.includes(firstAttributeIdentifier);
         });
     }
 
     private onItemClickFactory(
-        type: AFM.TotalType,
+        totalType: AFM.TotalType,
         measureIdentifiers: string[],
         rowAttributeHeaders: Execution.IAttributeHeader[],
         isSelected: boolean
     ): () => void {
         return () => this.props.onAggregationSelect({
-            type,
+            type: totalType,
             measureIdentifiers,
             include: !isSelected,
             attributeIdentifier: rowAttributeHeaders[0].attributeHeader.localIdentifier
         });
     }
 
-    private getItemClassNames(type: AFM.TotalType, hasSubmenu: boolean): string {
+    private getItemClassNames(totalType: AFM.TotalType, hasSubmenu: boolean): string {
         return classNames(
             { 'gd-aggregation-submenu': hasSubmenu },
             's-menu-aggregation',
-            `s-menu-aggregation-${type}`
+            `s-menu-aggregation-${totalType}`
         );
     }
 
@@ -270,28 +268,34 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
         const { intl, onAggregationSelect, hasSubmenu } = this.props;
         const firstAttributeIdentifier = this.getFirstAttributeIdentifier(rowAttributeHeaders);
 
-        return AVAILABLE_TOTALS.map((type: AFM.TotalType) => {
-            const isSelected = this.isItemSelected(type, columnTotals, firstAttributeIdentifier);
-            const onClick = this.onItemClickFactory(type, measureLocalIdentifiers, rowAttributeHeaders, isSelected);
-            const itemClassNames = this.getItemClassNames(type, hasSubmenu);
-            const renderSubmenu = hasSubmenu &&  rowAttributeHeaders.length;
+        return AVAILABLE_TOTALS.map((totalType: AFM.TotalType) => {
+            const isSelected = this.isItemSelected(totalType, columnTotals, firstAttributeIdentifier);
+            const onClick = this.onItemClickFactory(
+                totalType,
+                measureLocalIdentifiers,
+                rowAttributeHeaders,
+                isSelected
+            );
+            const itemClassNames = this.getItemClassNames(totalType, hasSubmenu);
+            const renderSubmenu = hasSubmenu && rowAttributeHeaders.length > 0;
+            const toggler = this.renderMenuItemContent(totalType, onClick, isSelected, renderSubmenu);
 
             return (
-                <div className={itemClassNames} key={type}>
+                <div className={itemClassNames} key={totalType}>
                     {
                         renderSubmenu
                             ? (
                                 <AggregationsSubMenu
                                     intl={intl}
-                                    type={type}
+                                    totalType={totalType}
                                     rowAttributeHeaders={rowAttributeHeaders}
-                                    enabledTotalsForColumn={columnTotals}
+                                    columnTotals={columnTotals}
                                     measureLocalIdentifiers={measureLocalIdentifiers}
                                     onAggregationSelect={onAggregationSelect}
-                                    toggler={this.renderMenuItemContent(type, onClick, isSelected, true)}
+                                    toggler={toggler}
                                 />
                             )
-                            : this.renderMenuItemContent(type, onClick, isSelected)
+                            : toggler
                     }
                 </div>
             );

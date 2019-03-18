@@ -11,12 +11,12 @@ const MENU_HEADER_OFFSET = -36;
 
 export interface IAggregationsSubMenuProps {
     intl: ReactIntl.InjectedIntl;
-    type: AFM.TotalType;
+    totalType: AFM.TotalType;
     toggler: JSX.Element;
     isMenuOpened?: boolean;
     rowAttributeHeaders: Execution.IAttributeHeader[];
     measureLocalIdentifiers: string[];
-    enabledTotalsForColumn: IColumnTotals[];
+    columnTotals: IColumnTotals[];
     onAggregationSelect: (clickConfig: IMenuAggregationClickConfig) => void;
 }
 
@@ -27,12 +27,13 @@ export default class AggregationsSubMenu extends React.Component<IAggregationsSu
 
     public render() {
         const { toggler, isMenuOpened, intl } = this.props;
+        const menuOpenedProp = isMenuOpened ? { opened: true } : {};
 
         return (
             <SubMenu
                 toggler={toggler}
                 offset={MENU_HEADER_OFFSET}
-                {...(isMenuOpened ? { opened: true } : {})}
+                {...menuOpenedProp}
             >
                 <ItemsWrapper>
                     <div className="s-table-header-submenu-content">
@@ -44,34 +45,61 @@ export default class AggregationsSubMenu extends React.Component<IAggregationsSu
         );
     }
 
+    private getAttributeLocalIdentifier(
+        rowAttributeHeaders: Execution.IAttributeHeader[],
+        headerIndex: number
+    ): string {
+        return rowAttributeHeaders[headerIndex].attributeHeader.localIdentifier;
+    }
+
+    private getAttributeName(
+        rowAttributeHeaders: Execution.IAttributeHeader[],
+        headerIndex: number
+    ): string {
+        return headerIndex === 0
+            ? this.props.intl.formatMessage({ id: 'visualizations.menu.aggregations.all-rows' })
+            : rowAttributeHeaders[headerIndex - 1].attributeHeader.name;
+    }
+
+    private isItemSelected(
+        totalType: AFM.TotalType,
+        attributeLocalIdentifier: string
+    ): boolean {
+        return this.props.columnTotals.some(
+            (total: IColumnTotals) => total.type === totalType && total.attributes.includes(attributeLocalIdentifier)
+        );
+    }
+
+    private onItemClickFactory(
+        totalType: AFM.TotalType,
+        measureIdentifiers: string[],
+        attributeLocalIdentifier: string,
+        isSelected: boolean
+    ): () => void {
+        return () => this.props.onAggregationSelect({
+            type: totalType,
+            measureIdentifiers,
+            include: !isSelected,
+            attributeIdentifier: attributeLocalIdentifier
+        });
+    }
+
     private renderSubMenuItems() {
-        const {
-            type,
-            rowAttributeHeaders,
-            enabledTotalsForColumn,
-            measureLocalIdentifiers,
-            intl
-        } = this.props;
+        const { totalType, rowAttributeHeaders, measureLocalIdentifiers } = this.props;
 
         return rowAttributeHeaders.map((_attributeHeader: Execution.IAttributeHeader, headerIndex: number) => {
-            const attributeLocalIdentifier = rowAttributeHeaders[headerIndex].attributeHeader.localIdentifier;
-            const attributeName = headerIndex === 0
-                ? intl.formatMessage({ id: 'visualizations.menu.aggregations.all-rows' })
-                : rowAttributeHeaders[headerIndex - 1].attributeHeader.name;
-            const isSelected = enabledTotalsForColumn.some(
-                (total: IColumnTotals) => total.type === type && total.attributes.includes(attributeLocalIdentifier)
+            const attributeLocalIdentifier = this.getAttributeLocalIdentifier(rowAttributeHeaders, headerIndex);
+            const isSelected = this.isItemSelected(totalType, attributeLocalIdentifier);
+            const onClick = this.onItemClickFactory(
+                totalType,
+                measureLocalIdentifiers,
+                attributeLocalIdentifier,
+                isSelected
             );
-            const onClick = () => this.props.onAggregationSelect({
-                type,
-                measureIdentifiers: measureLocalIdentifiers,
-                attributeIdentifier: attributeLocalIdentifier,
-                include: !isSelected
-            });
+            const attributeName = this.getAttributeName(rowAttributeHeaders, headerIndex);
 
             return (
                 <Item
-                    // Performance impact of this lambda is negligible
-                    // tslint:disable-next-line: jsx-no-lambda
                     onClick={onClick}
                     checked={isSelected}
                     key={attributeLocalIdentifier}
