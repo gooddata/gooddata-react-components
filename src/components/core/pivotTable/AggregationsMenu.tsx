@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2019 GoodData Corporation
 import { Header, Item, ItemsWrapper } from '@gooddata/goodstrap/lib/List/MenuList';
 import { AFM, Execution } from '@gooddata/typings';
 import * as classNames from 'classnames';
@@ -18,32 +18,29 @@ export interface IColumnTotals {
     attributes: string[];
 }
 
-// TODO BB-1410 Refactor this
+// TODO BB-1410 move to separate file?
+const getTotalTypesAppliedOnAllMeasures = (
+    columnTotals: AFM.ITotalItem[],
+    measureLocalIdentifiers: string[]
+): AFM.TotalType[] => AVAILABLE_TOTALS.filter((type) => {
+    const columnTotalsLength = columnTotals.filter((total: AFM.ITotalItem) => total.type === type).length;
+    return columnTotalsLength === measureLocalIdentifiers.length;
+});
+
+// TODO BB-1410 move to separate file?
 export function getTotalsForAttributeHeader(
     columnTotals: AFM.ITotalItem[],
     measureLocalIdentifiers: string[]
 ): IColumnTotals[] {
+    const totalTypesAppliedOnAllMeasures = getTotalTypesAppliedOnAllMeasures(columnTotals, measureLocalIdentifiers);
 
-    const turnedOnAttributes: IColumnTotals[] = [];
-
-    const totalsList: AFM.TotalType[] = AVAILABLE_TOTALS
-        .filter((type) => {
-            // Show checkmark for attribute aggregation only if all measure
-            // locale identifiers have turned on aggregation
-            const columnTotalsLength =
-                columnTotals.filter((total: AFM.ITotalItem) => total.type === type).length;
-            return columnTotalsLength === measureLocalIdentifiers.length;
-        });
-
-    totalsList.forEach((totalType: AFM.TotalType) => {
+    return totalTypesAppliedOnAllMeasures.map((totalType: AFM.TotalType) => {
         const attributeIdentifiers = columnTotals
             .filter((total: AFM.ITotalItem) => total.type === totalType)
             .map((total: AFM.ITotalItem) => total.attributeIdentifier);
 
-        turnedOnAttributes.push({ type: totalType, attributes: uniq(attributeIdentifiers) });
+        return { type: totalType, attributes: uniq(attributeIdentifiers) };
     });
-
-    return turnedOnAttributes;
 }
 
 // TODO BB-1410 Refactor this

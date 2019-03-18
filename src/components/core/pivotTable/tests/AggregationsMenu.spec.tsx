@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2019 GoodData Corporation
 import { AFM, Execution } from '@gooddata/typings';
 import { mount } from 'enzyme';
 import * as React from 'react';
