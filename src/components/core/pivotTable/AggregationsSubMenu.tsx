@@ -5,7 +5,7 @@ import { Header, Item, ItemsWrapper } from '@gooddata/goodstrap/lib/List/MenuLis
 
 import SubMenu from '../../menu/SubMenu';
 import { IMenuAggregationClickConfig } from '../../../interfaces/PivotTable';
-import { IColumnTotals } from './AggregationsMenu';
+import { IColumnTotal } from './AggregationsMenu';
 
 const MENU_HEADER_OFFSET = -36;
 
@@ -16,7 +16,7 @@ export interface IAggregationsSubMenuProps {
     isMenuOpened?: boolean;
     rowAttributeHeaders: Execution.IAttributeHeader[];
     measureLocalIdentifiers: string[];
-    columnTotals: IColumnTotals[];
+    columnTotals: IColumnTotal[];
     onAggregationSelect: (clickConfig: IMenuAggregationClickConfig) => void;
 }
 
@@ -66,7 +66,7 @@ export default class AggregationsSubMenu extends React.Component<IAggregationsSu
         attributeLocalIdentifier: string
     ): boolean {
         return this.props.columnTotals.some(
-            (total: IColumnTotals) => total.type === totalType && total.attributes.includes(attributeLocalIdentifier)
+            (total: IColumnTotal) => total.type === totalType && total.attributes.includes(attributeLocalIdentifier)
         );
     }
 

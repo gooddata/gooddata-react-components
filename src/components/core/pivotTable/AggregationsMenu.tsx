@@ -13,7 +13,7 @@ import { IOnOpenedChangeParams } from '../../menu/MenuSharedTypes';
 import { AVAILABLE_TOTALS } from '../../visualizations/table/totals/utils';
 import AggregationsSubMenu from './AggregationsSubMenu';
 
-export interface IColumnTotals {
+export interface IColumnTotal {
     type: AFM.TotalType;
     attributes: string[];
 }
@@ -31,7 +31,7 @@ const getTotalTypesAppliedOnAllMeasures = (
 export function getTotalsForAttributeHeader(
     columnTotals: AFM.ITotalItem[],
     measureLocalIdentifiers: string[]
-): IColumnTotals[] {
+): IColumnTotal[] {
     const totalTypesAppliedOnAllMeasures = getTotalTypesAppliedOnAllMeasures(columnTotals, measureLocalIdentifiers);
 
     return totalTypesAppliedOnAllMeasures.map((totalType: AFM.TotalType) => {
@@ -47,8 +47,8 @@ export function getTotalsForAttributeHeader(
 export function getTotalsForMeasureHeader(
     columnTotals: AFM.ITotalItem[],
     measureLocalIdentifier: string
-): IColumnTotals[] {
-    const turnedOnAttributes: IColumnTotals[] = [];
+): IColumnTotal[] {
+    const turnedOnAttributes: IColumnTotal[] = [];
 
     columnTotals.forEach((total: AFM.ITotalItem) => {
         if (total.measureIdentifier === measureLocalIdentifier) {
@@ -184,7 +184,7 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
         );
     }
 
-    private getColumnTotals(measureLocalIdentifiers: string[], isAttributeHeader: boolean): IColumnTotals[] {
+    private getColumnTotals(measureLocalIdentifiers: string[], isAttributeHeader: boolean): IColumnTotal[] {
         const columnTotals = this.props.getColumnTotals() || [];
 
         if (isAttributeHeader) {
@@ -227,10 +227,10 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
 
     private isItemSelected(
         totalType: AFM.TotalType,
-        columnTotals: IColumnTotals[],
+        columnTotals: IColumnTotal[],
         firstAttributeIdentifier: string
     ): boolean {
-        return columnTotals.some((total: IColumnTotals) => {
+        return columnTotals.some((total: IColumnTotal) => {
             return total.type === totalType && total.attributes.includes(firstAttributeIdentifier);
         });
     }
@@ -258,7 +258,7 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
     }
 
     private renderMainMenuItems(
-        columnTotals: IColumnTotals[],
+        columnTotals: IColumnTotal[],
         measureLocalIdentifiers: string[],
         rowAttributeHeaders: Execution.IAttributeHeader[]
     ) {
