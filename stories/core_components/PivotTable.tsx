@@ -3,16 +3,9 @@ import * as React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { screenshotWrap } from '@gooddata/test-storybook';
-import noop = require('lodash/noop');
 
 import { PivotTable } from '../../src';
-import AggregationsMenu from '../../src/components/core/pivotTable/AggregationsMenu';
-import AggregationsSubMenu from '../../src/components/core/pivotTable/AggregationsSubMenu';
-import { EXECUTION_RESPONSE_2A_3M } from '../../src/components/visualizations/table/fixtures/2attributes3measures';
-import { createIntlMock } from '../../src/components/visualizations/utils/intlUtils';
-import { IMenuAggregationClickConfig, IPivotTableConfig } from '../../src/interfaces/PivotTable';
 import { onErrorHandler } from '../mocks';
-
 import { GERMAN_SEPARATORS } from '../data/numberFormat';
 import {
     ATTRIBUTE_1,
@@ -29,8 +22,7 @@ import {
     ARITHMETIC_MEASURE_SIMPLE_OPERANDS,
     ARITHMETIC_MEASURE_USING_ARITHMETIC,
     ATTRIBUTE_COUNTRY,
-    GRAND_TOTALS_WITH_SUBTOTALS,
-    ATTRIBUTE_HEADERS_2A
+    GRAND_TOTALS_WITH_SUBTOTALS
 } from '../data/componentProps';
 
 function logTotalsChange(data: any) {
@@ -298,6 +290,28 @@ storiesOf('Core components/PivotTable', module)
             </div>
         )
     ))
+    .add('totals - column and row attributes with menu enabled', () => screenshotWrap(
+        <div style={wrapperStyle} className="s-table">
+            <PivotTable
+                projectId="storybook"
+                measures={[MEASURE_1, MEASURE_2]}
+                columns={[ATTRIBUTE_3]}
+                rows={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                groupRows={true}
+                totals={GRAND_TOTALS_WITH_SUBTOTALS}
+                onError={onErrorHandler}
+                LoadingComponent={null}
+                ErrorComponent={null}
+                config={{
+                    menu: {
+                        aggregations: true,
+                        aggregationsSubMenu: true
+                    }
+                }}
+            />
+        </div>
+        )
+    )
     .add('arithmetic measures', () => (
         screenshotWrap(
             <div style={wrapperStyle} className="s-table">
@@ -358,72 +372,4 @@ storiesOf('Core components/PivotTable', module)
                 />
             </div>
         )
-    ))
-    .add('BB-1410', () => {
-        const config: IPivotTableConfig = {
-            menu: {
-                aggregations: true,
-                aggregationsSubMenu: true
-            }
-        };
-
-        return screenshotWrap(
-            <div style={wrapperStyle} className="s-table">
-                <PivotTable
-                    projectId="storybook"
-                    measures={[MEASURE_1, MEASURE_2]}
-                    columns={[ATTRIBUTE_3]}
-                    rows={[ATTRIBUTE_1, ATTRIBUTE_2]}
-                    groupRows={true}
-                    totals={GRAND_TOTALS_WITH_SUBTOTALS}
-                    onError={onErrorHandler}
-                    LoadingComponent={null}
-                    ErrorComponent={null}
-                    config={config}
-                />
-            </div>
-        );
-    })
-    .add('Aggregation menus', () => {
-        const intlMock = createIntlMock();
-        const getExecutionResponse = () => EXECUTION_RESPONSE_2A_3M;
-        const getColumnTotals = () => GRAND_TOTALS_WITH_SUBTOTALS;
-        const onAggregationSelect = (menuAggregationClickConfig: IMenuAggregationClickConfig) => {
-            action('onAggregationSelect')(menuAggregationClickConfig);
-        };
-
-        return screenshotWrap(
-            <div style={wrapperStyle}>
-                <AggregationsMenu
-                    intl={intlMock}
-                    isMenuOpened={true}
-                    isMenuButtonVisible={true}
-                    showSubmenu={true}
-                    colId={'a_6_1-m_0'}
-                    getExecutionResponse={getExecutionResponse}
-                    getColumnTotals={getColumnTotals}
-                    onAggregationSelect={onAggregationSelect}
-                    onMenuOpenedChange={noop}
-                />
-
-                <div
-                    className="gd-aggregation-submenu"
-                    style={{ marginLeft: '160px', marginTop: '230px' }}
-                >
-                    <AggregationsSubMenu
-                        intl={intlMock}
-                        totalType={'max'}
-                        toggler={null}
-                        rowAttributeHeaders={ATTRIBUTE_HEADERS_2A}
-                        measureLocalIdentifiers={['1st_measure_local_identifier']}
-                        columnTotals={[{
-                            type: 'max',
-                            attributes: ['1st_attr_df_local_identifier', '2nd_attr_df_local_identifier']
-                        }]}
-                        onAggregationSelect={onAggregationSelect}
-                        isMenuOpened={true}
-                    />
-                </div>
-            </div>
-        );
-    });
+    ));

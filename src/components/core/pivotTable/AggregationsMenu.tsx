@@ -143,8 +143,6 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
             return null;
         }
 
-        console.log('colId', colId);
-
         const fields = getParsedFields(colId);
         const [lastFieldType, lastFieldId, lastFieldValudId = null] = fields[fields.length - 1];
 
