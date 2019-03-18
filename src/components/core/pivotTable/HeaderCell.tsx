@@ -89,21 +89,22 @@ export default class HeaderCell extends React.Component<IHeaderCellProps, IHeade
     }
 
     private renderMenu() {
-        if (!this.props.menu || !this.props.menu.aggregations) {
+        const { intl, colId, menu, getExecutionResponse, getColumnTotals } = this.props;
+        const { isMenuOpen, isMenuButtonVisible } = this.state;
+
+        if (!menu || !menu.aggregations) {
             return null;
         }
 
-        // TODO BB-1410 prepare props and state
-
         return (
             <AggregationsMenu
-                intl={this.props.intl}
-                colId={this.props.colId}
-                isMenuOpened={this.state.isMenuOpen}
-                isMenuButtonVisible={this.state.isMenuButtonVisible}
-                hasSubmenu={this.props.menu.aggregationsSubMenu}
-                getExecutionResponse={this.props.getExecutionResponse}
-                getColumnTotals={this.props.getColumnTotals}
+                intl={intl}
+                colId={colId}
+                isMenuOpened={isMenuOpen}
+                isMenuButtonVisible={isMenuButtonVisible}
+                hasSubmenu={menu.aggregationsSubMenu}
+                getExecutionResponse={getExecutionResponse}
+                getColumnTotals={getColumnTotals}
                 onMenuOpenedChange={this.handleMenuOpenedChange}
                 onAggregationSelect={this.menuItemClick}
             />

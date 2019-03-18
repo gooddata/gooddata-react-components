@@ -19,6 +19,7 @@ $cell-horizontal-border: none;
 $cell-border: 1px dashed transparent;
 $cell-border-color: transparentize($gd-color-disabled, 0.5);
 $header-cell-resize-width: 20px;
+$aggregation-submenu-icon: 'data:image/svg+xml;utf8,<svg version="1.1" viewBox="0 0 12 11" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g transform="translate(-519 -212)"><g transform="translate(244 165)"><g transform="translate(259.5 33)"><g transform="translate(15.5 14)"><rect y="2.2649e-14" width="12" height="2.2" fill="%23D7DCE1"/><rect y="2.9333" width="12" height="2.2" fill="%23798795"/><rect y="5.8667" width="12" height="2.2" fill="%23D7DCE1"/><rect y="8.8" width="12" height="2.2" fill="%23798795"/></g></g></g></g></g></svg>';
 
 @import '~ag-grid/src/styles/ag-grid';
 @import '~ag-grid/src/styles/ag-theme-balham';
@@ -337,23 +338,16 @@ $header-cell-resize-width: 20px;
     .gd-list-item-header:before {
         display: block;
         content: '';
+        position: absolute;
         width: 12px;
         height: 11px;
-        position: absolute;
         left: 10px;
         top: 13px;
-        // TODO BB-1410 Try to extract icon to scss variable
-        background-image: url('data:image/svg+xml;utf8,<svg version="1.1" viewBox="0 0 12 11" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g transform="translate(-519 -212)"><g transform="translate(244 165)"><g transform="translate(259.5 33)"><g transform="translate(15.5 14)"><rect y="2.2649e-14" width="12" height="2.2" fill="%23D7DCE1"/><rect y="2.9333" width="12" height="2.2" fill="%23798795"/><rect y="5.8667" width="12" height="2.2" fill="%23D7DCE1"/><rect y="8.8" width="12" height="2.2" fill="%23798795"/></g></g></g></g></g></svg>');
+        background-image: url($aggregation-submenu-icon);
     }
 
     .gd-menuPosition-wrapper:hover .gd-list-item.is-submenu {
         color: $is-focused-color;
         background: $is-focused-background;
     }
-
-    .gd-list-item.is-submenu:after {
-        pointer-events: none;
-        background: red !important;
-    }
 }
-
