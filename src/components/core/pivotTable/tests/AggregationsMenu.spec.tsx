@@ -6,14 +6,13 @@ import { FIELD_TYPE_ATTRIBUTE, FIELD_TYPE_MEASURE } from '../../../../helpers/ag
 import { EXECUTION_RESPONSE_2A_3M } from '../../../visualizations/table/fixtures/2attributes3measures';
 import { AVAILABLE_TOTALS } from '../../../visualizations/table/totals/utils';
 import { createIntlMock } from '../../../visualizations/utils/intlUtils';
-import AggregationsMenu, { IAggregationsMenuProps, TEST_API } from '../AggregationsMenu';
-import AggregationsSubMenu from '../AggregationsSubMenu';
-
-const {
+import AggregationsMenu, {
+    IAggregationsMenuProps,
     getTotalsForMeasureHeader,
     getTotalsForAttributeHeader,
     getHeaderMeasureLocalIdentifiers
-} = TEST_API;
+} from '../AggregationsMenu';
+import AggregationsSubMenu from '../AggregationsSubMenu';
 
 describe('getTotalsForMeasureHeader', () => {
     it('should return empty totals for measure when no total defined', () => {

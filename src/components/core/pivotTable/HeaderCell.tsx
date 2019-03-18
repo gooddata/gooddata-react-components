@@ -93,13 +93,15 @@ export default class HeaderCell extends React.Component<IHeaderCellProps, IHeade
             return null;
         }
 
+        // TODO BB-1410 prepare props and state
+
         return (
             <AggregationsMenu
                 intl={this.props.intl}
+                colId={this.props.colId}
                 isMenuOpened={this.state.isMenuOpen}
                 isMenuButtonVisible={this.state.isMenuButtonVisible}
                 hasSubmenu={this.props.menu.aggregationsSubMenu}
-                colId={this.props.colId}
                 getExecutionResponse={this.props.getExecutionResponse}
                 getColumnTotals={this.props.getColumnTotals}
                 onMenuOpenedChange={this.handleMenuOpenedChange}

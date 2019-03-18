@@ -19,7 +19,7 @@ export interface ITotalForColumn {
 }
 
 // TODO BB-1410 Refactor this
-function getTotalsForAttributeHeader(
+export function getTotalsForAttributeHeader(
     columnTotals: AFM.ITotalItem[],
     measureLocalIdentifiers: string[]
 ): ITotalForColumn[] {
@@ -47,7 +47,7 @@ function getTotalsForAttributeHeader(
 }
 
 // TODO BB-1410 Refactor this
-function getTotalsForMeasureHeader(
+export function getTotalsForMeasureHeader(
     columnTotals: AFM.ITotalItem[],
     measureLocalIdentifier: string
 ): ITotalForColumn[] {
@@ -71,7 +71,7 @@ function getTotalsForMeasureHeader(
 }
 
 // TODO BB-1410 Refactor this
-function getHeaderMeasureLocalIdentifiers(
+export function getHeaderMeasureLocalIdentifiers(
     measureGroupHeaderItems: Execution.IMeasureHeaderItem[],
     lastFieldType: string,
     lastFieldId: string | number
@@ -168,7 +168,6 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
 
         if (isMeasureHeader) {
             turnedOnAttributes = getTotalsForMeasureHeader(columnTotals, measureLocalIdentifiers[0]);
-
         } else if (isAttributeHeader) {
             turnedOnAttributes = getTotalsForAttributeHeader(columnTotals, measureLocalIdentifiers);
         }
@@ -185,6 +184,7 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
                 togglerWrapperClassName={this.getTogglerClassNames()}
                 opened={isMenuOpened}
                 onOpenedChange={onMenuOpenedChange}
+                openAction={'click'}
             >
                 <ItemsWrapper>
                     <div className="s-table-header-menu-content">
@@ -231,10 +231,12 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
         rowAttributeHeaders: Execution.IAttributeHeader[]
     ) {
         const { intl, onAggregationSelect, hasSubmenu } = this.props;
+        const firstAttributeIdentifier =
+            rowAttributeHeaders.length && rowAttributeHeaders[0].attributeHeader.localIdentifier;
 
         return AVAILABLE_TOTALS.map((type: AFM.TotalType) => {
             const isSelected = enabledTotalsForColumn.some((total: ITotalForColumn) => {
-                return total.type === type;
+                return total.type === type && total.attributes.includes(firstAttributeIdentifier);
             });
             const onClick = () => this.props.onAggregationSelect({
                 type,
@@ -270,9 +272,3 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
         });
     }
 }
-
-export const TEST_API = {
-    getTotalsForAttributeHeader,
-    getHeaderMeasureLocalIdentifiers,
-    getTotalsForMeasureHeader
-};
