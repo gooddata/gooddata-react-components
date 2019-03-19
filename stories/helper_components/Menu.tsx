@@ -465,7 +465,7 @@ storiesOf('Helper components/Menu', module)
 
                 <div
                     className="gd-aggregation-submenu"
-                    style={{ margin: '230px auto 0 160px' }}
+                    style={{ margin: '230px auto 0 0', width: 0 }}
                 >
                     <AggregationsSubMenu
                         intl={intlMock}
