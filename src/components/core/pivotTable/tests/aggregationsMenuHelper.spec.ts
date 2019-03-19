@@ -177,7 +177,7 @@ describe('getHeaderMeasureLocalIdentifiers', () => {
             )).toThrowError();
         });
 
-        it('should throw error when uknown field type provided', () => {
+        it('should throw error when unknown field type provided', () => {
             expect(aggregationsMenuHelper.getHeaderMeasureLocalIdentifiers.bind(
                 this, measureGroupHeaderItems, 'X', lastFieldId
             )).toThrowError();
