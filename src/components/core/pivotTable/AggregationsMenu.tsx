@@ -67,16 +67,14 @@ export function getTotalsForMeasureHeader(
     return turnedOnAttributes;
 }
 
-// TODO BB-1410 Refactor this
+// TODO BB-1410 move to separate file?
 export function getHeaderMeasureLocalIdentifiers(
     measureGroupHeaderItems: Execution.IMeasureHeaderItem[],
     lastFieldType: string,
     lastFieldId: string | number
 ): string[] {
-    let measureLocalIdentifiers: string[] = [];
-
     if (lastFieldType === FIELD_TYPE_MEASURE) {
-        if (!measureGroupHeaderItems.length || !measureGroupHeaderItems[lastFieldId]) {
+        if (measureGroupHeaderItems.length === 0 || !measureGroupHeaderItems[lastFieldId]) {
             invariant(false, `Measure header with index ${lastFieldId} was not found`);
         }
 
@@ -84,15 +82,13 @@ export function getHeaderMeasureLocalIdentifiers(
             measureGroupHeaderItems[lastFieldId].measureHeaderItem;
         const localIdentifier = headerItemData.localIdentifier;
 
-        measureLocalIdentifiers = [localIdentifier];
+        return [localIdentifier];
 
     } else if (lastFieldType === FIELD_TYPE_ATTRIBUTE) {
-        measureLocalIdentifiers = measureGroupHeaderItems.map(i => i.measureHeaderItem.localIdentifier);
-    } else {
-        invariant(false, `Uknown filed type '${lastFieldType}' provided`);
+        return measureGroupHeaderItems.map(i => i.measureHeaderItem.localIdentifier);
     }
 
-    return measureLocalIdentifiers;
+    invariant(false, `Uknown filed type '${lastFieldType}' provided`);
 }
 
 export interface IAggregationsMenuProps {
@@ -154,9 +150,6 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
             lastFieldType,
             lastFieldId
         );
-        if (measureLocalIdentifiers.length === 0) {
-            return null;
-        }
 
         const totalsForHeader = this.getColumnTotals(measureLocalIdentifiers, isAttributeHeader);
 
