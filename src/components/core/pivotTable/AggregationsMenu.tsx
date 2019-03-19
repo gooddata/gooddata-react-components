@@ -82,11 +82,7 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
         return (
             <Menu
                 toggler={
-                    <svg className="menu-icon">
-                        <g transform="translate(4 3)">
-                            <path d="M0 0h8v2H0V0zm0 4h8v2H0V4zm0 4h8v2H0V8z" fill="currentColor" />
-                        </g>
-                    </svg>
+                    <div className="menu-icon" />
                 }
                 togglerWrapperClassName={this.getTogglerClassNames()}
                 opened={isMenuOpened}

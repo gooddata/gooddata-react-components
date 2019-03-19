@@ -277,6 +277,7 @@ $aggregation-submenu-icon: 'data:image/svg+xml;utf8,<svg version="1.1" viewBox="
             & > .menu-icon {
                 width: 16px;
                 height: 16px;
+                background-image: url('~@gooddata/goodstrap/lib/core/styles/icons/menu-burger.svg');
             }
         }
 
@@ -343,7 +344,7 @@ $aggregation-submenu-icon: 'data:image/svg+xml;utf8,<svg version="1.1" viewBox="
         height: 11px;
         left: 10px;
         top: 13px;
-        background-image: url($aggregation-submenu-icon);
+        background-image: url('~@gooddata/goodstrap/lib/core/styles/icons/rows.svg');
     }
 
     .gd-menuPosition-wrapper:hover .gd-list-item.is-submenu {
