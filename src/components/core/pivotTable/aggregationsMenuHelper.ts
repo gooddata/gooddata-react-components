@@ -62,9 +62,9 @@ function getHeaderMeasureLocalIdentifiers(
         const { measureHeaderItem: { localIdentifier } } = measureGroupHeaderItems[lastFieldId];
         return [localIdentifier];
     } else if (lastFieldType === FIELD_TYPE_ATTRIBUTE) {
-        return measureGroupHeaderItems.map(i => i.measureHeaderItem.localIdentifier);
+        return measureGroupHeaderItems.map(item => item.measureHeaderItem.localIdentifier);
     }
-    invariant(false, `Unknown filed type '${lastFieldType}' provided`);
+    invariant(false, `Unknown field type '${lastFieldType}' provided`);
 }
 
 export default {
