@@ -3,83 +3,18 @@ import { Header, Item, ItemsWrapper } from '@gooddata/goodstrap/lib/List/MenuLis
 import { AFM, Execution } from '@gooddata/typings';
 import * as classNames from 'classnames';
 import * as React from 'react';
-import * as invariant from 'invariant';
-import uniq = require('lodash/uniq');
 
 import Menu from '../../menu/Menu';
-import { FIELD_TYPE_ATTRIBUTE, FIELD_TYPE_MEASURE, getParsedFields } from '../../../helpers/agGrid';
+import { FIELD_TYPE_ATTRIBUTE, getParsedFields } from '../../../helpers/agGrid';
 import { IMenuAggregationClickConfig } from '../../../interfaces/PivotTable';
 import { IOnOpenedChangeParams } from '../../menu/MenuSharedTypes';
 import { AVAILABLE_TOTALS } from '../../visualizations/table/totals/utils';
 import AggregationsSubMenu from './AggregationsSubMenu';
+import aggregationsMenuHelper from './aggregationsMenuHelper';
 
 export interface IColumnTotal {
     type: AFM.TotalType;
     attributes: string[];
-}
-
-// TODO BB-1410 move to separate file?
-const getTotalTypesAppliedOnAllMeasures = (
-    columnTotals: AFM.ITotalItem[],
-    measureLocalIdentifiers: string[]
-): AFM.TotalType[] => AVAILABLE_TOTALS.filter((type) => {
-    const columnTotalsLength = columnTotals.filter((total: AFM.ITotalItem) => total.type === type).length;
-    return columnTotalsLength === measureLocalIdentifiers.length;
-});
-
-// TODO BB-1410 move to separate file?
-export function getTotalsForAttributeHeader(
-    columnTotals: AFM.ITotalItem[],
-    measureLocalIdentifiers: string[]
-): IColumnTotal[] {
-    const totalTypesAppliedOnAllMeasures = getTotalTypesAppliedOnAllMeasures(columnTotals, measureLocalIdentifiers);
-
-    return totalTypesAppliedOnAllMeasures.map((totalType: AFM.TotalType) => {
-        const attributeIdentifiers = columnTotals
-            .filter((total: AFM.ITotalItem) => total.type === totalType)
-            .map((total: AFM.ITotalItem) => total.attributeIdentifier);
-
-        return { type: totalType, attributes: uniq(attributeIdentifiers) };
-    });
-}
-
-// TODO BB-1410 move to separate file?
-export function getTotalsForMeasureHeader(
-    columnTotals: AFM.ITotalItem[],
-    measureLocalIdentifier: string
-): IColumnTotal[] {
-    return columnTotals.reduce((turnedOnAttributes: IColumnTotal[], total: AFM.ITotalItem) => {
-        if (total.measureIdentifier === measureLocalIdentifier) {
-            const totalHeaderType = turnedOnAttributes.find(turned => turned.type === total.type);
-            if (totalHeaderType === undefined) {
-                turnedOnAttributes.push({
-                    type: total.type,
-                    attributes: [total.attributeIdentifier]
-                });
-            } else {
-                totalHeaderType.attributes.push(total.attributeIdentifier);
-            }
-        }
-        return turnedOnAttributes;
-    }, []);
-}
-
-// TODO BB-1410 move to separate file?
-export function getHeaderMeasureLocalIdentifiers(
-    measureGroupHeaderItems: Execution.IMeasureHeaderItem[],
-    lastFieldType: string,
-    lastFieldId: string | number
-): string[] {
-    if (lastFieldType === FIELD_TYPE_MEASURE) {
-        if (measureGroupHeaderItems.length === 0 || !measureGroupHeaderItems[lastFieldId]) {
-            invariant(false, `Measure header with index ${lastFieldId} was not found`);
-        }
-        const { measureHeaderItem: { localIdentifier } } = measureGroupHeaderItems[lastFieldId];
-        return [localIdentifier];
-    } else if (lastFieldType === FIELD_TYPE_ATTRIBUTE) {
-        return measureGroupHeaderItems.map(i => i.measureHeaderItem.localIdentifier);
-    }
-    invariant(false, `Unknown filed type '${lastFieldType}' provided`);
 }
 
 export interface IAggregationsMenuProps {
@@ -136,7 +71,7 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
             return null;
         }
 
-        const measureLocalIdentifiers = getHeaderMeasureLocalIdentifiers(
+        const measureLocalIdentifiers = aggregationsMenuHelper.getHeaderMeasureLocalIdentifiers(
             measureGroupHeader.measureGroupHeader.items,
             lastFieldType,
             lastFieldId
@@ -172,10 +107,10 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
         const columnTotals = this.props.getColumnTotals() || [];
 
         if (isAttributeHeader) {
-            return getTotalsForAttributeHeader(columnTotals, measureLocalIdentifiers);
+            return aggregationsMenuHelper.getTotalsForAttributeHeader(columnTotals, measureLocalIdentifiers);
         }
 
-        return getTotalsForMeasureHeader(columnTotals, measureLocalIdentifiers[0]);
+        return aggregationsMenuHelper.getTotalsForMeasureHeader(columnTotals, measureLocalIdentifiers[0]);
     }
 
     private getTogglerClassNames() {
