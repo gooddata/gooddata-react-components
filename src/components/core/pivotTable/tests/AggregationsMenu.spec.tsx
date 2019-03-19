@@ -205,7 +205,7 @@ describe('AggregationsMenu', () => {
     const onAggregationSelect = jest.fn();
 
     function render(customProps: Partial<IAggregationsMenuProps> = {}) {
-        const component = mount(
+        return mount(
             <AggregationsMenu
                 intl={intlMock}
                 isMenuOpened={true}
@@ -218,7 +218,6 @@ describe('AggregationsMenu', () => {
                 onAggregationSelect={onAggregationSelect}
                 {...customProps}
             />);
-        return component;
     }
 
     it('should render opened main menu', () => {

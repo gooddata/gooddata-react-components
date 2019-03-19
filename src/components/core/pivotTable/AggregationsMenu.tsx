@@ -43,17 +43,15 @@ export function getTotalsForAttributeHeader(
     });
 }
 
-// TODO BB-1410 Refactor this
+// TODO BB-1410 move to separate file?
 export function getTotalsForMeasureHeader(
     columnTotals: AFM.ITotalItem[],
     measureLocalIdentifier: string
 ): IColumnTotal[] {
-    const turnedOnAttributes: IColumnTotal[] = [];
-
-    columnTotals.forEach((total: AFM.ITotalItem) => {
+    return columnTotals.reduce((turnedOnAttributes: IColumnTotal[], total: AFM.ITotalItem) => {
         if (total.measureIdentifier === measureLocalIdentifier) {
             const totalHeaderType = turnedOnAttributes.find(turned => turned.type === total.type);
-            if (!totalHeaderType) {
+            if (totalHeaderType === undefined) {
                 turnedOnAttributes.push({
                     type: total.type,
                     attributes: [total.attributeIdentifier]
@@ -62,9 +60,8 @@ export function getTotalsForMeasureHeader(
                 totalHeaderType.attributes.push(total.attributeIdentifier);
             }
         }
-    });
-
-    return turnedOnAttributes;
+        return turnedOnAttributes;
+    }, []);
 }
 
 // TODO BB-1410 move to separate file?
@@ -77,18 +74,12 @@ export function getHeaderMeasureLocalIdentifiers(
         if (measureGroupHeaderItems.length === 0 || !measureGroupHeaderItems[lastFieldId]) {
             invariant(false, `Measure header with index ${lastFieldId} was not found`);
         }
-
-        const headerItemData: Execution.IMeasureHeaderItem['measureHeaderItem'] =
-            measureGroupHeaderItems[lastFieldId].measureHeaderItem;
-        const localIdentifier = headerItemData.localIdentifier;
-
+        const { measureHeaderItem: { localIdentifier } } = measureGroupHeaderItems[lastFieldId];
         return [localIdentifier];
-
     } else if (lastFieldType === FIELD_TYPE_ATTRIBUTE) {
         return measureGroupHeaderItems.map(i => i.measureHeaderItem.localIdentifier);
     }
-
-    invariant(false, `Uknown filed type '${lastFieldType}' provided`);
+    invariant(false, `Unknown filed type '${lastFieldType}' provided`);
 }
 
 export interface IAggregationsMenuProps {
