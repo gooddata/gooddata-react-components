@@ -52,7 +52,7 @@ import {
 } from '../../helpers/mappingHeader';
 
 import { getCellClassNames, getMeasureCellFormattedValue, getMeasureCellStyle } from '../../helpers/tableCell';
-import { IColumnDefOptions, IGridCellEvent, IGridHeader, IGridRow } from '../../interfaces/AGGrid';
+import { IGridCellEvent, IGridHeader, IGridRow } from '../../interfaces/AGGrid';
 
 import { IDrillEvent, IDrillEventContextTable, IDrillEventIntersectionElement } from '../../interfaces/DrillEvents';
 import { IHeaderPredicate } from '../../interfaces/HeaderPredicate';
@@ -107,6 +107,31 @@ export interface IPivotTableState {
 
 export interface ICustomGridOptions extends GridOptions {
     enableMenu?: boolean;
+}
+
+// Ag-grid incorrectly calls getRows function twice which caused 2 API requests
+// Related ag-grid ticket https://github.com/ag-grid/ag-grid/issues/2275
+//
+// As temporary workaround we remember previous getRows data, and if they
+// are the same as previous, we skip API request.
+// Once ag-grid resolves this issue we should be able to safely remove
+// anything related to "IPreviousAgGridRowsData" and "previousAGGridRowsData".
+//
+// Also it seems that getRows is called 3 times sometimes (when sorting or when
+// adding aggregations), so there might also be some problems in our code.
+// Investige more when removing this code.
+export interface IPreviousAgGridRowsData {
+    spec?: {
+        resultSpec: AFM.IResultSpec;
+        startRow: number;
+        endRow: number;
+    };
+    result?: {
+        rowData: any[],
+        lastRow: number,
+        offset: number[],
+        rowAttributeIds: string[]
+    };
 }
 
 const AG_NUMERIC_CELL_CLASSNAME = 'ag-numeric-cell';
@@ -272,9 +297,10 @@ export const getAGGridDataSource = (
     ) => void,
     getGridApi: () => any,
     intl: InjectedIntl,
-    columnDefOptions: IColumnDefOptions = {},
+    previousColDefs: ColDef[] = [],
     columnTotals: AFM.ITotalItem[],
-    getGroupingProvider: () => IGroupingProvider
+    getGroupingProvider: () => IGroupingProvider,
+    previousAGGridRowsData: IPreviousAgGridRowsData
 ): IDatasource => ({
     getRows: ({ startRow, endRow, successCallback, sortModel }: IGetRowsParams) => {
         const execution = getExecution();
@@ -301,6 +327,28 @@ export const getAGGridDataSource = (
             };
         }
 
+        const spec = {
+            resultSpec: resultSpecUpdated,
+            previousColDefs,
+            startRow,
+            endRow
+        };
+
+        // We skip data fetching if spec did not change from previous request, this is because of ag-grid bug
+        // where it call getRows twice, see "IPreviousAgGridRowsData" interface for more information.
+        if (isEqual(previousAGGridRowsData.spec, spec)) {
+            previousAGGridRowsData.spec = spec;
+
+            groupingProvider.processPage(
+                previousAGGridRowsData.result.rowData,
+                previousAGGridRowsData.result.offset[0],
+                previousAGGridRowsData.result.rowAttributeIds
+            );
+            successCallback(previousAGGridRowsData.result.rowData, previousAGGridRowsData.result.lastRow);
+            return;
+        }
+        previousAGGridRowsData.spec = spec;
+
         const pagePromise = getPage(
             resultSpecUpdated,
             // column limit defaults to SERVERSIDE_COLUMN_LIMIT (1000), because 1000 columns is hopefully enough.
@@ -320,7 +368,7 @@ export const getAGGridDataSource = (
                     intl,
                     {
                         addLoadingRenderer: 'loadingRenderer',
-                        columnDefOptions
+                        columnDefOptions: {}
                     }
                 );
                 const { offset, count, total } = execution.executionResult.paging;
@@ -335,6 +383,8 @@ export const getAGGridDataSource = (
                 successCallback(rowData, lastRow);
                 // set totals
                 getGridApi().setPinnedBottomRowData(rowTotals);
+
+                previousAGGridRowsData.result = { rowData, lastRow, offset, rowAttributeIds };
 
                 return execution;
             });
@@ -438,6 +488,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     private gridApi: GridApi;
     private containerRef: HTMLDivElement;
     private groupingProvider: IGroupingProvider;
+    private previousAGGridRowsData: IPreviousAgGridRowsData;
 
     constructor(props: IPivotTableInnerProps) {
         super(props);
@@ -455,6 +506,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         };
 
         this.agGridDataSource = null;
+        this.previousAGGridRowsData = {};
         this.gridApi = null;
 
         this.setGroupingProvider(props.groupRows);
@@ -608,9 +660,10 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             onSuccess,
             this.getGridApi,
             this.props.intl,
-            {},
+            this.state.columnDefs,
             this.state.columnTotals,
-            () => this.groupingProvider
+            () => this.groupingProvider,
+            this.previousAGGridRowsData
         );
     }
 
@@ -708,7 +761,6 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         if (include) {
             const columnTotalsChangedUnique = columnTotalsChanged
                 .filter(totalChanged => !columnTotals.some(total => isEqual(total, totalChanged)));
-
             updatedColumnTotals = [...columnTotals, ...columnTotalsChangedUnique];
         } else {
             updatedColumnTotals = columnTotals
