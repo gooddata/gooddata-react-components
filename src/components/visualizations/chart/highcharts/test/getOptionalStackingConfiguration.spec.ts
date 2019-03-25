@@ -98,6 +98,38 @@ describe('getOptionalStackingConfiguration', () => {
             });
         });
 
+        it.each([
+            ['empty', {}],
+            ['enabled', { stackLabels: { enabled: true } }]
+        ])('should disable stack labels when "stackMeasuresToPercent" is true and stack label config is %s', (
+            _condition: string,
+            axisConfig: any
+        ) => {
+            const chartOptions = { type: VisualizationTypes.COLUMN, yAxes: [{}] };
+            const config = {
+                series: Array(2).fill({ yAxis: 0 }),
+                yAxis: [axisConfig]
+            };
+            const chartConfig = {
+                stackMeasuresToPercent: true
+            };
+
+            const result = getStackMeasuresConfiguration(chartOptions, config, chartConfig);
+            expect(result).toEqual({
+                stackMeasuresToPercent: true,
+                series: Array(2).fill({
+                    yAxis: 0,
+                    stack: 0,
+                    stacking: 'percent'
+                }),
+                yAxis: [{
+                    stackLabels: {
+                        enabled: false
+                    }
+                }]
+            });
+        });
+
         it('should return series config with normal stacking for dual axis', () => {
             const chartOptions = {
                 type: VisualizationTypes.COLUMN,
@@ -158,9 +190,11 @@ describe('getOptionalStackingConfiguration', () => {
                     stack: 1,
                     stacking: 'normal'
                 }],
-                yAxis: Array(2).fill({
+                yAxis: [{
+                    stackLabels: { enabled: false }
+                }, {
                     stackLabels: { enabled: true }
-                })
+                }]
             });
         });
 

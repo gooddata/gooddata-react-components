@@ -28,8 +28,8 @@ function handleStackMeasuresToPercent(stackMeasuresToPercent: boolean, item: any
     } : item;
 }
 
-function handleDualAxes(isDualAxes: boolean, item: any) {
-    if (!isDualAxes) {
+function handleDualAxis(isDualAxis: boolean, item: any) {
+    if (!isDualAxis) {
         return item;
     }
 
@@ -50,13 +50,13 @@ function getSeriesConfiguration(
     config: any,
     stackMeasures: boolean,
     stackMeasuresToPercent: boolean,
-    isDualAxes: boolean
+    isDualAxis: boolean
 ) {
     const { series } = config;
     const handlers = [
         partial(handleStackMeasure, stackMeasures),
         partial(handleStackMeasuresToPercent, stackMeasuresToPercent),
-        partial(handleDualAxes, isDualAxes)
+        partial(handleDualAxis, isDualAxis)
     ];
 
     return {
@@ -67,13 +67,18 @@ function getSeriesConfiguration(
 function getYAxisConfiguration(
     config: any,
     type: string,
-    isDualAxes: boolean
+    stackMeasuresToPercent: boolean
 ) {
     const { yAxis } = config;
-    // let it be default for single axis chart
-    // and bar chart disables stack labels by default
-    if (!isDualAxes || !isColumnChart(type)) {
+    // only support column char and bar chart disables stack labels by default
+    if (!isColumnChart(type)) {
         return {};
+    }
+
+    if (stackMeasuresToPercent) {
+        // hide stack labels in primary axis
+        // leave stack labels in secondary axis to default flow
+        set(yAxis[0], 'stackLabels.enabled', false);
     }
 
     return {
@@ -101,12 +106,12 @@ export function getStackMeasuresConfiguration(chartOptions: any, config: any, ch
     }
 
     const { yAxes, type } = chartOptions;
-    const isDualAxes = yAxes.length === 2;
+    const isDualAxis = yAxes.length === 2;
 
     return {
-        stackMeasuresToPercent, // this prop is used in 'dualAxesLabelFormatter.ts'
-        ...getSeriesConfiguration(config, stackMeasures, stackMeasuresToPercent, isDualAxes),
-        ...getYAxisConfiguration(config, type, isDualAxes)
+        stackMeasuresToPercent, // put prop to 'highChart.userOptions' and use in 'dualAxesLabelFormatter.ts'
+        ...getSeriesConfiguration(config, stackMeasures, stackMeasuresToPercent, isDualAxis),
+        ...getYAxisConfiguration(config, type, stackMeasuresToPercent)
     };
 }
 
