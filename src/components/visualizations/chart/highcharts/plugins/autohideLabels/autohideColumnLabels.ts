@@ -117,17 +117,17 @@ function getStackLabelPointsForDualAxis(stacks: any[]) {
     return flatten(
         // 'column0' is primary axis and 'column1' is secondary axis
         zip(...stacks.map((item: any, index: number) => values(item[`column${index}`])))
-    );
+    ).filter((point: any) => point);
 }
 
 function toggleStackedLabelsForDualAxis() {
     const { yAxis } = this;
 
-    const stackTotalGroups = yAxis.map((axis: any) => axis.stackTotalGroup);
+    const stackTotalGroups = yAxis.map((axis: any) => axis.stackTotalGroup).filter((group: any) => group);
     const stacks = yAxis.map((axis: any) => axis.stacks);
 
     if (stacks && stackTotalGroups) {
-        const points = getStackLabelPointsForDualAxis(stacks);
+        const points = getStackLabelPointsForDualAxis(stacks).filter((point: any) => point);
         const labels = points.map((point: any) => point.label);
         const neighbors = toNeighbors(labels);
         const areOverlapping = areNeighborsOverlapping(neighbors);
@@ -142,7 +142,7 @@ function toggleStackedLabelsForDualAxis() {
     }
 }
 
-function toggleStackedLabelsForDualAxisForSingleAxis() {
+function toggleStackedLabelsForSingleAxis() {
     const { yAxis } = this;
     const { stackTotalGroup, stacks }: any = yAxis[0] || {};
 
@@ -173,7 +173,7 @@ function toggleStackedLabels() {
     if (yAxis.length === 2) {
         return toggleStackedLabelsForDualAxis.call(this);
     }
-    return toggleStackedLabelsForDualAxisForSingleAxis.call(this);
+    return toggleStackedLabelsForSingleAxis.call(this);
 }
 
 export const autohideColumnLabels = (chart: any) => {

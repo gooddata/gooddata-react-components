@@ -1161,6 +1161,12 @@ export function getCategoriesForTwoAttributes(viewByTwoAttributes: IViewByTwoAtt
     }));
 }
 
+/**
+ * Get stacking config which will be set to 'highchart.plotOptions.series'
+ * in 'customConfiguration.ts:getStackingConfiguration()'
+ * @param stackByAttribute
+ * @param options
+ */
 function getStackingConfig(stackByAttribute: any, options: IChartConfig): string {
     const { type, stackMeasures, stackMeasuresToPercent } = options;
     const stackingValue = stackMeasuresToPercent ? PERCENT_STACK : NORMAL_STACK;

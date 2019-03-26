@@ -53,7 +53,6 @@ import {
     IColorStrategy
 } from '../colorFactory';
 import { IColorPaletteItem } from '../../../../interfaces/Config';
-import { NORMAL_STACK, PERCENT_STACK } from '../highcharts/getOptionalStackingConfiguration';
 import { VisualizationTypes } from '../../../..';
 
 export { IPoint };
@@ -3458,23 +3457,6 @@ describe('chartOptionsBuilder', () => {
                     }
                 );
                 expect(stacking).toBeFalsy();
-            });
-
-            it.each`
-                description | config | expectation
-                ${'should return \'normal\' stacking'} | ${{ stackMeasures: true }} | ${NORMAL_STACK}
-                ${'should return \'percent\' stacking'} | ${{ stackMeasuresToPercent: true }} | ${PERCENT_STACK}
-                ${'should \'percent\' overwrite \'normal\' stacking'} |
-                    ${{ stackMeasures: true, stackMeasuresToPercent: true }} | ${PERCENT_STACK}
-            `('$description', ({ config, expectation }: {config: any, expectation: string}) => {
-                const { stacking } = generateChartOptions(
-                    fixtures.barChartWith3MetricsAndViewByAttribute,
-                    {
-                        type: VisualizationTypes.COLUMN,
-                        ...config
-                    }
-                );
-                expect(stacking).toBe(expectation);
             });
 
             describe('getCategoriesForTwoAttributes', () => {
