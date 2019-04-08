@@ -220,7 +220,7 @@ describe('PivotTable', () => {
     describe('groupRows for attribute columns', () => {
         it.each([
             ['should', true, true],
-            ['should NOT', undefined, false],
+            ['should', undefined, true],
             ['should NOT', false, false]
         ])('%s group rows for attribute columns when groupRows is %s', (_should, groupRows, expected) => {
             const component = renderShallowComponent({

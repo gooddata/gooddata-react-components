@@ -262,7 +262,7 @@ describe('PivotTable', () => {
         });
 
         it.each([
-            ['should NOT', undefined, false],
+            ['should', undefined, true],
             ['should NOT', false, false]
         ])('%s group rows when groupRows property is %s', (_should, groupRows, expected) => {
             renderComponentForGrouping({
