@@ -1642,7 +1642,6 @@ export function getChartOptions(
     if (isComboChart(type)) {
         return {
             type,
-            stacking,
             xAxes,
             yAxes,
             legendLayout: config.legendLayout || 'horizontal',

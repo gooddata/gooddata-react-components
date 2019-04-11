@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import { VisualizationObject, AFM, Execution } from '@gooddata/typings';
 import { IColumnTotal } from '../../src/components/core/pivotTable/AggregationsMenu';
 import {
@@ -14,6 +14,7 @@ import {
 export const MEASURE_1: VisualizationObject.IMeasure = measure('/gdc/md/storybook/obj/1').localIdentifier('m1');
 export const MEASURE_2: VisualizationObject.IMeasure = measure('/gdc/md/storybook/obj/2').localIdentifier('m2');
 export const MEASURE_3: VisualizationObject.IMeasure = measure('/gdc/md/storybook/obj/3').localIdentifier('m3');
+export const MEASURE_4: VisualizationObject.IMeasure = measure('/gdc/md/storybook/obj/4').localIdentifier('m4');
 
 export const MEASURE_AM_1_2: VisualizationObject.IMeasure = arithmeticMeasure(['m1', 'm2'], 'sum')
     .localIdentifier('am1')
