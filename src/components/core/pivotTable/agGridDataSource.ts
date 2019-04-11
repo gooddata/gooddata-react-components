@@ -10,7 +10,7 @@ import { IGridHeader, IGridTotalsRow } from "../../../interfaces/AGGrid";
 
 import { IGetPage } from "../base/VisualizationLoadingHOC";
 import { IGroupingProvider } from "../pivotTable/GroupingProvider";
-import { getSortsFromModel } from "../PivotTable";
+import { getSortsFromModel, IPreviousAgGridRowsData } from "../PivotTable";
 
 const areTotalsChanged = (gridApi: GridApi, totals: IGridTotalsRow[]) => {
     const totalsCount = gridApi.getPinnedBottomRowCount();
@@ -40,6 +40,8 @@ export const getDataSourceRowsGetter = (
     intl: InjectedIntl,
     columnTotals: AFM.ITotalItem[],
     getGroupingProvider: () => IGroupingProvider,
+    previousAGGridRowsData: IPreviousAgGridRowsData,
+    previousColDefs: IGridHeader[] = [],
 ) => {
     return (getRowsParams: IGetRowsParams) => {
         const { startRow, endRow, successCallback, sortModel } = getRowsParams;
@@ -68,6 +70,28 @@ export const getDataSourceRowsGetter = (
             };
         }
 
+        const spec = {
+            resultSpec: resultSpecUpdated,
+            previousColDefs,
+            startRow,
+            endRow,
+        };
+
+        // We skip data fetching if spec did not change from previous request, this is because of ag-grid bug
+        // where it call getRows twice, see "IPreviousAgGridRowsData" interface for more information.
+        if (isEqual(previousAGGridRowsData.spec, spec)) {
+            previousAGGridRowsData.spec = spec;
+
+            groupingProvider.processPage(
+                previousAGGridRowsData.result.rowData,
+                previousAGGridRowsData.result.offset[0],
+                previousAGGridRowsData.result.rowAttributeIds,
+            );
+            successCallback(previousAGGridRowsData.result.rowData, previousAGGridRowsData.result.lastRow);
+            return;
+        }
+        previousAGGridRowsData.spec = spec;
+
         const pagePromise = getPage(
             resultSpecUpdated,
             // column limit defaults to SERVERSIDE_COLUMN_LIMIT (1000), because 1000 columns is hopefully enough.
@@ -86,6 +110,7 @@ export const getDataSourceRowsGetter = (
                 intl,
                 {
                     addLoadingRenderer: "loadingRenderer",
+                    columnDefOptions: {},
                 },
             );
             const { offset, count, total } = execution.executionResult.paging;
@@ -103,6 +128,8 @@ export const getDataSourceRowsGetter = (
             if (areTotalsChanged(getGridApi(), rowTotals)) {
                 getGridApi().setPinnedBottomRowData(rowTotals);
             }
+
+            previousAGGridRowsData.result = { rowData, lastRow, offset, rowAttributeIds };
 
             return execution;
         });
@@ -123,6 +150,8 @@ export const getAGGridDataSource = (
     columnTotals: AFM.ITotalItem[],
     getGroupingProvider: () => IGroupingProvider,
     cancelPagePromises: () => void,
+    previousAGGridRowsData: IPreviousAgGridRowsData,
+    previousColDefs: IGridHeader[] = [],
 ): IDatasource => ({
     getRows: getDataSourceRowsGetter(
         resultSpec,
@@ -133,6 +162,8 @@ export const getAGGridDataSource = (
         intl,
         columnTotals,
         getGroupingProvider,
+        previousAGGridRowsData,
+        previousColDefs,
     ),
     destroy: () => {
         cancelPagePromises();

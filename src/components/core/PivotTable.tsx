@@ -111,7 +111,7 @@ export interface IPivotTableProps extends ICommonChartProps, IDataSourceProvider
 }
 
 export interface IPivotTableState {
-    columnDefs: ColDef[];
+    columnDefs: IGridHeader[];
     // rowData an an array of different objects depending on the content of the table.
     rowData: IGridRow[];
     execution: Execution.IExecutionResponses;
@@ -123,6 +123,31 @@ export interface IPivotTableState {
 
 export interface ICustomGridOptions extends GridOptions {
     enableMenu?: boolean;
+}
+
+// Ag-grid incorrectly calls getRows function twice which caused 2 API requests
+// Related ag-grid ticket https://github.com/ag-grid/ag-grid/issues/2275
+//
+// As temporary workaround we remember previous getRows data, and if they
+// are the same as previous, we skip API request.
+// Once ag-grid resolves this issue we should be able to safely remove
+// anything related to "IPreviousAgGridRowsData" and "previousAGGridRowsData".
+//
+// Also it seems that getRows is called 3 times sometimes (when sorting or when
+// adding aggregations), so there might also be some problems in our code.
+// Investige more when removing this code.
+export interface IPreviousAgGridRowsData {
+    spec?: {
+        resultSpec: AFM.IResultSpec;
+        startRow: number;
+        endRow: number;
+    };
+    result?: {
+        rowData: any[];
+        lastRow: number;
+        offset: number[];
+        rowAttributeIds: string[];
+    };
 }
 
 const AG_NUMERIC_CELL_CLASSNAME = "ag-numeric-cell";
@@ -374,6 +399,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     private groupingProvider: IGroupingProvider;
     private lastScrollTop: number = 0;
     private lastScrollLeft: number = 0;
+    private previousAGGridRowsData: IPreviousAgGridRowsData;
 
     constructor(props: IPivotTableInnerProps) {
         super(props);
@@ -392,6 +418,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
         this.agGridDataSource = null;
         this.gridApi = null;
+        this.previousAGGridRowsData = {};
 
         this.setGroupingProvider(props.groupRows);
     }
@@ -557,6 +584,8 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             this.state.columnTotals,
             () => this.groupingProvider,
             this.props.cancelPagePromises,
+            this.previousAGGridRowsData,
+            this.state.columnDefs,
         );
     }
 

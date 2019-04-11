@@ -34,6 +34,7 @@ describe("getGridDataSource", () => {
             [],
             () => groupingProvider,
             cancelPagePromises,
+            {},
         );
         await gridDataSource.getRows({ startRow, endRow, successCallback, sortModel } as any);
         expect(getPage).toHaveBeenCalledWith(resultSpec, [0, undefined], [0, undefined]);
