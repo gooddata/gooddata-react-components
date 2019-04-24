@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { AfmComponents } from "@gooddata/react-components";
 import "@gooddata/react-components/styles/css/main.css";
-import * as Measure from "react-measure";
+import Measure from "react-measure";
 
 import { projectId, totalSalesIdentifier, locationResortIdentifier } from "../utils/fixtures";
 
@@ -61,12 +61,12 @@ export class ResponsiveExample extends Component {
                 <hr className="separator" />
 
                 <div style={{ width, height }} className="s-resizable-vis">
-                    <Measure>
-                        {dimensions => (
-                            <div style={{ width: "100%", height: "100%" }}>
+                    <Measure client>
+                        {({ measureRef, contentRect }) => (
+                            <div style={{ width: "100%", height: "100%" }} ref={measureRef}>
                                 <AfmComponents.BarChart
-                                    width={dimensions.width}
-                                    height={dimensions.height}
+                                    width={contentRect.client.width || 0}
+                                    height={contentRect.client.height || 0}
                                     projectId={projectId}
                                     afm={afm}
                                 />
