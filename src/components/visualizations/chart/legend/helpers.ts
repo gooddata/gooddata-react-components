@@ -385,7 +385,8 @@ const LEGEND_TEXT_KEYS = {
     column: ['left', 'right'],
     line: ['left', 'right'],
     bar: ['bottom', 'top'],
-    combo: ['left', 'right']
+    combo: ['left', 'right'],
+    combo2: ['left', 'right']
 };
 
 export const LEGEND_AXIS_INDICATOR = 'legendAxisIndicator';

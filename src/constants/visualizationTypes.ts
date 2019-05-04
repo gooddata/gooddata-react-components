@@ -14,6 +14,7 @@ export const VisualizationTypes = {
     HEATMAP: 'heatmap' as 'heatmap',
     GEO: 'geo' as 'geo',
     COMBO: 'combo' as 'combo',
+    COMBO2: 'combo2' as 'combo2',
     HISTOGRAM: 'histogram' as 'histogram',
     BULLET: 'bullet' as 'bullet',
     TREEMAP: 'treemap' as 'treemap',
@@ -24,7 +25,7 @@ export const VisualizationTypes = {
 };
 
 export type ChartType = 'bar' | 'column' | 'pie' | 'line' | 'area' | 'donut' |
-    'scatter' | 'bubble' | 'heatmap' | 'geo' | 'combo' | 'histogram' |
+    'scatter' | 'bubble' | 'heatmap' | 'geo' | 'combo' | 'combo2' | 'histogram' |
     'bullet' | 'treemap' | 'waterfall' | 'funnel' | 'pareto' | 'alluvial';
 export type HeadlineType = 'headline';
 export type TableType = 'table' | 'pivotTable';
