@@ -15,6 +15,6 @@ export class ComboChart extends React.PureComponent<IChartProps, null> {
     }
 
     public render() {
-        return <BaseChart type="combo" {...this.props} />;
+        return <BaseChart type="combo2" {...this.props} />;
     }
 }
