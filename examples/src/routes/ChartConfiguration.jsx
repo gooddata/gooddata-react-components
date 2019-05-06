@@ -10,7 +10,7 @@ import PieChartColorMappingExampleSRC from "!raw-loader!../components/PieChartCo
 export const BarChartDynamic = () => (
     <div>
         <div>
-            <h1>Bar Chart with dynamic colors example</h1>
+            <h1>Bar1 Chart with dynamic colors example</h1>
 
             <hr className="separator" />
 

@@ -21,8 +21,12 @@ export class BarChartDynamicExample extends Component {
         this.state = {
             config: defaultProperties,
             customPaletteUsed: false,
+            customLegendUsed: true,
+            customSeparatorUsed: true,
         };
         this.onPaletteChange = this.onPaletteChange.bind(this);
+        this.onLegendChange = this.onLegendChange.bind(this);
+        this.onSeparatorChange = this.onSeparatorChange.bind(this);
     }
 
     onPaletteChange() {
@@ -36,6 +40,37 @@ export class BarChartDynamicExample extends Component {
                 ...colorPaletteProp,
             },
             customPaletteUsed: !customPaletteUsed,
+        });
+    }
+
+    onLegendChange() {
+        const { config: currentConfig, customLegendUsed } = this.state;
+        const legendProp = {
+            legend: {
+                enabled: customLegendUsed,
+                position: "right",
+            },
+        };
+        this.setState({
+            config: {
+                ...currentConfig,
+                ...legendProp,
+            },
+            customLegendUsed: !customLegendUsed,
+        });
+    }
+
+    onSeparatorChange() {
+        const { config: currentConfig, customSeparatorUsed } = this.state;
+        const separatorProp = {
+            separators: customSeparatorUsed ? { thousand: '.', decimal: ',' } : { thousand: ',', decimal: '.' }
+        };
+        this.setState({
+            config: {
+                ...currentConfig,
+                ...separatorProp,
+            },
+            customSeparatorUsed: !customSeparatorUsed,
         });
     }
 
@@ -54,8 +89,28 @@ export class BarChartDynamicExample extends Component {
 
         return (
             <div>
-                <button onClick={this.onPaletteChange}>Change palette</button>
                 <div style={{ height: 300 }} className="s-bar-chart">
+                    <button
+                        className="s-change-palette"
+                        onClick={this.onPaletteChange}
+                    >
+                        Change palette
+                    </button>
+
+                    <button
+                        className="s-change-legend"
+                        onClick={this.onLegendChange}
+                    >
+                        Change legend
+                    </button>
+
+                    <button
+                        className="s-change-separator"
+                        onClick={this.onSeparatorChange}
+                    >
+                        Change separator
+                    </button>
+
                     <BarChart
                         projectId={projectId}
                         measures={[amount]}
