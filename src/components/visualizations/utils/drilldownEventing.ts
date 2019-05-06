@@ -13,10 +13,8 @@ import {
 } from '../../../constants/visualizationTypes';
 import {
     IDrillEvent,
-    DrillEventContext,
-    IDrillEventContextGroup,
+    IDrillEventContext,
     IDrillEventIntersectionElement,
-    IDrillEventContextPoint,
     IDrillEventContextTable,
     IDrillPoint
 } from '../../../interfaces/DrillEvents';
@@ -90,7 +88,7 @@ function fireEvent(onFiredDrillEvent: OnFiredDrillEvent, data: IDrillEvent, targ
 function composeDrillContextGroup(
     { points }: IHighchartsChartDrilldownEvent,
     chartType: ChartType
-): IDrillEventContextGroup {
+): IDrillEventContext {
     const contextPoints: IDrillPoint[] = points.map((point: IHighchartsPointObject) => {
         return {
             x: point.x,
@@ -108,8 +106,8 @@ function composeDrillContextGroup(
 function composeDrillContextPoint(
     { point }: IHighchartsChartDrilldownEvent,
     chartType: ChartType
-): IDrillEventContextPoint {
-    const context: IDrillEventContextPoint = {
+): IDrillEventContext {
+    const context: IDrillEventContext = {
         type: chartType,
         element: getClickableElementNameByChartType(chartType),
         intersection: point.drillIntersection
@@ -140,7 +138,7 @@ const chartClickDebounced = debounce((drillConfig: IDrillConfig, event: IHighcha
         usedChartType = get(event, ['point', 'series', 'options', 'type'], chartType);
     }
 
-    const drillContext: DrillEventContext = isGroupHighchartsDrillEvent(event)
+    const drillContext: IDrillEventContext = isGroupHighchartsDrillEvent(event)
         ? composeDrillContextGroup(event, usedChartType)
         : composeDrillContextPoint(event, usedChartType);
 

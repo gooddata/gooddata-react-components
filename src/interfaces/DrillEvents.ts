@@ -1,12 +1,12 @@
 // (C) 2007-2018 GoodData Corporation
 import { AFM } from '@gooddata/typings';
 import {
-    ChartElementType,
-    ChartType,
     HeadlineElementType,
     HeadlineType,
     TableElementType,
-    TableType
+    TableType,
+    VisElementType,
+    VisType
 } from '../constants/visualizationTypes';
 
 export interface IDrillableItemUri {
@@ -60,17 +60,6 @@ export interface IDrillEventContextHeadline {
     intersection: IDrillEventIntersectionElement[];
 }
 
-// Drill context for chart
-export interface IDrillEventContextPoint {
-    type: ChartType;
-    element: ChartElementType;
-    x?: number;
-    y?: number;
-    z?: number;
-    value?: string;
-    intersection: IDrillEventIntersectionElement[];
-}
-
 // Chart series point with intersection element
 export interface IDrillPoint {
     x: number;
@@ -78,23 +67,23 @@ export interface IDrillPoint {
     intersection: IDrillEventIntersectionElement[];
 }
 
-// Drill context for chart element group (multiple series + click on axis value)
-// where every point has own intersection
-export interface IDrillEventContextGroup {
-    type: ChartType;
-    element: ChartElementType;
-    points: IDrillPoint[];
+// Shared drill context for all visualizations used in onFiredDrillEvent
+export interface IDrillEventContext {
+    type: VisType;
+    element: VisElementType;
+    x?: number;
+    y?: number;
+    z?: number;
+    columnIndex?: number;
+    rowIndex?: number;
+    row?: any[];
+    value?: string;
+    intersection?: IDrillEventIntersectionElement[];
+    points?: IDrillPoint[];
 }
-
-// Drill context for all visualization types
-export type DrillEventContext =
-    IDrillEventContextTable |
-    IDrillEventContextHeadline |
-    IDrillEventContextPoint |
-    IDrillEventContextGroup;
 
 // IDrillEvent is a parameter of the onFiredDrillEvent is callback
 export interface IDrillEvent {
     executionContext: AFM.IAfm;
-    drillContext: DrillEventContext;
+    drillContext: IDrillEventContext;
 }
