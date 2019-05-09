@@ -48,6 +48,7 @@ import {
 
 import getOptionalStackingConfiguration from "./getOptionalStackingConfiguration";
 import { IDrillConfig } from "../../../../interfaces/DrillEvents";
+import { getZeroAlignConfiguration } from "./getZeroAlignConfiguration";
 
 const { stripColors, numberFormat }: any = numberJS;
 
@@ -1181,6 +1182,7 @@ export function getCustomizedConfiguration(
         // should be after 'getDataConfiguration' to modify 'series'
         // and should be after 'getStackingConfiguration' to get stackLabels config
         getOptionalStackingConfiguration,
+        getZeroAlignConfiguration,
     ];
 
     const commonData = configurators.reduce((config: any, configurator: any) => {
