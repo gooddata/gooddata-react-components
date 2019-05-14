@@ -11,6 +11,13 @@ export function findBucketByLocalIdentifier(buckets: VisualizationObject.IBucket
     return (buckets || []).find(bucket => bucket.localIdentifier === bucketName);
 }
 
+export function getBucketItems(
+    buckets: VisualizationObject.IBucket[],
+    localIdentifier: string,
+): VisualizationObject.BucketItem[] {
+    return get(findBucketByLocalIdentifier(buckets, localIdentifier), "items", []);
+}
+
 export function getDimensionTotals(bucket: VisualizationObject.IBucket): AFM.ITotalItem[] {
     const bucketTotals: VisualizationObject.IVisualizationTotal[] = get<
         VisualizationObject.IBucket,

@@ -13,6 +13,7 @@ import { convertBucketsToAFM, convertBucketsToMdObject } from "../helpers/conver
 import { getResultSpec } from "../helpers/resultSpec";
 import { MEASURES, SECONDARY_MEASURES, VIEW } from "../constants/bucketNames";
 import { setMeasuresToSecondaryAxis } from "../helpers/dualAxis";
+import { sanitizeConfig, sanitizeMeasures } from "../helpers/optionalStacking/common";
 
 export interface IComboChartBucketProps {
     columnMeasures?: VisualizationInput.IMeasure[];
@@ -56,11 +57,11 @@ export function ComboChart(props: IComboChartProps): JSX.Element {
     const buckets: VisualizationObject.IBucket[] = [
         {
             localIdentifier: MEASURES,
-            items: primaryMeasures,
+            items: sanitizeMeasures(primaryMeasures),
         },
         {
             localIdentifier: SECONDARY_MEASURES,
-            items: secondaryMeasures,
+            items: sanitizeMeasures(secondaryMeasures),
         },
         {
             localIdentifier: VIEW,
@@ -80,14 +81,15 @@ export function ComboChart(props: IComboChartProps): JSX.Element {
             "sortBy",
         ],
     );
-    newProps.config = {
+    const sanitizedConfig = sanitizeConfig(buckets, {
         ...setMeasuresToSecondaryAxis(secondaryMeasures, newProps.config),
         mdObject: convertBucketsToMdObject(buckets, props.filters, "local:combo"),
-    };
+    });
 
     return (
         <AfmComboChart
             {...newProps}
+            config={sanitizedConfig}
             projectId={props.projectId}
             afm={convertBucketsToAFM(buckets, props.filters)}
             resultSpec={getResultSpec(buckets, props.sortBy)}

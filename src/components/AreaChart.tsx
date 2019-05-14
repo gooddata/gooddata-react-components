@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import { omit } from "lodash";
 import { VisualizationObject, VisualizationInput } from "@gooddata/typings";
@@ -11,10 +11,7 @@ import { convertBucketsToAFM } from "../helpers/conversion";
 import { getStackingResultSpec } from "../helpers/resultSpec";
 import { MEASURES, ATTRIBUTE, STACK } from "../constants/bucketNames";
 import { verifyBuckets, getBucketsProps, getConfigProps } from "../helpers/optionalStacking/areaChart";
-import {
-    getSanitizedBucketsAndStackingConfig,
-    ISanitizedBucketsAndStackingConfig,
-} from "../helpers/optionalStacking/common";
+import { sanitizeConfig, sanitizeMeasures } from "../helpers/optionalStacking/common";
 
 export interface IAreaChartBucketProps {
     measures: VisualizationInput.AttributeOrMeasure[];
@@ -43,7 +40,7 @@ export function AreaChart(props: IAreaChartProps): JSX.Element {
     const buckets: VisualizationObject.IBucket[] = [
         {
             localIdentifier: MEASURES,
-            items: measures,
+            items: sanitizeMeasures(measures),
         },
         {
             localIdentifier: ATTRIBUTE,
@@ -62,23 +59,18 @@ export function AreaChart(props: IAreaChartProps): JSX.Element {
         "filters",
         "sortBy",
     ]);
-    newProps.config = {
+    const sanitizedConfig = sanitizeConfig(buckets, {
         ...newProps.config,
         ...configProp,
-    };
-
-    const {
-        buckets: sanitizedBuckets,
-        config: sanitizedConfig,
-    }: ISanitizedBucketsAndStackingConfig = getSanitizedBucketsAndStackingConfig(buckets, newProps.config);
+    });
 
     return (
         <AfmAreaChart
             {...newProps}
             config={sanitizedConfig}
             projectId={props.projectId}
-            afm={convertBucketsToAFM(sanitizedBuckets, props.filters)}
-            resultSpec={getStackingResultSpec(sanitizedBuckets, props.sortBy)}
+            afm={convertBucketsToAFM(buckets, props.filters)}
+            resultSpec={getStackingResultSpec(buckets, props.sortBy)}
         />
     );
 }

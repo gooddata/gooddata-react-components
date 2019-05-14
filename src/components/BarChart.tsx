@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import omit = require("lodash/omit");
 import { VisualizationObject, VisualizationInput } from "@gooddata/typings";
@@ -9,11 +9,7 @@ import { ICommonChartProps } from "./core/base/BaseChart";
 import { convertBucketsToAFM } from "../helpers/conversion";
 import { getStackingResultSpec } from "../helpers/resultSpec";
 import { MEASURES, ATTRIBUTE, STACK } from "../constants/bucketNames";
-import {
-    getSanitizedBucketsAndStackingConfig,
-    getViewByTwoAttributes,
-    ISanitizedBucketsAndStackingConfig,
-} from "../helpers/optionalStacking/common";
+import { getViewByTwoAttributes, sanitizeConfig, sanitizeMeasures } from "../helpers/optionalStacking/common";
 
 export interface IBarChartBucketProps {
     measures: VisualizationInput.AttributeOrMeasure[];
@@ -37,7 +33,7 @@ export function BarChart(props: IBarChartProps): JSX.Element {
     const buckets: VisualizationObject.IBucket[] = [
         {
             localIdentifier: MEASURES,
-            items: props.measures || [],
+            items: sanitizeMeasures(props.measures),
         },
         {
             localIdentifier: ATTRIBUTE,
@@ -56,19 +52,15 @@ export function BarChart(props: IBarChartProps): JSX.Element {
         "filters",
         "sortBy",
     ]);
-
-    const {
-        buckets: sanitizedBuckets,
-        config: sanitizedConfig,
-    }: ISanitizedBucketsAndStackingConfig = getSanitizedBucketsAndStackingConfig(buckets, newProps.config);
+    const sanitizedConfig = sanitizeConfig(buckets, newProps.config);
 
     return (
         <AfmBarChart
             {...newProps}
             config={sanitizedConfig}
             projectId={props.projectId}
-            afm={convertBucketsToAFM(sanitizedBuckets, props.filters)}
-            resultSpec={getStackingResultSpec(sanitizedBuckets, props.sortBy)}
+            afm={convertBucketsToAFM(buckets, props.filters)}
+            resultSpec={getStackingResultSpec(buckets, props.sortBy)}
         />
     );
 }

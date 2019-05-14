@@ -2,49 +2,64 @@
 import { VisualizationObject } from "@gooddata/typings";
 import {
     getComputeRatio,
-    getSanitizedBucketsAndStackingConfig,
     getSanitizedStackingConfigFromAfm,
+    sanitizeConfig,
+    sanitizeMeasures,
     getViewByTwoAttributes,
-    ISanitizedBucketsAndStackingConfig,
 } from "../common";
 import { IColumnChartBucketProps } from "../../../components/ColumnChart";
 import { MEASURES, ATTRIBUTE, STACK } from "../../../constants/bucketNames";
-import { findBucketByLocalIdentifier } from "../../dimensions";
-import { attribute, measure } from "../../../helpers/model";
+import { measure, attribute } from "../../../helpers/model";
 import { IChartConfig } from "../../../interfaces/Config";
 import * as fixtures from "../../../../stories/test_data/fixtures";
 
-describe("getSanitizedBucketsAndStackingConfig", () => {
-    const A1: VisualizationObject.IVisualizationAttribute = attribute("a1").localIdentifier("a1");
-    const A2: VisualizationObject.IVisualizationAttribute = attribute("a2").localIdentifier("a2");
-    const M1: VisualizationObject.IMeasure = measure("m1").localIdentifier("m1");
-    const M2: VisualizationObject.IMeasure = measure("m2").localIdentifier("m2");
+const A1: VisualizationObject.IVisualizationAttribute = attribute("a1").localIdentifier("a1");
+const A2: VisualizationObject.IVisualizationAttribute = attribute("a2").localIdentifier("a2");
+const M1: VisualizationObject.IMeasure = measure("m1").localIdentifier("m1");
+const M2: VisualizationObject.IMeasure = measure("m2").localIdentifier("m2");
 
-    function createMeasureWithRatio(name: string): VisualizationObject.IMeasure {
-        return measure(name)
-            .localIdentifier(name)
-            .ratio();
-    }
+function createMeasureWithRatio(name: string): VisualizationObject.IMeasure {
+    return measure(name)
+        .localIdentifier(name)
+        .ratio();
+}
 
-    function getBuckets(props: IColumnChartBucketProps): VisualizationObject.IBucket[] {
-        return [
-            {
-                localIdentifier: MEASURES,
-                items: props.measures || [],
-            },
-            {
-                localIdentifier: ATTRIBUTE,
-                items: getViewByTwoAttributes(props.viewBy),
-            },
-            {
-                localIdentifier: STACK,
-                items: props.stackBy ? [props.stackBy] : [],
-            },
-        ];
-    }
+function getBuckets(props: IColumnChartBucketProps): VisualizationObject.IBucket[] {
+    return [
+        {
+            localIdentifier: MEASURES,
+            items: props.measures || [],
+        },
+        {
+            localIdentifier: ATTRIBUTE,
+            items: getViewByTwoAttributes(props.viewBy),
+        },
+        {
+            localIdentifier: STACK,
+            items: props.stackBy ? [props.stackBy] : [],
+        },
+    ];
+}
 
+describe("sanitizeMeasures", () => {
+    it("should keep measures as is if there is only one measure", () => {
+        expect(sanitizeMeasures([M1])).toEqual([M1]);
+    });
+
+    it("should sanitized computeRatio if there are multiple measures", () => {
+        const M2WithRatio = createMeasureWithRatio("m2");
+        const sanitizedMeasures = sanitizeMeasures([M1, M2WithRatio]);
+        const measuresWithComputeRatio = sanitizedMeasures.filter(
+            (bucketItem: VisualizationObject.BucketItem) => getComputeRatio(bucketItem),
+        );
+
+        expect(measuresWithComputeRatio.length).toEqual(0);
+    });
+});
+
+describe("sanitizeConfig", () => {
     it("should keep config as is if buckets have more than 1 measure", () => {
-        const buckets: VisualizationObject.IBucket[] = getBuckets({
+        const buckets = getBuckets({
             measures: [M1, M2],
             viewBy: [A1],
         });
@@ -52,11 +67,7 @@ describe("getSanitizedBucketsAndStackingConfig", () => {
             stackMeasures: true,
             stackMeasuresToPercent: true,
         };
-        const sanitizedBucketsAndStackingConfig: ISanitizedBucketsAndStackingConfig = getSanitizedBucketsAndStackingConfig(
-            buckets,
-            config,
-        );
-        expect(sanitizedBucketsAndStackingConfig.config).toEqual(config);
+        expect(sanitizeConfig(buckets, config)).toEqual(config);
     });
 
     it("should sanitized stacking config if buckets have one measure and no stackBy", () => {
@@ -68,11 +79,7 @@ describe("getSanitizedBucketsAndStackingConfig", () => {
             stackMeasures: true,
             stackMeasuresToPercent: true,
         };
-        const sanitizedBucketsAndStackingConfig: ISanitizedBucketsAndStackingConfig = getSanitizedBucketsAndStackingConfig(
-            buckets,
-            config,
-        );
-        expect(sanitizedBucketsAndStackingConfig.config).toEqual({
+        expect(sanitizeConfig(buckets, config)).toEqual({
             stackMeasures: true,
             stackMeasuresToPercent: false,
         });
@@ -88,11 +95,7 @@ describe("getSanitizedBucketsAndStackingConfig", () => {
             stackMeasures: true,
             stackMeasuresToPercent: true,
         };
-        const sanitizedBucketsAndStackingConfig: ISanitizedBucketsAndStackingConfig = getSanitizedBucketsAndStackingConfig(
-            buckets,
-            config,
-        );
-        expect(sanitizedBucketsAndStackingConfig.config).toEqual(config);
+        expect(sanitizeConfig(buckets, config)).toEqual(config);
     });
 
     it("should sanitized stacking config if buckets have 1 measure and isComputeRatio", () => {
@@ -105,35 +108,10 @@ describe("getSanitizedBucketsAndStackingConfig", () => {
             stackMeasures: true,
             stackMeasuresToPercent: true,
         };
-        const sanitizedBucketsAndStackingConfig: ISanitizedBucketsAndStackingConfig = getSanitizedBucketsAndStackingConfig(
-            buckets,
-            config,
-        );
-        expect(sanitizedBucketsAndStackingConfig.config).toEqual({
+        expect(sanitizeConfig(buckets, config)).toEqual({
             stackMeasures: false,
             stackMeasuresToPercent: false,
         });
-    });
-
-    it("should sanitized computeRatio if buckets have more than 1 measures", () => {
-        const M2WithRatio = createMeasureWithRatio("m2");
-        const buckets: VisualizationObject.IBucket[] = getBuckets({
-            measures: [M1, M2WithRatio],
-            viewBy: [A1],
-        });
-        const config: IChartConfig = {};
-        const sanitizedBucketsAndStackingConfig: ISanitizedBucketsAndStackingConfig = getSanitizedBucketsAndStackingConfig(
-            buckets,
-            config,
-        );
-
-        const measuresItems = findBucketByLocalIdentifier(sanitizedBucketsAndStackingConfig.buckets, MEASURES)
-            .items;
-        const measuresWithComputeRatio = measuresItems.filter((bucketItem: VisualizationObject.BucketItem) =>
-            getComputeRatio(bucketItem),
-        );
-
-        expect(measuresWithComputeRatio.length).toEqual(0);
     });
 });
 
