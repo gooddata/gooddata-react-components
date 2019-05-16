@@ -192,6 +192,8 @@ export default class HeaderCell extends React.Component<IHeaderCellProps, IHeade
     private onTextClick = () => {
         const { sortDirection, onSortClick, enableSorting, defaultSortDirection } = this.props;
 
+        // console.log('XX enableSorting', enableSorting);
+
         if (!enableSorting) {
             return;
         }

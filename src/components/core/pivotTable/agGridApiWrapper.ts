@@ -1,5 +1,5 @@
 // (C) 2007-2019 GoodData Corporation
-import { GridApi } from "ag-grid";
+import { GridApi } from "ag-grid-community";
 
 function getHeaderHeight(gridApi: GridApi): number {
     return (gridApi as any).headerRootComp.eHeaderContainer.clientHeight;
