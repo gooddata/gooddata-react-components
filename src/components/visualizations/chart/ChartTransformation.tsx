@@ -7,13 +7,13 @@ import noop = require("lodash/noop");
 
 import { convertDrillableItemsToPredicates } from "../../../helpers/headerPredicate";
 import { getSanitizedStackingConfigFromAfm } from "../../../helpers/optionalStacking/common";
-import { IChartConfig } from "../../../interfaces/Config";
+import { IChartConfig, IChartOptions } from "../../../interfaces/Config";
 import { IDrillableItem } from "../../../interfaces/DrillEvents";
 import { OnFiredDrillEvent, OnLegendReady } from "../../../interfaces/Events";
 import { IHeaderPredicate } from "../../../interfaces/HeaderPredicate";
 import { ILegendOptions } from "../typings/legend";
 import { getStackByAttribute } from "../../../helpers/stackByAttribute";
-import { getChartOptions, IChartOptions, validateData } from "./chartOptionsBuilder";
+import { getChartOptions, validateData } from "./chartOptionsBuilder";
 import { getHighchartsOptions } from "./highChartsCreators";
 import HighChartsRenderer, {
     IHighChartsRendererProps,
