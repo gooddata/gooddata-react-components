@@ -34,6 +34,10 @@ export const areLabelsStacked = (chart: any) => isLabelsStackedFromYAxis(chart) 
 
 export const hasDataLabel = (point: any) => point.dataLabel;
 export const hasShape = (point: any) => point.shapeArgs;
+export const isInsideLabel = (point: any) => {
+    const verticalAlign = get(point, "dataLabel.alignOptions.verticalAlign");
+    return verticalAlign === "middle";
+};
 
 export const minimizeDataLabel = (point: any) => {
     const { dataLabel } = point;
