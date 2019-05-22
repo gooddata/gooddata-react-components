@@ -128,20 +128,16 @@ export interface ISeriesDataItem {
     name?: string;
 }
 
-export interface ISeriesItem {
+export interface ISeriesItem extends Highcharts.IndividualSeriesOptions {
     name?: string;
     data?: ISeriesDataItem[];
-    color?: string;
     userOptions?: any;
     visible?: boolean;
     type?: VisualizationObject.VisualizationType | string;
     isDrillable?: boolean;
-    legendIndex?: number;
-    yAxis?: number;
-    zIndex?: number;
     labelKey?: string;
-    stack?: number;
     stacking?: string;
+    dataLabels?: Highcharts.DataLabels;
 }
 
 export interface IShapeArgsConfig {
