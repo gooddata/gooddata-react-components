@@ -63,6 +63,16 @@ const TOOLTIP_MAX_WIDTH = 366;
 const TOOLTIP_BAR_CHART_VERTICAL_OFFSET = 5;
 const TOOLTIP_VERTICAL_OFFSET = 14;
 
+export const WHITE_LABEL = {
+    color: "#ffffff",
+    textShadow: "0 0 1px #000000",
+};
+
+export const BLACK_LABEL = {
+    color: "#000000",
+    textShadow: "none",
+};
+
 const escapeAngleBrackets = (str: any) => str && str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
 function getTitleConfiguration(chartOptions: IChartOptions) {
@@ -564,18 +574,7 @@ const whiteDataLabelTypes = [
     VisualizationTypes.BUBBLE,
 ];
 
-function getLabelStyle(chartOptions: IChartOptions) {
-    const { stacking, type } = chartOptions;
-    const WHITE_LABEL = {
-        color: "#ffffff",
-        textShadow: "0 0 1px #000000",
-    };
-
-    const BLACK_LABEL = {
-        color: "#000000",
-        textShadow: "none",
-    };
-
+export function getLabelStyle(type: string, stacking: string) {
     if (isAreaChart(type)) {
         return BLACK_LABEL;
     }
@@ -589,7 +588,7 @@ function getLabelsConfiguration(chartOptions: IChartOptions, _config: any, chart
 
     const labelsConfig = getLabelsVisibilityConfig(labelsVisible);
 
-    const style = getLabelStyle(chartOptions);
+    const style = getLabelStyle(type, stacking);
 
     const drilldown =
         stacking || isTreemap(type)

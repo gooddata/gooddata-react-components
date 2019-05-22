@@ -142,6 +142,7 @@ export interface ISeriesItem {
     labelKey?: string;
     stack?: number;
     stacking?: string;
+    dataLabels?: any;
 }
 
 export interface IShapeArgsConfig {

@@ -44,7 +44,7 @@ module.exports = {
                         loader: 'ts-loader',
                         options: {
                             transpileOnly: true,
-                            configFile: '../stories/tsconfig.json',
+                            configFile: path.join(__dirname, '../stories/tsconfig.json'),
                         },
                     }
                 ]
