@@ -250,10 +250,10 @@ storiesOf("Core components/ComboChart", module)
     )
     .add("stack primary measures", () =>
         screenshotWrap(
-            <ScreenshotReadyWrapper resolver={createHighChartResolver(2)}>
-                {[COLUMN, AREA].map(chartType => (
-                    <div key={chartType}>
-                        <div className="storybook-title">{`${chartType} - line`}</div>
+            <ScreenshotReadyWrapper resolver={createHighChartResolver(4)}>
+                {[[COLUMN, LINE], [AREA, LINE], [COLUMN, COLUMN], [AREA, AREA]].map((types, index) => (
+                    <div key={index.toString()}>
+                        <div className="storybook-title">{types.join(" - ")}</div>
                         <div style={wrapperStyle} className="screenshot-container">
                             <ComboChart
                                 projectId="storybook"
@@ -261,7 +261,8 @@ storiesOf("Core components/ComboChart", module)
                                 secondaryMeasures={secondaryMeasure}
                                 viewBy={ATTRIBUTE_1}
                                 config={{
-                                    primaryChartType: chartType,
+                                    primaryChartType: types[0],
+                                    secondaryChartType: types[1],
                                     stackMeasures: true,
                                 }}
                                 onError={onErrorHandler}
