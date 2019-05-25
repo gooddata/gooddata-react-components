@@ -1145,10 +1145,10 @@
     rxjs "^5.5.6"
     uuid "3.2.1"
 
-"@gooddata/goodstrap@60.6.0":
-  version "60.6.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-60.6.0.tgz#cc09f91578433d05ead0d93deaba1f4a60158992"
-  integrity sha512-AkQnWzBnu/G0kIzJOrAN5SR4L3x9jJ1zUTXGaek/mOkAc34gRBXEiOmVINJSBQ2po6jfaJN2JvwnjT6QEQtWSQ==
+"@gooddata/goodstrap@60.6.0-strouhaljan-jsu-trivial-ts-2019-05-25T20-43-04-633Z":
+  version "60.6.0-strouhaljan-jsu-trivial-ts-2019-05-25T20-43-04-633Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-60.6.0-strouhaljan-jsu-trivial-ts-2019-05-25T20-43-04-633Z.tgz#b3360132c2bbaf33ab8cc9b45aef66e513d9edfa"
+  integrity sha512-fMvZmcN5YdDZzDQwmveciqMaD/vHM4agn93xIo5Tabubs9GcOgUdhdlhu67aW0QcuixYaIyFn4o9TptKpwktBQ==
   dependencies:
     "@gooddata/js-utils" "3.4.0"
     classnames "2.2.6"
