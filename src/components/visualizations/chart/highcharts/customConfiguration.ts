@@ -24,7 +24,13 @@ import {
 import { VisualizationTypes, ChartType } from "../../../../constants/visualizationTypes";
 import { IDataLabelsVisible, IChartConfig, IAxis } from "../../../../interfaces/Config";
 import { percentFormatter } from "../../../../helpers/utils";
-import { getShapeVisiblePart } from "../highcharts/dataLabelsHelpers";
+import {
+    formatAsPercent,
+    getLabelStyle,
+    getLabelsVisibilityConfig,
+    getShapeVisiblePart,
+    isInPercent,
+} from "./dataLabelsHelpers";
 import { HOVER_BRIGHTNESS, MINIMUM_HC_SAFE_BRIGHTNESS } from "./commonConfiguration";
 import { AXIS_LINE_COLOR, getLighterColor } from "../../utils/color";
 import {
@@ -63,16 +69,6 @@ const TOOLTIP_MAX_WIDTH = 366;
 const TOOLTIP_BAR_CHART_VERTICAL_OFFSET = 5;
 const TOOLTIP_VERTICAL_OFFSET = 14;
 
-export const WHITE_LABEL = {
-    color: "#ffffff",
-    textShadow: "0 0 1px #000000",
-};
-
-export const BLACK_LABEL = {
-    color: "#000000",
-    textShadow: "none",
-};
-
 const escapeAngleBrackets = (str: any) => str && str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
 function getTitleConfiguration(chartOptions: IChartOptions) {
@@ -101,15 +97,6 @@ function getTitleConfiguration(chartOptions: IChartOptions) {
         yAxis,
         xAxis,
     };
-}
-
-export function formatAsPercent(unit: number = 100) {
-    const val = parseFloat((this.value * unit).toPrecision(14));
-    return `${val}%`;
-}
-
-export function isInPercent(format: string = "") {
-    return format.includes("%");
 }
 
 export function formatOverlappingForParentAttribute(category: any) {
@@ -541,43 +528,6 @@ function getTreemapLabelsConfiguration(
             ],
         };
     }
-}
-
-export function getLabelsVisibilityConfig(visible: IDataLabelsVisible): any {
-    switch (visible) {
-        case "auto":
-            return {
-                enabled: true,
-                allowOverlap: false,
-            };
-        case true:
-            return {
-                enabled: true,
-                allowOverlap: true,
-            };
-        case false:
-            return {
-                enabled: false,
-            };
-        default:
-            // keep decision on each chart for `undefined`
-            return {};
-    }
-}
-
-// types with label inside sections have white labels
-const whiteDataLabelTypes = [
-    VisualizationTypes.PIE,
-    VisualizationTypes.DONUT,
-    VisualizationTypes.TREEMAP,
-    VisualizationTypes.BUBBLE,
-];
-
-export function getLabelStyle(type: string, stacking: string) {
-    if (isAreaChart(type)) {
-        return BLACK_LABEL;
-    }
-    return stacking || isOneOfTypes(type, whiteDataLabelTypes) ? WHITE_LABEL : BLACK_LABEL;
 }
 
 function getLabelsConfiguration(chartOptions: IChartOptions, _config: any, chartConfig?: IChartConfig) {

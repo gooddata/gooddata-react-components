@@ -11,10 +11,10 @@ import getOptionalStackingConfiguration, {
     PERCENT_STACK,
     NORMAL_STACK,
 } from "../getOptionalStackingConfiguration";
-import { VisualizationTypes } from "../../../../..";
 import { IDrillConfig } from "../../../../../interfaces/DrillEvents";
 import { IChartConfig, ISeriesItem } from "../../../../../interfaces/Config";
-import { BLACK_LABEL, WHITE_LABEL } from "../customConfiguration";
+import { VisualizationTypes } from "../../../../../constants/visualizationTypes";
+import { BLACK_LABEL, WHITE_LABEL } from "../../../../../constants/label";
 
 describe("getOptionalStackingConfiguration", () => {
     it("should return empty configuration to not supported chart type", () => {

@@ -19,7 +19,7 @@ import {
     isNegativeValueIncluded,
     supportedStackingAttributesChartTypes,
 } from "../chartOptionsBuilder";
-import { formatAsPercent, getLabelStyle, getLabelsVisibilityConfig } from "./customConfiguration";
+import { formatAsPercent, getLabelStyle, getLabelsVisibilityConfig } from "./dataLabelsHelpers";
 import {
     getPrimaryChartType,
     isBarChart,
