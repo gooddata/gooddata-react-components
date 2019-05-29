@@ -307,9 +307,7 @@ $header-cell-resize-width: 20px;
     }
 
     &-menu {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
+        display: block;
         flex: 0 0 auto;
         overflow: hidden;
         border-top: 2px solid transparent;
@@ -323,9 +321,13 @@ $header-cell-resize-width: 20px;
         }
 
         .menu-icon {
-            width: 16px;
-            height: 16px;
+            display: block;
+            height: 100%;
+            min-width: 16px;
+            min-height: 16px;
             background-image: url("~@gooddata/goodstrap/lib/core/styles/icons/menu-burger.svg");
+            background-repeat: no-repeat;
+            background-position: center;
         }
 
         &--hide {
