@@ -183,7 +183,7 @@ export function preventDataCutOff(axis: IHighchartsAxisExtend): void {
     const { min, max, dataMin, dataMax } = axis;
 
     const isCutOff =
-        !isPrimaryAxis(axis) && !isUserSetExtremesOnAxes(chart) && (min > dataMin || max < dataMax);
+        /*!isPrimaryAxis(axis) &&*/ !isUserSetExtremesOnAxes(chart) && (min > dataMin || max < dataMax);
     if (!isCutOff) {
         return;
     }
