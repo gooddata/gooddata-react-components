@@ -26,17 +26,21 @@ const getMenu = cell => {
     return cell.find(".s-table-header-menu");
 };
 
+const hoverOverElement = async (t, element) => {
+    // Sometimes testcafe mouse hover do not trigger an hover action in UI component
+    await t.hover(element, { offsetX: 10, speed: 0.55 }).hover(element, { speed: 0.55 });
+};
+
 const clickOnMenuAggregationItem = async (t, cell, aggregationItemClass, attribute) => {
     const menu = getMenu(cell);
 
-    await t.hover(cell);
+    await hoverOverElement(t, cell);
     await t.click(menu);
 
     const sumTotal = Selector(aggregationItemClass).find(".s-menu-aggregation-inner");
 
     if (attribute) {
-        await t.hover(sumTotal);
-        await t.wait(1000);
+        await hoverOverElement(t, sumTotal);
         const submenu = Selector(".s-table-header-submenu-content");
         await t.click(submenu.find(`.s-aggregation-item-${attribute}`));
     } else {
