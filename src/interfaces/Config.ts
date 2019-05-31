@@ -93,6 +93,8 @@ export interface IHighChartAxis {
     defaultFormat?: string;
     gridLineColor?: string;
     gridLineWidth?: number;
+    min?: number;
+    max?: number;
 }
 
 export interface IYAxisConfig {

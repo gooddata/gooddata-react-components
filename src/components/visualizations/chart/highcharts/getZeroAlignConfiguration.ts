@@ -3,9 +3,11 @@ import partial = require("lodash/partial");
 import isNil = require("lodash/isNil");
 import zip = require("lodash/zip");
 import sum = require("lodash/sum");
+
 import { IChartOptions } from "../chartOptionsBuilder";
 import { PERCENT_STACK } from "./getOptionalStackingConfiguration";
-import { ISeriesDataItem, ISeriesItem } from "../../../../interfaces/Config";
+import { IHighChartAxis, ISeriesDataItem, ISeriesItem } from "../../../../interfaces/Config";
+import { isComboChart, isLineChart } from "../../utils/common";
 
 export interface ICanon {
     min?: number;
@@ -171,24 +173,30 @@ export function getMinMax(axisIndex: number, min: number, max: number, minmax: I
     };
 }
 
-export function getMinMaxInfo(config: any, stacking: string): IMinMaxInfo[] {
+export function getMinMaxInfo(config: any, stacking: string, type: string): IMinMaxInfo[] {
     const { series, yAxis } = config;
     const isStackedChart = !isNil(stacking);
-    return yAxis.map((axis: any, index: number) => {
-        const seriesOnAxis = getSeriesOnAxis(index, series);
-        const { min, max, opposite } = axis;
-        const { min: dataMin, max: dataMax } = isStackedChart
-            ? getDataMinMaxOnStackedChart(seriesOnAxis, stacking, opposite)
-            : getDataMinMax(seriesOnAxis);
 
-        return {
-            id: index,
-            min: isNil(min) ? dataMin : min,
-            max: isNil(max) ? dataMax : max,
-            isSetMin: min !== undefined,
-            isSetMax: max !== undefined,
-        };
-    });
+    return yAxis.map(
+        (axis: IHighChartAxis, axisIndex: number): IMinMaxInfo => {
+            const isLineChartOnAxis = isLineChartType(series, axisIndex, type);
+            const seriesOnAxis = getSeriesOnAxis(series, axisIndex);
+            const { min, max, opposite } = axis;
+
+            const { min: dataMin, max: dataMax } =
+                isStackedChart && !isLineChartOnAxis
+                    ? getDataMinMaxOnStackedChart(seriesOnAxis, stacking, opposite)
+                    : getDataMinMax(seriesOnAxis);
+
+            return {
+                id: axisIndex,
+                min: isNil(min) ? dataMin : min,
+                max: isNil(max) ? dataMax : max,
+                isSetMin: min !== undefined,
+                isSetMax: max !== undefined,
+            };
+        },
+    );
 }
 
 /**
@@ -196,7 +204,7 @@ export function getMinMaxInfo(config: any, stacking: string): IMinMaxInfo[] {
  * @param axisIndex
  * @param series
  */
-function getSeriesOnAxis(axisIndex: number, series: ISeriesItem[]): ISeriesItem[] {
+function getSeriesOnAxis(series: ISeriesItem[], axisIndex: number): ISeriesItem[] {
     return series.filter((item: ISeriesItem): boolean => item.yAxis === axisIndex);
 }
 
@@ -318,13 +326,36 @@ function getDataMinMax(series: ISeriesItem[]): IMinMax {
     );
 }
 
+function isLineChartType(series: ISeriesItem[], axisIndex: number, type: string): boolean {
+    if (isLineChart(type)) {
+        return true;
+    }
+    if (isComboChart(type)) {
+        return getSeriesOnAxis(series, axisIndex).every((item: ISeriesItem) => isLineChart(item.type));
+    }
+    return false;
+}
+
+function getExtremeByChartTypeOnAxis(
+    extreme: number,
+    series: ISeriesItem[],
+    axisIndex: number,
+    type: string,
+) {
+    const isLineChartOnAxis = isLineChartType(series, axisIndex, type);
+    if (isLineChartOnAxis) {
+        return extreme;
+    }
+    return extreme > 0 ? 0 : extreme;
+}
+
 /**
  * Calculate new min/max to make Y axes aligned
  * @param _chartOptions
  * @param config
  */
 export function getZeroAlignConfiguration(chartOptions: IChartOptions, config: any) {
-    const { stacking } = chartOptions;
+    const { stacking, type } = chartOptions;
     const { yAxis } = config;
     const isDualAxis = (yAxis || []).length === 2;
 
@@ -332,7 +363,7 @@ export function getZeroAlignConfiguration(chartOptions: IChartOptions, config: a
         return {};
     }
 
-    const minmax: IMinMaxInfo[] = getMinMaxInfo(config, stacking);
+    const minmax: IMinMaxInfo[] = getMinMaxInfo(config, stacking, type);
     if (minmax[0].isSetMin && minmax[0].isSetMax && minmax[1].isSetMin && minmax[1].isSetMax) {
         // take user-input min/max, no need to calculate
         // this 'isUserMinMax' acts as a flag,
@@ -349,10 +380,15 @@ export function getZeroAlignConfiguration(chartOptions: IChartOptions, config: a
         };
     }
 
-    // calculate min/max on both Y axes and inject it to HighCharts yAxis config
+    // calculate min/max on both Y axes and set it to HighCharts yAxis config
     const yAxisWithMinMax = [0, 1].map((axisIndex: number) => {
         const { min, max } = minmax[axisIndex];
-        const newMinMax = getMinMax(axisIndex, min > 0 ? 0 : min, max < 0 ? 0 : max, minmax);
+        const newMinMax = getMinMax(
+            axisIndex,
+            getExtremeByChartTypeOnAxis(min, config.series, axisIndex, type),
+            getExtremeByChartTypeOnAxis(max, config.series, axisIndex, type),
+            minmax,
+        );
         return {
             isUserMinMax: minmax[axisIndex].isSetMin || minmax[axisIndex].isSetMax,
             ...newMinMax,

@@ -1,6 +1,7 @@
 // (C) 2007-2019 GoodData Corporation
 import { getMinMaxInfo, getZeroAlignConfiguration } from "../getZeroAlignConfiguration";
 import { NORMAL_STACK, PERCENT_STACK } from "../getOptionalStackingConfiguration";
+import { VisualizationTypes } from "../../../../../constants/visualizationTypes";
 
 describe("getZeroAlignConfiguration", () => {
     const SERIES = [
@@ -139,7 +140,7 @@ describe("getZeroAlignConfiguration", () => {
                 yAxis: [{}, {}],
                 series: SERIES,
             };
-            const result = getMinMaxInfo(config, NORMAL_STACK);
+            const result = getMinMaxInfo(config, NORMAL_STACK, VisualizationTypes.COLUMN);
             expect(result).toEqual([
                 {
                     id: 0,
@@ -163,7 +164,7 @@ describe("getZeroAlignConfiguration", () => {
                 yAxis: [{ opposite: false }, { opposite: true }],
                 series: SERIES,
             };
-            const result = getMinMaxInfo(config, PERCENT_STACK);
+            const result = getMinMaxInfo(config, PERCENT_STACK, VisualizationTypes.COLUMN);
             expect(result).toEqual([
                 {
                     id: 0,
@@ -187,7 +188,7 @@ describe("getZeroAlignConfiguration", () => {
                 yAxis: [{ min: -100, max: 300 }, { min: 200 }],
                 series: SERIES,
             };
-            const result = getMinMaxInfo(config, NORMAL_STACK);
+            const result = getMinMaxInfo(config, NORMAL_STACK, VisualizationTypes.COLUMN);
             expect(result).toEqual([
                 {
                     id: 0,
@@ -211,7 +212,7 @@ describe("getZeroAlignConfiguration", () => {
                 yAxis: [{ min: 10, max: 80 }, { min: 200 }],
                 series: SERIES,
             };
-            const result = getMinMaxInfo(config, NORMAL_STACK);
+            const result = getMinMaxInfo(config, NORMAL_STACK, VisualizationTypes.COLUMN);
             expect(result).toEqual([
                 {
                     id: 0,
