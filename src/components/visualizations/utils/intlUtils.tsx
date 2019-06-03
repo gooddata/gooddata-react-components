@@ -4,7 +4,7 @@ import { IntlProvider } from "react-intl";
 import { messagesMap } from "../../core/base/IntlWrapper";
 import { DEFAULT_LOCALE } from "../../../constants/localization";
 
-export function createIntlMock(customMessages = {}) {
+export function mockIntlProp(customMessages = {}) {
     const intlProvider = new IntlProvider(
         {
             locale: "en-US",
@@ -27,7 +27,7 @@ export function wrapWithIntl(children: any) {
     );
 }
 
-export function withIntl<P>(WrappedComponent: React.ComponentClass<P>): React.ComponentClass<P> {
+export function withIntlProvider<P>(WrappedComponent: React.ComponentClass<P>): React.ComponentClass<P> {
     return class extends React.Component<P> {
         public render() {
             return (

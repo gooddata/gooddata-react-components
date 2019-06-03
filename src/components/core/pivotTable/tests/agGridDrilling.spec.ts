@@ -3,7 +3,7 @@
 import { Execution } from "@gooddata/typings";
 import * as fixtures from "../../../../../stories/test_data/fixtures";
 import { IMappingHeader } from "../../../../interfaces/MappingHeader";
-import { createIntlMock } from "../../../visualizations/utils/intlUtils";
+import { mockIntlProp } from "../../../visualizations/utils/intlUtils";
 import { executionToAGGridAdapter } from "../agGridDataSource";
 import {
     getMeasureDrillItem,
@@ -15,7 +15,7 @@ import { IGridHeader } from "../agGridTypes";
 import { getTreeLeaves } from "../agGridUtils";
 
 const pivotTableWithColumnAndRowAttributes = fixtures.pivotTableWithColumnAndRowAttributes;
-const intl = createIntlMock();
+const intl = mockIntlProp();
 
 describe("getMeasureDrillItem", () => {
     it("should return measure drill item based on response headers", () => {

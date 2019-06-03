@@ -7,9 +7,9 @@ import { AddTotal } from "../AddTotal";
 import { RemoveRows } from "../RemoveRows";
 import { ITotalCellProps, TotalCell } from "../TotalCell";
 import { ITotalWithData } from "../../../../../interfaces/Totals";
-import { withIntl } from "../../../utils/intlUtils";
+import { withIntlProvider } from "../../../utils/intlUtils";
 
-const WrappedTotalCell = withIntl(TotalCell);
+const WrappedTotalCell = withIntlProvider(TotalCell);
 
 describe("TotalCell", () => {
     function render(customProps = {}) {

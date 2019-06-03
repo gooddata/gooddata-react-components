@@ -12,7 +12,7 @@ import Menu from "../../src/components/menu/Menu";
 import SubMenu, { ISubMenuProps } from "../../src/components/menu/SubMenu";
 import { IOnOpenedChangeParams } from "../../src/components/menu/MenuSharedTypes";
 import { EXECUTION_RESPONSE_2A_3M } from "../../src/components/visualizations/table/fixtures/2attributes3measures";
-import { createIntlMock } from "../../src/components/visualizations/utils/intlUtils";
+import { mockIntlProp } from "../../src/components/visualizations/utils/intlUtils";
 import { IMenuAggregationClickConfig } from "../../src/interfaces/PivotTable";
 import {
     ATTRIBUTE_HEADERS_3A_LONG_NAME,
@@ -450,7 +450,7 @@ storiesOf("Helper components/Menu", module)
         ),
     )
     .add("aggregation menus", () => {
-        const intlMock = createIntlMock();
+        const intlMock = mockIntlProp();
         const getExecutionResponse = () => EXECUTION_RESPONSE_2A_3M;
         const getTotals = () => [GRAND_TOTAL_SUM];
         const onAggregationSelect = (menuAggregationClickConfig: IMenuAggregationClickConfig) => {

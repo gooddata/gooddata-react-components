@@ -3,10 +3,10 @@ import * as fixtures from "../../../../../stories/test_data/fixtures";
 import { IGridTotalsRow } from "../agGridTypes";
 import { areTotalsChanged, createAgGridDataSource, executionToAGGridAdapter } from "../agGridDataSource";
 import { GroupingProviderFactory } from "../GroupingProvider";
-import { createIntlMock } from "../../../visualizations/utils/intlUtils";
+import { mockIntlProp } from "../../../visualizations/utils/intlUtils";
 
 const pivotTableWithColumnAndRowAttributes = fixtures.pivotTableWithColumnAndRowAttributes;
-const intl = createIntlMock();
+const intl = mockIntlProp();
 
 describe("getGridDataSource", () => {
     function createMockedDataSource(customGridApiProps?: any) {

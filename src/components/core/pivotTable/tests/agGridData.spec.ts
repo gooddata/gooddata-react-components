@@ -2,11 +2,11 @@
 
 import { AFM } from "@gooddata/typings";
 import * as fixtures from "../../../../../stories/test_data/fixtures";
-import { createIntlMock } from "../../../visualizations/utils/intlUtils";
+import { mockIntlProp } from "../../../visualizations/utils/intlUtils";
 import { getRowHeaders, getFields } from "../agGridHeaders";
 import { getRow, getRowTotals } from "../agGridData";
 
-const intl = createIntlMock();
+const intl = mockIntlProp();
 
 describe("getRowTotals", () => {
     it("should return total rows", () => {

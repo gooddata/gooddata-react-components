@@ -2,7 +2,7 @@
 import * as React from "react";
 import { mount } from "enzyme";
 import { oneAttributeOneMeasureSortByMeasureExecutionObject } from "../../../execution/fixtures/ExecuteAfm.fixtures";
-import { createIntlMock } from "../../visualizations/utils/intlUtils";
+import { mockIntlProp } from "../../visualizations/utils/intlUtils";
 import noop = require("lodash/noop");
 
 import { PivotTable, PivotTableInner, IPivotTableInnerProps } from "../PivotTable";
@@ -12,7 +12,7 @@ import { GroupingProviderFactory } from "../pivotTable/GroupingProvider";
 import * as stickyGroupHandler from "../pivotTable/stickyGroupHandler";
 import agGridApiWrapper from "../pivotTable/agGridApiWrapper";
 
-const intl = createIntlMock();
+const intl = mockIntlProp();
 
 describe("PivotTable", () => {
     function renderComponent(

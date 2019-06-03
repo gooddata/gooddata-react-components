@@ -2,11 +2,11 @@
 import * as React from "react";
 import { mount } from "enzyme";
 import { ILegendAxisIndicatorProps, LegendAxisIndicator } from "../LegendAxisIndicator";
-import { withIntl } from "../../../utils/intlUtils";
+import { withIntlProvider } from "../../../utils/intlUtils";
 
 describe("LegendAxisIndicator", () => {
     function createComponent(props: ILegendAxisIndicatorProps) {
-        const Wrapped = withIntl(LegendAxisIndicator);
+        const Wrapped = withIntlProvider(LegendAxisIndicator);
 
         return mount(<Wrapped {...props} />);
     }

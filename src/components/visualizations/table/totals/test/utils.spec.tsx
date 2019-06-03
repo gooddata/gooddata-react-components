@@ -27,11 +27,11 @@ import {
     getTotalsFromResultSpec,
     getAttributeDimension,
 } from "../utils";
-import { createIntlMock } from "../../../utils/intlUtils";
+import { mockIntlProp } from "../../../utils/intlUtils";
 import { ITotalWithData } from "../../../../../interfaces/Totals";
 import { IMappingHeader } from "../../../../../interfaces/MappingHeader";
 
-const intl = createIntlMock();
+const intl = mockIntlProp();
 
 const DEFAULT_MEASURE_FORMAT = "JP rikal, ze metrika ma vzdycky format";
 

@@ -5,12 +5,12 @@ import * as React from "react";
 import { EXECUTION_RESPONSE_2A_3M } from "../../../visualizations/table/fixtures/2attributes3measures";
 import { EXECUTION_RESPONSE_2M } from "../../../visualizations/table/fixtures/2measures";
 import { AVAILABLE_TOTALS } from "../../../visualizations/table/totals/utils";
-import { createIntlMock } from "../../../visualizations/utils/intlUtils";
+import { mockIntlProp } from "../../../visualizations/utils/intlUtils";
 import AggregationsMenu, { IAggregationsMenuProps } from "../AggregationsMenu";
 import AggregationsSubMenu from "../AggregationsSubMenu";
 
 describe("AggregationsMenu", () => {
-    const intlMock = createIntlMock();
+    const intlMock = mockIntlProp();
     const attributeColumnId = "a_6_2-m_0";
     const getExecutionResponse = () => EXECUTION_RESPONSE_2A_3M;
     const getTotals = () => [] as AFM.ITotalItem[];

@@ -28,12 +28,12 @@ import {
     ZERO_SECOND_MEASURE_VALUE_EXECUTION_RESULT,
     SAME_MEASURE_VALUES_EXECUTION_RESULT,
 } from "../../test/fixtures/two_measures";
-import { createIntlMock } from "../../../utils/intlUtils";
+import { mockIntlProp } from "../../../utils/intlUtils";
 
 describe("HeadlineTransformationUtils", () => {
     describe("getData", () => {
         it("should set primary item data from the execution", () => {
-            const intl = createIntlMock();
+            const intl = mockIntlProp();
 
             const data = getHeadlineData(
                 SINGLE_METRIC_EXECUTION_RESPONSE,
@@ -52,7 +52,7 @@ describe("HeadlineTransformationUtils", () => {
         });
 
         it("should set primary, secondary and tertiary item data from the execution", () => {
-            const intl = createIntlMock();
+            const intl = mockIntlProp();
 
             const data = getHeadlineData(
                 TWO_MEASURES_EXECUTION_RESPONSE,
@@ -85,7 +85,7 @@ describe("HeadlineTransformationUtils", () => {
         });
 
         it("should set null for tertiary value when primary value is null", () => {
-            const intl = createIntlMock();
+            const intl = mockIntlProp();
 
             const data = getHeadlineData(
                 TWO_MEASURES_EXECUTION_RESPONSE,
@@ -118,7 +118,7 @@ describe("HeadlineTransformationUtils", () => {
         });
 
         it("should set null for tertiary value when secondary value is null", () => {
-            const intl = createIntlMock();
+            const intl = mockIntlProp();
 
             const data = getHeadlineData(
                 TWO_MEASURES_EXECUTION_RESPONSE,
@@ -151,7 +151,7 @@ describe("HeadlineTransformationUtils", () => {
         });
 
         it("should set null for tertiary value when both primary & secondary values are null", () => {
-            const intl = createIntlMock();
+            const intl = mockIntlProp();
 
             const data = getHeadlineData(
                 TWO_MEASURES_EXECUTION_RESPONSE,
@@ -184,7 +184,7 @@ describe("HeadlineTransformationUtils", () => {
         });
 
         it("should set -100 for tertiary value when primary value is 0", () => {
-            const intl = createIntlMock();
+            const intl = mockIntlProp();
 
             const data = getHeadlineData(
                 TWO_MEASURES_EXECUTION_RESPONSE,
@@ -217,7 +217,7 @@ describe("HeadlineTransformationUtils", () => {
         });
 
         it("should set null for tertiary value when secondary value is 0", () => {
-            const intl = createIntlMock();
+            const intl = mockIntlProp();
 
             const data = getHeadlineData(
                 TWO_MEASURES_EXECUTION_RESPONSE,
@@ -250,7 +250,7 @@ describe("HeadlineTransformationUtils", () => {
         });
 
         it("should set null for tertiary value when both primary & secondary values are 0", () => {
-            const intl = createIntlMock();
+            const intl = mockIntlProp();
 
             const data = getHeadlineData(
                 TWO_MEASURES_EXECUTION_RESPONSE,
@@ -283,7 +283,7 @@ describe("HeadlineTransformationUtils", () => {
         });
 
         it("should set 0 for tertiary value when both primary & secondary are the same values except 0", () => {
-            const intl = createIntlMock();
+            const intl = mockIntlProp();
 
             const data = getHeadlineData(
                 TWO_MEASURES_EXECUTION_RESPONSE,

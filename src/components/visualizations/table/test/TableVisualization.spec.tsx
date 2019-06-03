@@ -34,7 +34,7 @@ import {
 import { TotalCell } from "../totals/TotalCell";
 import InjectedIntlProps = ReactIntl.InjectedIntlProps;
 import { ITotalWithData } from "../../../../interfaces/Totals";
-import { withIntl, wrapWithIntl } from "../../utils/intlUtils";
+import { withIntlProvider, wrapWithIntl } from "../../utils/intlUtils";
 import * as headerPredicateFactory from "../../../../factory/HeaderPredicateFactory";
 
 function getInstanceFromWrapper(wrapper: ReactWrapper<any>, component: any): any {
@@ -52,7 +52,7 @@ function createPortalWrapper(tableWrapper: ReactWrapper<any>): ReactWrapper<any>
     return new ReactWrapper(wrapWithIntl(portalInstance.props.children));
 }
 
-const WrappedTable: React.ComponentClass<Partial<ITableVisualizationProps & IContainerProps>> = withIntl(
+const WrappedTable: React.ComponentClass<Partial<ITableVisualizationProps & IContainerProps>> = withIntlProvider(
     TableVisualization,
 );
 

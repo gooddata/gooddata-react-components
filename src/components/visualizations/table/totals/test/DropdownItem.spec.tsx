@@ -4,7 +4,7 @@ import { mount } from "enzyme";
 import { noop } from "lodash";
 
 import { DropdownItem } from "../DropdownItem";
-import { withIntl } from "../../../utils/intlUtils";
+import { withIntlProvider } from "../../../utils/intlUtils";
 
 const FIXTURE = {
     item: {
@@ -25,7 +25,7 @@ const FIXTURE = {
     },
 };
 
-const WrappedComponent = withIntl(DropdownItem);
+const WrappedComponent = withIntlProvider(DropdownItem);
 
 describe("DropdownItem", () => {
     function renderComponent(customProps = {}) {

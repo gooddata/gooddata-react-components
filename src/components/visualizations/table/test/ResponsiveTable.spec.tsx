@@ -4,7 +4,7 @@ import { mount, ReactWrapper } from "enzyme";
 import { noop, range } from "lodash";
 import { AFM, Execution } from "@gooddata/typings";
 
-import { withIntl } from "../../utils/intlUtils";
+import { withIntlProvider } from "../../utils/intlUtils";
 import { TableRow } from "../../../../interfaces/Table";
 import { ITotalWithData } from "../../../../interfaces/Totals";
 import { IResponsiveTableProps, IResponsiveTableState, ResponsiveTable } from "../ResponsiveTable";
@@ -20,7 +20,7 @@ import {
 import "jest";
 
 const ROWS_PER_PAGE: number = 10;
-const WrappedTable: React.ComponentClass<IResponsiveTableProps> = withIntl(ResponsiveTable);
+const WrappedTable: React.ComponentClass<IResponsiveTableProps> = withIntlProvider(ResponsiveTable);
 
 const getMore = (wrapper: ReactWrapper<IResponsiveTableProps, IResponsiveTableState>) =>
     wrapper.find(".s-show_more");

@@ -16,7 +16,7 @@ import { PivotTable } from "../../core/PivotTable";
 import { IntlWrapper } from "../../core/base/IntlWrapper";
 import { VisualizationTypes } from "../../../constants/visualizationTypes";
 import { RuntimeError } from "../../../errors/RuntimeError";
-import { createIntlMock } from "../../visualizations/utils/intlUtils";
+import { mockIntlProp } from "../../visualizations/utils/intlUtils";
 import * as HttpStatusCodes from "http-status-codes";
 import { IColorPalette } from "../../../interfaces/Config";
 import { clearSdkCache } from "../../../helpers/sdkCache";
@@ -127,7 +127,7 @@ describe("VisualizationWrapped", () => {
         clearSdkCache();
     });
 
-    const intl = createIntlMock();
+    const intl = mockIntlProp();
 
     it("should render chart", () => {
         const props = {

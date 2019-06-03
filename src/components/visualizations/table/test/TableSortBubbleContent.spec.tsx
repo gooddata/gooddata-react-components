@@ -4,7 +4,7 @@ import { mount, ReactWrapper } from "enzyme";
 import { InjectedIntlProps } from "react-intl";
 import { ITableSortBubbleContentProps, TableSortBubbleContent } from "../TableSortBubbleContent";
 import { ASC, DESC } from "../../../../constants/sort";
-import { withIntl } from "../../utils/intlUtils";
+import { withIntlProvider } from "../../utils/intlUtils";
 
 describe("TableSortBubbleContent", () => {
     function createBubble(customProps = {}): ReactWrapper<ITableSortBubbleContentProps & InjectedIntlProps> {
@@ -12,7 +12,7 @@ describe("TableSortBubbleContent", () => {
             title: "Foo",
             ...customProps,
         };
-        const WrappedBubble: React.ComponentClass<ITableSortBubbleContentProps> = withIntl(
+        const WrappedBubble: React.ComponentClass<ITableSortBubbleContentProps> = withIntlProvider(
             TableSortBubbleContent,
         );
         return mount(<WrappedBubble {...props} />);

@@ -5,7 +5,7 @@ import { mount } from "enzyme";
 import { VisualizationTypes } from "../../../../../constants/visualizationTypes";
 import Legend from "../Legend";
 import HeatmapLegend from "../HeatmapLegend";
-import { withIntl } from "../../../utils/intlUtils";
+import { withIntlProvider } from "../../../utils/intlUtils";
 
 describe("Legend", () => {
     const series = [
@@ -37,7 +37,7 @@ describe("Legend", () => {
             ...userProps,
         };
 
-        const Wrapped = withIntl(Legend);
+        const Wrapped = withIntlProvider(Legend);
 
         return mount(<Wrapped {...props} />);
     }

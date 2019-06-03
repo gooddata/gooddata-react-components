@@ -6,7 +6,7 @@ import noop = require("lodash/noop");
 import { VisualizationTypes } from "../../../../../constants/visualizationTypes";
 import StaticLegend from "../StaticLegend";
 import LegendItem from "../LegendItem";
-import { withIntl } from "../../../utils/intlUtils";
+import { withIntlProvider } from "../../../utils/intlUtils";
 
 describe("StaticLegend", () => {
     function render(customProps: any = {}) {
@@ -19,7 +19,7 @@ describe("StaticLegend", () => {
             locale: "en-US",
             ...customProps,
         };
-        const Wrapped = withIntl(StaticLegend);
+        const Wrapped = withIntlProvider(StaticLegend);
 
         return mount(<Wrapped {...props} />);
     }

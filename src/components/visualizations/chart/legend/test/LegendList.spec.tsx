@@ -4,7 +4,7 @@ import { mount } from "enzyme";
 import { VisualizationTypes } from "../../../../../constants/visualizationTypes";
 import LegendList, { LegendSeparator } from "../LegendList";
 import { transformToDualAxesSeries } from "../helpers";
-import { withIntl } from "../../../utils/intlUtils";
+import { withIntlProvider } from "../../../utils/intlUtils";
 import LegendItem from "../LegendItem";
 import noop = require("lodash/noop");
 import { LegendAxisIndicator } from "../LegendAxisIndicator";
@@ -19,7 +19,7 @@ describe("LegendList", () => {
             ...customProps,
         };
 
-        const Wrapped = withIntl(LegendList);
+        const Wrapped = withIntlProvider(LegendList);
 
         return mount(<Wrapped {...props} />);
     }

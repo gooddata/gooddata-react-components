@@ -4,7 +4,7 @@ import { mount } from "enzyme";
 import { InjectedIntlProps } from "react-intl";
 import { IMappingHeader } from "../../../../interfaces/MappingHeader";
 
-import { withIntl } from "../../utils/intlUtils";
+import { withIntlProvider } from "../../utils/intlUtils";
 import { ITableProps, Table } from "../Table";
 import { ITableTransformationProps, TableTransformation } from "../TableTransformation";
 import {
@@ -14,7 +14,7 @@ import {
 } from "../fixtures/2attributes3measures";
 import { IHeaderPredicateContext } from "../../../../interfaces/HeaderPredicate";
 
-const WrappedTable = withIntl(TableTransformation);
+const WrappedTable = withIntlProvider(TableTransformation);
 
 describe("TableTransformation", () => {
     function createComponent(

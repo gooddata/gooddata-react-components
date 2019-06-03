@@ -1,12 +1,12 @@
 // (C) 2007-2018 GoodData Corporation
 import { mount } from "enzyme";
 import * as React from "react";
-import { createIntlMock } from "../../../visualizations/utils/intlUtils";
+import { mockIntlProp } from "../../../visualizations/utils/intlUtils";
 import { IColumnTotal } from "../AggregationsMenu";
 import AggregationsSubMenu, { IAggregationsSubMenuProps } from "../AggregationsSubMenu";
 
 describe("AggregationsSubMenu", () => {
-    const intlMock = createIntlMock();
+    const intlMock = mockIntlProp();
     const attributeHeaders = [
         {
             attributeHeader: {
@@ -61,7 +61,7 @@ describe("AggregationsSubMenu", () => {
 
     it('should render submenu with attributes, first attribute as "All rows"', () => {
         const wrapper = render({
-            intl: createIntlMock({
+            intl: mockIntlProp({
                 "visualizations.menu.aggregations.all-rows": "all rows",
             }),
         });
