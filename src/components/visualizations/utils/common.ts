@@ -7,8 +7,7 @@ import { Observable } from "rxjs/Rx";
 import { numberFormat } from "@gooddata/numberjs";
 
 import { VisualizationTypes } from "../../../constants/visualizationTypes";
-import { IAxis, ISeriesItem } from "../../../interfaces/Config";
-import { IChartOptions } from "../chart/chartOptionsBuilder";
+import { IAxis, ISeriesItem, IChartOptions } from "../../../interfaces/Config";
 
 // lodash/fp does not provide typings
 // https://stackoverflow.com/questions/38020019/where-can-i-find-typescript-typings-for-lodash-fp
