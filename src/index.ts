@@ -46,6 +46,7 @@ import { Headline } from "./components/Headline";
 import { ScatterPlot } from "./components/ScatterPlot";
 import { ComboChart } from "./components/ComboChart";
 import { FunnelChart } from "./components/FunnelChart";
+import { PyramidChart } from "./components/PyramidChart";
 import { Heatmap } from "./components/Heatmap";
 import * as ChartConfiguration from "./interfaces/Config";
 // tslint:disable-next-line:no-duplicate-imports
@@ -117,6 +118,7 @@ export {
     BubbleChart,
     DonutChart,
     Heatmap,
+    PyramidChart,
     IMeasureTitleProps,
     IArithmeticMeasureTitleProps,
     MeasureTitleHelper,

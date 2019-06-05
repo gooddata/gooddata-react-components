@@ -22,6 +22,7 @@ export const VisualizationTypes = {
     FUNNEL: "funnel" as "funnel",
     PARETO: "pareto" as "pareto",
     ALLUVIAL: "alluvial" as "alluvial",
+    PYRAMID: "pyramid" as "pyramid"
 };
 
 export type ChartType =
@@ -43,7 +44,8 @@ export type ChartType =
     | "waterfall"
     | "funnel"
     | "pareto"
-    | "alluvial";
+    | "alluvial"
+    | "pyramid";
 export type HeadlineType = "headline";
 export type TableType = "table" | "pivotTable";
 export type VisType = ChartType | HeadlineType | TableType;

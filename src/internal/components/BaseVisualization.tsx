@@ -39,6 +39,7 @@ import { PluggableComboChart } from "./pluggableVisualizations/comboChart/Plugga
 import { PluggableTreemap } from "./pluggableVisualizations/treeMap/PluggableTreemap";
 import { PluggableFunnelChart } from "./pluggableVisualizations/funnelChart/PluggableFunnelChart";
 import { PluggableBubbleChart } from "./pluggableVisualizations/bubbleChart/PluggableBubbleChart";
+import { PluggablePyramidChart } from "./pluggableVisualizations/pyramidChart/PluggablePyramidChart";
 
 // visualization catalogue - add your new visualization here
 const VisualizationsCatalog = {
@@ -58,6 +59,7 @@ const VisualizationsCatalog = {
     combo2: PluggableComboChart, // new combo chart
     treemap: PluggableTreemap,
     funnel: PluggableFunnelChart,
+    pyramid: PluggablePyramidChart
 };
 
 export interface IBaseVisualizationProps extends IVisCallbacks {

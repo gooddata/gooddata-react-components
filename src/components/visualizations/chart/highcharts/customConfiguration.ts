@@ -809,6 +809,7 @@ function getHoverStyles({ type }: any, config: any) {
         case VisualizationTypes.BAR:
         case VisualizationTypes.COLUMN:
         case VisualizationTypes.FUNNEL:
+        case VisualizationTypes.PYRAMID:
             seriesMapFn = barSeriesMapFn;
             break;
         case VisualizationTypes.HEATMAP:

@@ -71,6 +71,7 @@ export const isComboChart = (type: string) =>
 export const isTreemap = isEqual(VisualizationTypes.TREEMAP);
 export const isFunnelChart = isEqual(VisualizationTypes.FUNNEL);
 export const isHeatmap = isEqual(VisualizationTypes.HEATMAP);
+export const isPyramid = isEqual(VisualizationTypes.PYRAMID);
 export const isChartSupported = (type: string) => includes(VisualizationTypes, type);
 export const isOneOfTypes = (type: string, types: string[]) => includes(types, type);
 export const isPrimaryYAxis = (yAxis: IAxis | IHighchartsAxisExtend) => !yAxis.opposite;

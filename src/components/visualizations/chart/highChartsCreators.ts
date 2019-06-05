@@ -21,6 +21,7 @@ import { getTreemapConfiguration } from "./highcharts/treemapConfiguration";
 import { getFunnelConfiguration } from "./highcharts/funnelConfiguration";
 import { getHeatmapConfiguration } from "./highcharts/heatmapConfiguration";
 import { getBubbleConfiguration } from "./highcharts/bubbleConfiguration";
+import { getPyramidConfiguration } from "./highcharts/pyramidConfiguration";
 import { VisualizationTypes } from "../../../constants/visualizationTypes";
 
 const chartConfigurationMap = {
@@ -37,6 +38,7 @@ const chartConfigurationMap = {
     [VisualizationTypes.FUNNEL]: getFunnelConfiguration,
     [VisualizationTypes.HEATMAP]: getHeatmapConfiguration,
     [VisualizationTypes.BUBBLE]: getBubbleConfiguration,
+    [VisualizationTypes.PYRAMID]: getPyramidConfiguration
 };
 
 export function getHighchartsOptions(chartOptions: IChartOptions, drillConfig: any, config?: IChartConfig) {
