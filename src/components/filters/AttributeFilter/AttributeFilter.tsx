@@ -3,6 +3,7 @@ import * as React from "react";
 import * as PropTypes from "prop-types";
 import { SDK, factory as createSdk } from "@gooddata/gooddata-js";
 import pick = require("lodash/pick");
+import { AFM } from "@gooddata/typings";
 
 import { IntlWrapper } from "../../core/base/IntlWrapper";
 import { injectIntl } from "react-intl";
@@ -13,8 +14,7 @@ import { setTelemetryHeaders } from "../../../helpers/utils";
 
 export interface IAttributeFilterProps {
     sdk?: SDK;
-    uri?: string;
-    identifier?: string;
+    filter: AFM.AttributeFilterItem;
     projectId?: string;
     metadata?: {
         getObjectUri: (...params: any[]) => any; // TODO: make the types more specific (FET-282)
@@ -46,8 +46,7 @@ const DefaultFilterError = injectIntl(({ intl }) => {
  */
 export class AttributeFilter extends React.PureComponent<IAttributeFilterProps> {
     public static propTypes = {
-        uri: PropTypes.string,
-        identifier: PropTypes.string,
+        filter: PropTypes.object.isRequired,
         projectId: PropTypes.string,
         onApply: PropTypes.func.isRequired,
         fullscreenOnMobile: PropTypes.bool,
@@ -57,8 +56,6 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps> 
     };
 
     public static defaultProps: Partial<IAttributeFilterProps> = {
-        uri: null,
-        identifier: null,
         projectId: null,
         locale: "en-US",
 
@@ -85,8 +82,10 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps> 
     }
 
     public render() {
-        const { locale, projectId, uri, identifier } = this.props;
+        const { locale, projectId } = this.props;
         const { md } = this.sdk;
+        const { identifier, uri } = this.getIdentifierOrUri();
+
         return (
             <IntlWrapper locale={locale}>
                 <AttributeLoader uri={uri} identifier={identifier} projectId={projectId} metadata={md}>
@@ -94,6 +93,41 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps> 
                 </AttributeLoader>
             </IntlWrapper>
         );
+    }
+
+    private isInverted() {
+        const { filter } = this.props;
+
+        return !AFM.isPositiveAttributeFilter(filter);
+    }
+
+    private getIdentifierOrUri() {
+        const { filter } = this.props;
+        const displayForm = AFM.isPositiveAttributeFilter(filter)
+            ? filter.positiveAttributeFilter.displayForm
+            : filter.negativeAttributeFilter.displayForm;
+
+        if (AFM.isObjIdentifierQualifier(displayForm)) {
+            return { identifier: displayForm.identifier };
+        }
+
+        return { uri: displayForm.uri };
+    }
+
+    private getSelection() {
+        const { filter } = this.props;
+        const filterBody = AFM.isPositiveAttributeFilter(filter)
+            ? filter.positiveAttributeFilter
+            : filter.negativeAttributeFilter;
+        const inType = AFM.isPositiveAttributeFilter(filter) ? "in" : "notIn";
+        const textFilter = Boolean(filterBody.textFilter);
+        const selection = filterBody[inType];
+
+        return selection
+            ? selection.map((uriOrTitle: string) => ({
+                  [textFilter ? "title" : "uri"]: uriOrTitle,
+              }))
+            : [];
     }
 
     private renderContent({
@@ -108,13 +142,16 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps> 
         }
 
         const dropdownProps: any = pick(this.props, Object.keys(AttributeDropdownWrapped.propTypes));
-        const isUsingIdentifier = this.props.identifier !== null;
+        const { identifier } = this.getIdentifierOrUri();
+        const isUsingIdentifier = !!identifier;
         const { md } = this.sdk;
         return (
             <AttributeDropdown
                 attributeDisplayForm={attributeDisplayForm}
                 metadata={md}
                 {...dropdownProps}
+                selection={this.getSelection()}
+                isInverted={this.isInverted()}
                 isUsingIdentifier={isUsingIdentifier}
             />
         );

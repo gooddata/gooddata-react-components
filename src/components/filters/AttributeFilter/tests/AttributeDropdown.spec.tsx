@@ -63,9 +63,7 @@ describe("AttributeDropdown", () => {
         const attributeDisplayForm = createADF();
         const wrapper = renderComponent({ attributeDisplayForm });
         wrapper.find("button.s-country").simulate("click");
-        expect(
-            document.querySelectorAll(".gd-attribute-filter-overlay .s-attribute-filter-list-loading"),
-        ).toHaveLength(1);
+        expect(document.querySelectorAll(".s-isLoading")).toHaveLength(1);
     });
 
     it("should render overlay with loaded items", async done => {
@@ -96,9 +94,12 @@ describe("AttributeDropdown", () => {
         const attributeDisplayForm = createADF();
         const onApply = jest.fn(filter => {
             expect(filter).toEqual({
-                id: ATTRIBUTE_DISPLAY_FORM_URI,
-                type: "attribute",
-                notIn: ["0"],
+                negativeAttributeFilter: {
+                    displayForm: {
+                        uri: ATTRIBUTE_DISPLAY_FORM_URI,
+                    },
+                    notIn: ["/gdc/md/projectId/object/123?id=0"],
+                },
             });
         });
         const wrapper = renderComponent({
@@ -146,17 +147,23 @@ describe("AttributeDropdown", () => {
 
         it("should create filter from selection", () => {
             expect(createAfmFilter(id, selection, false)).toEqual({
-                id: "foo",
-                in: ["1", "2"],
-                type: "attribute",
+                positiveAttributeFilter: {
+                    displayForm: {
+                        identifier: "foo",
+                    },
+                    in: ["/gdc/md/projectId/obj/1?id=1", "/gdc/md/projectId/obj/1?id=2"],
+                },
             });
         });
 
         it("should create filter from inverted selection", () => {
             expect(createAfmFilter(id, selection, true)).toEqual({
-                id: "foo",
-                notIn: ["1", "2"],
-                type: "attribute",
+                negativeAttributeFilter: {
+                    displayForm: {
+                        identifier: "foo",
+                    },
+                    notIn: ["/gdc/md/projectId/obj/1?id=1", "/gdc/md/projectId/obj/1?id=2"],
+                },
             });
         });
     });

@@ -2,6 +2,7 @@
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
+import * as Model from "../../src/helpers/model";
 
 import {
     AttributeFilter,
@@ -10,14 +11,14 @@ import {
 import "../../styles/scss/attributeFilter.scss";
 
 const attributeFilterWithUri: IAttributeFilterProps = {
-    uri: "/gdc/md/storybook/obj/3.df",
     projectId: "storybook",
+    filter: Model.negativeAttributeFilter("/gdc/md/storybook/obj/3.df", []),
     onApply: action("apply"),
 };
 
 const attributeFilterWithIdentifier: IAttributeFilterProps = {
-    identifier: "3.df",
     projectId: "storybook",
+    filter: Model.negativeAttributeFilter("3.df", []),
     fullscreenOnMobile: false,
     onApply: action("apply"),
 };

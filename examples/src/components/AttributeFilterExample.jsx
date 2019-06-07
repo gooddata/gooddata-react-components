@@ -1,15 +1,11 @@
 // (C) 2007-2019 GoodData Corporation
 import React, { Component } from "react";
 import { LineChart, AttributeFilter, Model, ErrorComponent } from "@gooddata/react-components";
+import { AFM } from "@gooddata/typings";
 
 import "@gooddata/react-components/styles/css/main.css";
 
-import {
-    totalSalesIdentifier,
-    locationResortIdentifier,
-    locationResortUri,
-    projectId,
-} from "../utils/fixtures";
+import { totalSalesIdentifier, locationResortIdentifier, projectId } from "../utils/fixtures";
 
 export class AttributeFilterExample extends Component {
     constructor(props) {
@@ -30,55 +26,21 @@ export class AttributeFilterExample extends Component {
     onApply(filter) {
         // eslint-disable-next-line no-console
         console.log("AttributeFilterExample onApply", filter);
-        this.setState({ filters: [], error: null });
-        if (filter.in) {
-            this.filterPositiveAttribute(filter);
+        const inType = AFM.isPositiveAttributeFilter(filter) ? "in" : "notIn";
+        const filterItems = AFM.isPositiveAttributeFilter(filter)
+            ? filter.positiveAttributeFilter[inType]
+            : filter.negativeAttributeFilter[inType];
+
+        if (!filterItems.length) {
+            this.setState({ filters: [], error: null });
         } else {
-            this.filterNegativeAttribute(filter);
+            this.setState({ filters: [filter], error: null });
         }
     }
 
     onError(...params) {
         // eslint-disable-next-line no-console
         console.info("AttributeFilterExample onLoadingChanged", ...params);
-    }
-
-    filterPositiveAttribute(filter) {
-        let filters;
-        if (filter.in.length !== 0) {
-            filters = [
-                {
-                    positiveAttributeFilter: {
-                        displayForm: {
-                            identifier: filter.id,
-                        },
-                        in: filter.in.map(element => `${locationResortUri}/elements?id=${element}`),
-                    },
-                },
-            ];
-        } else {
-            this.setState({
-                error: "The filter must have at least one item selected",
-            });
-        }
-        this.setState({ filters });
-    }
-
-    filterNegativeAttribute(filter) {
-        let filters;
-        if (filter.notIn.length !== 0) {
-            filters = [
-                {
-                    negativeAttributeFilter: {
-                        displayForm: {
-                            identifier: filter.id,
-                        },
-                        notIn: filter.notIn.map(element => `${locationResortUri}/elements?id=${element}`),
-                    },
-                },
-            ];
-        }
-        this.setState({ filters });
     }
 
     render() {
@@ -93,8 +55,8 @@ export class AttributeFilterExample extends Component {
         return (
             <div className="s-attribute-filter">
                 <AttributeFilter
-                    identifier={locationResortIdentifier}
                     projectId={projectId}
+                    filter={Model.negativeAttributeFilter(locationResortIdentifier, [])}
                     fullscreenOnMobile={false}
                     onApply={this.onApply}
                 />

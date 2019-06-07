@@ -374,12 +374,12 @@ export const SPELLS = [
     "Youthful Appearance",
 ];
 
-export const ATTRIBUTE_DISPLAY_FORM_URI = "/gdc/md/projectId/obj/foo";
-export const ATTRIBUTE_DISPLAY_FORM_URI_2 = "/gdc/md/projectId/obj/baz";
-export const ATTRIBUTE_DISPLAY_FORM_URI_3 = "/gdc/md/projectId/obj/bar";
-export const ATTRIBUTE_DISPLAY_FORM_IDENTIFIER = "foo";
-export const ATTRIBUTE_DISPLAY_FORM_IDENTIFIER_2 = "baz";
-export const ATTRIBUTE_DISPLAY_FORM_IDENTIFIER_3 = "bar";
+export const ATTRIBUTE_DISPLAY_FORM_URI = "/gdc/md/projectId/obj/123";
+export const ATTRIBUTE_DISPLAY_FORM_URI_2 = "/gdc/md/projectId/obj/456";
+export const ATTRIBUTE_DISPLAY_FORM_URI_3 = "/gdc/md/projectId/obj/789";
+export const ATTRIBUTE_DISPLAY_FORM_IDENTIFIER = "123";
+export const ATTRIBUTE_DISPLAY_FORM_IDENTIFIER_2 = "456";
+export const ATTRIBUTE_DISPLAY_FORM_IDENTIFIER_3 = "789";
 
 export function createMetadataMock() {
     return {

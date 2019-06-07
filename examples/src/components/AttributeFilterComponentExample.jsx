@@ -1,6 +1,6 @@
 // (C) 2007-2019 GoodData Corporation
 import React, { Component } from "react";
-import { AttributeFilter } from "@gooddata/react-components";
+import { AttributeFilter, Model } from "@gooddata/react-components";
 
 import "@gooddata/react-components/styles/css/main.css";
 
@@ -16,8 +16,8 @@ export class AttributeFilterComponentExample extends Component {
         return (
             <div>
                 <AttributeFilter
-                    identifier={employeeNameIdentifier}
                     projectId={projectId}
+                    filter={Model.negativeAttributeFilter(employeeNameIdentifier, [])}
                     fullscreenOnMobile={false}
                     onApply={this.onApply}
                 />
