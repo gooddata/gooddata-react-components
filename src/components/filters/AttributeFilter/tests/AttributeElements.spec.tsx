@@ -54,7 +54,7 @@ describe("AttributeElements", () => {
                     {
                         element: {
                             title: "Afghanistan",
-                            uri: "/gdc/md/projectId/object/foo?id=0",
+                            uri: "/gdc/md/projectId/object/123?id=0",
                         },
                     },
                 ],
@@ -80,7 +80,7 @@ describe("AttributeElements", () => {
             expect(props.sdk.md.getValidElements).toHaveBeenCalledTimes(1);
             expect(props.children).toHaveBeenCalledTimes(2);
             expect(props.children.mock.calls[1][0].validElements).toEqual({
-                items: [{ element: { title: "Afghanistan", uri: "/gdc/md/projectId/object/foo?id=0" } }],
+                items: [{ element: { title: "Afghanistan", uri: "/gdc/md/projectId/object/123?id=0" } }],
                 paging: { count: 1, offset: 0, total: 198 },
             });
             expect(props.children.mock.calls[1][0].isLoading).toBe(false);
@@ -113,7 +113,7 @@ describe("AttributeElements", () => {
 
         return testUtils.delay().then(() => {
             expect(props.children.mock.calls[1][0].validElements).toEqual({
-                items: [{ element: { title: "Afghanistan", uri: "/gdc/md/projectId/object/foo?id=0" } }],
+                items: [{ element: { title: "Afghanistan", uri: "/gdc/md/projectId/object/123?id=0" } }],
                 paging: { count: 1, offset: 0, total: 198 },
             });
             props.children.mock.calls[1][0].loadMore();
@@ -128,8 +128,8 @@ describe("AttributeElements", () => {
                 expect(props.children.mock.calls[3][0].isLoading).toBe(false);
                 expect(props.children.mock.calls[3][0].validElements).toEqual({
                     items: [
-                        { element: { title: "Afghanistan", uri: "/gdc/md/projectId/object/foo?id=0" } },
-                        { element: { title: "Albania", uri: "/gdc/md/projectId/object/foo?id=1" } },
+                        { element: { title: "Afghanistan", uri: "/gdc/md/projectId/object/123?id=0" } },
+                        { element: { title: "Albania", uri: "/gdc/md/projectId/object/123?id=1" } },
                     ],
                     paging: { count: 2, offset: 0, total: 198 },
                 });
@@ -149,7 +149,7 @@ describe("AttributeElements", () => {
             expect(props.sdk.md.getValidElements).toHaveBeenCalledTimes(1);
             expect(props.children.mock.calls[1][0].validElements).toEqual({
                 items: [
-                    { element: { title: "Abundant Ammunition", uri: "/gdc/md/projectId/object/baz?id=0" } },
+                    { element: { title: "Abundant Ammunition", uri: "/gdc/md/projectId/object/456?id=0" } },
                 ],
                 paging: { count: 1, offset: 0, total: 167 },
             });
@@ -168,7 +168,7 @@ describe("AttributeElements", () => {
                 expect(props.children).toHaveBeenCalledTimes(4);
                 expect(props.children.mock.calls[3][0].isLoading).toBe(false);
                 expect(props.children.mock.calls[3][0].validElements).toEqual({
-                    items: [{ element: { title: "Afghanistan", uri: "/gdc/md/projectId/object/foo?id=0" } }],
+                    items: [{ element: { title: "Afghanistan", uri: "/gdc/md/projectId/object/123?id=0" } }],
                     paging: { count: 1, offset: 0, total: 198 },
                 });
             });

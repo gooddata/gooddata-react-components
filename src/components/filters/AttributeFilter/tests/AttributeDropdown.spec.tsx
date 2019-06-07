@@ -14,6 +14,9 @@ import {
     ATTRIBUTE_DISPLAY_FORM_IDENTIFIER,
 } from "./utils";
 
+const delayOffset = 250; // Magic constant inside Goodstrap FLEX_DIMENSIONS_THROTTLE :(
+const increment = 100;
+
 describe("AttributeDropdown", () => {
     function renderComponent(props: any = {}) {
         const {
@@ -51,7 +54,7 @@ describe("AttributeDropdown", () => {
         document.body.innerHTML = "";
     });
 
-    it("should render attribute title", () => {
+    it("should render attribute as default title", () => {
         const attributeDisplayForm = createADF();
         const wrapper = renderComponent({ attributeDisplayForm });
         expect(wrapper.find(".gd-attribute-filter .gd-button-text").text()).toBe(
@@ -59,14 +62,23 @@ describe("AttributeDropdown", () => {
         );
     });
 
+    it("should render custom title if provided", () => {
+        const attributeDisplayForm = createADF();
+        const title = "Custom title";
+        const wrapper = renderComponent({ attributeDisplayForm, title });
+        expect(wrapper.find(".gd-attribute-filter .gd-button-text").text()).toBe(title);
+    });
+
     it("should render overlay on click and display loading", () => {
         const attributeDisplayForm = createADF();
         const wrapper = renderComponent({ attributeDisplayForm });
         wrapper.find("button.s-country").simulate("click");
-        expect(
-            document.querySelectorAll(".gd-attribute-filter-overlay .s-attribute-filter-list-loading"),
-        ).toHaveLength(1);
+        expect(document.querySelectorAll(".s-isLoading")).toHaveLength(1);
     });
+
+    const waitForItemsLoaded = () => {
+        return document.querySelectorAll(".s-attribute-filter-list-item").length !== 0;
+    };
 
     it("should render overlay with loaded items", async done => {
         const attributeDisplayForm = createADF();
@@ -84,21 +96,20 @@ describe("AttributeDropdown", () => {
             done();
         };
 
-        const delayOffset = 250; // Magic constant inside Goodstrap FLEX_DIMENSIONS_THROTTLE :(
         const maxDelay = 5000;
-        const increment = 10;
-
-        const intervalTest = () => document.querySelectorAll(".s-attribute-filter-list-item").length;
-        await waitFor(intervalTest, maxDelay, delayOffset, increment).then(testItems, testItems);
+        await waitFor(waitForItemsLoaded, maxDelay, delayOffset, increment).then(testItems, testItems);
     });
 
     it("should run onApply with current selection", async done => {
         const attributeDisplayForm = createADF();
         const onApply = jest.fn(filter => {
             expect(filter).toEqual({
-                id: ATTRIBUTE_DISPLAY_FORM_URI,
-                type: "attribute",
-                notIn: ["0"],
+                negativeAttributeFilter: {
+                    displayForm: {
+                        uri: ATTRIBUTE_DISPLAY_FORM_URI,
+                    },
+                    notIn: ["/gdc/md/projectId/object/123?id=0"],
+                },
             });
         });
         const wrapper = renderComponent({
@@ -121,14 +132,54 @@ describe("AttributeDropdown", () => {
             done();
         };
 
-        const delayOffset = 250; // Magic constant inside Goodstrap FLEX_DIMENSIONS_THROTTLE :(
         const maxDelay = 2000;
-        const increment = 100;
-        const intervalTest = () => {
-            const test = document.querySelectorAll(".s-attribute-filter-list-item").length;
-            return !!test;
-        };
-        waitFor(intervalTest, maxDelay, delayOffset, increment).then(testItems, testItems);
+        waitFor(waitForItemsLoaded, maxDelay, delayOffset, increment).then(testItems, testItems);
+    });
+
+    it("should keep selection after Apply", async () => {
+        const attributeDisplayForm = createADF();
+        const wrapper = renderComponent({
+            attributeDisplayForm,
+        });
+
+        wrapper.find(".s-country.dropdown-button").simulate("click");
+        const maxDelay = 2000;
+        await waitFor(waitForItemsLoaded, maxDelay, delayOffset, increment);
+        const dropdownItems = document.querySelectorAll(".s-attribute-filter-list-item");
+        ReactTestUtils.Simulate.click(dropdownItems[0]);
+        ReactTestUtils.Simulate.click(dropdownItems[1]);
+        ReactTestUtils.Simulate.click(dropdownItems[2]);
+
+        wrapper.find("button.s-apply").simulate("click");
+        wrapper.find(".s-country.dropdown-button").simulate("click");
+
+        const selectedItemElements = document.querySelectorAll(
+            ".s-attribute-filter-list-item .gd-input-checkbox:checked",
+        );
+        expect(selectedItemElements.length).toBe(8);
+    });
+
+    it("should reset selection on Cancel", async () => {
+        const attributeDisplayForm = createADF();
+        const wrapper = renderComponent({
+            attributeDisplayForm,
+        });
+
+        wrapper.find(".s-country.dropdown-button").simulate("click");
+        const maxDelay = 2000;
+        await waitFor(waitForItemsLoaded, maxDelay, delayOffset, increment);
+        const dropdownItems = document.querySelectorAll(".s-attribute-filter-list-item");
+        ReactTestUtils.Simulate.click(dropdownItems[0]);
+        ReactTestUtils.Simulate.click(dropdownItems[1]);
+        ReactTestUtils.Simulate.click(dropdownItems[2]);
+        wrapper.find("button.s-cancel").simulate("click");
+
+        wrapper.find(".s-country.dropdown-button").simulate("click");
+
+        const selectedItemElements = document.querySelectorAll(
+            ".s-attribute-filter-list-item .gd-input-checkbox:checked",
+        );
+        expect(selectedItemElements.length).toBe(11);
     });
 
     describe("createAfmFilter", () => {
@@ -146,17 +197,23 @@ describe("AttributeDropdown", () => {
 
         it("should create filter from selection", () => {
             expect(createAfmFilter(id, selection, false)).toEqual({
-                id: "foo",
-                in: ["1", "2"],
-                type: "attribute",
+                positiveAttributeFilter: {
+                    displayForm: {
+                        identifier: "foo",
+                    },
+                    in: ["/gdc/md/projectId/obj/1?id=1", "/gdc/md/projectId/obj/1?id=2"],
+                },
             });
         });
 
         it("should create filter from inverted selection", () => {
             expect(createAfmFilter(id, selection, true)).toEqual({
-                id: "foo",
-                notIn: ["1", "2"],
-                type: "attribute",
+                negativeAttributeFilter: {
+                    displayForm: {
+                        identifier: "foo",
+                    },
+                    notIn: ["/gdc/md/projectId/obj/1?id=1", "/gdc/md/projectId/obj/1?id=2"],
+                },
             });
         });
     });
