@@ -16,6 +16,7 @@ export interface IDataLabelsConfig {
     visible?: IDataLabelsVisible;
     width?: number;
     padding?: number;
+    element?: Highcharts.HTMLDOMElement | Highcharts.SVGDOMElement;
 }
 
 export interface IColorMapping {
@@ -115,6 +116,9 @@ export interface IAxisConfig {
     min?: string;
     max?: string;
     measures?: string[];
+    stacks?: IStackItem;
+    series?: ISeriesItem[];
+    stackTotalGroup?: Highcharts.SVGAttributes;
 }
 
 export interface IAxis {
@@ -129,6 +133,11 @@ export interface ISeriesDataItem {
     y: number;
     value?: number;
     name?: string;
+}
+
+export interface IStackItem {
+    column0?: Highcharts.StackItemObject[];
+    column?: ISeriesDataItem[];
 }
 
 export interface ISeriesItem {
@@ -146,6 +155,7 @@ export interface ISeriesItem {
     stack?: number;
     stacking?: string;
     dataLabels?: Highcharts.DataLabelsOptionsObject;
+    dataLabelsGroup?: Highcharts.SVGAttributes;
 }
 
 export interface IShapeArgsConfig {
@@ -230,4 +240,11 @@ export interface ISeriesItemConfig {
     name?: string;
     yAxis?: number;
     xAxis?: number;
+}
+
+export interface IClientRect {
+    x?: number;
+    y?: number;
+    width?: number;
+    height?: number;
 }
