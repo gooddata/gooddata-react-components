@@ -1,6 +1,6 @@
 {
   "name": "@gooddata/react-components",
-  "version": "7.1.0-alpha.28",
+  "version": "7.1.0-alpha.30",
   "description": "GoodData React Components",
   "main": "dist/index.js",
   "repository": "git@github.com:gooddata/gooddata-react-components.git",
@@ -102,7 +102,7 @@
     "yup": "^0.24.1"
   },
   "dependencies": {
-    "@gooddata/gooddata-js": "11.14.0",
+    "@gooddata/gooddata-js": "11.14.0-sarfy-msa-fet-232-b-2019-06-18T13-07-23-989Z",
     "@gooddata/goodstrap": "60.8.0",
     "@gooddata/js-utils": "3.4.0",
     "@gooddata/numberjs": "^3.1.2",
