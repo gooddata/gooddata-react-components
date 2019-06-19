@@ -8,6 +8,7 @@ import sdk, { IExportConfig } from "@gooddata/gooddata-js";
 import {
     emptyDataSource,
     oneMeasureDataSource,
+    oneMeasureDataSourceWithFormat,
     oneMeasurePagableOnlyDataSource,
     oneMeasureOneDimensionDataSource,
     oneAttributeOneMeasureOneFilterDataSource,
@@ -143,6 +144,43 @@ describe("VisualizationLoadingHOC", () => {
                 execution: oneMeasureResponse,
             });
         });
+    });
+
+    it("should pass execution to the inner component with default format", async () => {
+        const wrapper = createComponent({
+            config: { separators: { decimal: ",", thousand: "'" } },
+            dataSource: oneMeasureDataSourceWithFormat,
+        });
+
+        await testUtils.delay();
+        wrapper.update();
+
+        const innerWrapped = wrapper.find(TestInnerComponent);
+
+        expect(innerWrapped.props().execution.executionResponse.dimensions).toEqual([
+            {
+                headers: [],
+            },
+            {
+                headers: [
+                    {
+                        measureGroupHeader: {
+                            items: [
+                                {
+                                    measureHeaderItem: {
+                                        format: "#,##0.00",
+                                        identifier: "af2Ewj9Re2vK",
+                                        localIdentifier: "1st_measure_local_identifier",
+                                        name: "Lost",
+                                        uri: "/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1283",
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                ],
+            },
+        ]);
     });
 
     it("should pass down error flag when execution failed", () => {

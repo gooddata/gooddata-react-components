@@ -1,6 +1,7 @@
 // (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import noop = require("lodash/noop");
+import cloneDeep = require("lodash/cloneDeep");
 import get = require("lodash/get");
 import isEqual = require("lodash/isEqual");
 import omit = require("lodash/omit");
@@ -12,12 +13,14 @@ import {
     IExportResponse,
     SDK,
 } from "@gooddata/gooddata-js";
+import { FormatTranslator } from "@gooddata/numberjs";
 import { AFM, Execution } from "@gooddata/typings";
 
 import { ErrorStates } from "../../../constants/errorStates";
 import { IEvents, IExportFunction, IExtendedExportConfig, ILoadingState } from "../../../interfaces/Events";
 import { IDrillableItem } from "../../../interfaces/DrillEvents";
 import { ISubject } from "../../../helpers/async";
+import { DEFAULT_FORMAT } from "../../../helpers/conversion";
 import { convertErrors, checkEmptyResult } from "../../../helpers/errorHandlers";
 import { IHeaderPredicate } from "../../../interfaces/HeaderPredicate";
 import { IDataSourceProviderInjectedProps } from "../../afm/DataSourceProvider";
@@ -196,10 +199,11 @@ export function visualizationLoadingHOC<
                         rawExecution.executionResult,
                         emptyHeaderString,
                     );
-                    const result = {
+                    const resultWithFormats = {
                         ...rawExecution,
                         executionResult: executionResultWithResolvedEmptyValues,
                     };
+                    const result = this.resetMeasuresToDefaultSeparators(resultWithFormats);
                     // This returns only current page,
                     // gooddata-js mergePages doesn't support discontinuous page ranges yet
                     this.setState({ result, error: null });
@@ -251,6 +255,58 @@ export function visualizationLoadingHOC<
             this.onError = noop;
         }
 
+        /*
+        Format of measures were modified if separators are exists (required by exporter).
+        Resetting format to default to make sure number fotmatter works correctly.
+        */
+        private resetMeasuresToDefaultSeparators(
+            resultWithFormats: Execution.IExecutionResponses,
+        ): Execution.IExecutionResponses {
+            const { config } = this.props;
+            if (!config || !config.separators) {
+                return resultWithFormats;
+            }
+
+            const result = cloneDeep(resultWithFormats);
+
+            const { separators } = config;
+            const {
+                executionResponse: { dimensions },
+            } = result;
+            dimensions.forEach((dimension: Execution.IResultDimension) => {
+                dimension.headers.forEach((header: Execution.IHeader) => {
+                    if (this.isMeasureGroupHeader(header)) {
+                        header.measureGroupHeader.items.forEach((item: Execution.IMeasureHeaderItem) => {
+                            const {
+                                measureHeaderItem: { format },
+                            } = item;
+                            const decimalIndex = format.indexOf(separators.decimal);
+                            const thousandIndex = format.indexOf(separators.thousand);
+
+                            if (
+                                format !== DEFAULT_FORMAT &&
+                                thousandIndex !== -1 &&
+                                (decimalIndex === -1 || thousandIndex < decimalIndex)
+                            ) {
+                                item.measureHeaderItem.format = FormatTranslator.translate2default(
+                                    format,
+                                    separators,
+                                );
+                            }
+                        });
+                    }
+                });
+            });
+
+            return result;
+        }
+
+        private isMeasureGroupHeader(
+            header: Execution.IMeasureGroupHeader | Execution.IAttributeHeader,
+        ): header is Execution.IMeasureGroupHeader {
+            return (header as Execution.IMeasureGroupHeader).measureGroupHeader !== undefined;
+        }
+
         private createPagePromise(
             resultSpec: AFM.IResultSpec,
             limit: number[],
@@ -283,7 +339,8 @@ export function visualizationLoadingHOC<
 
         private initSubject() {
             this.subject = DataLayer.createSubject<Execution.IExecutionResponses>(
-                result => {
+                resultWithFormats => {
+                    const result = this.resetMeasuresToDefaultSeparators(resultWithFormats);
                     this.setState({ result });
                     this.props.pushData({ result });
                     this.onLoadingChanged({ isLoading: false });

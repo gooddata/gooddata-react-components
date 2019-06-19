@@ -6,7 +6,7 @@ import { VisualizationObject, VisualizationInput } from "@gooddata/typings";
 import { Subtract } from "../typings/subtract";
 import { PieChart as AfmPieChart } from "./afm/PieChart";
 import { ICommonChartProps } from "./core/base/BaseChart";
-import { convertBucketsToAFM } from "../helpers/conversion";
+import { convertBucketsToAFM, mergeSeparatorsIntoMeasures } from "../helpers/conversion";
 import { getResultSpec } from "../helpers/resultSpec";
 import { generateDefaultDimensionsForRoundChart } from "../helpers/dimensions";
 import { MEASURES, VIEW } from "../constants/bucketNames";
@@ -32,10 +32,15 @@ const generatePieDimensionsFromBuckets = (buckets: VisualizationObject.IBucket[]
  * is a component with bucket props measures, viewBy, filters
  */
 export function PieChart(props: IPieChartProps): JSX.Element {
+    const measures = mergeSeparatorsIntoMeasures(
+        props.config && props.config.separators,
+        props.measures || [],
+    );
+
     const buckets: VisualizationObject.IBucket[] = [
         {
             localIdentifier: MEASURES,
-            items: props.measures || [],
+            items: measures,
         },
         {
             localIdentifier: VIEW,

@@ -18,7 +18,7 @@ import { VisualizationTypes } from "../../../constants/visualizationTypes";
 import { RuntimeError } from "../../../errors/RuntimeError";
 import { createIntlMock } from "../../visualizations/utils/intlUtils";
 import * as HttpStatusCodes from "http-status-codes";
-import { IColorPalette } from "../../../interfaces/Config";
+import { IColorPalette, IChartConfig } from "../../../interfaces/Config";
 import { clearSdkCache } from "../../../helpers/sdkCache";
 
 const projectId = "myproject";
@@ -743,6 +743,51 @@ describe("VisualizationWrapped", () => {
                     },
                 ],
             });
+        });
+    });
+
+    it("should contains measures with format", async () => {
+        const config: IChartConfig = { separators: { thousand: "'", decimal: "," } };
+
+        const props = {
+            config,
+            sdk,
+            projectId,
+            uri: TREEMAP_URI,
+            fetchVisObject,
+            fetchVisualizationClass,
+            uriResolver,
+            intl,
+            BaseChartComponent: BaseChart,
+        };
+
+        const wrapper = mount(<VisualizationWrapped {...props as any} />);
+
+        await testUtils.delay(SLOW + 1);
+        wrapper.update();
+
+        const BaseChartElement = wrapper.find(BaseChart).get(0);
+        expect(BaseChartElement.props.dataSource.getAfm()).toEqual({
+            attributes: [
+                {
+                    displayForm: { uri: "/gdc/md/jm8bsdakbhujk1a254h25a6mtd6orn9g/obj/324" },
+                    localIdentifier: "02b7736f6bef48b1849798e430d837df",
+                },
+                {
+                    displayForm: { uri: "/gdc/md/jm8bsdakbhujk1a254h25a6mtd6orn9g/obj/952" },
+                    localIdentifier: "bc5257e06a9342ec99854bd1a53f3262",
+                },
+            ],
+            measures: [
+                {
+                    alias: "Avg. Amount",
+                    definition: {
+                        measure: { item: { uri: "/gdc/md/jm8bsdakbhujk1a254h25a6mtd6orn9g/obj/62827" } },
+                    },
+                    localIdentifier: "b5a12d1bf094469d9b4e7d5d2bb87287",
+                    format: "#'##0,00",
+                },
+            ],
         });
     });
 

@@ -225,6 +225,22 @@ const oneMeasureAfm: AFM.IAfm = {
     ],
 };
 
+const oneMeasureAfmWithFormat: AFM.IAfm = {
+    measures: [
+        {
+            localIdentifier: "1st_measure_local_identifier",
+            definition: {
+                measure: {
+                    item: {
+                        uri: "/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1283",
+                    },
+                },
+            },
+            format: "#'##0,00",
+        },
+    ],
+};
+
 const twoMeasuresAfm: AFM.IAfm = {
     measures: [
         ...oneMeasureAfm.measures,
@@ -656,6 +672,49 @@ const oneMeasureResponse: Execution.IExecutionResponses = {
     },
 };
 
+const oneMeasureWithFormatResponse: Execution.IExecutionResponses = {
+    executionResponse: {
+        dimensions: [
+            {
+                headers: [],
+            },
+            {
+                headers: [
+                    {
+                        measureGroupHeader: {
+                            items: [
+                                {
+                                    measureHeaderItem: {
+                                        name: "Lost",
+                                        format: "#'##0,00",
+                                        localIdentifier: "1st_measure_local_identifier",
+                                        uri: "/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1283",
+                                        identifier: "af2Ewj9Re2vK",
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                ],
+            },
+        ],
+        links: {
+            // tslint:disable-next-line:max-line-length
+            executionResult:
+                "/gdc/app/projects/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/executionResults/2651138797087227392",
+        },
+    },
+    executionResult: {
+        data: [["42470571.16"]],
+        paging: {
+            count: [1, 1],
+            offset: [0, 0],
+            total: [1, 1],
+        },
+        headerItems: [[], []],
+    },
+};
+
 const oneMeasureOneDimensionResponse: Execution.IExecutionResponses = {
     executionResponse: {
         dimensions: [
@@ -747,7 +806,9 @@ export {
     attributeOnlyResponse,
     tooLargeResponse,
     oneMeasureResponse,
+    oneMeasureWithFormatResponse,
     oneMeasureAfm,
+    oneMeasureAfmWithFormat,
     twoMeasuresAfm,
     executionObjectWithTotals,
     responseWithTotals,

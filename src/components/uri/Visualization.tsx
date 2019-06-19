@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import {
     SDK,
@@ -25,6 +25,7 @@ import { VisualizationPropType, Requireable } from "../../proptypes/Visualizatio
 import { VisualizationTypes, VisType } from "../../constants/visualizationTypes";
 import { IDataSource } from "../../interfaces/DataSource";
 import { ISubject } from "../../helpers/async";
+import { mergeSeparatorsIntoBuckets } from "../../helpers/conversion";
 import { getVisualizationTypeFromVisualizationClass } from "../../helpers/visualizationType";
 import MdObjectHelper, { mdObjectToPivotBucketProps } from "../../helpers/MdObjectHelper";
 import { fillMissingTitles } from "../../helpers/measureTitleHelper";
@@ -381,12 +382,26 @@ export class VisualizationWrapped extends React.Component<
         identifier: string,
         filters: AFM.FilterItem[] = [],
     ): Promise<IVisualizationExecInfo> {
-        const { uriResolver, fetchVisObject, fetchVisualizationClass, locale, getFeatureFlags } = this.props;
+        const {
+            config,
+            uriResolver,
+            fetchVisObject,
+            fetchVisualizationClass,
+            locale,
+            getFeatureFlags,
+        } = this.props;
 
         const visualizationUri = await uriResolver(this.sdk, projectId, this.visualizationUri, identifier);
         this.visualizationUri = visualizationUri;
 
-        const mdObject = await fetchVisObject(this.sdk, visualizationUri);
+        const visObject = await fetchVisObject(this.sdk, visualizationUri);
+        const mdObject: VisualizationObject.IVisualizationObject = {
+            ...visObject,
+            content: {
+                ...visObject.content,
+                buckets: mergeSeparatorsIntoBuckets(config && config.separators, visObject.content.buckets),
+            },
+        };
 
         const visualizationClassUri: string = MdObjectHelper.getVisualizationClassUri(mdObject);
 

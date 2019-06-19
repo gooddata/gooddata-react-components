@@ -1,12 +1,17 @@
 // (C) 2007-2018 GoodData Corporation
 import * as React from "react";
 import omit = require("lodash/omit");
+import partial = require("lodash/partial");
 
 import { VisualizationInput, VisualizationObject } from "@gooddata/typings";
 
 import { Subtract } from "../typings/subtract";
 import { ICommonChartProps } from "./core/base/BaseChart";
-import { convertBucketsToAFM, convertBucketsToMdObject } from "../helpers/conversion";
+import {
+    convertBucketsToAFM,
+    convertBucketsToMdObject,
+    mergeSeparatorsIntoMeasures,
+} from "../helpers/conversion";
 import { getResultSpec } from "../helpers/resultSpec";
 import { generateDefaultDimensionsForPointsCharts } from "../helpers/dimensions";
 import { BubbleChart as AfmBubbleChart } from "../components/afm/BubbleChart";
@@ -38,18 +43,23 @@ type IBubbleChartNonBucketProps = Subtract<IBubbleChartProps, IBubbleChartBucket
  * [BubbleChart](http://sdk.gooddata.com/gdc-ui-sdk-doc/)
  */
 export function BubbleChart(props: IBubbleChartProps): JSX.Element {
+    const mergeSeparatorsIntoMeasuresPartial = partial(
+        mergeSeparatorsIntoMeasures,
+        props.config && props.config.separators,
+    );
+
     const buckets: VisualizationObject.IBucket[] = [
         {
             localIdentifier: MEASURES,
-            items: props.xAxisMeasure ? [props.xAxisMeasure] : [],
+            items: mergeSeparatorsIntoMeasuresPartial(props.xAxisMeasure ? [props.xAxisMeasure] : []),
         },
         {
             localIdentifier: SECONDARY_MEASURES,
-            items: props.yAxisMeasure ? [props.yAxisMeasure] : [],
+            items: mergeSeparatorsIntoMeasuresPartial(props.yAxisMeasure ? [props.yAxisMeasure] : []),
         },
         {
             localIdentifier: TERTIARY_MEASURES,
-            items: props.size ? [props.size] : [],
+            items: mergeSeparatorsIntoMeasuresPartial(props.size ? [props.size] : []),
         },
         {
             localIdentifier: VIEW,

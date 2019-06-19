@@ -8,7 +8,7 @@ import { Subtract } from "../typings/subtract";
 import { PivotTable as CorePivotTable } from "./core/PivotTable";
 import { dataSourceProvider } from "./afm/DataSourceProvider";
 import { ICommonChartProps } from "./core/base/BaseChart";
-import { convertBucketsToAFM } from "../helpers/conversion";
+import { convertBucketsToAFM, mergeSeparatorsIntoMeasures } from "../helpers/conversion";
 import { getPivotTableDimensions } from "../helpers/dimensions";
 import { getResultSpec } from "../helpers/resultSpec";
 import { IPivotTableConfig } from "../interfaces/PivotTable";
@@ -33,13 +33,18 @@ export interface IPivotTableProps extends ICommonChartProps, IPivotTableBucketPr
     exportTitle?: string;
 }
 
-export const getBuckets = (props: IPivotTableBucketProps): VisualizationObject.IBucket[] => {
-    const { measures, rows, columns, totals } = props;
+export const getBuckets = (
+    props: IPivotTableBucketProps,
+    config: IPivotTableConfig,
+): VisualizationObject.IBucket[] => {
+    const { measures: measuresFromProps, rows, columns, totals } = props;
+
+    const measures = mergeSeparatorsIntoMeasures(config && config.separators, measuresFromProps || []);
 
     return [
         {
             localIdentifier: MEASURES,
-            items: measures || [],
+            items: measures,
         },
         {
             // ATTRIBUTE for backwards compatibility with Table component. Actually ROWS
@@ -68,9 +73,9 @@ export class PivotTable extends React.Component<IPivotTableProps> {
     };
 
     public render() {
-        const { sortBy, filters, exportTitle } = this.props;
+        const { config, sortBy, filters, exportTitle } = this.props;
 
-        const buckets: VisualizationObject.IBucket[] = getBuckets(this.props);
+        const buckets: VisualizationObject.IBucket[] = getBuckets(this.props, config);
 
         const afm = convertBucketsToAFM(buckets, filters);
 

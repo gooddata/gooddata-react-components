@@ -1,11 +1,12 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
-import { shallow } from "enzyme";
+import { shallow, ShallowWrapper } from "enzyme";
 import { factory } from "@gooddata/gooddata-js";
 import { VisualizationObject, AFM } from "@gooddata/typings";
-import { FunnelChart } from "../FunnelChart";
+import { FunnelChart, IFunnelChartProps } from "../FunnelChart";
 import { FunnelChart as AfmFunnelChart } from "../afm/FunnelChart";
 import { M1 } from "./fixtures/buckets";
+import { IChartConfig } from "../../interfaces/Config";
 
 describe("FunnelChart", () => {
     const measure: VisualizationObject.IMeasure = {
@@ -43,22 +44,23 @@ describe("FunnelChart", () => {
         },
     };
 
+    function renderChart(props: Partial<IFunnelChartProps>): ShallowWrapper {
+        return shallow(<FunnelChart measures={[M1]} projectId="foo" {...props} />);
+    }
+
     it("should render with custom SDK", () => {
-        const wrapper = shallow(
-            <FunnelChart projectId="foo" measures={[M1]} sdk={factory({ domain: "example.com" })} />,
-        );
+        const wrapper = renderChart({
+            sdk: factory({ domain: "example.com" }),
+        });
         expect(wrapper.find(AfmFunnelChart)).toHaveLength(1);
     });
 
     it("should render funnel chart and convert the buckets to AFM", () => {
-        const wrapper = shallow(
-            <FunnelChart
-                projectId="foo"
-                measures={[measure]}
-                viewBy={attribute}
-                sortBy={[measureSortItem]}
-            />,
-        );
+        const wrapper = renderChart({
+            measures: [measure],
+            viewBy: attribute,
+            sortBy: [measureSortItem],
+        });
 
         const expectedAfm: AFM.IAfm = {
             measures: [
@@ -111,5 +113,28 @@ describe("FunnelChart", () => {
         expect(wrapper.find(AfmFunnelChart)).toHaveLength(1);
         expect(wrapper.find(AfmFunnelChart).prop("afm")).toEqual(expectedAfm);
         expect(wrapper.find(AfmFunnelChart).prop("resultSpec")).toEqual(expectedResultSpec);
+    });
+
+    describe("Separators", () => {
+        const config: IChartConfig = { separators: { thousand: "'", decimal: "," } };
+
+        it("should update format of measures", () => {
+            const wrapper = renderChart({ config });
+            expect(wrapper.find(AfmFunnelChart).prop("afm")).toEqual({
+                measures: [
+                    {
+                        definition: {
+                            measure: {
+                                item: {
+                                    identifier: "m1",
+                                },
+                            },
+                        },
+                        format: "#'##0,00",
+                        localIdentifier: "m1",
+                    },
+                ],
+            });
+        });
     });
 });

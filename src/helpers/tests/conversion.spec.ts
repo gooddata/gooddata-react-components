@@ -1,6 +1,7 @@
 // (C) 2019 GoodData Corporation
-import { VisualizationInput } from "@gooddata/typings";
-import { convertBucketsToAFM } from "../conversion";
+import { VisualizationInput, VisualizationObject } from "@gooddata/typings";
+import { convertBucketsToAFM, mergeSeparatorsIntoBuckets, mergeSeparatorsIntoMeasures } from "../conversion";
+import { MEASURES } from "../../constants/bucketNames";
 
 const PositiveTextFilter: VisualizationInput.IFilter = {
     positiveAttributeFilter: {
@@ -94,5 +95,103 @@ describe("convertBucketsToAFM", () => {
                 },
             ],
         });
+    });
+});
+
+describe("mergeSeparatorsIntoMeasures", () => {
+    const measures: VisualizationObject.IMeasure[] = [
+        {
+            measure: {
+                definition: {
+                    measureDefinition: {
+                        item: {
+                            identifier: "identifier",
+                        },
+                    },
+                },
+                localIdentifier: "franchiseFeesAdRoyaltyIdentifier",
+                format: "#,##0.00",
+            },
+        },
+    ];
+
+    it("should return null if there is no measures", () => {
+        expect(mergeSeparatorsIntoMeasures(null, null)).toEqual(null);
+    });
+
+    it("should return the same measures if there is no separators", () => {
+        expect(mergeSeparatorsIntoMeasures(null, measures)).toEqual(measures);
+    });
+
+    it("should return the measures with updated format", () => {
+        expect(mergeSeparatorsIntoMeasures({ decimal: ",", thousand: "'" }, measures)).toEqual([
+            {
+                measure: {
+                    definition: {
+                        measureDefinition: {
+                            item: {
+                                identifier: "identifier",
+                            },
+                        },
+                    },
+                    localIdentifier: "franchiseFeesAdRoyaltyIdentifier",
+                    format: "#'##0,00",
+                },
+            },
+        ]);
+    });
+});
+
+describe("mergeSeparatorsIntoBuckets", () => {
+    const buckets: VisualizationObject.IBucket[] = [
+        {
+            localIdentifier: MEASURES,
+            items: [
+                {
+                    measure: {
+                        definition: {
+                            measureDefinition: {
+                                item: {
+                                    identifier: "identifier",
+                                },
+                            },
+                        },
+                        localIdentifier: "franchiseFeesAdRoyaltyIdentifier",
+                        format: "#,##0.00",
+                    },
+                },
+            ],
+        },
+    ];
+
+    it("should return null if there is no buckets", () => {
+        expect(mergeSeparatorsIntoBuckets(null, null)).toEqual(null);
+    });
+
+    it("should return the same buckets if there is no separators", () => {
+        expect(mergeSeparatorsIntoBuckets(null, buckets)).toEqual(buckets);
+    });
+
+    it("should return the buckets with updated format", () => {
+        expect(mergeSeparatorsIntoBuckets({ decimal: ",", thousand: "'" }, buckets)).toEqual([
+            {
+                localIdentifier: MEASURES,
+                items: [
+                    {
+                        measure: {
+                            definition: {
+                                measureDefinition: {
+                                    item: {
+                                        identifier: "identifier",
+                                    },
+                                },
+                            },
+                            localIdentifier: "franchiseFeesAdRoyaltyIdentifier",
+                            format: "#'##0,00",
+                        },
+                    },
+                ],
+            },
+        ]);
     });
 });

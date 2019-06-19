@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import { shallow, ShallowWrapper } from "enzyme";
 import { factory } from "@gooddata/gooddata-js";
@@ -143,7 +143,7 @@ describe("ColumnChart", () => {
     });
 
     describe("Stacking", () => {
-        const config = { stackMeasures: true, stackMeasuresToPercent: true };
+        const config: IChartConfig = { stackMeasures: true, stackMeasuresToPercent: true };
 
         it("should NOT reset stackMeasuresToPercent in case of one measure", () => {
             const wrapper = renderChart([M1], config);
@@ -158,6 +158,29 @@ describe("ColumnChart", () => {
             expect(wrapper.find(AfmColumnChart).prop("config")).toEqual({
                 stackMeasures: false,
                 stackMeasuresToPercent: false,
+            });
+        });
+    });
+
+    describe("Separators", () => {
+        const config: IChartConfig = { separators: { thousand: "'", decimal: "," } };
+
+        it("should update format of measures", () => {
+            const wrapper = renderChart([M1], config);
+            expect(wrapper.find(AfmColumnChart).prop("afm")).toEqual({
+                measures: [
+                    {
+                        definition: {
+                            measure: {
+                                item: {
+                                    identifier: "m1",
+                                },
+                            },
+                        },
+                        format: "#'##0,00",
+                        localIdentifier: "m1",
+                    },
+                ],
             });
         });
     });

@@ -4,7 +4,9 @@ import * as React from "react";
 import { IDataSource } from "../../interfaces/DataSource";
 import {
     oneMeasureResponse,
+    oneMeasureWithFormatResponse,
     oneMeasureAfm,
+    oneMeasureAfmWithFormat,
     tooLargeResponse,
     responseWithTotals,
     executionObjectWithTotals,
@@ -55,6 +57,13 @@ export const oneMeasureDataSource: IDataSource = {
     getPage: () => Promise.resolve(oneMeasureResponse),
     getAfm: () => oneMeasureAfm,
     getFingerprint: () => JSON.stringify(oneMeasureResponse),
+};
+
+export const oneMeasureDataSourceWithFormat: IDataSource = {
+    getData: () => Promise.resolve(oneMeasureWithFormatResponse),
+    getPage: () => Promise.resolve(oneMeasureWithFormatResponse),
+    getAfm: () => oneMeasureAfmWithFormat,
+    getFingerprint: () => JSON.stringify(oneMeasureWithFormatResponse),
 };
 
 export const oneMeasurePagableOnlyDataSource: IDataSource = {

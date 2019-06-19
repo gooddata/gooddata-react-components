@@ -1,12 +1,12 @@
 // (C) 2007-2018 GoodData Corporation
 import * as React from "react";
 import omit = require("lodash/omit");
-import { VisualizationInput } from "@gooddata/typings";
+import { VisualizationInput, VisualizationObject } from "@gooddata/typings";
 
 import { Subtract } from "../typings/subtract";
 import { Headline as AfmHeadline } from "./afm/Headline";
 import { ICommonChartProps } from "./core/base/BaseChart";
-import { convertBucketsToAFM } from "../helpers/conversion";
+import { convertBucketsToAFM, mergeSeparatorsIntoMeasures } from "../helpers/conversion";
 import { MEASURES } from "../constants/bucketNames";
 
 export interface IHeadlineBucketProps {
@@ -26,12 +26,15 @@ type IHeadlineNonBucketProps = Subtract<IHeadlineProps, IHeadlineBucketProps>;
  * is a component with bucket props primaryMeasure, secondaryMeasure, filters
  */
 export function Headline(props: IHeadlineProps): JSX.Element {
-    const buckets = [
+    const measuresFromProps = props.secondaryMeasure
+        ? [props.primaryMeasure, props.secondaryMeasure]
+        : [props.primaryMeasure];
+    const measures = mergeSeparatorsIntoMeasures(props.config && props.config.separators, measuresFromProps);
+
+    const buckets: VisualizationObject.IBucket[] = [
         {
             localIdentifier: MEASURES,
-            items: props.secondaryMeasure
-                ? [props.primaryMeasure, props.secondaryMeasure]
-                : [props.primaryMeasure],
+            items: measures,
         },
     ];
 

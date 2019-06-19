@@ -6,7 +6,7 @@ import { VisualizationInput, VisualizationObject } from "@gooddata/typings";
 import { Subtract } from "../typings/subtract";
 import { ColumnChart as AfmColumnChart } from "./afm/ColumnChart";
 import { ICommonChartProps } from "./core/base/BaseChart";
-import { convertBucketsToAFM } from "../helpers/conversion";
+import { convertBucketsToAFM, mergeSeparatorsIntoMeasures } from "../helpers/conversion";
 import { getStackingResultSpec } from "../helpers/resultSpec";
 import { MEASURES, ATTRIBUTE, STACK } from "../constants/bucketNames";
 import {
@@ -34,7 +34,8 @@ type IColumnChartNonBucketProps = Subtract<IColumnChartProps, IColumnChartBucket
  * is a component with bucket props measures, viewBy, stackBy, filters
  */
 export function ColumnChart(props: IColumnChartProps): JSX.Element {
-    const measures = sanitizeComputeRatioOnMeasures(props.measures);
+    const sanitizedMeasures = sanitizeComputeRatioOnMeasures(props.measures);
+    const measures = mergeSeparatorsIntoMeasures(props.config && props.config.separators, sanitizedMeasures);
     const viewBy = getViewByTwoAttributes(props.viewBy); // could be one or two attributes
     const stackBy = props.stackBy ? [props.stackBy] : [];
 

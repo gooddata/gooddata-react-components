@@ -5,12 +5,17 @@ import set = require("lodash/set");
 import get = require("lodash/get");
 import cloneDeep = require("lodash/cloneDeep");
 import isArray = require("lodash/isArray");
+import partial = require("lodash/partial");
 import { VisualizationObject, VisualizationInput } from "@gooddata/typings";
 
 import { Subtract } from "../typings/subtract";
 import { ComboChart as AfmComboChart } from "./afm/ComboChart";
 import { ICommonChartProps } from "./core/base/BaseChart";
-import { convertBucketsToAFM, convertBucketsToMdObject } from "../helpers/conversion";
+import {
+    convertBucketsToAFM,
+    convertBucketsToMdObject,
+    mergeSeparatorsIntoMeasures,
+} from "../helpers/conversion";
 import { getResultSpec } from "../helpers/resultSpec";
 import { MEASURES, SECONDARY_MEASURES, VIEW } from "../constants/bucketNames";
 import { setMeasuresToSecondaryAxis } from "../helpers/dualAxis";
@@ -102,14 +107,19 @@ function getBuckets(props: IComboChartProps): VisualizationObject.IBucket[] {
     const { primaryMeasures, secondaryMeasures, viewBy } = props;
     const categories = isArray(viewBy) ? [viewBy[0]] : [viewBy];
 
+    const mergeSeparatorsIntoMeasuresPartial = partial(
+        mergeSeparatorsIntoMeasures,
+        props.config && props.config.separators,
+    );
+
     return [
         {
             localIdentifier: MEASURES,
-            items: primaryMeasures,
+            items: mergeSeparatorsIntoMeasuresPartial(primaryMeasures),
         },
         {
             localIdentifier: SECONDARY_MEASURES,
-            items: secondaryMeasures,
+            items: mergeSeparatorsIntoMeasuresPartial(secondaryMeasures),
         },
         {
             localIdentifier: VIEW,

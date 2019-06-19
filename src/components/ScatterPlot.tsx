@@ -1,12 +1,17 @@
 // (C) 2007-2018 GoodData Corporation
 import * as React from "react";
 import omit = require("lodash/omit");
+import partial = require("lodash/partial");
 import { VisualizationObject, VisualizationInput } from "@gooddata/typings";
 
 import { Subtract } from "../typings/subtract";
 import { ScatterPlot as AfmScatterPlot } from "./afm/ScatterPlot";
 import { ICommonChartProps } from "./core/base/BaseChart";
-import { convertBucketsToAFM, convertBucketsToMdObject } from "../helpers/conversion";
+import {
+    convertBucketsToAFM,
+    convertBucketsToMdObject,
+    mergeSeparatorsIntoMeasures,
+} from "../helpers/conversion";
 import { generateDefaultDimensionsForPointsCharts } from "../helpers/dimensions";
 import { getResultSpec } from "../helpers/resultSpec";
 import { MEASURES, SECONDARY_MEASURES, ATTRIBUTE } from "../constants/bucketNames";
@@ -33,14 +38,19 @@ const generateScatterDimensionsFromBuckets = (buckets: VisualizationObject.IBuck
  * is a component with bucket props xAxisMeasure, yAxisMeasure, attribute, filters
  */
 export function ScatterPlot(props: IScatterPlotProps): JSX.Element {
+    const mergeSeparatorsIntoMeasuresPartial = partial(
+        mergeSeparatorsIntoMeasures,
+        props.config && props.config.separators,
+    );
+
     const buckets: VisualizationObject.IBucket[] = [
         {
             localIdentifier: MEASURES,
-            items: props.xAxisMeasure ? [props.xAxisMeasure] : [],
+            items: mergeSeparatorsIntoMeasuresPartial(props.xAxisMeasure ? [props.xAxisMeasure] : []),
         },
         {
             localIdentifier: SECONDARY_MEASURES,
-            items: props.yAxisMeasure ? [props.yAxisMeasure] : [],
+            items: mergeSeparatorsIntoMeasuresPartial(props.yAxisMeasure ? [props.yAxisMeasure] : []),
         },
         {
             localIdentifier: ATTRIBUTE,

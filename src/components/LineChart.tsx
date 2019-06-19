@@ -6,7 +6,7 @@ import { VisualizationObject, VisualizationInput } from "@gooddata/typings";
 import { Subtract } from "../typings/subtract";
 import { LineChart as AfmLineChart } from "./afm/LineChart";
 import { ICommonChartProps } from "./core/base/BaseChart";
-import { convertBucketsToAFM } from "../helpers/conversion";
+import { convertBucketsToAFM, mergeSeparatorsIntoMeasures } from "../helpers/conversion";
 import { getStackingResultSpec } from "../helpers/resultSpec";
 import { MEASURES, ATTRIBUTE, STACK } from "../constants/bucketNames";
 
@@ -29,10 +29,15 @@ type ILineChartNonBucketProps = Subtract<ILineChartProps, ILineChartBucketProps>
  * is a component with bucket props measures, trendBy, segmentBy, filters
  */
 export function LineChart(props: ILineChartProps): JSX.Element {
+    const measures = mergeSeparatorsIntoMeasures(
+        props.config && props.config.separators,
+        props.measures || [],
+    );
+
     const buckets: VisualizationObject.IBucket[] = [
         {
             localIdentifier: MEASURES,
-            items: props.measures || [],
+            items: measures,
         },
         {
             localIdentifier: ATTRIBUTE,
