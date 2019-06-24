@@ -121,6 +121,17 @@ const configuration = {
             'Combo chart with onFiredDrillEvent': {
                 readySelector: '.screenshot-ready-wrapper-done'
             }
+        },
+        'Internal/ComputeRatio': {
+            'ignore percent format with multiple measures': {
+                readySelector: '.screenshot-ready-wrapper-done'
+            },
+            'ignore stackMeasuresToPercent with one measure and computeRatio configured': {
+                readySelector: '.screenshot-ready-wrapper-done'
+            },
+            'apply stackMeasuresToPercent and ignore computeRatio with multiple measures': {
+                readySelector: '.screenshot-ready-wrapper-done'
+            }
         }
     }
 };
