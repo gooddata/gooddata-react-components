@@ -16,7 +16,6 @@ import {
     IDrillEventContextTable,
     IDrillPoint,
     IHighchartsPointObject,
-    IDrillConfig,
     ICellDrillEvent,
     isGroupHighchartsDrillEvent,
     IDrillEventContextPoint,
@@ -25,6 +24,7 @@ import {
 import { OnFiredDrillEvent } from "../../../interfaces/Events";
 import { isComboChart, isHeatmap, isTreemap } from "./common";
 import { getVisualizationType } from "../../../helpers/visualizationType";
+import { IDrillConfig } from "../../../interfaces/Config";
 
 export function getClickableElementNameByChartType(type: VisType): ChartElementType {
     switch (type) {

@@ -5,11 +5,11 @@ import { styleVariables } from "../../styles/variables";
 import { tickLabelClick } from "../../utils/drilldownEventing";
 import { ChartType } from "../../../../constants/visualizationTypes";
 import {
-    IDrillConfig,
     IHighchartsCategoriesTree,
     IHighchartsParentTick,
     IHighchartsPointObject,
 } from "../../../../interfaces/DrillEvents";
+import { IDrillConfig } from "../../../../interfaces/Config";
 
 function getDDPointsInParentTick(axis: any, tick: IHighchartsParentTick): IHighchartsPointObject[] {
     const { startAt, leaves } = tick;

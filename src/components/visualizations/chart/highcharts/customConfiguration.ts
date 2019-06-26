@@ -24,6 +24,7 @@ import {
     IAxis,
     IChartOptions,
     ISeriesItem,
+    IDrillConfig,
 } from "../../../../interfaces/Config";
 import { percentFormatter } from "../../../../helpers/utils";
 import {
@@ -55,7 +56,6 @@ import {
 } from "../highcharts/helpers";
 
 import getOptionalStackingConfiguration from "./getOptionalStackingConfiguration";
-import { IDrillConfig } from "../../../../interfaces/DrillEvents";
 import { getZeroAlignConfiguration } from "./getZeroAlignConfiguration";
 import { canComboChartBeStackedInPercent } from "../chartOptions/comboChartOptions";
 

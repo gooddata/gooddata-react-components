@@ -1,12 +1,12 @@
 // (C) 2007-2019 GoodData Corporation
 import { ISeparators } from "@gooddata/numberjs";
-import { VisualizationObject } from "@gooddata/typings";
-import { IColorItem, IColor } from "@gooddata/gooddata-js";
+import { AFM, VisualizationObject } from "@gooddata/typings";
+import { IColor, IColorItem } from "@gooddata/gooddata-js";
 import { PositionType } from "../components/visualizations/typings/legend";
 import { VisType } from "../constants/visualizationTypes";
-import { IDataLabelsConfig } from "../interfaces/Config";
 import { IHeaderPredicate } from "./HeaderPredicate";
 import { IMappingHeader } from "./MappingHeader";
+import { OnFiredDrillEvent } from "./Events";
 
 export { DEFAULT_COLOR_PALETTE } from "../components/visualizations/utils/color";
 
@@ -229,4 +229,9 @@ export interface ISeriesItemConfig {
     name?: string;
     yAxis?: number;
     xAxis?: number;
+}
+
+export interface IDrillConfig {
+    afm: AFM.IAfm;
+    onFiredDrillEvent: OnFiredDrillEvent;
 }

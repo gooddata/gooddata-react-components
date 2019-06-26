@@ -70,8 +70,8 @@ import {
 import { TotalCell } from "./totals/TotalCell";
 import InjectedIntlProps = ReactIntl.InjectedIntlProps;
 import { IIndexedTotalItem, ITotalWithData } from "../../../interfaces/Totals";
-import { IDrillConfig } from "../../../interfaces/DrillEvents";
 import { DEFAULT_HEADER_HEIGHT, DEFAULT_ROW_HEIGHT } from "./constants/layout";
+import { IDrillConfig } from "../../../interfaces/Config";
 
 const FULLSCREEN_TOOLTIP_VIEWPORT_THRESHOLD: number = 480;
 const MIN_COLUMN_WIDTH: number = 100;

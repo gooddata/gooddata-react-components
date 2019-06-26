@@ -11,7 +11,6 @@ import {
     VisType,
 } from "../constants/visualizationTypes";
 import { TableRowForDrilling } from "./Table";
-import { OnFiredDrillEvent } from "./Events";
 
 export interface IDrillableItemUri {
     uri: string;
@@ -140,9 +139,4 @@ export interface ICellDrillEvent {
     rowIndex: number;
     row: TableRowForDrilling;
     intersection: IDrillEventIntersectionElement[];
-}
-
-export interface IDrillConfig {
-    afm: AFM.IAfm;
-    onFiredDrillEvent: OnFiredDrillEvent;
 }

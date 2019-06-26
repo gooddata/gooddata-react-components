@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import { AFM } from "@gooddata/typings";
 import getOptionalStackingConfiguration, {
     convertMinMaxFromPercentToNumber,
@@ -11,8 +11,7 @@ import getOptionalStackingConfiguration, {
     PERCENT_STACK,
     NORMAL_STACK,
 } from "../getOptionalStackingConfiguration";
-import { IDrillConfig } from "../../../../../interfaces/DrillEvents";
-import { IChartConfig, ISeriesItem, IChartOptions } from "../../../../../interfaces/Config";
+import { IChartConfig, ISeriesItem, IChartOptions, IDrillConfig } from "../../../../../interfaces/Config";
 import { VisualizationTypes } from "../../../../../constants/visualizationTypes";
 import { BLACK_LABEL, WHITE_LABEL } from "../../../../../constants/label";
 

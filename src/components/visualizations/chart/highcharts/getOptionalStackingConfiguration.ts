@@ -14,6 +14,7 @@ import {
     IHighChartAxis,
     IYAxisConfig,
     IChartOptions,
+    IDrillConfig,
 } from "../../../../interfaces/Config";
 import { supportedStackingAttributesChartTypes } from "../chartOptionsBuilder";
 import { formatAsPercent, getLabelStyle, getLabelsVisibilityConfig } from "./dataLabelsHelpers";
@@ -25,7 +26,6 @@ import {
     isLineChart,
     isPrimaryYAxis,
 } from "../../utils/common";
-import { IDrillConfig } from "../../../../interfaces/DrillEvents";
 import { canComboChartBeStackedInPercent } from "../chartOptions/comboChartOptions";
 
 export const NORMAL_STACK = "normal";
