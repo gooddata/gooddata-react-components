@@ -24,7 +24,6 @@ import {
     getHeatmapDataClasses,
     getTreemapAttributes,
     isDerivedMeasure,
-    IValidationResult,
     getHeatmapSeries,
 } from "../chartOptionsBuilder";
 import { DEFAULT_CATEGORIES_LIMIT } from "../highcharts/commonConfiguration";
@@ -51,6 +50,7 @@ import {
 } from "../../../../interfaces/Config";
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 import { NORMAL_STACK, PERCENT_STACK } from "../highcharts/getOptionalStackingConfiguration";
+import { IValidationResult } from "../../../../interfaces/ChartOptions";
 
 const FIRST_DEFAULT_COLOR_ITEM_AS_STRING = getRgbString(DEFAULT_COLOR_PALETTE[0]);
 const SECOND_DEFAULT_COLOR_ITEM_AS_STRING = getRgbString(DEFAULT_COLOR_PALETTE[1]);

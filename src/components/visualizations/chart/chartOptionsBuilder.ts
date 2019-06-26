@@ -94,6 +94,11 @@ import { isDataOfReasonableSize } from "./highChartsCreators";
 import { NORMAL_STACK, PERCENT_STACK } from "./highcharts/getOptionalStackingConfiguration";
 
 import { getCategoriesForTwoAttributes } from "./chartOptions/extendedStackingChartOptions";
+import {
+    ITooltipFactory,
+    IUnwrappedAttributeHeadersWithItems,
+    IValidationResult,
+} from "../../../interfaces/ChartOptions";
 
 const isAreaChartStackingEnabled = (options: IChartConfig) => {
     const { type, stacking, stackMeasures } = options;
@@ -167,17 +172,6 @@ export const supportedStackingAttributesChartTypes = [
     VisualizationTypes.COMBO,
     VisualizationTypes.COMBO2,
 ];
-
-export type IUnwrappedAttributeHeadersWithItems = Execution.IAttributeHeader["attributeHeader"] & {
-    items: Execution.IResultAttributeHeaderItem[];
-};
-
-export interface IValidationResult {
-    dataTooLarge: boolean;
-    hasNegativeValue: boolean;
-}
-
-export type ITooltipFactory = (point: IPointData, percentageValue?: number) => string;
 
 export function isNegativeValueIncluded(series: ISeriesItem[]) {
     return series.some((seriesItem: ISeriesItem) =>

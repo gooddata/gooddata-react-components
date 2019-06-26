@@ -1,9 +1,9 @@
 // (C) 2007-2019 GoodData Corporation
 import { Execution, VisualizationObject } from "@gooddata/typings";
 import { getStackByAttribute } from "../stackByAttribute";
-import { IUnwrappedAttributeHeadersWithItems } from "../../components/visualizations/chart/chartOptionsBuilder";
 import { IChartConfig } from "../../interfaces/Config";
 import { VisualizationTypes } from "../../constants/visualizationTypes";
+import { IUnwrappedAttributeHeadersWithItems } from "../../interfaces/ChartOptions";
 
 const dimensions: Execution.IResultDimension[] = [
     {

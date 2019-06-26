@@ -8,8 +8,6 @@ import { IHeaderPredicate } from "./HeaderPredicate";
 import { IMappingHeader } from "./MappingHeader";
 import { OnFiredDrillEvent } from "./Events";
 
-export { DEFAULT_COLOR_PALETTE } from "../components/visualizations/utils/color";
-
 export type IDataLabelsVisible = string | boolean;
 
 export interface IDataLabelsConfig {
