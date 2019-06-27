@@ -1,7 +1,7 @@
 // (C) 2007-2018 GoodData Corporation
 import * as React from "react";
-import get = require("lodash/get");
-import noop = require("lodash/noop");
+import get from "lodash/get";
+import noop from "lodash/noop";
 import { AFM } from "@gooddata/typings";
 import { DataLayer } from "@gooddata/gooddata-js";
 import { PureTable, ITableProps } from "./PureTable";

@@ -1,6 +1,6 @@
 // (C) 2007-2019 GoodData Corporation
-import get = require("lodash/get");
-import set = require("lodash/set");
+import get from "lodash/get";
+import set from "lodash/set";
 interface ISdkCache {
     [apiCallId: string]: Promise<any>;
 }

@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
-import noop = require("lodash/noop");
-import get = require("lodash/get");
+import noop from "lodash/noop";
+import get from "lodash/get";
 import * as referencePointMocks from "../../../mocks/referencePointMocks";
 import { IBucket, IFilters, IVisProps, IVisConstruct } from "../../../interfaces/Visualization";
 import { MAX_VIEW_COUNT } from "../../../constants/uiConfig";

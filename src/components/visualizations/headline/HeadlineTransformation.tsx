@@ -2,7 +2,7 @@
 import { AFM, Execution } from "@gooddata/typings";
 import * as React from "react";
 import { InjectedIntlProps, injectIntl } from "react-intl";
-import noop = require("lodash/noop");
+import noop from "lodash/noop";
 import { convertDrillableItemsToPredicates } from "../../../helpers/headerPredicate";
 import { IChartConfig } from "../../../interfaces/Config";
 import { IDrillableItem, IDrillEventCallback } from "../../../interfaces/DrillEvents";

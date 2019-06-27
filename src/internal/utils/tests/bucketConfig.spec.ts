@@ -1,5 +1,5 @@
 // (C) 2019 GoodData Corporation
-import cloneDeep = require("lodash/cloneDeep");
+import cloneDeep from "lodash/cloneDeep";
 
 import { DATE, DATE_DATASET_ATTRIBUTE, GRANULARITY } from "../../constants/bucket";
 import { DEFAULT_BASE_CHART_UICONFIG, DEFAULT_TABLE_UICONFIG } from "../../constants/uiConfig";

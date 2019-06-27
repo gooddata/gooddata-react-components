@@ -1,6 +1,6 @@
 // (C) 2007-2019 GoodData Corporation
-import get = require("lodash/get");
-import partial = require("lodash/partial");
+import get from "lodash/get";
+import partial from "lodash/partial";
 import { styleVariables } from "../../styles/variables";
 import { tickLabelClick } from "../../utils/drilldownEventing";
 import { ChartType } from "../../../../constants/visualizationTypes";

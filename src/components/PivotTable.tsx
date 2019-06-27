@@ -1,8 +1,8 @@
 // (C) 2007-2018 GoodData Corporation
 import * as React from "react";
 import { VisualizationObject, VisualizationInput } from "@gooddata/typings";
-import omit = require("lodash/omit");
-import noop = require("lodash/noop");
+import omit from "lodash/omit";
+import noop from "lodash/noop";
 
 import { Subtract } from "../typings/subtract";
 import { PivotTable as CorePivotTable } from "./core/PivotTable";

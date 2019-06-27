@@ -1,9 +1,9 @@
 // (C) 2007-2018 GoodData Corporation
 import { AFM, Execution } from "@gooddata/typings";
 import { TypeGuards, IColor, IColorItem, IGuidColorItem, RGBType } from "@gooddata/gooddata-js";
-import range = require("lodash/range");
-import uniqBy = require("lodash/uniqBy");
-import isEqual = require("lodash/isEqual");
+import range from "lodash/range";
+import uniqBy from "lodash/uniqBy";
+import isEqual from "lodash/isEqual";
 
 import {
     DEFAULT_COLOR_PALETTE,

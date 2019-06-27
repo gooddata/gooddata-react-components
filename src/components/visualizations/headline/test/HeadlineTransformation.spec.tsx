@@ -1,6 +1,6 @@
 // (C) 2007-2018 GoodData Corporation
 import * as React from "react";
-import noop = require("lodash/noop");
+import noop from "lodash/noop";
 import { mount } from "enzyme";
 import HeadlineTransformation, { IHeadlineTransformationProps } from "../HeadlineTransformation";
 import {

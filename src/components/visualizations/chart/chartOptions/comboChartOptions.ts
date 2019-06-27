@@ -1,7 +1,7 @@
 // (C) 2007-2019 GoodData Corporation
-import set = require("lodash/set");
-import get = require("lodash/get");
-import cloneDeep = require("lodash/cloneDeep");
+import set from "lodash/set";
+import get from "lodash/get";
+import cloneDeep from "lodash/cloneDeep";
 import { Execution, VisualizationObject as VizObject } from "@gooddata/typings";
 import { MEASURES, SECONDARY_MEASURES } from "../../../../constants/bucketNames";
 import { IChartConfig, ISeriesItem } from "../../../../interfaces/Config";

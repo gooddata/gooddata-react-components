@@ -1,8 +1,8 @@
 // (C) 2007-2018 GoodData Corporation
 import { AFM, Execution } from "@gooddata/typings";
 import { IColor, IColorItem } from "@gooddata/gooddata-js";
-import isEmpty = require("lodash/isEmpty");
-import isEqual = require("lodash/isEqual");
+import isEmpty from "lodash/isEmpty";
+import isEqual from "lodash/isEqual";
 import { getMappingHeaderLocalIdentifier } from "../../../helpers/mappingHeader";
 import { IChartConfig, IColorPalette, IColorPaletteItem, IColorMapping } from "../../../interfaces/Config";
 import { IHeaderPredicate, IHeaderPredicateContext } from "../../../interfaces/HeaderPredicate";

@@ -1,11 +1,11 @@
 // (C) 2019 GoodData Corporation
-import get = require("lodash/get");
-import set = require("lodash/set");
-import includes = require("lodash/includes");
-import every = require("lodash/every");
-import isEmpty = require("lodash/isEmpty");
-import omitBy = require("lodash/omitBy");
-import isNil = require("lodash/isNil");
+import get from "lodash/get";
+import set from "lodash/set";
+import includes from "lodash/includes";
+import every from "lodash/every";
+import isEmpty from "lodash/isEmpty";
+import omitBy from "lodash/omitBy";
+import isNil from "lodash/isNil";
 import { AFM } from "@gooddata/typings";
 import { DataLayer } from "@gooddata/gooddata-js";
 import { SORT_DIR_ASC, SORT_DIR_DESC } from "../constants/sort";

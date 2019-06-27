@@ -3,8 +3,8 @@ import { AFM } from "@gooddata/typings";
 import * as React from "react";
 import * as ReactDom from "react-dom";
 import Measure from "react-measure";
-import noop = require("lodash/noop");
-import cloneDeep = require("lodash/cloneDeep");
+import noop from "lodash/noop";
+import cloneDeep from "lodash/cloneDeep";
 
 import { PluggableTable, removeSortsWithInvalidLocatorCount } from "../PluggableTable";
 import * as testMocks from "../../../../mocks/testMocks";

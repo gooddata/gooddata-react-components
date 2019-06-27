@@ -1,7 +1,7 @@
 // (C) 2007-2019 GoodData Corporation
-import isArray = require("lodash/isArray");
-import get = require("lodash/get");
-import set = require("lodash/set");
+import isArray from "lodash/isArray";
+import get from "lodash/get";
+import set from "lodash/set";
 import { AFM, VisualizationObject } from "@gooddata/typings";
 import { VIEW_BY_ATTRIBUTES_LIMIT } from "../../components/visualizations/chart/constants";
 import { IChartConfig } from "../../interfaces/Config";

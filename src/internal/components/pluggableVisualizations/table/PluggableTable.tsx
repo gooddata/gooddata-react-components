@@ -1,10 +1,10 @@
 // (C) 2019 GoodData Corporation
-import cloneDeep = require("lodash/cloneDeep");
-import set = require("lodash/set");
-import uniqBy = require("lodash/uniqBy");
-import get = require("lodash/get");
-import isEmpty = require("lodash/isEmpty");
-import isNil = require("lodash/isNil");
+import cloneDeep from "lodash/cloneDeep";
+import set from "lodash/set";
+import uniqBy from "lodash/uniqBy";
+import get from "lodash/get";
+import isEmpty from "lodash/isEmpty";
+import isNil from "lodash/isNil";
 
 import * as React from "react";
 import Measure from "react-measure";

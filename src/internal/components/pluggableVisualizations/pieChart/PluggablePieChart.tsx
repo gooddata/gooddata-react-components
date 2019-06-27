@@ -1,9 +1,9 @@
 // (C) 2019 GoodData Corporation
 import { render } from "react-dom";
-import React = require("react");
-import cloneDeep = require("lodash/cloneDeep");
-import get = require("lodash/get");
-import set = require("lodash/set");
+import React from "react";
+import cloneDeep from "lodash/cloneDeep";
+import get from "lodash/get";
+import set from "lodash/set";
 import * as BucketNames from "../../../../constants/bucketNames";
 
 import { IVisConstruct, IReferencePoint, IExtendedReferencePoint } from "../../../interfaces/Visualization";

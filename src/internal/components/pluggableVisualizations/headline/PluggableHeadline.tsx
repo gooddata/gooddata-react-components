@@ -4,8 +4,8 @@ import { render, unmountComponentAtNode } from "react-dom";
 import { InjectedIntl } from "react-intl";
 import { AFM, VisualizationObject } from "@gooddata/typings";
 
-import cloneDeep = require("lodash/cloneDeep");
-import get = require("lodash/get");
+import cloneDeep from "lodash/cloneDeep";
+import get from "lodash/get";
 
 import * as BucketNames from "../../../../constants/bucketNames";
 import { METRIC } from "../../../constants/bucket";

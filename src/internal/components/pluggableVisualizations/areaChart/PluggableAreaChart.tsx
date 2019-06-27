@@ -1,9 +1,9 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
-import cloneDeep = require("lodash/cloneDeep");
-import get = require("lodash/get");
-import set = require("lodash/set");
-import negate = require("lodash/negate");
+import cloneDeep from "lodash/cloneDeep";
+import get from "lodash/get";
+import set from "lodash/set";
+import negate from "lodash/negate";
 import { render } from "react-dom";
 import * as BucketNames from "../../../../constants/bucketNames";
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";

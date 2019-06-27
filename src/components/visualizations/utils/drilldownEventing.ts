@@ -1,6 +1,6 @@
 // (C) 2007-2019 GoodData Corporation
-import get = require("lodash/get");
-import debounce = require("lodash/debounce");
+import get from "lodash/get";
+import debounce from "lodash/debounce";
 import * as CustomEvent from "custom-event";
 import * as invariant from "invariant";
 import {

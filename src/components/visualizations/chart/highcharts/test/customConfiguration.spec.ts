@@ -1,7 +1,7 @@
 // (C) 2007-2019 GoodData Corporation
-import get = require("lodash/get");
-import set = require("lodash/set");
-import noop = require("lodash/noop");
+import get from "lodash/get";
+import set from "lodash/set";
+import noop from "lodash/noop";
 import {
     escapeCategories,
     formatOverlapping,

@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
 import { AFM, Execution } from "@gooddata/typings";
-import isEqual = require("lodash/isEqual");
+import isEqual from "lodash/isEqual";
 import { GridApi } from "ag-grid-community";
 import { IGridTotalsRow } from "./agGridTypes";
 import { IGetPage } from "../base/VisualizationLoadingHOC";

@@ -5,12 +5,12 @@ import { getMappingHeaderName } from "../../../helpers/mappingHeader";
 import { unwrap } from "../../../helpers/utils";
 import { IMappingHeader } from "../../../interfaces/MappingHeader";
 import { getIdsFromUri } from "./agGridUtils";
-import range = require("lodash/range");
-import clone = require("lodash/clone");
+import range from "lodash/range";
+import clone from "lodash/clone";
 import { FIELD_SEPARATOR, ID_SEPARATOR, ROW_ATTRIBUTE_COLUMN } from "./agGridConst";
 import { assignDrillItemsAndType } from "./agGridDrilling";
 import { IColumnDefOptions, IGridHeader } from "./agGridTypes";
-import invariant = require("invariant");
+import invariant from "invariant";
 
 /*
  * All code related to transforming headers from our backend to ag-grid specific data structures

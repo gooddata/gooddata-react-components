@@ -1,5 +1,5 @@
 // (C) 2007-2018 GoodData Corporation
-import get = require("lodash/get");
+import get from "lodash/get";
 import { VisualizationObject, AFM, VisualizationInput } from "@gooddata/typings";
 import { DataLayer } from "@gooddata/gooddata-js";
 import { IMeasureTitleProps, IArithmeticMeasureTitleProps } from "..";

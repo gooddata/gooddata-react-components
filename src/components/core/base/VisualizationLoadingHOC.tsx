@@ -1,9 +1,9 @@
 // (C) 2007-2019 GoodData Corporation
 import * as React from "react";
-import noop = require("lodash/noop");
-import get = require("lodash/get");
-import isEqual = require("lodash/isEqual");
-import omit = require("lodash/omit");
+import noop from "lodash/noop";
+import get from "lodash/get";
+import isEqual from "lodash/isEqual";
+import omit from "lodash/omit";
 import {
     factory as createSdk,
     DataLayer,

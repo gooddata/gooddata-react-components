@@ -1,10 +1,10 @@
 // (C) 2019 GoodData Corporation
 import { AFM, Execution } from "@gooddata/typings";
 import * as invariant from "invariant";
-import uniq = require("lodash/uniq");
-import intersection = require("lodash/intersection");
-import isEqual = require("lodash/isEqual");
-import sortBy = require("lodash/sortBy");
+import uniq from "lodash/uniq";
+import intersection from "lodash/intersection";
+import isEqual from "lodash/isEqual";
+import sortBy from "lodash/sortBy";
 
 import { FIELD_TYPE_ATTRIBUTE, FIELD_TYPE_MEASURE } from "./agGridConst";
 import { AVAILABLE_TOTALS } from "../../visualizations/table/totals/utils";

@@ -1,13 +1,13 @@
 // (C) 2007-2018 GoodData Corporation
 import * as React from "react";
-import cloneDeep = require("lodash/cloneDeep");
-import get = require("lodash/get");
-import set = require("lodash/set");
-import isEqual = require("lodash/isEqual");
-import noop = require("lodash/noop");
-import partial = require("lodash/partial");
-import throttle = require("lodash/throttle");
-import isNil = require("lodash/isNil");
+import cloneDeep from "lodash/cloneDeep";
+import get from "lodash/get";
+import set from "lodash/set";
+import isEqual from "lodash/isEqual";
+import noop from "lodash/noop";
+import partial from "lodash/partial";
+import throttle from "lodash/throttle";
+import isNil from "lodash/isNil";
 import * as cx from "classnames";
 import Chart, { IChartProps } from "./Chart";
 import Legend, { ILegendProps } from "./legend/Legend";

@@ -1,9 +1,9 @@
 // (C) 2007-2019 GoodData Corporation
-import range = require("lodash/range");
-import get = require("lodash/get");
-import set = require("lodash/set");
-import isNil = require("lodash/isNil");
-import cloneDeep = require("lodash/cloneDeep");
+import range from "lodash/range";
+import get from "lodash/get";
+import set from "lodash/set";
+import isNil from "lodash/isNil";
+import cloneDeep from "lodash/cloneDeep";
 import { Execution } from "@gooddata/typings";
 import { findMeasureGroupInDimensions } from "../../../../helpers/executionResultHelper";
 import { immutableSet } from "../../utils/common";

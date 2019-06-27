@@ -1,11 +1,11 @@
 // (C) 2019 GoodData Corporation
 import produce from "immer";
-import get = require("lodash/get");
-import set = require("lodash/set");
-import isEqual = require("lodash/isEqual");
-import uniqBy = require("lodash/uniqBy");
-import isEmpty = require("lodash/isEmpty");
-import compact = require("lodash/compact");
+import get from "lodash/get";
+import set from "lodash/set";
+import isEqual from "lodash/isEqual";
+import uniqBy from "lodash/uniqBy";
+import isEmpty from "lodash/isEmpty";
+import compact from "lodash/compact";
 
 import { Execution } from "@gooddata/typings";
 import { TypeGuards, IColorItem, IColorMappingProperty } from "@gooddata/gooddata-js";

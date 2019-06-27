@@ -1,7 +1,7 @@
 // (C) 2007-2019 GoodData Corporation
 import { VisualizationObject } from "@gooddata/typings";
 
-import get = require("lodash/get");
+import get from "lodash/get";
 import { MAX_POINT_WIDTH } from "./commonConfiguration";
 import { LINE_WIDTH } from "./lineConfiguration";
 import { IChartConfig } from "../../../../interfaces/Config";

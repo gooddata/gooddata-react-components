@@ -1,6 +1,6 @@
 // (C) 2007-2019 GoodData Corporation
-import get = require("lodash/get");
-import merge = require("lodash/merge");
+import get from "lodash/get";
+import merge from "lodash/merge";
 import * as invariant from "invariant";
 import { getCommonConfiguration } from "./highcharts/commonConfiguration";
 

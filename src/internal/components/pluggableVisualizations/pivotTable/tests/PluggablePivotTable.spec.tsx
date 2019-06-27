@@ -26,8 +26,8 @@ import {
     IBucketFilter,
     IBucketFilterElement,
 } from "../../../../interfaces/Visualization";
-import noop = require("lodash/noop");
-import cloneDeep = require("lodash/cloneDeep");
+import noop from "lodash/noop";
+import cloneDeep from "lodash/cloneDeep";
 import SpyInstance = jest.SpyInstance;
 import { IDrillableItem } from "../../../../../interfaces/DrillEvents";
 import { PivotTable } from "../../../../../components/core/PivotTable";

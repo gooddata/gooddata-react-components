@@ -1,5 +1,5 @@
 // (C) 2019 GoodData Corporation
-import noop = require("lodash/noop");
+import noop from "lodash/noop";
 import { PluggableTreemap } from "../PluggableTreemap";
 import * as referencePointMocks from "../../../../mocks/referencePointMocks";
 import * as uiConfigMocks from "../../../../mocks/uiConfigMocks";

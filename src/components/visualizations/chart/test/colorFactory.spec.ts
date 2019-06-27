@@ -19,7 +19,7 @@ import { CUSTOM_COLOR_PALETTE } from "../../../../../stories/data/colors";
 import * as fixtures from "../../../../../stories/test_data/fixtures";
 import { IColorPalette, IColorPaletteItem, IColorMapping } from "../../../../interfaces/Config";
 import { Execution } from "@gooddata/typings";
-import range = require("lodash/range");
+import range from "lodash/range";
 import { IColorItem, RGBType } from "@gooddata/gooddata-js";
 
 function getColorsFromStrategy(strategy: IColorStrategy): string[] {

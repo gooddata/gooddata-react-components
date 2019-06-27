@@ -3,7 +3,7 @@ import * as React from "react";
 import { mount } from "enzyme";
 import { oneAttributeOneMeasureSortByMeasureExecutionObject } from "../../../execution/fixtures/ExecuteAfm.fixtures";
 import { createIntlMock } from "../../visualizations/utils/intlUtils";
-import noop = require("lodash/noop");
+import noop from "lodash/noop";
 
 import { PivotTable, PivotTableInner, IPivotTableInnerProps } from "../PivotTable";
 import { oneMeasureDataSource, oneAttributeOneMeasureDataSource } from "../../tests/mocks";

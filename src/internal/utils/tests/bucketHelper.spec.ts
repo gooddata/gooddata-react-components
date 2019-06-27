@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
-import cloneDeep = require("lodash/cloneDeep");
-import set = require("lodash/set");
+import cloneDeep from "lodash/cloneDeep";
+import set from "lodash/set";
 
 import { ATTRIBUTE, DATE_DATASET_ATTRIBUTE, METRIC } from "../../constants/bucket";
 import {

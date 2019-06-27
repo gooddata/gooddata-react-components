@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
-import noop = require("lodash/noop");
+import noop from "lodash/noop";
 import { VisualizationObject } from "@gooddata/typings";
 import { ILocale, IVisProps, IBucket, IFilters } from "../../../../interfaces/Visualization";
 import * as BucketNames from "../../../../../constants/bucketNames";

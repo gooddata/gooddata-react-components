@@ -1,10 +1,10 @@
 // (C) 2019 GoodData Corporation
-import cloneDeep = require("lodash/cloneDeep");
-import get = require("lodash/get");
-import merge = require("lodash/merge");
-import flatMap = require("lodash/flatMap");
-import isNil = require("lodash/isNil");
-import includes = require("lodash/includes");
+import cloneDeep from "lodash/cloneDeep";
+import get from "lodash/get";
+import merge from "lodash/merge";
+import flatMap from "lodash/flatMap";
+import isNil from "lodash/isNil";
+import includes from "lodash/includes";
 import * as React from "react";
 import Measure from "react-measure";
 import { render, unmountComponentAtNode } from "react-dom";

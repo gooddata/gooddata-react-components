@@ -1,5 +1,5 @@
 // (C) 2019 GoodData Corporation
-import set = require("lodash/set");
+import set from "lodash/set";
 import { InjectedIntl } from "react-intl";
 
 import * as BucketNames from "../../../constants/bucketNames";

@@ -1,7 +1,7 @@
 // (C) 2007-2018 GoodData Corporation
 import * as React from "react";
 import { shallow, mount } from "enzyme";
-import noop = require("lodash/noop");
+import noop from "lodash/noop";
 
 import HighChartsRenderer, { FLUID_LEGEND_THRESHOLD } from "../HighChartsRenderer";
 import { getHighchartsOptions } from "../highChartsCreators";

@@ -2,7 +2,7 @@
 import { AFM, Execution, VisualizationObject } from "@gooddata/typings";
 import * as invariant from "invariant";
 import * as React from "react";
-import noop = require("lodash/noop");
+import noop from "lodash/noop";
 
 import { convertDrillableItemsToPredicates } from "../../../helpers/headerPredicate";
 import { getSanitizedStackingConfigFromAfm } from "../../../helpers/optionalStacking/common";

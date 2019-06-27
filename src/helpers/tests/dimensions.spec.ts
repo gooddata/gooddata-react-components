@@ -1,7 +1,7 @@
 // (C) 2007-2019 GoodData Corporation
 import { VisualizationObject, AFM } from "@gooddata/typings";
-import cloneDeep = require("lodash/cloneDeep");
-import update = require("lodash/update");
+import cloneDeep from "lodash/cloneDeep";
+import update from "lodash/update";
 
 import { VisualizationTypes } from "../../constants/visualizationTypes";
 import {

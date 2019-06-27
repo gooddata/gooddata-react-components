@@ -3,7 +3,7 @@ import * as React from "react";
 import ConfigSection from "../ConfigSection";
 import LegendPositionControl from "./LegendPositionControl";
 import { IVisualizationProperties } from "../../../interfaces/Visualization";
-import get = require("lodash/get");
+import get from "lodash/get";
 
 export interface ILegendSection {
     controlsDisabled: boolean;

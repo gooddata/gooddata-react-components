@@ -1,5 +1,5 @@
 // (C) 2007-2019 GoodData Corporation
-import get = require("lodash/get");
+import get from "lodash/get";
 import { VisualizationClass } from "@gooddata/typings";
 import { IFeatureFlags } from "@gooddata/gooddata-js";
 import { VisualizationTypes, VisType, ChartType } from "../constants/visualizationTypes";

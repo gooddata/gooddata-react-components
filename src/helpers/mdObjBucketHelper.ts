@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
-import get = require("lodash/get");
-import isEmpty = require("lodash/isEmpty");
+import get from "lodash/get";
+import isEmpty from "lodash/isEmpty";
 import { VisualizationObject } from "@gooddata/typings";
 
 export function findBucketByLocalIdentifier(

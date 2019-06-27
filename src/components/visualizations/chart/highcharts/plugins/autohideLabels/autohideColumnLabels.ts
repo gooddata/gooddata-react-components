@@ -1,9 +1,9 @@
 // (C) 2007-2019 GoodData Corporation
-import map = require("lodash/map");
-import zip = require("lodash/zip");
-import values = require("lodash/values");
-import flatten = require("lodash/flatten");
-import identity = require("lodash/identity");
+import map from "lodash/map";
+import zip from "lodash/zip";
+import values from "lodash/values";
+import flatten from "lodash/flatten";
+import identity from "lodash/identity";
 
 import {
     isStacked,

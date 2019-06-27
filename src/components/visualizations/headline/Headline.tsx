@@ -1,7 +1,7 @@
 // (C) 2007-2018 GoodData Corporation
 import * as React from "react";
 import * as classNames from "classnames";
-import noop = require("lodash/noop");
+import noop from "lodash/noop";
 import { AFM } from "@gooddata/typings";
 import { HeadlineElementType } from "../../../constants/visualizationTypes";
 import { ResponsiveText } from "@gooddata/goodstrap";

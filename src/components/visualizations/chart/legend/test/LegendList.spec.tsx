@@ -6,7 +6,7 @@ import LegendList, { LegendSeparator } from "../LegendList";
 import { transformToDualAxesSeries } from "../helpers";
 import { withIntl } from "../../../utils/intlUtils";
 import LegendItem from "../LegendItem";
-import noop = require("lodash/noop");
+import noop from "lodash/noop";
 import { LegendAxisIndicator } from "../LegendAxisIndicator";
 
 describe("LegendList", () => {

@@ -1,12 +1,12 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
 import { InjectedIntl } from "react-intl";
-import isEmpty = require("lodash/isEmpty");
-import cloneDeep = require("lodash/cloneDeep");
-import get = require("lodash/get");
-import noop = require("lodash/noop");
-import tail = require("lodash/tail");
-import set = require("lodash/set");
+import isEmpty from "lodash/isEmpty";
+import cloneDeep from "lodash/cloneDeep";
+import get from "lodash/get";
+import noop from "lodash/noop";
+import tail from "lodash/tail";
+import set from "lodash/set";
 import { render, unmountComponentAtNode } from "react-dom";
 import { AFM, VisualizationObject } from "@gooddata/typings";
 import {

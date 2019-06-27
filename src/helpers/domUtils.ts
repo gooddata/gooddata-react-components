@@ -1,5 +1,5 @@
 // (C) 2007-2019 GoodData Corporation
-import once = require("lodash/once");
+import once from "lodash/once";
 
 const getScrollbarWidthBody = (): number => {
     const outer = document.createElement("div");

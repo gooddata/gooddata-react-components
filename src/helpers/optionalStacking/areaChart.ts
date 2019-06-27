@@ -1,5 +1,5 @@
 // (C) 2007-2018 GoodData Corporation
-import isNil = require("lodash/isNil");
+import isNil from "lodash/isNil";
 import { VisualizationObject } from "@gooddata/typings";
 import { IAreaChartProps } from "../../components/AreaChart";
 import { IChartConfig } from "../..";

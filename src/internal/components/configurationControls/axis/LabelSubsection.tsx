@@ -2,7 +2,7 @@
 import * as React from "react";
 import { InjectedIntlProps, injectIntl } from "react-intl";
 import ConfigSubsection from "../../configurationControls/ConfigSubsection";
-import get = require("lodash/get");
+import get from "lodash/get";
 import { AxisType } from "../../../interfaces/AxisType";
 import LabelRotationControl from "./LabelRotationControl";
 import { IVisualizationProperties } from "../../../interfaces/Visualization";

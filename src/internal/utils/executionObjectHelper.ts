@@ -1,10 +1,10 @@
 // (C) 2019 GoodData Corporation
 import { AFM } from "@gooddata/typings";
-import get = require("lodash/get");
-import isEmpty = require("lodash/isEmpty");
-import cloneDeep = require("lodash/cloneDeep");
-import uniqBy = require("lodash/unionBy");
-import flatMap = require("lodash/flatMap");
+import get from "lodash/get";
+import isEmpty from "lodash/isEmpty";
+import cloneDeep from "lodash/cloneDeep";
+import uniqBy from "lodash/unionBy";
+import flatMap from "lodash/flatMap";
 
 export function expandTotalsInAfm(afm: AFM.IAfm): AFM.IAfm {
     if (isEmpty(afm.measures) || isEmpty(afm.nativeTotals)) {

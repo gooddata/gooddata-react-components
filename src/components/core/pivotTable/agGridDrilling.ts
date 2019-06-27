@@ -8,7 +8,7 @@ import {
     getMappingHeaderName,
     getMappingHeaderUri,
 } from "../../../helpers/mappingHeader";
-import get = require("lodash/get");
+import get from "lodash/get";
 import { IDrillEventIntersectionElement } from "../../../interfaces/DrillEvents";
 import { IMappingHeader, isMappingHeaderAttributeItem } from "../../../interfaces/MappingHeader";
 import { getAttributeElementIdFromAttributeElementUri } from "../../visualizations/utils/common";

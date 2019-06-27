@@ -1,6 +1,6 @@
 // (C) 2007-2018 GoodData Corporation
-import get = require("lodash/get");
-import flatMap = require("lodash/flatMap");
+import get from "lodash/get";
+import flatMap from "lodash/flatMap";
 
 import { VisualizationObject, Localization } from "@gooddata/typings";
 import { string as stringUtils } from "@gooddata/js-utils";

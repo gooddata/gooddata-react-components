@@ -1,7 +1,7 @@
 // (C) 2019 GoodData Corporation
-import cloneDeep = require("lodash/cloneDeep");
-import set = require("lodash/set");
-import get = require("lodash/get");
+import cloneDeep from "lodash/cloneDeep";
+import set from "lodash/set";
+import get from "lodash/get";
 import { InjectedIntl } from "react-intl";
 
 import * as BucketNames from "../../../constants/bucketNames";

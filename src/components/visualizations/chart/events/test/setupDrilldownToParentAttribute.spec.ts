@@ -1,5 +1,5 @@
 // (C) 2007-2019 GoodData Corporation
-import get = require("lodash/get");
+import get from "lodash/get";
 import { setupDrilldown } from "../setupDrilldownToParentAttribute";
 import { styleVariables } from "../../../styles/variables";
 import { IHighchartsPointObject } from "../../../../../interfaces/DrillEvents";

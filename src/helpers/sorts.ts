@@ -1,5 +1,5 @@
 // (C) 2007-2018 GoodData Corporation
-import get = require("lodash/get");
+import get from "lodash/get";
 import { AFM } from "@gooddata/typings";
 
 import { ASC, DESC } from "../constants/sort";

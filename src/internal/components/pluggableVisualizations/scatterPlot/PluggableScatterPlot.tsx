@@ -2,9 +2,9 @@
 import * as React from "react";
 import { render } from "react-dom";
 import { configurePercent, configureOverTimeComparison } from "../../../utils/bucketConfig";
-import cloneDeep = require("lodash/cloneDeep");
-import set = require("lodash/set");
-import includes = require("lodash/includes");
+import cloneDeep from "lodash/cloneDeep";
+import set from "lodash/set";
+import includes from "lodash/includes";
 import { PluggableBaseChart } from "../baseChart/PluggableBaseChart";
 import { IReferencePoint, IExtendedReferencePoint, IVisConstruct } from "../../../interfaces/Visualization";
 

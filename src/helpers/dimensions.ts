@@ -1,5 +1,5 @@
 // (C) 2007-2019 GoodData Corporation
-import get = require("lodash/get");
+import get from "lodash/get";
 import { AFM, VisualizationObject } from "@gooddata/typings";
 import { VisualizationTypes, VisType } from "../constants/visualizationTypes";
 import { MEASUREGROUP } from "../constants/dimensions";

@@ -1,5 +1,5 @@
 // (C) 2019 GoodData Corporation
-import get = require("lodash/get");
+import get from "lodash/get";
 import { VisualizationObject } from "@gooddata/typings";
 import { getMeasuresFromMdObject } from "./bucketHelper";
 import * as BucketNames from "../../constants/bucketNames";

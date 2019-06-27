@@ -1,5 +1,5 @@
 // (C) 2007-2019 GoodData Corporation
-import cloneDeep = require("lodash/cloneDeep");
+import cloneDeep from "lodash/cloneDeep";
 import { AFM } from "@gooddata/typings";
 import {
     getClickableElementNameByChartType,

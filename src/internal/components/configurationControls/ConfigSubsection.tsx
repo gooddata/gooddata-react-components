@@ -1,8 +1,8 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
 import { InjectedIntlProps, injectIntl } from "react-intl";
-import noop = require("lodash/noop");
-import set = require("lodash/set");
+import noop from "lodash/noop";
+import set from "lodash/set";
 import DisabledBubbleMessage from "../DisabledBubbleMessage";
 
 import { getTranslation } from "../../utils/translations";

@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
-import noop = require("lodash/noop");
+import noop from "lodash/noop";
 import { ChartType } from "../../../constants/visualizationTypes";
 import { VisualizationObject } from "@gooddata/typings";
 

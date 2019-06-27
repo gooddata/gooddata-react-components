@@ -1,11 +1,11 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
 import * as uuid from "uuid";
-import isEqual = require("lodash/isEqual");
-import isEmpty = require("lodash/isEmpty");
-import get = require("lodash/get");
-import noop = require("lodash/noop");
-import omit = require("lodash/omit");
+import isEqual from "lodash/isEqual";
+import isEmpty from "lodash/isEmpty";
+import get from "lodash/get";
+import noop from "lodash/noop";
+import omit from "lodash/omit";
 import { AFM, Execution, VisualizationObject, VisualizationClass } from "@gooddata/typings";
 import { IDrillableItem } from "../../interfaces/DrillEvents";
 import { DataLayer } from "@gooddata/gooddata-js";

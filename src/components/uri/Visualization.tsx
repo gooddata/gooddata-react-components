@@ -8,9 +8,9 @@ import {
     IPropertiesControls,
     IFeatureFlags,
 } from "@gooddata/gooddata-js";
-import get = require("lodash/get");
-import noop = require("lodash/noop");
-import isEqual = require("lodash/isEqual");
+import get from "lodash/get";
+import noop from "lodash/noop";
+import isEqual from "lodash/isEqual";
 import { AFM, VisualizationObject, VisualizationClass, Localization } from "@gooddata/typings";
 import { injectIntl, intlShape, InjectedIntlProps } from "react-intl";
 import { IHeaderPredicate } from "../../interfaces/HeaderPredicate";

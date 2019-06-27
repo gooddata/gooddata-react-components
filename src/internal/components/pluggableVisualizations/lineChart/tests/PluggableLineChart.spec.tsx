@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
-import noop = require("lodash/noop");
-import get = require("lodash/get");
+import noop from "lodash/noop";
+import get from "lodash/get";
 import { IBucket, IFilters } from "../../../../interfaces/Visualization";
 import { PluggableLineChart } from "../PluggableLineChart";
 import * as testMocks from "../../../../mocks/testMocks";

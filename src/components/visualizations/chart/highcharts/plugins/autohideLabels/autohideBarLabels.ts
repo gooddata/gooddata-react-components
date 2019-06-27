@@ -1,5 +1,5 @@
 // (C) 2007-2018 GoodData Corporation
-import sortBy = require("lodash/sortBy");
+import sortBy from "lodash/sortBy";
 
 import {
     isStacked,

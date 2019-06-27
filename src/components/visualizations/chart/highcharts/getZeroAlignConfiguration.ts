@@ -10,11 +10,11 @@
  * Modified by binh.nguyen@gooddata.com to support min/max configuration
  */
 
-import partial = require("lodash/partial");
-import isNil = require("lodash/isNil");
-import zip = require("lodash/zip");
-import sum = require("lodash/sum");
-import compact = require("lodash/compact");
+import partial from "lodash/partial";
+import isNil from "lodash/isNil";
+import zip from "lodash/zip";
+import sum from "lodash/sum";
+import compact from "lodash/compact";
 
 import { PERCENT_STACK } from "./getOptionalStackingConfiguration";
 import { IChartOptions, IHighChartAxis, ISeriesDataItem, ISeriesItem } from "../../../../interfaces/Config";

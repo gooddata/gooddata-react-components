@@ -9,8 +9,8 @@ import {
     getSubtotalStyles,
     cellRenderer,
 } from "../agGridUtils";
-import cloneDeep = require("lodash/cloneDeep");
-import identity = require("lodash/identity");
+import cloneDeep from "lodash/cloneDeep";
+import identity from "lodash/identity";
 import { AFM } from "@gooddata/typings";
 
 describe("getIdsFromUri", () => {

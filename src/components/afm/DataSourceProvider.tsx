@@ -3,8 +3,8 @@ import * as React from "react";
 import { SDK, factory as createSdk, DataLayer } from "@gooddata/gooddata-js";
 import * as PropTypes from "prop-types";
 
-import isEqual = require("lodash/isEqual");
-import omit = require("lodash/omit");
+import isEqual from "lodash/isEqual";
+import omit from "lodash/omit";
 import { AFM, Execution } from "@gooddata/typings";
 import { AfmPropTypesShape, ResultSpecPropTypesShape } from "../visualizations/proptypes/execution";
 

@@ -1,5 +1,5 @@
 // (C) 2007-2018 GoodData Corporation
-import get = require("lodash/get");
+import get from "lodash/get";
 
 export interface IIdentifierWithTags {
     identifier: string;

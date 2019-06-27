@@ -13,7 +13,7 @@ import * as nlNL from "../translations/nl-NL.json";
 import * as ptBR from "../translations/pt-BR.json";
 import * as ptPT from "../translations/pt-PT.json";
 import * as zhHans from "../translations/zh-Hans.json";
-import isEmpty = require("lodash/isEmpty");
+import isEmpty from "lodash/isEmpty";
 
 const messagesMap = {
     "en-US": translations.removeMetadata(enUS),

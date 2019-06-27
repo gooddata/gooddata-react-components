@@ -9,7 +9,7 @@ import {
     ATTRIBUTE_DISPLAY_FORM_IDENTIFIER,
     ATTRIBUTE_DISPLAY_FORM_IDENTIFIER_2,
 } from "./utils";
-import noop = require("lodash/noop");
+import noop from "lodash/noop";
 
 describe("AttributeLoader", () => {
     function renderComponent(props: IAttributeLoaderProps) {

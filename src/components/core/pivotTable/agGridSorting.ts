@@ -10,7 +10,7 @@ import {
 } from "./agGridConst";
 import { assortDimensionHeaders, identifyResponseHeader } from "./agGridHeaders";
 import { ISortedByColumnIndexes, ISortModelItem } from "./agGridTypes";
-import invariant = require("invariant");
+import invariant from "invariant";
 import { ColDef } from "ag-grid-community";
 
 /*

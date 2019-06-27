@@ -1,9 +1,9 @@
 // (C) 2007-2018 GoodData Corporation
 import { AFM, VisualizationObject } from "@gooddata/typings";
-import find = require("lodash/find");
-import findIndex = require("lodash/findIndex");
-import isEmpty = require("lodash/isEmpty");
-import get = require("lodash/get");
+import find from "lodash/find";
+import findIndex from "lodash/findIndex";
+import isEmpty from "lodash/isEmpty";
+import get from "lodash/get";
 
 import { IIndexedTotalItem } from "../interfaces/Totals";
 

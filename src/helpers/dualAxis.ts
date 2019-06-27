@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
 import { VisualizationObject } from "@gooddata/typings";
-import get = require("lodash/get");
+import get from "lodash/get";
 import { IChartConfig } from "../interfaces/Config";
 
 export function setMeasuresToSecondaryAxis(

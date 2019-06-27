@@ -88,12 +88,12 @@ import {
     updateStickyHeaders,
     updateStickyHeadersPosition,
 } from "./pivotTable/stickyGroupHandler";
-import cloneDeep = require("lodash/cloneDeep");
+import cloneDeep from "lodash/cloneDeep";
 
-import get = require("lodash/get");
-import isEqual = require("lodash/isEqual");
-import noop = require("lodash/noop");
-import sumBy = require("lodash/sumBy");
+import get from "lodash/get";
+import isEqual from "lodash/isEqual";
+import noop from "lodash/noop";
+import sumBy from "lodash/sumBy";
 
 import InjectedIntlProps = ReactIntl.InjectedIntlProps;
 

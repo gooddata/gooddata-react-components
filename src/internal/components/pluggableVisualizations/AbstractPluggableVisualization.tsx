@@ -1,5 +1,5 @@
 // (C) 2019 GoodData Corporation
-import cloneDeep = require("lodash/cloneDeep");
+import cloneDeep from "lodash/cloneDeep";
 import { VisualizationObject } from "@gooddata/typings";
 import IVisualizationObjectContent = VisualizationObject.IVisualizationObjectContent;
 import {

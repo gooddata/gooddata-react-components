@@ -4,7 +4,7 @@ import * as React from "react";
 import { LoadingComponent } from "../../../../components/simple/LoadingComponent";
 import { RowLoadingElement } from "../RowLoadingElement";
 import { ICellRendererParams } from "ag-grid-community";
-import noop = require("lodash/noop");
+import noop from "lodash/noop";
 
 describe("RowLoadingElement", () => {
     it("should show LoadingComponent for empty cell", async () => {

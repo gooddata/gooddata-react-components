@@ -3,7 +3,7 @@ import * as React from "react";
 import { FormattedMessage } from "react-intl";
 import { Bubble, BubbleHoverTrigger } from "@gooddata/goodstrap";
 import { VisualizationObject } from "@gooddata/typings";
-import get = require("lodash/get");
+import get from "lodash/get";
 import * as classNames from "classnames";
 
 import ConfigurationPanelContent from "./ConfigurationPanelContent";

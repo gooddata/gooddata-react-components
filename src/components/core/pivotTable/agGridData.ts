@@ -12,9 +12,9 @@ import {
     ROW_SUBTOTAL,
 } from "./agGridConst";
 import { IGridHeader, IGridRow, IGridTotalsRow } from "./agGridTypes";
-import invariant = require("invariant");
+import invariant from "invariant";
 import InjectedIntl = ReactIntl.InjectedIntl;
-import zipObject = require("lodash/zipObject");
+import zipObject from "lodash/zipObject";
 
 /*
  * All code related to transforming data from our backend to ag-grid structures

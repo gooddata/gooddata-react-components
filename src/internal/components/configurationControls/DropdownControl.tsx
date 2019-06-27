@@ -1,7 +1,7 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
 import { injectIntl, InjectedIntlProps } from "react-intl";
-import set = require("lodash/set");
+import set from "lodash/set";
 import { Dropdown, DropdownButton, DropdownBody } from "@gooddata/goodstrap";
 import DisabledBubbleMessage from "../DisabledBubbleMessage";
 

@@ -2,19 +2,19 @@
 import { colors2Object, numberFormat } from "@gooddata/numberjs";
 import { AFM, Execution, VisualizationObject } from "@gooddata/typings";
 import * as invariant from "invariant";
-import cloneDeep = require("lodash/cloneDeep");
-import compact = require("lodash/compact");
-import escape = require("lodash/escape");
-import get = require("lodash/get");
-import includes = require("lodash/includes");
-import isEmpty = require("lodash/isEmpty");
-import isEqual = require("lodash/isEqual");
-import isUndefined = require("lodash/isUndefined");
-import last = require("lodash/last");
-import range = require("lodash/range");
-import unescape = require("lodash/unescape");
-import without = require("lodash/without");
-import isNil = require("lodash/isNil");
+import cloneDeep from "lodash/cloneDeep";
+import compact from "lodash/compact";
+import escape from "lodash/escape";
+import get from "lodash/get";
+import includes from "lodash/includes";
+import isEmpty from "lodash/isEmpty";
+import isEqual from "lodash/isEqual";
+import isUndefined from "lodash/isUndefined";
+import last from "lodash/last";
+import range from "lodash/range";
+import unescape from "lodash/unescape";
+import without from "lodash/without";
+import isNil from "lodash/isNil";
 
 import {
     MEASURES,

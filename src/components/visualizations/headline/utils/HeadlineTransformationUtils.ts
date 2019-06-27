@@ -1,8 +1,8 @@
 // (C) 2007-2018 GoodData Corporation
-import cloneDeep = require("lodash/cloneDeep");
-import get = require("lodash/get");
-import isEmpty = require("lodash/isEmpty");
-import isNumber = require("lodash/isNumber");
+import cloneDeep from "lodash/cloneDeep";
+import get from "lodash/get";
+import isEmpty from "lodash/isEmpty";
+import isNumber from "lodash/isNumber";
 import * as CustomEventPolyfill from "custom-event";
 import * as invariant from "invariant";
 import { AFM, Execution } from "@gooddata/typings";

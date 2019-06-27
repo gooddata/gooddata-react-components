@@ -2,10 +2,10 @@
 import * as React from "react";
 import * as invariant from "invariant";
 import { IHeaderPredicate } from "../../interfaces/HeaderPredicate";
-import isEqual = require("lodash/isEqual");
-import noop = require("lodash/noop");
-import isFunction = require("lodash/isFunction");
-import omitBy = require("lodash/omitBy");
+import isEqual from "lodash/isEqual";
+import noop from "lodash/noop";
+import isFunction from "lodash/isFunction";
+import omitBy from "lodash/omitBy";
 import { Highcharts } from "./chart/Chart";
 import { IChartConfig } from "../../interfaces/Config";
 import { OnFiredDrillEvent } from "../../interfaces/Events";

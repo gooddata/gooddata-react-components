@@ -1,5 +1,5 @@
 // (C) 2007-2018 GoodData Corporation
-import max = require("lodash/max");
+import max from "lodash/max";
 import { IGridRow } from "./agGridTypes";
 import { isMappingHeaderAttributeItem } from "../../../interfaces/MappingHeader";
 

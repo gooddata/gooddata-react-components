@@ -1,6 +1,6 @@
 // (C) 2007-2019 GoodData Corporation
 import { ICellRendererParams } from "ag-grid-community";
-import escape = require("lodash/escape");
+import escape from "lodash/escape";
 import { AFM, Execution } from "@gooddata/typings";
 import { getMappingHeaderUri } from "../../../helpers/mappingHeader";
 import { IMappingHeader, isMappingHeaderTotal } from "../../../interfaces/MappingHeader";

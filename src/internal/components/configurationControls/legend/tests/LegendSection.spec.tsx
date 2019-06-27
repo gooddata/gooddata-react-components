@@ -4,9 +4,9 @@ import { mount } from "enzyme";
 import LegendSection, { ILegendSection } from "../LegendSection";
 import LegendPositionControl from "../LegendPositionControl";
 import { InternalIntlWrapper } from "../../../../utils/internalIntlProvider";
-import noop = require("lodash/noop");
-import cloneDeep = require("lodash/cloneDeep");
-import set = require("lodash/set");
+import noop from "lodash/noop";
+import cloneDeep from "lodash/cloneDeep";
+import set from "lodash/set";
 
 const defaultProps: ILegendSection = {
     controlsDisabled: true,

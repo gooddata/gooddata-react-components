@@ -1,8 +1,8 @@
 // (C) 2007-2018 GoodData Corporation
 import * as React from "react";
 import { DataLayer, SDK, factory as createSdk } from "@gooddata/gooddata-js";
-import isEqual = require("lodash/isEqual");
-import noop = require("lodash/noop");
+import isEqual from "lodash/isEqual";
+import noop from "lodash/noop";
 import { AFM, Execution } from "@gooddata/typings";
 
 import { IEvents } from "../interfaces/Events";

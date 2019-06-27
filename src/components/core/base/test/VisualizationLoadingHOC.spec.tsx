@@ -2,7 +2,7 @@
 import * as React from "react";
 import * as PropTypes from "prop-types";
 import { mount } from "enzyme";
-import noop = require("lodash/noop");
+import noop from "lodash/noop";
 import { testUtils } from "@gooddata/js-utils";
 import sdk, { IExportConfig } from "@gooddata/gooddata-js";
 import {

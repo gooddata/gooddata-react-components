@@ -1,9 +1,9 @@
 // (C) 2007-2019 GoodData Corporation
-import cloneDeep = require("lodash/cloneDeep");
-import invoke = require("lodash/invoke");
-import get = require("lodash/get");
-import set = require("lodash/set");
-import isEmpty = require("lodash/isEmpty");
+import cloneDeep from "lodash/cloneDeep";
+import invoke from "lodash/invoke";
+import get from "lodash/get";
+import set from "lodash/set";
+import isEmpty from "lodash/isEmpty";
 import { css } from "highcharts";
 import { chartClick } from "../../utils/drilldownEventing";
 import { styleVariables } from "../../styles/variables";

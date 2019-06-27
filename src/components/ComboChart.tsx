@@ -1,10 +1,10 @@
 // (C) 2007-2019 GoodData Corporation
 import * as React from "react";
-import omit = require("lodash/omit");
-import set = require("lodash/set");
-import get = require("lodash/get");
-import cloneDeep = require("lodash/cloneDeep");
-import isArray = require("lodash/isArray");
+import omit from "lodash/omit";
+import set from "lodash/set";
+import get from "lodash/get";
+import cloneDeep from "lodash/cloneDeep";
+import isArray from "lodash/isArray";
 import { VisualizationObject, VisualizationInput } from "@gooddata/typings";
 
 import { Subtract } from "../typings/subtract";

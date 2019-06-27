@@ -1,6 +1,6 @@
 // (C) 2007-2018 GoodData Corporation
 import { AFM } from "@gooddata/typings";
-import get = require("lodash/get");
+import get from "lodash/get";
 import { AfmUtils } from "@gooddata/gooddata-js/lib/DataLayer";
 
 export function isDerivedMeasure(measure: AFM.IMeasure): boolean {

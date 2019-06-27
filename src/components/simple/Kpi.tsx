@@ -2,7 +2,7 @@
 import * as React from "react";
 import { SDK, DataLayer } from "@gooddata/gooddata-js";
 import { colors2Object, ISeparators, numberFormat } from "@gooddata/numberjs";
-import noop = require("lodash/noop");
+import noop from "lodash/noop";
 import { AFM, Execution } from "@gooddata/typings";
 import { injectIntl, intlShape, InjectedIntlProps } from "react-intl";
 

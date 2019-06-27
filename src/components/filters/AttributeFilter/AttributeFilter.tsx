@@ -2,7 +2,7 @@
 import * as React from "react";
 import * as PropTypes from "prop-types";
 import { SDK, factory as createSdk } from "@gooddata/gooddata-js";
-import pick = require("lodash/pick");
+import pick from "lodash/pick";
 
 import { IntlWrapper } from "../../core/base/IntlWrapper";
 import { injectIntl } from "react-intl";

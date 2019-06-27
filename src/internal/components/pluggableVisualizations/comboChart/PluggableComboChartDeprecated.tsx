@@ -1,10 +1,10 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
 import { render } from "react-dom";
-import cloneDeep = require("lodash/cloneDeep");
-import get = require("lodash/get");
-import set = require("lodash/set");
-import without = require("lodash/without");
+import cloneDeep from "lodash/cloneDeep";
+import get from "lodash/get";
+import set from "lodash/set";
+import without from "lodash/without";
 import * as BucketNames from "../../../../constants/bucketNames";
 import { configurePercent, configureOverTimeComparison } from "../../../utils/bucketConfig";
 import { PluggableBaseChart } from "../baseChart/PluggableBaseChart";

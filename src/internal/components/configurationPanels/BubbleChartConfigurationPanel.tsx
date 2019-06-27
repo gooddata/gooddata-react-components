@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
-import get = require("lodash/get");
+import get from "lodash/get";
 import { FormattedMessage } from "react-intl";
 import { Bubble, BubbleHoverTrigger } from "@gooddata/goodstrap";
 import * as classNames from "classnames";

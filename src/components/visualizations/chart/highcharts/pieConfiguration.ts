@@ -1,6 +1,6 @@
 // (C) 2007-2018 GoodData Corporation
-import cloneDeep = require("lodash/cloneDeep");
-import get = require("lodash/get");
+import cloneDeep from "lodash/cloneDeep";
+import get from "lodash/get";
 
 const PIE_TEMPLATE = {
     chart: {

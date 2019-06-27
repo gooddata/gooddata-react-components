@@ -6,10 +6,10 @@ import { string as stringUtils } from "@gooddata/js-utils";
 import { injectIntl, intlShape, InjectedIntlProps, InjectedIntl } from "react-intl";
 import { IValidElementsResponse, IElement } from "@gooddata/gooddata-js";
 import * as classNames from "classnames";
-import last = require("lodash/last");
-import pick = require("lodash/pick");
-import range = require("lodash/range");
-import isEqual = require("lodash/isEqual");
+import last from "lodash/last";
+import pick from "lodash/pick";
+import range from "lodash/range";
+import isEqual from "lodash/isEqual";
 
 import { AttributeFilterItem } from "./AttributeFilterItem";
 import { IAttributeDisplayForm, IAttributeElement } from "./model";
