@@ -7,7 +7,7 @@
       "es7",
       "dom"
     ],
-    "module": "commonjs",
+    "module": "esnext",
     "moduleResolution": "node",
     "noImplicitAny": true,
     "noUnusedLocals": true,
