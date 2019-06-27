@@ -24,15 +24,15 @@ addLocaleData([
     ...zhLocaleData,
 ]);
 
-import * as enUS from "../../../translations/en-US.json";
-import * as deDE from "../../../translations/de-DE.json";
-import * as esES from "../../../translations/es-ES.json";
-import * as frFR from "../../../translations/fr-FR.json";
-import * as jaJP from "../../../translations/ja-JP.json";
-import * as nlNL from "../../../translations/nl-NL.json";
-import * as ptBR from "../../../translations/pt-BR.json";
-import * as ptPT from "../../../translations/pt-PT.json";
-import * as zhHans from "../../../translations/zh-Hans.json";
+import enUS from "../../../translations/en-US.json";
+import deDE from "../../../translations/de-DE.json";
+import esES from "../../../translations/es-ES.json";
+import frFR from "../../../translations/fr-FR.json";
+import jaJP from "../../../translations/ja-JP.json";
+import nlNL from "../../../translations/nl-NL.json";
+import ptBR from "../../../translations/pt-BR.json";
+import ptPT from "../../../translations/pt-PT.json";
+import zhHans from "../../../translations/zh-Hans.json";
 
 export const messagesMap = {
     "en-US": translations.removeMetadata(enUS),
