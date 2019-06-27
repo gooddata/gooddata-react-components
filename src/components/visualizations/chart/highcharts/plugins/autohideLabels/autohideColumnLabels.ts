@@ -170,6 +170,7 @@ function toggleStackedLabelsForDualAxis() {
         }
     }
 }
+// POC
 
 function toggleStackedLabelsForSingleAxis() {
     const { yAxis } = this;
