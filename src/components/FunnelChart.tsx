@@ -6,7 +6,7 @@ import { VisualizationObject, VisualizationInput } from "@gooddata/typings";
 import { Subtract } from "../typings/subtract";
 import { FunnelChart as AfmFunnelChart } from "./afm/FunnelChart";
 import { ICommonChartProps } from "./core/base/BaseChart";
-import { convertBucketsToAFM, mergeSeparatorsIntoMeasures } from "../helpers/conversion";
+import { convertBucketsToAFM } from "../helpers/conversion";
 import { getResultSpec } from "../helpers/resultSpec";
 import { generateDefaultDimensionsForRoundChart } from "../helpers/dimensions";
 import { MEASURES, VIEW } from "../constants/bucketNames";
@@ -31,15 +31,10 @@ const generateFunnelDimensionsFromBuckets = (buckets: VisualizationObject.IBucke
  * is a component with bucket props measures, viewBy, filters
  */
 export function FunnelChart(props: IFunnelChartProps): JSX.Element {
-    const measures = mergeSeparatorsIntoMeasures(
-        props.config && props.config.separators,
-        props.measures || [],
-    );
-
     const buckets: VisualizationObject.IBucket[] = [
         {
             localIdentifier: MEASURES,
-            items: measures,
+            items: props.measures || [],
         },
         {
             localIdentifier: VIEW,

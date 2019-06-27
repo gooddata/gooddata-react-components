@@ -6,7 +6,7 @@ import { VisualizationObject, VisualizationInput } from "@gooddata/typings";
 import { Subtract } from "../typings/subtract";
 import { Table as AfmTable } from "./afm/Table";
 import { ICommonChartProps } from "./core/base/BaseChart";
-import { convertBucketsToAFM, mergeSeparatorsIntoMeasures } from "../helpers/conversion";
+import { convertBucketsToAFM } from "../helpers/conversion";
 import { getTableDimensions } from "../helpers/dimensions";
 import { getResultSpec } from "../helpers/resultSpec";
 import { MEASURES, ATTRIBUTE } from "../constants/bucketNames";
@@ -31,15 +31,10 @@ type ITableNonBucketProps = Subtract<ITableProps, ITableBucketProps>;
  * is a component with bucket props measures, attributes, totals, filters
  */
 export function Table(props: ITableProps): JSX.Element {
-    const measures = mergeSeparatorsIntoMeasures(
-        props.config && props.config.separators,
-        props.measures || [],
-    );
-
     const buckets: VisualizationObject.IBucket[] = [
         {
             localIdentifier: MEASURES,
-            items: measures,
+            items: props.measures || [],
         },
         {
             localIdentifier: ATTRIBUTE,

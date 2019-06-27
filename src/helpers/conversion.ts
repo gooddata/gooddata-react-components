@@ -38,6 +38,22 @@ export function convertBucketsToAFM(
     return afm;
 }
 
+export function mergeSeparatorsIntoAfm(separators: ISeparators, afm: AFM.IAfm): AFM.IAfm {
+    if (!afm || !separators) {
+        return afm;
+    }
+
+    const measures = afm.measures.map((measure: AFM.IMeasure) => {
+        measure.format = FormatTranslator.translate2custom(measure.format || DEFAULT_FORMAT, separators);
+        return measure;
+    });
+
+    return {
+        ...afm,
+        measures,
+    };
+}
+
 export function mergeSeparatorsIntoMeasures(
     separators: ISeparators,
     measures: VisualizationObject.BucketItem[],
@@ -105,8 +121,8 @@ export function resetMeasuresToDefaultSeparators(
                     const {
                         measureHeaderItem: { format },
                     } = item;
-                    const decimalIndex = format.indexOf('0' + separators.decimal + '0');
-                    const thousandIndex = format.indexOf('#' + separators.thousand + '#');
+                    const decimalIndex = format.indexOf("0" + separators.decimal + "0");
+                    const thousandIndex = format.indexOf("#" + separators.thousand + "#");
 
                     if (
                         format !== DEFAULT_FORMAT &&

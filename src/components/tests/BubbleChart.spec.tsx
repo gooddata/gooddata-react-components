@@ -1,12 +1,11 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2018 GoodData Corporation
 import * as React from "react";
-import { shallow, ShallowWrapper } from "enzyme";
+import { shallow } from "enzyme";
 import { factory } from "@gooddata/gooddata-js";
 import { VisualizationObject, AFM } from "@gooddata/typings";
-import { BubbleChart, IBubbleChartProps } from "../BubbleChart";
+import { BubbleChart } from "../BubbleChart";
 import { BubbleChart as AfmBubbleChart } from "../afm/BubbleChart";
 import { M1 } from "./fixtures/buckets";
-import { IChartConfig } from "../../interfaces/Config";
 
 describe("BubbleChart", () => {
     const measure: VisualizationObject.IMeasure = {
@@ -64,26 +63,24 @@ describe("BubbleChart", () => {
         },
     };
 
-    function renderChart(props: Partial<IBubbleChartProps>): ShallowWrapper {
-        return shallow(<BubbleChart projectId="foo" {...props} />);
-    }
-
     it("should render with custom SDK", () => {
-        const wrapper = renderChart({
-            xAxisMeasure: M1,
-            sdk: factory({ domain: "example.com" }),
-        });
+        const wrapper = shallow(
+            <BubbleChart projectId="foo" xAxisMeasure={M1} sdk={factory({ domain: "example.com" })} />,
+        );
         expect(wrapper.find(AfmBubbleChart)).toHaveLength(1);
     });
 
     it("should render scatter plot and convert the buckets to AFM", () => {
-        const wrapper = renderChart({
-            xAxisMeasure: measure,
-            yAxisMeasure: secondaryMeasure,
-            size: tertiaryMeasure,
-            viewBy: attribute,
-            sortBy: [attributeSortItem],
-        });
+        const wrapper = shallow(
+            <BubbleChart
+                projectId="foo"
+                xAxisMeasure={measure}
+                yAxisMeasure={secondaryMeasure}
+                size={tertiaryMeasure}
+                viewBy={attribute}
+                sortBy={[attributeSortItem]}
+            />,
+        );
 
         const expectedAfm: AFM.IAfm = {
             measures: [
@@ -150,32 +147,5 @@ describe("BubbleChart", () => {
         expect(wrapper.find(AfmBubbleChart)).toHaveLength(1);
         expect(wrapper.find(AfmBubbleChart).prop("afm")).toEqual(expectedAfm);
         expect(wrapper.find(AfmBubbleChart).prop("resultSpec")).toEqual(expectedResultSpec);
-    });
-
-    describe("Separators", () => {
-        const config: IChartConfig = { separators: { thousand: "'", decimal: "," } };
-
-        it("should update format of measures", () => {
-            const wrapper = renderChart({
-                config,
-                xAxisMeasure: M1,
-                sdk: factory({ domain: "example.com" }),
-            });
-            expect(wrapper.find(AfmBubbleChart).prop("afm")).toEqual({
-                measures: [
-                    {
-                        definition: {
-                            measure: {
-                                item: {
-                                    identifier: "m1",
-                                },
-                            },
-                        },
-                        format: "#'##0,00",
-                        localIdentifier: "m1",
-                    },
-                ],
-            });
-        });
     });
 });

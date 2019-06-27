@@ -1,12 +1,11 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2018 GoodData Corporation
 import * as React from "react";
-import { shallow, ShallowWrapper } from "enzyme";
+import { shallow } from "enzyme";
 import { factory } from "@gooddata/gooddata-js";
 import { VisualizationObject, AFM } from "@gooddata/typings";
-import { Headline, IHeadlineProps } from "../Headline";
+import { Headline } from "../Headline";
 import { Headline as AfmHeadline } from "../afm/Headline";
 import { M1 } from "./fixtures/buckets";
-import { IChartConfig } from "../../interfaces/Config";
 
 describe("Headline", () => {
     const measure: VisualizationObject.IMeasure = {
@@ -22,21 +21,15 @@ describe("Headline", () => {
         },
     };
 
-    function renderChart(props: Partial<IHeadlineProps>): ShallowWrapper {
-        return shallow(<Headline primaryMeasure={M1} projectId="foo" {...props} />);
-    }
-
     it("should render with custom SDK", () => {
-        const wrapper = renderChart({
-            sdk: factory({ domain: "example.com" }),
-        });
+        const wrapper = shallow(
+            <Headline projectId="foo" primaryMeasure={M1} sdk={factory({ domain: "example.com" })} />,
+        );
         expect(wrapper.find(AfmHeadline)).toHaveLength(1);
     });
 
     it("should render headline with one measure and convert the bucket to AFM", () => {
-        const wrapper = renderChart({
-            primaryMeasure: measure,
-        });
+        const wrapper = shallow(<Headline projectId="foo" primaryMeasure={measure} />);
 
         const expectedAfm: AFM.IAfm = {
             measures: [
@@ -70,10 +63,9 @@ describe("Headline", () => {
                 },
             },
         };
-        const wrapper = renderChart({
-            primaryMeasure: measure,
-            secondaryMeasure,
-        });
+        const wrapper = shallow(
+            <Headline projectId="foo" primaryMeasure={measure} secondaryMeasure={secondaryMeasure} />,
+        );
 
         const expectedAfm: AFM.IAfm = {
             measures: [
@@ -102,28 +94,5 @@ describe("Headline", () => {
 
         expect(wrapper.find(AfmHeadline)).toHaveLength(1);
         expect(wrapper.find(AfmHeadline).prop("afm")).toEqual(expectedAfm);
-    });
-
-    describe("Separators", () => {
-        const config: IChartConfig = { separators: { thousand: "'", decimal: "," } };
-
-        it("should update format of measures", () => {
-            const wrapper = renderChart({ config });
-            expect(wrapper.find(AfmHeadline).prop("afm")).toEqual({
-                measures: [
-                    {
-                        definition: {
-                            measure: {
-                                item: {
-                                    identifier: "m1",
-                                },
-                            },
-                        },
-                        format: "#'##0,00",
-                        localIdentifier: "m1",
-                    },
-                ],
-            });
-        });
     });
 });

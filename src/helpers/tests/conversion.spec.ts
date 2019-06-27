@@ -1,6 +1,11 @@
 // (C) 2019 GoodData Corporation
-import { VisualizationInput, VisualizationObject } from "@gooddata/typings";
-import { convertBucketsToAFM, mergeSeparatorsIntoBuckets, mergeSeparatorsIntoMeasures } from "../conversion";
+import { AFM, VisualizationInput, VisualizationObject } from "@gooddata/typings";
+import {
+    convertBucketsToAFM,
+    mergeSeparatorsIntoAfm,
+    mergeSeparatorsIntoBuckets,
+    mergeSeparatorsIntoMeasures,
+} from "../conversion";
 import { MEASURES } from "../../constants/bucketNames";
 
 const PositiveTextFilter: VisualizationInput.IFilter = {
@@ -92,6 +97,50 @@ describe("convertBucketsToAFM", () => {
                             filters: [NegativeTextFilter],
                         },
                     },
+                },
+            ],
+        });
+    });
+});
+
+describe("mergeSeparatorsIntoAfm", () => {
+    const afm: AFM.IAfm = {
+        measures: [
+            {
+                localIdentifier: "franchiseFeesAdRoyaltyIdentifier",
+                definition: {
+                    measure: {
+                        item: {
+                            identifier: "identifier",
+                        },
+                    },
+                },
+                format: "#,##0.00",
+            },
+        ],
+    };
+
+    it("should return null if there is no afm", () => {
+        expect(mergeSeparatorsIntoAfm(null, null)).toEqual(null);
+    });
+
+    it("should return the same afm if there is no separators", () => {
+        expect(mergeSeparatorsIntoAfm(null, afm)).toEqual(afm);
+    });
+
+    it("should return the afm with updated format", () => {
+        expect(mergeSeparatorsIntoAfm({ decimal: ",", thousand: "'" }, afm)).toEqual({
+            measures: [
+                {
+                    localIdentifier: "franchiseFeesAdRoyaltyIdentifier",
+                    definition: {
+                        measure: {
+                            item: {
+                                identifier: "identifier",
+                            },
+                        },
+                    },
+                    format: "#'##0,00",
                 },
             ],
         });

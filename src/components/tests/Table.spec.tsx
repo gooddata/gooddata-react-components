@@ -1,12 +1,11 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2018 GoodData Corporation
 import * as React from "react";
-import { shallow, ShallowWrapper } from "enzyme";
+import { shallow } from "enzyme";
 import { factory } from "@gooddata/gooddata-js";
 import { VisualizationObject, AFM } from "@gooddata/typings";
-import { Table, ITableProps } from "../Table";
+import { Table } from "../Table";
 import { Table as AfmTable } from "../afm/Table";
 import { M1 } from "./fixtures/buckets";
-import { IChartConfig } from "../../interfaces/Config";
 
 describe("Table", () => {
     const measure: VisualizationObject.IMeasure = {
@@ -44,23 +43,22 @@ describe("Table", () => {
         },
     };
 
-    function renderChart(props: Partial<ITableProps>): ShallowWrapper {
-        return shallow(<Table measures={[M1]} projectId="foo" {...props} />);
-    }
-
     it("should render with custom SDK", () => {
-        const wrapper = renderChart({
-            sdk: factory({ domain: "example.com" }),
-        });
+        const wrapper = shallow(
+            <Table projectId="foo" measures={[M1]} sdk={factory({ domain: "example.com" })} />,
+        );
         expect(wrapper.find(AfmTable)).toHaveLength(1);
     });
 
     it("should render table and convert the buckets to AFM", () => {
-        const wrapper = renderChart({
-            measures: [measure],
-            attributes: [attribute],
-            sortBy: [measureSortItem],
-        });
+        const wrapper = shallow(
+            <Table
+                projectId="foo"
+                measures={[measure]}
+                attributes={[attribute]}
+                sortBy={[measureSortItem]}
+            />,
+        );
 
         const expectedAfm: AFM.IAfm = {
             measures: [
@@ -113,28 +111,5 @@ describe("Table", () => {
         expect(wrapper.find(AfmTable)).toHaveLength(1);
         expect(wrapper.find(AfmTable).prop("afm")).toEqual(expectedAfm);
         expect(wrapper.find(AfmTable).prop("resultSpec")).toEqual(expectedResultSpec);
-    });
-
-    describe("Separators", () => {
-        const config: IChartConfig = { separators: { thousand: "'", decimal: "," } };
-
-        it("should update format of measures", () => {
-            const wrapper = renderChart({ config });
-            expect(wrapper.find(AfmTable).prop("afm")).toEqual({
-                measures: [
-                    {
-                        definition: {
-                            measure: {
-                                item: {
-                                    identifier: "m1",
-                                },
-                            },
-                        },
-                        format: "#'##0,00",
-                        localIdentifier: "m1",
-                    },
-                ],
-            });
-        });
     });
 });

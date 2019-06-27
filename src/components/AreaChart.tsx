@@ -7,7 +7,7 @@ import { Subtract } from "../typings/subtract";
 import { AreaChart as AfmAreaChart } from "./afm/AreaChart";
 
 import { ICommonChartProps } from "./core/base/BaseChart";
-import { convertBucketsToAFM, mergeSeparatorsIntoMeasures } from "../helpers/conversion";
+import { convertBucketsToAFM } from "../helpers/conversion";
 import { getStackingResultSpec } from "../helpers/resultSpec";
 import { MEASURES, ATTRIBUTE, STACK } from "../constants/bucketNames";
 import { verifyBuckets, getBucketsProps, getConfigProps } from "../helpers/optionalStacking/areaChart";
@@ -34,15 +34,14 @@ type IAreaChartNonBucketProps = Subtract<IAreaChartProps, IAreaChartBucketProps>
 export function AreaChart(props: IAreaChartProps): JSX.Element {
     verifyBuckets(props);
 
-    const { measures: measuresFromProps, viewBy, stackBy } = getBucketsProps(props);
-    const sanitizedMeasures = sanitizeComputeRatioOnMeasures(measuresFromProps);
-    const measures = mergeSeparatorsIntoMeasures(props.config && props.config.separators, sanitizedMeasures);
+    const { measures, viewBy, stackBy } = getBucketsProps(props);
+    const sanitizedMeasures = sanitizeComputeRatioOnMeasures(measures);
     const configProp = getConfigProps(props);
 
     const buckets: VisualizationObject.IBucket[] = [
         {
             localIdentifier: MEASURES,
-            items: measures,
+            items: sanitizedMeasures,
         },
         {
             localIdentifier: ATTRIBUTE,

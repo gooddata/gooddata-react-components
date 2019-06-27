@@ -202,7 +202,10 @@ export function visualizationLoadingHOC<
                         ...rawExecution,
                         executionResult: executionResultWithResolvedEmptyValues,
                     };
-                    const result = resetMeasuresToDefaultSeparators(config && config.separators, executionWithFormats);
+                    const result = resetMeasuresToDefaultSeparators(
+                        config && config.separators,
+                        executionWithFormats,
+                    );
                     // This returns only current page,
                     // gooddata-js mergePages doesn't support discontinuous page ranges yet
                     this.setState({ result, error: null });
@@ -289,7 +292,10 @@ export function visualizationLoadingHOC<
 
             this.subject = DataLayer.createSubject<Execution.IExecutionResponses>(
                 executionWithFormats => {
-                    const result = resetMeasuresToDefaultSeparators(config && config.separators, executionWithFormats);
+                    const result = resetMeasuresToDefaultSeparators(
+                        config && config.separators,
+                        executionWithFormats,
+                    );
                     this.setState({ result });
                     this.props.pushData({ result });
                     this.onLoadingChanged({ isLoading: false });

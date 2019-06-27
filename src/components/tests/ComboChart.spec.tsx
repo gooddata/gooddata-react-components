@@ -11,21 +11,6 @@ import { IChartConfig } from "../../interfaces/Config";
 import { measure } from "../../helpers/model";
 
 describe("ComboChart", () => {
-    function renderChart(
-        primaryMeasures: VisualizationObject.IMeasure[],
-        secondaryMeasures: VisualizationObject.IMeasure[],
-        config?: IChartConfig,
-    ) {
-        return shallow(
-            <ComboChart
-                config={config}
-                projectId="foo"
-                primaryMeasures={primaryMeasures}
-                secondaryMeasures={secondaryMeasures}
-            />,
-        );
-    }
-
     it("should render with custom SDK", () => {
         const wrapper = shallow(
             <ComboChart
@@ -83,7 +68,22 @@ describe("ComboChart", () => {
     });
 
     describe("Stacking", () => {
-        const config: IChartConfig = { stackMeasures: true, stackMeasuresToPercent: true };
+        function renderChart(
+            primaryMeasures: VisualizationObject.IMeasure[],
+            secondaryMeasures: VisualizationObject.IMeasure[],
+            config?: IChartConfig,
+        ) {
+            return shallow(
+                <ComboChart
+                    config={config}
+                    projectId="foo"
+                    primaryMeasures={primaryMeasures}
+                    secondaryMeasures={secondaryMeasures}
+                />,
+            );
+        }
+
+        const config = { stackMeasures: true, stackMeasuresToPercent: true };
         const M5 = measure("m5").localIdentifier("m5");
         const M5WithRatio = measure("m5ratio")
             .localIdentifier("m5ratio")
@@ -198,29 +198,6 @@ describe("ComboChart", () => {
                                 computeRatio: true,
                             },
                         },
-                    },
-                ],
-            });
-        });
-    });
-
-    describe("Separators", () => {
-        const config: IChartConfig = { separators: { thousand: "'", decimal: "," } };
-
-        it("should update format of measures", () => {
-            const wrapper = renderChart([M1], [], config);
-            expect(wrapper.find(AfmComboChart).prop("afm")).toEqual({
-                measures: [
-                    {
-                        definition: {
-                            measure: {
-                                item: {
-                                    identifier: "m1",
-                                },
-                            },
-                        },
-                        format: "#'##0,00",
-                        localIdentifier: "m1",
                     },
                 ],
             });

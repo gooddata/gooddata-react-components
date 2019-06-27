@@ -8,8 +8,10 @@ import omit = require("lodash/omit");
 import { AFM, Execution } from "@gooddata/typings";
 import { AfmPropTypesShape, ResultSpecPropTypesShape } from "../visualizations/proptypes/execution";
 
+import { IChartConfig } from "../../interfaces/Config";
 import { IDataSource } from "../../interfaces/DataSource";
 import { ISubject } from "../../helpers/async";
+import { mergeSeparatorsIntoAfm } from "../../helpers/conversion";
 import { setTelemetryHeaders } from "../../helpers/utils";
 import { getNativeTotals } from "../visualizations/table/totals/utils";
 
@@ -113,13 +115,13 @@ export function dataSourceProvider<T>(
         }
 
         public componentDidMount() {
-            const { projectId, afm } = this.props;
+            const { projectId, afm, config } = this.props;
             this.createAdapter(projectId);
-            this.prepareDataSource(afm);
+            this.prepareDataSource(afm, config);
         }
 
         public componentWillReceiveProps(nextProps: IDataSourceProviderProps) {
-            const { projectId, afm, resultSpec, sdk } = nextProps;
+            const { projectId, afm, config, resultSpec, sdk } = nextProps;
             if (projectId !== this.props.projectId) {
                 this.createAdapter(projectId);
             }
@@ -134,7 +136,7 @@ export function dataSourceProvider<T>(
                 !isEqual(resultSpec, this.props.resultSpec) ||
                 projectId !== this.props.projectId
             ) {
-                this.prepareDataSource(afm);
+                this.prepareDataSource(afm, config);
             }
         }
 
@@ -157,10 +159,13 @@ export function dataSourceProvider<T>(
                     !afm.nativeTotals.find(afmNativeTotal => isEqual(afmNativeTotal, total)),
             );
             if (nativeTotalsRequested && (!hasAfmNativeTotals || hasUnlistedNativeTotals)) {
-                this.prepareDataSource({
-                    ...afm,
-                    nativeTotals,
-                });
+                this.prepareDataSource(
+                    {
+                        ...afm,
+                        nativeTotals,
+                    },
+                    this.props.config,
+                );
             }
         }
 
@@ -197,8 +202,10 @@ export function dataSourceProvider<T>(
             throw error;
         }
 
-        private prepareDataSource(afm: AFM.IAfm) {
-            const promise = this.adapter.createDataSource(afm);
+        private prepareDataSource(afm: AFM.IAfm, config: IChartConfig) {
+            const afmWithFormat = mergeSeparatorsIntoAfm(config && config.separators, afm);
+
+            const promise = this.adapter.createDataSource(afmWithFormat);
             this.subject.next(promise);
         }
     };

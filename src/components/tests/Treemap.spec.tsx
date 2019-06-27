@@ -1,12 +1,11 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2018 GoodData Corporation
 import * as React from "react";
-import { shallow, ShallowWrapper } from "enzyme";
+import { shallow } from "enzyme";
 import { factory } from "@gooddata/gooddata-js";
 import { VisualizationObject, AFM } from "@gooddata/typings";
-import { Treemap, ITreemapProps } from "../Treemap";
+import { Treemap } from "../Treemap";
 import { Treemap as AfmTreemap } from "../afm/Treemap";
 import { M1 } from "./fixtures/buckets";
-import { IChartConfig } from "../../interfaces/Config";
 
 describe("Treemap", () => {
     const measure: VisualizationObject.IMeasure = {
@@ -31,22 +30,15 @@ describe("Treemap", () => {
         },
     };
 
-    function renderChart(props: Partial<ITreemapProps>): ShallowWrapper {
-        return shallow(<Treemap measures={[M1]} projectId="foo" {...props} />);
-    }
-
     it("should render with custom SDK", () => {
-        const wrapper = renderChart({
-            sdk: factory({ domain: "example.com" }),
-        });
+        const wrapper = shallow(
+            <Treemap projectId="foo" measures={[M1]} sdk={factory({ domain: "example.com" })} />,
+        );
         expect(wrapper.find(AfmTreemap)).toHaveLength(1);
     });
 
     it("should render treemap and convert the buckets to AFM", () => {
-        const wrapper = renderChart({
-            measures: [measure],
-            viewBy: attribute,
-        });
+        const wrapper = shallow(<Treemap projectId="foo" measures={[measure]} viewBy={attribute} />);
 
         const expectedAfm: AFM.IAfm = {
             measures: [
@@ -73,28 +65,5 @@ describe("Treemap", () => {
 
         expect(wrapper.find(AfmTreemap)).toHaveLength(1);
         expect(wrapper.find(AfmTreemap).prop("afm")).toEqual(expectedAfm);
-    });
-
-    describe("Separators", () => {
-        const config: IChartConfig = { separators: { thousand: "'", decimal: "," } };
-
-        it("should update format of measures", () => {
-            const wrapper = renderChart({ config });
-            expect(wrapper.find(AfmTreemap).prop("afm")).toEqual({
-                measures: [
-                    {
-                        definition: {
-                            measure: {
-                                item: {
-                                    identifier: "m1",
-                                },
-                            },
-                        },
-                        format: "#'##0,00",
-                        localIdentifier: "m1",
-                    },
-                ],
-            });
-        });
     });
 });
