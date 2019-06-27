@@ -31,6 +31,7 @@ import {
     getMeasureCellFormattedValue,
     getMeasureCellStyle,
 } from "../../helpers/tableCell";
+import { resetMeasuresToDefaultSeparators } from "../../helpers/conversion";
 
 import { IDrillEvent, IDrillEventContextTable } from "../../interfaces/DrillEvents";
 import { IHeaderPredicate } from "../../interfaces/HeaderPredicate";
@@ -346,10 +347,13 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
     private createAGGridDataSource() {
         const onSuccess = (
-            execution: Execution.IExecutionResponses,
+            executionWithFormats: Execution.IExecutionResponses,
             columnDefs: IGridHeader[],
             resultSpec: AFM.IResultSpec,
         ) => {
+            const separators = get(this.props, ["config", "separators"], undefined);
+            const execution = resetMeasuresToDefaultSeparators(separators, executionWithFormats);
+
             if (!isEqual(columnDefs, this.state.columnDefs)) {
                 const sortedByFirstAttribute = isSortedByFirstAttibute(columnDefs, resultSpec);
                 this.setState({
