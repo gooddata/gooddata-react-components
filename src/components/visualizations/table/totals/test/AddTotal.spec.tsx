@@ -1,7 +1,7 @@
 // (C) 2007-2018 GoodData Corporation
 import * as React from "react";
 import { mount } from "enzyme";
-import Dropdown from "@gooddata/goodstrap/lib/Dropdown/Dropdown";
+import { Dropdown } from "@gooddata/goodstrap";
 
 import { AddTotal, IAddTotalProps } from "../AddTotal";
 import { AddTotalButton } from "../AddTotalButton";

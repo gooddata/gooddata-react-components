@@ -3,6 +3,7 @@
   "version": "7.1.0-alpha.42",
   "description": "GoodData React Components",
   "main": "dist/index.js",
+  "sideEffects": false,
   "repository": "git@github.com:gooddata/gooddata-react-components.git",
   "author": "GoodData Corporation",
   "license": "BSD-3-Clause",
@@ -104,7 +105,7 @@
   },
   "dependencies": {
     "@gooddata/gooddata-js": "^11.14.0",
-    "@gooddata/goodstrap": "^61.0.0",
+    "@gooddata/goodstrap": "61.1.0-no23reason-dho-fet-25-goodstrap-entry-2019-06-27T13-30-09-788Z",
     "@gooddata/js-utils": "^3.4.0",
     "@gooddata/numberjs": "^3.1.2",
     "@gooddata/typings": "^2.13.2",

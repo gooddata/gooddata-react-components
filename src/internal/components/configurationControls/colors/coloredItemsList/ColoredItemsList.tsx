@@ -2,7 +2,7 @@
 import * as React from "react";
 import * as CustomEvent from "custom-event";
 import { injectIntl, InjectedIntlProps } from "react-intl";
-import { DropdownBody } from "@gooddata/goodstrap/lib/Dropdown/Dropdown";
+import { DropdownBody } from "@gooddata/goodstrap";
 import * as ChartConfiguration from "../../../../../interfaces/Config";
 import { IColorItem } from "@gooddata/gooddata-js";
 

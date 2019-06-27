@@ -2,7 +2,7 @@
 import * as React from "react";
 import { injectIntl, InjectedIntlProps } from "react-intl";
 import set = require("lodash/set");
-import Dropdown, { DropdownButton, DropdownBody } from "@gooddata/goodstrap/lib/Dropdown/Dropdown";
+import { Dropdown, DropdownButton, DropdownBody } from "@gooddata/goodstrap";
 import DisabledBubbleMessage from "../DisabledBubbleMessage";
 
 import { getTranslation } from "../../utils/translations";

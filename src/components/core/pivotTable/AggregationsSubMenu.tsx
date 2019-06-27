@@ -1,8 +1,8 @@
 // (C) 2007-2018 GoodData Corporation
 import * as React from "react";
-import { AFM, Execution } from "@gooddata/typings";
-import { Header, Item, ItemsWrapper } from "@gooddata/goodstrap/lib/List/MenuList";
 import * as classNames from "classnames";
+import { AFM, Execution } from "@gooddata/typings";
+import { MenuList } from "@gooddata/goodstrap";
 
 import { getNthAttributeLocalIdentifier, getNthAttributeName } from "../../../helpers/executionResultHelper";
 import SubMenu from "../../menu/SubMenu";
@@ -34,12 +34,14 @@ export default class AggregationsSubMenu extends React.Component<IAggregationsSu
 
         return (
             <SubMenu toggler={toggler} offset={MENU_HEADER_OFFSET} {...menuOpenedProp}>
-                <ItemsWrapper>
+                <MenuList.ItemsWrapper>
                     <div className="gd-aggregation-submenu s-table-header-submenu-content">
-                        <Header>{intl.formatMessage({ id: "visualizations.menu.aggregations.rows" })}</Header>
+                        <MenuList.Header>
+                            {intl.formatMessage({ id: "visualizations.menu.aggregations.rows" })}
+                        </MenuList.Header>
                         {this.renderSubMenuItems()}
                     </div>
-                </ItemsWrapper>
+                </MenuList.ItemsWrapper>
             </SubMenu>
         );
     }
@@ -95,7 +97,7 @@ export default class AggregationsSubMenu extends React.Component<IAggregationsSu
 
                 const attributeName = this.getAttributeName(rowAttributeHeaders, headerIndex);
                 return (
-                    <Item checked={isSelected} key={attributeLocalIdentifier}>
+                    <MenuList.Item checked={isSelected} key={attributeLocalIdentifier}>
                         <div
                             onClick={onClick}
                             className={classNames(
@@ -109,7 +111,7 @@ export default class AggregationsSubMenu extends React.Component<IAggregationsSu
                         >
                             {attributeName}
                         </div>
-                    </Item>
+                    </MenuList.Item>
                 );
             },
         );

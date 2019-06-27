@@ -7,10 +7,9 @@ import { debounce, isEqual, noop, pick, uniqueId } from "lodash";
 import { Cell, CellProps, Column, Table, ColumnHeaderProps } from "fixed-data-table-2";
 import { AFM, Execution } from "@gooddata/typings";
 import { ISeparators } from "@gooddata/numberjs";
+import { Bubble, BubbleHoverTrigger } from "@gooddata/goodstrap";
 import "nodelist-foreach-polyfill";
 
-import Bubble from "@gooddata/goodstrap/lib/Bubble/Bubble";
-import BubbleHoverTrigger from "@gooddata/goodstrap/lib/Bubble/BubbleHoverTrigger";
 import { Subscription } from "rxjs/Subscription";
 import { isSomeHeaderPredicateMatched } from "../../../helpers/headerPredicate";
 import { getMappingHeaderLocalIdentifier, getMappingHeaderName } from "../../../helpers/mappingHeader";

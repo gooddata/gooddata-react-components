@@ -1,7 +1,7 @@
 // (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import { IExportResponse } from "@gooddata/gooddata-js";
-import ExportDialog, { IExportDialogData } from "@gooddata/goodstrap/lib/Dialog/ExportDialog";
+import { ExportDialog, IExportDialogData } from "@gooddata/goodstrap";
 import { AFM } from "@gooddata/typings";
 import { action } from "@storybook/addon-actions";
 import { storiesOf } from "@storybook/react";

@@ -4,8 +4,7 @@ import { FormattedMessage } from "react-intl";
 import get = require("lodash/get");
 import includes = require("lodash/includes");
 import * as BucketNames from "../../../constants/bucketNames";
-import Bubble from "@gooddata/goodstrap/lib/Bubble/Bubble";
-import BubbleHoverTrigger from "@gooddata/goodstrap/lib/Bubble/BubbleHoverTrigger";
+import { Bubble, BubbleHoverTrigger } from "@gooddata/goodstrap";
 import * as classNames from "classnames";
 
 import MinMaxControl from "../configurationControls//MinMaxControl";

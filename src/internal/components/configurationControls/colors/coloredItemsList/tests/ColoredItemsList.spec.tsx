@@ -2,7 +2,7 @@
 import * as React from "react";
 import { mount } from "enzyme";
 import { noop, cloneDeep } from "lodash";
-import { DropdownBody } from "@gooddata/goodstrap/lib/Dropdown/Dropdown";
+import { DropdownBody } from "@gooddata/goodstrap";
 import ColoredItemsList, { IColoredItemsListProps } from "../ColoredItemsList";
 import { colorPalette } from "../../../../../mocks/testColorHelper";
 import { InternalIntlWrapper, createInternalIntl } from "../../../../../utils/internalIntlProvider";

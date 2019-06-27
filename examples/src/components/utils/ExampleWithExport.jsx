@@ -2,7 +2,7 @@
 /* eslint-disable react/jsx-closing-tag-location */
 import React from "react";
 import get from "lodash/get";
-import ExportDialog from "@gooddata/goodstrap/lib/Dialog/ExportDialog";
+import { ExportDialog } from "@gooddata/goodstrap";
 import PropTypes from "prop-types";
 
 const DOWNLOADER_ID = "downloader";

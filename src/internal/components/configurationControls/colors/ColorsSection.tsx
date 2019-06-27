@@ -5,7 +5,7 @@ import get = require("lodash/get");
 import cloneDeep = require("lodash/cloneDeep");
 import { injectIntl, InjectedIntlProps } from "react-intl";
 import { IColorItem } from "@gooddata/gooddata-js";
-import Button from "@gooddata/goodstrap/lib/Button/Button";
+import { Button } from "@gooddata/goodstrap";
 import * as classNames from "classnames";
 
 import ConfigSection from "../../configurationControls/ConfigSection";

@@ -3,8 +3,7 @@ import * as React from "react";
 import * as classNames from "classnames";
 import { noop } from "lodash";
 
-import List from "@gooddata/goodstrap/lib/List/List";
-import Dropdown, { DropdownBody } from "@gooddata/goodstrap/lib/Dropdown/Dropdown";
+import { List, Dropdown, DropdownBody } from "@gooddata/goodstrap";
 import { IMappingHeader } from "../../../../interfaces/MappingHeader";
 
 import { DropdownItem } from "./DropdownItem";

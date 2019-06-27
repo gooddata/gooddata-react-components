@@ -3,7 +3,7 @@ import { action } from "@storybook/addon-actions";
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { screenshotWrap } from "@gooddata/test-storybook";
-import { ItemsWrapper, Header, Separator, Item } from "@gooddata/goodstrap/lib/List/MenuList";
+import { MenuList } from "@gooddata/goodstrap";
 import noop = require("lodash/noop");
 
 import AggregationsMenu from "../../src/components/core/pivotTable/AggregationsMenu";
@@ -302,63 +302,66 @@ storiesOf("Helper components/Menu", module)
     .add("presentational menu components", () => (
         <Menu toggler={<ToggleButton />} spacing={4}>
             {({ closeMenu }) => (
-                <ItemsWrapper>
+                <MenuList.ItemsWrapper>
                     <SubMenu
                         toggler={
-                            <Item subMenu={true} checked={true}>
+                            <MenuList.Item subMenu={true} checked={true}>
                                 Sort
-                            </Item>
+                            </MenuList.Item>
                         }
                         offset={-8}
                     >
-                        <ItemsWrapper>
-                            <Item checked={true} onClick={closeMenu}>
+                        <MenuList.ItemsWrapper>
+                            <MenuList.Item checked={true} onClick={closeMenu}>
                                 Net Revenue
-                            </Item>
-                            <Item onClick={closeMenu}>Gross Revenue</Item>
-                        </ItemsWrapper>
+                            </MenuList.Item>
+                            <MenuList.Item onClick={closeMenu}>Gross Revenue</MenuList.Item>
+                        </MenuList.ItemsWrapper>
                     </SubMenu>
 
-                    <Separator />
+                    <MenuList.Separator />
 
-                    <Header>AGGREGATE</Header>
+                    <MenuList.Header>AGGREGATE</MenuList.Header>
                     <SubMenu
                         toggler={
-                            <Item subMenu={true} checked={true}>
+                            <MenuList.Item subMenu={true} checked={true}>
                                 Total (rollup)
-                            </Item>
+                            </MenuList.Item>
                         }
                         offset={-8}
                     >
-                        <ItemsWrapper>
-                            <Item checked={true} onClick={closeMenu}>
+                        <MenuList.ItemsWrapper>
+                            <MenuList.Item checked={true} onClick={closeMenu}>
                                 of all rows
-                            </Item>
-                            <Item checked={true} onClick={closeMenu}>
+                            </MenuList.Item>
+                            <MenuList.Item checked={true} onClick={closeMenu}>
                                 within department
-                            </Item>
-                            <Item onClick={closeMenu}>within city</Item>
-                        </ItemsWrapper>
+                            </MenuList.Item>
+                            <MenuList.Item onClick={closeMenu}>within city</MenuList.Item>
+                        </MenuList.ItemsWrapper>
                     </SubMenu>
-                    <Item onClick={closeMenu}>Sum</Item>
-                    <Item onClick={closeMenu}>Average</Item>
-                    <Item onClick={closeMenu}>Median</Item>
+                    <MenuList.Item onClick={closeMenu}>Sum</MenuList.Item>
+                    <MenuList.Item onClick={closeMenu}>Average</MenuList.Item>
+                    <MenuList.Item onClick={closeMenu}>Median</MenuList.Item>
 
-                    <Separator />
-                    <Item disabled={true} checked={true}>
-                        Disabled Item
-                    </Item>
-                    <SubMenu toggler={<Item subMenu={true}>Menu with just items</Item>} offset={-8}>
-                        <ItemsWrapper smallItemsSpacing={true}>
-                            <Item onClick={closeMenu}>Item text text</Item>
-                            <Item onClick={closeMenu}>Item text text text</Item>
-                            <Separator />
-                            <Item onClick={closeMenu}>Item text text</Item>
-                            <Header>HEADING</Header>
-                            <Item onClick={closeMenu}>Item text text text</Item>
-                        </ItemsWrapper>
+                    <MenuList.Separator />
+                    <MenuList.Item disabled={true} checked={true}>
+                        Disabled MenuList.Item
+                    </MenuList.Item>
+                    <SubMenu
+                        toggler={<MenuList.Item subMenu={true}>Menu with just items</MenuList.Item>}
+                        offset={-8}
+                    >
+                        <MenuList.ItemsWrapper smallItemsSpacing={true}>
+                            <MenuList.Item onClick={closeMenu}>Item text text</MenuList.Item>
+                            <MenuList.Item onClick={closeMenu}>Item text text text</MenuList.Item>
+                            <MenuList.Separator />
+                            <MenuList.Item onClick={closeMenu}>Item text text</MenuList.Item>
+                            <MenuList.Header>HEADING</MenuList.Header>
+                            <MenuList.Item onClick={closeMenu}>Item text text text</MenuList.Item>
+                        </MenuList.ItemsWrapper>
                     </SubMenu>
-                </ItemsWrapper>
+                </MenuList.ItemsWrapper>
             )}
         </Menu>
     ))
@@ -372,31 +375,31 @@ storiesOf("Helper components/Menu", module)
                 }}
             >
                 <Menu toggler={<ToggleButton />} opened={true} spacing={4}>
-                    <ItemsWrapper>
-                        <Header>AGGREGATE</Header>
-                        <Item checked={true}>Sum</Item>
-                        <Item>Average</Item>
-                        <Item>Median</Item>
+                    <MenuList.ItemsWrapper>
+                        <MenuList.Header>AGGREGATE</MenuList.Header>
+                        <MenuList.Item checked={true}>Sum</MenuList.Item>
+                        <MenuList.Item>Average</MenuList.Item>
+                        <MenuList.Item>Median</MenuList.Item>
 
-                        <Separator />
-                        <Item disabled={true} checked={true}>
+                        <MenuList.Separator />
+                        <MenuList.Item disabled={true} checked={true}>
                             Disabled Item
-                        </Item>
+                        </MenuList.Item>
                         <SubMenu
-                            toggler={<Item subMenu={true}>Menu with just items</Item>}
+                            toggler={<MenuList.Item subMenu={true}>Menu with just items</MenuList.Item>}
                             offset={-8}
                             opened={true}
                         >
-                            <ItemsWrapper smallItemsSpacing={true}>
-                                <Item>Item text text</Item>
-                                <Item>Item text text text</Item>
-                                <Separator />
-                                <Item>Item text text</Item>
-                                <Header>HEADING</Header>
-                                <Item>Item text text text</Item>
-                            </ItemsWrapper>
+                            <MenuList.ItemsWrapper smallItemsSpacing={true}>
+                                <MenuList.Item>Item text text</MenuList.Item>
+                                <MenuList.Item>Item text text text</MenuList.Item>
+                                <MenuList.Separator />
+                                <MenuList.Item>Item text text</MenuList.Item>
+                                <MenuList.Header>HEADING</MenuList.Header>
+                                <MenuList.Item>Item text text text</MenuList.Item>
+                            </MenuList.ItemsWrapper>
                         </SubMenu>
-                    </ItemsWrapper>
+                    </MenuList.ItemsWrapper>
                 </Menu>
             </div>,
         ),
@@ -415,36 +418,39 @@ storiesOf("Helper components/Menu", module)
                 }}
             >
                 <Menu toggler={<ToggleButton />} opened={true} spacing={4} alignment={["left", "bottom"]}>
-                    <ItemsWrapper style={{ height: 100, width: 150 }}>
+                    <MenuList.ItemsWrapper style={{ height: 100, width: 150 }}>
                         <SubMenu
-                            toggler={<Item subMenu={true}>Submenu</Item>}
+                            toggler={<MenuList.Item subMenu={true}>Submenu</MenuList.Item>}
                             offset={-8}
                             opened={true}
                             alignment={["left", "top"]}
                         >
-                            <ItemsWrapper style={{ height: 200, width: 150 }}>
+                            <MenuList.ItemsWrapper style={{ height: 200, width: 150 }}>
                                 <SubMenu
-                                    toggler={<Item subMenu={true}>Submenu</Item>}
+                                    toggler={<MenuList.Item subMenu={true}>Submenu</MenuList.Item>}
                                     offset={-8}
                                     opened={true}
                                     alignment={["right", "top"]}
                                 >
-                                    <ItemsWrapper style={{ height: 150, width: 150 }}>
+                                    <MenuList.ItemsWrapper style={{ height: 150, width: 150 }}>
                                         <SubMenu
-                                            toggler={<Item subMenu={true}>Submenu</Item>}
+                                            toggler={<MenuList.Item subMenu={true}>Submenu</MenuList.Item>}
                                             offset={-8}
                                             opened={true}
                                             alignment={["right", "bottom"]}
                                         >
-                                            <ItemsWrapper smallItemsSpacing={true} style={{ width: 100 }}>
-                                                <Item>Item text</Item>
-                                            </ItemsWrapper>
+                                            <MenuList.ItemsWrapper
+                                                smallItemsSpacing={true}
+                                                style={{ width: 100 }}
+                                            >
+                                                <MenuList.Item>Item text</MenuList.Item>
+                                            </MenuList.ItemsWrapper>
                                         </SubMenu>
-                                    </ItemsWrapper>
+                                    </MenuList.ItemsWrapper>
                                 </SubMenu>
-                            </ItemsWrapper>
+                            </MenuList.ItemsWrapper>
                         </SubMenu>
-                    </ItemsWrapper>
+                    </MenuList.ItemsWrapper>
                 </Menu>
             </div>,
         ),

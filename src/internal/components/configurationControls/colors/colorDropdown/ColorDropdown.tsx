@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
-import ColorPicker from "@gooddata/goodstrap/lib/ColorPicker/ColorPicker";
+import { ColorPicker } from "@gooddata/goodstrap";
 import { InjectedIntlProps, injectIntl } from "react-intl";
 import { TypeGuards, IColor, IColorItem } from "@gooddata/gooddata-js";
 import * as uuid from "uuid";

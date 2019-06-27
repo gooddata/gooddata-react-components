@@ -1,8 +1,8 @@
 // (C) 2019 GoodData Corporation
-import { Header, Item, ItemsWrapper } from "@gooddata/goodstrap/lib/List/MenuList";
-import { AFM, Execution } from "@gooddata/typings";
-import * as classNames from "classnames";
 import * as React from "react";
+import * as classNames from "classnames";
+import { MenuList } from "@gooddata/goodstrap";
+import { AFM, Execution } from "@gooddata/typings";
 
 import {
     getNthAttributeHeader,
@@ -92,16 +92,18 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
                 onOpenedChange={onMenuOpenedChange}
                 openAction={"click"}
             >
-                <ItemsWrapper>
+                <MenuList.ItemsWrapper>
                     <div className="s-table-header-menu-content">
-                        <Header>{intl.formatMessage({ id: "visualizations.menu.aggregations" })}</Header>
+                        <MenuList.Header>
+                            {intl.formatMessage({ id: "visualizations.menu.aggregations" })}
+                        </MenuList.Header>
                         {this.renderMainMenuItems(
                             totalsForHeader,
                             measureLocalIdentifiers,
                             rowAttributeHeaders,
                         )}
                     </div>
-                </ItemsWrapper>
+                </MenuList.ItemsWrapper>
             </Menu>
         );
     }
@@ -133,13 +135,13 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
         hasSubMenu = false,
     ) {
         return (
-            <Item checked={isSelected} subMenu={hasSubMenu}>
+            <MenuList.Item checked={isSelected} subMenu={hasSubMenu}>
                 <div onClick={onClick} className="gd-aggregation-menu-item-inner s-menu-aggregation-inner">
                     {this.props.intl.formatMessage({
                         id: `visualizations.totals.dropdown.title.${totalType}`,
                     })}
                 </div>
-            </Item>
+            </MenuList.Item>
         );
     }
 

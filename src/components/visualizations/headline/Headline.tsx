@@ -4,7 +4,7 @@ import * as classNames from "classnames";
 import noop = require("lodash/noop");
 import { AFM } from "@gooddata/typings";
 import { HeadlineElementType } from "../../../constants/visualizationTypes";
-import ResponsiveText from "@gooddata/goodstrap/lib/ResponsiveText/ResponsiveText";
+import { ResponsiveText } from "@gooddata/goodstrap";
 import { IFormattedHeadlineDataItem, IHeadlineData, IHeadlineDataItem } from "../../../interfaces/Headlines";
 import { formatItemValue, formatPercentageValue } from "./utils/HeadlineDataItemUtils";
 import { IChartConfig } from "../../../interfaces/Config";

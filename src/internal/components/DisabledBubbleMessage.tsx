@@ -2,8 +2,7 @@
 import * as React from "react";
 import { InjectedIntlProps, injectIntl } from "react-intl";
 import * as classNames from "classnames";
-import Bubble from "@gooddata/goodstrap/lib/Bubble/Bubble";
-import BubbleHoverTrigger from "@gooddata/goodstrap/lib/Bubble/BubbleHoverTrigger";
+import { Bubble, BubbleHoverTrigger } from "@gooddata/goodstrap";
 import { getTranslation } from "../utils/translations";
 
 export interface IBubbleMessageProps {

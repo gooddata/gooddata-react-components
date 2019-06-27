@@ -2,8 +2,7 @@
 import * as React from "react";
 import * as classNames from "classnames";
 import { FormattedMessage } from "react-intl";
-import Bubble from "@gooddata/goodstrap/lib/Bubble/Bubble";
-import BubbleHoverTrigger from "@gooddata/goodstrap/lib/Bubble/BubbleHoverTrigger";
+import { Bubble, BubbleHoverTrigger } from "@gooddata/goodstrap";
 
 import ConfigurationPanelContent from "./ConfigurationPanelContent";
 import ConfigSection from "../configurationControls/ConfigSection";

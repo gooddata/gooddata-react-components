@@ -2,7 +2,7 @@
 import * as React from "react";
 import { InjectedIntlProps, injectIntl } from "react-intl";
 
-import Button from "@gooddata/goodstrap/lib/Button/Button";
+import { Button } from "@gooddata/goodstrap";
 
 export interface ITableControlsProps {
     onMore: () => void;

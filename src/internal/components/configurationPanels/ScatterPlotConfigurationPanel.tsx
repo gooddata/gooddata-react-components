@@ -2,8 +2,7 @@
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
 import get = require("lodash/get");
-import Bubble from "@gooddata/goodstrap/lib/Bubble/Bubble";
-import BubbleHoverTrigger from "@gooddata/goodstrap/lib/Bubble/BubbleHoverTrigger";
+import { Bubble, BubbleHoverTrigger } from "@gooddata/goodstrap";
 import * as classNames from "classnames";
 
 import ConfigurationPanelContent from "./ConfigurationPanelContent";

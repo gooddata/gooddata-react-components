@@ -2,7 +2,7 @@
 import * as React from "react";
 import { mount } from "enzyme";
 import { noop, cloneDeep } from "lodash";
-import ColorPicker from "@gooddata/goodstrap/lib/ColorPicker/ColorPicker";
+import { ColorPicker } from "@gooddata/goodstrap";
 import { IColorItem } from "@gooddata/gooddata-js";
 import { colorPalette } from "../../../../../mocks/testColorHelper";
 import { InternalIntlWrapper } from "../../../../../utils/internalIntlProvider";

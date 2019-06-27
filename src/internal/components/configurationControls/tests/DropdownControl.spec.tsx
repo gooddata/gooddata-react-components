@@ -2,7 +2,7 @@
 import * as React from "react";
 import { mount } from "enzyme";
 import noop = require("lodash/noop");
-import Dropdown from "@gooddata/goodstrap/lib/Dropdown/Dropdown";
+import { Dropdown } from "@gooddata/goodstrap";
 import DropdownControl, { IDropdownControlProps } from "../DropdownControl";
 import { InternalIntlWrapper } from "../../../utils/internalIntlProvider";
 

@@ -1,7 +1,7 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
 import get = require("lodash/get");
-import Message from "@gooddata/goodstrap/lib/Messages/Message";
+import { Message } from "@gooddata/goodstrap";
 import { InjectedIntlProps, injectIntl } from "react-intl";
 
 import ConfigSubsection from "../configurationControls/ConfigSubsection";

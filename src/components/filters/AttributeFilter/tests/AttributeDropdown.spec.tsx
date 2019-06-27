@@ -2,7 +2,7 @@
 import * as React from "react";
 import * as ReactTestUtils from "react-dom/test-utils";
 import { mount } from "enzyme";
-import { DropdownButton } from "@gooddata/goodstrap/lib/Dropdown/Dropdown";
+import { DropdownButton } from "@gooddata/goodstrap";
 import { testUtils } from "@gooddata/js-utils";
 
 import { AttributeDropdown, VISIBLE_ITEMS_COUNT, createAfmFilter } from "../AttributeDropdown";

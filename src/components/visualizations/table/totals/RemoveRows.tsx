@@ -4,7 +4,7 @@ import * as classNames from "classnames";
 import { noop } from "lodash";
 import { VisualizationObject } from "@gooddata/typings";
 
-import Button from "@gooddata/goodstrap/lib/Button/Button";
+import { Button } from "@gooddata/goodstrap";
 
 import { ITotalWithData } from "../../../../interfaces/Totals";
 import { TOTALS_ADD_ROW_HEIGHT } from "../constants/layout";
