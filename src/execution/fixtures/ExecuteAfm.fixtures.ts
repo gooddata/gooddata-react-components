@@ -236,7 +236,7 @@ const oneMeasureAfmWithFormat: AFM.IAfm = {
                     },
                 },
             },
-            format: "#'##0,00",
+            format: "#,##0.00",
         },
     ],
 };

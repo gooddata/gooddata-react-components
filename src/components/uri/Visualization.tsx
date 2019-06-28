@@ -22,6 +22,8 @@ import { PivotTable } from "../PivotTable";
 import { Headline } from "../core/Headline";
 import { IEvents, OnLegendReady } from "../../interfaces/Events";
 import { VisualizationPropType, Requireable } from "../../proptypes/Visualization";
+import { IDefaultFormats } from "../afm/DataSourceProvider";
+import { MEASURES, SECONDARY_MEASURES, TERTIARY_MEASURES } from "../../constants/bucketNames";
 import { VisualizationTypes, VisType } from "../../constants/visualizationTypes";
 import { IDataSource } from "../../interfaces/DataSource";
 import { ISubject } from "../../helpers/async";
@@ -154,6 +156,7 @@ export class VisualizationWrapped extends React.Component<
     private visualizationUri: string;
     private adapter: DataLayer.ExecuteAfmAdapter;
     private dataSource: IDataSource;
+    private defaultFormats: IDefaultFormats;
 
     private subject: ISubject<Promise<IVisualizationExecInfo>>;
 
@@ -338,6 +341,7 @@ export class VisualizationWrapped extends React.Component<
             ErrorComponent,
             locale,
             config,
+            defaultFormats: this.defaultFormats,
             exportTitle: this.exportTitle,
             onExportReady,
         };
@@ -395,11 +399,29 @@ export class VisualizationWrapped extends React.Component<
         this.visualizationUri = visualizationUri;
 
         const visObject = await fetchVisObject(this.sdk, visualizationUri);
+
+        const {
+            content: { buckets: visObjectBuckets },
+        } = visObject;
+
+        const defaultFormats = {};
+        const measureTypes = [MEASURES, SECONDARY_MEASURES, TERTIARY_MEASURES];
+        visObjectBuckets.forEach((bucket: VisualizationObject.IBucket) => {
+            if (measureTypes.indexOf(bucket.localIdentifier) !== -1) {
+                bucket.items.forEach((item: VisualizationObject.IMeasure) => {
+                    if (VisualizationObject.isMeasure(item)) {
+                        defaultFormats[item.measure.localIdentifier] = item.measure.format;
+                    }
+                });
+            }
+        });
+        this.defaultFormats = defaultFormats;
+
         const mdObject: VisualizationObject.IVisualizationObject = {
             ...visObject,
             content: {
                 ...visObject.content,
-                buckets: mergeSeparatorsIntoBuckets(config && config.separators, visObject.content.buckets),
+                buckets: mergeSeparatorsIntoBuckets(config && config.separators, visObjectBuckets),
             },
         };
 

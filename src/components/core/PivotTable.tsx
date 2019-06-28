@@ -351,8 +351,10 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             columnDefs: IGridHeader[],
             resultSpec: AFM.IResultSpec,
         ) => {
-            const separators = get(this.props, ["config", "separators"], undefined);
-            const execution = resetMeasuresToDefaultSeparators(separators, executionWithFormats);
+            const execution = resetMeasuresToDefaultSeparators(
+                this.props.defaultFormats,
+                executionWithFormats,
+            );
 
             if (!isEqual(columnDefs, this.state.columnDefs)) {
                 const sortedByFirstAttribute = isSortedByFirstAttibute(columnDefs, resultSpec);

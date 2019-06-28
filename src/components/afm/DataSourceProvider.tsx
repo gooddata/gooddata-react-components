@@ -3,6 +3,7 @@ import * as React from "react";
 import { SDK, factory as createSdk, DataLayer } from "@gooddata/gooddata-js";
 import * as PropTypes from "prop-types";
 
+import get = require("lodash/get");
 import isEqual = require("lodash/isEqual");
 import omit = require("lodash/omit");
 import { AFM, Execution } from "@gooddata/typings";
@@ -30,13 +31,18 @@ export interface IDataSourceProviderProps {
     [p: string]: any; // other params of inner componnent, just for pass through
 }
 
+export interface IDefaultFormats {
+    [localIdentifier: string]: string;
+}
+
 export interface IDataSourceProviderState {
-    exportTitle?: string;
     dataSource: IDataSource;
     resultSpec?: AFM.IResultSpec;
 }
 
 export interface IDataSourceProviderInjectedProps extends IDataSourceProviderState {
+    defaultFormats?: IDefaultFormats;
+    exportTitle?: string;
     updateTotals?: (totals: AFM.ITotalItem[]) => void;
 }
 
@@ -93,6 +99,7 @@ export function dataSourceProvider<T>(
         private adapter: DataLayer.IAdapter<Execution.IExecutionResponses>;
         private subject: ISubject<IDataSourceInfoPromise>;
         private sdk: SDK;
+        private defaultFormats: IDefaultFormats;
 
         constructor(props: IDataSourceProviderProps) {
             super(props);
@@ -101,6 +108,13 @@ export function dataSourceProvider<T>(
                 dataSource: null,
                 resultSpec: null,
             };
+
+            const defaultFormats = {};
+            const afmMeasures = get(props, ["afm", "measures"], []);
+            afmMeasures.forEach((measure: AFM.IMeasure) => {
+                defaultFormats[measure.localIdentifier] = measure.format;
+            });
+            this.defaultFormats = defaultFormats;
 
             const sdk = props.sdk || createSdk();
             this.sdk = sdk.clone();
@@ -185,8 +199,9 @@ export function dataSourceProvider<T>(
             return (
                 <InnerComponent
                     {...props}
-                    exportTitle={exportTitle || componentName}
                     dataSource={dataSource}
+                    defaultFormats={this.defaultFormats}
+                    exportTitle={exportTitle || componentName}
                     updateTotals={this.updateTotals}
                     resultSpec={resultSpec}
                 />

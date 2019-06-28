@@ -147,7 +147,12 @@ describe("VisualizationLoadingHOC", () => {
     });
 
     it("should pass execution to the inner component with default format", async () => {
+        const measure = oneMeasureDataSourceWithFormat.getAfm().measures[0];
+        const defaultFormat = measure.format;
         const wrapper = createComponent({
+            defaultFormats: {
+                [measure.localIdentifier]: defaultFormat,
+            },
             config: { separators: { decimal: ",", thousand: "'" } },
             dataSource: oneMeasureDataSourceWithFormat,
         });
@@ -168,9 +173,9 @@ describe("VisualizationLoadingHOC", () => {
                             items: [
                                 {
                                     measureHeaderItem: {
-                                        format: "#,##0.00",
+                                        format: defaultFormat,
                                         identifier: "af2Ewj9Re2vK",
-                                        localIdentifier: "1st_measure_local_identifier",
+                                        localIdentifier: measure.localIdentifier,
                                         name: "Lost",
                                         uri: "/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1283",
                                     },
