@@ -1,7 +1,7 @@
 // (C) 2007-2018 GoodData Corporation
 import isEqual from "lodash/isEqual";
 import noop from "lodash/noop";
-import * as React from "react";
+import React from "react";
 import { initChartPlugins } from "./highcharts/chartPlugins";
 import { IChartConfig } from "../../../interfaces/Config";
 

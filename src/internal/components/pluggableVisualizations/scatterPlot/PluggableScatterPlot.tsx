@@ -1,5 +1,5 @@
 // (C) 2019 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import { render } from "react-dom";
 import { configurePercent, configureOverTimeComparison } from "../../../utils/bucketConfig";
 import cloneDeep from "lodash/cloneDeep";

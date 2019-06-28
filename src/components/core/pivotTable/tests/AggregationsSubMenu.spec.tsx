@@ -1,6 +1,6 @@
 // (C) 2007-2018 GoodData Corporation
 import { mount } from "enzyme";
-import * as React from "react";
+import React from "react";
 import { createIntlMock } from "../../../visualizations/utils/intlUtils";
 import { IColumnTotal } from "../AggregationsMenu";
 import AggregationsSubMenu, { IAggregationsSubMenuProps } from "../AggregationsSubMenu";

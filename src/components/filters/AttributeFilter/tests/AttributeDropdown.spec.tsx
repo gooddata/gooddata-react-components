@@ -1,6 +1,6 @@
 // (C) 2007-2018 GoodData Corporation
-import * as React from "react";
-import * as ReactTestUtils from "react-dom/test-utils";
+import React from "react";
+import ReactTestUtils from "react-dom/test-utils";
 import { mount } from "enzyme";
 import { DropdownButton } from "@gooddata/goodstrap";
 import { testUtils } from "@gooddata/js-utils";

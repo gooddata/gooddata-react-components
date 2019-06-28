@@ -1,17 +1,17 @@
 // (C) 2007-2019 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import { IntlProvider, addLocaleData } from "react-intl";
 import { translations } from "@gooddata/js-utils";
 import { DEFAULT_LOCALE } from "../../../constants/localization";
 
-import * as deLocaleData from "react-intl/locale-data/de";
-import * as esLocaleData from "react-intl/locale-data/es";
-import * as enLocaleData from "react-intl/locale-data/en";
-import * as frLocaleData from "react-intl/locale-data/fr";
-import * as jaLocaleData from "react-intl/locale-data/ja";
-import * as nlLocaleData from "react-intl/locale-data/nl";
-import * as ptLocaleData from "react-intl/locale-data/pt";
-import * as zhLocaleData from "react-intl/locale-data/zh";
+import deLocaleData from "react-intl/locale-data/de";
+import esLocaleData from "react-intl/locale-data/es";
+import enLocaleData from "react-intl/locale-data/en";
+import frLocaleData from "react-intl/locale-data/fr";
+import jaLocaleData from "react-intl/locale-data/ja";
+import nlLocaleData from "react-intl/locale-data/nl";
+import ptLocaleData from "react-intl/locale-data/pt";
+import zhLocaleData from "react-intl/locale-data/zh";
 
 addLocaleData([
     ...deLocaleData,

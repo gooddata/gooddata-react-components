@@ -1,5 +1,5 @@
 // (C) 2007-2019 GoodData Corporation
-import * as classNames from "classnames";
+import classNames from "classnames";
 import { colors2Object, ISeparators, numberFormat } from "@gooddata/numberjs";
 
 import { styleVariables } from "../components/visualizations/styles/variables";

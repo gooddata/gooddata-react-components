@@ -1,8 +1,8 @@
 // (C) 2019 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import * as ChartConfiguration from "../../../../../interfaces/Config";
 import { IColorItem } from "@gooddata/gooddata-js";
-import * as classNames from "classnames";
+import classNames from "classnames";
 import ColorPaletteItem from "./ColorPaletteItem";
 
 const MAX_SMALL_PALETTE_SIZE = 20;

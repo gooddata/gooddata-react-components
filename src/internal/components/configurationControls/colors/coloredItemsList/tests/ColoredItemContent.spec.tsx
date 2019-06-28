@@ -2,7 +2,7 @@
 import { cloneDeep } from "lodash";
 import { mount } from "enzyme";
 import { InternalIntlWrapper } from "../../../../../utils/internalIntlProvider";
-import * as React from "react";
+import React from "react";
 import ColoredItemContent, { IColoredItemContentProps } from "../ColoredItemContent";
 
 const defaultProps: IColoredItemContentProps = {

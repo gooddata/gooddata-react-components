@@ -1,5 +1,5 @@
 // (C) 2019 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import { render, unmountComponentAtNode } from "react-dom";
 import { InjectedIntl } from "react-intl";
 import { AFM, VisualizationObject } from "@gooddata/typings";

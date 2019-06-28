@@ -1,11 +1,11 @@
 // (C) 2007-2018 GoodData Corporation
-import * as React from "react";
-import * as PropTypes from "prop-types";
+import React from "react";
+import PropTypes from "prop-types";
 import { InvertableList, Button, Dropdown, DropdownButton, DataSource } from "@gooddata/goodstrap";
 import { string as stringUtils } from "@gooddata/js-utils";
 import { injectIntl, intlShape, InjectedIntlProps, InjectedIntl } from "react-intl";
 import { IValidElementsResponse, IElement } from "@gooddata/gooddata-js";
-import * as classNames from "classnames";
+import classNames from "classnames";
 import last from "lodash/last";
 import pick from "lodash/pick";
 import range from "lodash/range";

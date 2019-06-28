@@ -1,8 +1,8 @@
 // (C) 2007-2019 GoodData Corporation
 import get from "lodash/get";
 import debounce from "lodash/debounce";
-import * as CustomEvent from "custom-event";
-import * as invariant from "invariant";
+import CustomEvent from "custom-event";
+import invariant from "invariant";
 import {
     ChartElementType,
     ChartType,

@@ -1,6 +1,6 @@
 // (C) 2007-2018 GoodData Corporation
-import * as React from "react";
-import * as PropTypes from "prop-types";
+import React from "react";
+import PropTypes from "prop-types";
 import { SDK, factory as createSdk } from "@gooddata/gooddata-js";
 import pick from "lodash/pick";
 

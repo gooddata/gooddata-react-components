@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
 import { ICellRendererParams } from "ag-grid-community";
-import * as React from "react";
+import React from "react";
 import { LoadingComponent } from "../../..";
 
 /**

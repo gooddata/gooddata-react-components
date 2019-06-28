@@ -1,5 +1,5 @@
 // (C) 2007-2018 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import noop from "lodash/noop";
 import difference from "lodash/difference";
 import uniq from "lodash/uniq";

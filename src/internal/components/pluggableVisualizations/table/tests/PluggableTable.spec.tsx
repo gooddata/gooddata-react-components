@@ -1,7 +1,7 @@
 // (C) 2019 GoodData Corporation
 import { AFM } from "@gooddata/typings";
-import * as React from "react";
-import * as ReactDom from "react-dom";
+import React from "react";
+import ReactDom from "react-dom";
 import Measure from "react-measure";
 import noop from "lodash/noop";
 import cloneDeep from "lodash/cloneDeep";

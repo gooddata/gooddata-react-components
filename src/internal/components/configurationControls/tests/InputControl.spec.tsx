@@ -1,5 +1,5 @@
 // (C) 2019 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import { shallow } from "enzyme";
 import noop from "lodash/noop";
 import { InputControl, IInputControlProps } from "../InputControl";

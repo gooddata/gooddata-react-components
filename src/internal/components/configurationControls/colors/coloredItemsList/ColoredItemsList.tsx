@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
-import * as React from "react";
-import * as CustomEvent from "custom-event";
+import React from "react";
+import CustomEvent from "custom-event";
 import { injectIntl, InjectedIntlProps } from "react-intl";
 import { DropdownBody } from "@gooddata/goodstrap";
 import * as ChartConfiguration from "../../../../../interfaces/Config";

@@ -1,5 +1,5 @@
 // (C) 2007-2018 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import { mount } from "enzyme";
 import cloneDeep from "lodash/cloneDeep";
 import noop from "lodash/noop";
@@ -17,7 +17,7 @@ import { IntlWrapper } from "../../core/base/IntlWrapper";
 import { VisualizationTypes } from "../../../constants/visualizationTypes";
 import { RuntimeError } from "../../../errors/RuntimeError";
 import { createIntlMock } from "../../visualizations/utils/intlUtils";
-import * as HttpStatusCodes from "http-status-codes";
+import HttpStatusCodes from "http-status-codes";
 import { IColorPalette } from "../../../interfaces/Config";
 import { clearSdkCache } from "../../../helpers/sdkCache";
 

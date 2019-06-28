@@ -1,6 +1,6 @@
 // (C) 2007-2018 GoodData Corporation
-import * as classNames from "classnames";
-import * as invariant from "invariant";
+import classNames from "classnames";
+import invariant from "invariant";
 import { first, get } from "lodash";
 
 import { AFM } from "@gooddata/typings";

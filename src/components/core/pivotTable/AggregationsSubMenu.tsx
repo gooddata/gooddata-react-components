@@ -1,6 +1,6 @@
 // (C) 2007-2018 GoodData Corporation
-import * as React from "react";
-import * as classNames from "classnames";
+import React from "react";
+import classNames from "classnames";
 import { AFM, Execution } from "@gooddata/typings";
 import { MenuList } from "@gooddata/goodstrap";
 

@@ -1,5 +1,5 @@
 // (C) 2019 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import { InjectedIntlProps, injectIntl } from "react-intl";
 import ConfigSubsection from "../../configurationControls/ConfigSubsection";
 import get from "lodash/get";

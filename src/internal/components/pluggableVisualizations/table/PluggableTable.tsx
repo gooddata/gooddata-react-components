@@ -6,7 +6,7 @@ import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import isNil from "lodash/isNil";
 
-import * as React from "react";
+import React from "react";
 import Measure from "react-measure";
 import { render, unmountComponentAtNode } from "react-dom";
 import { InjectedIntl } from "react-intl";

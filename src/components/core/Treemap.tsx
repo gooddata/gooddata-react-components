@@ -1,5 +1,5 @@
 // (C) 2007-2018 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import { BaseChart, IChartProps } from "./base/BaseChart";
 import { ChartPropTypes, Requireable } from "../../proptypes/Chart";
 import { getDefaultTreemapSort } from "../../helpers/sorts";

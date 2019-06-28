@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
-import * as React from "react";
-import * as classNames from "classnames";
+import React from "react";
+import classNames from "classnames";
 import { IColor } from "@gooddata/gooddata-js";
 import { ISelectableChild, IconPosition } from "../colorDropdown/ColorDropdown";
 

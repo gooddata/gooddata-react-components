@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
 import { AFM, Execution } from "@gooddata/typings";
-import * as invariant from "invariant";
+import invariant from "invariant";
 import uniq from "lodash/uniq";
 import intersection from "lodash/intersection";
 import isEqual from "lodash/isEqual";

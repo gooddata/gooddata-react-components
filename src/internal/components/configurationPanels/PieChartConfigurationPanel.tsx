@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
-import * as React from "react";
-import * as classNames from "classnames";
+import React from "react";
+import classNames from "classnames";
 import { FormattedMessage } from "react-intl";
 import { Bubble, BubbleHoverTrigger } from "@gooddata/goodstrap";
 

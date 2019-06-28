@@ -1,5 +1,5 @@
 // (C) 2019 GoodData Corporation
-import * as React from "react";
+import React from "react";
 
 import { IBaseChartProps, IChartProps } from "../components/core/base/BaseChart";
 import { ITableProps } from "../components/core/PureTable";

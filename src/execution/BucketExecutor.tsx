@@ -1,6 +1,6 @@
 // (C) 2007-2018 GoodData Corporation
 // tslint:disable:member-ordering
-import * as React from "react";
+import React from "react";
 import { SDK, factory as createSdk } from "@gooddata/gooddata-js";
 import { AFM, Execution, VisualizationObject, VisualizationInput } from "@gooddata/typings";
 

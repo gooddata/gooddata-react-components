@@ -1,7 +1,7 @@
 // (C) 2007-2019 GoodData Corporation
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import * as classNames from "classnames";
+import React from "react";
+import ReactDOM from "react-dom";
+import classNames from "classnames";
 import { injectIntl } from "react-intl";
 import { debounce, isEqual, noop, pick, uniqueId } from "lodash";
 import { Cell, CellProps, Column, Table, ColumnHeaderProps } from "fixed-data-table-2";

@@ -1,11 +1,11 @@
 // (C) 2019 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import { FormattedMessage } from "react-intl";
 import get from "lodash/get";
 import includes from "lodash/includes";
 import * as BucketNames from "../../../constants/bucketNames";
 import { Bubble, BubbleHoverTrigger } from "@gooddata/goodstrap";
-import * as classNames from "classnames";
+import classNames from "classnames";
 
 import MinMaxControl from "../configurationControls//MinMaxControl";
 import ConfigurationPanelContent from "./ConfigurationPanelContent";

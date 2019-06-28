@@ -1,7 +1,7 @@
 // (C) 2019 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import { InjectedIntlProps, injectIntl } from "react-intl";
-import * as classNames from "classnames";
+import classNames from "classnames";
 import { Bubble, BubbleHoverTrigger } from "@gooddata/goodstrap";
 import { getTranslation } from "../utils/translations";
 

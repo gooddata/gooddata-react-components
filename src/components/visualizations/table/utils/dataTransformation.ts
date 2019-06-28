@@ -1,6 +1,6 @@
 // (C) 2007-2018 GoodData Corporation
 import { AFM, Execution } from "@gooddata/typings";
-import * as invariant from "invariant";
+import invariant from "invariant";
 import { get, has, isEmpty, zip } from "lodash";
 import {
     getMappingHeaderIdentifier,

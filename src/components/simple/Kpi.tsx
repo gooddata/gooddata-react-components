@@ -1,5 +1,5 @@
 // (C) 2007-2018 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import { SDK, DataLayer } from "@gooddata/gooddata-js";
 import { colors2Object, ISeparators, numberFormat } from "@gooddata/numberjs";
 import noop from "lodash/noop";

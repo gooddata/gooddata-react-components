@@ -1,6 +1,6 @@
 // (C) 2007-2018 GoodData Corporation
-import * as React from "react";
-import * as classNames from "classnames";
+import React from "react";
+import classNames from "classnames";
 import noop from "lodash/noop";
 import { AFM } from "@gooddata/typings";
 import { HeadlineElementType } from "../../../constants/visualizationTypes";

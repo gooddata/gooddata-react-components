@@ -1,6 +1,6 @@
 // (C) 2007-2018 GoodData Corporation
-import * as React from "react";
-import * as PropTypes from "prop-types";
+import React from "react";
+import PropTypes from "prop-types";
 import { SDK, factory as createSdk, IValidElementsResponse, IElement } from "@gooddata/gooddata-js";
 import { IValidElementsOptions } from "@gooddata/gooddata-js/lib/metadata";
 import { AFM } from "@gooddata/typings";

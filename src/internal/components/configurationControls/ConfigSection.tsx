@@ -1,7 +1,7 @@
 // (C) 2019 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import { injectIntl, InjectedIntlProps } from "react-intl";
-import * as classNames from "classnames";
+import classNames from "classnames";
 import noop from "lodash/noop";
 import get from "lodash/get";
 import set from "lodash/set";

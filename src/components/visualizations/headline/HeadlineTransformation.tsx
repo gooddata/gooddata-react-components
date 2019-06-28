@@ -1,6 +1,6 @@
 // (C) 2007-2018 GoodData Corporation
 import { AFM, Execution } from "@gooddata/typings";
-import * as React from "react";
+import React from "react";
 import { InjectedIntlProps, injectIntl } from "react-intl";
 import noop from "lodash/noop";
 import { convertDrillableItemsToPredicates } from "../../../helpers/headerPredicate";

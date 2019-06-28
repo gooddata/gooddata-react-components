@@ -1,5 +1,5 @@
 // (C) 2007-2018 GoodData Corporation
-import * as PropTypes from "prop-types";
+import PropTypes from "prop-types";
 import { FiltersPropType } from "./Filters";
 
 import { Requireable } from "prop-types"; // tslint:disable-line:no-duplicate-imports

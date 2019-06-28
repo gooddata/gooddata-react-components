@@ -1,6 +1,6 @@
 // (C) 2007-2018 GoodData Corporation
-import * as React from "react";
-import * as invariant from "invariant";
+import React from "react";
+import invariant from "invariant";
 import { IHeaderPredicate } from "../../interfaces/HeaderPredicate";
 import isEqual from "lodash/isEqual";
 import noop from "lodash/noop";

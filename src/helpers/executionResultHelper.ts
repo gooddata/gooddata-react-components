@@ -1,6 +1,6 @@
 // (C) 2007-2018 GoodData Corporation
 import { Execution } from "@gooddata/typings";
-import * as invariant from "invariant";
+import invariant from "invariant";
 import { IUnwrappedAttributeHeadersWithItems } from "../components/visualizations/chart/chartOptionsBuilder";
 import { IMappingHeader } from "../interfaces/MappingHeader";
 import { getMappingHeaderLocalIdentifier } from "./mappingHeader";

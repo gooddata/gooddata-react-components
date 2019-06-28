@@ -1,6 +1,6 @@
 // (C) 2007-2018 GoodData Corporation
-import * as React from "react";
-import * as PropTypes from "prop-types";
+import React from "react";
+import PropTypes from "prop-types";
 import { IHeaderParams } from "ag-grid-community";
 import { AFM, Execution } from "@gooddata/typings";
 

@@ -1,7 +1,7 @@
 // (C) 2007-2019 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import { SDK, factory as createSdk, DataLayer } from "@gooddata/gooddata-js";
-import * as PropTypes from "prop-types";
+import PropTypes from "prop-types";
 
 import isEqual from "lodash/isEqual";
 import omit from "lodash/omit";

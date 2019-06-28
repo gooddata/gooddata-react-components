@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
 import { shallow } from "enzyme";
-import * as React from "react";
+import React from "react";
 import { LoadingComponent } from "../../../../components/simple/LoadingComponent";
 import { RowLoadingElement } from "../RowLoadingElement";
 import { ICellRendererParams } from "ag-grid-community";

@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
-import * as React from "react";
-import * as uuid from "uuid";
+import React from "react";
+import uuid from "uuid";
 import isEqual from "lodash/isEqual";
 import isEmpty from "lodash/isEmpty";
 import get from "lodash/get";

@@ -1,5 +1,5 @@
 // (C) 2007-2018 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import { shallow, ShallowWrapper } from "enzyme";
 import { factory } from "@gooddata/gooddata-js";
 import { VisualizationInput } from "@gooddata/typings";

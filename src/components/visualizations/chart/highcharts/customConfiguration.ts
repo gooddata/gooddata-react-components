@@ -1,5 +1,5 @@
 // (C) 2007-2019 GoodData Corporation
-import * as cx from "classnames";
+import cx from "classnames";
 import noop from "lodash/noop";
 import isString from "lodash/isString";
 import set from "lodash/set";
@@ -13,7 +13,7 @@ import cloneDeep from "lodash/cloneDeep";
 import every from "lodash/every";
 import isNil from "lodash/isNil";
 import pickBy from "lodash/pickBy";
-import * as numberJS from "@gooddata/numberjs";
+import numberJS from "@gooddata/numberjs";
 
 import { styleVariables } from "../../styles/variables";
 import { supportedDualAxesChartTypes, supportedTooltipFollowPointerChartTypes } from "../chartOptionsBuilder";

@@ -1,6 +1,6 @@
 // (C) 2007-2019 GoodData Corporation
 import { AFM } from "@gooddata/typings";
-import * as React from "react";
+import React from "react";
 
 import { dataSourceProvider, IDataSourceProviderProps } from "./DataSourceProvider";
 

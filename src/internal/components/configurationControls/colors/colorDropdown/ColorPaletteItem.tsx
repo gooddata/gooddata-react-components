@@ -1,8 +1,8 @@
 // (C) 2019 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import * as ChartConfiguration from "../../../../../interfaces/Config";
 import { IColorItem, IGuidColorItem } from "@gooddata/gooddata-js";
-import * as classNames from "classnames";
+import classNames from "classnames";
 
 const ITEM_MARGIN = 5;
 

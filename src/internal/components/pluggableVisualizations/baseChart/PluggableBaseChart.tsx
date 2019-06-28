@@ -1,5 +1,5 @@
 // (C) 2019 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import { InjectedIntl } from "react-intl";
 import isEmpty from "lodash/isEmpty";
 import cloneDeep from "lodash/cloneDeep";

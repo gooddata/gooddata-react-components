@@ -1,7 +1,7 @@
 // (C) 2019 GoodData Corporation
 import { AFM } from "@gooddata/typings";
 import { mount } from "enzyme";
-import * as React from "react";
+import React from "react";
 import { EXECUTION_RESPONSE_2A_3M } from "../../../visualizations/table/fixtures/2attributes3measures";
 import { EXECUTION_RESPONSE_2M } from "../../../visualizations/table/fixtures/2measures";
 import { AVAILABLE_TOTALS } from "../../../visualizations/table/totals/utils";

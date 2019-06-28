@@ -1,12 +1,12 @@
 // (C) 2019 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import set from "lodash/set";
 import get from "lodash/get";
 import cloneDeep from "lodash/cloneDeep";
 import { injectIntl, InjectedIntlProps } from "react-intl";
 import { IColorItem } from "@gooddata/gooddata-js";
 import { Button } from "@gooddata/goodstrap";
-import * as classNames from "classnames";
+import classNames from "classnames";
 
 import ConfigSection from "../../configurationControls/ConfigSection";
 import ColoredItemsList from "./coloredItemsList/ColoredItemsList";

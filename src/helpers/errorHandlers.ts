@@ -4,7 +4,7 @@ import { ApiResponseError } from "@gooddata/gooddata-js";
 import { InjectedIntl } from "react-intl";
 import { ErrorStates, ErrorCodes } from "../constants/errorStates";
 import { get, includes } from "lodash";
-import * as HttpStatusCodes from "http-status-codes";
+import HttpStatusCodes from "http-status-codes";
 import { RuntimeError } from "../errors/RuntimeError";
 import { unwrap } from "./utils";
 

@@ -1,5 +1,5 @@
 // (C) 2007-2019 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import omit from "lodash/omit";
 import set from "lodash/set";
 import get from "lodash/get";

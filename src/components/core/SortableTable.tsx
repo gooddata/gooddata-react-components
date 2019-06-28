@@ -1,5 +1,5 @@
 // (C) 2007-2018 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import get from "lodash/get";
 import noop from "lodash/noop";
 import { AFM } from "@gooddata/typings";

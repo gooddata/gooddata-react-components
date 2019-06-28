@@ -1,5 +1,5 @@
 // (C) 2007-2018 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import { ErrorStates } from "../../../constants/errorStates";
 import { ICommonVisualizationProps, ILoadingInjectedProps } from "./VisualizationLoadingHOC";
 import { ILoadingProps } from "../../simple/LoadingComponent";

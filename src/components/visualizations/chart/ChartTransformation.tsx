@@ -1,7 +1,7 @@
 // (C) 2007-2018 GoodData Corporation
 import { AFM, Execution, VisualizationObject } from "@gooddata/typings";
-import * as invariant from "invariant";
-import * as React from "react";
+import invariant from "invariant";
+import React from "react";
 import noop from "lodash/noop";
 
 import { convertDrillableItemsToPredicates } from "../../../helpers/headerPredicate";

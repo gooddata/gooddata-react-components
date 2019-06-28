@@ -1,5 +1,5 @@
 // (C) 2007-2018 GoodData Corporation
-import * as HttpStatusCodes from "http-status-codes";
+import HttpStatusCodes from "http-status-codes";
 import { checkEmptyResult, convertErrors, generateErrorMap, hasDuplicateIdentifiers } from "../errorHandlers";
 import { ApiResponseError } from "@gooddata/gooddata-js";
 import "isomorphic-fetch";

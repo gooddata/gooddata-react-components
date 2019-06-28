@@ -1,7 +1,7 @@
 // (C) 2007-2019 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import Measure from "react-measure";
-import * as cx from "classnames";
+import cx from "classnames";
 
 import FluidLegend from "./FluidLegend";
 import StaticLegend from "./StaticLegend";

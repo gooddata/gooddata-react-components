@@ -5,7 +5,7 @@ import merge from "lodash/merge";
 import flatMap from "lodash/flatMap";
 import isNil from "lodash/isNil";
 import includes from "lodash/includes";
-import * as React from "react";
+import React from "react";
 import Measure from "react-measure";
 import { render, unmountComponentAtNode } from "react-dom";
 import { InjectedIntl } from "react-intl";

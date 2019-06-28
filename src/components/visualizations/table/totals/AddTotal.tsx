@@ -1,6 +1,6 @@
 // (C) 2007-2019 GoodData Corporation
-import * as React from "react";
-import * as classNames from "classnames";
+import React from "react";
+import classNames from "classnames";
 import { noop } from "lodash";
 
 import { List, Dropdown, DropdownBody } from "@gooddata/goodstrap";

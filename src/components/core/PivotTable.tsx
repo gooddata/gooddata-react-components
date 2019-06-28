@@ -11,10 +11,10 @@ import {
 } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { CellClassParams } from "ag-grid-community/dist/lib/entities/colDef";
-import * as classNames from "classnames";
-import * as CustomEvent from "custom-event";
-import * as invariant from "invariant";
-import * as React from "react";
+import classNames from "classnames";
+import CustomEvent from "custom-event";
+import invariant from "invariant";
+import React from "react";
 
 import "../../../styles/css/pivotTable.css";
 

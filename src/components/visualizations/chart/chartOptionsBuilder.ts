@@ -1,7 +1,7 @@
 // (C) 2007-2019 GoodData Corporation
 import { colors2Object, numberFormat } from "@gooddata/numberjs";
 import { AFM, Execution, VisualizationObject } from "@gooddata/typings";
-import * as invariant from "invariant";
+import invariant from "invariant";
 import cloneDeep from "lodash/cloneDeep";
 import compact from "lodash/compact";
 import escape from "lodash/escape";

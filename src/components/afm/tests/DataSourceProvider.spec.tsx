@@ -1,5 +1,5 @@
 // (C) 2007-2019 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import { mount, ReactWrapper } from "enzyme";
 import { AFM } from "@gooddata/typings";
 import { testUtils } from "@gooddata/js-utils";

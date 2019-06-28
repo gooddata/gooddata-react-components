@@ -1,5 +1,5 @@
 // (C) 2007-2018 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import { IntlProvider } from "react-intl";
 import { messagesMap } from "../../core/base/IntlWrapper";
 import { DEFAULT_LOCALE } from "../../../constants/localization";

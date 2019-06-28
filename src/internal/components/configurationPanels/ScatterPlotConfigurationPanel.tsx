@@ -1,9 +1,9 @@
 // (C) 2019 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import { FormattedMessage } from "react-intl";
 import get from "lodash/get";
 import { Bubble, BubbleHoverTrigger } from "@gooddata/goodstrap";
-import * as classNames from "classnames";
+import classNames from "classnames";
 
 import ConfigurationPanelContent from "./ConfigurationPanelContent";
 import LabelSubsection from "../configurationControls/axis/LabelSubsection";

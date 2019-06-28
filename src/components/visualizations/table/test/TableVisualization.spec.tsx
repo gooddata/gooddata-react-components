@@ -1,5 +1,5 @@
 // (C) 2007-2019 GoodData Corporation
-import * as React from "react";
+import React from "react";
 import { mount, ReactWrapper } from "enzyme";
 import { Table } from "fixed-data-table-2";
 // tslint:disable-next-line:no-implicit-dependencies

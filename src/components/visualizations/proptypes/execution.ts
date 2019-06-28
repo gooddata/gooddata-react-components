@@ -1,5 +1,5 @@
 // (C) 2007-2018 GoodData Corporation
-import * as PropTypes from "prop-types";
+import PropTypes from "prop-types";
 
 const identifierPropTypes = PropTypes.string;
 

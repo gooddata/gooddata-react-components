@@ -1,5 +1,5 @@
 // (C) 2019 GoodData Corporation
-import * as classNames from "classnames";
+import classNames from "classnames";
 import { clamp } from "lodash";
 import { string } from "@gooddata/js-utils";
 import { IMappingHeader } from "../../../../interfaces/MappingHeader";

@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
-import * as React from "react";
-import * as ReactDom from "react-dom";
+import React from "react";
+import ReactDom from "react-dom";
 import cloneDeep from "lodash/cloneDeep";
 
 import { PluggableHeadline } from "../PluggableHeadline";
