@@ -15,6 +15,14 @@ The REST API versions in the table are just for your information as the values a
 
 - We ask developers to consider using the Headline component instead of the KPI component. The KPI component may be eventually marked as deprecated in one of the next major versions.
 
+## 6.3.3
+
+ June 28, 2019
+ 
+### Fixed
+ 
+- Drill event intersection element id. Now item localIdentifier has correctly higher priority over measure/attribute id
+
 ## 6.3.2
 
  May 9, 2019
