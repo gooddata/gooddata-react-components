@@ -19,7 +19,7 @@ import CustomLegend from "../utils/CustomLegend";
 
 import "../../styles/scss/charts.scss";
 import { GERMAN_SEPARATORS } from "../data/numberFormat";
-import identity = require("lodash/identity");
+import identity from "lodash/identity";
 
 function getChart({
     type = "column",

@@ -1145,10 +1145,10 @@
     rxjs "^5.5.6"
     uuid "^3.2.1"
 
-"@gooddata/goodstrap@61.1.0-no23reason-dho-fet-25-goodstrap-entry-2019-06-27T14-22-06-970Z":
-  version "61.1.0-no23reason-dho-fet-25-goodstrap-entry-2019-06-27T14-22-06-970Z"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-61.1.0-no23reason-dho-fet-25-goodstrap-entry-2019-06-27T14-22-06-970Z.tgz#5890dbee768eb2e306e116af11fe4507776c9557"
-  integrity sha512-BEsGU1YnoqnHVZfyIe4UlbdLq5suGDh2J8cNiOHsB+UEL0T8Gx2MwhA85GbVcx+gCU3nxm6FrRw//xyCWGz/zQ==
+"@gooddata/goodstrap@61.1.0-no23reason-dho-fet-25-goodstrap-entry-2019-06-28T07-02-15-873Z":
+  version "61.1.0-no23reason-dho-fet-25-goodstrap-entry-2019-06-28T07-02-15-873Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-61.1.0-no23reason-dho-fet-25-goodstrap-entry-2019-06-28T07-02-15-873Z.tgz#ed7d283373ab2d56baecb49dba19991151ff0f0a"
+  integrity sha512-UgiBz8nPrZn/XaOk5Itp1TeVgX6CMKiBceEfh9W8OIvsKhUC+j2OOaXxXneShgIrB0JEsNmignn7leSZ9Dzp8Q==
   dependencies:
     "@gooddata/js-utils" "^3.4.0"
     classnames "^2.2.6"

@@ -1,7 +1,7 @@
 // (C) 2007-2018 GoodData Corporation
 import * as React from "react";
 import { screenshotWrap } from "@gooddata/test-storybook";
-import identity = require("lodash/identity");
+import identity from "lodash/identity";
 
 import ChartTransformation from "../../src/components/visualizations/chart/ChartTransformation";
 import { barChartWith3MetricsAndViewByAttribute } from "../test_data/fixtures";

@@ -2,8 +2,8 @@
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { screenshotWrap } from "@gooddata/test-storybook";
-import identity = require("lodash/identity");
-import cloneDeep = require("lodash/cloneDeep");
+import identity from "lodash/identity";
+import cloneDeep from "lodash/cloneDeep";
 
 import ChartTransformation from "../../src/components/visualizations/chart/ChartTransformation";
 import { VIEW_BY_DIMENSION_INDEX } from "../../src/components/visualizations/chart/constants";

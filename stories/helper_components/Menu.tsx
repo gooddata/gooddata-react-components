@@ -4,7 +4,7 @@ import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { screenshotWrap } from "@gooddata/test-storybook";
 import { MenuList } from "@gooddata/goodstrap";
-import noop = require("lodash/noop");
+import noop from "lodash/noop";
 
 import AggregationsMenu from "../../src/components/core/pivotTable/AggregationsMenu";
 import AggregationsSubMenu from "../../src/components/core/pivotTable/AggregationsSubMenu";
