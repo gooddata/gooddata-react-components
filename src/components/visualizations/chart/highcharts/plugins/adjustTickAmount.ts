@@ -11,7 +11,7 @@ import isNil = require("lodash/isNil");
 import get = require("lodash/get");
 import { correctFloat, wrap, WrapProceedFunction } from "highcharts";
 import { IHighchartsAxisExtend } from "../../../../../interfaces/HighchartsExtend";
-import { isLineChart, isPrimaryYAxis } from "../../../utils/common";
+import { isLineChart } from "../../../utils/common";
 
 const ALIGNED = 0;
 const MOVE_ZERO_LEFT = -1;
@@ -44,8 +44,8 @@ function isUserSetExtremesOnAnyAxis(chart: Highcharts.Chart): boolean {
  *      1: move zero index to right
  */
 function getDirection(primaryAxis: IHighchartsAxisExtend, secondaryAxis: IHighchartsAxisExtend): number {
-    const { tickPositions: primaryTickPosition } = primaryAxis;
-    const { tickPositions: secondaryTickPosition } = secondaryAxis;
+    const { tickPositions: primaryTickPosition = [] } = primaryAxis;
+    const { tickPositions: secondaryTickPosition = [] } = secondaryAxis;
 
     const primaryZeroIndex = primaryTickPosition.indexOf(0);
     const secondaryZeroIndex = secondaryTickPosition.indexOf(0);
@@ -125,32 +125,45 @@ export function adjustTicks(axis: IHighchartsAxisExtend): void {
 }
 
 /**
- * Align zero of secondary axis to primary axis
+ * Get axis score that increase 1 for data having positive and negative values
  * @param axis
  */
-export function alignSecondaryAxis(axis: IHighchartsAxisExtend): void {
-    if (isPrimaryYAxis(axis)) {
-        // only handle on secondary axis
-        return;
-    }
+export function getYAxisScore(axis: IHighchartsAxisExtend): number {
+    let score: number = 0;
+    const { dataMin, dataMax } = axis;
+    const yAxisMin = Math.min(0, dataMin);
+    const yAxisMax = Math.max(0, dataMax);
 
-    const {
-        chart: { axes },
-    } = axis;
-    const primaryAxis: IHighchartsAxisExtend = axes.find(
-        (axis: IHighchartsAxisExtend) => isYAxis(axis) && isPrimaryYAxis(axis),
-    );
-    if (!primaryAxis) {
-        return;
+    if (yAxisMin < 0) {
+        score += 1;
     }
+    if (yAxisMax > 0) {
+        score += 1;
+    }
+    return score;
+}
 
-    const { tickInterval } = axis;
+/**
+ * Base on axis score which is bigger than another, will become base axis
+ * The other axis will be aligned to base axis
+ * @param yAxes
+ */
+function getBaseYAxis(yAxes: IHighchartsAxisExtend[]): IHighchartsAxisExtend[] {
+    const [firstAxisScore, secondAxisScore] = yAxes.map(getYAxisScore);
+    if (firstAxisScore >= secondAxisScore) {
+        return [yAxes[0], yAxes[1]];
+    }
+    return [yAxes[1], yAxes[0]];
+}
+
+export function alignToBaseAxis(yAxis: IHighchartsAxisExtend, baseYAxis: IHighchartsAxisExtend): void {
+    const { tickInterval } = yAxis;
     for (
-        let direction: number = getDirection(primaryAxis, axis);
+        let direction: number = getDirection(baseYAxis, yAxis);
         direction !== ALIGNED;
-        direction = getDirection(primaryAxis, axis)
+        direction = getDirection(baseYAxis, yAxis)
     ) {
-        let tickPositions: number[] = axis.tickPositions.slice();
+        let tickPositions: number[] = yAxis.tickPositions.slice();
 
         if (direction === MOVE_ZERO_RIGHT) {
             // add new tick to the start
@@ -164,7 +177,7 @@ export function alignSecondaryAxis(axis: IHighchartsAxisExtend): void {
             tickPositions = tickPositions.slice(1, tickPositions.length);
         }
 
-        axis.tickPositions = tickPositions;
+        yAxis.tickPositions = tickPositions;
     }
 }
 
@@ -181,7 +194,7 @@ function updateAxis(axis: IHighchartsAxisExtend, currentTickAmount: number): voi
 }
 
 /**
- * Prevent data is cut off by increasing tick interval to zoom out secondary axis
+ * Prevent data is cut off by increasing tick interval to zoom out axis
  * Only apply to chart without user-input min/max
  * @param axis
  */
@@ -195,7 +208,27 @@ export function preventDataCutOff(axis: IHighchartsAxisExtend): void {
     }
 
     axis.tickInterval *= 2;
-    axis.setTickPositions();
+    axis.tickPositions = axis.tickPositions.map((value: number): number => value * 2);
+    updateAxis(axis, axis.tickAmount);
+}
+
+/**
+ * Align axes once secondary axis is ready
+ * Cause at the time HC finishes adjust primary axis, secondary axis has not been done yet
+ * @param axis
+ */
+function alignYAxes(axis: IHighchartsAxisExtend) {
+    const chart: Highcharts.Chart = axis.chart;
+    const yAxes = getYAxes(chart);
+    const [baseYAxis, alignedYAxis] = getBaseYAxis(yAxes);
+    const direction: number = getDirection(baseYAxis, alignedYAxis);
+    const isReadyToAlign = axis.opposite && direction !== ALIGNED;
+
+    if (baseYAxis && alignedYAxis && isReadyToAlign) {
+        alignToBaseAxis(alignedYAxis, baseYAxis);
+        updateAxis(alignedYAxis, alignedYAxis.tickAmount);
+        preventDataCutOff(alignedYAxis);
+    }
 }
 
 /**
@@ -211,7 +244,6 @@ export function customAdjustTickAmount(): void {
         // persist tick amount value to calculate transA in 'updateAxis'
         const currentTickAmount = (axis.tickPositions || []).length;
         adjustTicks(axis);
-        alignSecondaryAxis(axis);
         updateAxis(axis, currentTickAmount);
         preventDataCutOff(axis);
     }
@@ -235,15 +267,28 @@ export function customAdjustTickAmount(): void {
     }
 }
 
+function isAxisExtremeCoverZero(axis: IHighchartsAxisExtend): boolean {
+    const { min, max, dataMin, dataMax, userMin, userMax } = axis.getExtremes();
+    const a = userMin || min || dataMin;
+    const b = userMax || max || dataMax;
+    return a < 0 && 0 < b;
+}
+
 function isAxisWithLineChartType(axis: IHighchartsAxisExtend): boolean {
     if (isLineChart(get(axis, "chart.userOptions.chart.type"))) {
         return true;
     }
 
-    const { series } = axis;
+    const { series = [] } = axis;
     return series.reduce((result: boolean, item: Highcharts.Series) => {
         return isLineChart(item.type) ? true : result;
     }, false);
+}
+
+function isSingleAxisChart(axis: IHighchartsAxisExtend): boolean {
+    const chart = axis.chart;
+    const yAxes = getYAxes(chart);
+    return yAxes.length < 2;
 }
 
 /**
@@ -251,21 +296,15 @@ function isAxisWithLineChartType(axis: IHighchartsAxisExtend): boolean {
  * @param axis
  */
 export function shouldBeHandledByHighcharts(axis: IHighchartsAxisExtend): boolean {
-    if (!isYAxis(axis)) {
+    if (
+        !isYAxis(axis) ||
+        isSingleAxisChart(axis) ||
+        (isAxisWithLineChartType(axis) && !isAxisExtremeCoverZero(axis))
+    ) {
         return true;
     }
 
-    const chart = axis.chart;
-    const yAxes = getYAxes(chart);
-    const isSingleAxis = yAxes.length < 2;
-    if (isSingleAxis) {
-        return true;
-    }
-
-    if (isAxisWithLineChartType(axis)) {
-        return true;
-    }
-
+    const yAxes = getYAxes(axis.chart);
     return yAxes.some((axis: IHighchartsAxisExtend) => axis.visible === false);
 }
 
@@ -274,9 +313,13 @@ export const adjustTickAmount = (HighCharts: any) => {
         const axis = this;
 
         if (shouldBeHandledByHighcharts(axis)) {
-            return proceed.call(axis);
+            proceed.call(axis);
+        } else {
+            customAdjustTickAmount.call(axis);
         }
 
-        return customAdjustTickAmount.call(axis);
+        if (!isSingleAxisChart(axis)) {
+            alignYAxes(axis);
+        }
     });
 };
