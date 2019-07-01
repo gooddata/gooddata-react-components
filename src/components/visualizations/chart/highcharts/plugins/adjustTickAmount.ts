@@ -11,7 +11,7 @@ import isNil = require("lodash/isNil");
 import get = require("lodash/get");
 import { correctFloat, wrap, WrapProceedFunction } from "highcharts";
 import { IHighchartsAxisExtend } from "../../../../../interfaces/HighchartsExtend";
-import { isLineChart, isPrimaryYAxis } from "../../../utils/common";
+import { isLineChart } from "../../../utils/common";
 
 const ALIGNED = 0;
 const MOVE_ZERO_LEFT = -1;
@@ -125,32 +125,56 @@ export function adjustTicks(axis: IHighchartsAxisExtend): void {
 }
 
 /**
- * Align zero of secondary axis to primary axis
+ * Get axis score that increase 1 for data having positive and negative values
  * @param axis
  */
-export function alignSecondaryAxis(axis: IHighchartsAxisExtend): void {
-    if (isPrimaryYAxis(axis)) {
-        // only handle on secondary axis
+export function getYAxisScore(axis: IHighchartsAxisExtend): number {
+    let score: number = 0;
+    const { dataMin, dataMax } = axis;
+    const yAxisMin = Math.min(0, dataMin);
+    const yAxisMax = Math.max(0, dataMax);
+
+    if (yAxisMin < 0) {
+        score += 1;
+    }
+    if (yAxisMax > 0) {
+        score += 1;
+    }
+    return score;
+}
+
+/**
+ * Base on axis score which is bigger than another, will become base axis
+ * The other axis will be aligned to base axis
+ * @param yAxes
+ */
+function getBaseYAxis(yAxes: IHighchartsAxisExtend[]): IHighchartsAxisExtend[] {
+    const [firstAxisScore, secondAxisScore] = yAxes.map(getYAxisScore);
+    if (firstAxisScore >= secondAxisScore) {
+        return [yAxes[0], yAxes[1]];
+    }
+    return [yAxes[1], yAxes[0]];
+}
+
+export function alignToBaseAxis(axis: IHighchartsAxisExtend): void {
+    const yAxes = getYAxes(axis.chart);
+    if (yAxes.length < 2) {
         return;
     }
 
-    const {
-        chart: { axes },
-    } = axis;
-    const primaryAxis: IHighchartsAxisExtend = axes.find(
-        (axis: IHighchartsAxisExtend) => isYAxis(axis) && isPrimaryYAxis(axis),
-    );
-    if (!primaryAxis) {
+    const [baseYAxis, alignedYAxis] = getBaseYAxis(yAxes);
+    if (!baseYAxis || baseYAxis === axis) {
+        // stop aligning
         return;
     }
 
-    const { tickInterval } = axis;
+    const { tickInterval } = alignedYAxis;
     for (
-        let direction: number = getDirection(primaryAxis, axis);
+        let direction: number = getDirection(baseYAxis, alignedYAxis);
         direction !== ALIGNED;
-        direction = getDirection(primaryAxis, axis)
+        direction = getDirection(baseYAxis, alignedYAxis)
     ) {
-        let tickPositions: number[] = axis.tickPositions.slice();
+        let tickPositions: number[] = alignedYAxis.tickPositions.slice();
 
         if (direction === MOVE_ZERO_RIGHT) {
             // add new tick to the start
@@ -164,7 +188,7 @@ export function alignSecondaryAxis(axis: IHighchartsAxisExtend): void {
             tickPositions = tickPositions.slice(1, tickPositions.length);
         }
 
-        axis.tickPositions = tickPositions;
+        alignedYAxis.tickPositions = tickPositions;
     }
 }
 
@@ -181,7 +205,7 @@ function updateAxis(axis: IHighchartsAxisExtend, currentTickAmount: number): voi
 }
 
 /**
- * Prevent data is cut off by increasing tick interval to zoom out secondary axis
+ * Prevent data is cut off by increasing tick interval to zoom out axis
  * Only apply to chart without user-input min/max
  * @param axis
  */
@@ -195,7 +219,8 @@ export function preventDataCutOff(axis: IHighchartsAxisExtend): void {
     }
 
     axis.tickInterval *= 2;
-    axis.setTickPositions();
+    axis.tickPositions = axis.tickPositions.map((value: number): number => value * 2);
+    updateAxis(axis, axis.tickAmount);
 }
 
 /**
@@ -211,7 +236,7 @@ export function customAdjustTickAmount(): void {
         // persist tick amount value to calculate transA in 'updateAxis'
         const currentTickAmount = (axis.tickPositions || []).length;
         adjustTicks(axis);
-        alignSecondaryAxis(axis);
+        alignToBaseAxis(axis);
         updateAxis(axis, currentTickAmount);
         preventDataCutOff(axis);
     }

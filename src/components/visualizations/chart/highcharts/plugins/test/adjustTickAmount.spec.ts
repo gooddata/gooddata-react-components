@@ -1,8 +1,9 @@
 // (C) 2019 GoodData Corporation
 import {
     adjustTicks,
-    alignSecondaryAxis,
+    alignToBaseAxis,
     customAdjustTickAmount,
+    getYAxisScore,
     preventDataCutOff,
     shouldBeHandledByHighcharts,
 } from "../adjustTickAmount";
@@ -279,130 +280,157 @@ describe("adjustTickAmount - detail", () => {
         });
     });
 
-    describe("alignSecondaryAxis", () => {
-        it("should not handle primary axis", () => {
+    describe("alignToBaseAxis", () => {
+        it("should not handle single axis chart", () => {
             const leftAxis: IHighchartsAxisExtend = {
                 opposite: false,
+                tickPositions: [-2, -1, 0, 1, 2, 3],
+                chart: {},
             };
-            expect(alignSecondaryAxis(leftAxis)).toBeFalsy();
+            leftAxis.chart.axes = [leftAxis];
+            expect(alignToBaseAxis(leftAxis)).toBeFalsy();
         });
 
-        it("should not handle chart without primary axis", () => {
+        it("should not handle base axis", () => {
+            const leftAxis: IHighchartsAxisExtend = {
+                opposite: false,
+                tickPositions: [-2, -1, 0, 1, 2, 3],
+                chart: {},
+            };
             const rightAxis: IHighchartsAxisExtend = {
                 opposite: true,
-                chart: {
-                    axes: [{}],
-                },
+                tickPositions: [-200, -100, 0, 100, 200, 300],
+                chart: {},
             };
-            expect(alignSecondaryAxis(rightAxis)).toBeFalsy();
+            leftAxis.chart.axes = [leftAxis, rightAxis];
+
+            expect(alignToBaseAxis(leftAxis)).toBeFalsy();
         });
 
         it("should do nothing with aligned axes", () => {
             const leftAxis: IHighchartsAxisExtend = {
                 opposite: false,
-                tickPositions: [-1, -2, 0, 1, 2, 3],
+                tickPositions: [-2, -1, 0, 1, 2, 3],
+                chart: {},
             };
             const rightAxis: IHighchartsAxisExtend = {
                 opposite: true,
                 tickPositions: [-200, -100, 0, 100, 200, 300],
-                chart: {
-                    axes: [leftAxis],
-                },
+                chart: {},
             };
-            alignSecondaryAxis(rightAxis);
+            leftAxis.chart.axes = [leftAxis, rightAxis];
+            rightAxis.chart.axes = [leftAxis, rightAxis];
+
+            alignToBaseAxis(rightAxis);
             expect(rightAxis.tickPositions).toEqual([-200, -100, 0, 100, 200, 300]);
+
+            alignToBaseAxis(leftAxis);
+            expect(leftAxis.tickPositions).toEqual([-2, -1, 0, 1, 2, 3]);
         });
 
         it("should zero move right", () => {
             const leftAxis: IHighchartsAxisExtend = {
                 coll: "yAxis",
                 opposite: false,
-                tickPositions: [-1, -2, 0, 1, 2, 3],
+                tickPositions: [-2, -1, 0, 1, 2, 3],
+                chart: {},
             };
             const rightAxis: IHighchartsAxisExtend = {
                 coll: "yAxis",
                 opposite: true,
                 tickInterval: 100,
                 tickPositions: [0, 100, 200, 300, 400, 500],
-                chart: {
-                    axes: [leftAxis],
-                },
+                chart: {},
             };
-            alignSecondaryAxis(rightAxis);
+            leftAxis.chart.axes = [leftAxis, rightAxis];
+            rightAxis.chart.axes = [leftAxis, rightAxis];
+
+            alignToBaseAxis(rightAxis);
             expect(rightAxis.tickPositions).toEqual([-200, -100, 0, 100, 200, 300]);
+
+            alignToBaseAxis(leftAxis);
+            expect(leftAxis.tickPositions).toEqual([-2, -1, 0, 1, 2, 3]);
         });
 
         it("should zero move left", () => {
-            const leftAxis = {
+            const leftAxis: IHighchartsAxisExtend = {
                 coll: "yAxis",
                 opposite: false,
-                tickPositions: [-1, -2, 0, 1, 2, 3],
+                tickPositions: [-2, -1, 0, 1, 2, 3],
+                chart: {},
             };
-            const rightAxis = {
+            const rightAxis: IHighchartsAxisExtend = {
                 coll: "yAxis",
                 opposite: true,
                 tickInterval: 100,
                 tickPositions: [-400, -300, -200, -100, 0, 100],
-                chart: {
-                    axes: [leftAxis],
-                },
+                chart: {},
             };
-            alignSecondaryAxis(rightAxis);
+            leftAxis.chart.axes = [leftAxis, rightAxis];
+            rightAxis.chart.axes = [leftAxis, rightAxis];
+
+            alignToBaseAxis(rightAxis);
             expect(rightAxis.tickPositions).toEqual([-200, -100, 0, 100, 200, 300]);
+
+            alignToBaseAxis(leftAxis);
+            expect(leftAxis.tickPositions).toEqual([-2, -1, 0, 1, 2, 3]);
         });
     });
 
     describe("preventDataCutOff", () => {
         it("should not run with chart having user-input min/max", () => {
-            const rightAxis = {
+            const axis = {
                 opposite: true,
                 chart: {
                     userOptions: {
                         yAxis: [{ isUserMinMax: true }, { isUserMinMax: true }],
                     },
                 },
-                setTickPositions: jest.fn(),
             };
-            expect(preventDataCutOff(rightAxis)).toBeFalsy();
-            expect(rightAxis.setTickPositions).not.toHaveBeenCalled();
+            expect(preventDataCutOff(axis)).toBeFalsy();
         });
 
         it("should not run with non-cut-off chart", () => {
-            const rightAxis = {
+            const axis = {
                 opposite: true,
                 chart: {
                     userOptions: {
                         yAxis: [{ isUserMinMax: false }, { isUserMinMax: false }],
                     },
                 },
-                setTickPositions: jest.fn(),
                 min: 0,
                 max: 100,
                 dataMin: 10,
                 dataMax: 90,
             };
-            expect(preventDataCutOff(rightAxis)).toBeFalsy();
-            expect(rightAxis.setTickPositions).not.toHaveBeenCalled();
+            expect(preventDataCutOff(axis)).toBeFalsy();
         });
 
-        it("should double tick interval to zoom out secondary axis", () => {
-            const rightAxis = {
+        it("should double tick interval and tick positions to zoom out axis", () => {
+            const axis = {
                 opposite: true,
+                options: {
+                    startOnTick: true,
+                    endOnTick: true,
+                },
                 chart: {
                     userOptions: {
                         yAxis: [{ isUserMinMax: false }, { isUserMinMax: false }],
                     },
                 },
-                setTickPositions: jest.fn(),
                 min: 20,
                 max: 80,
                 dataMin: 10,
                 dataMax: 90,
                 tickInterval: 10,
+                tickPositions: [0, 10, 20, 30, 40],
             };
-            preventDataCutOff(rightAxis);
-            expect(rightAxis.setTickPositions).toHaveBeenCalledTimes(1);
-            expect(rightAxis.tickInterval).toBe(20);
+            preventDataCutOff(axis);
+
+            expect(axis.min).toBe(0);
+            expect(axis.max).toBe(80);
+            expect(axis.tickInterval).toBe(20);
+            expect(axis.tickPositions).toEqual([0, 20, 40, 60, 80]);
         });
     });
 
@@ -492,5 +520,18 @@ describe("adjustTickAmount - detail", () => {
             };
             expect(shouldBeHandledByHighcharts(yAxis)).toBeTruthy();
         });
+    });
+
+    describe("getYAxisScore", () => {
+        it.each([[0, 0, 0], [1, 5, 10], [1, -10, -5], [2, -10, 10]])(
+            "should score equal to %s",
+            (score: number, dataMin: number, dataMax: number) => {
+                const axis: IHighchartsAxisExtend = {
+                    dataMin,
+                    dataMax,
+                };
+                expect(getYAxisScore(axis)).toBe(score);
+            },
+        );
     });
 });
