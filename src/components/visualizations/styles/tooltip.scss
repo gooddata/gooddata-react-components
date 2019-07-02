@@ -25,21 +25,12 @@
         width: 320px;
 
         @media #{$insight-small-only} {
+            right: 0;
             width: auto;
         }
 
         > span {
             flex: 0 0 auto;
-        }
-
-        &,
-        > span {
-            @media #{$insight-small-only} {
-                right: 0;
-                // overwrite
-                // stylelint-disable-next-line declaration-no-important
-                left: 0 !important;
-            }
         }
     }
 }
@@ -138,6 +129,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
     vertical-align: top;
+
+    @media #{$insight-small-only} {
+        display: block;
+    }
 }
 
 .gd-viz-tooltip-table-title {
@@ -148,10 +143,19 @@
     line-height: 14px;
     text-align: right;
     color: $gd-color-label;
+
+    @media #{$insight-small-only} {
+        border-bottom-width: 0;
+        text-align: left;
+    }
 }
 
 .gd-viz-tooltip-table-value {
     max-width: 165px;
     padding-left: 5px;
     font-size: 14px;
+
+    @media #{$insight-small-only} {
+        padding-left: 0;
+    }
 }

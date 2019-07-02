@@ -1,5 +1,4 @@
 // (C) 2007-2019 GoodData Corporation
-import * as cx from "classnames";
 import noop = require("lodash/noop");
 import isString = require("lodash/isString");
 import set = require("lodash/set");
@@ -24,7 +23,6 @@ import {
     formatAsPercent,
     getLabelStyle,
     getLabelsVisibilityConfig,
-    getShapeVisiblePart,
     isInPercent,
 } from "./dataLabelsHelpers";
 import { HOVER_BRIGHTNESS, MINIMUM_HC_SAFE_BRIGHTNESS } from "./commonConfiguration";
@@ -61,7 +59,6 @@ const ALIGN_RIGHT = "right";
 const ALIGN_CENTER = "center";
 
 const TOOLTIP_ARROW_OFFSET = 23;
-const TOOLTIP_FULLSCREEN_THRESHOLD = 480;
 const TOOLTIP_MAX_WIDTH = 366;
 const TOOLTIP_BAR_CHART_VERTICAL_OFFSET = 5;
 const TOOLTIP_VERTICAL_OFFSET = 14;
@@ -227,11 +224,7 @@ function getDataPointStart(chartType: any, isNegative: any, endPoint: any, heigh
     return isColumnChart(chartType) && isNegative && stacking ? endPoint - height : endPoint;
 }
 
-function getTooltipVerticalOffset(chartType: any, stacking: any, point: any) {
-    if (isColumnChart(chartType) && (stacking || point.negative)) {
-        return 0;
-    }
-
+function getTooltipVerticalOffset(chartType: any) {
     if (isBarChart(chartType)) {
         return TOOLTIP_BAR_CHART_VERTICAL_OFFSET;
     }
@@ -250,7 +243,7 @@ function positionTooltip(chartType: any, stacking: any, labelWidth: any, labelHe
         labelWidth,
     );
 
-    const verticalOffset = getTooltipVerticalOffset(chartType, stacking, point);
+    const verticalOffset = getTooltipVerticalOffset(chartType);
 
     const dataPointStart = getDataPointStart(chartType, point.negative, point.plotY, point.h, stacking);
 
@@ -260,21 +253,7 @@ function positionTooltip(chartType: any, stacking: any, labelWidth: any, labelHe
     };
 }
 
-const showFullscreenTooltip = () => {
-    return document.documentElement.clientWidth <= TOOLTIP_FULLSCREEN_THRESHOLD;
-};
-
-function isPointBasedChart(chartType: string) {
-    const pointBasedTypes = [
-        VisualizationTypes.LINE,
-        VisualizationTypes.AREA,
-        VisualizationTypes.TREEMAP,
-        VisualizationTypes.SCATTER,
-    ];
-    return isOneOfTypes(chartType, pointBasedTypes);
-}
-
-function formatTooltip(chartType: any, stacking: any, tooltipCallback: any) {
+function formatTooltip(tooltipCallback: any) {
     const { chart } = this.series;
     const { color: pointColor } = this.point;
 
@@ -283,39 +262,7 @@ function formatTooltip(chartType: any, stacking: any, tooltipCallback: any) {
         return false;
     }
 
-    const dataPointEnd =
-        isPointBasedChart(chartType) || !this.point.tooltipPos
-            ? this.point.plotX
-            : getDataPointEnd(
-                  chartType,
-                  this.point.negative,
-                  this.point.tooltipPos[0],
-                  this.point.tooltipPos[2],
-                  stacking,
-              );
-
-    const ignorePointHeight = isPointBasedChart(chartType) || !this.point.shapeArgs;
-
-    const dataPointHeight = ignorePointHeight ? 0 : this.point.shapeArgs.height;
-
-    const arrowPosition = getArrowHorizontalPosition(chartType, stacking, dataPointEnd, dataPointHeight);
-
-    const chartWidth = chart.plotWidth;
-    const align = getArrowAlignment(arrowPosition, chartWidth);
-    const defaultArrowPosition = arrowPosition > chartWidth ? chartWidth : arrowPosition * 2;
-    const arrowPositionForTail = getArrowPositionForTail(defaultArrowPosition, this.point, chartType, chart);
-
     const strokeStyle = pointColor ? `border-top-color: ${pointColor};` : "";
-    const tailStyle = showFullscreenTooltip()
-        ? `style="left: ${arrowPositionForTail + chart.plotLeft}px;"`
-        : "";
-
-    const getTailClasses = (classname: any) => {
-        return cx(classname, {
-            [align]: !showFullscreenTooltip(),
-        });
-    };
-
     const tooltipContent = tooltipCallback(this.point, this.percentage); // null disables whole tooltip
 
     return tooltipContent !== null
@@ -324,27 +271,8 @@ function formatTooltip(chartType: any, stacking: any, tooltipCallback: any) {
             <div class="content gd-viz-tooltip-content">
                 ${tooltipContent}
             </div>
-            <div class="${getTailClasses(
-                "gd-viz-tooltip-tail tail1 gd-viz-tooltip-tail1",
-            )}" ${tailStyle}></div>
-            <div class="${getTailClasses(
-                "gd-viz-tooltip-tail tail2 gd-viz-tooltip-tail2",
-            )}" ${tailStyle}></div>
         </div>`
         : null;
-}
-
-function getArrowPositionForTail(defaultArrowPosition: number, point: any, chartType: any, chart: any) {
-    let arrowPositionForTail = defaultArrowPosition / 2;
-    if (isBarChart(chartType) && point.shapeArgs && chart) {
-        const visiblePart = getShapeVisiblePart(point.shapeArgs, chart, defaultArrowPosition);
-        arrowPositionForTail = visiblePart / 2;
-        // truncated shapes are moved to negative coordinates and tooltip needs compensation
-        if (point.shapeArgs.y < 0) {
-            arrowPositionForTail = chart.plotWidth - arrowPositionForTail;
-        }
-    }
-    return arrowPositionForTail;
 }
 
 function formatLabel(value: any, format: any, config: IChartConfig = {}) {
@@ -462,7 +390,7 @@ function getTooltipConfiguration(chartOptions: IChartOptions) {
                   shadow: false,
                   useHTML: true,
                   positioner: partial(positionTooltip, chartType, stacking),
-                  formatter: partial(formatTooltip, chartType, stacking, tooltipAction),
+                  formatter: partial(formatTooltip, tooltipAction),
                   ...followPointer,
               },
           }
