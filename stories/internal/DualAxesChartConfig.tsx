@@ -263,7 +263,7 @@ storiesOf("Internal/DualAxesMinMaxConfig", module)
     .add("Chart should be zero aligned and no columns is hidden", () => {
         // SD-538
         const chartConfig: IChartConfig = {
-            type: "column",
+            type: VisualizationTypes.COLUMN,
             legend: {
                 enabled: true,
                 position: "top",
