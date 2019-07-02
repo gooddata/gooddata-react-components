@@ -128,7 +128,7 @@ export function adjustTicks(axis: IHighchartsAxisExtend): void {
  * Get axis score that increase 1 for data having positive and negative values
  * @param axis
  */
-export function getAxisScore(axis: IHighchartsAxisExtend): number {
+export function getYAxisScore(axis: IHighchartsAxisExtend): number {
     let score: number = 0;
     const { dataMin, dataMax } = axis;
     const yAxisMin = Math.min(0, dataMin);
@@ -146,14 +146,14 @@ export function getAxisScore(axis: IHighchartsAxisExtend): number {
 /**
  * Base on axis score which is bigger than another, will become base axis
  * The other axis will be aligned to base axis
- * @param axes
+ * @param yAxes
  */
-function getBaseAxis(axes: IHighchartsAxisExtend[]): IHighchartsAxisExtend[] {
-    const [firstAxisScore, secondAxisScore] = axes.map(getAxisScore);
+function getBaseYAxis(yAxes: IHighchartsAxisExtend[]): IHighchartsAxisExtend[] {
+    const [firstAxisScore, secondAxisScore] = yAxes.map(getYAxisScore);
     if (firstAxisScore >= secondAxisScore) {
-        return [axes[0], axes[1]];
+        return [yAxes[0], yAxes[1]];
     }
-    return [axes[1], axes[0]];
+    return [yAxes[1], yAxes[0]];
 }
 
 export function alignToBaseAxis(axis: IHighchartsAxisExtend): void {
@@ -162,19 +162,19 @@ export function alignToBaseAxis(axis: IHighchartsAxisExtend): void {
         return;
     }
 
-    const [baseAxis, alignedAxis] = getBaseAxis(yAxes);
-    if (!baseAxis || baseAxis === axis) {
+    const [baseYAxis, alignedYAxis] = getBaseYAxis(yAxes);
+    if (!baseYAxis || baseYAxis === axis) {
         // stop aligning
         return;
     }
 
-    const { tickInterval } = alignedAxis;
+    const { tickInterval } = alignedYAxis;
     for (
-        let direction: number = getDirection(baseAxis, alignedAxis);
+        let direction: number = getDirection(baseYAxis, alignedYAxis);
         direction !== ALIGNED;
-        direction = getDirection(baseAxis, alignedAxis)
+        direction = getDirection(baseYAxis, alignedYAxis)
     ) {
-        let tickPositions: number[] = alignedAxis.tickPositions.slice();
+        let tickPositions: number[] = alignedYAxis.tickPositions.slice();
 
         if (direction === MOVE_ZERO_RIGHT) {
             // add new tick to the start
@@ -188,7 +188,7 @@ export function alignToBaseAxis(axis: IHighchartsAxisExtend): void {
             tickPositions = tickPositions.slice(1, tickPositions.length);
         }
 
-        alignedAxis.tickPositions = tickPositions;
+        alignedYAxis.tickPositions = tickPositions;
     }
 }
 

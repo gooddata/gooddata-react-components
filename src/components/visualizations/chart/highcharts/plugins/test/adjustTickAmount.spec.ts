@@ -3,7 +3,7 @@ import {
     adjustTicks,
     alignToBaseAxis,
     customAdjustTickAmount,
-    getAxisScore,
+    getYAxisScore,
     preventDataCutOff,
     shouldBeHandledByHighcharts,
 } from "../adjustTickAmount";
@@ -522,7 +522,7 @@ describe("adjustTickAmount - detail", () => {
         });
     });
 
-    describe("getAxisScore", () => {
+    describe("getYAxisScore", () => {
         it.each([[0, 0, 0], [1, 5, 10], [1, -10, -5], [2, -10, 10]])(
             "should score equal to %s",
             (score: number, dataMin: number, dataMax: number) => {
@@ -530,7 +530,7 @@ describe("adjustTickAmount - detail", () => {
                     dataMin,
                     dataMax,
                 };
-                expect(getAxisScore(axis)).toBe(score);
+                expect(getYAxisScore(axis)).toBe(score);
             },
         );
     });
