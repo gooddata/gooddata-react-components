@@ -36,7 +36,7 @@ describe("adjustTickAmount - general", () => {
             },
         };
         // min/max are calculated in 'getZeroAlignConfiguration'
-        const leftAxis = {
+        const getLeftAxis = () => ({
             ...Y_AXIS,
             chart,
             tickAmount: 8,
@@ -47,8 +47,8 @@ describe("adjustTickAmount - general", () => {
             dataMax: 986,
             min: -986,
             max: 986,
-        };
-        const rightAxis = {
+        });
+        const getRightAxis = () => ({
             ...Y_AXIS,
             chart,
             tickAmount: 8,
@@ -59,35 +59,27 @@ describe("adjustTickAmount - general", () => {
             dataMax: -1239,
             min: -8895,
             max: 8895,
-        };
-
-        beforeAll(() => {
-            chart.axes = [leftAxis, rightAxis];
-            customAdjustTickAmount.call(leftAxis);
-            customAdjustTickAmount.call(rightAxis);
         });
 
         it.each([
-            ["left", leftAxis, [-900, -600, -300, 0, 300, 600, 900, 1200]], // reduced to 8 ticks
-            ["right", rightAxis, [-9000, -6000, -3000, 0, 3000, 6000, 9000, 12000]], // reduced to 8 ticks
+            ["left", getLeftAxis(), [-900, -600, -300, 0, 300, 600, 900, 1200]], // reduced to 8 ticks
+            ["right", getRightAxis(), [-12000, -9000, -6000, -3000, 0, 3000, 6000, 9000]], // reduced to 8 ticks
         ])(
             "should return %s tick positions aligned zero with opposite",
             (_side: string, axis: IHighchartsAxisExtend, expectation: number) => {
+                customAdjustTickAmount.call(axis);
                 expect(axis.tickPositions).toEqual(expectation);
             },
         );
 
-        it.each([["left", leftAxis, -900, 1200], ["right", rightAxis, -9000, 12000]])(
+        it.each([["left", getLeftAxis(), -900, 1200], ["right", getRightAxis(), -12000, 9000]])(
             "should min/max be updated on %s axis",
             (_side: string, axis: IHighchartsAxisExtend, min: number, max: number) => {
+                customAdjustTickAmount.call(axis);
                 expect(axis.min).toBe(min);
                 expect(axis.max).toBe(max);
             },
         );
-
-        it("should two axes be zero aligned", () => {
-            expect(leftAxis.tickPositions.indexOf(0)).toBe(rightAxis.tickPositions.indexOf(0));
-        });
     });
 
     describe("should adjust tick amount with user-input min/max", () => {
@@ -281,16 +273,6 @@ describe("adjustTickAmount - detail", () => {
     });
 
     describe("alignToBaseAxis", () => {
-        it("should not handle single axis chart", () => {
-            const leftAxis: IHighchartsAxisExtend = {
-                opposite: false,
-                tickPositions: [-2, -1, 0, 1, 2, 3],
-                chart: {},
-            };
-            leftAxis.chart.axes = [leftAxis];
-            expect(alignToBaseAxis(leftAxis)).toBeFalsy();
-        });
-
         it("should not handle base axis", () => {
             const leftAxis: IHighchartsAxisExtend = {
                 opposite: false,
@@ -302,9 +284,7 @@ describe("adjustTickAmount - detail", () => {
                 tickPositions: [-200, -100, 0, 100, 200, 300],
                 chart: {},
             };
-            leftAxis.chart.axes = [leftAxis, rightAxis];
-
-            expect(alignToBaseAxis(leftAxis)).toBeFalsy();
+            expect(alignToBaseAxis(leftAxis, rightAxis)).toBeFalsy();
         });
 
         it("should do nothing with aligned axes", () => {
@@ -318,17 +298,12 @@ describe("adjustTickAmount - detail", () => {
                 tickPositions: [-200, -100, 0, 100, 200, 300],
                 chart: {},
             };
-            leftAxis.chart.axes = [leftAxis, rightAxis];
-            rightAxis.chart.axes = [leftAxis, rightAxis];
+            alignToBaseAxis(leftAxis, rightAxis);
 
-            alignToBaseAxis(rightAxis);
             expect(rightAxis.tickPositions).toEqual([-200, -100, 0, 100, 200, 300]);
-
-            alignToBaseAxis(leftAxis);
-            expect(leftAxis.tickPositions).toEqual([-2, -1, 0, 1, 2, 3]);
         });
 
-        it("should zero move right", () => {
+        it("should zero move right on right axis", () => {
             const leftAxis: IHighchartsAxisExtend = {
                 coll: "yAxis",
                 opposite: false,
@@ -342,17 +317,13 @@ describe("adjustTickAmount - detail", () => {
                 tickPositions: [0, 100, 200, 300, 400, 500],
                 chart: {},
             };
-            leftAxis.chart.axes = [leftAxis, rightAxis];
-            rightAxis.chart.axes = [leftAxis, rightAxis];
+            alignToBaseAxis(rightAxis, leftAxis);
 
-            alignToBaseAxis(rightAxis);
             expect(rightAxis.tickPositions).toEqual([-200, -100, 0, 100, 200, 300]);
-
-            alignToBaseAxis(leftAxis);
             expect(leftAxis.tickPositions).toEqual([-2, -1, 0, 1, 2, 3]);
         });
 
-        it("should zero move left", () => {
+        it("should zero move left on right axis", () => {
             const leftAxis: IHighchartsAxisExtend = {
                 coll: "yAxis",
                 opposite: false,
@@ -366,13 +337,9 @@ describe("adjustTickAmount - detail", () => {
                 tickPositions: [-400, -300, -200, -100, 0, 100],
                 chart: {},
             };
-            leftAxis.chart.axes = [leftAxis, rightAxis];
-            rightAxis.chart.axes = [leftAxis, rightAxis];
+            alignToBaseAxis(rightAxis, leftAxis);
 
-            alignToBaseAxis(rightAxis);
             expect(rightAxis.tickPositions).toEqual([-200, -100, 0, 100, 200, 300]);
-
-            alignToBaseAxis(leftAxis);
             expect(leftAxis.tickPositions).toEqual([-2, -1, 0, 1, 2, 3]);
         });
     });
