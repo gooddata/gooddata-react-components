@@ -17,7 +17,6 @@ import {
 } from "../utils/color";
 import { isHeatmap, isOneOfTypes, isTreemap, isScatterPlot, isBubbleChart } from "../utils/common";
 import { VisualizationTypes } from "../../../constants/visualizationTypes";
-import { isDerivedMeasure, findParentMeasureIndex } from "./chartOptionsBuilder";
 import {
     IColorPalette,
     IColorMapping,
@@ -26,6 +25,7 @@ import {
 } from "../../../interfaces/Config";
 import { IMappingHeader } from "../../../interfaces/MappingHeader";
 import { findMeasureGroupInDimensions } from "../../../helpers/executionResultHelper";
+import {findParentMeasureIndex, isDerivedMeasure} from "../utils/chart";
 
 export interface IColorStrategy {
     getColorByIndex(index: number): string;
