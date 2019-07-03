@@ -109,6 +109,7 @@ const getMockReferencePoint = (
         },
         exportConfig: {
             supported: true,
+            mergeHeadersSupported: true,
         },
         openAsReport: {
             supported: false,

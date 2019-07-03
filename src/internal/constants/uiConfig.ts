@@ -62,11 +62,19 @@ export const defaultFilters = {
 };
 
 export const disabledExportConfig = {
-    exportConfig: { supported: false },
+    supported: false,
 };
 
 export const enabledExportConfig = {
-    exportConfig: { supported: true },
+    supported: true,
+};
+
+const disabledMergeHeadersExportConfig = {
+    mergeHeadersSupported: false,
+};
+
+const enabledMergeHeadersExportConfig = {
+    mergeHeadersSupported: true,
 };
 
 export const disabledOpenAsReportConfig = {
@@ -78,10 +86,13 @@ export const enabledOpenAsReportConfig = {
 };
 
 export const defaultRootUiConfigProperties: Partial<IUiConfig> = {
+    exportConfig: {
+        ...disabledMergeHeadersExportConfig,
+        ...enabledExportConfig,
+    },
     recommendations: {},
     supportedOverTimeComparisonTypes: [],
     ...disabledOpenAsReportConfig,
-    ...enabledExportConfig,
 };
 
 export const DEFAULT_SCATTERPLOT_UICONFIG: IUiConfig = {
@@ -318,6 +329,10 @@ export const DEFAULT_TREEMAP_UICONFIG: IUiConfig = {
         ...defaultFilters,
     },
     ...defaultRootUiConfigProperties,
+    exportConfig: {
+        ...enabledExportConfig,
+        ...enabledMergeHeadersExportConfig,
+    },
 };
 
 export const TREEMAP_UICONFIG_WITH_MULTIPLE_MEASURES: IUiConfig = {
@@ -335,6 +350,10 @@ export const TREEMAP_UICONFIG_WITH_MULTIPLE_MEASURES: IUiConfig = {
         ...defaultFilters,
     },
     ...defaultRootUiConfigProperties,
+    exportConfig: {
+        ...enabledExportConfig,
+        ...enabledMergeHeadersExportConfig,
+    },
 };
 
 export const TREEMAP_UICONFIG_WITH_ONE_MEASURE: IUiConfig = {
@@ -355,6 +374,10 @@ export const TREEMAP_UICONFIG_WITH_ONE_MEASURE: IUiConfig = {
         ...defaultFilters,
     },
     ...defaultRootUiConfigProperties,
+    exportConfig: {
+        ...enabledExportConfig,
+        ...enabledMergeHeadersExportConfig,
+    },
 };
 
 export const DEFAULT_PIVOT_TABLE_UICONFIG: IUiConfig = {
@@ -378,6 +401,10 @@ export const DEFAULT_PIVOT_TABLE_UICONFIG: IUiConfig = {
     },
     ...defaultRootUiConfigProperties,
     ...disabledOpenAsReportConfig,
+    exportConfig: {
+        ...enabledExportConfig,
+        ...enabledMergeHeadersExportConfig,
+    },
     supportedOverTimeComparisonTypes: [
         OverTimeComparisonTypes.SAME_PERIOD_PREVIOUS_YEAR,
         OverTimeComparisonTypes.PREVIOUS_PERIOD,
@@ -399,6 +426,10 @@ export const DEFAULT_TABLE_UICONFIG: IUiConfig = {
     },
     ...defaultRootUiConfigProperties,
     ...enabledOpenAsReportConfig,
+    exportConfig: {
+        ...enabledExportConfig,
+        ...enabledMergeHeadersExportConfig,
+    },
     supportedOverTimeComparisonTypes: [
         OverTimeComparisonTypes.SAME_PERIOD_PREVIOUS_YEAR,
         OverTimeComparisonTypes.PREVIOUS_PERIOD,
@@ -422,7 +453,10 @@ export const DEFAULT_HEADLINE_UICONFIG: IUiConfig = {
         ...defaultFilters,
     },
     ...defaultRootUiConfigProperties,
-    ...disabledExportConfig,
+    exportConfig: {
+        ...disabledExportConfig,
+        ...disabledMergeHeadersExportConfig,
+    },
     supportedOverTimeComparisonTypes: [
         OverTimeComparisonTypes.SAME_PERIOD_PREVIOUS_YEAR,
         OverTimeComparisonTypes.PREVIOUS_PERIOD,

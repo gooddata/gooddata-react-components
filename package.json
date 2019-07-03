@@ -107,7 +107,7 @@
   },
   "dependencies": {
     "@gooddata/gooddata-js": "^11.19.3",
-    "@gooddata/goodstrap": "^63.4.0",
+    "@gooddata/goodstrap": "^63.5.2-alpha-ptquang86-qp-sd-342-merge-cells-2019-10-15T08-23-54-142Z",
     "@gooddata/js-utils": "^3.5.0",
     "@gooddata/numberjs": "^3.1.2",
     "@gooddata/typings": "^2.18.0",

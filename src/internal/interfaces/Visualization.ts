@@ -154,6 +154,7 @@ export interface IBucketsUiConfig {
 
 export interface IExportUiConfig {
     supported?: boolean;
+    mergeHeadersSupported?: boolean;
 }
 
 export interface IOpenAsReportUiConfig {

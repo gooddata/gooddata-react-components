@@ -249,6 +249,16 @@ describe("PluggableTreemap", () => {
         });
     });
 
+    it("should return a new reference point with treemap UI config", async () => {
+        const treemap = createComponent();
+
+        const extendedReferencePoint = await treemap.getExtendedReferencePoint(
+            referencePointMocks.multipleMetricsOneStackByReferencePoint,
+        );
+
+        expect(extendedReferencePoint.uiConfig).toEqual(uiConfigMocks.multipleMetricsOneStackByUiConfig);
+    });
+
     describe("Over Time Comparison", () => {
         it("should return reference point containing uiConfig with no supported comparison types", async () => {
             const component = createComponent();
