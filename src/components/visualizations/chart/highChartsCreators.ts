@@ -52,4 +52,3 @@ export function getHighchartsOptions(chartOptions: IChartOptions, drillConfig: a
         getCustomizedConfiguration(chartOptions, config, drillConfig),
     );
 }
-

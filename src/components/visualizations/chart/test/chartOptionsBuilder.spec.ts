@@ -299,8 +299,6 @@ describe("chartOptionsBuilder", () => {
         });
     });
 
-
-
     describe("getSeriesItemData", () => {
         describe("in usecase of bar chart with pop measure and view by attribute", () => {
             const parameters = getSeriesItemDataParameters(

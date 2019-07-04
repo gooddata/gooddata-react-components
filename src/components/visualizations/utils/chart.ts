@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
-import {AFM, Execution} from "@gooddata/typings";
-import {IChartLimits} from "../../../interfaces/Config";
+import { AFM, Execution } from "@gooddata/typings";
+import { IChartLimits } from "../../../interfaces/Config";
 import get = require("lodash/get");
 
 export function isDerivedMeasure(measureItem: Execution.IMeasureHeaderItem, afm: AFM.IAfm) {

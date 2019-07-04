@@ -25,7 +25,7 @@ import {
 } from "../../../interfaces/Config";
 import { IMappingHeader } from "../../../interfaces/MappingHeader";
 import { findMeasureGroupInDimensions } from "../../../helpers/executionResultHelper";
-import {findParentMeasureIndex, isDerivedMeasure} from "../utils/chart";
+import { findParentMeasureIndex, isDerivedMeasure } from "../utils/chart";
 
 export interface IColorStrategy {
     getColorByIndex(index: number): string;
