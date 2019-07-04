@@ -1,8 +1,8 @@
 // (C) 2007-2019 GoodData Corporation
 import { getHighchartsOptions } from "../highChartsCreators";
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
-import { supportedDualAxesChartTypes } from "../chartOptionsBuilder";
 import { handleChartLoad } from "../highcharts/commonConfiguration";
+import {supportedDualAxesChartTypes} from "../../../../constants/chart";
 
 const chartOptions = {
     data: {

@@ -16,7 +16,7 @@ import pickBy = require("lodash/pickBy");
 import * as numberJS from "@gooddata/numberjs";
 
 import { styleVariables } from "../../styles/variables";
-import { supportedDualAxesChartTypes, supportedTooltipFollowPointerChartTypes } from "../chartOptionsBuilder";
+import { supportedTooltipFollowPointerChartTypes } from "../chartOptionsBuilder";
 import { VisualizationTypes, ChartType } from "../../../../constants/visualizationTypes";
 import {
     IDataLabelsVisible,
@@ -58,6 +58,7 @@ import {
 import getOptionalStackingConfiguration from "./getOptionalStackingConfiguration";
 import { getZeroAlignConfiguration } from "./getZeroAlignConfiguration";
 import { canComboChartBeStackedInPercent } from "../chartOptions/comboChartOptions";
+import {supportedDualAxesChartTypes} from "../../../../constants/chart";
 
 const { stripColors, numberFormat }: any = numberJS;
 

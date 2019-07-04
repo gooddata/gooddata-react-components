@@ -99,6 +99,7 @@ import {
     IValidationResult,
 } from "../../../interfaces/ChartOptions";
 import { isDataOfReasonableSize } from "../utils/chart";
+import {supportedDualAxesChartTypes} from "../../../constants/chart";
 
 const isAreaChartStackingEnabled = (options: IChartConfig) => {
     const { type, stacking, stackMeasures } = options;
@@ -148,15 +149,6 @@ const nullColor: IPatternObject = {
         height: 10,
     },
 };
-
-export const supportedDualAxesChartTypes = [
-    VisualizationTypes.COLUMN,
-    VisualizationTypes.BAR,
-    VisualizationTypes.LINE,
-    VisualizationTypes.AREA,
-    VisualizationTypes.COMBO,
-    VisualizationTypes.COMBO2,
-];
 
 export const supportedTooltipFollowPointerChartTypes = [
     VisualizationTypes.COLUMN,
