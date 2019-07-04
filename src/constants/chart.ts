@@ -1,5 +1,5 @@
 // (C) 2019 GoodData Corporation
-import {VisualizationTypes} from "./visualizationTypes";
+import { VisualizationTypes } from "./visualizationTypes";
 
 export const supportedDualAxesChartTypes = [
     VisualizationTypes.COLUMN,

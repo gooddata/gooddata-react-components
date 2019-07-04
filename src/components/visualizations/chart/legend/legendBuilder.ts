@@ -14,7 +14,7 @@ import {
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 import { ILegendOptions, LegendOptionsItemType, DEFAULT_LEGEND_CONFIG } from "../../typings/legend";
 import { isStackedChart } from "./helpers";
-import {supportedDualAxesChartTypes} from "../../../../constants/chart";
+import { supportedDualAxesChartTypes } from "../../../../constants/chart";
 
 function isHeatmapWithMultipleValues(chartOptions: any) {
     const { type } = chartOptions;

@@ -2,7 +2,7 @@
 import { getHighchartsOptions } from "../highChartsCreators";
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 import { handleChartLoad } from "../highcharts/commonConfiguration";
-import {supportedDualAxesChartTypes} from "../../../../constants/chart";
+import { supportedDualAxesChartTypes } from "../../../../constants/chart";
 
 const chartOptions = {
     data: {
