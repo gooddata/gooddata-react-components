@@ -88,7 +88,7 @@
     "sass-loader": "6.0.6",
     "stats-webpack-plugin": "0.7.0",
     "style-loader": "0.19.1",
-    "styled-jsx": "2.2.1",
+    "styled-jsx": "3.2.1",
     "supertest": "3.0.0",
     "testcafe": "0.20.3",
     "testcafe-live": "0.1.4",
