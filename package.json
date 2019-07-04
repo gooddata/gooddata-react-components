@@ -85,7 +85,7 @@
     "react-syntax-highlighter": "6.1.2",
     "react-test-renderer": "16.4.2",
     "recharts": "1.0.0-beta.9",
-    "sass-loader": "6.0.6",
+    "sass-loader": "7.1.0",
     "stats-webpack-plugin": "0.7.0",
     "style-loader": "0.19.1",
     "styled-jsx": "3.2.1",
