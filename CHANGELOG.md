@@ -52,7 +52,7 @@ const exportConfig: VisEvents.IExtendedExportConfig = {
 June 28, 2019
 
 ### Fixed
- 
+
 - Drill event intersection element id. Now item localIdentifier has correctly higher priority over measure/attribute id
 
 ## 7.0.0
@@ -75,9 +75,9 @@ June 28, 2019
 ## 6.3.3
 
 June 28, 2019
- 
+
 ### Fixed
- 
+
 - Drill event intersection element id. Now item localIdentifier has correctly higher priority over measure/attribute id
 
 ## 6.3.2
