@@ -1,4 +1,5 @@
 // (C) 2007-2019 GoodData Corporation
+import { VisualizationObject } from "@gooddata/typings";
 import flatten = require("lodash/flatten");
 import get = require("lodash/get");
 import pick = require("lodash/pick");
@@ -15,8 +16,11 @@ import max = require("lodash/max");
 import isNil = require("lodash/isNil");
 
 import { VisualizationTypes, VisType } from "../../../../constants/visualizationTypes";
-import { isBarChart } from "../../utils/common";
+import { isBarChart, isComboChart } from "../../utils/common";
 import { IChartConfig, ISeriesItem, ISeriesDataItem } from "../../../../interfaces/Config";
+import { SECONDARY_MEASURES } from "../../../../constants/bucketNames";
+import { getIdentifierFromBucketsItem } from "../../../../helpers/mdObjBucketHelper";
+import isEqual = require("lodash/isEqual");
 
 export interface IRectByPoints {
     left: number;
@@ -85,6 +89,10 @@ export function getChartProperties(config: IChartConfig, type: VisType) {
     }
     if (!isEmpty(secondaryYAxisProps)) {
         chartProps.secondary_yAxisProps = secondaryYAxisProps;
+    }
+
+    if (isComboChart(type) && !config.dualAxis) {
+        chartProps.secondary_yAxisProps = {};
     }
 
     return chartProps;
@@ -234,6 +242,20 @@ export function getStackedMaxValue(series: ISeriesItem[]) {
 
     const maxValue = max(maximumPerColumn);
     return !isNil(maxValue) ? maxValue : Number.MIN_SAFE_INTEGER;
+}
+
+export function inorgeSecondaryYAxis(config: IChartConfig) {
+    const { dualAxis, secondary_yaxis } = config;
+    const buckets: VisualizationObject.IBucket[] = get(config, "mdObject.buckets");
+    const secondaryIdentifierMeasures: string[] = getIdentifierFromBucketsItem(buckets, SECONDARY_MEASURES);
+    const measures: string[] = get(secondary_yaxis, "measures", []);
+    if (!isEqual(secondaryIdentifierMeasures.sort(), measures.sort())) {
+        config.secondary_yaxis = dualAxis
+            ? {
+                  measures: secondaryIdentifierMeasures,
+              }
+            : {};
+    }
 }
 
 export function getStackedMinValue(series: ISeriesItem[]) {

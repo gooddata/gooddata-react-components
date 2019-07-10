@@ -19,6 +19,8 @@ import HighChartsRenderer, {
     renderLegend as legendRenderer,
 } from "./HighChartsRenderer";
 import getLegend from "./legend/legendBuilder";
+import { inorgeSecondaryYAxis } from "./highcharts/helpers";
+import { isComboChart } from "../utils/common";
 
 export function renderHighCharts(props: IHighChartsRendererProps) {
     return <HighChartsRenderer {...props} />;
@@ -187,7 +189,9 @@ export default class ChartTransformation extends React.Component<
             executionRequest: { afm },
             config,
         } = props;
-
+        if (isComboChart(config.type)) {
+            inorgeSecondaryYAxis(config);
+        }
         return getSanitizedStackingConfigFromAfm(afm, config);
     }
 }

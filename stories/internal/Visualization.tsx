@@ -419,4 +419,60 @@ storiesOf("Internal/Visualization", module)
                 1200,
             ),
         );
+    })
+    .add("visualization combo chart with secondary_yaxis point to primary measure", () => {
+        return screenshotWrap(
+            wrap(
+                <Visualization
+                    {...fixtures.comboWithThreeMeasuresAndViewByAttribute}
+                    config={{
+                        type: "combo2",
+                        mdObject: fixtures.comboWithThreeMeasuresAndViewByAttributeMdObject,
+                        secondary_yaxis: {
+                            measures: ["lostMetric"],
+                        },
+                    }}
+                    onDataTooLarge={noop}
+                />,
+                800,
+                1200,
+            ),
+        );
+    })
+    .add("visualization combo chart has dualAxis and secondary_yaxis point to measure", () => {
+        return screenshotWrap(
+            wrap(
+                <Visualization
+                    {...fixtures.comboWithThreeMeasuresAndViewByAttribute}
+                    config={{
+                        type: "combo2",
+                        mdObject: fixtures.comboWithThreeMeasuresAndViewByAttributeMdObject,
+                        secondary_yaxis: {
+                            measures: ["wonMetric"],
+                        },
+                        dualAxis: true,
+                    }}
+                    onDataTooLarge={noop}
+                />,
+                800,
+                1200,
+            ),
+        );
+    })
+    .add("visualization combo chart has dualAxis and do not set param secondary_yaxis", () => {
+        return screenshotWrap(
+            wrap(
+                <Visualization
+                    {...fixtures.comboWithThreeMeasuresAndViewByAttribute}
+                    config={{
+                        type: "combo2",
+                        mdObject: fixtures.comboWithThreeMeasuresAndViewByAttributeMdObject,
+                        dualAxis: true,
+                    }}
+                    onDataTooLarge={noop}
+                />,
+                800,
+                1200,
+            ),
+        );
     });

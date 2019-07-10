@@ -10,9 +10,11 @@ import {
     getStackedMinValue,
     shouldXAxisStartOnTickOnBubbleScatter,
     shouldYAxisStartOnTickOnBubbleScatter,
+    inorgeSecondaryYAxis,
 } from "../helpers";
 import { VisualizationTypes } from "../../../../../constants/visualizationTypes";
 import { IChartConfig } from "../../../../../interfaces/Config";
+import { comboWithThreeMeasuresAndViewByAttributeMdObject } from "../../../../../../stories/test_data/fixtures";
 
 describe("helpers", () => {
     describe("getChartProperties", () => {
@@ -827,6 +829,36 @@ describe("helpers", () => {
             it("should match output for negative values", () => {
                 const result = getStackedMinValue(negativeValues);
                 expect(result).toEqual(-135);
+            });
+        });
+    });
+
+    describe("inorgeSecondaryYAxis", () => {
+        it("should inorge secondary YAxis when combo hasn't dualAxis", () => {
+            const config: IChartConfig = {
+                dualAxis: false,
+                secondary_yaxis: {
+                    measures: ["measure1"],
+                },
+            };
+            inorgeSecondaryYAxis(config);
+            expect(config).toEqual({
+                dualAxis: false,
+                secondary_yaxis: {},
+            });
+        });
+
+        it("should update secondary YAxis when combo has dualAxis", () => {
+            const config: IChartConfig = {
+                dualAxis: true,
+                mdObject: comboWithThreeMeasuresAndViewByAttributeMdObject,
+            };
+            inorgeSecondaryYAxis(config);
+            expect(config).toEqual({
+                ...config,
+                secondary_yaxis: {
+                    measures: ["expectedMetric"],
+                },
             });
         });
     });
