@@ -143,7 +143,7 @@ export function visualizationLoadingHOC<
 
         public render() {
             const { result, isLoading, error } = this.state;
-            const { intl } = this.props;
+            const { intl, dataSource } = this.props;
 
             const getPageProperty = autoExecuteDataSource
                 ? {}
@@ -157,7 +157,7 @@ export function visualizationLoadingHOC<
 
             return (
                 <InnerComponent
-                    key="InnerComponent"
+                    key={`InnerComponent-${dataSource.getFingerprint()}`}
                     {...props}
                     execution={result}
                     onDataTooLarge={this.onDataTooLarge}
