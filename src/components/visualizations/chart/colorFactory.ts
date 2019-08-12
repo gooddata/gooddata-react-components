@@ -45,6 +45,7 @@ export const attributeChartSupportedTypes = [
     VisualizationTypes.FUNNEL,
     VisualizationTypes.SCATTER,
     VisualizationTypes.BUBBLE,
+    VisualizationTypes.PYRAMID
 ];
 
 export abstract class ColorStrategy implements IColorStrategy {

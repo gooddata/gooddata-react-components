@@ -11,13 +11,13 @@ import {
     IVisualizationProperties,
 } from "../../../interfaces/Visualization";
 
-import { PluggableBaseChart } from "../baseChart/PluggableBaseChart";
+import { PluggablePieChart } from "../pieChart/PluggablePieChart";
 import { setPyramidChartUiConfig } from "../../../utils/uiConfigHelpers/pyramidChartUiConfigHelper";
 import UnsupportConfigurationPanel from "../../configurationPanels/UnsupportedConfigurationPanel";
 
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 
-export class PluggablePyramidChart extends PluggableBaseChart {
+export class PluggablePyramidChart extends PluggablePieChart {
     constructor(props: IVisConstruct) {
         super(props);
 

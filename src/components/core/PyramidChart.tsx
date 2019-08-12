@@ -5,7 +5,7 @@ import { ChartPropTypes, Requireable } from "../../proptypes/Chart";
 
 export { Requireable };
 
-export class Pyramid extends React.PureComponent<IChartProps, null> {
+export class PyramidChart extends React.PureComponent<IChartProps, null> {
     public static propTypes = ChartPropTypes;
 
     public render() {

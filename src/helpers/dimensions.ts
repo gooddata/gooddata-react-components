@@ -372,6 +372,7 @@ export function generateDimensions(
         }
         case VisualizationTypes.PIE:
         case VisualizationTypes.DONUT:
+        case VisualizationTypes.PYRAMID:
         case VisualizationTypes.FUNNEL: {
             return getPieOrDonutDimensions(mdObject);
         }
