@@ -3,13 +3,13 @@
 import * as React from "react";
 import { SDK, factory as createSdk } from "@gooddata/gooddata-js";
 import { AFM, Execution, VisualizationObject, VisualizationInput } from "@gooddata/typings";
+import { MEASUREGROUP } from '../constants/dimensions';
 
 import { setTelemetryHeaders } from "../helpers/utils";
 import { convertErrors } from "../helpers/errorHandlers";
 import { RuntimeError } from "../errors/RuntimeError";
 import { convertBucketsToAFM } from "../helpers/conversion";
 import { MEASURES, ATTRIBUTES } from "../constants/bucketNames";
-import { MEASUREGROUP } from "../internal/constants/bucket";
 import { LoadingComponent } from "../components/simple/LoadingComponent";
 import { ErrorComponent } from "../components/simple/ErrorComponent";
 
