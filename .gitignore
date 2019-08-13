@@ -35,6 +35,7 @@ yalc.lock
 ci/results
 ci/results/coverage
 coverage
+dependency*.*
 
 junit.xml
 
