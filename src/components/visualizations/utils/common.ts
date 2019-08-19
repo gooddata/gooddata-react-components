@@ -4,7 +4,7 @@ import clone = require("lodash/clone");
 import get = require("lodash/get");
 import includes = require("lodash/includes");
 import { Observable } from "rxjs/Rx";
-import { numberFormat } from "@gooddata/numberjs";
+import { numberFormat, INumberObject, colors2Object } from "@gooddata/numberjs";
 
 import { VisualizationTypes } from "../../../constants/visualizationTypes";
 import { IAxis, ISeriesItem, IChartOptions } from "../../../interfaces/Config";
@@ -108,7 +108,11 @@ export function formatLegendLabel(
     const b = `[<10000000000]#.#,,,${numericSymbols[2]};[<999500000000]#,,,${numericSymbols[2]};`;
     const t = `[<10000000000000]#.#,,,${numericSymbols[3]};[>=10000000000000]#,,,${numericSymbols[3]}`;
     formattingString += k + m + b + t;
-    return sign + numberFormat(positiveValue, formattingString);
+
+    const formatValue = format && positiveValue !== 0 ? format : formattingString;
+    const formattedObject: INumberObject = colors2Object(numberFormat(positiveValue, formatValue));
+
+    return sign + formattedObject.label;
 }
 
 export const getPrimaryChartType = (chartOptions: IChartOptions): string => {

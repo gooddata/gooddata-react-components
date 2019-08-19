@@ -23,6 +23,7 @@ import {
     IAxis,
     IChartOptions,
     ISeriesItem,
+    IHighChartAxis,
 } from "../../../../interfaces/Config";
 import { percentFormatter } from "../../../../helpers/utils";
 import { formatAsPercent, getLabelStyle, getLabelsVisibilityConfig, isInPercent } from "./dataLabelsHelpers";
@@ -155,11 +156,23 @@ function hideOverlappedLabels(chartOptions: IChartOptions) {
     return {};
 }
 
-function getShowInPercentConfiguration(chartOptions: IChartOptions) {
-    const { yAxes = [], xAxes = [] } = chartOptions;
+function isNotApplyMetricFormatOnYAxis(series: ISeriesItem[], format: string, dualAxis: number): boolean {
+    return series.some((serie: ISeriesItem) => {
+        const { data = {} } = serie;
+        return serie.yAxis === dualAxis && data[0].format !== format;
+    });
+}
+
+function getShowInPercentConfiguration(
+    chartOptions: IChartOptions,
+    _config: IChartConfig,
+    chartConfig?: IChartConfig,
+) {
+    const { yAxes = [], xAxes = [], data = {}, type } = chartOptions;
+    const { series = [] } = data;
     const percentageFormatter = partial(formatAsPercent, 100);
 
-    const xAxis = xAxes.map((axis: any) =>
+    const xAxis = xAxes.map((axis: IHighChartAxis) =>
         axis && isInPercent(axis.format)
             ? {
                   labels: {
@@ -169,15 +182,25 @@ function getShowInPercentConfiguration(chartOptions: IChartOptions) {
             : {},
     );
 
-    const yAxis = yAxes.map((axis: any) =>
-        axis && isInPercent(axis.format)
+    const yAxis = yAxes.map((axis: IHighChartAxis, index: number) => {
+        if (!axis) {
+            return {};
+        }
+        const { format } = axis;
+        return isInPercent(format)
             ? {
                   labels: {
                       formatter: percentageFormatter,
                   },
               }
-            : {},
-    );
+            : !isNotApplyMetricFormatOnYAxis(series, format, index) && !isHeatmap(type)
+            ? {
+                  labels: {
+                      formatter: partial(yAxisLabelsFormatter, format, chartConfig),
+                  },
+              }
+            : {};
+    });
 
     return {
         xAxis,
@@ -362,6 +385,13 @@ function labelFormatterBubble(config?: IChartConfig) {
     } else {
         return formatLabel(value, get(this, "point.format"), config);
     }
+}
+
+function yAxisLabelsFormatter(format: string, config: IChartConfig = {}) {
+    if (this.value === 0) {
+        return this.value;
+    }
+    return formatLabel(this.value, format, config);
 }
 
 function labelFormatterScatter() {
