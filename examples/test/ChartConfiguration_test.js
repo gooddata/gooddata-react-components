@@ -137,24 +137,44 @@ test("should be able to change configuration of dual axis chart and render them"
         .expect(dualAxisColumnChart.visible)
         .ok()
         .expect(dualAxisColumnChart.find(primaryYAxisLabels).nth(1).textContent)
-        .eql("-50M", "To set min scale value incorrectly")
+        .eql("-50,000,000", "To set min scale value incorrectly")
         .expect(dualAxisColumnChart.find(primaryYAxisLabels).nth(3).textContent)
-        .eql("100M", "To set max scale value incorrectly")
+        .eql("100,000,000", "To set max scale value incorrectly")
         .expect(dualAxisColumnChart.find(secondaryYAxisLabels).nth(1).textContent)
-        .eql("-50M", "To set min scale value incorrectly")
+        .eql("-50,000,000", "To set min scale value incorrectly")
         .expect(dualAxisColumnChart.find(secondaryYAxisLabels).nth(3).textContent)
-        .eql("100M", "To set max scale value incorrectly");
+        .eql("100,000,000", "To set max scale value incorrectly");
 
     await t
         .hover(dualAxisBarChart)
         .expect(dualAxisBarChart.visible)
         .ok()
-        .expect(dualAxisBarChart.find(primaryYAxisLabels).nth(3).textContent)
-        .eql("-45M", "To set min scale value incorrectly")
-        .expect(dualAxisBarChart.find(primaryYAxisLabels).nth(11).textContent)
-        .eql("75M", "To set max scale value incorrectly")
-        .expect(dualAxisBarChart.find(secondaryYAxisLabels).nth(3).textContent)
-        .eql("-45M", "To set min scale value incorrectly")
-        .expect(dualAxisBarChart.find(secondaryYAxisLabels).nth(11).textContent)
-        .eql("75M", "To set max scale value incorrectly");
+        .expect(
+            dualAxisBarChart
+                .find(primaryYAxisLabels)
+                .nth(3)
+                .find("title").textContent,
+        )
+        .eql("-$45,000,000", "To set min scale value incorrectly")
+        .expect(
+            dualAxisBarChart
+                .find(primaryYAxisLabels)
+                .nth(11)
+                .find("title").textContent,
+        )
+        .eql("$75,000,000", "To set max scale value incorrectly")
+        .expect(
+            dualAxisBarChart
+                .find(secondaryYAxisLabels)
+                .nth(3)
+                .find("title").textContent,
+        )
+        .eql("-$45,000,000", "To set min scale value incorrectly")
+        .expect(
+            dualAxisBarChart
+                .find(secondaryYAxisLabels)
+                .nth(11)
+                .find("title").textContent,
+        )
+        .eql("$75,000,000", "To set max scale value incorrectly");
 });

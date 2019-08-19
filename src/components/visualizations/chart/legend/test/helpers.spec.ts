@@ -204,17 +204,17 @@ describe("helpers", () => {
             expect(result).toEqual(expectedResult);
         });
 
-        it("should prepare legend config with shortening", () => {
+        it("should prepare legend config with format is #,## and shortening", () => {
             const expectedLabels = [
-                { key: "label-0", label: "99999", style: { textAlign: "left", width: 45 } },
+                { key: "label-0", label: "99,999", style: { textAlign: "left", width: 45 } },
                 { key: "dots-1", label: "...", style: { textAlign: "center", width: 10 } },
-                { key: "label-2", label: "100002", style: { textAlign: "center", width: 90 } },
+                { key: "label-2", label: "100,002", style: { textAlign: "center", width: 90 } },
                 { key: "dots-3", label: "...", style: { textAlign: "center", width: 10 } },
                 { key: "empty-4", label: " ", style: { width: 40 } },
                 { key: "dots-5", label: "...", style: { textAlign: "center", width: 10 } },
-                { key: "label-6", label: "100005", style: { textAlign: "center", width: 90 } },
+                { key: "label-6", label: "100,005", style: { textAlign: "center", width: 90 } },
                 { key: "dots-7", label: "...", style: { textAlign: "center", width: 10 } },
-                { key: "label-8", label: "100007", style: { textAlign: "right", width: 45 } },
+                { key: "label-8", label: "100,007", style: { textAlign: "right", width: 45 } },
             ];
             const expectedResult = {
                 classes: ["viz-legend", "heatmap-legend", "position-top", null],
@@ -233,7 +233,7 @@ describe("helpers", () => {
             expect(result).toEqual(expectedResult);
         });
 
-        it("should prepare small legend config with shortening", () => {
+        it("should prepare small legend config with shortening and without format", () => {
             const expectedLabels = [
                 { key: "label-0", label: "99999", style: { textAlign: "left", width: 35 } },
                 { key: "dots-1", label: "...", style: { textAlign: "center", width: 10 } },
@@ -253,7 +253,7 @@ describe("helpers", () => {
             };
             const result = getHeatmapLegendConfiguration(
                 seriesForShortening,
-                format,
+                "",
                 numericSymbols,
                 true,
                 "top",

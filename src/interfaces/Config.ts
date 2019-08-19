@@ -98,6 +98,7 @@ export interface IHighChartAxis {
     min?: number;
     max?: number;
     visible?: boolean;
+    format?: string;
 }
 
 export interface IYAxisConfig {
@@ -133,6 +134,7 @@ export interface ISeriesDataItem {
     y: number;
     value?: number;
     name?: string;
+    format?: string;
 }
 
 export interface IStackItem {

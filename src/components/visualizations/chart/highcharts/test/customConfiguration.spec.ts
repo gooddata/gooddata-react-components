@@ -31,6 +31,9 @@ function getData(dataValues: ISeriesDataItem[]) {
     };
 }
 
+function getSerieData(name: string, format: string, value: number) {
+    return { name, format, y: value };
+}
 const chartOptions = {
     type: VisualizationTypes.LINE,
     yAxes: [{ title: "atitle" }],
@@ -55,13 +58,76 @@ describe("getCustomizedConfiguration", () => {
         expect(result.series[0].data[0].name).toEqual("&lt;b&gt;bbb&lt;/b&gt;");
     });
 
-    it('should handle "%" format on axis and use label formatter', () => {
+    it('should handle "%" format on YAxis and use label formatter', () => {
         const chartOptionsWithFormat = immutableSet(chartOptions, "yAxes[0].format", "0.00 %");
         const resultWithoutFormat = getCustomizedConfiguration(chartOptions);
         const resultWithFormat = getCustomizedConfiguration(chartOptionsWithFormat);
 
-        expect(resultWithoutFormat.yAxis[0].labels.formatter).toBeUndefined();
-        expect(resultWithFormat.yAxis[0].labels.formatter).toBeDefined();
+        resultWithoutFormat.yAxis[0].labels.value = 10;
+        expect(resultWithoutFormat.yAxis[0].labels.formatter()).toEqual("10");
+
+        resultWithFormat.yAxis[0].labels.value = 10;
+        expect(resultWithFormat.yAxis[0].labels.formatter()).toEqual("1000%");
+    });
+
+    it("should not apply format on YAxis", () => {
+        const chartOptionsWithMultipleFormat = {
+            ...chartOptions,
+            yAxes: [{ title: "atitle", format: "#.###'##" }],
+            data: {
+                series: [
+                    {
+                        color: "rgb(0, 0, 0)",
+                        name: "<b>aaa</b>",
+                        data: [getSerieData("Amount", "#,##0.00", 10)],
+                        yAxis: 0,
+                    },
+                    {
+                        color: "rgb(0, 120, 23)",
+                        name: "<b>bbb</b>",
+                        data: [getSerieData("Sum of Amount", "#,0.0 K", 30)],
+                        yAxis: 0,
+                    },
+                ],
+            },
+        };
+        const resultWithoutFormat = getCustomizedConfiguration(chartOptions);
+        const resultWithIgnoreFormat = getCustomizedConfiguration(chartOptionsWithMultipleFormat);
+
+        resultWithoutFormat.yAxis[0].labels.value = 10;
+
+        expect(resultWithoutFormat.yAxis[0].labels.formatter()).toEqual("10");
+        expect(resultWithIgnoreFormat.yAxis[0].labels.formatter).toEqual(undefined);
+    });
+
+    it("should apply format on both YAxis", () => {
+        const chartOptionsWithMultipleFormat = {
+            ...chartOptions,
+            yAxes: [{ title: "aaa", format: "0.00 %" }, { title: "bbb", format: "#,##0.00" }],
+            data: {
+                series: [
+                    {
+                        color: "rgb(0, 0, 0)",
+                        name: "<b>aaa</b>",
+                        data: [getSerieData("Amount", "0.00 %", 10)],
+                        yAxis: 0,
+                    },
+                    {
+                        color: "rgb(0, 120, 23)",
+                        name: "<b>bbb</b>",
+                        data: [getSerieData("Sum of Amount", "#,##0.00", 30)],
+                        yAxis: 1,
+                    },
+                ],
+            },
+        };
+
+        const resultWithFormat = getCustomizedConfiguration(chartOptionsWithMultipleFormat);
+        resultWithFormat.yAxis[0].labels.value = 10;
+        resultWithFormat.yAxis[1].labels.value = 30;
+
+        expect(resultWithFormat.yAxis[0].labels.formatter()).toEqual("1000%");
+        expect(resultWithFormat.yAxis[1].labels.formatter()).toEqual("30.00");
     });
 
     it("should set formatter for xAxis labels to prevent overlapping for bar chart with 90 rotation", () => {

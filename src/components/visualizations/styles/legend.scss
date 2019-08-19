@@ -207,6 +207,13 @@ $responsive-legend: "only screen and (max-width: 767px)";
             overflow: visible;
             text-overflow: unset;
             color: $gd-color-link;
+
+            span {
+                max-width: 150px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
         }
 
         .boxes {
