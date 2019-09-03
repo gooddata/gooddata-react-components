@@ -31,7 +31,7 @@ function getData(dataValues: ISeriesDataItem[]) {
     };
 }
 
-function getSerieData(name: string, format: string, value: number) {
+function getSeriesData(name: string, format: string, value: number) {
     return { name, format, y: value };
 }
 const chartOptions = {
@@ -79,13 +79,13 @@ describe("getCustomizedConfiguration", () => {
                     {
                         color: "rgb(0, 0, 0)",
                         name: "<b>aaa</b>",
-                        data: [getSerieData("Amount", "#,##0.00", 10)],
+                        data: [getSeriesData("Amount", "#,##0.00", 10)],
                         yAxis: 0,
                     },
                     {
                         color: "rgb(0, 120, 23)",
                         name: "<b>bbb</b>",
-                        data: [getSerieData("Sum of Amount", "#,0.0 K", 30)],
+                        data: [getSeriesData("Sum of Amount", "#,0.0 K", 30)],
                         yAxis: 0,
                     },
                 ],
@@ -109,13 +109,13 @@ describe("getCustomizedConfiguration", () => {
                     {
                         color: "rgb(0, 0, 0)",
                         name: "<b>aaa</b>",
-                        data: [getSerieData("Amount", "0.00 %", 10)],
+                        data: [getSeriesData("Amount", "0.00 %", 10)],
                         yAxis: 0,
                     },
                     {
                         color: "rgb(0, 120, 23)",
                         name: "<b>bbb</b>",
-                        data: [getSerieData("Sum of Amount", "#,##0.00", 30)],
+                        data: [getSeriesData("Sum of Amount", "#,##0.00", 30)],
                         yAxis: 1,
                     },
                 ],

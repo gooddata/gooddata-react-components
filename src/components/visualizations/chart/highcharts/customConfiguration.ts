@@ -187,19 +187,22 @@ function getShowInPercentConfiguration(
             return {};
         }
         const { format } = axis;
-        return isInPercent(format)
-            ? {
-                  labels: {
-                      formatter: percentageFormatter,
-                  },
-              }
-            : !isNotApplyMetricFormatOnYAxis(series, format, index) && !isHeatmap(type)
-            ? {
-                  labels: {
-                      formatter: partial(yAxisLabelsFormatter, format, chartConfig),
-                  },
-              }
-            : {};
+
+        if (isInPercent(format)) {
+            return {
+                labels: {
+                    formatter: percentageFormatter,
+                },
+            };
+        } else if (!isNotApplyMetricFormatOnYAxis(series, format, index) && !isHeatmap(type)) {
+            return {
+                labels: {
+                    formatter: partial(yAxisLabelsFormatter, format, chartConfig),
+                },
+            };
+        }
+
+        return {};
     });
 
     return {
