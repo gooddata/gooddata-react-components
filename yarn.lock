@@ -1147,10 +1147,10 @@
     rxjs "^5.5.6"
     uuid "^3.2.1"
 
-"@gooddata/goodstrap@^63.3.0":
-  version "63.3.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-63.3.0.tgz#bcd5be9d5ac6b86a9c887070fa2c8683371322c3"
-  integrity sha512-j6Ks6zNf7YbHU8h7LCZnPwu0R+ejBOMa4RpSXoS4eY8BlfpsQf0TWM0CNewsCjvtDlWNKbgQBaiGuRXqlVxFNw==
+"@gooddata/goodstrap@^63.4.0":
+  version "63.4.0"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-63.4.0.tgz#0fa54d97f4b61ce00a1a7a0db0fb17287e832667"
+  integrity sha512-XWRqjph+tdFPh9jHyoUwbAdpRgWjJUlksXI3UVrrkRTuiDJg+9WUmSda747U9xEGqW/Y7ZIrgJvnnN4u+V4aKA==
   dependencies:
     "@gooddata/js-utils" "^3.5.0"
     classnames "^2.2.6"
