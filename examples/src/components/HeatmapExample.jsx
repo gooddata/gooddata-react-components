@@ -25,16 +25,11 @@ export class HeatmapExample extends Component {
     render() {
         const totalSales = Model.measure(totalSalesIdentifier)
             .format("#,##0")
-            .alias("$ Total Sales")
-            .localIdentifier("totalSales");
+            .alias("$ Total Sales");
 
-        const menuCategory = Model.attribute(menuCategoryAttributeDFIdentifier).localIdentifier(
-            "menuCategory",
-        );
+        const menuCategory = Model.attribute(menuCategoryAttributeDFIdentifier);
 
-        const locationState = Model.attribute(locationStateDisplayFormIdentifier).localIdentifier(
-            "locationState",
-        );
+        const locationState = Model.attribute(locationStateDisplayFormIdentifier);
 
         return (
             <div style={{ height: 300 }} className="s-heat-map">

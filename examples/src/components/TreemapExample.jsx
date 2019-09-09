@@ -25,16 +25,11 @@ export class TreeMapExample extends Component {
     render() {
         const numberOfChecks = Model.measure(numberOfChecksIdentifier)
             .format("#,##0")
-            .alias("# Checks")
-            .localIdentifier("numberOfChecks");
+            .alias("# Checks");
 
-        const locationState = Model.attribute(locationStateDisplayFormIdentifier).localIdentifier(
-            "locationState",
-        );
+        const locationState = Model.attribute(locationStateDisplayFormIdentifier);
 
-        const locationCity = Model.attribute(locationCityDisplayFormIdentifier).localIdentifier(
-            "locationCity",
-        );
+        const locationCity = Model.attribute(locationCityDisplayFormIdentifier);
 
         return (
             <div style={{ height: 300 }} className="s-tree-map">

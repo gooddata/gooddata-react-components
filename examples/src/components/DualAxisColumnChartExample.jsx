@@ -24,7 +24,6 @@ export class DualAxisColumnChartExample extends Component {
     render() {
         const totalCostsLocalIdentifier = "totalCosts";
         const totalSalesLocalIdentifier = "totalSales";
-        const locationStateLocalIdentifier = "locationState";
 
         const totalCosts = Model.measure(totalCostsIdentifier)
             .format("#,##0")
@@ -33,12 +32,9 @@ export class DualAxisColumnChartExample extends Component {
 
         const totalSales = Model.measure(totalSalesIdentifier)
             .format("#,##0")
-            .alias("$ Total Sales")
-            .localIdentifier(totalSalesLocalIdentifier);
+            .alias("$ Total Sales");
 
-        const localState = Model.attribute(locationStateDisplayFormIdentifier).localIdentifier(
-            locationStateLocalIdentifier,
-        );
+        const localState = Model.attribute(locationStateDisplayFormIdentifier);
 
         const config = {
             secondary_yaxis: {

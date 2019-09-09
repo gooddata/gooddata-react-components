@@ -65,8 +65,7 @@ export class ParentFilterExample extends Component {
 
         const measureTotalSales = Model.measure(totalSalesIdentifier)
             .format("#,##0")
-            .alias("$ Total Sales")
-            .localIdentifier("totalSales");
+            .alias("$ Total Sales");
 
         const viewByLocationName = Model.attribute(locationNameDisplayFormIdentifier).localIdentifier(
             "location_name",

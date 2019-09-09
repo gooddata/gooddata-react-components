@@ -80,10 +80,9 @@ export class MonthPickerExample extends PureComponent {
 
         const totalSales = Model.measure(totalSalesIdentifier)
             .format("#,##0")
-            .alias("$ Total Sales")
-            .localIdentifier("totalSales");
+            .alias("$ Total Sales");
 
-        const locationResort = Model.attribute(monthOfYearDateIdentifier).localIdentifier("monthOfYearDate");
+        const locationResort = Model.attribute(monthOfYearDateIdentifier);
 
         const filters = [
             {

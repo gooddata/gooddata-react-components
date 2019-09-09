@@ -26,21 +26,13 @@ export class StackedAreaChartExample extends Component {
 
     render() {
         const measures = [
-            Model.measure(franchiseFeesIdentifier)
-                .format("#,##0")
-                .localIdentifier("franchiseFees"),
-            Model.measure(franchiseFeesAdRoyaltyIdentifier)
-                .format("#,##0")
-                .localIdentifier("franchiseFeesAdRoyalty"),
-            Model.measure(franchiseFeesInitialFranchiseFeeIdentifier)
-                .format("#,##0")
-                .localIdentifier("franchiseFeesInitialFranchiseFee"),
-            Model.measure(franchiseFeesIdentifierOngoingRoyalty)
-                .format("#,##0")
-                .localIdentifier("franchiseFeesOngoingRoyalty"),
+            Model.measure(franchiseFeesIdentifier).format("#,##0"),
+            Model.measure(franchiseFeesAdRoyaltyIdentifier).format("#,##0"),
+            Model.measure(franchiseFeesInitialFranchiseFeeIdentifier).format("#,##0"),
+            Model.measure(franchiseFeesIdentifierOngoingRoyalty).format("#,##0"),
         ];
 
-        const viewBy = Model.attribute(monthDateIdentifier).localIdentifier("month");
+        const viewBy = Model.attribute(monthDateIdentifier);
 
         return (
             <div style={{ height: 300 }} className="s-area-chart">

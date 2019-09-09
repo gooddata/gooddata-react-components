@@ -13,7 +13,7 @@ export class AttributeSortingExample extends Component {
             <div style={{ height: 300 }} className="s-attribute-sorting">
                 <ColumnChart
                     projectId={projectId}
-                    measures={[Model.measure(totalSalesIdentifier).localIdentifier("totalSales")]}
+                    measures={[Model.measure(totalSalesIdentifier)]}
                     viewBy={Model.attribute(locationCityDisplayFormIdentifier).localIdentifier(
                         locationCityDisplayFormIdentifier,
                     )}

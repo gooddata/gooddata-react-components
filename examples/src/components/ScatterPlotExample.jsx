@@ -23,15 +23,11 @@ export class ScatterPlotExample extends Component {
     }
 
     render() {
-        const xMeasure = Model.measure(franchiseFeesIdentifier)
-            .format("#,##0")
-            .localIdentifier("franchiseFees");
+        const xMeasure = Model.measure(franchiseFeesIdentifier).format("#,##0");
 
-        const yMeasure = Model.measure(franchisedSalesIdentifier)
-            .format("#,##0")
-            .localIdentifier("franchisedSales");
+        const yMeasure = Model.measure(franchisedSalesIdentifier).format("#,##0");
 
-        const locationResort = Model.attribute(locationResortIdentifier).localIdentifier("locationResort");
+        const locationResort = Model.attribute(locationResortIdentifier);
 
         return (
             <div style={{ height: 300 }} className="s-scatter-plot">

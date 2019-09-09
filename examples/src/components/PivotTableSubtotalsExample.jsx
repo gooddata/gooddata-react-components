@@ -26,16 +26,12 @@ export class PivotTableSubtotalsExample extends Component {
             Model.measure(franchiseFeesAdRoyaltyIdentifier)
                 .format("#,##0")
                 .localIdentifier("franchiseFeesAdRoyaltyIdentifier"),
-            Model.measure(franchiseFeesInitialFranchiseFeeIdentifier)
-                .format("#,##0")
-                .localIdentifier("franchiseFeesInitialFranchiseFeeIdentifier"),
-            Model.measure(franchiseFeesIdentifierOngoingRoyalty)
-                .format("#,##0")
-                .localIdentifier("franchiseFeesIdentifierOngoingRoyalty"),
+            Model.measure(franchiseFeesInitialFranchiseFeeIdentifier).format("#,##0"),
+            Model.measure(franchiseFeesIdentifierOngoingRoyalty).format("#,##0"),
         ];
 
         const attributes = [
-            Model.attribute(locationStateDisplayFormIdentifier).localIdentifier("locationState"),
+            Model.attribute(locationStateDisplayFormIdentifier),
             Model.attribute(locationNameDisplayFormIdentifier).localIdentifier("locationName"),
             Model.attribute(menuCategoryAttributeDFIdentifier).localIdentifier("menu"),
         ];
@@ -63,10 +59,7 @@ export class PivotTableSubtotalsExample extends Component {
             },
         ];
 
-        const columns = [
-            Model.attribute(quarterDateIdentifier).localIdentifier("quarter"),
-            Model.attribute(monthDateIdentifier).localIdentifier("month"),
-        ];
+        const columns = [Model.attribute(quarterDateIdentifier), Model.attribute(monthDateIdentifier)];
 
         return (
             <div style={{ height: 500 }} className="s-pivot-table-row-grouping">

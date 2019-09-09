@@ -21,10 +21,9 @@ export class BarChartExportExample extends Component {
     render() {
         const amount = Model.measure(totalSalesIdentifier)
             .format("#,##0")
-            .alias("$ Total Sales")
-            .localIdentifier("totalSales");
+            .alias("$ Total Sales");
 
-        const locationResort = Model.attribute(locationResortIdentifier).localIdentifier("locationResort");
+        const locationResort = Model.attribute(locationResortIdentifier);
 
         const filters = [Model.absoluteDateFilter(dateDataSetUri, "2017-01-01", "2017-12-31")];
 

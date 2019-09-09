@@ -19,20 +19,16 @@ export class PreviousPeriodHeadlineExample extends Component {
     }
 
     render() {
-        const primaryMeasure = Model.measure(totalSalesIdentifier)
-            .localIdentifier("totalSales")
-            .alias("$ Total Sales");
-        const secondaryMeasure = Model.previousPeriodMeasure("totalSales", [
-            { dataSet: dateDataSetUri, periodsAgo: 1 },
-        ])
-            .alias("$ Total Sales - period ago")
-            .localIdentifier("totalSalesPeriod");
         return (
             <div style={{ height: 125 }} className="s-headline">
                 <Headline
                     projectId={projectId}
-                    primaryMeasure={primaryMeasure}
-                    secondaryMeasure={secondaryMeasure}
+                    primaryMeasure={Model.measure(totalSalesIdentifier)
+                        .localIdentifier("totalSales")
+                        .alias("$ Total Sales")}
+                    secondaryMeasure={Model.previousPeriodMeasure("totalSales", [
+                        { dataSet: dateDataSetUri, periodsAgo: 1 },
+                    ]).alias("$ Total Sales - period ago")}
                     filters={[Model.relativeDateFilter(dateDataSetUri, "GDC.time.year", -2, -1)]}
                     onLoadingChanged={this.onLoadingChanged}
                     onError={this.onError}

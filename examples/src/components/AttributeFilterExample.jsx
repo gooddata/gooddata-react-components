@@ -86,10 +86,9 @@ export class AttributeFilterExample extends Component {
 
         const totalSales = Model.measure(totalSalesIdentifier)
             .format("#,##0")
-            .alias("$ Total Sales")
-            .localIdentifier("totalSales");
+            .alias("$ Total Sales");
 
-        const locationResort = Model.attribute(locationResortIdentifier).localIdentifier("locationResort");
+        const locationResort = Model.attribute(locationResortIdentifier);
 
         return (
             <div className="s-attribute-filter">

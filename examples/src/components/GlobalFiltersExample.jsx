@@ -93,17 +93,11 @@ export class EmployeeProfile extends React.Component {
 
         const employeeFilter = Model.positiveAttributeFilter(employeeNameIdentifier, [selectedEmployeeUri]);
 
-        const measures = [
-            Model.measure(averageDailyTotalSales)
-                .alias("$ Avg Daily Total Sales")
-                .localIdentifier("averageDailyTotalSales"),
-        ];
-        const menuCategoryAttribute = Model.attribute(menuCategoryAttributeDFIdentifier).localIdentifier(
-            "menuCategory",
+        const measures = [Model.measure(averageDailyTotalSales).alias("$ Avg Daily Total Sales")];
+        const menuCategoryAttribute = Model.attribute(menuCategoryAttributeDFIdentifier);
+        const menuItemNameAttribute = Model.attribute(menuItemNameAttributeDFIdentifier).alias(
+            "Menu Item name",
         );
-        const menuItemNameAttribute = Model.attribute(menuItemNameAttributeDFIdentifier)
-            .alias("Menu Item name")
-            .localIdentifier("menuItemName");
 
         const selectedEmployee = validElements.items.find(item => item.element.uri === selectedEmployeeUri)
             .element;

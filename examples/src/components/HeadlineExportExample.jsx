@@ -24,13 +24,9 @@ export class HeadlineExportExample extends Component {
     }
 
     render() {
-        const primaryMeasure = Model.measure(franchiseFeesIdentifier)
-            .format("#,##0")
-            .localIdentifier("franchiseFees");
+        const primaryMeasure = Model.measure(franchiseFeesIdentifier).format("#,##0");
 
-        const secondaryMeasure = Model.measure(franchiseFeesAdRoyaltyIdentifier)
-            .format("#,##0")
-            .localIdentifier("franchiseFeesAdRoyalty");
+        const secondaryMeasure = Model.measure(franchiseFeesAdRoyaltyIdentifier).format("#,##0");
 
         const filters = [Model.absoluteDateFilter(dateDataSetUri, "2017-01-01", "2017-12-31")];
 
