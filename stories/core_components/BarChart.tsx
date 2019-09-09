@@ -893,4 +893,34 @@ storiesOf("Core components/BarChart", module)
                 />
             </div>,
         ),
+    )
+
+    .add("Data label must update vertical align in the middle when filtering one value", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BarChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    filters={[
+                        {
+                            positiveAttributeFilter: {
+                                displayForm: {
+                                    uri: "/gdc/md/storybook/obj/4.df",
+                                },
+                                in: ["/gdc/md/storybook/obj/4/elements?id=1"],
+                            },
+                        },
+                        {
+                            positiveAttributeFilter: {
+                                displayForm: {
+                                    uri: "/gdc/md/storybook/obj/5.df",
+                                },
+                                in: ["/gdc/md/storybook/obj/5/elements?id=1"],
+                            },
+                        },
+                    ]}
+                />
+            </div>,
+        ),
     );
