@@ -12,6 +12,30 @@ import {
     totalSalesIdentifier,
 } from "../utils/fixtures";
 
+const localIdentifiers = {
+    numberOfRestaurants: "numberOfRestaurants",
+    averageRestaurantDailyCosts: "averageRestaurantDailyCosts",
+    averageRestaurantSales: "averageRestaurantSales",
+};
+
+const measures = [
+    Model.measure(totalSalesIdentifier)
+        .localIdentifier(localIdentifiers.averageRestaurantDailyCosts)
+        .format("#,##0"),
+    Model.measure(numberOfRestaurantsIdentifier)
+        .localIdentifier(localIdentifiers.numberOfRestaurants)
+        .format("#,##0"),
+    Model.arithmeticMeasure(
+        [localIdentifiers.averageRestaurantDailyCosts, localIdentifiers.numberOfRestaurants],
+        "ratio",
+    )
+        .localIdentifier(localIdentifiers.averageRestaurantSales)
+        .format("#,##0")
+        .title("$ Avg Restaurant Sales"),
+];
+
+const attributes = [Model.attribute(locationStateDisplayFormIdentifier).localIdentifier("month")];
+
 export class ArithmeticMeasureRatioExample extends Component {
     onLoadingChanged(...params) {
         // eslint-disable-next-line no-console
@@ -24,30 +48,6 @@ export class ArithmeticMeasureRatioExample extends Component {
     }
 
     render() {
-        const localIdentifiers = {
-            numberOfRestaurants: "numberOfRestaurants",
-            averageRestaurantDailyCosts: "averageRestaurantDailyCosts",
-            averageRestaurantSales: "averageRestaurantSales",
-        };
-
-        const measures = [
-            Model.measure(numberOfRestaurantsIdentifier)
-                .localIdentifier(localIdentifiers.numberOfRestaurants)
-                .format("#,##0"),
-            Model.measure(totalSalesIdentifier)
-                .localIdentifier(localIdentifiers.averageRestaurantDailyCosts)
-                .format("#,##0"),
-            Model.arithmeticMeasure(
-                [localIdentifiers.numberOfRestaurants, localIdentifiers.averageRestaurantDailyCosts],
-                "ratio",
-            )
-                .localIdentifier(localIdentifiers.averageRestaurantSales)
-                .format("#,##0")
-                .title("$ Avg State Daily Sales"),
-        ];
-
-        const attributes = [Model.attribute(locationStateDisplayFormIdentifier).localIdentifier("month")];
-
         return (
             <div style={{ height: 200 }} className="s-table">
                 <Table

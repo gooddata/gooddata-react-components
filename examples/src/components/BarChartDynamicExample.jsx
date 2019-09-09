@@ -14,6 +14,16 @@ import { CUSTOM_COLOR_PALETTE } from "../utils/colors";
 
 const defaultProperties = {};
 
+const amount = Model.measure(totalSalesIdentifier)
+    .format("#,##0")
+    .alias("$ Total Sales");
+
+const locationResort = Model.attribute(locationResortIdentifier).localIdentifier("location_resort");
+
+const menuCategory = Model.attribute(menuCategoryAttributeDFIdentifier).localIdentifier(
+    menuCategoryAttributeDFIdentifier,
+);
+
 export class BarChartDynamicExample extends Component {
     constructor(props) {
         super(props);
@@ -78,17 +88,6 @@ export class BarChartDynamicExample extends Component {
 
     render() {
         const { config } = this.state;
-
-        const amount = Model.measure(totalSalesIdentifier)
-            .format("#,##0")
-            .alias("$ Total Sales");
-
-        const locationResort = Model.attribute(locationResortIdentifier).localIdentifier("location_resort");
-
-        const menuCategory = Model.attribute(menuCategoryAttributeDFIdentifier).localIdentifier(
-            menuCategoryAttributeDFIdentifier,
-        );
-
         return (
             <div>
                 <div style={{ height: 300 }} className="s-bar-chart">

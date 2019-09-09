@@ -16,6 +16,14 @@ import {
     totalSalesIdentifier,
 } from "../utils/fixtures";
 
+const measureTotalSales = Model.measure(totalSalesIdentifier)
+    .format("#,##0")
+    .alias("$ Total Sales");
+
+const viewByLocationName = Model.attribute(locationNameDisplayFormIdentifier).localIdentifier(
+    "location_name",
+);
+
 export class ParentFilterExample extends Component {
     constructor(props) {
         super(props);
@@ -62,14 +70,6 @@ export class ParentFilterExample extends Component {
                 ),
             );
         }
-
-        const measureTotalSales = Model.measure(totalSalesIdentifier)
-            .format("#,##0")
-            .alias("$ Total Sales");
-
-        const viewByLocationName = Model.attribute(locationNameDisplayFormIdentifier).localIdentifier(
-            "location_name",
-        );
 
         return (
             <div style={{ height: 500 }}>
