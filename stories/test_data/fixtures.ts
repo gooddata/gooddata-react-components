@@ -186,6 +186,15 @@ export const barChartWithStackByAndViewByAttributes: any = {
         .executionResult,
 };
 
+export const stackedBarChartWithUnsortedValues: any = {
+    executionRequest: require("../test_data/bar_chart_with_stack_attributes_unsorted_values_request.json")
+        .execution,
+    executionResponse: require("../test_data/bar_chart_with_stack_attributes_unsorted_values_response.json")
+        .executionResponse,
+    executionResult: require("../test_data/bar_chart_with_stack_attributes_unsorted_values_result.json")
+        .executionResult,
+};
+
 export const barChartWithStackByAndOnlyOneStack: any = {
     executionRequest: require("../test_data/bar_chart_with_stack_by_and_only_one_stack_request.json")
         .execution,

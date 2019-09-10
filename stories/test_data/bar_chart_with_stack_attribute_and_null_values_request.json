@@ -1,0 +1,42 @@
+{
+    "execution": {
+        "afm": {
+            "measures": [
+                {
+                    "localIdentifier": "m4",
+                    "definition": {
+                        "measure": {
+                            "item": {
+                                "uri": "/gdc/md/storybook/obj/9"
+                            }
+                        }
+                    }
+                }
+            ],
+            "attributes": [
+                {
+                    "localIdentifier": "a2",
+                    "displayForm": {
+                        "uri": "/gdc/md/storybook/obj/5.df"
+                    }
+                },
+                {
+                    "localIdentifier": "a1",
+                    "displayForm": {
+                        "uri": "/gdc/md/storybook/obj/4.df"
+                    }
+                }
+            ]
+        },
+        "resultSpec": {
+            "dimensions": [
+                {
+                    "itemIdentifiers": ["a1"]
+                },
+                {
+                    "itemIdentifiers": ["a2", "measureGroup"]
+                }
+            ]
+        }
+    }
+}

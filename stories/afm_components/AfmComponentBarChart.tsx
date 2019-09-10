@@ -12,6 +12,9 @@ import {
     AFM_TWO_MEASURES_ONE_ATTRIBUTE_POP,
     AFM_TWO_MEASURES_ONE_ATTRIBUTE_PREVIOUS_PERIOD,
     AFM_ARITHMETIC_MEASURES_ONE_ATTRIBUTE,
+    AFM_STACK_BY_ATTRIBUTE_WITH_NULL_VALUES,
+    AFM_STACK_BY_ATTRIBUTE_WITH_NEGATIVE_VALUES,
+    AFM_STACK_BY_ATTRIBUTE_WITH_DUAL_AXES,
 } from "../data/afmComponentProps";
 import { CUSTOM_COLORS } from "../data/colors";
 import { onErrorHandler } from "../mocks";
@@ -75,6 +78,109 @@ storiesOf("AFM components/BarChart", module)
                                 itemIdentifiers: ["a2", "measureGroup"],
                             },
                         ],
+                    }}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
+    .add("stacked bar chart is sorted by total value on secondary axis", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BarChart
+                    projectId="storybook"
+                    afm={AFM_ONE_MEASURE_TWO_ATTRIBUTES}
+                    resultSpec={{
+                        dimensions: [
+                            {
+                                itemIdentifiers: ["a1"],
+                            },
+                            {
+                                itemIdentifiers: ["a2", "measureGroup"],
+                            },
+                        ],
+                    }}
+                    config={{
+                        secondary_xaxis: {
+                            measures: ["m1"],
+                        },
+                    }}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
+    .add("stacked bar chart with null values", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BarChart
+                    projectId="storybook"
+                    afm={AFM_STACK_BY_ATTRIBUTE_WITH_NULL_VALUES}
+                    resultSpec={{
+                        dimensions: [
+                            {
+                                itemIdentifiers: ["a1"],
+                            },
+                            {
+                                itemIdentifiers: ["a2", "measureGroup"],
+                            },
+                        ],
+                    }}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
+    .add("stacked bar chart with negative values", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BarChart
+                    projectId="storybook"
+                    afm={AFM_STACK_BY_ATTRIBUTE_WITH_NEGATIVE_VALUES}
+                    resultSpec={{
+                        dimensions: [
+                            {
+                                itemIdentifiers: ["a1"],
+                            },
+                            {
+                                itemIdentifiers: ["a2", "measureGroup"],
+                            },
+                        ],
+                    }}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
+    .add("stacked bar chart with dual axes", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BarChart
+                    projectId="storybook"
+                    afm={AFM_STACK_BY_ATTRIBUTE_WITH_DUAL_AXES}
+                    resultSpec={{
+                        dimensions: [
+                            {
+                                itemIdentifiers: ["measureGroup"],
+                            },
+                            {
+                                itemIdentifiers: ["a2"],
+                            },
+                        ],
+                    }}
+                    config={{
+                        secondary_xaxis: {
+                            measures: ["m3"],
+                        },
+                        stackMeasures: true,
                     }}
                     onError={onErrorHandler}
                     LoadingComponent={null}

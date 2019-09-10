@@ -133,6 +133,8 @@ export interface ISeriesDataItem {
     y: number;
     value?: number;
     name?: string;
+    color?: string | IPatternObject;
+    legendIndex?: number;
 }
 
 export interface IStackItem {
@@ -231,6 +233,7 @@ export interface ICategoryParent {
 export interface ICategory {
     name: string;
     parent?: ICategoryParent;
+    categories?: string[];
 }
 
 export interface ISeriesItemConfig {

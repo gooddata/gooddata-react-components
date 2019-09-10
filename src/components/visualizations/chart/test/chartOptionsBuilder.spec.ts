@@ -49,6 +49,8 @@ import {
     IPointData,
     IChartOptions,
     IMeasuresStackConfig,
+    ISeriesItem,
+    ISeriesDataItem,
 } from "../../../../interfaces/Config";
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 import { NORMAL_STACK, PERCENT_STACK } from "../highcharts/getOptionalStackingConfiguration";
@@ -2976,22 +2978,24 @@ describe("chartOptionsBuilder", () => {
         });
 
         describe("in usecase of stack bar chart", () => {
-            const chartOptions = generateChartOptions(fixtures.barChartWithStackByAndViewByAttributes);
+            const chartOptions = generateChartOptions(fixtures.stackedBarChartWithUnsortedValues, {
+                type: "bar",
+            });
 
             it("should assign stacking normal", () => {
                 expect(chartOptions.stacking).toBe("normal");
             });
 
             it("should assign number of series equal to number of stack by attribute values", () => {
-                expect(chartOptions.data.series.length).toBe(2);
+                expect(chartOptions.data.series.length).toBe(4);
             });
 
             it("should assign categories equal to view by attribute values", () => {
-                expect(chartOptions.data.categories).toEqual(["Direct Sales", "Inside Sales"]);
+                expect(chartOptions.data.categories).toEqual(["medium", "low", "high"]);
             });
 
             it("should assign correct tooltip function", () => {
-                const { viewByAttribute } = getMVS(fixtures.barChartWithStackByAndViewByAttributes);
+                const { viewByAttribute } = getMVS(fixtures.stackedBarChartWithUnsortedValues);
                 const pointData = {
                     y: 1,
                     format: "# ###",
@@ -3006,6 +3010,63 @@ describe("chartOptionsBuilder", () => {
                 const tooltip = chartOptions.actions.tooltip(pointData);
                 const expectedTooltip = buildTooltipFactory(viewByAttribute, "column")(pointData, undefined);
                 expect(tooltip).toBe(expectedTooltip);
+            });
+
+            it("should sort stacked bar chart by total value", () => {
+                const expectedSeries = [
+                    {
+                        color: "rgb(20,178,226)",
+                        data: [
+                            { legendIndex: 0, y: 624 },
+                            { legendIndex: 1, y: 594 },
+                            { legendIndex: 2, y: 176 },
+                        ],
+                        legendIndex: 0,
+                        yAxis: 0,
+                    },
+                    {
+                        color: "rgb(0,193,141)",
+                        data: [
+                            { legendIndex: 0, y: 882 },
+                            { legendIndex: 1, y: 873 },
+                            { legendIndex: 2, y: 60 },
+                        ],
+                        legendIndex: 1,
+                        yAxis: 0,
+                    },
+                    {
+                        color: "rgb(229,77,66)",
+                        data: [
+                            { legendIndex: 0, y: 972 },
+                            { legendIndex: 1, y: 788 },
+                            { legendIndex: 2, y: 530 },
+                        ],
+                        legendIndex: 2,
+                        yAxis: 0,
+                    },
+                    {
+                        color: "rgb(241,134,0)",
+                        data: [
+                            { legendIndex: 0, y: 786 },
+                            { legendIndex: 1, y: 858 },
+                            { legendIndex: 2, y: 505 },
+                        ],
+                        legendIndex: 3,
+                        yAxis: 0,
+                    },
+                ];
+                expect(chartOptions.data.categories).toEqual(["medium", "low", "high"]);
+                expect(
+                    chartOptions.data.series.map((series: ISeriesItem) => ({
+                        color: series.color,
+                        data: series.data.map((data: ISeriesDataItem) => ({
+                            legendIndex: data.legendIndex,
+                            y: data.y,
+                        })),
+                        legendIndex: series.legendIndex,
+                        yAxis: series.yAxis,
+                    })),
+                ).toEqual(expectedSeries);
             });
         });
 

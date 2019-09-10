@@ -66,6 +66,7 @@ import {
     isTreemap,
     parseValue,
     stringifyChartTypes,
+    isStackedBarChart,
 } from "../utils/common";
 import { createDrillIntersectionElement } from "../utils/drilldownEventing";
 import {
@@ -98,6 +99,7 @@ import { NORMAL_STACK, PERCENT_STACK } from "./highcharts/getOptionalStackingCon
 import { getCategoriesForTwoAttributes } from "./chartOptions/extendedStackingChartOptions";
 import { setMeasuresToSecondaryAxis } from "../../../helpers/dualAxis";
 import { isCssMultiLineTruncationSupported } from "../../../helpers/domUtils";
+import { sortStackedSeriesData, ISortSeriesDataResult } from "../../../helpers/sorts";
 
 const TOOLTIP_PADDING = 10;
 
@@ -1728,9 +1730,9 @@ export function getChartOptions(
         type,
     );
 
-    const series = assignYAxes(drillableSeries, yAxes);
+    let series: ISeriesItem[] = assignYAxes(drillableSeries, yAxes);
 
-    let categories = viewByParentAttribute
+    let categories: ICategory[] = viewByParentAttribute
         ? getCategoriesForTwoAttributes(viewByAttribute, viewByParentAttribute)
         : getCategories(type, measureGroup, viewByAttribute, stackByAttribute);
 
@@ -1738,28 +1740,36 @@ export function getChartOptions(
     if (isOneOfTypes(type, sortedByMeasureTypes)) {
         const dataPoints = series[0].data;
         const indexSortOrder: number[] = [];
-        const sortedDataPoints = dataPoints
-            .sort((pointDataA: IPointData, pointDataB: IPointData) => {
-                if (pointDataA.y === pointDataB.y) {
-                    return 0;
-                }
-                return pointDataB.y - pointDataA.y;
+        const sortedSeriesDataItems: ISeriesDataItem[] = dataPoints
+            .sort((seriesItemA: ISeriesDataItem, seriesItemB: ISeriesDataItem) => {
+                return seriesItemB.y - seriesItemA.y;
             })
-            .map((dataPoint: IPointData, dataPointIndex: number) => {
-                // Legend index equals original dataPoint index
-                indexSortOrder.push(dataPoint.legendIndex);
-                return {
-                    // after sorting, colors need to be reassigned in original order and legendIndex needs to be reset
-                    ...dataPoint,
-                    color: get(dataPoints[dataPointIndex], "color"),
-                    legendIndex: dataPointIndex,
-                };
-            });
+            .map(
+                (seriesItem: ISeriesDataItem, seriesDataItemIndex: number): ISeriesDataItem => {
+                    // Legend index equals original dataPoint index
+                    indexSortOrder.push(seriesItem.legendIndex);
+                    return {
+                        // after sorting, colors need to be reassigned in original order and legendIndex needs to be reset
+                        ...seriesItem,
+                        color: get(dataPoints[seriesDataItemIndex], "color"),
+                        legendIndex: seriesDataItemIndex,
+                    };
+                },
+            );
         // categories need to be sorted in exactly the same order as dataPoints
         categories = categories.map(
-            (_category: any, dataPointIndex: number) => categories[indexSortOrder[dataPointIndex]],
+            (_category: ICategory, seriesDataItemIndex: number) =>
+                categories[indexSortOrder[seriesDataItemIndex]],
         );
-        series[0].data = sortedDataPoints;
+        series[0].data = sortedSeriesDataItems;
+    }
+
+    // sort stacked bar chart only
+    if (isStackedBarChart(type, stacking) && !isViewByTwoAttributes) {
+        const isSingleAxis = yAxes.length === 1;
+        const sortResults: ISortSeriesDataResult = sortStackedSeriesData(series, categories, isSingleAxis);
+        series = sortResults.series;
+        categories = sortResults.categories;
     }
 
     const colorAssignments = colorStrategy.getColorAssignment();

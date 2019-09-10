@@ -27,7 +27,7 @@ test("should be able to change configuration of bucket component chart and rende
         .click(Selector(".highcharts-series-1 rect").nth(0))
         .wait(500)
         .expect(tooltip.nth(1).textContent)
-        .eql("1,179,436");
+        .eql("1,537,842");
 
     await t
         .expect(changeLegendBtn.visible)
@@ -50,7 +50,7 @@ test("should be able to change configuration of bucket component chart and rende
         .click(barChart.find(".highcharts-series-1 rect").nth(0))
         .wait(500)
         .expect(tooltip.nth(1).textContent)
-        .eql("1.179.436");
+        .eql("1.537.842");
 
     await t
         .expect(changePaletteBtn.visible)

@@ -1,0 +1,82 @@
+{
+    "executionResult": {
+        "data": [["594", "624", "176"], ["873", "882", "60"], ["788", "972", "530"], ["858", "786", "505"]],
+        "headerItems": [
+            [
+                [
+                    {
+                        "attributeHeaderItem": {
+                            "uri": "/gdc/md/storybook/obj/4/elements?id=1",
+                            "name": "Pink"
+                        }
+                    },
+                    {
+                        "attributeHeaderItem": {
+                            "uri": "/gdc/md/storybook/obj/4/elements?id=2",
+                            "name": "Red"
+                        }
+                    },
+                    {
+                        "attributeHeaderItem": {
+                            "uri": "/gdc/md/storybook/obj/4/elements?id=3",
+                            "name": "Purple"
+                        }
+                    },
+                    {
+                        "attributeHeaderItem": {
+                            "uri": "/gdc/md/storybook/obj/4/elements?id=4",
+                            "name": "Salmon"
+                        }
+                    }
+                ]
+            ],
+            [
+                [
+                    {
+                        "attributeHeaderItem": {
+                            "uri": "/gdc/md/storybook/obj/5/elements?id=1",
+                            "name": "low"
+                        }
+                    },
+                    {
+                        "attributeHeaderItem": {
+                            "uri": "/gdc/md/storybook/obj/5/elements?id=2",
+                            "name": "medium"
+                        }
+                    },
+                    {
+                        "attributeHeaderItem": {
+                            "uri": "/gdc/md/storybook/obj/5/elements?id=3",
+                            "name": "high"
+                        }
+                    }
+                ],
+                [
+                    {
+                        "measureHeaderItem": {
+                            "name": "Amount",
+                            "order": 0
+                        }
+                    },
+                    {
+                        "measureHeaderItem": {
+                            "name": "Amount",
+                            "order": 0
+                        }
+                    },
+                    {
+                        "measureHeaderItem": {
+                            "name": "Amount",
+                            "order": 0
+                        }
+                    }
+                ]
+            ]
+        ],
+        "paging": {
+            "count": [4, 3],
+            "offset": [0, 0],
+            "total": [4, 3]
+        }
+    }
+}

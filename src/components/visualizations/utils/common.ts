@@ -2,6 +2,7 @@
 import setWith = require("lodash/setWith");
 import clone = require("lodash/clone");
 import get = require("lodash/get");
+import isEmpty = require("lodash/isEmpty");
 import includes = require("lodash/includes");
 import { Observable } from "rxjs/Rx";
 import { numberFormat } from "@gooddata/numberjs";
@@ -58,6 +59,9 @@ export function isRotationInRange(rotation: number, min: number, max: number) {
 export const isTable = isEqual(VisualizationTypes.TABLE);
 export const isColumnChart = isEqual(VisualizationTypes.COLUMN);
 export const isBarChart = isEqual(VisualizationTypes.BAR);
+export const isStackedBarChart = (type: string, stacking: string): boolean => {
+    return isBarChart(type) && !isEmpty(stacking);
+};
 export const isLineChart = isEqual(VisualizationTypes.LINE);
 export const isScatterPlot = isEqual(VisualizationTypes.SCATTER);
 export const isPieChart = isEqual(VisualizationTypes.PIE);

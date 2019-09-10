@@ -11,6 +11,16 @@ const heatmapAfmExecutions = [{
         executionResult: require('./stories/test_data/heat_map_with_empty_cells_result.json')
     }];
 
+const stackedAttributeWithNullAfmExecutions = {
+    execution: require('./stories/test_data/bar_chart_with_stack_attribute_and_null_values_request.json'),
+    executionResult: require('./stories/test_data/bar_chart_with_stack_attribute_and_null_values_result.json')
+}
+
+const stackedAttributeWithNegativeValuesAfmExecutions = {
+    execution: require('./stories/test_data/bar_chart_with_stack_attribute_and_negative_values_request.json'),
+    executionResult: require('./stories/test_data/bar_chart_with_stack_attribute_and_negative_values_result.json')
+}
+
 const pivotTableAfmExecutions = [
     {
         execution: require("./stories/test_data/pivot_table_with_subtotals_request.json"),
@@ -63,6 +73,10 @@ const getBaseProjectSchema = (title, identifier) => {
                 {
                     identifier: '9',
                     title: 'Saved null'
+                },
+                {
+                    identifier: 'negative',
+                    title: 'negative'
                 }
             ],
             attributes: [{
@@ -2214,6 +2228,8 @@ const getBaseProjectSchema = (title, identifier) => {
             ...pivotTableAfmExecutions,
             ...pivotTableSubtotalsAfmExecutions,
             ...pivotTableGrandtotalSubtotalAfmExecutions,
+            stackedAttributeWithNullAfmExecutions,
+            stackedAttributeWithNegativeValuesAfmExecutions
         ],
         visualizationClasses: [{
             title: 'Table',

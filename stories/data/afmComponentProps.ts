@@ -108,6 +108,17 @@ export const MEASURE_WITH_NULLS: AFM.IMeasure = {
     },
 };
 
+export const MEASURE_WITH_NEGATIVE_VALUES: AFM.IMeasure = {
+    localIdentifier: "negative",
+    definition: {
+        measure: {
+            item: {
+                uri: "/gdc/md/storybook/obj/negative",
+            },
+        },
+    },
+};
+
 const ARITHMETIC_MEASURE_SIMPLE_OPERANDS: AFM.IMeasure = {
     localIdentifier: "arithmetic_measure_1",
     definition: {
@@ -202,6 +213,21 @@ export const AFM_ONE_MEASURE_ONE_ATTRIBUTE: AFM.IAfm = {
 export const AFM_ONE_MEASURE_TWO_ATTRIBUTES: AFM.IAfm = {
     measures: [MEASURE_1],
     attributes: [ATTRIBUTE_POPULARITY, ATTRIBUTE_COLOURS],
+};
+
+export const AFM_STACK_BY_ATTRIBUTE_WITH_NULL_VALUES: AFM.IAfm = {
+    measures: [MEASURE_WITH_NULLS],
+    attributes: [ATTRIBUTE_POPULARITY, ATTRIBUTE_COLOURS],
+};
+
+export const AFM_STACK_BY_ATTRIBUTE_WITH_NEGATIVE_VALUES: AFM.IAfm = {
+    measures: [MEASURE_WITH_NEGATIVE_VALUES],
+    attributes: [ATTRIBUTE_POPULARITY, ATTRIBUTE_COLOURS],
+};
+
+export const AFM_STACK_BY_ATTRIBUTE_WITH_DUAL_AXES: AFM.IAfm = {
+    measures: [MEASURE_1, MEASURE_2, MEASURE_3],
+    attributes: [ATTRIBUTE_POPULARITY],
 };
 
 export const AFM_HEATMAP_58ROWS: AFM.IAfm = {
