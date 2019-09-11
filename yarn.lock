@@ -1129,6 +1129,14 @@
     eslint-plugin-no-only-tests "^2.3.1"
     eslint-plugin-react "7.6.1"
 
+"@gooddata/frontend-npm-scripts@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@gooddata/frontend-npm-scripts/-/frontend-npm-scripts-1.0.1.tgz#f13d351c383bf009cf04728eb86a5610be2cc695"
+  integrity sha512-3Szx0DjNucb7Zq7HvF9fZieJTKOYOMI1lCbX/Qgq3XOun08E3iZSclMEHJ6//NtJAZwaf4NevTKQImQylvRpBw==
+  dependencies:
+    firstline "^2.0.2"
+    line-replace "^1.0.2"
+
 "@gooddata/gooddata-js@^11.18.2":
   version "11.18.2"
   resolved "https://registry.yarnpkg.com/@gooddata/gooddata-js/-/gooddata-js-11.18.2.tgz#ae4d1de5fbb174f69558c5fef3684c60c0ebf94f"
@@ -7234,6 +7242,11 @@ findup-sync@^2.0.0:
     micromatch "^3.0.4"
     resolve-dir "^1.0.1"
 
+firstline@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/firstline/-/firstline-2.0.2.tgz#3fdfd894a80e181cd2fa478b07cadb8d446c53cd"
+  integrity sha512-8KcmfI0jgSECnzdhucm0i7vrwef3BWwgjimW2YkRC5eSFwjb5DibVoA0YvgkYwwxuJi9c+7M7X3b3lX8o9B6wg==
+
 fixed-data-table-2@0.7.17, fixed-data-table-2@^0.7.17:
   version "0.7.17"
   resolved "https://registry.yarnpkg.com/fixed-data-table-2/-/fixed-data-table-2-0.7.17.tgz#327d172f865f71715c86d4979fdbf3c77ecf7d9a"
@@ -9838,6 +9851,11 @@ lighthouse-logger@^1.0.0:
   resolved "https://registry.yarnpkg.com/lighthouse-logger/-/lighthouse-logger-1.0.1.tgz#f073d83f7acbc96729bf100a121c8f006991ae61"
   dependencies:
     debug "^2.6.8"
+
+line-replace@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/line-replace/-/line-replace-1.0.2.tgz#b1995da54060d671c449196fa228395f0faaea47"
+  integrity sha1-sZldpUBg1nHESRlvoig5Xw+q6kc=
 
 lint-staged@9.1.0:
   version "9.1.0"
