@@ -17,6 +17,12 @@ import {
 
 const dateFormat = "YYYY-MM-DD";
 
+const totalSales = Model.measure(totalSalesIdentifier)
+    .format("#,##0")
+    .alias("$ Total Sales");
+
+const locationResort = Model.attribute(monthOfYearDateIdentifier);
+
 // sync with backend timezone
 function withGTM0(time) {
     return time.utcOffset("+00:00", true);
@@ -77,14 +83,6 @@ export class MonthPickerExample extends PureComponent {
 
     render() {
         const { from, to, error } = this.state;
-
-        const totalSales = Model.measure(totalSalesIdentifier)
-            .format("#,##0")
-            .alias("$ Total Sales")
-            .localIdentifier("totalSales");
-
-        const locationResort = Model.attribute(monthOfYearDateIdentifier).localIdentifier("monthOfYearDate");
-
         const filters = [
             {
                 relativeDateFilter: {

@@ -11,6 +11,12 @@ import {
     franchiseFeesIdentifierOngoingRoyalty,
 } from "../utils/fixtures";
 
+const measures = [
+    Model.measure(franchiseFeesAdRoyaltyIdentifier).format("#,##0"),
+    Model.measure(franchiseFeesInitialFranchiseFeeIdentifier).format("#,##0"),
+    Model.measure(franchiseFeesIdentifierOngoingRoyalty).format("#,##0"),
+];
+
 export class PieChartExample extends Component {
     onLoadingChanged(...params) {
         // eslint-disable-next-line no-console
@@ -23,18 +29,6 @@ export class PieChartExample extends Component {
     }
 
     render() {
-        const measures = [
-            Model.measure(franchiseFeesAdRoyaltyIdentifier)
-                .format("#,##0")
-                .localIdentifier("franchiseFeesAdRoyalty"),
-            Model.measure(franchiseFeesInitialFranchiseFeeIdentifier)
-                .format("#,##0")
-                .localIdentifier("franchiseFeesInitialFranchiseFee"),
-            Model.measure(franchiseFeesIdentifierOngoingRoyalty)
-                .format("#,##0")
-                .localIdentifier("franchiseFeesOngoingRoyalty"),
-        ];
-
         return (
             <div style={{ height: 300 }} className="s-pie-chart">
                 <PieChart

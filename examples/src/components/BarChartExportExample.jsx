@@ -7,6 +7,14 @@ import "@gooddata/react-components/styles/css/main.css";
 import ExampleWithExport from "./utils/ExampleWithExport";
 import { dateDataSetUri, locationResortIdentifier, projectId, totalSalesIdentifier } from "../utils/fixtures";
 
+const amount = Model.measure(totalSalesIdentifier)
+    .format("#,##0")
+    .alias("$ Total Sales");
+
+const locationResort = Model.attribute(locationResortIdentifier);
+
+const filters = [Model.absoluteDateFilter(dateDataSetUri, "2017-01-01", "2017-12-31")];
+
 export class BarChartExportExample extends Component {
     onLoadingChanged(...params) {
         // eslint-disable-next-line no-console
@@ -19,15 +27,6 @@ export class BarChartExportExample extends Component {
     }
 
     render() {
-        const amount = Model.measure(totalSalesIdentifier)
-            .format("#,##0")
-            .alias("$ Total Sales")
-            .localIdentifier("totalSales");
-
-        const locationResort = Model.attribute(locationResortIdentifier).localIdentifier("locationResort");
-
-        const filters = [Model.absoluteDateFilter(dateDataSetUri, "2017-01-01", "2017-12-31")];
-
         return (
             <ExampleWithExport>
                 {onExportReady => (

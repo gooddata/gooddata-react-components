@@ -6,10 +6,10 @@ import ExampleWithExport from "./utils/ExampleWithExport";
 
 import { columnVisualizationIdentifier, dateDataSetUri, projectId } from "../utils/fixtures";
 
+const filters = [Model.absoluteDateFilter(dateDataSetUri, "2017-01-01", "2017-12-31")];
+
 export class VisualizationColumnChartExportExample extends Component {
     render() {
-        const filters = [Model.absoluteDateFilter(dateDataSetUri, "2017-01-01", "2017-12-31")];
-
         return (
             <ExampleWithExport>
                 {onExportReady => (

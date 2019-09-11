@@ -42,10 +42,15 @@ CustomErrorComponent.propTypes = {
     getPage: propTypes.func.isRequired,
 };
 
+const totalSalesMeasure = Model.measure(totalSalesIdentifier);
+
+const locationStateAttributeDisplayForm = Model.attribute(locationStateDisplayFormIdentifier);
+const invalidMeasure = Model.measure("invalid");
+
 const presets = {
     kpi: {
         props: {
-            dimensions: [[Model.measure(totalSalesIdentifier)]],
+            dimensions: [[totalSalesMeasure]],
         },
         label: "KPI",
         // eslint-disable-next-line react/prop-types
@@ -65,7 +70,7 @@ const presets = {
     },
     attributeValueList: {
         props: {
-            dimensions: [[Model.attribute(locationStateDisplayFormIdentifier)]],
+            dimensions: [[locationStateAttributeDisplayForm]],
         },
         label: "List of States",
         // eslint-disable-next-line react/prop-types
@@ -79,10 +84,7 @@ const presets = {
     },
     pagedExecution: {
         props: {
-            dimensions: [
-                [Model.attribute(locationStateDisplayFormIdentifier)],
-                [Model.measure(totalSalesIdentifier)],
-            ],
+            dimensions: [[locationStateAttributeDisplayForm], [totalSalesMeasure]],
             initialPaging: {
                 offset: [0, 0],
                 limit: [1, 1],
@@ -132,7 +134,7 @@ const presets = {
     },
     onDemandExecution: {
         props: {
-            dimensions: [[Model.measure(totalSalesIdentifier)]],
+            dimensions: [[totalSalesMeasure]],
             autoLoadFirstPage: false,
             ErrorComponent: CustomErrorComponent,
         },
@@ -173,7 +175,7 @@ const presets = {
     error: {
         props: {
             // Invalid measure identifier will cause an error
-            dimensions: [[Model.measure("invalid")]],
+            dimensions: [[invalidMeasure]],
             ErrorComponent: CustomErrorComponent,
         },
         label: "Error",

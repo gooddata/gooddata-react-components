@@ -6,6 +6,12 @@ import "@gooddata/react-components/styles/css/main.css";
 
 import { totalSalesIdentifier, locationResortIdentifier, projectId } from "../utils/fixtures";
 
+const amount = Model.measure(totalSalesIdentifier)
+    .format("#,##0")
+    .alias("$ Total Sales");
+
+const locationResort = Model.attribute(locationResortIdentifier);
+
 export class BarChartExample extends Component {
     onLoadingChanged(...params) {
         // eslint-disable-next-line no-console
@@ -18,13 +24,6 @@ export class BarChartExample extends Component {
     }
 
     render() {
-        const amount = Model.measure(totalSalesIdentifier)
-            .format("#,##0")
-            .alias("$ Total Sales")
-            .localIdentifier("totalSales");
-
-        const locationResort = Model.attribute(locationResortIdentifier).localIdentifier("locationResort");
-
         return (
             <div style={{ height: 300 }} className="s-bar-chart">
                 <BarChart

@@ -12,6 +12,14 @@ import {
     locationResortIdentifier,
 } from "../utils/fixtures";
 
+const xMeasure = Model.measure(franchiseFeesIdentifier).format("#,##0");
+
+const yMeasure = Model.measure(franchisedSalesIdentifier).format("#,##0");
+
+const size = Model.measure(averageCheckSizeByServer);
+
+const locationResort = Model.attribute(locationResortIdentifier);
+
 export class BubbleChartExample extends Component {
     onLoadingChanged(...params) {
         // eslint-disable-next-line no-console
@@ -24,18 +32,6 @@ export class BubbleChartExample extends Component {
     }
 
     render() {
-        const xMeasure = Model.measure(franchiseFeesIdentifier)
-            .format("#,##0")
-            .localIdentifier("franchiseFees");
-
-        const yMeasure = Model.measure(franchisedSalesIdentifier)
-            .format("#,##0")
-            .localIdentifier("franchisedSales");
-
-        const size = Model.measure(averageCheckSizeByServer).localIdentifier("averageCheckSizeByServer");
-
-        const locationResort = Model.attribute(locationResortIdentifier).localIdentifier("locationResort");
-
         return (
             <div style={{ height: 300 }} className="s-bubble-chart">
                 <BubbleChart

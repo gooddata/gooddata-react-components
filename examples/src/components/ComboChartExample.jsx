@@ -11,6 +11,20 @@ import {
     locationResortIdentifier,
 } from "../utils/fixtures";
 
+const columnMeasures = [
+    Model.measure(franchiseFeesInitialFranchiseFeeIdentifier)
+        .format("#,##0")
+        .localIdentifier("franchiseFeesInitialFranchiseFeeIdentifier"),
+];
+
+const lineMeasures = [
+    Model.measure(franchiseFeesAdRoyaltyIdentifier)
+        .format("#,##0")
+        .localIdentifier("franchiseFeesAdRoyaltyIdentifier"),
+];
+
+const locationResort = Model.attribute(locationResortIdentifier).localIdentifier("location_resort");
+
 export class ComboChartExample extends Component {
     onLoadingChanged(...params) {
         // eslint-disable-next-line no-console
@@ -23,20 +37,6 @@ export class ComboChartExample extends Component {
     }
 
     render() {
-        const columnMeasures = [
-            Model.measure(franchiseFeesInitialFranchiseFeeIdentifier)
-                .format("#,##0")
-                .localIdentifier("franchiseFeesInitialFranchiseFeeIdentifier"),
-        ];
-
-        const lineMeasures = [
-            Model.measure(franchiseFeesAdRoyaltyIdentifier)
-                .format("#,##0")
-                .localIdentifier("franchiseFeesAdRoyaltyIdentifier"),
-        ];
-
-        const locationResort = Model.attribute(locationResortIdentifier).localIdentifier("location_resort");
-
         return (
             <div style={{ height: 300 }} className="s-combo-chart">
                 <ComboChart

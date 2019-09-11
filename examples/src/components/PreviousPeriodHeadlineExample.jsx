@@ -7,6 +7,16 @@ import "@gooddata/react-components/styles/css/main.css";
 
 import { totalSalesIdentifier, dateDataSetUri, projectId } from "../utils/fixtures";
 
+const primaryMeasure = Model.measure(totalSalesIdentifier)
+    .localIdentifier("totalSales")
+    .alias("$ Total Sales");
+
+const secondaryMeasure = Model.previousPeriodMeasure("totalSales", [
+    { dataSet: dateDataSetUri, periodsAgo: 1 },
+]).alias("$ Total Sales - period ago");
+
+const filters = [Model.relativeDateFilter(dateDataSetUri, "GDC.time.year", -2, -1)];
+
 export class PreviousPeriodHeadlineExample extends Component {
     onLoadingChanged(...params) {
         // eslint-disable-next-line no-console
@@ -19,21 +29,13 @@ export class PreviousPeriodHeadlineExample extends Component {
     }
 
     render() {
-        const primaryMeasure = Model.measure(totalSalesIdentifier)
-            .localIdentifier("totalSales")
-            .alias("$ Total Sales");
-        const secondaryMeasure = Model.previousPeriodMeasure("totalSales", [
-            { dataSet: dateDataSetUri, periodsAgo: 1 },
-        ])
-            .alias("$ Total Sales - period ago")
-            .localIdentifier("totalSalesPeriod");
         return (
             <div style={{ height: 125 }} className="s-headline">
                 <Headline
                     projectId={projectId}
                     primaryMeasure={primaryMeasure}
                     secondaryMeasure={secondaryMeasure}
-                    filters={[Model.relativeDateFilter(dateDataSetUri, "GDC.time.year", -2, -1)]}
+                    filters={filters}
                     onLoadingChanged={this.onLoadingChanged}
                     onError={this.onError}
                 />

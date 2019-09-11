@@ -6,6 +6,9 @@ import "@gooddata/react-components/styles/css/main.css";
 
 import { projectId, franchiseFeesIdentifier, franchiseFeesAdRoyaltyIdentifier } from "../utils/fixtures";
 
+const primaryMeasure = Model.measure(franchiseFeesIdentifier).format("#,##0");
+const secondaryMeasure = Model.measure(franchiseFeesAdRoyaltyIdentifier).format("#,##0");
+
 export class HeadlineExample extends Component {
     onLoadingChanged(...params) {
         // eslint-disable-next-line no-console
@@ -18,14 +21,6 @@ export class HeadlineExample extends Component {
     }
 
     render() {
-        const primaryMeasure = Model.measure(franchiseFeesIdentifier)
-            .format("#,##0")
-            .localIdentifier("franchiseFees");
-
-        const secondaryMeasure = Model.measure(franchiseFeesAdRoyaltyIdentifier)
-            .format("#,##0")
-            .localIdentifier("franchiseFeesAdRoyalty");
-
         return (
             <div className="s-headline" style={{ display: "flex" }}>
                 <style jsx>

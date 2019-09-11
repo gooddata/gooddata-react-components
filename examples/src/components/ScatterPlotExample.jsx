@@ -11,6 +11,10 @@ import {
     locationResortIdentifier,
 } from "../utils/fixtures";
 
+const xMeasure = Model.measure(franchiseFeesIdentifier).format("#,##0");
+const yMeasure = Model.measure(franchisedSalesIdentifier).format("#,##0");
+const locationResort = Model.attribute(locationResortIdentifier);
+
 export class ScatterPlotExample extends Component {
     onLoadingChanged(...params) {
         // eslint-disable-next-line no-console
@@ -23,16 +27,6 @@ export class ScatterPlotExample extends Component {
     }
 
     render() {
-        const xMeasure = Model.measure(franchiseFeesIdentifier)
-            .format("#,##0")
-            .localIdentifier("franchiseFees");
-
-        const yMeasure = Model.measure(franchisedSalesIdentifier)
-            .format("#,##0")
-            .localIdentifier("franchisedSales");
-
-        const locationResort = Model.attribute(locationResortIdentifier).localIdentifier("locationResort");
-
         return (
             <div style={{ height: 300 }} className="s-scatter-plot">
                 <ScatterPlot

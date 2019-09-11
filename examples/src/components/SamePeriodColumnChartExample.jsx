@@ -12,6 +12,14 @@ import {
     projectId,
 } from "../utils/fixtures";
 
+const measures = [
+    Model.popMeasure("totalSales", yearDateDataSetAttributeIdentifier).alias("$ Total Sales - SP year ago"),
+    Model.measure(totalSalesIdentifier)
+        .localIdentifier("totalSales")
+        .alias("$ Total Sales"),
+];
+const attribute = Model.attribute(quarterDateIdentifier);
+
 export class SamePeriodColumnChartExample extends Component {
     onLoadingChanged(...params) {
         // eslint-disable-next-line no-console
@@ -28,15 +36,8 @@ export class SamePeriodColumnChartExample extends Component {
             <div style={{ height: 300 }} className="s-column-chart">
                 <ColumnChart
                     projectId={projectId}
-                    measures={[
-                        Model.popMeasure("totalSales", yearDateDataSetAttributeIdentifier)
-                            .localIdentifier("totalSalesPeriod")
-                            .alias("$ Total Sales - SP year ago"),
-                        Model.measure(totalSalesIdentifier)
-                            .localIdentifier("totalSales")
-                            .alias("$ Total Sales"),
-                    ]}
-                    viewBy={Model.attribute(quarterDateIdentifier).localIdentifier("quarter")}
+                    measures={measures}
+                    viewBy={attribute}
                     onLoadingChanged={this.onLoadingChanged}
                     onError={this.onError}
                 />

@@ -11,6 +11,12 @@ import {
     locationStateDisplayFormIdentifier,
 } from "../utils/fixtures";
 
+const totalSales = Model.measure(totalSalesIdentifier)
+    .format("#,##0")
+    .alias("$ Total Sales");
+const menuCategory = Model.attribute(menuCategoryAttributeDFIdentifier);
+const locationState = Model.attribute(locationStateDisplayFormIdentifier);
+
 export class HeatmapExample extends Component {
     onLoadingChanged(...params) {
         // eslint-disable-next-line no-console
@@ -23,19 +29,6 @@ export class HeatmapExample extends Component {
     }
 
     render() {
-        const totalSales = Model.measure(totalSalesIdentifier)
-            .format("#,##0")
-            .alias("$ Total Sales")
-            .localIdentifier("totalSales");
-
-        const menuCategory = Model.attribute(menuCategoryAttributeDFIdentifier).localIdentifier(
-            "menuCategory",
-        );
-
-        const locationState = Model.attribute(locationStateDisplayFormIdentifier).localIdentifier(
-            "locationState",
-        );
-
         return (
             <div style={{ height: 300 }} className="s-heat-map">
                 <Heatmap

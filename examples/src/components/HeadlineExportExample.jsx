@@ -12,6 +12,10 @@ import {
     projectId,
 } from "../utils/fixtures";
 
+const primaryMeasure = Model.measure(franchiseFeesIdentifier).format("#,##0");
+const secondaryMeasure = Model.measure(franchiseFeesAdRoyaltyIdentifier).format("#,##0");
+const filters = [Model.absoluteDateFilter(dateDataSetUri, "2017-01-01", "2017-12-31")];
+
 export class HeadlineExportExample extends Component {
     onLoadingChanged(...params) {
         // eslint-disable-next-line no-console
@@ -24,16 +28,6 @@ export class HeadlineExportExample extends Component {
     }
 
     render() {
-        const primaryMeasure = Model.measure(franchiseFeesIdentifier)
-            .format("#,##0")
-            .localIdentifier("franchiseFees");
-
-        const secondaryMeasure = Model.measure(franchiseFeesAdRoyaltyIdentifier)
-            .format("#,##0")
-            .localIdentifier("franchiseFeesAdRoyalty");
-
-        const filters = [Model.absoluteDateFilter(dateDataSetUri, "2017-01-01", "2017-12-31")];
-
         return (
             <ExampleWithExport>
                 {onExportReady => (

@@ -12,6 +12,30 @@ import {
     averageRestaurantDailyCostsIdentifier,
 } from "../utils/fixtures";
 
+const localIdentifiers = {
+    numberOfRestaurants: "numberOfRestaurants",
+    averageRestaurantDailyCosts: "averageRestaurantDailyCosts",
+    averageStateDailyCosts: "averageStateDailyCosts",
+};
+
+const measures = [
+    Model.measure(numberOfRestaurantsIdentifier)
+        .localIdentifier(localIdentifiers.numberOfRestaurants)
+        .format("#,##0"),
+    Model.measure(averageRestaurantDailyCostsIdentifier)
+        .localIdentifier(localIdentifiers.averageRestaurantDailyCosts)
+        .format("#,##0"),
+    Model.arithmeticMeasure(
+        [localIdentifiers.numberOfRestaurants, localIdentifiers.averageRestaurantDailyCosts],
+        "multiplication",
+    )
+        .localIdentifier(localIdentifiers.averageStateDailyCosts)
+        .format("#,##0")
+        .title("$ Avg State Daily Costs"),
+];
+
+const attributes = [Model.attribute(locationStateDisplayFormIdentifier).localIdentifier("month")];
+
 export class ArithmeticMeasureMultiplicationExample extends Component {
     onLoadingChanged(...params) {
         // eslint-disable-next-line no-console
@@ -24,30 +48,6 @@ export class ArithmeticMeasureMultiplicationExample extends Component {
     }
 
     render() {
-        const localIdentifiers = {
-            numberOfRestaurants: "numberOfRestaurants",
-            averageRestaurantDailyCosts: "averageRestaurantDailyCosts",
-            averageStateDailyCosts: "averageStateDailyCosts",
-        };
-
-        const measures = [
-            Model.measure(numberOfRestaurantsIdentifier)
-                .localIdentifier(localIdentifiers.numberOfRestaurants)
-                .format("#,##0"),
-            Model.measure(averageRestaurantDailyCostsIdentifier)
-                .localIdentifier(localIdentifiers.averageRestaurantDailyCosts)
-                .format("#,##0"),
-            Model.arithmeticMeasure(
-                [localIdentifiers.numberOfRestaurants, localIdentifiers.averageRestaurantDailyCosts],
-                "multiplication",
-            )
-                .localIdentifier(localIdentifiers.averageStateDailyCosts)
-                .format("#,##0")
-                .title("$ Avg State Daily Costs"),
-        ];
-
-        const attributes = [Model.attribute(locationStateDisplayFormIdentifier).localIdentifier("month")];
-
         return (
             <div style={{ height: 200 }} className="s-table">
                 <Table

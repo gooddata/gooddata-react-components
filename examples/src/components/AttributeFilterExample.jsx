@@ -11,6 +11,12 @@ import {
     projectId,
 } from "../utils/fixtures";
 
+const totalSales = Model.measure(totalSalesIdentifier)
+    .format("#,##0")
+    .alias("$ Total Sales");
+
+const locationResort = Model.attribute(locationResortIdentifier);
+
 export class AttributeFilterExample extends Component {
     constructor(props) {
         super(props);
@@ -83,14 +89,6 @@ export class AttributeFilterExample extends Component {
 
     render() {
         const { filters, error } = this.state;
-
-        const totalSales = Model.measure(totalSalesIdentifier)
-            .format("#,##0")
-            .alias("$ Total Sales")
-            .localIdentifier("totalSales");
-
-        const locationResort = Model.attribute(locationResortIdentifier).localIdentifier("locationResort");
-
         return (
             <div className="s-attribute-filter">
                 <AttributeFilter

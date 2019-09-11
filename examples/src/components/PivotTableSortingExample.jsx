@@ -17,36 +17,25 @@ import {
     menuCategoryAttributeDFIdentifier,
 } from "../utils/fixtures";
 
+const measures = [
+    Model.measure(franchiseFeesIdentifier).format("#,##0"),
+    Model.measure(franchiseFeesAdRoyaltyIdentifier).format("#,##0"),
+    Model.measure(franchiseFeesInitialFranchiseFeeIdentifier).format("#,##0"),
+    Model.measure(franchiseFeesIdentifierOngoingRoyalty).format("#,##0"),
+];
+
+const attributes = [
+    Model.attribute(locationStateDisplayFormIdentifier),
+    Model.attribute(locationNameDisplayFormIdentifier),
+    Model.attribute(menuCategoryAttributeDFIdentifier).localIdentifier("menu"),
+];
+
+const columns = [Model.attribute(quarterDateIdentifier), Model.attribute(monthDateIdentifier)];
+
+const sortBy = [Model.attributeSortItem("menu", "asc")];
+
 export class PivotTableSortingExample extends Component {
     render() {
-        const measures = [
-            Model.measure(franchiseFeesIdentifier)
-                .format("#,##0")
-                .localIdentifier("franchiseFees"),
-            Model.measure(franchiseFeesAdRoyaltyIdentifier)
-                .format("#,##0")
-                .localIdentifier("franchiseFeesAdRoyalty"),
-            Model.measure(franchiseFeesInitialFranchiseFeeIdentifier)
-                .format("#,##0")
-                .localIdentifier("franchiseFeesInitialFranchiseFee"),
-            Model.measure(franchiseFeesIdentifierOngoingRoyalty)
-                .format("#,##0")
-                .localIdentifier("franchiseFeesOngoingRoyalty"),
-        ];
-
-        const attributes = [
-            Model.attribute(locationStateDisplayFormIdentifier).localIdentifier("locationState"),
-            Model.attribute(locationNameDisplayFormIdentifier).localIdentifier("locationName"),
-            Model.attribute(menuCategoryAttributeDFIdentifier).localIdentifier("menu"),
-        ];
-
-        const columns = [
-            Model.attribute(quarterDateIdentifier).localIdentifier("quarter"),
-            Model.attribute(monthDateIdentifier).localIdentifier("month"),
-        ];
-
-        const sortBy = [Model.attributeSortItem("menu", "asc")];
-
         return (
             <div style={{ height: 300 }} className="s-pivot-table-sorting">
                 <PivotTable

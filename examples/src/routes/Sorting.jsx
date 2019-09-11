@@ -39,7 +39,7 @@ export const Sorting = () => (
         <h2>Dynamic Sorting</h2>
         <p>
             When sorting insights with multiple attributes in different dimensions by measure, specify an{" "}
-            <code>attributeSortItem</code> with <code>aggregation: &apos;sum&apos;</code> or
+            <code>attributeSortItem</code> with <code>aggregation: &apos;sum&apos;</code> or &nbsp;
             <code>measureSortItem</code> with an <code>attributeLocator</code> property. Sorting by an
             attribute value works the same way as in the previous example.
         </p>

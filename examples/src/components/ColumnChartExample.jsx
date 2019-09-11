@@ -7,6 +7,12 @@ import "@gooddata/react-components/styles/css/main.css";
 
 import { totalSalesIdentifier, monthDateIdentifier, projectId } from "../utils/fixtures";
 
+const totalSales = Model.measure(totalSalesIdentifier)
+    .format("#,##0")
+    .alias("$ Total Sales");
+
+const month = Model.attribute(monthDateIdentifier);
+
 export class ColumnChartExample extends Component {
     onLoadingChanged(...params) {
         // eslint-disable-next-line no-console
@@ -19,13 +25,6 @@ export class ColumnChartExample extends Component {
     }
 
     render() {
-        const totalSales = Model.measure(totalSalesIdentifier)
-            .format("#,##0")
-            .alias("$ Total Sales")
-            .localIdentifier("totalSales");
-
-        const month = Model.attribute(monthDateIdentifier).localIdentifier("month");
-
         return (
             <div style={{ height: 300 }} className="s-column-chart">
                 <ColumnChart

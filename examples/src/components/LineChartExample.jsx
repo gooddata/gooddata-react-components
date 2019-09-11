@@ -15,6 +15,15 @@ import {
 
 import { CUSTOM_COLOR_PALETTE } from "../utils/colors";
 
+const measures = [
+    Model.measure(franchiseFeesIdentifier).format("#,##0"),
+    Model.measure(franchiseFeesAdRoyaltyIdentifier).format("#,##0"),
+    Model.measure(franchiseFeesInitialFranchiseFeeIdentifier).format("#,##0"),
+    Model.measure(franchiseFeesIdentifierOngoingRoyalty).format("#,##0"),
+];
+
+const trendBy = Model.attribute(monthDateIdentifier);
+
 export class LineChartExample extends Component {
     onLoadingChanged(...params) {
         // eslint-disable-next-line no-console
@@ -27,23 +36,6 @@ export class LineChartExample extends Component {
     }
 
     render() {
-        const measures = [
-            Model.measure(franchiseFeesIdentifier)
-                .format("#,##0")
-                .localIdentifier("franchiseFees"),
-            Model.measure(franchiseFeesAdRoyaltyIdentifier)
-                .format("#,##0")
-                .localIdentifier("franchiseFeesAdRoyalty"),
-            Model.measure(franchiseFeesInitialFranchiseFeeIdentifier)
-                .format("#,##0")
-                .localIdentifier("franchiseFeesInitialFranchiseFee"),
-            Model.measure(franchiseFeesIdentifierOngoingRoyalty)
-                .format("#,##0")
-                .localIdentifier("franchiseFeesOngoingRoyalty"),
-        ];
-
-        const trendBy = Model.attribute(monthDateIdentifier).localIdentifier("a1");
-
         return (
             <div style={{ height: 300 }} className="s-line-chart">
                 <LineChart

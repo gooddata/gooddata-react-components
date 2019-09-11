@@ -18,6 +18,19 @@ import {
     menuCategoryAttributeDFIdentifier,
 } from "../utils/fixtures";
 
+const pivotMeasures = [
+    Model.measure(franchiseFeesIdentifier).format("#,##0"),
+    Model.measure(franchiseFeesAdRoyaltyIdentifier).format("#,##0"),
+    Model.measure(franchiseFeesInitialFranchiseFeeIdentifier).format("#,##0"),
+    Model.measure(franchiseFeesIdentifierOngoingRoyalty).format("#,##0"),
+];
+const pivotRowAttributes = [
+    Model.attribute(locationStateDisplayFormIdentifier),
+    Model.attribute(locationNameDisplayFormIdentifier),
+    Model.attribute(menuCategoryAttributeDFIdentifier),
+];
+const pivotColumnAttributes = [Model.attribute(quarterDateIdentifier), Model.attribute(monthDateIdentifier)];
+
 export class PivotTableExample extends Component {
     static propTypes = {
         className: PropTypes.string,
@@ -37,37 +50,12 @@ export class PivotTableExample extends Component {
 
     render() {
         const { withMeasures, withAttributes, withPivot, hasError, className } = this.props;
-        const measures = withMeasures
-            ? [
-                  Model.measure(franchiseFeesIdentifier)
-                      .format("#,##0")
-                      .localIdentifier("franchiseFees"),
-                  Model.measure(franchiseFeesAdRoyaltyIdentifier)
-                      .format("#,##0")
-                      .localIdentifier("franchiseFeesAdRoyalty"),
-                  Model.measure(franchiseFeesInitialFranchiseFeeIdentifier)
-                      .format("#,##0")
-                      .localIdentifier("franchiseFeesInitialFranchiseFee"),
-                  Model.measure(franchiseFeesIdentifierOngoingRoyalty)
-                      .format("#,##0")
-                      .localIdentifier("franchiseFeesOngoingRoyalty"),
-              ]
-            : [];
 
-        const attributes = withAttributes
-            ? [
-                  Model.attribute(locationStateDisplayFormIdentifier).localIdentifier("locationState"),
-                  Model.attribute(locationNameDisplayFormIdentifier).localIdentifier("locationName"),
-                  Model.attribute(menuCategoryAttributeDFIdentifier).localIdentifier("menuCategory"),
-              ]
-            : [];
+        const measures = withMeasures ? pivotMeasures : [];
 
-        const columns = withPivot
-            ? [
-                  Model.attribute(quarterDateIdentifier).localIdentifier("quarter"),
-                  Model.attribute(monthDateIdentifier).localIdentifier("month"),
-              ]
-            : [];
+        const attributes = withAttributes ? pivotRowAttributes : [];
+
+        const columns = withPivot ? pivotColumnAttributes : [];
 
         return (
             <div style={{ height: 300 }} className={className}>
