@@ -44,7 +44,7 @@ class ColoredItemsList extends React.PureComponent<IColoredItemsListProps, IColo
             searchString: "",
         };
 
-        this.listRef = (React as any).createRef();
+        this.listRef = React.createRef<HTMLDivElement>();
     }
 
     public render() {

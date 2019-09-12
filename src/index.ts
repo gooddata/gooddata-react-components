@@ -76,6 +76,8 @@ const CoreComponents: ICoreComponents = {
     FunnelChart: CoreFunnelChart,
 };
 
+export * from "./components/filters/DateFilter";
+
 export {
     AfmComponents,
     AttributeElements,

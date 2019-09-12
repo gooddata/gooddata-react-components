@@ -7,7 +7,7 @@ import Dropdown, { DropdownButton } from "@gooddata/goodstrap/lib/Dropdown/Dropd
 import LoadingMask from "@gooddata/goodstrap/lib/core/LoadingMask";
 import { string as stringUtils } from "@gooddata/js-utils";
 import DataSource from "@gooddata/goodstrap/lib/DataSource/DataSource";
-import { injectIntl, intlShape, InjectedIntlProps, InjectedIntl } from "react-intl";
+import { injectIntl, InjectedIntlProps, InjectedIntl } from "react-intl";
 import { IValidElementsResponse, IElement } from "@gooddata/gooddata-js";
 import * as classNames from "classnames";
 import last = require("lodash/last");
@@ -133,7 +133,6 @@ export class AttributeDropdownWrapped extends React.PureComponent<
         projectId: PropTypes.string.isRequired,
         selection: PropTypes.array,
         isInverted: PropTypes.bool,
-        intl: intlShape.isRequired,
 
         onApply: PropTypes.func.isRequired,
         onApplyWithFilterDefinition: PropTypes.func,

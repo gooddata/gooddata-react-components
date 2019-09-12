@@ -11,7 +11,7 @@ export function wrap(
     key?: any,
 ) {
     const keyProp: any = key ? { key } : {};
-    const style = {
+    const style: React.CSSProperties = {
         height,
         width,
         minHeight,
