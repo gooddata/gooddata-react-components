@@ -1,0 +1,17 @@
+// (C) 2007-2019 GoodData Corporation
+@import "~@gooddata/goodstrap/src/core/styles/variables.scss";
+
+.gd-extended-date-filter-body {
+    .gd-filter-list-item {
+        display: flex;
+        justify-content: flex-start;
+        width: 100%;
+        border: none;
+        text-align: left;
+        background: transparent;
+
+        span {
+            flex: 0 1 auto;
+        }
+    }
+}
