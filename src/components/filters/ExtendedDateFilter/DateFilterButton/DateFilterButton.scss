@@ -1,0 +1,45 @@
+// (C) 2019 GoodData Corporation
+@import "~@gooddata/goodstrap/src/core/styles/variables.scss";
+
+.gd-date-filter-button {
+    max-width: none !important;
+    &.disabled {
+        cursor: pointer;
+        pointer-events: none;
+        user-select: auto;
+
+        .button-subtitle::after {
+            content: none;
+        }
+    }
+}
+
+// remove button in mobile
+.gd-mobile-dropdown-overlay .attribute-filter-button-mobile {
+    display: none;
+}
+
+// display the duplicate button in mobile content
+.gd-mobile-dropdown-content .attribute-filter-button-mobile {
+    display: block;
+    width: auto;
+    margin: 0;
+    padding: 10px;
+    border-width: 1px 0;
+    border-top: 1px solid $border-color;
+    border-bottom: 1px solid $border-color;
+    font-size: nth(map-get($gd-typo, font-sizes), 4);
+    text-align: left;
+    line-height: 25px;
+    height: auto;
+    background-color: $gd-color-white;
+    box-shadow: 0 1px 2px 0 rgba(20, 56, 93, 0.1);
+
+    &::after {
+        display: none;
+    }
+
+    &::before {
+        right: 4px;
+    }
+}

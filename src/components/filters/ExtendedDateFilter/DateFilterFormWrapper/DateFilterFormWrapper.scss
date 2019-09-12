@@ -1,0 +1,13 @@
+// (C) 2007-2019 GoodData Corporation
+@import "~@gooddata/goodstrap/src/core/styles/variables.scss";
+
+.gd-date-filter-form-wrapper-desktop.gd-date-filter-form-wrapper {
+    margin: 0 0 0 10px;
+    padding: 10px;
+    border-left: 2px dotted $border-color;
+}
+
+.gd-date-filter-form-wrapper-inner {
+    padding: 10px;
+    background-color: #f5f7f9;
+}
