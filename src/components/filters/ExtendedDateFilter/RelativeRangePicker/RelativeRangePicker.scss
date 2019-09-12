@@ -1,0 +1,54 @@
+// (C) 2019 GoodData Corporation
+@import "~@gooddata/goodstrap/src/core/styles/variables.scss";
+@import "../../../styles/variables";
+
+$gd-relative-range-picker-picker-width: 180px;
+
+.gd-relative-range-picker {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+
+    .gd-dynamic-select-input-wrapper {
+        @media #{$medium-up} {
+            min-width: $gd-relative-range-picker-picker-width;
+        }
+    }
+
+    &-picker {
+        .gd-select-menu-wrapper {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            left: 0;
+        }
+
+        &-mobile {
+            flex-direction: column;
+            overflow: hidden;
+
+            .gd-select-separator {
+                padding: 0;
+            }
+
+            .gd-select-menu-wrapper .gd-select-menu {
+                position: relative;
+                z-index: auto;
+                border-radius: 0;
+                background-color: $gd-color-white;
+                box-shadow: none;
+            }
+
+            .gd-input-field {
+                font-size: 16px; // Prevent iPhone zoom on focus
+            }
+        }
+    }
+
+    &-dash {
+        margin: 0 5px;
+        color: $gd-color-state-blank;
+    }
+}

@@ -62,6 +62,37 @@ import * as MappingHeader from "./interfaces/MappingHeader";
 import { ICoreComponents } from "./interfaces/CoreComponents";
 import { BucketExecutor } from "./execution/BucketExecutor";
 
+// TODO ONE-4000 Consider creating index file for EDF if module will be exporting multiple stuff
+import { ExtendedDateFilter } from "./components/filters/ExtendedDateFilter/ExtendedDateFilter";
+import { validateFilterOption } from "./components/filters/ExtendedDateFilter/validation/DateFilterOptionValidation";
+import { mapDateFilterOptionToDateFilterValue } from "./helpers/ExtendedDateFilterService/DateFilterValueConversions";
+import { convertDateFilterConfigToDateFilterOptions } from "./helpers/ExtendedDateFilterService/DateFilterConfigConversions";
+import { removeEmptyKeysFromDateFilterOptions } from "./helpers/ExtendedDateFilterService/DateFilterGroupUtils";
+import {
+    mapAllTimeFilterToAfm,
+    mapAbsoluteFilterToAfm,
+    mapRelativeFilterToAfm,
+} from "./helpers/ExtendedDateFilterService/AFMConversions";
+import { applyExcludeCurrentPeriod } from "./helpers/ExtendedDateFilter";
+import {
+    getKpiPopLabel,
+    getKpiAlertTranslationData,
+} from "./helpers/ExtendedDateFilterService/Translations/KpiTranslations";
+import { getDateFilterTitle } from "./helpers/ExtendedDateFilterService/Translations/DateFilterTitle";
+import { mergeProjectConfigWithDashboardConfig } from "./helpers/ExtendedDateFilterService/DateFilterConfigMerging";
+import {
+    validateDateFilterConfig,
+    getDateFilterConfigValidationMessages,
+    isSelectedOptionValid,
+} from "./helpers/ExtendedDateFilterService/DateFilterConfigValidation";
+import {
+    serializingTranslator,
+    IMessageTranslator,
+} from "./helpers/ExtendedDateFilterService/Translations/Translators";
+import { granularityIntlCodes } from "./components/filters/ExtendedDateFilter/constants/i18n";
+import { Separator } from "./components/filters/ExtendedDateFilter/Separator/Separator";
+import { defaultExtendedDateFilterOptions } from "./constants/ExtendedDateFilter";
+
 /**
  * CoreComponents
  * A collection of BaseChart, Headline, Table, ScatterPlot, FunnelChart
@@ -142,4 +173,25 @@ export {
     HeaderPredicateFactory,
     MappingHeader,
     withJsxExport,
+    ExtendedDateFilter,
+    validateFilterOption,
+    mapDateFilterOptionToDateFilterValue,
+    convertDateFilterConfigToDateFilterOptions,
+    removeEmptyKeysFromDateFilterOptions,
+    mapAllTimeFilterToAfm,
+    mapAbsoluteFilterToAfm,
+    mapRelativeFilterToAfm,
+    getDateFilterTitle,
+    getKpiPopLabel,
+    validateDateFilterConfig,
+    getDateFilterConfigValidationMessages,
+    mergeProjectConfigWithDashboardConfig,
+    isSelectedOptionValid,
+    serializingTranslator,
+    IMessageTranslator,
+    granularityIntlCodes,
+    getKpiAlertTranslationData,
+    Separator,
+    applyExcludeCurrentPeriod,
+    defaultExtendedDateFilterOptions,
 };
