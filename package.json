@@ -218,7 +218,8 @@
       "git add"
     ],
     "{src,stories,styles,__mocks__,examples/server/src,examples/src,examples/test}/**/*.{ts,js,tsx,jsx,scss}": [
-      "npx gdc-fix-copyright"
+      "npx gdc-fix-copyright",
+      "git add"
     ]
   }
 }
