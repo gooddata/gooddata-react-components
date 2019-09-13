@@ -14,14 +14,14 @@ export interface IDateFilterButtonLocalizedProps {
     disabled?: boolean;
 }
 
-export const DateFilterButtonLocalized: React.FC<IDateFilterButtonLocalizedProps> = ({
+export const DateFilterButtonLocalized = ({
     dateFilterOption,
     isOpen = false,
     isMobile = true,
     excludeCurrentPeriod = false,
     customFilterName,
     disabled,
-}) => {
+}: IDateFilterButtonLocalizedProps) => {
     return (
         <DateFilterButton
             title={customFilterName || <FormattedMessage id="dateFilterDropdown.title" />}

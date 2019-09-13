@@ -2,12 +2,12 @@
 import React from "react";
 import cx from "classnames";
 
-interface IListHeading extends React.PropsWithoutRef<JSX.IntrinsicElements["div"]> {
+interface IListHeadingProps {
     className?: string;
     children: React.ReactNode;
 }
 
-export const ListHeading: React.FC<IListHeading> = ({ children, className, ...otherProps }) => (
+export const ListHeading = ({ children, className, ...otherProps }: IListHeadingProps) => (
     <div className={cx("gd-list-item gd-list-item-header gd-filter-list-heading", className)} {...otherProps}>
         {children}
     </div>

@@ -13,11 +13,13 @@ const granularities: ExtendedDateFilters.DateFilterGranularity[] = [
     "GDC.time.year",
 ];
 
-const RelativeFormButton: React.FC<{
+interface IRelativeFormButtonProps {
     from: number;
     to: number;
     selectedGranularity: ExtendedDateFilters.DateFilterGranularity;
-}> = ({ from, to, selectedGranularity }) =>
+}
+
+const RelativeFormButton = ({ from, to, selectedGranularity }: IRelativeFormButtonProps) =>
     IntlDecorator(
         <DateFilterButtonLocalized
             dateFilterOption={{
@@ -34,13 +36,21 @@ const RelativeFormButton: React.FC<{
         />,
     );
 
-const RelativePresetButton: React.FC<{
+interface IRelativePresetButtonProps {
     from: number;
     to: number;
     granularity: ExtendedDateFilters.DateFilterGranularity;
     name?: string;
     excludeCurrentPeriod?: boolean;
-}> = ({ from, to, granularity, name, excludeCurrentPeriod = false }) =>
+}
+
+const RelativePresetButton = ({
+    from,
+    to,
+    granularity,
+    name,
+    excludeCurrentPeriod = false,
+}: IRelativePresetButtonProps) =>
     IntlDecorator(
         <DateFilterButtonLocalized
             dateFilterOption={{
@@ -57,11 +67,13 @@ const RelativePresetButton: React.FC<{
         />,
     );
 
-const AbsolutePresetButton: React.FC<{
+interface IAbsolutePresetButtonProps {
     from: ExtendedDateFilters.DateString;
     to: ExtendedDateFilters.DateString;
     name?: string;
-}> = ({ from, to, name }) =>
+}
+
+const AbsolutePresetButton = ({ from, to, name }: IAbsolutePresetButtonProps) =>
     IntlDecorator(
         <DateFilterButtonLocalized
             dateFilterOption={{

@@ -28,11 +28,11 @@ export interface IGranularityTabsProps {
     onSelectedGranularityChange: (granularity: ExtendedDateFilters.DateFilterGranularity) => void;
 }
 
-export const GranularityTabs: React.FC<IGranularityTabsProps> = ({
+export const GranularityTabs = ({
     availableGranularities,
     onSelectedGranularityChange,
     selectedGranularity,
-}) => (
+}: IGranularityTabsProps) => (
     <TabsWrapper className="gd-relative-filter-form-granularity-tabs s-relative-filter-form-granularity-tabs">
         {sortGranularities(availableGranularities).map(granularity => {
             const intlGranularity = granularityIntlCodes[granularity];
