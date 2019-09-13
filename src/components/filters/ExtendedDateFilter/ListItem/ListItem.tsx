@@ -4,12 +4,9 @@ import cx from "classnames";
 
 import "./ListItem.scss";
 
-export const ListItem: React.FC<{ isSelected?: boolean } & React.HTMLProps<HTMLButtonElement>> = ({
-    isSelected: isActive,
-    className,
-    children,
-    ...restProps
-}) => (
+type ListItemProps = { isSelected?: boolean } & React.HTMLProps<HTMLButtonElement>;
+
+export const ListItem = ({ isSelected: isActive, className, children, ...restProps }: ListItemProps) => (
     <button
         className={cx(
             "gd-list-item",
