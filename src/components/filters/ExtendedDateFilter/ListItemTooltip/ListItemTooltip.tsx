@@ -6,11 +6,9 @@ import cx from "classnames";
 
 import "./ListItemTooltip.scss";
 
-export const ListItemTooltip: React.FC<React.HTMLProps<HTMLSpanElement>> = ({
-    children,
-    className,
-    ...restProps
-}) => (
+type ListItemTooltipProps = React.HTMLProps<HTMLSpanElement>;
+
+export const ListItemTooltip = ({ children, className, ...restProps }: ListItemTooltipProps) => (
     <span className={cx("gd-list-item-tooltip", className)} {...restProps}>
         <BubbleHoverTrigger>
             <span className="icon-circle-question gd-list-item-tooltip-icon" />

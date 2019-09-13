@@ -4,18 +4,20 @@ import cx from "classnames";
 
 import "./SelectOption.scss";
 
-interface ISelectOptionProps extends React.PropsWithoutRef<JSX.IntrinsicElements["div"]> {
+interface ISelectOptionProps {
     isFocused: boolean;
     isSelected: boolean;
+    className?: string;
+    children: React.ReactNode;
 }
 
-export const SelectOption: React.FC<ISelectOptionProps> = ({
+export const SelectOption = ({
     isFocused,
     isSelected,
     className,
     children,
     ...restProps
-}) => (
+}: ISelectOptionProps) => (
     <div
         className={cx(
             "gd-list-item",

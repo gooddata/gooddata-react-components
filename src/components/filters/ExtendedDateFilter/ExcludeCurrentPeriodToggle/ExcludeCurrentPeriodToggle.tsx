@@ -17,12 +17,12 @@ interface IExcludeCurrentPeriodToggleProps {
 
 const alignPoints = [{ align: "tc bc" }];
 
-export const ExcludeCurrentPeriodToggle: React.FC<IExcludeCurrentPeriodToggleProps> = ({
+export const ExcludeCurrentPeriodToggle = ({
     value,
     onChange,
     disabled,
     granularity,
-}) => (
+}: IExcludeCurrentPeriodToggleProps) => (
     <div className="gd-extended-date-filter-exclude-current">
         <BubbleHoverTrigger>
             <label className={cx("s-exclude-current-period", "input-checkbox-label")}>

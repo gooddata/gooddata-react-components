@@ -9,15 +9,10 @@ export interface IDateFilterButtonProps {
     isOpen?: boolean;
     isMobile: boolean;
     disabled?: boolean;
+    children: React.ReactNode;
 }
 
-export const DateFilterButton: React.FC<IDateFilterButtonProps> = ({
-    isOpen,
-    isMobile,
-    title,
-    children,
-    disabled,
-}) => {
+export const DateFilterButton = ({ isOpen, isMobile, title, children, disabled }: IDateFilterButtonProps) => {
     return (
         <div
             className={cx(

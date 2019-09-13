@@ -3,11 +3,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import cx from "classnames";
 
-interface ISelectHeading extends React.PropsWithoutRef<JSX.IntrinsicElements["div"]> {
+interface ISelectHeading {
     children: React.ReactNode;
+    className?: string;
+    key?: string;
+    style?: React.CSSProperties;
 }
 
-export const SelectHeading: React.FC<ISelectHeading> = ({ children, className, ...otherProps }) => (
+export const SelectHeading = ({ children, className, ...otherProps }: ISelectHeading) => (
     <div className={cx("gd-select-heading gd-list-item gd-list-item-header", className)} {...otherProps}>
         {children}
     </div>

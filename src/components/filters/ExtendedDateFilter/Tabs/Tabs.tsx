@@ -2,21 +2,25 @@
 import React from "react";
 import cx from "classnames";
 
-export const TabsWrapper: React.FC<React.PropsWithoutRef<JSX.IntrinsicElements["div"]>> = ({
-    className,
-    children,
-    ...restProps
-}) => (
+interface ITabsWrapperProps {
+    className?: string;
+    children: React.ReactNode;
+}
+
+export const TabsWrapper = ({ className, children, ...restProps }: ITabsWrapperProps) => (
     <div className={cx("gd-tabs small is-condensed", className)} {...restProps}>
         {children}
     </div>
 );
 
-export const Tab: React.FC<
-    React.PropsWithoutRef<JSX.IntrinsicElements["div"]> & {
-        selected?: boolean;
-    }
-> = ({ selected, className, children, ...restProps }) => (
+interface ITabProps {
+    selected?: boolean;
+    className?: string;
+    children: React.ReactNode;
+    onClick?: () => void;
+}
+
+export const Tab = ({ selected, className, children, ...restProps }: ITabProps) => (
     <div className={cx(selected && "is-active", "gd-tab", className)} {...restProps}>
         {children}
     </div>
