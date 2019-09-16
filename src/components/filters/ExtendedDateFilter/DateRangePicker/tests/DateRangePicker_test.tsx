@@ -4,7 +4,7 @@ import { mount } from "enzyme";
 
 import { DateRangePicker, IDateRange } from "../DateRangePicker";
 import { childGetter, writeTo, clickOn } from "../../tests/utils";
-import { IntlDecorator } from "../../../../../stories/decorators/IntlDecorators";
+import { IntlDecorator } from "../../../../../../stories/utils/IntlDecorators";
 
 const getFromInput = childGetter(".s-date-range-picker-from .s-date-range-picker-input-field");
 const getToInput = childGetter(".s-date-range-picker-to .s-date-range-picker-input-field");
