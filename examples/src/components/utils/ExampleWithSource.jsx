@@ -2,8 +2,8 @@
 /* eslint-disable react/jsx-closing-tag-location */
 import React from "react";
 import PropTypes from "prop-types";
-import SyntaxHighlighter from "react-syntax-highlighter/prism";
-import { okaidia } from "react-syntax-highlighter/styles/prism";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { okaidia } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 export class ExampleWithSource extends React.Component {
     static propTypes = {
