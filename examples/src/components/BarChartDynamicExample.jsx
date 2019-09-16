@@ -90,7 +90,7 @@ export class BarChartDynamicExample extends Component {
         const { config } = this.state;
         return (
             <div>
-                <div style={{ height: 300 }} className="s-bar-chart">
+                <div className="s-bar-chart">
                     <button className="s-change-palette" onClick={this.onPaletteChange}>
                         Change palette
                     </button>
@@ -102,14 +102,15 @@ export class BarChartDynamicExample extends Component {
                     <button className="s-change-separator" onClick={this.onSeparatorChange}>
                         Change separator
                     </button>
-
-                    <BarChart
-                        projectId={projectId}
-                        measures={[amount]}
-                        viewBy={locationResort}
-                        stackBy={menuCategory}
-                        config={config}
-                    />
+                    <div style={{ height: 300 }}>
+                        <BarChart
+                            projectId={projectId}
+                            measures={[amount]}
+                            viewBy={locationResort}
+                            stackBy={menuCategory}
+                            config={config}
+                        />
+                    </div>
                 </div>
             </div>
         );
