@@ -19,14 +19,14 @@ interface IRelativeFormButtonProps {
     selectedGranularity: ExtendedDateFilters.DateFilterGranularity;
 }
 
-const RelativeFormButton = ({ from, to, selectedGranularity }: IRelativeFormButtonProps) =>
-    IntlDecorator(
+const RelativeFormButton = ({ from, to, selectedGranularity }: IRelativeFormButtonProps) => {
+    return IntlDecorator(
         <DateFilterButtonLocalized
             dateFilterOption={{
                 localIdentifier: "RELATIVE_FORM",
                 from,
                 to,
-                selectedGranularity,
+                granularity: selectedGranularity, // TODO ONE-4000 This was previously `selectedGranulatity` property name, but interface does not know such option. Maybe mistake? I Changed it to `granularality` property name
                 type: "relativeForm",
                 availableGranularities: granularities,
                 visible: true,
@@ -35,6 +35,7 @@ const RelativeFormButton = ({ from, to, selectedGranularity }: IRelativeFormButt
             isMobile={false}
         />,
     );
+};
 
 interface IRelativePresetButtonProps {
     from: number;
@@ -73,13 +74,13 @@ interface IAbsolutePresetButtonProps {
     name?: string;
 }
 
-const AbsolutePresetButton = ({ from, to, name }: IAbsolutePresetButtonProps) =>
-    IntlDecorator(
+const AbsolutePresetButton = ({ from, to, name }: IAbsolutePresetButtonProps) => {
+    return IntlDecorator(
         <DateFilterButtonLocalized
             dateFilterOption={{
                 localIdentifier: "ABSOLUTE_PRESET",
                 type: "absolutePreset",
-                granularity: "GDC.time.date",
+                // granularity: "GDC.time.date", // TODO ONE-4000 This was previously in the object, but interface does not know such property. Commented out.
                 name,
                 from,
                 to,
@@ -88,6 +89,7 @@ const AbsolutePresetButton = ({ from, to, name }: IAbsolutePresetButtonProps) =>
             isMobile={false}
         />,
     );
+};
 
 storiesOf("ExtendedDateFilters/DateFilterButtonLocalized", module)
     .add("allTime", () =>
