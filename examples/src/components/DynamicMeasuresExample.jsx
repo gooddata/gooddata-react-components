@@ -36,7 +36,11 @@ export class DynamicMeasuresExample extends Component {
                     });
                 }
                 return this.setState({
-                    measureList: response.data.entries.map(entry => ({ ...entry, isSelected: true })),
+                    measureList: response.data.entries.map(entry => ({
+                        ...entry,
+                        isSelected: true,
+                        afmMeasure: Model.measure(entry.link).format("#,##0"),
+                    })),
                     error: null,
                 });
             })
@@ -64,10 +68,6 @@ export class DynamicMeasuresExample extends Component {
         this.setState({
             measureList: updatedMeasures,
         });
-    }
-
-    getNewMeasureDefinition(measureItem) {
-        return Model.measure(measureItem.link).format("#,##0");
     }
 
     render() {
@@ -128,7 +128,7 @@ export class DynamicMeasuresExample extends Component {
 
         if (measureList) {
             const selectedMeasures = measureList.filter(measure => measure.isSelected);
-            const measures = selectedMeasures.map(this.getNewMeasureDefinition);
+            const measures = selectedMeasures.map(item => item.afmMeasure);
 
             if (selectedMeasures.length) {
                 content = (
