@@ -4,11 +4,11 @@ import { mount } from "enzyme";
 import { noop } from "lodash";
 import { ExtendedDateFilters } from "@gooddata/typings";
 
+import { IntlWrapper } from "../../../../core/base/IntlWrapper";
 import { RelativeDateFilterForm, IRelativeDateFilterFormProps } from "../RelativeDateFilterForm";
 import { clickOn } from "../../tests/utils";
 import { GranularityTabs } from "../GranularityTabs";
 import { RelativeRangePicker } from "../../RelativeRangePicker/RelativeRangePicker";
-import { IntlWrapper } from "../../../../utils/translations";
 
 const availableGranularities: ExtendedDateFilters.DateFilterGranularity[] = [
     "GDC.time.date",

@@ -3,7 +3,7 @@ import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 import { ExtendedDateFilters } from "@gooddata/typings";
-import { IntlDecorator } from "../../decorators/IntlDecorators"; // TODO ONE-4000 Add decorator here
+import { IntlDecorator } from "../../utils/IntlDecorators";
 import { ExtendedDateFilter } from "../../../src/components/filters/ExtendedDateFilter/ExtendedDateFilter";
 import { defaultExtendedDateFilterOptions } from "../../../src/constants/ExtendedDateFilter";
 
