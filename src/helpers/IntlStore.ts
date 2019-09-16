@@ -1,7 +1,16 @@
 // (C) 2007-2018 GoodData Corporation
-import { InjectedIntl, IntlProvider } from "react-intl";
+import { InjectedIntl, IntlProvider, addLocaleData } from "react-intl";
 import { Localization } from "@gooddata/typings";
 import { translations } from "@gooddata/js-utils";
+import isEmpty = require("lodash/isEmpty");
+import deLocaleData from "react-intl/locale-data/de";
+import esLocaleData from "react-intl/locale-data/es";
+import enLocaleData from "react-intl/locale-data/en";
+import frLocaleData from "react-intl/locale-data/fr";
+import jaLocaleData from "react-intl/locale-data/ja";
+import nlLocaleData from "react-intl/locale-data/nl";
+import ptLocaleData from "react-intl/locale-data/pt";
+
 import { DEFAULT_LOCALE } from "../constants/localization";
 
 import * as enUS from "../translations/en-US.json";
@@ -13,7 +22,6 @@ import * as nlNL from "../translations/nl-NL.json";
 import * as ptBR from "../translations/pt-BR.json";
 import * as ptPT from "../translations/pt-PT.json";
 import * as zhHans from "../translations/zh-Hans.json";
-import isEmpty = require("lodash/isEmpty");
 
 const messagesMap = {
     "en-US": translations.removeMetadata(enUS),
@@ -28,6 +36,19 @@ const messagesMap = {
 };
 
 const intlStore = {};
+
+// TODO ONE-4000 This function should be called maybe also during normal lod, not just stories. See KD for details.
+export function addLocaleDataToReactIntl() {
+    addLocaleData([
+        ...deLocaleData,
+        ...esLocaleData,
+        ...enLocaleData,
+        ...frLocaleData,
+        ...jaLocaleData,
+        ...nlLocaleData,
+        ...ptLocaleData,
+    ]);
+}
 
 function createIntl(locale: Localization.ILocale): InjectedIntl {
     const intlProvider = new IntlProvider({ locale, messages: messagesMap[locale] }, {});

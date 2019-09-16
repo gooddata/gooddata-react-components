@@ -2,7 +2,7 @@
 import React from "react";
 import { storiesOf } from "@storybook/react";
 import { ExtendedDateFilters } from "@gooddata/typings";
-import { IntlDecorator } from "../../decorators/IntlDecorators";
+import { IntlDecorator } from "../../utils/IntlDecorators";
 import { DateFilterButtonLocalized } from "../../../src/components/filters/ExtendedDateFilter/DateFilterButtonLocalized/DateFilterButtonLocalized";
 
 const granularities: ExtendedDateFilters.DateFilterGranularity[] = [

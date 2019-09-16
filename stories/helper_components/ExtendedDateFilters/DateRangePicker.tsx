@@ -2,7 +2,7 @@
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
-import { IntlDecorator } from "../../decorators/IntlDecorators";
+import { IntlDecorator } from "../../utils/IntlDecorators";
 import {
     DateRangePicker,
     IDateRange,
