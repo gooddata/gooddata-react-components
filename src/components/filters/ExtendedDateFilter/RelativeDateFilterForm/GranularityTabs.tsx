@@ -1,5 +1,5 @@
 // (C) 2019 GoodData Corporation
-import React from "react";
+import * as React from "react";
 import { FormattedMessage } from "react-intl";
 import sortBy from "lodash/sortBy";
 import { ExtendedDateFilters } from "@gooddata/typings";

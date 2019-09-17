@@ -1,5 +1,5 @@
 // (C) 2019 GoodData Corporation
-import React from "react";
+import * as React from "react";
 import kebabCase from "lodash/kebabCase";
 import cx from "classnames";
 import { ExtendedDateFilters } from "@gooddata/typings";

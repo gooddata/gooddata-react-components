@@ -1,5 +1,5 @@
 // (C) 2007-2019 GoodData Corporation
-import React from "react";
+import * as React from "react";
 import { isEmpty, isNumber, defaultTo, clamp } from "lodash";
 
 import "./NumericInput.scss";

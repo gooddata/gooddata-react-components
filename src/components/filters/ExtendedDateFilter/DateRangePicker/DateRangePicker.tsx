@@ -1,7 +1,7 @@
 // (C) 2007-2019 GoodData Corporation
-import React from "react";
+import * as React from "react";
 import cx from "classnames";
-import moment from "moment";
+import * as moment from "moment";
 import MomentLocaleUtils from "react-day-picker/moment";
 import { DayPickerProps } from "react-day-picker";
 import { injectIntl, InjectedIntlProps } from "react-intl";

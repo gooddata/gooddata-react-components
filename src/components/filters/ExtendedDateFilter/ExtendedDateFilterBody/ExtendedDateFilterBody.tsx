@@ -1,5 +1,5 @@
 // (C) 2019 GoodData Corporation
-import React from "react";
+import * as React from "react";
 import isEmpty from "lodash/isEmpty";
 import cx from "classnames";
 import { FormattedMessage } from "react-intl";

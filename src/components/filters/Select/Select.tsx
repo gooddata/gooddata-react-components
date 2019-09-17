@@ -2,8 +2,8 @@
 
 // TODO ONE-4000 This was moved from KD. It should be probably somewhere else than in filters directory.
 
-import React from "react";
-import PropTypes from "prop-types";
+import * as React from "react";
+import * as PropTypes from "prop-types";
 // TODO: remove downshift from gdc-dahsbords when moved to gdc-bootstrap
 import Downshift, { ControllerStateAndHelpers } from "downshift";
 import cx from "classnames";

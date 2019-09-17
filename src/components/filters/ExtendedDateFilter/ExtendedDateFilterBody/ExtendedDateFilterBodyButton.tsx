@@ -1,5 +1,5 @@
 // (C) 2019 GoodData Corporation
-import React from "react";
+import * as React from "react";
 import { InjectedIntlProps, injectIntl } from "react-intl";
 import Button from "@gooddata/goodstrap/lib/Button/Button";
 

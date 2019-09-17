@@ -1,5 +1,5 @@
 // (C) 2007-2019 GoodData Corporation
-import moment from "moment";
+import * as moment from "moment";
 import isDate from "lodash/isDate";
 import isString from "lodash/isString";
 import { ExtendedDateFilters } from "@gooddata/typings";
