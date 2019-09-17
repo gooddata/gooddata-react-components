@@ -4,6 +4,9 @@ import { mount } from "enzyme";
 import { noop } from "lodash";
 import { ExtendedDateFilters } from "@gooddata/typings";
 
+// TODO ONE-4000 This imports TS types for enzyme meatchers and is orphaned here. How to import properly?
+import "jest-enzyme";
+
 import { IntlWrapper } from "../../../../core/base/IntlWrapper";
 import { RelativeDateFilterForm, IRelativeDateFilterFormProps } from "../RelativeDateFilterForm";
 import { clickOn } from "../../tests/utils";
