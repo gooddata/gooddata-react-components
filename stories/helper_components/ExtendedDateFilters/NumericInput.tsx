@@ -9,19 +9,18 @@ storiesOf("ExtendedDateFilters/NumericInput", module).add("renders", () => {
             value: "" as number | "",
         };
 
+        public setValue = (value: number | string) => this.setState({ value });
+        public setValueByEvent = (e: React.ChangeEvent<HTMLInputElement>) =>
+            this.setState({ value: e.target.value });
+
         public render(): React.ReactNode {
             return (
                 <React.Fragment>
-                    <NumericInput
-                        value={this.state.value}
-                        onChange={value => this.setState({ value })}
-                        min={-5}
-                        max={5}
-                    />
+                    <NumericInput value={this.state.value} onChange={this.setValue} min={-5} max={5} />
                     <input
                         type="number"
                         value={this.state.value}
-                        onChange={e => this.setState({ value: e.target.value })}
+                        onChange={this.setValueByEvent}
                         min={-5}
                         max={5}
                     />
