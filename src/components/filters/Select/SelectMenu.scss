@@ -1,5 +1,6 @@
 /* (C) 2019 GoodData Corporation */
-@import "../../styles/variables";
+@import "~@gooddata/goodstrap/src/core/styles/variables.scss";
+@import "~@gooddata/goodstrap/src/core/styles/mixins.scss";
 
 .gd-select-menu {
     position: absolute;
