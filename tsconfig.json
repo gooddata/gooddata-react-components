@@ -15,7 +15,9 @@
     "outDir": "dist",
     "sourceMap": true,
     "suppressImplicitAnyIndexErrors": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "target": "es5"
+
   },
   "exclude": [
     "node_modules",
