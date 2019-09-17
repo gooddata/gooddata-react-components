@@ -3,8 +3,9 @@
 // TODO ONE-4000 This was moved from KD. It should be probably somewhere else than in filters directory.
 
 // tslint:disable member-ordering
-import React from "react";
-import PropTypes from "prop-types";
+
+import * as React from "react";
+import * as PropTypes from "prop-types";
 import noop from "lodash/noop";
 // TODO: remove downshift from gdc-dashboards when moved to gdc-bootstrap
 import Downshift, { ControllerStateAndHelpers } from "downshift";

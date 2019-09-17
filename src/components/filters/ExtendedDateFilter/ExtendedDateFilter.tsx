@@ -1,5 +1,5 @@
 // (C) 2007-2019 GoodData Corporation
-import React from "react";
+import * as React from "react";
 import Dropdown from "@gooddata/goodstrap/lib/Dropdown/Dropdown";
 import MediaQuery from "react-responsive";
 import { ExtendedDateFilters } from "@gooddata/typings";

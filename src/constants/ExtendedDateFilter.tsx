@@ -1,5 +1,5 @@
 // (C) 2007-2019 GoodData Corporation
-import moment from "moment";
+import * as moment from "moment";
 import { ExtendedDateFilters } from "@gooddata/typings";
 
 import { platformDateFormat } from "./Platform";

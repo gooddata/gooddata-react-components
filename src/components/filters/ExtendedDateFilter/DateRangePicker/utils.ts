@@ -1,5 +1,5 @@
 // (C) 2007-2019 GoodData Corporation
-import moment from "moment";
+import * as moment from "moment";
 import { DayPickerProps } from "react-day-picker/types/props";
 import { Modifiers } from "react-day-picker/types/common";
 

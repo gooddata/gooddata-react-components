@@ -1,5 +1,5 @@
 // (C) 2007-2019 GoodData Corporation
-import React from "react";
+import * as React from "react";
 import { constant } from "lodash";
 import cx from "classnames";
 import { unless } from "./utils";
