@@ -1,5 +1,5 @@
 // (C) 2007-2019 GoodData Corporation
-import React from "react";
+import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { DateFilterButton } from "../../../src/components/filters/ExtendedDateFilter/DateFilterButton/DateFilterButton";
 
