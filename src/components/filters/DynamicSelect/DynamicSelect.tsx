@@ -182,8 +182,10 @@ export class DynamicSelect extends React.Component<IDynamicSelectProps, IDynamic
                                         },
                                         // Downshifts onInputValueChanged fires twice and with an old value
                                         // So we need to use our own callback
-                                        onChange: (event: React.FocusEvent<HTMLInputElement>) =>
-                                            this.onInputValueChanged(event.target.value),
+                                        onChange: (event: React.ChangeEvent<HTMLInputElement>) =>
+                                            this.onInputValueChanged(
+                                                (event.target as HTMLInputElement).value,
+                                            ),
                                         onBlur: () => {
                                             // reset to selected item on blur
                                             selectItem(selectedItem);
