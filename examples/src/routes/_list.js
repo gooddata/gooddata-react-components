@@ -29,6 +29,7 @@ import ArithmeticMeasure from "./ArithmeticMeasure";
 import Export from "./Export";
 import VisualizationByUri from "./VisualizationByUri";
 import VisualizationByIdentifier from "./VisualizationByIdentifier";
+import MeasureValueFilter from "./MeasureValueFilter";
 
 export const advancedUseCasesRoutes = [
     { path: "/advanced/global-filters", title: "Global Filters", Component: GlobalFilters },
@@ -128,6 +129,8 @@ export const hiddenPaths = [
     { path: "/hidden/pivot-table", title: "Pivot Table", Component: PivotTable },
     { path: "/hidden/pivot-table-dynamic", title: "Pivot Table Dynamic", Component: PivotTableDynamic },
     { path: "/hidden/bucket-executor", title: "Bucket Executor Example", Component: BucketExecutor },
+    // TODO BB-1694 - Add Measure Value Filter example to the menu
+    { path: "/hidden/measure-value-filter", title: "Measure Value Filter", Component: MeasureValueFilter },
 ];
 
 export const backendInfoRoutes = [

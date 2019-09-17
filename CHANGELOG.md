@@ -17,6 +17,10 @@ The REST API versions in the table are just for your information as the values a
 
 ## 7.2.0
 
+### Added
+
+- Support for measure value filters
+
 ### Fixed
 
 - Sticky row update in pivot table
