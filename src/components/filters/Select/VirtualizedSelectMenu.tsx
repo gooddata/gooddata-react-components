@@ -103,7 +103,7 @@ export class VirtualizedSelectMenu<V> extends React.Component<ISelectMenuProps<V
         visibleItemsRange: defaultVisibleItemsRange,
     };
 
-    private listRef = React.createRef<List>();
+    private listRef = (React as any).createRef();
 
     public render(): React.ReactNode {
         const {

@@ -2,7 +2,6 @@
 import React from "react";
 import cx from "classnames";
 import moment from "moment";
-import DayPickerInput from "react-day-picker/DayPickerInput";
 import MomentLocaleUtils from "react-day-picker/moment";
 import { DayPickerProps } from "react-day-picker";
 import { injectIntl, InjectedIntlProps } from "react-intl";
@@ -34,8 +33,8 @@ const toInputDateString = (date: Date) => (date ? moment(date).format("YYYY-MM-D
 const toDateFromString = (dateString: string) => (dateString ? new Date(dateString) : undefined);
 
 export class DateRangePickerComponent extends React.Component<IDateRangePickerProps & InjectedIntlProps> {
-    private fromInputRef = React.createRef<DayPickerInput>();
-    private toInputRef = React.createRef<DayPickerInput>();
+    private fromInputRef = (React as any).createRef();
+    private toInputRef = (React as any).createRef();
 
     public render(): React.ReactNode {
         const {
@@ -137,7 +136,7 @@ export class DateRangePickerComponent extends React.Component<IDateRangePickerPr
         );
     }
 
-    private focusField = (inputRef: React.RefObject<DayPickerInput>) => {
+    private focusField = (inputRef: any) => {
         if (inputRef.current) {
             // Focus needs to happen on the next tick otherwise the day picker is not updated
             setTimeout(() => {
@@ -146,7 +145,7 @@ export class DateRangePickerComponent extends React.Component<IDateRangePickerPr
         }
     };
 
-    private blurField = (inputRef: React.RefObject<DayPickerInput>) => {
+    private blurField = (inputRef: any) => {
         if (inputRef.current) {
             inputRef.current.getInput().blur();
         }
