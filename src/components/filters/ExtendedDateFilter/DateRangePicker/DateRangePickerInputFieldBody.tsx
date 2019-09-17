@@ -7,7 +7,7 @@ import cx from "classnames";
 export class DateRangePickerInputFieldBody extends React.Component<
     React.InputHTMLAttributes<HTMLInputElement>
 > {
-    private inputRef = React.createRef<HTMLInputElement>();
+    private inputRef = (React as any).createRef();
 
     public invokeInputMethod = (key: keyof HTMLInputElement) => {
         if (this.inputRef.current) {
