@@ -16,7 +16,7 @@ interface IRelativeRangePickerProps {
 }
 
 class RelativeRangePickerComponent extends React.Component<IRelativeRangePickerProps & InjectedIntlProps> {
-    private toFieldRef = React.createRef<DynamicSelect>();
+    private toFieldRef = (React as any).createRef();
 
     public render(): React.ReactNode {
         const { handleFromChange, handleToChange } = this;

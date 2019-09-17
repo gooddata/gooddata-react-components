@@ -18,8 +18,8 @@ interface IDateRangePickerInputFieldProps extends DayPickerInputProps {
     classNameCalendar?: string;
 }
 
-export const DateRangePickerInputField = React.forwardRef<DayPickerInput, IDateRangePickerInputFieldProps>(
-    (props, ref) => (
+export const DateRangePickerInputField = (React as any).forwardRef(
+    (props: IDateRangePickerInputFieldProps, ref: any) => (
         <DayPickerInput
             {...props}
             ref={ref}

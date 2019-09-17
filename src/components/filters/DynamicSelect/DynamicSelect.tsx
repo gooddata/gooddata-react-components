@@ -53,7 +53,7 @@ export class DynamicSelect extends React.Component<IDynamicSelectProps, IDynamic
         };
     }
 
-    public inputRef = React.createRef<HTMLInputElement>();
+    public inputRef = (React as any).createRef();
 
     public static defaultProps: Partial<IDynamicSelectProps> = {
         onChange: noop,
