@@ -1,5 +1,5 @@
 // (C) 2019 GoodData Corporation
-import React from "react";
+import * as React from "react";
 import { mount } from "enzyme";
 import { noop } from "lodash";
 import { ExtendedDateFilters } from "@gooddata/typings";

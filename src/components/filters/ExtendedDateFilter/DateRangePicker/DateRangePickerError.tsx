@@ -1,5 +1,5 @@
 // (C) 2019 GoodData Corporation
-import React from "react";
+import * as React from "react";
 import { injectIntl, FormattedMessage, InjectedIntlProps } from "react-intl";
 
 import { getLocalizedDateFormat } from "../utils/dateFormattingUtils";

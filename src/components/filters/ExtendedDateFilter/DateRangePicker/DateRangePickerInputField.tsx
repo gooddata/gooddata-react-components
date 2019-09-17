@@ -1,5 +1,5 @@
 // (C) 2007-2019 GoodData Corporation
-import React from "react";
+import * as React from "react";
 import cx from "classnames";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import { formatDate, parseDate } from "react-day-picker/moment";

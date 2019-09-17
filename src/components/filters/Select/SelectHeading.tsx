@@ -1,6 +1,6 @@
 // (C) 2007-2019 GoodData Corporation
-import React from "react";
-import PropTypes from "prop-types";
+import * as React from "react";
+import * as PropTypes from "prop-types";
 import cx from "classnames";
 
 interface ISelectHeading {

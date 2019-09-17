@@ -1,5 +1,5 @@
 // (C) 2007-2019 GoodData Corporation
-import React from "react";
+import * as React from "react";
 import renderer from "react-test-renderer";
 import { shallow } from "enzyme";
 import { DateFilterFormWrapper } from "../DateFilterFormWrapper";

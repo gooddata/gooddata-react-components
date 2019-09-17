@@ -1,5 +1,5 @@
 // (C) 2019 GoodData Corporation
-import moment from "moment";
+import * as moment from "moment";
 
 export const sanitizeLocaleForMoment = (intlLocale: string): string => {
     if (intlLocale === "zh-Hans") {

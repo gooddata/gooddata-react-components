@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
-import React from "react";
-import PropTypes from "prop-types";
+import * as React from "react";
+import * as PropTypes from "prop-types";
 import { VariableSizeList as List, ListChildComponentProps } from "react-window";
 import cx from "classnames";
 import { range } from "lodash";
