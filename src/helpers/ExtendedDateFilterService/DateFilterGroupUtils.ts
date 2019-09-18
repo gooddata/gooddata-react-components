@@ -1,5 +1,5 @@
 // (C) 2019 GoodData Corporation
-import isEmpty from "lodash/isEmpty";
+import isEmpty = require("lodash/isEmpty");
 import { ExtendedDateFilters } from "@gooddata/typings";
 
 export const removeEmptyKeysFromDateFilterOptions = (

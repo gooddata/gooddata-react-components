@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
-import isEmpty from "lodash/isEmpty";
+import isEmpty = require("lodash/isEmpty");
 import cx from "classnames";
 import { FormattedMessage } from "react-intl";
 import { ExtendedDateFilters } from "@gooddata/typings";

@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
-import moment from "moment";
-import groupBy from "lodash/groupBy";
+import * as moment from "moment";
+import groupBy = require("lodash/groupBy");
 import { ExtendedDateFilters } from "@gooddata/typings";
 import { platformDateFormat } from "../../constants/Platform";
 import { removeEmptyKeysFromDateFilterOptions } from "./DateFilterGroupUtils";

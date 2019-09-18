@@ -1,7 +1,7 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
-import sortBy from "lodash/sortBy";
+import sortBy = require("lodash/sortBy");
 import { ExtendedDateFilters } from "@gooddata/typings";
 
 import { TabsWrapper, Tab } from "../Tabs/Tabs";
