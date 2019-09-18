@@ -35,23 +35,6 @@ export const absolutePresetFilter: ExtendedDateFilters.IAbsoluteDateFilterPreset
     visible: true,
 };
 
-export const relativeFormFilter: ExtendedDateFilters.IRelativeDateFilterForm = {
-    localIdentifier: "RELATIVE_FORM",
-    type: "relativeForm",
-    from: -5,
-    to: 5,
-    granularity: "GDC.time.date",
-    availableGranularities: [
-        "GDC.time.date",
-        "GDC.time.week_us",
-        "GDC.time.month",
-        "GDC.time.quarter",
-        "GDC.time.year",
-    ],
-    name: "Floating range",
-    visible: true,
-};
-
 export const relativePresetFilter: ExtendedDateFilters.IRelativeDateFilterPreset = {
     localIdentifier: "RELATIVE_PRESET_FOO",
     type: "relativePreset",
