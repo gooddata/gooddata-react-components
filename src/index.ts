@@ -75,20 +75,16 @@ import {
 } from "./helpers/ExtendedDateFilterService/AFMConversions";
 import { applyExcludeCurrentPeriod } from "./helpers/ExtendedDateFilter";
 import {
-    getKpiPopLabel,
-    getKpiAlertTranslationData,
-} from "./helpers/ExtendedDateFilterService/Translations/KpiTranslations";
-import { getDateFilterTitle } from "./helpers/ExtendedDateFilterService/Translations/DateFilterTitle";
+    getDateFilterTitle,
+    getDateFilterRepresentation,
+} from "./helpers/ExtendedDateFilterService/Translations/DateFilterTitle";
 import { mergeProjectConfigWithDashboardConfig } from "./helpers/ExtendedDateFilterService/DateFilterConfigMerging";
 import {
     validateDateFilterConfig,
     getDateFilterConfigValidationMessages,
     isSelectedOptionValid,
 } from "./helpers/ExtendedDateFilterService/DateFilterConfigValidation";
-import {
-    serializingTranslator,
-    IMessageTranslator,
-} from "./helpers/ExtendedDateFilterService/Translations/Translators";
+import * as Translators from "./helpers/ExtendedDateFilterService/Translations/Translators";
 import { granularityIntlCodes } from "./components/filters/ExtendedDateFilter/constants/i18n";
 import { Separator } from "./components/filters/ExtendedDateFilter/Separator/Separator";
 import { defaultExtendedDateFilterOptions } from "./constants/ExtendedDateFilter";
@@ -182,15 +178,13 @@ export {
     mapAbsoluteFilterToAfm,
     mapRelativeFilterToAfm,
     getDateFilterTitle,
-    getKpiPopLabel,
+    getDateFilterRepresentation,
     validateDateFilterConfig,
     getDateFilterConfigValidationMessages,
     mergeProjectConfigWithDashboardConfig,
     isSelectedOptionValid,
-    serializingTranslator,
-    IMessageTranslator,
+    Translators,
     granularityIntlCodes,
-    getKpiAlertTranslationData,
     Separator,
     applyExcludeCurrentPeriod,
     defaultExtendedDateFilterOptions,
