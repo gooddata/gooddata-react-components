@@ -7,7 +7,7 @@ import * as PropTypes from "prop-types";
 // TODO: remove downshift from gdc-dahsbords when moved to gdc-bootstrap
 import Downshift, { ControllerStateAndHelpers } from "downshift";
 import cx from "classnames";
-import noop from "lodash/noop";
+import noop = require("lodash/noop");
 import { SelectButton } from "./SelectButton";
 import { SelectMenu } from "./SelectMenu";
 import { ISelectItem, ISelectItemOption } from "./types";

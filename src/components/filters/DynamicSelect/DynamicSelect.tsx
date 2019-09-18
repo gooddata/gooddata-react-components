@@ -6,7 +6,7 @@
 
 import * as React from "react";
 import * as PropTypes from "prop-types";
-import noop from "lodash/noop";
+import noop = require("lodash/noop");
 // TODO: remove downshift from gdc-dashboards when moved to gdc-bootstrap
 import Downshift, { ControllerStateAndHelpers } from "downshift";
 import cx from "classnames";
