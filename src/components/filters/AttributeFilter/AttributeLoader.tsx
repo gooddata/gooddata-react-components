@@ -14,20 +14,21 @@ export interface IAttributeLoaderProps {
     uri?: string;
     identifier?: string;
 
-    children(props: IAttributeLoaderChildren): any;
+    children(props: IAttributeLoaderChildrenProps): any;
 }
 
 export interface IAttributeLoaderState {
     attributeDisplayForm: IAttributeDisplayForm;
     isLoading: boolean;
     isUsingIdentifier: boolean;
-    error?: any;
+    error?: string;
 }
 
-export interface IAttributeLoaderChildren {
+export interface IAttributeLoaderChildrenProps {
     attributeDisplayForm: IAttributeDisplayForm;
     isLoading: boolean;
     isUsingIdentifier: boolean;
+    error?: string;
 }
 
 function getAttributeUri(
@@ -109,11 +110,12 @@ export class AttributeLoader extends React.PureComponent<IAttributeLoaderProps, 
     }
 
     public render() {
-        const { attributeDisplayForm, isLoading, isUsingIdentifier } = this.state;
+        const { attributeDisplayForm, isLoading, isUsingIdentifier, error } = this.state;
         return this.props.children({
             attributeDisplayForm,
             isLoading,
             isUsingIdentifier,
+            error,
         });
     }
 

@@ -52,6 +52,7 @@ export const comboVisualizationUri = `/gdc/md/${demoProjectId}/obj/9304`;
 export const dateDatasetIdentifier = "date.dataset.dt";
 export const dateDataSetUri = `/gdc/md/${demoProjectId}/obj/2180`;
 export const employeeNameIdentifier = "label.employee.employeename";
+export const employeeNameDisplayFormUri = `/gdc/md/${demoProjectId}/obj/2201`;
 export const franchiseFeesAdRoyaltyIdentifier = "aabHeqImaK0d";
 export const franchiseFeesIdentifier = "aaEGaXAEgB7U";
 export const franchiseFeesIdentifierOngoingRoyalty = "aaWGcgnsfxIg";
