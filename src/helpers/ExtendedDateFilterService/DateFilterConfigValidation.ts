@@ -1,5 +1,5 @@
 // (C) 2019 GoodData Corporation
-import groupBy from "lodash/groupBy";
+import groupBy = require("lodash/groupBy");
 import { ExtendedDateFilters } from "@gooddata/typings";
 
 const getDuplicateIdentifiers = (options: ExtendedDateFilters.IDateFilterBase[]): string[] => {

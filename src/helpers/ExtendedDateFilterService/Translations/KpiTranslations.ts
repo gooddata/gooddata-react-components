@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
 import { ExtendedDateFilters } from "@gooddata/typings";
-import lowerFirst from "lodash/lowerFirst";
+import lowerFirst = require("lodash/lowerFirst");
 import { IMessageTranslator, IDateAndMessageTranslator } from "./Translators";
 import { granularityIntlCodes } from "../../../components/filters/ExtendedDateFilter/constants/i18n";
 import { getDateFilterRepresentation } from "./DateFilterTitle";

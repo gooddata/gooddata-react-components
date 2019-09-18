@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
-import capitalize from "lodash/capitalize";
-import moment from "moment";
+import capitalize = require("lodash/capitalize");
+import * as moment from "moment";
 import { ExtendedDateFilters } from "@gooddata/typings";
 
 import { granularityIntlCodes } from "../../../components/filters/ExtendedDateFilter/constants/i18n";

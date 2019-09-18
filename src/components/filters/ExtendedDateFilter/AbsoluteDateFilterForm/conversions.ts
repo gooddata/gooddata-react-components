@@ -1,7 +1,7 @@
 // (C) 2007-2019 GoodData Corporation
 import * as moment from "moment";
-import isDate from "lodash/isDate";
-import isString from "lodash/isString";
+import isDate = require("lodash/isDate");
+import isString = require("lodash/isString");
 import { ExtendedDateFilters } from "@gooddata/typings";
 
 import { IDateRange } from "../DateRangePicker/DateRangePicker";

@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
-import flow from "lodash/flow";
-import uniqBy from "lodash/uniqBy";
+import flow = require("lodash/flow");
+import uniqBy = require("lodash/uniqBy");
 import stringify from "fast-json-stable-stringify";
 import { ExtendedDateFilters } from "@gooddata/typings";
 import { sanitizeDateFilterOption } from "./DateFilterOptionSanitization";
