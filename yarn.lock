@@ -2143,10 +2143,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-window@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@types/react-window/-/react-window-1.1.0.tgz#5253a7545b9017e0a4440f2a14e78136b4a7fb2a"
-  integrity sha512-T387G7k7VvBOkI1foivqK5uFhR6+QJte4pLd+ZPkwEnYLRE2gyhZpVnCCbxpGg2U3Bj7AIKKXPvgwzJozyqHlA==
+"@types/react-window@1.8.1":
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/@types/react-window/-/react-window-1.8.1.tgz#6e1ceab2e6f2f78dbf1f774ee0e00f1bb0364bb3"
+  integrity sha512-V3k1O5cbfZIRa0VVbQ81Ekq/7w42CK1SuiB9U1oPMTxv270D9qUn7rHb3sZoqMkIJFfB1NZxaH7NRDlk+ToDsg==
   dependencies:
     "@types/react" "*"
 
@@ -10691,10 +10691,10 @@ mem@^4.0.0:
     mimic-fn "^2.0.0"
     p-is-promise "^2.0.0"
 
-memoize-one@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/memoize-one/-/memoize-one-3.1.1.tgz#ef609811e3bc28970eac2884eece64d167830d17"
-  integrity sha512-YqVh744GsMlZu6xkhGslPSqSurOv6P+kLN2J3ysBZfagLcL5FdRK/0UpgLoL8hwjjEvvAVkjJZyFP+1T6p1vgA==
+"memoize-one@>=3.1.1 <6":
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/memoize-one/-/memoize-one-5.1.1.tgz#047b6e3199b508eaec03504de71229b8eb1d75c0"
+  integrity sha512-HKeeBpWvqiVJD57ZUAsJNm71eHTykffzcLZVYWiVfQeI1rJtuEaS7hQiEpWfVVk18donPwJEcFKIkCmPJNOhHA==
 
 memoizerific@^1.11.3:
   version "1.11.3"
@@ -13461,13 +13461,13 @@ react-transition-group@^2.2.1:
     loose-envify "^1.3.1"
     prop-types "^15.6.1"
 
-react-window@1.3.1:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/react-window/-/react-window-1.3.1.tgz#4509ff0b5f25f08377a5f16050ae5826f8dc46ed"
-  integrity sha512-hNeFTTrIcmypDuWAFgppeu6awNr3QFJhgFBa3MHLxsfjx2CHdTjjyP4CqCK1mh2diyA58jYaXGQoQjWzdHDYIQ==
+react-window@1.8.1:
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/react-window/-/react-window-1.8.1.tgz#12f1db71d91552ed2263790e57cc77d950803db1"
+  integrity sha512-iNzekymggL9zAnil3QbmRG74RDMfIbO+plE/soP3M/zskicA1DwoLthC6/QA6xu9dr+A5UoawCTsEYcva2mfeA==
   dependencies:
     "@babel/runtime" "^7.0.0"
-    memoize-one "^3.1.1"
+    memoize-one ">=3.1.1 <6"
 
 react@^16.5.2, react@^16.8.1:
   version "16.8.6"
