@@ -1,7 +1,7 @@
 // (C) 2019 GoodData Corporation
 import flow = require("lodash/flow");
 import uniqBy = require("lodash/uniqBy");
-import stringify from "fast-json-stable-stringify";
+import * as stringify from "fast-json-stable-stringify";
 import { ExtendedDateFilters } from "@gooddata/typings";
 import { sanitizeDateFilterOption } from "./DateFilterOptionSanitization";
 // tslint:disable: ter-arrow-parens
