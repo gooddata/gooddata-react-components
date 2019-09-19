@@ -67,5 +67,8 @@
     "visualizations.menu.aggregations": "总和",
     "visualizations.menu.aggregations.rows": "行",
     "visualizations.menu.aggregations.all-rows": "所有行",
-    "visualizations.menu.aggregations.within-attribute": "在 {attributeName} 中"
+    "visualizations.menu.aggregations.within-attribute": "在 {attributeName} 中",
+    "dateFilterDropdown.title": "日期范围",
+    "dateFilterDropdown.buttonTitle": "日期范围",
+    "dateFilterDropdown.setDefault": "为观看者设置默认日期筛选器："
 }

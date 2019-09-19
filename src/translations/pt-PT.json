@@ -67,5 +67,8 @@
     "visualizations.menu.aggregations": "Agregar",
     "visualizations.menu.aggregations.rows": "Linhas",
     "visualizations.menu.aggregations.all-rows": "de todas as linhas",
-    "visualizations.menu.aggregations.within-attribute": "dentro de {attributeName}"
+    "visualizations.menu.aggregations.within-attribute": "dentro de {attributeName}",
+    "dateFilterDropdown.title": "Intervalo de datas",
+    "dateFilterDropdown.buttonTitle": "Intervalo de datas",
+    "dateFilterDropdown.setDefault": "Predefinir filtro de data para&nbsp;Os Visualizadores:"
 }

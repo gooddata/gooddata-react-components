@@ -67,5 +67,8 @@
     "visualizations.menu.aggregations": "Agregar",
     "visualizations.menu.aggregations.rows": "Filas",
     "visualizations.menu.aggregations.all-rows": "de todas las filas",
-    "visualizations.menu.aggregations.within-attribute": "dentro de {attributeName}"
+    "visualizations.menu.aggregations.within-attribute": "dentro de {attributeName}",
+    "dateFilterDropdown.title": "Rango de fechas",
+    "dateFilterDropdown.buttonTitle": "Rango de fechas",
+    "dateFilterDropdown.setDefault": "Establecer filtro de fecha predeterminado para&nbsp;lectores:"
 }

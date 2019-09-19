@@ -67,5 +67,8 @@
     "visualizations.menu.aggregations": "集計する",
     "visualizations.menu.aggregations.rows": "行",
     "visualizations.menu.aggregations.all-rows": "全ての行",
-    "visualizations.menu.aggregations.within-attribute": "{attributeName}内"
+    "visualizations.menu.aggregations.within-attribute": "{attributeName}内",
+    "dateFilterDropdown.title": "日付範囲",
+    "dateFilterDropdown.buttonTitle": "日付範囲",
+    "dateFilterDropdown.setDefault": "ビューア用に既定の日付フィルタを設定:"
 }

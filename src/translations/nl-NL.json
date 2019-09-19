@@ -67,5 +67,8 @@
     "visualizations.menu.aggregations": "Aggregeer",
     "visualizations.menu.aggregations.rows": "Rijen",
     "visualizations.menu.aggregations.all-rows": "van alle rijen",
-    "visualizations.menu.aggregations.within-attribute": "binnen {attributeName}"
+    "visualizations.menu.aggregations.within-attribute": "binnen {attributeName}",
+    "dateFilterDropdown.title": "Datumbereik",
+    "dateFilterDropdown.buttonTitle": "Datumbereik",
+    "dateFilterDropdown.setDefault": "Standaarddatumfilter instellen voor&nbsp;Kijkers:"
 }
