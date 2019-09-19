@@ -67,5 +67,8 @@
     "visualizations.menu.aggregations": "Sammeln Sie",
     "visualizations.menu.aggregations.rows": "Zeilen",
     "visualizations.menu.aggregations.all-rows": "aller Zeilen",
-    "visualizations.menu.aggregations.within-attribute": "innerhalb von {attributeName}"
+    "visualizations.menu.aggregations.within-attribute": "innerhalb von {attributeName}",
+    "dateFilterDropdown.title": "Datumsbereich",
+    "dateFilterDropdown.buttonTitle": "Datumsbereich",
+    "dateFilterDropdown.setDefault": "Standarddatumsfilter festlegen für&nbsp;Betrachter:"
 }

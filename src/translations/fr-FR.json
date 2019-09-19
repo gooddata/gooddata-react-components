@@ -67,5 +67,8 @@
     "visualizations.menu.aggregations": "Agréger",
     "visualizations.menu.aggregations.rows": "Lignes",
     "visualizations.menu.aggregations.all-rows": "de toutes les lignes",
-    "visualizations.menu.aggregations.within-attribute": "à l'intérieur de {attributeName}"
+    "visualizations.menu.aggregations.within-attribute": "à l'intérieur de {attributeName}",
+    "dateFilterDropdown.title": "Plage de dates",
+    "dateFilterDropdown.buttonTitle": "Plage de dates",
+    "dateFilterDropdown.setDefault": "Définissez le filtre de date par défaut pour les&nbsp;lecteurs :"
 }
