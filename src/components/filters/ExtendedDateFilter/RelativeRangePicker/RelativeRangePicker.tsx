@@ -6,7 +6,6 @@ import { DynamicSelect, IDynamicSelectProps } from "../../DynamicSelect/DynamicS
 import { getRelativeDateFilterItems } from "../../DynamicSelect/utils";
 import { injectIntl, InjectedIntlProps } from "react-intl";
 
-import "./RelativeRangePicker.scss";
 import { defaultVisibleItemsRange } from "../../Select/VirtualizedSelectMenu";
 
 interface IRelativeRangePickerProps {

@@ -1,7 +1,6 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
 import cx from "classnames";
-import "./VisibleScrollbar.scss";
 
 type VisibleScrollbarProps = React.HTMLProps<HTMLDivElement>;
 

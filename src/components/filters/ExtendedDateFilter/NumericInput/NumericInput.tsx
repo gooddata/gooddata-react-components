@@ -2,7 +2,6 @@
 import * as React from "react";
 import { isEmpty, isNumber, defaultTo, clamp } from "lodash";
 
-import "./NumericInput.scss";
 import { ArrowButton } from "./ArrowButton";
 import { unless } from "./utils";
 

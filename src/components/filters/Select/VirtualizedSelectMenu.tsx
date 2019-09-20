@@ -11,8 +11,6 @@ import { SelectSeparator } from "./SelectSeparator";
 import { ISelectItem, ISelectItemOption, SelectItemTypes } from "./types";
 import { getSelectableItems } from "./utils";
 
-import "./SelectMenu.scss";
-
 export interface IOptionGetterProps<V> {
     items: Array<ISelectItem<V>>;
     selectedItem: ISelectItemOption<V>;

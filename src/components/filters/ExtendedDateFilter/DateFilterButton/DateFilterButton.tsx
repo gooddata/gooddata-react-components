@@ -2,8 +2,6 @@
 import * as React from "react";
 import cx from "classnames";
 
-import "./DateFilterButton.scss";
-
 export interface IDateFilterButtonProps {
     title: React.ReactNode;
     isOpen?: boolean;
