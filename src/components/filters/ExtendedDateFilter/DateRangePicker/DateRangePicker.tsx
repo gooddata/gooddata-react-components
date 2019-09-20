@@ -11,7 +11,6 @@ import { DateRangePickerError } from "./DateRangePickerError";
 import { IExtendedDateFilterErrors } from "../../../../interfaces/ExtendedDateFilters";
 import { sanitizeLocaleForMoment } from "../utils/dateFormattingUtils";
 import { DateRangePickerInputFieldBody } from "./DateRangePickerInputFieldBody";
-import "./DateRangePicker.scss";
 
 export interface IDateRange {
     from: Date;

@@ -8,8 +8,6 @@ import { SelectSeparator } from "./SelectSeparator";
 import { ISelectItem, ISelectItemOption } from "./types";
 import { getSelectableItems } from "./utils";
 
-import "./SelectMenu.scss";
-
 export interface ISelectMenuProps<V> {
     items: Array<ISelectItem<V>>;
     selectedItem: ISelectItemOption<V>;

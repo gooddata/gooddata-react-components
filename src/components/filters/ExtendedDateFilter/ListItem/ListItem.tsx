@@ -2,8 +2,6 @@
 import * as React from "react";
 import cx from "classnames";
 
-import "./ListItem.scss";
-
 type ListItemProps = { isSelected?: boolean } & React.HTMLProps<HTMLButtonElement>;
 
 export const ListItem = ({ isSelected: isActive, className, children, ...restProps }: ListItemProps) => (

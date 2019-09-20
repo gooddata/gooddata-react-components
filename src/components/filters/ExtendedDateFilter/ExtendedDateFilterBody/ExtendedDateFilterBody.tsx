@@ -17,7 +17,6 @@ import { ListItemTooltip } from "../ListItemTooltip/ListItemTooltip";
 import { RelativeDateFilterForm } from "../RelativeDateFilterForm/RelativeDateFilterForm";
 import { RelativePresetFilterItems } from "./RelativePresetFilterItems";
 import { EditModeMessage } from "./EditModeMessage";
-import "./ExtendedDateFilterBody.scss";
 import { ExtendedDateFilterHeader } from "./ExtendedDateFilterHeader";
 import { ExtendedDateFilterBodyButton } from "./ExtendedDateFilterBodyButton";
 import { AbsolutePresetFilterItems } from "./AbsolutePresetFilterItems";

@@ -1,6 +1,5 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
-import "./ExtendedDateFilterHeader.scss";
 
 import { IExtendedDateFilterBodyState } from "./ExtendedDateFilterBody";
 
