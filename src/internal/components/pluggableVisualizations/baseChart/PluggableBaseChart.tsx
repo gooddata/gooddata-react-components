@@ -36,7 +36,7 @@ import { BASE_CHART_SUPPORTED_PROPERTIES } from "../../../constants/supportedPro
 
 import { BUCKETS } from "../../../constants/bucket";
 import { configurePercent, configureOverTimeComparison } from "../../../utils/bucketConfig";
-import { isStacked } from "../../../utils/mdObjectHelper";
+import { isStacked, isSimpleStackMeasures } from "../../../utils/mdObjectHelper";
 
 import {
     sanitizeUnusedFilters,
@@ -255,7 +255,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
                 {},
             ) as IVisualizationProperties;
 
-            const supportedControls = this.getSupportedControls(mdObject);
+            const supportedControls: IVisualizationProperties = this.getSupportedControls(mdObject);
 
             const resultSpecWithDimensions: AFM.IResultSpec = {
                 ...options.resultSpec,
@@ -267,6 +267,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
                 dataSource.getAfm(),
                 resultSpecWithDimensions,
                 allProperties,
+                isSimpleStackMeasures(mdObject, supportedControls),
             );
 
             const resultSpecWithSorts = {

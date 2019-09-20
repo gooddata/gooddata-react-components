@@ -3,6 +3,8 @@ import get = require("lodash/get");
 import { VisualizationObject } from "@gooddata/typings";
 import { getMeasuresFromMdObject } from "./bucketHelper";
 import * as BucketNames from "../../constants/bucketNames";
+import { IAxisConfig } from "../../interfaces/Config";
+import { IVisualizationProperties } from "../interfaces/Visualization";
 
 function isAttribute(item: VisualizationObject.BucketItem): boolean {
     const attribute = item as VisualizationObject.IVisualizationAttribute;
@@ -44,4 +46,24 @@ export function isStacked(mdObject: VisualizationObject.IVisualizationObjectCont
 
 export function hasMeasures(mdObject: VisualizationObject.IVisualizationObjectContent): boolean {
     return mdObject && getMeasuresFromMdObject(mdObject).length > 0;
+}
+
+function isAllMeasuresOnSingleAxis(
+    mdObject: VisualizationObject.IVisualizationObjectContent,
+    secondaryYAxis: IAxisConfig,
+): boolean {
+    const measureCount = getMeasuresFromMdObject(mdObject).length;
+    const numberOfMeasureOnSecondaryAxis = secondaryYAxis ? secondaryYAxis.measures.length : 0;
+    return numberOfMeasureOnSecondaryAxis === 0 || measureCount === numberOfMeasureOnSecondaryAxis;
+}
+
+export function isSimpleStackMeasures(
+    mdObject: VisualizationObject.IVisualizationObjectContent,
+    supportedControls: IVisualizationProperties,
+): boolean {
+    return (
+        get(supportedControls, "stackMeasures", false) &&
+        isAllMeasuresOnSingleAxis(mdObject, get(supportedControls, "secondary_yaxis", false)) &&
+        !haveManyViewItems(mdObject)
+    );
 }
