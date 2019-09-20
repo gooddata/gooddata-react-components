@@ -2,8 +2,6 @@
 import * as React from "react";
 import cx from "classnames";
 
-import "./SelectOption.scss";
-
 interface ISelectOptionProps {
     isFocused: boolean;
     isSelected: boolean;

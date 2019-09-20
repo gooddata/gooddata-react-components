@@ -1,8 +1,11 @@
 // (C) 2019 GoodData Corporation
 @import "~@gooddata/goodstrap/src/core/styles/variables.scss";
+@import "~@gooddata/goodstrap/lib/Button/styles/variables";
+$transition-length: 0.2s;
 
 .gd-date-filter-button {
     max-width: none !important;
+    font-family: $gd-font-primary;
     &.disabled {
         cursor: pointer;
         pointer-events: none;
@@ -10,6 +13,186 @@
 
         .button-subtitle::after {
             content: none;
+        }
+    }
+
+    &.attribute-filter-button {
+        position: relative;
+        height: 41px;
+        max-width: 185px;
+        margin: 7px 11px 7px 0;
+        padding: 5px 10px;
+        font-size: 12px;
+        line-height: 16px;
+        cursor: pointer;
+        user-select: none;
+
+        &::before,
+        &::after {
+            content: "";
+            position: absolute;
+            transition: all $transition-length;
+        }
+
+        &::before {
+            z-index: 1;
+            top: 8px;
+            left: -4px;
+            width: 7px;
+            height: 26px;
+            background: url("../assets/attribute-filter-drag-handle.svg") no-repeat;
+            opacity: 0;
+        }
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            border: 1px solid transparent;
+            border-radius: 3px;
+            transform: translateZ(-1px);
+        }
+
+        &:hover,
+        .drag-preview & {
+            &::after {
+                background: transparentize($gd-color-white, 0.05);
+            }
+        }
+
+        &:hover {
+            &::after {
+                border-color: $border-color;
+            }
+
+            .edit-mode-on .attribute-filter-draggable & {
+                @media #{$large-up} {
+                    // refactor
+                    // stylelint-disable-next-line max-nesting-depth
+                    &::before {
+                        opacity: 1;
+                    }
+                    // refactor
+                    // stylelint-disable-next-line max-nesting-depth
+                    &::after {
+                        border-color: $button-normal-active-border-color;
+                        // refactor
+                        // stylelint-disable-next-line max-line-length
+                        box-shadow: 0 1px 3px 0 $button-shadow-lighter, 0 2px 9px 0 $button-shadow-darker;
+                    }
+                }
+            }
+        }
+
+        &:active,
+        &.is-active {
+            &::after {
+                &,
+                .edit-mode-on .attribute-filter-draggable & {
+                    border-color: $button-normal-hover-border-color;
+                    box-shadow: inset 0 1px 0 0 $button-normal-active-shadow;
+
+                    // refactor
+                    // stylelint-disable-next-line max-line-length
+                    @include gradient-linear(
+                        $button-normal-active-gradient-top,
+                        $button-normal-active-gradient-bottom
+                    );
+                }
+            }
+        }
+
+        &.is-active {
+            .button-title,
+            .button-subtitle {
+                &::after {
+                    content: "\e613";
+                }
+            }
+        }
+
+        .edit-mode-on .attribute-filter-draggable & {
+            @media #{$large-up} {
+                cursor: grab;
+
+                &::after {
+                    left: -10px;
+                }
+
+                &.is-active {
+                    // refactor
+                    // stylelint-disable-next-line max-nesting-depth
+                    &::before {
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+
+        .attribute-filter-draggable.is-dragging & {
+            &,
+            &:hover,
+            &:active,
+            &.is-active {
+                &::after {
+                    border-color: transparent;
+                    box-shadow: none;
+                    background: #eff2f4;
+                }
+            }
+
+            .button-title,
+            .button-subtitle {
+                &::after {
+                    content: "\e612";
+                }
+            }
+        }
+    }
+
+    .button-subtitle {
+        display: inline-flex;
+        overflow: hidden;
+        font-weight: bold;
+        text-overflow: ellipsis;
+        color: $gd-color-dark;
+        max-width: 100%;
+        white-space: nowrap;
+
+        .overlay & {
+            flex: 1 1 auto;
+            max-width: none;
+
+            &::after {
+                position: absolute;
+                top: 50%;
+                right: -20px;
+                font-size: 18px;
+                transform: translateY(-50%);
+            }
+        }
+
+        &::after {
+            content: "\e612";
+            display: inline-block;
+            margin-left: 0.5em;
+            font-family: "Indigo";
+            font-weight: normal;
+            font-size: inherit;
+            vertical-align: top;
+            color: $gd-color-state-blank;
+            transition: $transition-length;
+        }
+
+        &:only-child::after {
+            display: inline-block;
+        }
+
+        .drag-preview &::after {
+            display: none;
         }
     }
 }

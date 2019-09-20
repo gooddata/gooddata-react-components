@@ -2,8 +2,6 @@
 import * as React from "react";
 import cx from "classnames";
 
-import "./DateFilterFormWrapper.scss";
-
 interface IDateFilterFormWrapperProps {
     children: React.ReactNode;
     isMobile: boolean;

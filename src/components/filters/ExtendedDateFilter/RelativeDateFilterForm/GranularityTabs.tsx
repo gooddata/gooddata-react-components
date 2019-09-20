@@ -7,8 +7,6 @@ import { ExtendedDateFilters } from "@gooddata/typings";
 import { TabsWrapper, Tab } from "../Tabs/Tabs";
 import { granularityIntlCodes } from "../constants/i18n";
 
-import "./GranularityTabs.scss";
-
 const granularityOrders: { [G in ExtendedDateFilters.DateFilterGranularity]: number } = {
     "GDC.time.date": 0,
     "GDC.time.week_us": 1,

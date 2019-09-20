@@ -18,7 +18,6 @@ import {
 } from "../Select/VirtualizedSelectMenu";
 import { ISelectItemOption, ISelectItem } from "../Select/types";
 
-import "./DynamicSelect.scss";
 import { findRelativeDateFilterOptionByValue } from "./utils";
 
 export type DynamicSelectItem = ISelectItem<number>;
