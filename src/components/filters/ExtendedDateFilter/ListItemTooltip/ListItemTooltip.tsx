@@ -4,9 +4,11 @@ import Bubble from "@gooddata/goodstrap/lib/Bubble/Bubble";
 import BubbleHoverTrigger from "@gooddata/goodstrap/lib/Bubble/BubbleHoverTrigger";
 import cx from "classnames";
 
-type ListItemTooltipProps = React.HTMLProps<HTMLSpanElement>;
-
-export const ListItemTooltip = ({ children, className, ...restProps }: ListItemTooltipProps) => (
+export const ListItemTooltip: React.FC<React.HTMLProps<HTMLSpanElement>> = ({
+    children,
+    className,
+    ...restProps
+}) => (
     <span className={cx("gd-list-item-tooltip", className)} {...restProps}>
         <BubbleHoverTrigger>
             <span className="icon-circle-question gd-list-item-tooltip-icon" />

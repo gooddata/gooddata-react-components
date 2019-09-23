@@ -2,9 +2,11 @@
 import * as React from "react";
 import cx from "classnames";
 
-type VisibleScrollbarProps = React.HTMLProps<HTMLDivElement>;
-
-export const VisibleScrollbar = ({ className, children, ...restProps }: VisibleScrollbarProps) => (
+export const VisibleScrollbar: React.FC<React.HTMLProps<HTMLDivElement>> = ({
+    className,
+    children,
+    ...restProps
+}) => (
     <div className={cx("gd-visible-scrollbar", className)} {...restProps}>
         {children}
     </div>

@@ -11,13 +11,11 @@ const iconClassNames: { [AD in ArrowDirection]: string } = {
     increment: "icon-chevron-up",
 };
 
-interface IArrowButtonProps {
+export const ArrowButton: React.FC<{
     onClick: () => void;
     arrowDirection: ArrowDirection;
     disabled?: boolean;
-}
-
-export const ArrowButton = (props: IArrowButtonProps) => (
+}> = props => (
     <button
         type="button"
         className={cx(

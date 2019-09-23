@@ -13,14 +13,12 @@ const granularities: ExtendedDateFilters.DateFilterGranularity[] = [
     "GDC.time.year",
 ];
 
-interface IRelativeFormButtonProps {
+const RelativeFormButton: React.FC<{
     from: number;
     to: number;
     selectedGranularity: ExtendedDateFilters.DateFilterGranularity;
-}
-
-const RelativeFormButton = ({ from, to, selectedGranularity }: IRelativeFormButtonProps) => {
-    return IntlDecorator(
+}> = ({ from, to, selectedGranularity }) =>
+    IntlDecorator(
         <DateFilterButtonLocalized
             dateFilterOption={{
                 localIdentifier: "RELATIVE_FORM",
@@ -35,23 +33,14 @@ const RelativeFormButton = ({ from, to, selectedGranularity }: IRelativeFormButt
             isMobile={false}
         />,
     );
-};
 
-interface IRelativePresetButtonProps {
+const RelativePresetButton: React.FC<{
     from: number;
     to: number;
     granularity: ExtendedDateFilters.DateFilterGranularity;
     name?: string;
     excludeCurrentPeriod?: boolean;
-}
-
-const RelativePresetButton = ({
-    from,
-    to,
-    granularity,
-    name,
-    excludeCurrentPeriod = false,
-}: IRelativePresetButtonProps) =>
+}> = ({ from, to, granularity, name, excludeCurrentPeriod = false }) =>
     IntlDecorator(
         <DateFilterButtonLocalized
             dateFilterOption={{
@@ -68,14 +57,12 @@ const RelativePresetButton = ({
         />,
     );
 
-interface IAbsolutePresetButtonProps {
+const AbsolutePresetButton: React.FC<{
     from: ExtendedDateFilters.DateString;
     to: ExtendedDateFilters.DateString;
     name?: string;
-}
-
-const AbsolutePresetButton = ({ from, to, name }: IAbsolutePresetButtonProps) => {
-    return IntlDecorator(
+}> = ({ from, to, name }) =>
+    IntlDecorator(
         <DateFilterButtonLocalized
             dateFilterOption={{
                 localIdentifier: "ABSOLUTE_PRESET",
@@ -89,7 +76,6 @@ const AbsolutePresetButton = ({ from, to, name }: IAbsolutePresetButtonProps) =>
             isMobile={false}
         />,
     );
-};
 
 storiesOf("ExtendedDateFilters/DateFilterButtonLocalized", module)
     .add("allTime", () =>

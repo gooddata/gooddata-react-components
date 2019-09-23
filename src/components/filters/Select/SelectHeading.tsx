@@ -10,7 +10,7 @@ interface ISelectHeading {
     style?: React.CSSProperties;
 }
 
-export const SelectHeading = ({ children, className, ...otherProps }: ISelectHeading) => (
+export const SelectHeading: React.FC<ISelectHeading> = ({ children, className, ...otherProps }) => (
     <div className={cx("gd-select-heading gd-list-item gd-list-item-header", className)} {...otherProps}>
         {children}
     </div>
