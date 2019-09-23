@@ -5,7 +5,7 @@ import { colors2Object, ISeparators, numberFormat } from "@gooddata/numberjs";
 import isNil = require("lodash/isNil");
 import noop = require("lodash/noop");
 import { AFM, Execution } from "@gooddata/typings";
-import { injectIntl, intlShape, InjectedIntlProps } from "react-intl";
+import { injectIntl, InjectedIntlProps } from "react-intl";
 
 import { Execute, IExecuteChildrenProps, IExecuteProps } from "../../execution/Execute";
 import { LoadingComponent, ILoadingProps } from "./LoadingComponent";
@@ -101,10 +101,7 @@ export class KpiWrapped extends React.PureComponent<IKpiProps & InjectedIntlProp
         ErrorComponent: KpiError,
     };
 
-    public static propTypes = {
-        ...KpiPropTypes,
-        intl: intlShape.isRequired,
-    };
+    public static propTypes = KpiPropTypes;
 
     public render() {
         const {
