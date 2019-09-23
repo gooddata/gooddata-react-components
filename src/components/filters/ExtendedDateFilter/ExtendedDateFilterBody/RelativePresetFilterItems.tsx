@@ -16,19 +16,12 @@ const granularityOrder: ExtendedDateFilters.DateFilterGranularity[] = [
     "GDC.time.year",
 ];
 
-interface IRelativePresetFilterItemsProps {
+export const RelativePresetFilterItems: React.FC<{
     filterOption: ExtendedDateFilters.DateFilterRelativeOptionGroup;
     selectedFilterOption: ExtendedDateFilters.DateFilterOption;
     className?: string;
     onSelectedFilterOptionChange: (option: ExtendedDateFilters.DateFilterOption) => void;
-}
-
-export const RelativePresetFilterItems = ({
-    filterOption,
-    selectedFilterOption,
-    onSelectedFilterOptionChange,
-    className,
-}: IRelativePresetFilterItemsProps) => {
+}> = ({ filterOption, selectedFilterOption, onSelectedFilterOptionChange, className }) => {
     const relativePresets = granularityOrder
         .filter(granularity =>
             Boolean(filterOption && filterOption[granularity] && filterOption[granularity].length > 0),

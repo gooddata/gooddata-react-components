@@ -9,13 +9,11 @@ interface IDateFilterTextLocalizedProps {
     excludeCurrentPeriod: boolean;
 }
 
-type DateFilterTextLocalizedComponentProps = IDateFilterTextLocalizedProps & InjectedIntlProps;
-
-const DateFilterTextLocalizedComponent = ({
+const DateFilterTextLocalizedComponent: React.FC<IDateFilterTextLocalizedProps & InjectedIntlProps> = ({
     filter,
     excludeCurrentPeriod,
     intl,
-}: DateFilterTextLocalizedComponentProps) => <>{getDateFilterTitle(filter, excludeCurrentPeriod, intl)}</>;
+}) => <>{getDateFilterTitle(filter, excludeCurrentPeriod, intl)}</>;
 
 export const DateFilterTextLocalized = injectIntl<IDateFilterTextLocalizedProps>(
     DateFilterTextLocalizedComponent,

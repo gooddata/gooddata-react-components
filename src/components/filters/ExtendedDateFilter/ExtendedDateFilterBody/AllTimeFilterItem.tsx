@@ -5,19 +5,12 @@ import { ExtendedDateFilters } from "@gooddata/typings";
 import cx from "classnames";
 import { ListItem } from "../ListItem/ListItem";
 
-interface IAllTimeFilterItemProps {
+export const AllTimeFilterItem: React.FC<{
     filterOption: ExtendedDateFilters.IAllTimeDateFilter;
     selectedFilterOption: ExtendedDateFilters.DateFilterOption;
     className?: string;
     onSelectedFilterOptionChange: (option: ExtendedDateFilters.DateFilterOption) => void;
-}
-
-export const AllTimeFilterItem = ({
-    className,
-    filterOption,
-    selectedFilterOption,
-    onSelectedFilterOptionChange,
-}: IAllTimeFilterItemProps) => (
+}> = ({ className, filterOption, selectedFilterOption, onSelectedFilterOptionChange }) => (
     <ListItem
         isSelected={filterOption.localIdentifier === selectedFilterOption.localIdentifier}
         // tslint:disable-next-line:jsx-no-lambda

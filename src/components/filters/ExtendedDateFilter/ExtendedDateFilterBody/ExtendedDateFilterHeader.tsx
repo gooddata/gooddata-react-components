@@ -3,16 +3,10 @@ import * as React from "react";
 
 import { IExtendedDateFilterBodyState } from "./ExtendedDateFilterBody";
 
-interface IExtendedDateFilterHeaderProps {
+export const ExtendedDateFilterHeader: React.FC<{
     children: any;
     changeRoute: (route: IExtendedDateFilterBodyState["route"]) => void;
-}
-
-export const ExtendedDateFilterHeader = ({
-    children,
-    changeRoute,
-    ...otherProps
-}: IExtendedDateFilterHeaderProps) => {
+}> = ({ children, changeRoute, ...otherProps }) => {
     return (
         <button
             className="gd-extended-date-filter-header s-do-not-close-dropdown-on-click"

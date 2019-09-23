@@ -11,11 +11,9 @@ const intlIdDict: { [key in ExtendedDateFilters.DateFilterGranularity]: string }
     "GDC.time.year": "filters.year.title",
 };
 
-interface IRelativePresetTitleTranslatedProps {
+export const RelativePresetTitleTranslated: React.FC<{
     granularity: ExtendedDateFilters.DateFilterGranularity;
-}
-
-export const RelativePresetTitleTranslated = ({ granularity }: IRelativePresetTitleTranslatedProps) => {
+}> = ({ granularity }) => {
     const intlId = intlIdDict[granularity] || null;
     if (!intlId) {
         return null;

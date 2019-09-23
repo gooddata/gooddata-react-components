@@ -7,12 +7,9 @@ interface IDateFilterFormWrapperProps {
     isMobile: boolean;
 }
 
-export const DateFilterFormWrapper = ({
-    children,
-    isMobile,
-    className,
-    ...restProps
-}: IDateFilterFormWrapperProps & React.HTMLProps<HTMLDivElement>) => (
+export const DateFilterFormWrapper: React.FC<
+    IDateFilterFormWrapperProps & React.HTMLProps<HTMLDivElement>
+> = ({ children, isMobile, className, ...restProps }) => (
     <div
         className={cx(
             className,

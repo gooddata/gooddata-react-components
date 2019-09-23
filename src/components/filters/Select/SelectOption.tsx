@@ -9,13 +9,13 @@ interface ISelectOptionProps {
     children: React.ReactNode;
 }
 
-export const SelectOption = ({
+export const SelectOption: React.FC<ISelectOptionProps> = ({
     isFocused,
     isSelected,
     className,
     children,
     ...restProps
-}: ISelectOptionProps) => (
+}) => (
     <div
         className={cx(
             "gd-list-item",

@@ -11,12 +11,12 @@ export interface IRelativeDateFilterFormProps {
     isMobile: boolean;
 }
 
-export const RelativeDateFilterForm = ({
+export const RelativeDateFilterForm: React.FC<IRelativeDateFilterFormProps> = ({
     selectedFilterOption,
     availableGranularities,
     onSelectedFilterOptionChange,
     isMobile,
-}: IRelativeDateFilterFormProps) => (
+}) => (
     <>
         <GranularityTabs
             availableGranularities={availableGranularities}

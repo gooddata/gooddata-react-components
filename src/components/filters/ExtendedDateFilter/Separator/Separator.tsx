@@ -6,6 +6,6 @@ interface ISeparatorProps {
     className?: string;
 }
 
-export const Separator = ({ className, ...restProps }: ISeparatorProps) => (
+export const Separator: React.FC<ISeparatorProps> = ({ className, ...restProps }) => (
     <hr className={cx("gd-separator-generic", className)} {...restProps} />
 );

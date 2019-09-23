@@ -14,13 +14,13 @@ interface IAbsolutePresetFilterItemsProps {
     onSelectedFilterOptionChange: (option: ExtendedDateFilters.DateFilterOption) => void;
 }
 
-export const AbsolutePresetFilterItems = ({
+export const AbsolutePresetFilterItems: React.FC<IAbsolutePresetFilterItemsProps> = ({
     filterOptions,
     selectedFilterOption,
     onSelectedFilterOptionChange,
     excludeCurrentPeriod,
     className,
-}: IAbsolutePresetFilterItemsProps) => (
+}) => (
     <>
         {filterOptions.map(item => (
             <ListItem
