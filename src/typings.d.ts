@@ -24,17 +24,9 @@ declare module "react-day-picker/moment" {
     export { formatDate, parseDate };
 }
 
-// Mock some React types since we are supporting react@^16.5.2, but we use types for 16.0 due to inability to upgrade it
+// Mock some React types since we are supporting react@^16.5.2, but 16.5 does not have typings. We are using typings 16.4.
 // tslint:disable-next-line:no-namespace
 declare namespace React {
-    type FC<P = {}> = FunctionComponent<P>;
-
-    // tslint:disable-next-line:interface-name
-    interface FunctionComponent<P = {}> {
-        (props: any, context?: any): any;
-        propTypes?: any;
-        contextTypes?: any;
-        defaultProps?: any;
-        displayName?: string;
-    }
+    type FC<P = {}> = SFC<P>;
+    type FunctionComponent<P = {}> = SFC<P>;
 }

@@ -7,7 +7,7 @@ interface IListHeadingProps {
     children: React.ReactNode;
 }
 
-export const ListHeading = ({ children, className, ...otherProps }: IListHeadingProps) => (
+export const ListHeading: React.FC<IListHeadingProps> = ({ children, className, ...otherProps }) => (
     <div className={cx("gd-list-item gd-list-item-header gd-filter-list-heading", className)} {...otherProps}>
         {children}
     </div>

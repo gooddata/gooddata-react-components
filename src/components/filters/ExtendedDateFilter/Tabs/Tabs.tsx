@@ -7,7 +7,7 @@ interface ITabsWrapperProps {
     children: React.ReactNode;
 }
 
-export const TabsWrapper = ({ className, children, ...restProps }: ITabsWrapperProps) => (
+export const TabsWrapper: React.FC<ITabsWrapperProps> = ({ className, children, ...restProps }) => (
     <div className={cx("gd-tabs small is-condensed", className)} {...restProps}>
         {children}
     </div>
@@ -20,7 +20,7 @@ interface ITabProps {
     onClick?: () => void;
 }
 
-export const Tab = ({ selected, className, children, ...restProps }: ITabProps) => (
+export const Tab: React.FC<ITabProps> = ({ selected, className, children, ...restProps }) => (
     <div className={cx(selected && "is-active", "gd-tab", className)} {...restProps}>
         {children}
     </div>

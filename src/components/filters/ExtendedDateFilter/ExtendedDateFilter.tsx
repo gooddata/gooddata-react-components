@@ -40,27 +40,25 @@ export interface IExtendedDateFilterProps {
     errors?: IExtendedDateFilterErrors;
 }
 
-interface IDropDownBodyProps {
+const DropdownBody: React.FC<{
     isMobile?: boolean;
     closeDropdown?: () => void;
     children: (props: { isMobile: boolean; closeDropdown: () => void }) => React.ReactElement<any>;
-}
-
-const DropdownBody = (props: IDropDownBodyProps) => {
+}> = props => {
     return props.children({
         isMobile: props.isMobile,
         closeDropdown: props.closeDropdown,
     });
 };
 
-export const ExtendedDateFilter = ({
+export const ExtendedDateFilter: React.FC<IExtendedDateFilterProps> = ({
     originalSelectedFilterOption,
     originalExcludeCurrentPeriod,
     onDropdownOpenChanged,
     customFilterName,
     disabled,
     ...dropdownBodyProps
-}: IExtendedDateFilterProps) => {
+}) => {
     return (
         <MediaQuery query={MediaQueries.IS_MOBILE_DEVICE}>
             {isMobile => {
