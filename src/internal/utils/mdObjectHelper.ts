@@ -48,7 +48,7 @@ export function hasMeasures(mdObject: VisualizationObject.IVisualizationObjectCo
     return mdObject && getMeasuresFromMdObject(mdObject).length > 0;
 }
 
-function isAllMeasuresOnSingleAxis(
+function areAllMeasuresOnSingleAxis(
     mdObject: VisualizationObject.IVisualizationObjectContent,
     secondaryYAxis: IAxisConfig,
 ): boolean {
@@ -63,7 +63,7 @@ export function isSimpleStackMeasures(
 ): boolean {
     return (
         get(supportedControls, "stackMeasures", false) &&
-        isAllMeasuresOnSingleAxis(mdObject, get(supportedControls, "secondary_yaxis", false)) &&
+        areAllMeasuresOnSingleAxis(mdObject, get(supportedControls, "secondary_yaxis", false)) &&
         !haveManyViewItems(mdObject)
     );
 }
