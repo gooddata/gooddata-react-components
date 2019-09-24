@@ -1,11 +1,20 @@
 // (C) 2019 GoodData Corporation
 @import "~@gooddata/goodstrap/src/core/styles/variables.scss";
 @import "~@gooddata/goodstrap/lib/Button/styles/variables";
+
 $transition-length: 0.2s;
 
 .gd-date-filter-button {
     max-width: none !important;
-    font-family: $gd-font-primary;
+    position: relative;
+    height: 41px;
+    margin: 7px 11px 7px 0;
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 16px;
+    cursor: pointer;
+    user-select: none;
+
     &.disabled {
         cursor: pointer;
         pointer-events: none;
@@ -16,169 +25,164 @@ $transition-length: 0.2s;
         }
     }
 
-    &.attribute-filter-button {
-        position: relative;
-        height: 41px;
-        max-width: 185px;
-        margin: 7px 11px 7px 0;
-        padding: 5px 10px;
-        font-size: 12px;
-        line-height: 16px;
-        cursor: pointer;
-        user-select: none;
+    &::before,
+    &::after {
+        content: "";
+        position: absolute;
+        transition: all $transition-length;
+    }
 
-        &::before,
+    &::before {
+        z-index: 1;
+        top: 8px;
+        left: -4px;
+        width: 7px;
+        height: 26px;
+        background: url("../assets/attribute-filter-drag-handle.svg") no-repeat;
+        opacity: 0;
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        border: 1px solid transparent;
+        border-radius: 3px;
+        transform: translateZ(-1px);
+    }
+
+    &:hover,
+    .drag-preview & {
         &::after {
-            content: "";
-            position: absolute;
-            transition: all $transition-length;
+            background: transparentize($gd-color-white, 0.05);
         }
+    }
 
-        &::before {
-            z-index: 1;
-            top: 8px;
-            left: -4px;
-            width: 7px;
-            height: 26px;
-            background: url("~@gooddata/react-components/styles/assets/attribute-filter-drag-handle.svg")
-                no-repeat;
-            opacity: 0;
-        }
-
+    &:hover {
         &::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            border: 1px solid transparent;
-            border-radius: 3px;
-            transform: translateZ(-1px);
+            border-color: $border-color;
         }
 
-        &:hover,
-        .drag-preview & {
-            &::after {
-                background: transparentize($gd-color-white, 0.05);
-            }
-        }
-
-        &:hover {
-            &::after {
-                border-color: $border-color;
-            }
-
-            .edit-mode-on .attribute-filter-draggable & {
-                @media #{$large-up} {
-                    // refactor
-                    // stylelint-disable-next-line max-nesting-depth
-                    &::before {
-                        opacity: 1;
-                    }
-                    // refactor
-                    // stylelint-disable-next-line max-nesting-depth
-                    &::after {
-                        border-color: $button-normal-active-border-color;
-                        // refactor
-                        // stylelint-disable-next-line max-line-length
-                        box-shadow: 0 1px 3px 0 $button-shadow-lighter, 0 2px 9px 0 $button-shadow-darker;
-                    }
+        .edit-mode-on & {
+            @media #{$large-up} {
+                // refactor
+                // stylelint-disable-next-line max-nesting-depth
+                &::before {
+                    opacity: 1;
                 }
-            }
-        }
-
-        &:active,
-        &.is-active {
-            &::after {
-                &,
-                .edit-mode-on .attribute-filter-draggable & {
-                    border-color: $button-normal-hover-border-color;
-                    box-shadow: inset 0 1px 0 0 $button-normal-active-shadow;
-
+                // refactor
+                // stylelint-disable-next-line max-nesting-depth
+                &::after {
+                    border-color: $button-normal-active-border-color;
                     // refactor
                     // stylelint-disable-next-line max-line-length
-                    @include gradient-linear(
-                        $button-normal-active-gradient-top,
-                        $button-normal-active-gradient-bottom
-                    );
+                    box-shadow: 0 1px 3px 0 $button-shadow-lighter, 0 2px 9px 0 $button-shadow-darker;
                 }
             }
-        }
 
-        &.is-active {
-            .button-title,
-            .button-subtitle {
-                &::after {
-                    content: "\e613";
-                }
+            &::before {
+                z-index: 1;
+                top: 8px;
+                left: -4px;
+                width: 7px;
+                height: 26px;
+                background: url("../assets/attribute-filter-drag-handle.svg") no-repeat;
+                opacity: 0;
             }
         }
+    }
 
-        .edit-mode-on .attribute-filter-draggable & {
-            @media #{$large-up} {
-                cursor: grab;
-
-                &::after {
-                    left: -10px;
-                }
-
-                &.is-active {
-                    // refactor
-                    // stylelint-disable-next-line max-nesting-depth
-                    &::before {
-                        opacity: 1;
-                    }
-                }
-            }
-        }
-
-        .attribute-filter-draggable.is-dragging & {
+    &:active,
+    &.is-active {
+        &::after {
             &,
-            &:hover,
-            &:active,
-            &.is-active {
-                &::after {
-                    border-color: transparent;
-                    box-shadow: none;
-                    background: #eff2f4;
-                }
+            .edit-mode-on & {
+                border-color: $button-normal-hover-border-color;
+                box-shadow: inset 0 1px 0 0 $button-normal-active-shadow;
+
+                // refactor
+                // stylelint-disable-next-line max-line-length
+                @include gradient-linear(
+                    $button-normal-active-gradient-top,
+                    $button-normal-active-gradient-bottom
+                );
+            }
+        }
+    }
+
+    &.is-active {
+        .button-title,
+        .button-subtitle {
+            &::after {
+                content: "\e613";
+            }
+        }
+    }
+
+    .edit-mode-on & {
+        @media #{$large-up} {
+            cursor: grab;
+
+            &::after {
+                left: -10px;
             }
 
-            .button-title,
-            .button-subtitle {
-                &::after {
-                    content: "\e612";
+            &.is-active {
+                // refactor
+                // stylelint-disable-next-line max-nesting-depth
+                &::before {
+                    opacity: 1;
                 }
             }
         }
     }
 
-    .button-subtitle {
-        display: inline-flex;
-        overflow: hidden;
-        font-weight: bold;
-        text-overflow: ellipsis;
-        color: $gd-color-dark;
-        max-width: 100%;
-        white-space: nowrap;
-
-        .overlay & {
-            flex: 1 1 auto;
-            max-width: none;
-
+    .is-dragging & {
+        &,
+        &:hover,
+        &:active,
+        &.is-active {
             &::after {
-                position: absolute;
-                top: 50%;
-                right: -20px;
-                font-size: 18px;
-                transform: translateY(-50%);
+                border-color: transparent;
+                box-shadow: none;
+                background: #eff2f4;
             }
         }
 
+        .button-title,
+        .button-subtitle {
+            &::after {
+                content: "\e612";
+            }
+        }
+    }
+
+    .button-content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+
+        .overlay & {
+            flex-direction: row;
+            align-items: center;
+            height: 100%;
+        }
+    }
+
+    .button-title,
+    .button-subtitle {
+        max-width: 100%;
+        white-space: nowrap;
+
         &::after {
             content: "\e612";
-            display: inline-block;
+            display: none;
             margin-left: 0.5em;
             font-family: "Indigo";
             font-weight: normal;
@@ -196,15 +200,72 @@ $transition-length: 0.2s;
             display: none;
         }
     }
+
+    .button-title {
+        overflow: hidden;
+        color: $gd-color-link;
+
+        .gd-bubble-trigger,
+        .shortened {
+            display: inline-flex;
+        }
+
+        .shortened {
+            max-width: 100%;
+        }
+
+        .overlay & {
+            flex: 0 0 auto;
+            max-width: 100%;
+            margin-right: 5px;
+            color: $gd-color-label;
+
+            &::after {
+                content: ":";
+            }
+        }
+    }
+
+    .button-subtitle {
+        display: inline-flex;
+        overflow: hidden;
+        font-weight: bold;
+        text-overflow: ellipsis;
+        color: $gd-color-dark;
+
+        .overlay & {
+            flex: 1 1 auto;
+            max-width: none;
+
+            &::after {
+                position: absolute;
+                top: 50%;
+                right: -20px;
+                font-size: 18px;
+                transform: translateY(-50%);
+            }
+        }
+
+        &::after {
+            display: inline-block;
+        }
+    }
+
+    &.dropdown-button,
+    .gd-list-item {
+        &.is-unrelated {
+            color: $gd-color-negative;
+        }
+    }
 }
 
 // remove button in mobile
-.gd-mobile-dropdown-overlay .attribute-filter-button-mobile {
+.gd-mobile-dropdown-overlay .gd-date-filter-button-mobile {
     display: none;
 }
 
 // display the duplicate button in mobile content
-.gd-mobile-dropdown-content .attribute-filter-button-mobile {
+.gd-mobile-dropdown-content .gd-date-filter-button-mobile {
     display: block;
     width: auto;
     margin: 0;
