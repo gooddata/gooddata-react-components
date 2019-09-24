@@ -1,7 +1,6 @@
 // (C) 2007-2019 GoodData Corporation
 import { AFM, Execution, VisualizationObject } from "@gooddata/typings";
 import {
-    BodyScrollEvent,
     ColDef,
     ColumnResizedEvent,
     GridApi,
@@ -429,6 +428,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     private startWatchingTableRendered = () => {
         const missingContainerRef = !this.containerRef; // table having no data will be unmounted, it causes ref null
         const isTableVisible = !this.isTableHidden(); // table has data and takes place of Loading icon
+
         if (missingContainerRef || isTableVisible) {
             this.stopWatchingTableRendered();
         }
@@ -462,7 +462,14 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     };
 
     private onModelUpdated = () => {
-        this.updateStickyRow();
+        updateStickyRowPosition(this.getGridApi());
+
+        this.lastScrollPosition = {
+            top: 0,
+            left: 0,
+        };
+
+        this.updateStickyRowContent(ApiWrapper.getViewportScroll(this.getGridApi()));
     };
 
     private cellClicked = (cellEvent: IGridCellEvent) => {
@@ -573,12 +580,8 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         this.updateGrouping();
     };
 
-    private onBodyScroll = (event: BodyScrollEvent) => {
-        const scrollPosition: IScrollPosition = {
-            top: Math.max(event.top, 0),
-            left: event.left,
-        };
-        this.updateStickyRowContent(scrollPosition);
+    private onBodyScroll = () => {
+        this.updateStickyRowContent(ApiWrapper.getViewportScroll(this.gridApi));
     };
 
     private preventHeaderResizerEvents = (event: Event) => {
@@ -808,20 +811,6 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     private isStickyRowAvailable(): boolean {
         const gridApi = this.getGridApi();
         return this.props.groupRows && gridApi && stickyRowExists(gridApi);
-    }
-
-    private updateStickyRow(): void {
-        if (this.isStickyRowAvailable()) {
-            updateStickyRowPosition(this.getGridApi());
-
-            const scrollPosition: IScrollPosition = { ...this.lastScrollPosition };
-            this.lastScrollPosition = {
-                top: 0,
-                left: 0,
-            };
-
-            this.updateStickyRowContent(scrollPosition);
-        }
     }
 
     private updateStickyRowContent(scrollPosition: IScrollPosition): void {

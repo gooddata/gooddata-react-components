@@ -1,13 +1,28 @@
 // (C) 2007-2019 GoodData Corporation
 import { GridApi } from "ag-grid-community";
+import { IScrollPosition } from "./stickyRowHandler";
 
 function getHeaderHeight(gridApi: GridApi): number {
     return (gridApi as any).headerRootComp.eHeaderContainer.clientHeight;
 }
 
+function findRealColumnIndex(cells: any, attributeId: string) {
+    return Object.keys(cells).find((index: string) => {
+        return index.slice(0, attributeId.length) === attributeId && cells[index] !== null;
+    });
+}
+
+function getCellElementWrapper(row: any, attributeId: string) {
+    if (!row) {
+        return null;
+    }
+    const columnIndex = findRealColumnIndex(row.cellComps, attributeId);
+    return row.cellComps[columnIndex] ? row.cellComps[columnIndex].eGui : null;
+}
+
 function getCellElement(gridApi: GridApi, attributeId: string, rowIndex: number): HTMLElement | null {
     const rowComp = (gridApi as any).rowRenderer.rowCompsByIndex[rowIndex];
-    return rowComp && rowComp.cellComps[attributeId] ? rowComp.cellComps[attributeId].eGui : null;
+    return getCellElementWrapper(rowComp, attributeId);
 }
 
 function addCellClass(gridApi: GridApi, attributeId: string, rowIndex: number, className: string) {
@@ -61,15 +76,7 @@ function setPinnedTopRowStyle(gridApi: GridApi, propertyName: string, propertyVa
 
 function getPinnedTopRowCellElementWrapper(gridApi: GridApi, attributeId: string): HTMLElement | null {
     const pinnedTopRow = getPinnedTopRow(gridApi);
-    if (!pinnedTopRow) {
-        return null;
-    }
-
-    const columnIndex = Object.keys(pinnedTopRow.cellComps).find((index: string) => {
-        return index.slice(0, attributeId.length) === attributeId && pinnedTopRow.cellComps[index] !== null;
-    });
-
-    return pinnedTopRow.cellComps[columnIndex] ? pinnedTopRow.cellComps[columnIndex].eGui : null;
+    return getCellElementWrapper(pinnedTopRow, attributeId);
 }
 
 function getPinnedTopRowCellElement(gridApi: GridApi, attributeId: string): HTMLElement | null {
@@ -99,6 +106,13 @@ function setPinnedTopRowCellText(gridApi: GridApi, attributeId: string, text: st
     }
 }
 
+function getViewportScroll(gridApi: GridApi): IScrollPosition {
+    return {
+        top: (gridApi as any).rowRenderer.rowContainers.body.eViewport.scrollTop,
+        left: (gridApi as any).rowRenderer.rowContainers.body.eWrapper.children[0].scrollLeft,
+    };
+}
+
 export default {
     getHeaderHeight,
     // cell element
@@ -117,4 +131,6 @@ export default {
     removePinnedTopRowCellClass,
     setPinnedTopRowCellText,
     getPaginationBottomRowIndex,
+    // scroll
+    getViewportScroll,
 };
