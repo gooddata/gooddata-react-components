@@ -21,9 +21,8 @@ export const DateFilterButton: React.FC<IDateFilterButtonProps> = ({
             className={cx(
                 "s-date-filter-button",
                 "gd-date-filter-button",
-                "attribute-filter-button",
                 "dropdown-button",
-                isMobile && "attribute-filter-button-mobile",
+                isMobile && "gd-date-filter-button-mobile",
                 isOpen && "is-active",
                 disabled && "disabled",
             )}
