@@ -13,6 +13,7 @@ import { immutableSet } from "../../src/components/visualizations/utils/common";
 import "../../styles/scss/charts.scss";
 import { GERMAN_NUMBER_FORMAT } from "../data/numberFormat";
 import { VisualizationTypes } from "../../src";
+import { withAxisNamePositionConfig, withAxisNameVisibilityConfig } from "../hoc/withAxisName";
 
 export interface IDynamicVisualizationState {
     chartType: string;
@@ -506,4 +507,47 @@ storiesOf("Internal/Visualization", module)
                 800,
             ),
         );
-    });
+    })
+
+    .add("with axis name position", () =>
+        screenshotWrap(
+            wrap(
+                withAxisNamePositionConfig(
+                    <Visualization
+                        {...fixtures.comboWithTwoMeasuresAndViewByAttribute}
+                        config={{
+                            type: VisualizationTypes.COMBO,
+                            mdObject: fixtures.comboWithTwoMeasuresAndViewByAttributeMdObject,
+                            secondary_yaxis: {
+                                measures: ["wonMetric"],
+                            },
+                        }}
+                        onDataTooLarge={noop}
+                    />,
+                ),
+                "100%",
+                "820px",
+            ),
+        ),
+    )
+    .add("with axis name visibility", () =>
+        screenshotWrap(
+            wrap(
+                withAxisNameVisibilityConfig(
+                    <Visualization
+                        {...fixtures.comboWithTwoMeasuresAndViewByAttribute}
+                        config={{
+                            type: VisualizationTypes.COMBO,
+                            mdObject: fixtures.comboWithTwoMeasuresAndViewByAttributeMdObject,
+                            secondary_yaxis: {
+                                measures: ["wonMetric"],
+                            },
+                        }}
+                        onDataTooLarge={noop}
+                    />,
+                ),
+                "100%",
+                "820px",
+            ),
+        ),
+    );

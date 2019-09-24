@@ -30,6 +30,7 @@ import {
     isEmptyObject,
     getReferencePointWithSupportedProperties,
     getSupportedProperties,
+    getHighchartsAxisNameConfiguration,
 } from "../../../utils/propertiesHelper";
 import { DEFAULT_BASE_CHART_UICONFIG, MAX_CATEGORIES_COUNT, UICONFIG } from "../../../constants/uiConfig";
 import { BASE_CHART_SUPPORTED_PROPERTIES } from "../../../constants/supportedProperties";
@@ -439,7 +440,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
     }
 
     private getSupportedControls(mdObject: VisualizationObject.IVisualizationObjectContent) {
-        const supportedControls = cloneDeep(get(this.visualizationProperties, "controls", {}));
+        let supportedControls = cloneDeep(get(this.visualizationProperties, "controls", {}));
         const defaultControls = getSupportedPropertiesControls(
             this.defaultControlsProperties,
             this.supportedPropertiesList,
@@ -456,6 +457,8 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
         if (this.environment === "dashboards") {
             set(supportedControls, "legend.responsive", true);
         }
+
+        supportedControls = getHighchartsAxisNameConfiguration(supportedControls);
 
         return {
             ...defaultControls,

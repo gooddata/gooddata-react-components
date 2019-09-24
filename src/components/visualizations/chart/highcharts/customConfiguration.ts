@@ -54,6 +54,7 @@ import getOptionalStackingConfiguration from "./getOptionalStackingConfiguration
 import { IDrillConfig } from "../../../../interfaces/DrillEvents";
 import { getZeroAlignConfiguration } from "./getZeroAlignConfiguration";
 import { canComboChartBeStackedInPercent } from "../chartOptions/comboChartOptions";
+import { getAxisNameConfiguration } from "./getAxisNameConfiguration";
 
 const { stripColors, numberFormat }: any = numberJS;
 
@@ -1140,6 +1141,7 @@ export function getCustomizedConfiguration(
         // and should be after 'getStackingConfiguration' to get stackLabels config
         getOptionalStackingConfiguration,
         getZeroAlignConfiguration,
+        getAxisNameConfiguration,
     ];
 
     const commonData = configurators.reduce((config: any, configurator: any) => {
