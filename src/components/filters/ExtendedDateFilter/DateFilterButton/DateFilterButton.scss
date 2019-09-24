@@ -40,7 +40,8 @@ $transition-length: 0.2s;
             left: -4px;
             width: 7px;
             height: 26px;
-            background: url("../assets/attribute-filter-drag-handle.svg") no-repeat;
+            background: url("~@gooddata/react-components/styles/assets/attribute-filter-drag-handle.svg")
+                no-repeat;
             opacity: 0;
         }
 
