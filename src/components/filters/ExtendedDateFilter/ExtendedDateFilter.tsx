@@ -8,6 +8,7 @@ import { IExtendedDateFilterErrors } from "../../../interfaces/ExtendedDateFilte
 import { DateFilterButtonLocalized } from "./DateFilterButtonLocalized/DateFilterButtonLocalized";
 import { ExtendedDateFilterBody } from "./ExtendedDateFilterBody/ExtendedDateFilterBody";
 import { applyExcludeCurrentPeriod } from "../../../helpers/ExtendedDateFilter";
+import { IntlWrapper } from "../../core/base/IntlWrapper";
 
 export interface IExtendedDateFilterProps {
     filterOptions: ExtendedDateFilters.IDateFilterOptionsByType;
@@ -29,6 +30,7 @@ export interface IExtendedDateFilterProps {
     availableGranularities: ExtendedDateFilters.DateFilterGranularity[];
 
     isEditMode: boolean;
+    locale?: string;
 
     customFilterName?: string;
     disabled?: boolean;
@@ -57,60 +59,63 @@ export const ExtendedDateFilter: React.FC<IExtendedDateFilterProps> = ({
     onDropdownOpenChanged,
     customFilterName,
     disabled,
+    locale,
     ...dropdownBodyProps
 }) => {
     return (
-        <MediaQuery query={MediaQueries.IS_MOBILE_DEVICE}>
-            {isMobile => {
-                const dateFilterButton = (
-                    <DateFilterButtonLocalized
-                        isMobile={isMobile}
-                        dateFilterOption={applyExcludeCurrentPeriod(
-                            originalSelectedFilterOption,
-                            originalExcludeCurrentPeriod,
-                        )}
-                        excludeCurrentPeriod={originalExcludeCurrentPeriod}
-                        customFilterName={customFilterName}
-                    />
-                );
-                return (
-                    <Dropdown
-                        closeOnParentScroll={true}
-                        closeOnMouseDrag={true}
-                        closeOnOutsideClick={true}
-                        enableEventPropagation={true}
-                        alignPoints={[
-                            { align: "bl tl" },
-                            { align: "tr tl" },
-                            { align: "tr tl", offset: { x: 0, y: -100 } },
-                            { align: "tr tl", offset: { x: 0, y: -50 } },
-                        ]}
-                        onOpenStateChanged={onDropdownOpenChanged}
-                        disabled={disabled}
-                        // Dropdown component passes "isOpen" prop automatically to the component in "button" prop
-                        // In Mobile case this is also rendered in the open dropdown
-                        button={dateFilterButton}
-                        ignoreClicksOn={[
-                            ".s-do-not-close-dropdown-on-click",
-                            ".DayPicker-Day", // absolute range picker calendar items
-                        ]}
-                        body={
-                            // Dropdown component uses React.Children.map and adds special props to this component
-                            // https://stackoverflow.com/questions/32370994/how-to-pass-props-to-this-props-children
-                            <DropdownBody>
-                                {({ closeDropdown }) => (
-                                    <ExtendedDateFilterBody
-                                        {...dropdownBodyProps}
-                                        isMobile={isMobile}
-                                        closeDropdown={closeDropdown}
-                                        dateFilterButton={dateFilterButton}
-                                    />
-                                )}
-                            </DropdownBody>
-                        }
-                    />
-                );
-            }}
-        </MediaQuery>
+        <IntlWrapper locale={locale || "en-US"}>
+            <MediaQuery query={MediaQueries.IS_MOBILE_DEVICE}>
+                {isMobile => {
+                    const dateFilterButton = (
+                        <DateFilterButtonLocalized
+                            isMobile={isMobile}
+                            dateFilterOption={applyExcludeCurrentPeriod(
+                                originalSelectedFilterOption,
+                                originalExcludeCurrentPeriod,
+                            )}
+                            excludeCurrentPeriod={originalExcludeCurrentPeriod}
+                            customFilterName={customFilterName}
+                        />
+                    );
+                    return (
+                        <Dropdown
+                            closeOnParentScroll={true}
+                            closeOnMouseDrag={true}
+                            closeOnOutsideClick={true}
+                            enableEventPropagation={true}
+                            alignPoints={[
+                                { align: "bl tl" },
+                                { align: "tr tl" },
+                                { align: "tr tl", offset: { x: 0, y: -100 } },
+                                { align: "tr tl", offset: { x: 0, y: -50 } },
+                            ]}
+                            onOpenStateChanged={onDropdownOpenChanged}
+                            disabled={disabled}
+                            // Dropdown component passes "isOpen" prop automatically to the component in "button" prop
+                            // In Mobile case this is also rendered in the open dropdown
+                            button={dateFilterButton}
+                            ignoreClicksOn={[
+                                ".s-do-not-close-dropdown-on-click",
+                                ".DayPicker-Day", // absolute range picker calendar items
+                            ]}
+                            body={
+                                // Dropdown component uses React.Children.map and adds special props to this component
+                                // https://stackoverflow.com/questions/32370994/how-to-pass-props-to-this-props-children
+                                <DropdownBody>
+                                    {({ closeDropdown }) => (
+                                        <ExtendedDateFilterBody
+                                            {...dropdownBodyProps}
+                                            isMobile={isMobile}
+                                            closeDropdown={closeDropdown}
+                                            dateFilterButton={dateFilterButton}
+                                        />
+                                    )}
+                                </DropdownBody>
+                            }
+                        />
+                    );
+                }}
+            </MediaQuery>
+        </IntlWrapper>
     );
 };
