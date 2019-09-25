@@ -344,6 +344,18 @@
         "comment": "Menu option that adds row aggregation (sub-total) for specific attribute to the table. Example: 'Sum within Attribute A'. Don't translate placeholder '{attributeName}'.",
         "limit": 50
     },
+
+    "apply": {
+        "value": "Apply",
+        "comment": "",
+        "limit": 0
+    },
+    "cancel": {
+        "value": "Cancel",
+        "comment": "",
+        "limit": 0
+    },
+
     "dateFilterDropdown.title": {
         "value": "Date range",
         "comment": "",
@@ -359,6 +371,7 @@
         "comment": "Do not translate non-breakable space '&nbsp;'",
         "limit": 0
     },
+
     "filters.thisDay.title": {
         "value": "Today",
         "comment": "",
@@ -484,6 +497,7 @@
         "comment": "In '{n, plural, one {NEXT # YEAR} other {NEXT # YEARS}}' translate only uppercase words. Do not translate the numeric placeholder '#'. Add missing plural forms if your language has any: ask if you need any help.",
         "limit": 0
     },
+
     "filters.interval.days.past": {
         "value": "From {from} to {to} {to, plural, one {day} other {days}} ago",
         "comment": "Example: 'From 5 to 3 days ago'. Don't translate placeholders '{from}', '{to}'. In '{to, plural, one {DAY} other {DAYS}}' translate only uppercase words.",
@@ -559,6 +573,7 @@
         "comment": "Example: 'From 5 years ago to 3 years ahead'. Don't translate placeholders '{from}', '{to}'. In '{to, plural, one {YEAR} other {YEARS}}' translate only uppercase words.",
         "limit": 0
     },
+
     "filters.granularity.days": {
         "value": "Days",
         "comment": "",
@@ -584,11 +599,13 @@
         "comment": "",
         "limit": 0
     },
+
     "filters.allTime.title": {
         "value": "All time",
         "comment": "",
         "limit": 0
     },
+
     "filters.from": {
         "value": "from",
         "comment": "Displayed as placeholder in static period inputs where user enters date",
@@ -599,6 +616,7 @@
         "comment": "Displayed as placeholder in static period inputs where user enters date",
         "limit": 0
     },
+
     "filters.floatingRange": {
         "value": "Floating range",
         "comment": "",
@@ -692,6 +710,48 @@
     "filters.floatingRange.option.year.offset.future": {
         "value": "{n, plural, =1 {next year} other {# years ahead}}",
         "comment": "In '{n, plural, =1 {NEXT YEAR} other {# YEARS AHEAD}}' translate only uppercase words. Do not translate the numeric placeholder '#'. Add missing plural forms if your language has any: ask if you need any help.",
+        "limit": 0
+    },
+
+    "filters.allTime.title": {
+        "value": "All time",
+        "comment": "",
+        "limit": 0
+    },
+    "filters.day.title": {
+        "value": "DAY",
+        "comment": "",
+        "limit": 0
+    },
+    "filters.week.title": {
+        "value": "WEEK",
+        "comment": "",
+        "limit": 0
+    },
+    "filters.month.title": {
+        "value": "MONTH",
+        "comment": "",
+        "limit": 0
+    },
+    "filters.quarter.title": {
+        "value": "QUARTER",
+        "comment": "",
+        "limit": 0
+    },
+    "filters.year.title": {
+        "value": "YEAR",
+        "comment": "",
+        "limit": 0
+    },
+    "filters.allTime.excludeCurrentPeriod": {
+        "value": "Exclude open period",
+        "comment": "",
+        "limit": 0
+    },
+
+    "filters.excludeCurrentPeriod.unavailable": {
+        "value": "Not available for the selected date range",
+        "comment": "",
         "limit": 0
     }
 }
