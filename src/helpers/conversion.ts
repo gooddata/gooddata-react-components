@@ -26,9 +26,5 @@ export function convertBucketsToAFM(
     filters?: VisualizationObject.VisualizationObjectFilter[],
 ): AFM.IAfm {
     const { afm } = DataLayer.toAfmResultSpec(convertBucketsToMdObject(buckets, filters));
-    if (filters) {
-        afm.filters = filters as AFM.FilterItem[];
-    }
-
     return afm;
 }

@@ -18,6 +18,14 @@ const NegativeTextFilter: VisualizationInput.IFilter = {
     },
 };
 
+const SelectAllFilter: VisualizationInput.IFilter = {
+    negativeAttributeFilter: {
+        displayForm: { identifier: "foo" },
+        notIn: [],
+        textFilter: true,
+    },
+};
+
 /**
  * Tests here solidify the contract of text filters:
  *
@@ -93,6 +101,12 @@ describe("convertBucketsToAFM", () => {
                     },
                 },
             ],
+        });
+    });
+
+    it("should ignore (remove) negative filter with empty selection (Select All)", () => {
+        expect(convertBucketsToAFM([], [SelectAllFilter, PositiveTextFilter])).toEqual({
+            filters: [PositiveTextFilter],
         });
     });
 });
