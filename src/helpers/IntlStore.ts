@@ -37,7 +37,6 @@ const messagesMap = {
 
 const intlStore = {};
 
-// TODO ONE-4000 This function should be called maybe also during normal lod, not just stories. See KD for details.
 export function addLocaleDataToReactIntl() {
     addLocaleData([
         ...deLocaleData,

@@ -4,8 +4,6 @@ import { ExtendedDateFilters } from "@gooddata/typings";
 
 import { platformDateFormat } from "./Platform";
 
-// TODO ONE-4000 This is a part of KD/app/constants/ExtendedDateFilterItems.ts file
-
 export const defaultExtendedDateFilterOptions: ExtendedDateFilters.IDateFilterOptionsByType = {
     allTime: {
         localIdentifier: "ALL_TIME",
