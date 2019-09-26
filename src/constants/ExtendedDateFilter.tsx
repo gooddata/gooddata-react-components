@@ -147,3 +147,25 @@ export const defaultExtendedDateFilterOptions: ExtendedDateFilters.IDateFilterOp
         ],
     },
 };
+
+export const defaultDateFilterProjectConfig: ExtendedDateFilters.IDateFilterConfigContent = {
+    selectedOption: "THIS_MONTH",
+    allTime: defaultExtendedDateFilterOptions.allTime,
+    absoluteForm: defaultExtendedDateFilterOptions.absoluteForm,
+    relativeForm: {
+        // month has to be the first as it should be the default selected option
+        granularities: ["GDC.time.month", "GDC.time.date", "GDC.time.quarter", "GDC.time.year"],
+        localIdentifier: defaultExtendedDateFilterOptions.relativeForm.localIdentifier,
+        name: defaultExtendedDateFilterOptions.relativeForm.name,
+        visible: true,
+    },
+    relativePresets: Object.keys(defaultExtendedDateFilterOptions.relativePreset).reduce(
+        (presets: ExtendedDateFilters.IDateFilterRelativePreset[], granularityKey: string) => {
+            const granularityPresets: ExtendedDateFilters.IDateFilterRelativePreset[] =
+                defaultExtendedDateFilterOptions.relativePreset[granularityKey];
+            return [...presets, ...granularityPresets];
+        },
+        [],
+    ),
+    absolutePresets: [],
+};

@@ -87,7 +87,10 @@ import {
 import * as Translators from "./helpers/ExtendedDateFilterService/Translations/Translators";
 import { granularityIntlCodes } from "./components/filters/ExtendedDateFilter/constants/i18n";
 import { Separator } from "./components/filters/ExtendedDateFilter/Separator/Separator";
-import { defaultExtendedDateFilterOptions } from "./constants/ExtendedDateFilter";
+import {
+    defaultExtendedDateFilterOptions,
+    defaultDateFilterProjectConfig,
+} from "./constants/ExtendedDateFilter";
 
 /**
  * CoreComponents
@@ -188,4 +191,5 @@ export {
     Separator,
     applyExcludeCurrentPeriod,
     defaultExtendedDateFilterOptions,
+    defaultDateFilterProjectConfig,
 };
