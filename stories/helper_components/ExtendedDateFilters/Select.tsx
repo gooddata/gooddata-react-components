@@ -1,8 +1,11 @@
 // (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
-import { Select } from "../../../src/components/filters/Select/Select";
-import { ISelectItem, ISelectItemOption } from "../../../src/components/filters/Select/types";
+import { Select } from "../../../src/components/filters/ExtendedDateFilter/Select/Select";
+import {
+    ISelectItem,
+    ISelectItemOption,
+} from "../../../src/components/filters/ExtendedDateFilter/Select/types";
 
 storiesOf("Helper components/ExtendedDateFilter/Select", module).add("renders", () => {
     const items: Array<ISelectItem<string>> = [

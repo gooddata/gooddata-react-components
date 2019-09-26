@@ -2,11 +2,11 @@
 import * as React from "react";
 import cx from "classnames";
 import { ExtendedDateFilters } from "@gooddata/typings";
-import { DynamicSelect, IDynamicSelectProps } from "../../DynamicSelect/DynamicSelect";
-import { getRelativeDateFilterItems } from "../../DynamicSelect/utils";
+import { DynamicSelect, IDynamicSelectProps } from "../DynamicSelect/DynamicSelect";
+import { getRelativeDateFilterItems } from "../DynamicSelect/utils";
 import { injectIntl, InjectedIntlProps } from "react-intl";
 
-import { defaultVisibleItemsRange } from "../../Select/VirtualizedSelectMenu";
+import { defaultVisibleItemsRange } from "../Select/VirtualizedSelectMenu";
 
 interface IRelativeRangePickerProps {
     selectedFilterOption: ExtendedDateFilters.IRelativeDateFilterForm;

@@ -1,7 +1,7 @@
 // (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import cx from "classnames";
-import { Separator } from "../ExtendedDateFilter/Separator/Separator"; // TODO ONE-4000 We should not traverse like that
+import { Separator } from "../Separator/Separator";
 
 interface ISelectSeparatorProps {
     className?: string;
