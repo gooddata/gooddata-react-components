@@ -1,10 +1,8 @@
 // (C) 2007-2019 GoodData Corporation
 
-// TODO ONE-4000 This was moved from KD. It should be probably somewhere else than in filters directory.
-
 import * as React from "react";
 import * as PropTypes from "prop-types";
-// TODO: remove downshift from gdc-dahsbords when moved to gdc-bootstrap
+// TODO ONE-4000 remove downshift from gdc-dahsbords when moved to gdc-bootstrap
 import Downshift, { ControllerStateAndHelpers } from "downshift";
 import cx from "classnames";
 import noop = require("lodash/noop");

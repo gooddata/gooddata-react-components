@@ -3,8 +3,8 @@ import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 import { injectIntl } from "react-intl";
-import { DynamicSelect } from "../../../src/components/filters/DynamicSelect/DynamicSelect";
-import { getRelativeDateFilterItems } from "../../../src/components/filters/DynamicSelect/utils";
+import { DynamicSelect } from "../../../src/components/filters/ExtendedDateFilter/DynamicSelect/DynamicSelect";
+import { getRelativeDateFilterItems } from "../../../src/components/filters/ExtendedDateFilter/DynamicSelect/utils";
 import { IntlDecorator } from "../../utils/IntlDecorators";
 
 const DynamicSelectWithIntl = injectIntl(({ intl, ...otherProps }) => (

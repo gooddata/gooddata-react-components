@@ -6,9 +6,9 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
 @import "~@gooddata/goodstrap/lib/core/styles/avenir";
 @import "~@gooddata/goodstrap/lib/core/styles/Tabs";
 @import "~@gooddata/goodstrap/lib/Form/styles/Form";
-@import "../../src/components/filters/DynamicSelect/DynamicSelect.scss";
-@import "../../src/components/filters/Select/SelectMenu.scss";
-@import "../../src/components/filters/Select/SelectOption.scss";
+@import "../../src/components/filters/ExtendedDateFilter/DynamicSelect/DynamicSelect.scss";
+@import "../../src/components/filters/ExtendedDateFilter/Select/SelectMenu.scss";
+@import "../../src/components/filters/ExtendedDateFilter/Select/SelectOption.scss";
 
 @import "../../src/components/filters/ExtendedDateFilter/DateFilterButton/DateFilterButton.scss";
 @import "../../src/components/filters/ExtendedDateFilter/DateFilterFormWrapper/DateFilterFormWrapper.scss";

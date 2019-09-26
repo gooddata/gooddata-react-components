@@ -1,7 +1,5 @@
 // (C) 2019 GoodData Corporation
 
-// TODO ONE-4000 This was moved from KD. It should be probably somewhere else than in filters directory.
-
 // tslint:disable member-ordering
 
 import * as React from "react";

@@ -1,8 +1,8 @@
 // (C) 2019 GoodData Corporation
 import { range } from "lodash";
 import { ExtendedDateFilters } from "@gooddata/typings";
-import { IMessageTranslator } from "../../../helpers/ExtendedDateFilterService/Translations/Translators";
-import { granularityIntlCodes } from "../ExtendedDateFilter/constants/i18n";
+import { IMessageTranslator } from "../../../../helpers/ExtendedDateFilterService/Translations/Translators";
+import { granularityIntlCodes } from "../constants/i18n";
 import { DynamicSelectItem, DynamicSelectOption } from "./DynamicSelect";
 
 import { getSelectableItems } from "../Select/utils";

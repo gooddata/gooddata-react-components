@@ -9,7 +9,7 @@ import { SelectHeading } from "../../Select/SelectHeading";
 import { SelectOption } from "../../Select/SelectOption";
 import { SelectSeparator } from "../../Select/SelectSeparator";
 import { getRelativeDateFilterItems, DAY, WEEK_US, MONTH, QUARTER, YEAR } from "../utils";
-import { IMessageTranslator } from "../../../../../src/helpers/ExtendedDateFilterService/Translations/Translators";
+import { IMessageTranslator } from "../../../../../helpers/ExtendedDateFilterService/Translations/Translators";
 
 const optionTranslator = (
     lastOneString: string,
