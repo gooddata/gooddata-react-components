@@ -3,7 +3,7 @@ import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { NumericInput } from "../../../src/components/filters/ExtendedDateFilter/NumericInput/NumericInput";
 
-storiesOf("ExtendedDateFilters/NumericInput", module).add("renders", () => {
+storiesOf("Helper components/ExtendedDateFilter/NumericInput", module).add("renders", () => {
     class Container extends React.Component {
         public state = {
             value: "" as number | "",

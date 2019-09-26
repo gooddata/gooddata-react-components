@@ -8,7 +8,7 @@ import {
     IDateRange,
 } from "../../../src/components/filters/ExtendedDateFilter/DateRangePicker/DateRangePicker";
 
-storiesOf("ExtendedDateFilters/DateRangePicker", module)
+storiesOf("Helper components/ExtendedDateFilter/DateRangePicker", module)
     .add("renders", () =>
         IntlDecorator(
             <DateRangePicker

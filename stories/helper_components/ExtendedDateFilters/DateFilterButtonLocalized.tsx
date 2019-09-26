@@ -77,7 +77,7 @@ const AbsolutePresetButton: React.FC<{
         />,
     );
 
-storiesOf("ExtendedDateFilters/DateFilterButtonLocalized", module)
+storiesOf("Helper components/ExtendedDateFilter/DateFilterButtonLocalized", module)
     .add("allTime", () =>
         IntlDecorator(
             <DateFilterButtonLocalized

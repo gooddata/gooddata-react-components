@@ -3,7 +3,7 @@ import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { ListItem } from "../../../src/components/filters/ExtendedDateFilter/ListItem/ListItem";
 
-storiesOf("ExtendedDateFilters/ListItem", module).add("renders", () => {
+storiesOf("Helper components/ExtendedDateFilter/ListItem", module).add("renders", () => {
     return (
         <div style={{ padding: "2em 1em" }}>
             <ListItem>Sample List Item</ListItem>

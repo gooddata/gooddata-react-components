@@ -7,7 +7,7 @@ import { IntlDecorator } from "../../utils/IntlDecorators";
 import { ExtendedDateFilter } from "../../../src/components/filters/ExtendedDateFilter/ExtendedDateFilter";
 import { defaultExtendedDateFilterOptions } from "../../../src/constants/ExtendedDateFilter";
 
-storiesOf("ExtendedDateFilters/ExtendedDateFilter", module).add("renders", () => {
+storiesOf("Helper components/ExtendedDateFilter/ExtendedDateFilter", module).add("renders", () => {
     interface IExtendedDateFilterState {
         selectedFilterOption: ExtendedDateFilters.DateFilterOption;
         excludeCurrentPeriod: boolean;

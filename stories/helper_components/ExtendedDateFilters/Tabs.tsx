@@ -3,7 +3,7 @@ import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { TabsWrapper, Tab } from "../../../src/components/filters/ExtendedDateFilter/Tabs/Tabs";
 
-storiesOf("ExtendedDateFilters/Tabs", module).add("renders", () => {
+storiesOf("Helper components/ExtendedDateFilter/Tabs", module).add("renders", () => {
     return (
         <div style={{ padding: "1em 2em" }}>
             <TabsWrapper>
