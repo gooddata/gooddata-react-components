@@ -718,8 +718,18 @@
         "comment": "",
         "limit": 0
     },
+    "filters.allTime.excludeCurrentPeriod": {
+        "value": "Exclude open period",
+        "comment": "",
+        "limit": 0
+    },
     "filters.day.title": {
         "value": "DAY",
+        "comment": "",
+        "limit": 0
+    },
+    "filters.day.excludeCurrentPeriod": {
+        "value": "Exclude today",
         "comment": "",
         "limit": 0
     },
@@ -728,8 +738,18 @@
         "comment": "",
         "limit": 0
     },
+    "filters.week.excludeCurrentPeriod": {
+        "value": "Exclude this week",
+        "comment": "",
+        "limit": 0
+    },
     "filters.month.title": {
         "value": "MONTH",
+        "comment": "",
+        "limit": 0
+    },
+    "filters.month.excludeCurrentPeriod": {
+        "value": "Exclude this month",
         "comment": "",
         "limit": 0
     },
@@ -738,13 +758,18 @@
         "comment": "",
         "limit": 0
     },
+    "filters.quarter.excludeCurrentPeriod": {
+        "value": "Exclude this quarter",
+        "comment": "",
+        "limit": 0
+    },
     "filters.year.title": {
         "value": "YEAR",
         "comment": "",
         "limit": 0
     },
-    "filters.allTime.excludeCurrentPeriod": {
-        "value": "Exclude open period",
+    "filters.year.excludeCurrentPeriod": {
+        "value": "Exclude this year",
         "comment": "",
         "limit": 0
     },
@@ -752,6 +777,17 @@
     "filters.excludeCurrentPeriod.unavailable": {
         "value": "Not available for the selected date range",
         "comment": "",
+        "limit": 0
+    },
+
+    "filters.staticPeriod": {
+        "value": "Static period",
+        "comment": "",
+        "limit": 0
+    },
+    "filters.staticPeriod.incorrectFormat": {
+        "value": "Date is not in {format} format",
+        "comment": "Placeholder '{format}' is used for showing date format. Example 'Date is not in MMMM/YY/DD format'. Don't translate placeholder '{format}'.",
         "limit": 0
     }
 }
