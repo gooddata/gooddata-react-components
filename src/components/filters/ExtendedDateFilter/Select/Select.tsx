@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import * as PropTypes from "prop-types";
-// TODO ONE-4000 remove downshift from gdc-dahsbords when moved to gdc-bootstrap
 import Downshift, { ControllerStateAndHelpers } from "downshift";
 import cx from "classnames";
 import noop = require("lodash/noop");
