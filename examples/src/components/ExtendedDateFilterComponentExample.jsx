@@ -1,82 +1,209 @@
 // (C) 2007-2019 GoodData Corporation
 import React, { Component } from "react";
+import moment from "moment";
 import { ExtendedDateFilter } from "@gooddata/react-components";
-
-import "@gooddata/react-components/styles/css/main.css";
 import "@gooddata/react-components/styles/css/extendedDateFilter.css";
 
-const noop = () => {};
+const platformDateFormat = "YYYY-MM-DD";
 
-const filterOptions = {
+const defaultExtendedDateFilterOptions = {
     allTime: {
         localIdentifier: "ALL_TIME",
-        name: "",
         type: "allTime",
+        name: "",
         visible: true,
     },
-    absolutePreset: [
-        {
-            from: "2019-01-01",
-            localIdentifier: "YEAR_2019",
-            name: "The year 2019",
-            to: "2019-12-31",
-            type: "absolutePreset",
-            visible: true,
-        },
-    ],
-    relativeForm: {
-        availableGranularities: ["GDC.time.date"],
-        granularity: "GDC.time.date",
-        localIdentifier: "RELATIVE_FORM",
+    absoluteForm: {
+        localIdentifier: "ABSOLUTE_FORM",
+        type: "absoluteForm",
+        from: moment()
+            .subtract(1, "month")
+            .startOf("day")
+            .format(platformDateFormat),
+        to: moment()
+            .startOf("day")
+            .format(platformDateFormat),
         name: "",
-        type: "relativeForm",
         visible: true,
+    },
+    absolutePreset: [],
+    relativeForm: {
+        localIdentifier: "RELATIVE_FORM",
+        type: "relativeForm",
+        granularity: "GDC.time.month",
+        from: undefined,
+        to: undefined,
+        name: "",
+        visible: true,
+        availableGranularities: ["GDC.time.date", "GDC.time.month", "GDC.time.quarter", "GDC.time.year"],
     },
     relativePreset: {
+        "GDC.time.date": [
+            {
+                from: -6,
+                to: 0,
+                granularity: "GDC.time.date",
+                localIdentifier: "LAST_7_DAYS",
+                type: "relativePreset",
+                visible: true,
+                name: "",
+            },
+            {
+                from: -29,
+                to: 0,
+                granularity: "GDC.time.date",
+                localIdentifier: "LAST_30_DAYS",
+                type: "relativePreset",
+                visible: true,
+                name: "",
+            },
+            {
+                from: -89,
+                to: 0,
+                granularity: "GDC.time.date",
+                localIdentifier: "LAST_90_DAYS",
+                type: "relativePreset",
+                visible: true,
+                name: "",
+            },
+        ],
         "GDC.time.month": [
             {
                 from: 0,
+                to: 0,
                 granularity: "GDC.time.month",
                 localIdentifier: "THIS_MONTH",
-                to: 0,
-                name: "",
                 type: "relativePreset",
                 visible: true,
+                name: "",
+            },
+            {
+                from: -1,
+                to: -1,
+                granularity: "GDC.time.month",
+                localIdentifier: "LAST_MONTH",
+                type: "relativePreset",
+                visible: true,
+                name: "",
+            },
+            {
+                from: -11,
+                to: 0,
+                granularity: "GDC.time.month",
+                localIdentifier: "LAST_12_MONTHS",
+                type: "relativePreset",
+                visible: true,
+                name: "",
+            },
+        ],
+        "GDC.time.quarter": [
+            {
+                from: 0,
+                to: 0,
+                granularity: "GDC.time.quarter",
+                localIdentifier: "THIS_QUARTER",
+                type: "relativePreset",
+                visible: true,
+                name: "",
+            },
+            {
+                from: -1,
+                to: -1,
+                granularity: "GDC.time.quarter",
+                localIdentifier: "LAST_QUARTER",
+                type: "relativePreset",
+                visible: true,
+                name: "",
+            },
+            {
+                from: -3,
+                to: 0,
+                granularity: "GDC.time.quarter",
+                localIdentifier: "LAST_4_QUARTERS",
+                type: "relativePreset",
+                visible: true,
+                name: "",
+            },
+        ],
+        "GDC.time.year": [
+            {
+                from: 0,
+                to: 0,
+                granularity: "GDC.time.year",
+                localIdentifier: "THIS_YEAR",
+                type: "relativePreset",
+                visible: true,
+                name: "",
+            },
+            {
+                from: -1,
+                to: -1,
+                granularity: "GDC.time.year",
+                localIdentifier: "LAST_YEAR",
+                type: "relativePreset",
+                visible: true,
+                name: "",
             },
         ],
     },
 };
 
-const selectedFilterOption = {
-    localIdentifier: "ALL_TIME",
-    type: "allTime",
-    name: "",
-    visible: true,
-};
+const availableGranularities = ["GDC.time.month", "GDC.time.year", "GDC.time.quarter", "GDC.time.date"];
 
 export class ExtendedDateFilterComponentExample extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            selectedFilterOption: defaultExtendedDateFilterOptions.allTime,
+            excludeCurrentPeriod: false,
+        };
+    }
+
     onApply = (...params) => {
         // eslint-disable-next-line no-console
         console.log("ExtendedDateFilterExample onApply", ...params);
     };
 
+    onCancel = (...params) => {
+        // eslint-disable-next-line no-console
+        console.log("ExtendedDateFilterExample onCancel", ...params);
+    };
+
+    onDropdownOpenChanged = (...params) => {
+        // eslint-disable-next-line no-console
+        console.log("ExtendedDateFilterExample onDropdownOpenChanged", ...params);
+    };
+
+    setSelectedFilterOption = newFilter => {
+        this.setState({
+            selectedFilterOption: newFilter,
+        });
+    };
+
+    setExcludeCurrentPeriod = isExcluded => {
+        this.setState({
+            excludeCurrentPeriod: isExcluded,
+        });
+    };
+
     render() {
         return (
-            <div>
+            <div style={{ width: 200 }}>
                 <ExtendedDateFilter
-                    filterOptions={filterOptions}
-                    selectedFilterOption={selectedFilterOption}
-                    onSelectedFilterOptionChange={noop}
-                    originalSelectedFilterOption={selectedFilterOption}
-                    excludeCurrentPeriod={false}
-                    originalExcludeCurrentPeriod={false}
-                    isExcludeCurrentPeriodEnabled={false}
-                    onExcludeCurrentPeriodChange={noop}
-                    availableGranularities={[]}
+                    availableGranularities={availableGranularities}
+                    filterOptions={defaultExtendedDateFilterOptions}
+                    selectedFilterOption={this.state.selectedFilterOption}
+                    originalSelectedFilterOption={this.state.selectedFilterOption} // just to show the value immediately
+                    onSelectedFilterOptionChange={this.setSelectedFilterOption}
+                    originalExcludeCurrentPeriod={this.state.excludeCurrentPeriod} // just to show the value immediately
+                    excludeCurrentPeriod={this.state.excludeCurrentPeriod}
                     isEditMode={false}
+                    isExcludeCurrentPeriodEnabled
+                    onExcludeCurrentPeriodChange={this.setExcludeCurrentPeriod}
                     onApplyClick={this.onApply}
-                    onCancelClick={noop}
-                    onDropdownOpenChanged={noop}
+                    onCancelClick={this.onCancel}
+                    onDropdownOpenChanged={this.onDropdownOpenChanged}
                 />
             </div>
         );
