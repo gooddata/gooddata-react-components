@@ -4,7 +4,7 @@ import { storiesOf } from "@storybook/react";
 import { DateFilterButton } from "../../../src/components/filters/ExtendedDateFilter/DateFilterButton/DateFilterButton";
 import "../../../styles/css/extendedDateFilter.css";
 
-storiesOf("ExtendedDateFilters/DateFilterButton", module)
+storiesOf("Helper components/ExtendedDateFilter/DateFilterButton", module)
     .add("default state", () => {
         return (
             <DateFilterButton title="Date range" isMobile={false}>
