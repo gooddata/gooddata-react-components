@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
 import { VisualizationObject } from "@gooddata/typings";
-import { hasAttribute, hasTertiaryMeasures, isStacked, isSimpleStackMeasures } from "../mdObjectHelper";
+import { hasAttribute, hasTertiaryMeasures, isStacked, canSortStackTotalValue } from "../mdObjectHelper";
 import { IVisualizationProperties } from "../../interfaces/Visualization";
 
 describe("mdObjectHelper", () => {
@@ -119,7 +119,7 @@ describe("mdObjectHelper", () => {
                     measures: ["m2"],
                 },
             };
-            expect(isSimpleStackMeasures(mdObject, supportedControls)).toBe(false);
+            expect(canSortStackTotalValue(mdObject, supportedControls)).toBe(false);
         });
 
         it("should return false if have two view by attribute", () => {
@@ -148,7 +148,7 @@ describe("mdObjectHelper", () => {
             const supportedControls: IVisualizationProperties = {
                 stackMeasures: true,
             };
-            expect(isSimpleStackMeasures(mdObject, supportedControls)).toBe(false);
+            expect(canSortStackTotalValue(mdObject, supportedControls)).toBe(false);
         });
 
         it("should return true if have one view by and many measures", () => {
@@ -168,7 +168,7 @@ describe("mdObjectHelper", () => {
             const supportedControls: IVisualizationProperties = {
                 stackMeasures: true,
             };
-            expect(isSimpleStackMeasures(mdObject, supportedControls)).toBe(true);
+            expect(canSortStackTotalValue(mdObject, supportedControls)).toBe(true);
         });
     });
 });

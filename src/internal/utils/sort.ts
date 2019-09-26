@@ -106,12 +106,12 @@ export function getDefaultPivotTableSort(afm: AFM.IAfm): AFM.SortItem[] {
 function getDefaultBarChartSort(
     afm: AFM.IAfm,
     resultSpec: AFM.IResultSpec,
-    isSimpleStackMeasures: boolean = false,
+    canSortStackTotalValue: boolean = false,
 ): AFM.SortItem[] {
     const viewByAttributeIdentifier = getFirstAttributeIdentifier(resultSpec, VIEW_BY_DIMENSION);
     const stackByAttributeIdentifier = getFirstAttributeIdentifier(resultSpec, STACK_BY_DIMENSION);
 
-    if ((viewByAttributeIdentifier && stackByAttributeIdentifier) || isSimpleStackMeasures) {
+    if ((viewByAttributeIdentifier && stackByAttributeIdentifier) || canSortStackTotalValue) {
         return [getAttributeSortItem(viewByAttributeIdentifier, SORT_DIR_DESC, true)];
     }
 
@@ -136,7 +136,7 @@ export function createSorts(
     afm: AFM.IAfm,
     resultSpec: AFM.IResultSpec,
     visualizationProperties: IVisualizationProperties,
-    isSimpleStackMeasures: boolean = false,
+    canSortStackTotalValue: boolean = false,
 ): AFM.SortItem[] {
     const sortItems = get(visualizationProperties, "sortItems", []) as AFM.SortItem[];
     const sanitizedSortItems: AFM.SortItem[] = sanitizeSorts(afm, sortItems);
@@ -154,7 +154,7 @@ export function createSorts(
         case VisualizationTypes.LINE:
             return [];
         case VisualizationTypes.BAR:
-            return getDefaultBarChartSort(afm, resultSpec, isSimpleStackMeasures);
+            return getDefaultBarChartSort(afm, resultSpec, canSortStackTotalValue);
         case VisualizationTypes.TREEMAP:
             return SortsHelper.getDefaultTreemapSort(afm, resultSpec);
     }

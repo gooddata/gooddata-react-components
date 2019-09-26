@@ -26,6 +26,11 @@ export function haveManyViewItems(mdObject: VisualizationObject.IVisualizationOb
     return viewBucket && get(viewBucket, "items").length > 1;
 }
 
+export function hasOneViewItem(mdObject: VisualizationObject.IVisualizationObjectContent): boolean {
+    const viewBucket = mdObject && findBucketByLocalIdentifier(mdObject.buckets, BucketNames.VIEW);
+    return viewBucket && get(viewBucket, "items").length === 1;
+}
+
 export function hasTertiaryMeasures(mdObject: VisualizationObject.IVisualizationObjectContent): boolean {
     return mdObject.buckets
         .filter(bucket => [BucketNames.TERTIARY_MEASURES].indexOf(get(bucket, "localIdentifier")) >= 0)
@@ -57,13 +62,14 @@ function areAllMeasuresOnSingleAxis(
     return numberOfMeasureOnSecondaryAxis === 0 || measureCount === numberOfMeasureOnSecondaryAxis;
 }
 
-export function isSimpleStackMeasures(
+// don't support sort by total value for dual axis and group of categories
+export function canSortStackTotalValue(
     mdObject: VisualizationObject.IVisualizationObjectContent,
     supportedControls: IVisualizationProperties,
 ): boolean {
     return (
         get(supportedControls, "stackMeasures", false) &&
         areAllMeasuresOnSingleAxis(mdObject, get(supportedControls, "secondary_yaxis", false)) &&
-        !haveManyViewItems(mdObject)
+        hasOneViewItem(mdObject)
     );
 }
