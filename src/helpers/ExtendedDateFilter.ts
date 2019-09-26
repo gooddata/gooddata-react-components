@@ -32,3 +32,26 @@ export const applyExcludeCurrentPeriod = (
             throw new Error("Unknown date filter value type");
     }
 };
+
+export const canExcludeCurrentPeriod = (dateFilterOption: ExtendedDateFilters.DateFilterOption): boolean => {
+    if (!dateFilterOption.visible) {
+        return false;
+    }
+    if (ExtendedDateFilters.isRelativeDateFilterPreset(dateFilterOption)) {
+        return dateFilterOption.to === 0 && dateFilterOption.from < dateFilterOption.to;
+    }
+    return false;
+};
+
+export const normalizeSelectedFilterOption = (
+    selectedFilterOption: ExtendedDateFilters.DateFilterOption,
+): ExtendedDateFilters.DateFilterOption => {
+    if (selectedFilterOption.type === "relativeForm" && selectedFilterOption.from > selectedFilterOption.to) {
+        return {
+            ...selectedFilterOption,
+            from: selectedFilterOption.to,
+            to: selectedFilterOption.from,
+        };
+    }
+    return selectedFilterOption;
+};

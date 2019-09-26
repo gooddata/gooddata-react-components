@@ -64,6 +64,11 @@ import { BucketExecutor } from "./execution/BucketExecutor";
 
 // TODO ONE-4000 Consider creating index file for EDF if module will be exporting multiple stuff
 import { ExtendedDateFilter } from "./components/filters/ExtendedDateFilter/ExtendedDateFilter";
+import {
+    ExtendedDateFilterControllerComponent,
+    IDateFilterCallbackProps,
+    IDateFilterStateProps,
+} from "./components/filters/ExtendedDateFilter/ExtendedDateFilterController";
 import { validateFilterOption } from "./components/filters/ExtendedDateFilter/validation/DateFilterOptionValidation";
 import { mapDateFilterOptionToDateFilterValue } from "./helpers/ExtendedDateFilterService/DateFilterValueConversions";
 import { convertDateFilterConfigToDateFilterOptions } from "./helpers/ExtendedDateFilterService/DateFilterConfigConversions";
@@ -73,7 +78,7 @@ import {
     mapAbsoluteFilterToAfm,
     mapRelativeFilterToAfm,
 } from "./helpers/ExtendedDateFilterService/AFMConversions";
-import { applyExcludeCurrentPeriod } from "./helpers/ExtendedDateFilter";
+import { applyExcludeCurrentPeriod, canExcludeCurrentPeriod } from "./helpers/ExtendedDateFilter";
 import {
     getDateFilterTitle,
     getDateFilterRepresentation,
@@ -192,4 +197,8 @@ export {
     applyExcludeCurrentPeriod,
     defaultExtendedDateFilterOptions,
     defaultDateFilterProjectConfig,
+    ExtendedDateFilterControllerComponent,
+    IDateFilterCallbackProps,
+    IDateFilterStateProps,
+    canExcludeCurrentPeriod,
 };
