@@ -1,6 +1,6 @@
 // (C) 2007-2019 GoodData Corporation
 
-// TODO ONE-4000 Moved from SDK
+// TODO ONE-4000 Moved from SDK, do we need all of the config?
 
 const SCREEN = "only screen";
 
