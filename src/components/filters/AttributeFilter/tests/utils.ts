@@ -389,10 +389,15 @@ export function createMetadataMock() {
                 [ATTRIBUTE_DISPLAY_FORM_IDENTIFIER_2]: SPELLS,
             };
             const allItems = get(itemMap, objectId, []);
+            let filteredItems = allItems;
+            if (options.filter) {
+                filteredItems = allItems.filter((item: string) => item === options.filter);
+            }
             const offset: number = options.offset;
             const limit: number | null = options.limit || null;
             const limitedItems =
-                limit !== null ? allItems.slice(offset, offset + limit) : allItems.slice(offset);
+                limit !== null ? filteredItems.slice(offset, offset + limit) : filteredItems.slice(offset);
+
             const items: IElement[] = limitedItems.map((item: string, index: number) => ({
                 element: {
                     uri: `/gdc/md/projectId/object/${objectId}?id=${offset + index}`,
@@ -400,12 +405,19 @@ export function createMetadataMock() {
                 },
             }));
 
+            const totalCountWithoutFiltersProp = options.includeTotalCountWithoutFilters
+                ? {
+                      totalCountWithoutFilters: allItems.length,
+                  }
+                : {};
+
             return Promise.resolve({
                 validElements: {
                     items,
                     paging: {
-                        total: allItems.length,
+                        total: filteredItems.length,
                     },
+                    ...totalCountWithoutFiltersProp,
                 },
             });
         }),

@@ -16,6 +16,7 @@ import {
 
 const delayOffset = 250; // Magic constant inside Goodstrap FLEX_DIMENSIONS_THROTTLE :(
 const increment = 100;
+const maxDelay = 2000;
 
 describe("AttributeDropdown", () => {
     function renderComponent(props: any = {}) {
@@ -96,8 +97,8 @@ describe("AttributeDropdown", () => {
             done();
         };
 
-        const maxDelay = 5000;
-        await waitFor(waitForItemsLoaded, maxDelay, delayOffset, increment).then(testItems, testItems);
+        const longerMaxDelay = 5000;
+        await waitFor(waitForItemsLoaded, longerMaxDelay, delayOffset, increment).then(testItems, testItems);
     });
 
     it("should run onApply with current selection", async done => {
@@ -132,7 +133,6 @@ describe("AttributeDropdown", () => {
             done();
         };
 
-        const maxDelay = 2000;
         waitFor(waitForItemsLoaded, maxDelay, delayOffset, increment).then(testItems, testItems);
     });
 
@@ -143,7 +143,6 @@ describe("AttributeDropdown", () => {
         });
 
         wrapper.find(".s-country.dropdown-button").simulate("click");
-        const maxDelay = 2000;
         await waitFor(waitForItemsLoaded, maxDelay, delayOffset, increment);
         const dropdownItems = document.querySelectorAll(".s-attribute-filter-list-item");
         ReactTestUtils.Simulate.click(dropdownItems[0]);
@@ -166,7 +165,6 @@ describe("AttributeDropdown", () => {
         });
 
         wrapper.find(".s-country.dropdown-button").simulate("click");
-        const maxDelay = 2000;
         await waitFor(waitForItemsLoaded, maxDelay, delayOffset, increment);
         const dropdownItems = document.querySelectorAll(".s-attribute-filter-list-item");
         ReactTestUtils.Simulate.click(dropdownItems[0]);
@@ -180,6 +178,40 @@ describe("AttributeDropdown", () => {
             ".s-attribute-filter-list-item .gd-input-checkbox:checked",
         );
         expect(selectedItemElements.length).toBe(11);
+    });
+
+    it("should limit items by search string", async () => {
+        const attributeDisplayForm = createADF();
+        const wrapper = renderComponent({
+            attributeDisplayForm,
+        });
+
+        wrapper.find(".s-country.dropdown-button").simulate("click");
+        await waitFor(waitForItemsLoaded, maxDelay, delayOffset, increment);
+        wrapper.find("input").simulate("change", { target: { value: "Afghanistan" } });
+        await waitFor(waitForItemsLoaded, maxDelay, delayOffset, increment);
+        const dropdownItems = document.querySelectorAll(".s-attribute-filter-list-item");
+        expect(dropdownItems.length).toBe(1);
+    });
+
+    it("should reset search string on Cancel", async () => {
+        const attributeDisplayForm = createADF();
+        const wrapper = renderComponent({
+            attributeDisplayForm,
+        });
+
+        wrapper.find(".s-country.dropdown-button").simulate("click");
+
+        await waitFor(waitForItemsLoaded, maxDelay, delayOffset, increment);
+        (wrapper.find("AttributeDropdownWrapped").instance() as any).onSearch("Afghanistan");
+        // wait for debounce
+        await testUtils.delay(300);
+        wrapper.update();
+        expect(wrapper.find("InvertableList").prop("searchString")).toBe("Afghanistan");
+        wrapper.find("button.s-cancel").simulate("click");
+        wrapper.update();
+        wrapper.find(".s-country.dropdown-button").simulate("click");
+        expect(wrapper.find("InvertableList").prop("searchString")).toBe("");
     });
 
     describe("createAfmFilter", () => {
