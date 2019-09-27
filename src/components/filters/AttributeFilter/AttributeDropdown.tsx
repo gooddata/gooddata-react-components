@@ -9,6 +9,7 @@ import { string as stringUtils } from "@gooddata/js-utils";
 import DataSource from "@gooddata/goodstrap/lib/DataSource/DataSource";
 import { injectIntl, intlShape, InjectedIntlProps, InjectedIntl } from "react-intl";
 import { IValidElementsResponse, IElement } from "@gooddata/gooddata-js";
+import { VisualizationInput } from "@gooddata/typings";
 import * as Model from "../../../helpers/model";
 import * as classNames from "classnames";
 import last = require("lodash/last");
@@ -54,6 +55,9 @@ export interface IAttributeDropdownProps {
     selection: IAttributeElement[];
     isInverted: boolean;
     onApply: (...params: any[]) => any; // TODO: make the types more specific (FET-282)
+    onApplyWithFilterDefinition?: (
+        filter: VisualizationInput.IPositiveAttributeFilter | VisualizationInput.INegativeAttributeFilter,
+    ) => void;
     fullscreenOnMobile?: boolean;
     isUsingIdentifier: boolean;
     metadata: IAttributeMetadata;
@@ -125,6 +129,17 @@ export function loadAttributeElements(
         };
     });
 }
+function getElementId(element: IAttributeElement) {
+    return element.uri.split("=")[1];
+}
+
+export function createOldFilterDefinition(id: string, selection: IAttributeElement[], isInverted: boolean) {
+    return {
+        id,
+        type: "attribute",
+        [isInverted ? "notIn" : "in"]: selection.map(getElementId),
+    };
+}
 
 export function createAfmFilter(id: string, selection: IAttributeElement[], isInverted: boolean) {
     const filterFactory = isInverted ? Model.negativeAttributeFilter : Model.positiveAttributeFilter;
@@ -144,6 +159,7 @@ export class AttributeDropdownWrapped extends React.PureComponent<
         intl: intlShape.isRequired,
 
         onApply: PropTypes.func.isRequired,
+        onApplyWithFilterDefinition: PropTypes.func,
         fullscreenOnMobile: PropTypes.bool,
         title: PropTypes.string,
 
@@ -160,6 +176,7 @@ export class AttributeDropdownWrapped extends React.PureComponent<
         isUsingIdentifier: false,
         title: null,
         selection: new Array<IAttributeElement>(),
+        onApplyWithFilterDefinition: noop,
 
         getListItem: () => <AttributeFilterItem />,
         getListError: getDefaultListError,
@@ -275,7 +292,8 @@ export class AttributeDropdownWrapped extends React.PureComponent<
             ? attributeDisplayForm.meta.identifier
             : attributeDisplayForm.meta.uri;
 
-        this.props.onApply(createAfmFilter(id, selection, isInverted));
+        this.props.onApply(createOldFilterDefinition(id, selection, isInverted));
+        this.props.onApplyWithFilterDefinition(createAfmFilter(id, selection, isInverted));
         this.resetSearchString();
         this.backupSelection(() => this.dropdownRef.closeDropdown());
     };

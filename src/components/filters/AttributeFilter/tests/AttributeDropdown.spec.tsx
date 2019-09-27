@@ -5,7 +5,12 @@ import { mount } from "enzyme";
 import { DropdownButton } from "@gooddata/goodstrap/lib/Dropdown/Dropdown";
 import { testUtils } from "@gooddata/js-utils";
 
-import { AttributeDropdown, VISIBLE_ITEMS_COUNT, createAfmFilter } from "../AttributeDropdown";
+import {
+    AttributeDropdown,
+    VISIBLE_ITEMS_COUNT,
+    createAfmFilter,
+    createOldFilterDefinition,
+} from "../AttributeDropdown";
 import { IntlWrapper } from "../../../core/base/IntlWrapper";
 import {
     createMetadataMock,
@@ -101,16 +106,13 @@ describe("AttributeDropdown", () => {
         await waitFor(waitForItemsLoaded, longerMaxDelay, delayOffset, increment).then(testItems, testItems);
     });
 
-    it("should run onApply with current selection", async done => {
+    it("should run onApply with current selection in old format", async done => {
         const attributeDisplayForm = createADF();
         const onApply = jest.fn(filter => {
             expect(filter).toEqual({
-                negativeAttributeFilter: {
-                    displayForm: {
-                        uri: ATTRIBUTE_DISPLAY_FORM_URI,
-                    },
-                    notIn: ["/gdc/md/projectId/object/123?id=0"],
-                },
+                id: ATTRIBUTE_DISPLAY_FORM_URI,
+                type: "attribute",
+                notIn: ["0"],
             });
         });
         const wrapper = renderComponent({
@@ -134,6 +136,36 @@ describe("AttributeDropdown", () => {
         };
 
         waitFor(waitForItemsLoaded, maxDelay, delayOffset, increment).then(testItems, testItems);
+    });
+
+    it("should run new onApplyWithFilterDefinition with current selection as AFM filter", async () => {
+        const attributeDisplayForm = createADF();
+        const onApplyWithFilterDefinition = jest.fn();
+        const wrapper = renderComponent({
+            attributeDisplayForm,
+            onApplyWithFilterDefinition,
+        });
+
+        const expectedSelection = {
+            negativeAttributeFilter: {
+                displayForm: {
+                    uri: ATTRIBUTE_DISPLAY_FORM_URI,
+                },
+                notIn: ["/gdc/md/projectId/object/123?id=0"],
+            },
+        };
+        // wait for the plugin to initialize before click
+        await testUtils.delay(600);
+        wrapper.find(DropdownButton).simulate("click");
+
+        const maxDelay = 2000;
+        await waitFor(waitForItemsLoaded, maxDelay, delayOffset, increment);
+        const itemElement = document.querySelector(".s-attribute-filter-list-item");
+        ReactTestUtils.Simulate.click(itemElement);
+        const applyElement = document.querySelector(".s-apply");
+        ReactTestUtils.Simulate.click(applyElement);
+        expect(onApplyWithFilterDefinition).toHaveBeenCalledTimes(1);
+        expect(onApplyWithFilterDefinition).toHaveBeenCalledWith(expectedSelection);
     });
 
     it("should keep selection after Apply", async () => {
@@ -203,7 +235,8 @@ describe("AttributeDropdown", () => {
         wrapper.find(".s-country.dropdown-button").simulate("click");
 
         await waitFor(waitForItemsLoaded, maxDelay, delayOffset, increment);
-        (wrapper.find("AttributeDropdownWrapped").instance() as any).onSearch("Afghanistan");
+        const onSearchCallback: (search: string) => void = wrapper.find("InvertableList").prop("onSearch");
+        onSearchCallback("Afghanistan");
         // wait for debounce
         await testUtils.delay(300);
         wrapper.update();
@@ -212,6 +245,36 @@ describe("AttributeDropdown", () => {
         wrapper.update();
         wrapper.find(".s-country.dropdown-button").simulate("click");
         expect(wrapper.find("InvertableList").prop("searchString")).toBe("");
+    });
+
+    describe("createOldFilterDefinition", () => {
+        const id = "foo";
+        const selection = [
+            {
+                uri: "/gdc/md/projectId/obj/1?id=1",
+                title: "1",
+            },
+            {
+                uri: "/gdc/md/projectId/obj/1?id=2",
+                title: "2",
+            },
+        ];
+
+        it("should create filter from selection", () => {
+            expect(createOldFilterDefinition(id, selection, false)).toEqual({
+                id: "foo",
+                in: ["1", "2"],
+                type: "attribute",
+            });
+        });
+
+        it("should create filter from inverted selection", () => {
+            expect(createOldFilterDefinition(id, selection, true)).toEqual({
+                id: "foo",
+                notIn: ["1", "2"],
+                type: "attribute",
+            });
+        });
     });
 
     describe("createAfmFilter", () => {
