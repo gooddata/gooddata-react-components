@@ -160,50 +160,41 @@ export class DateFilterComponentExample extends Component {
         };
     }
 
-    onApply = (...params) => {
-        // eslint-disable-next-line no-console
-        console.log("DateFilterExample onApply", ...params);
-    };
-
-    onCancel = (...params) => {
-        // eslint-disable-next-line no-console
-        console.log("DateFilterExample onCancel", ...params);
-    };
-
-    onDropdownOpenChanged = (...params) => {
-        // eslint-disable-next-line no-console
-        console.log("DateFilterExample onDropdownOpenChanged", ...params);
-    };
-
-    setSelectedFilterOption = newFilter => {
+    onApply = (dateFilterOption, excludeCurrentPeriod) => {
         this.setState({
-            selectedFilterOption: newFilter,
+            selectedFilterOption: dateFilterOption,
+            excludeCurrentPeriod,
         });
+        // eslint-disable-next-line no-console
+        console.log(
+            "DateFilterExample onApply",
+            "selectedFilterOption:",
+            dateFilterOption,
+            "excludeCurrentPeriod:",
+            excludeCurrentPeriod,
+        );
     };
 
-    setExcludeCurrentPeriod = isExcluded => {
-        this.setState({
-            excludeCurrentPeriod: isExcluded,
-        });
+    onCancel = () => {
+        // eslint-disable-next-line no-console
+        console.log("DateFilterExample onCancel");
     };
 
     render() {
         return (
-            <div style={{ width: 200 }}>
+            <div style={{ width: 300 }}>
                 <DateFilter
-                    availableGranularities={availableGranularities}
-                    filterOptions={defaultDateFilterOptions}
-                    selectedFilterOption={this.state.selectedFilterOption}
-                    originalSelectedFilterOption={this.state.selectedFilterOption} // just to show the value immediately
-                    onSelectedFilterOptionChange={this.setSelectedFilterOption}
-                    originalExcludeCurrentPeriod={this.state.excludeCurrentPeriod} // just to show the value immediately
                     excludeCurrentPeriod={this.state.excludeCurrentPeriod}
-                    isEditMode={false}
                     isExcludeCurrentPeriodEnabled
-                    onExcludeCurrentPeriodChange={this.setExcludeCurrentPeriod}
-                    onApplyClick={this.onApply}
-                    onCancelClick={this.onCancel}
-                    onDropdownOpenChanged={this.onDropdownOpenChanged}
+                    selectedFilterOption={this.state.selectedFilterOption}
+                    filterOptions={defaultDateFilterOptions}
+                    availableGranularities={availableGranularities}
+                    customFilterName="Date filter name"
+                    dateFilterMode="active"
+                    onApply={this.onApply}
+                    onCancel={this.onCancel}
+                    onOpen={this.onOpen}
+                    onClose={this.onClose}
                 />
             </div>
         );
