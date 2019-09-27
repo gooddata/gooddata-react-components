@@ -129,6 +129,11 @@ describe("applyExcludeCurrentPeriod", () => {
                 name: "filters.allTime.title",
                 localIdentifier: "ALL_TIME",
             },
+            {
+                type: "allTime",
+                name: "filters.allTime.title",
+                localIdentifier: "ALL_TIME",
+            },
         ],
         [
             "relativePreset ending in today",
@@ -159,9 +164,25 @@ describe("applyExcludeCurrentPeriod", () => {
                 name: "filters.last30days.title",
                 localIdentifier: "FOO",
             },
+            {
+                from: -29,
+                to: 10,
+                granularity: "GDC.time.date",
+                type: "relativePreset",
+                name: "filters.last30days.title",
+                localIdentifier: "FOO",
+            },
         ],
         [
             "relativePreset ending for just today",
+            {
+                from: 0,
+                to: 0,
+                granularity: "GDC.time.date",
+                type: "relativePreset",
+                name: "filters.last30days.title",
+                localIdentifier: "TODAY",
+            },
             {
                 from: 0,
                 to: 0,
@@ -180,9 +201,22 @@ describe("applyExcludeCurrentPeriod", () => {
                 type: "relativeForm",
                 localIdentifier: "RELATIVE_FORM",
             },
+            {
+                from: -299,
+                to: 10,
+                granularity: "GDC.time.date",
+                type: "relativeForm",
+                localIdentifier: "RELATIVE_FORM",
+            },
         ],
         [
             "absoluteForm",
+            {
+                from: "2019-01-01",
+                to: "2019-01-02",
+                type: "absoluteForm",
+                localIdentifier: "ABSOLUTE_FORM",
+            },
             {
                 from: "2019-01-01",
                 to: "2019-01-02",
@@ -198,14 +232,16 @@ describe("applyExcludeCurrentPeriod", () => {
                 type: "absolutePreset",
                 localIdentifier: "FOO",
             },
+            {
+                from: "2019-01-01",
+                to: "2019-01-02",
+                type: "absolutePreset",
+                localIdentifier: "FOO",
+            },
         ],
     ])(
         "should handle %s properly",
-        (
-            _,
-            input: ExtendedDateFilters.DateFilterOption,
-            expected: ExtendedDateFilters.DateFilterOption = input,
-        ) => {
+        (_, input: ExtendedDateFilters.DateFilterOption, expected: ExtendedDateFilters.DateFilterOption) => {
             const actual = applyExcludeCurrentPeriod(input, true);
             expect(actual).toEqual(expected);
         },
