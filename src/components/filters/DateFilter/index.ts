@@ -19,7 +19,7 @@ import {
     getDateFilterConfigValidationMessages,
     isSelectedOptionValid,
 } from "./utils/ConfigValidation";
-import { DateFilter, IDateFilterCallbackProps, IDateFilterStateProps } from "./DateFilter";
+import { DateFilter, IDateFilterCallbackProps, IDateFilterStateProps, IDateFilterProps } from "./DateFilter";
 
 const DateFilterHelpers = {
     validateFilterOption,
@@ -47,6 +47,7 @@ export {
     DateFilter,
     IDateFilterCallbackProps,
     IDateFilterStateProps,
+    IDateFilterProps,
     DateFilterHelpers,
     Translators as DateFilterTranslators,
 };

@@ -43,15 +43,12 @@ export interface IDateFilterCallbackProps {
     onClose?: () => void;
 }
 
-interface IExtendedDateFilterControllerProps extends IDateFilterStateProps, IDateFilterCallbackProps {}
+export interface IDateFilterProps extends IDateFilterStateProps, IDateFilterCallbackProps {}
 
 // tslint:disable-next-line: no-empty-interface
 interface IExtendedDateFilterControllerState extends IStatePropsIntersection {}
 
-export class DateFilter extends React.Component<
-    IExtendedDateFilterControllerProps,
-    IExtendedDateFilterControllerState
-> {
+export class DateFilter extends React.Component<IDateFilterProps, IExtendedDateFilterControllerState> {
     public static propTypes = {
         excludeCurrentPeriod: PropTypes.bool.isRequired,
         isExcludeCurrentPeriodEnabled: PropTypes.bool.isRequired,
@@ -67,14 +64,14 @@ export class DateFilter extends React.Component<
         onClose: PropTypes.func,
     };
 
-    public static defaultProps: Partial<IExtendedDateFilterControllerProps> = {
+    public static defaultProps: Partial<IDateFilterProps> = {
         isEditMode: false,
         onCancel: noop,
         onOpen: noop,
         onClose: noop,
     };
 
-    constructor(props: IExtendedDateFilterControllerProps) {
+    constructor(props: IDateFilterProps) {
         super(props);
 
         this.state = {
@@ -84,7 +81,7 @@ export class DateFilter extends React.Component<
         };
     }
 
-    public componentDidUpdate(prevProps: IExtendedDateFilterControllerProps): void {
+    public componentDidUpdate(prevProps: IDateFilterProps): void {
         this.syncStateProp(prevProps, "excludeCurrentPeriod");
         this.syncStateProp(prevProps, "isExcludeCurrentPeriodEnabled");
         this.syncStateProp(prevProps, "selectedFilterOption");
@@ -123,10 +120,7 @@ export class DateFilter extends React.Component<
         );
     }
 
-    private syncStateProp = (
-        prevProps: IExtendedDateFilterControllerProps,
-        propName: keyof IStatePropsIntersection,
-    ): void => {
+    private syncStateProp = (prevProps: IDateFilterProps, propName: keyof IStatePropsIntersection): void => {
         if (!isEqual(prevProps[propName], this.props[propName])) {
             this.copyStatePropFromProps(propName);
         }
