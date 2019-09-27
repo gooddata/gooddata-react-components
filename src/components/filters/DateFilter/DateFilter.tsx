@@ -1,6 +1,8 @@
 // (C) 2007-2019 GoodData Corporation
 import * as React from "react";
+import * as PropTypes from "prop-types";
 import isEqual = require("lodash/isEqual");
+import noop = require("lodash/noop");
 import { ExtendedDateFilters } from "@gooddata/typings";
 import { canExcludeCurrentPeriod } from "./utils/PeriodExlusion";
 
@@ -29,18 +31,16 @@ interface IStatePropsIntersection {
 export interface IDateFilterStateProps extends IStatePropsIntersection {
     filterOptions: ExtendedDateFilters.IDateFilterOptionsByType;
     availableGranularities: ExtendedDateFilters.DateFilterGranularity[];
-    isEditMode: boolean;
+    isEditMode?: boolean;
     customFilterName?: string;
     dateFilterMode: ExtendedDateFilters.DashboardDateFilterConfigMode;
 }
 
 export interface IDateFilterCallbackProps {
-    dateFilterApplied: (
-        dateFilterOption: ExtendedDateFilters.DateFilterOption,
-        excludeCurrentPeriod: boolean,
-    ) => void;
-    dateFilterOpened: () => void;
-    dateFilterClosed: () => void;
+    onApply: (dateFilterOption: ExtendedDateFilters.DateFilterOption, excludeCurrentPeriod: boolean) => void;
+    onCancel?: () => void;
+    onOpen?: () => void;
+    onClose?: () => void;
 }
 
 interface IExtendedDateFilterControllerProps extends IDateFilterStateProps, IDateFilterCallbackProps {}
@@ -52,6 +52,28 @@ export class DateFilter extends React.Component<
     IExtendedDateFilterControllerProps,
     IExtendedDateFilterControllerState
 > {
+    public static propTypes = {
+        excludeCurrentPeriod: PropTypes.bool.isRequired,
+        isExcludeCurrentPeriodEnabled: PropTypes.bool.isRequired,
+        selectedFilterOption: PropTypes.object.isRequired,
+        filterOptions: PropTypes.object.isRequired,
+        availableGranularities: PropTypes.arrayOf(PropTypes.string).isRequired,
+        isEditMode: PropTypes.bool,
+        customFilterName: PropTypes.string,
+        dateFilterMode: PropTypes.oneOf(["readonly", "hidden", "active"]).isRequired,
+        onApply: PropTypes.func.isRequired,
+        onCancel: PropTypes.func,
+        onOpen: PropTypes.func,
+        onClose: PropTypes.func,
+    };
+
+    public static defaultProps: Partial<IExtendedDateFilterControllerProps> = {
+        isEditMode: false,
+        onCancel: noop,
+        onOpen: noop,
+        onClose: noop,
+    };
+
     constructor(props: IExtendedDateFilterControllerProps) {
         super(props);
 
@@ -92,7 +114,7 @@ export class DateFilter extends React.Component<
                 selectedFilterOption={selectedFilterOption}
                 originalSelectedFilterOption={originalSelectedFilterOption}
                 onApplyClick={this.handleApplyClick}
-                onCancelClick={this.onChangesDiscarded}
+                onCancelClick={this.onCancelClicked}
                 onDropdownOpenChanged={this.onDropdownOpenChanged}
                 onExcludeCurrentPeriodChange={this.handleExcludeCurrentPeriodChange}
                 onSelectedFilterOptionChange={this.handleSelectedFilterOptionChange}
@@ -116,7 +138,7 @@ export class DateFilter extends React.Component<
 
     private handleApplyClick = () => {
         const normalizedSelectedFilterOption = normalizeSelectedFilterOption(this.state.selectedFilterOption);
-        this.props.dateFilterApplied(normalizedSelectedFilterOption, this.state.excludeCurrentPeriod);
+        this.props.onApply(normalizedSelectedFilterOption, this.state.excludeCurrentPeriod);
     };
 
     private onChangesDiscarded = () => {
@@ -125,11 +147,16 @@ export class DateFilter extends React.Component<
         this.copyStatePropFromProps("selectedFilterOption");
     };
 
+    private onCancelClicked = () => {
+        this.props.onCancel();
+        this.onChangesDiscarded();
+    };
+
     private onDropdownOpenChanged = (isOpen: boolean) => {
         if (isOpen) {
-            this.props.dateFilterOpened();
+            this.props.onOpen();
         } else {
-            this.props.dateFilterClosed();
+            this.props.onClose();
             this.onChangesDiscarded();
         }
     };
@@ -150,7 +177,6 @@ export class DateFilter extends React.Component<
     };
 }
 
-
 export const testAPI = {
-    normalizeSelectedFilterOption
+    normalizeSelectedFilterOption,
 };
