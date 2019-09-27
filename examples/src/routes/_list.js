@@ -30,7 +30,7 @@ import Export from "./Export";
 import VisualizationByUri from "./VisualizationByUri";
 import VisualizationByIdentifier from "./VisualizationByIdentifier";
 import MeasureValueFilter from "./MeasureValueFilter";
-import ExtendedDateFilter from "./ExtendedDateFilter";
+import DateFilter from "./DateFilter";
 
 export const advancedUseCasesRoutes = [
     { path: "/advanced/global-filters", title: "Global Filters", Component: GlobalFilters },
@@ -101,7 +101,7 @@ export const sideNavigationRoutes = [
     {
         path: "/date-filter-components",
         title: "Date Filter Component",
-        Component: ExtendedDateFilter,
+        Component: DateFilter,
     },
     { path: "/arithmetic-measures", title: "Arithmetic Measures", Component: ArithmeticMeasure },
     { path: "/execute", title: "Execute Component", Component: Execute },
