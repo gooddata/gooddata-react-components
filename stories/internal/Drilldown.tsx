@@ -66,6 +66,32 @@ const defaultColumnChartProps = {
 document.addEventListener("drill", eventAction("drill"));
 
 storiesOf("Internal/Drilldown", module)
+    .add("force disable drill on axes", () => {
+        const dataSet = fixtures.barChartWith6PopMeasuresAndViewByAttribute;
+        return screenshotWrap(
+            wrap(
+                <Visualization
+                    drillableItems={[
+                        {
+                            uri: dataSet.executionRequest.afm.attributes[0].displayForm.uri,
+                        },
+                    ]}
+                    config={{
+                        type: "column",
+                        legend: {
+                            enabled: true,
+                            position: "top",
+                        },
+                        legendLayout: "vertical",
+                        colorPalette: fixtures.customPalette,
+                        forceDisableDrillOnAxes: true,
+                    }}
+                    {...dataSet}
+                    onDataTooLarge={noop}
+                />,
+            ),
+        );
+    })
     .add("Column chart with 6 pop measures and view by attribute", () => {
         const dataSet = fixtures.barChartWith6PopMeasuresAndViewByAttribute;
         return screenshotWrap(
