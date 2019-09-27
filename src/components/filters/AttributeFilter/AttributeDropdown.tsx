@@ -71,6 +71,7 @@ export interface IAttributeDropdownStateItem {
 export interface IAttributeDropdownState {
     items: IAttributeDropdownStateItem[];
     totalCount?: string;
+    filteredItemsCount?: string;
     selection: IAttributeElement[];
     prevSelection: IAttributeElement[];
     isListReady: boolean;
@@ -104,12 +105,14 @@ export function loadAttributeElements(
         limit,
         offset,
         filter: encodedSearchString,
+        includeTotalCountWithoutFilters: true,
     };
 
     return metadata.getValidElements(projectId, objectId, options).then((res: IValidElementsResponse) => {
         const {
             items,
             paging: { total },
+            totalCountWithoutFilters,
         } = res.validElements;
         return {
             data: {
@@ -117,6 +120,7 @@ export function loadAttributeElements(
                 limit,
                 items: items.map((item: IElement) => pick(item.element, "uri", "title")),
                 totalCount: total,
+                totalCountWithoutFilters,
             },
         };
     });
@@ -213,6 +217,18 @@ export class AttributeDropdownWrapped extends React.PureComponent<
         );
     }
 
+    public onSearch = (searchString: string) => {
+        this.setState(
+            {
+                searchString,
+                isListReady: false,
+            },
+            () => {
+                this.dataSource.getData({});
+            },
+        );
+    };
+
     private createMediaQuery(fullscreenOnMobile: boolean) {
         this.MediaQuery = fullscreenOnMobile
             ? undefined
@@ -242,6 +258,16 @@ export class AttributeDropdownWrapped extends React.PureComponent<
         });
     };
 
+    private resetSearchString = () => {
+        const { searchString } = this.state;
+        if (searchString) {
+            this.setState({
+                searchString: "",
+                isListReady: false,
+            });
+        }
+    };
+
     private onApply = () => {
         const { selection, isInverted } = this.state;
         const { attributeDisplayForm, isUsingIdentifier } = this.props;
@@ -250,11 +276,13 @@ export class AttributeDropdownWrapped extends React.PureComponent<
             : attributeDisplayForm.meta.uri;
 
         this.props.onApply(createAfmFilter(id, selection, isInverted));
+        this.resetSearchString();
         this.backupSelection(() => this.dropdownRef.closeDropdown());
     };
 
     private onCancel = () => {
         this.restoreSelection();
+        this.resetSearchString();
         this.dropdownRef.closeDropdown();
     };
 
@@ -287,6 +315,7 @@ export class AttributeDropdownWrapped extends React.PureComponent<
         const request = this.getAttributeElements(uri);
 
         this.setState({
+            searchString: "",
             isListInitialising: true,
             listError: null,
         });
@@ -302,7 +331,8 @@ export class AttributeDropdownWrapped extends React.PureComponent<
             const updatedPrevSelection = this.updateSelectionByData(prevSelection, items);
 
             this.setState({
-                totalCount: result.data.totalCount,
+                totalCount: result.data.totalCountWithoutFilters,
+                filteredItemsCount: result.data.totalCount,
                 isListReady: true,
                 listError: null,
                 items,
@@ -322,15 +352,6 @@ export class AttributeDropdownWrapped extends React.PureComponent<
         });
     };
 
-    private onSearch = (searchString: string) => {
-        const { attributeDisplayForm } = this.props;
-        this.setState({
-            searchString,
-            isListReady: false,
-        });
-        this.setupDataSource(attributeDisplayForm.meta.uri);
-    };
-
     private onRangeChange = (_searchString: string, from: number, to: number) => {
         range(from, to).forEach(this.dataSource.getRowAt);
     };
@@ -345,6 +366,7 @@ export class AttributeDropdownWrapped extends React.PureComponent<
             this.backupSelection();
         } else {
             this.restoreSelection();
+            this.resetSearchString();
         }
     };
 
@@ -358,7 +380,15 @@ export class AttributeDropdownWrapped extends React.PureComponent<
     }
 
     private renderList() {
-        const { isListReady, items, selection, listError, totalCount, searchString } = this.state;
+        const {
+            isListReady,
+            items,
+            selection,
+            listError,
+            totalCount,
+            searchString,
+            filteredItemsCount,
+        } = this.state;
         const { getListError } = this.props;
 
         if (listError) {
@@ -369,7 +399,7 @@ export class AttributeDropdownWrapped extends React.PureComponent<
             <InvertableList
                 items={items}
                 itemsCount={parseInt(totalCount, 10)}
-                filteredItemsCount={parseInt(totalCount, 10)}
+                filteredItemsCount={parseInt(filteredItemsCount, 10)}
                 selection={selection}
                 isInverted={this.state.isInverted}
                 showSearchField={true}
