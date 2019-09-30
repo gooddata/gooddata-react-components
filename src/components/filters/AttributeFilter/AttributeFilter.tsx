@@ -11,6 +11,8 @@ import { IntlWrapper } from "../../core/base/IntlWrapper";
 import { AttributeDropdown, AttributeDropdownWrapped } from "./AttributeDropdown";
 import { AttributeLoader, IAttributeLoaderChildrenProps } from "./AttributeLoader";
 import { setTelemetryHeaders } from "../../../helpers/utils";
+import { IAttributeElement } from "./model";
+import * as Model from "../../../helpers/model";
 
 export interface IAttributeFilterProps {
     projectId: string;
@@ -47,6 +49,38 @@ const DefaultFilterError = injectIntl(({ intl, error }: IFilterErrorProps & Inje
     const text = intl.formatMessage({ id: "gs.filter.error" });
     return <div className="gd-message error">{text}</div>;
 });
+
+function getElementId(element: IAttributeElement) {
+    return element.uri.split("=")[1];
+}
+
+export function createOldFilterDefinition(
+    id: string,
+    selection: IAttributeElement[],
+    isInverted: boolean,
+    isUsingTextFilter: boolean = false,
+) {
+    return {
+        id,
+        type: "attribute",
+        [isInverted ? "notIn" : "in"]: isUsingTextFilter
+            ? selection.map(item => item.title)
+            : selection.map(getElementId),
+    };
+}
+
+export function createAfmFilter(
+    id: string,
+    selection: IAttributeElement[],
+    isInverted: boolean,
+    isUsingTextFilter: boolean = false,
+) {
+    const filterFactory = isInverted ? Model.negativeAttributeFilter : Model.positiveAttributeFilter;
+    if (isUsingTextFilter) {
+        return filterFactory(id, selection.map(item => item.title), true);
+    }
+    return filterFactory(id, selection.map(item => item.uri));
+}
 
 /**
  * AttributeFilter
@@ -111,6 +145,19 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps> 
         );
     }
 
+    public onApply = (selection: IAttributeElement[], isInverted: boolean) => {
+        const { identifier, uri } = this.getIdentifierOrUri();
+        let isUsingTextFilter = false;
+        if (this.props.filter) {
+            const filterBody = this.getFilterBody(this.props.filter);
+            isUsingTextFilter = Boolean(filterBody.textFilter);
+        }
+        const id: string = identifier || uri;
+
+        this.props.onApply(createOldFilterDefinition(id, selection, isInverted, isUsingTextFilter));
+        this.props.onApplyWithFilterDefinition(createAfmFilter(id, selection, isInverted, isUsingTextFilter));
+    };
+
     private isInverted() {
         const { filter } = this.props;
 
@@ -145,12 +192,18 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps> 
         }
     }
 
+    private getFilterBody = (
+        filter: VisualizationInput.IPositiveAttributeFilter | VisualizationInput.INegativeAttributeFilter,
+    ) => {
+        return VisualizationInput.isPositiveAttributeFilter(filter)
+            ? filter.positiveAttributeFilter
+            : filter.negativeAttributeFilter;
+    };
+
     private getSelection() {
         const { filter } = this.props;
         if (filter) {
-            const filterBody = VisualizationInput.isPositiveAttributeFilter(filter)
-                ? filter.positiveAttributeFilter
-                : filter.negativeAttributeFilter;
+            const filterBody = this.getFilterBody(filter);
             const inType = VisualizationInput.isPositiveAttributeFilter(filter) ? "in" : "notIn";
             const textFilter = Boolean(filterBody.textFilter);
             const selection = filterBody[inType];
@@ -164,12 +217,7 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps> 
         return [];
     }
 
-    private renderContent({
-        isLoading,
-        attributeDisplayForm,
-        isUsingIdentifier,
-        error,
-    }: IAttributeLoaderChildrenProps) {
+    private renderContent({ isLoading, attributeDisplayForm, error }: IAttributeLoaderChildrenProps) {
         if (isLoading) {
             return <this.props.FilterLoading />;
         }
@@ -186,7 +234,7 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps> 
                 {...dropdownProps}
                 selection={this.getSelection()}
                 isInverted={this.isInverted()}
-                isUsingIdentifier={isUsingIdentifier}
+                onApply={this.onApply}
             />
         );
     }
