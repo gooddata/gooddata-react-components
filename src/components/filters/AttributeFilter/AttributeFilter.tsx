@@ -1,12 +1,13 @@
 // (C) 2007-2018 GoodData Corporation
 import * as React from "react";
 import * as PropTypes from "prop-types";
-import { SDK, factory as createSdk } from "@gooddata/gooddata-js";
 import pick = require("lodash/pick");
-import { AFM } from "@gooddata/typings";
+import noop = require("lodash/noop");
+import { injectIntl, InjectedIntlProps } from "react-intl";
+import { SDK, factory as createSdk } from "@gooddata/gooddata-js";
+import { AFM, VisualizationInput } from "@gooddata/typings";
 
 import { IntlWrapper } from "../../core/base/IntlWrapper";
-import { injectIntl, InjectedIntlProps } from "react-intl";
 import { AttributeDropdown, AttributeDropdownWrapped } from "./AttributeDropdown";
 import { AttributeLoader, IAttributeLoaderChildrenProps } from "./AttributeLoader";
 import { setTelemetryHeaders } from "../../../helpers/utils";
@@ -14,11 +15,14 @@ import { setTelemetryHeaders } from "../../../helpers/utils";
 export interface IAttributeFilterProps {
     projectId: string;
     onApply: (...params: any[]) => any; // TODO: make the types more specific (FET-282)
+    onApplyWithFilterDefinition?: (
+        filter: VisualizationInput.IPositiveAttributeFilter | VisualizationInput.INegativeAttributeFilter,
+    ) => void;
     sdk?: SDK;
     // one of these three needs to be provided
     uri?: string;
     identifier?: string;
-    filter?: AFM.AttributeFilterItem;
+    filter?: VisualizationInput.IPositiveAttributeFilter | VisualizationInput.INegativeAttributeFilter;
     locale?: string;
     fullscreenOnMobile?: boolean;
     title?: string;
@@ -55,6 +59,7 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps> 
         filter: PropTypes.object,
         projectId: PropTypes.string.isRequired,
         onApply: PropTypes.func.isRequired,
+        onApplyWithFilterDefinition: PropTypes.func,
         fullscreenOnMobile: PropTypes.bool,
         FilterLoading: PropTypes.func,
         FilterError: PropTypes.func,
@@ -72,6 +77,7 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps> 
         FilterError: DefaultFilterError,
         fullscreenOnMobile: false,
         title: null,
+        onApplyWithFilterDefinition: noop,
     };
 
     private sdk: SDK;
@@ -108,7 +114,7 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps> 
     private isInverted() {
         const { filter } = this.props;
 
-        return !AFM.isPositiveAttributeFilter(filter);
+        return !VisualizationInput.isPositiveAttributeFilter(filter);
     }
 
     private getIdentifierOrUri() {
@@ -123,7 +129,7 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps> 
             );
         }
         if (filter) {
-            const displayForm = AFM.isPositiveAttributeFilter(filter)
+            const displayForm = VisualizationInput.isPositiveAttributeFilter(filter)
                 ? filter.positiveAttributeFilter.displayForm
                 : filter.negativeAttributeFilter.displayForm;
 
@@ -142,10 +148,10 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps> 
     private getSelection() {
         const { filter } = this.props;
         if (filter) {
-            const filterBody = AFM.isPositiveAttributeFilter(filter)
+            const filterBody = VisualizationInput.isPositiveAttributeFilter(filter)
                 ? filter.positiveAttributeFilter
                 : filter.negativeAttributeFilter;
-            const inType = AFM.isPositiveAttributeFilter(filter) ? "in" : "notIn";
+            const inType = VisualizationInput.isPositiveAttributeFilter(filter) ? "in" : "notIn";
             const textFilter = Boolean(filterBody.textFilter);
             const selection = filterBody[inType];
 
