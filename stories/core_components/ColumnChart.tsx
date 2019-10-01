@@ -357,6 +357,21 @@ storiesOf("Core components/ColumnChart", module)
             </div>,
         ),
     )
+    .add("force disable drilling on axes", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <ColumnChart
+                    projectId="storybook"
+                    measures={[MEASURE_1]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    drillableItems={[
+                        HeaderPredicateFactory.uriMatch("/gdc/md/storybook/obj/5/elements?id=1"),
+                    ]}
+                    config={{ forceDisableDrillOnAxes: true }}
+                />
+            </div>,
+        ),
+    )
     .add("optional stacking chart with drillable child items", () =>
         screenshotWrap(
             <div style={wrapperStyle}>

@@ -13,6 +13,7 @@ import every = require("lodash/every");
 import isNil = require("lodash/isNil");
 import pickBy = require("lodash/pickBy");
 import * as numberJS from "@gooddata/numberjs";
+import * as cx from "classnames";
 
 import { styleVariables } from "../../styles/variables";
 import { supportedDualAxesChartTypes, supportedTooltipFollowPointerChartTypes } from "../chartOptionsBuilder";
@@ -286,6 +287,7 @@ function getHighchartTooltipLeftOffset(chartType: string): number {
     }
     return HIGHCHARTS_TOOLTIP_TOP_LEFT_OFFSET;
 }
+
 export function getTooltipPositionInViewPort(
     chartType: string,
     stacking: string,
@@ -384,6 +386,7 @@ function level1LabelsFormatter(config?: IChartConfig) {
         config,
     )})`;
 }
+
 function level2LabelsFormatter(config?: IChartConfig) {
     return `${get(this, "point.name")} (${formatLabel(
         get(this, "point.value"),
@@ -976,6 +979,7 @@ function getYAxisTickConfiguration(chartOptions: IChartOptions, axisPropsKey: st
 }
 
 function getAxesConfiguration(chartOptions: IChartOptions) {
+    const { forceDisableDrillOnAxes = false } = chartOptions;
     const type = chartOptions.type as ChartType;
 
     return {
@@ -993,7 +997,9 @@ function getAxesConfiguration(chartOptions: IChartOptions) {
 
             const opposite = get(axis, "opposite", false);
             const axisType: string = axis.opposite ? "secondary" : "primary";
-            const className: string = `s-highcharts-${axisType}-yaxis`;
+            const className: string = cx(`s-highcharts-${axisType}-yaxis`, {
+                "gd-axis-label-drilling-disabled": forceDisableDrillOnAxes,
+            });
             const axisPropsKey = opposite ? "secondary_yAxisProps" : "yAxisProps";
 
             // For bar chart take x axis options
@@ -1051,6 +1057,9 @@ function getAxesConfiguration(chartOptions: IChartOptions) {
 
             const opposite = get(axis, "opposite", false);
             const axisPropsKey = opposite ? "secondary_xAxisProps" : "xAxisProps";
+            const className: string = cx({
+                "gd-axis-label-drilling-disabled": forceDisableDrillOnAxes,
+            });
 
             const min = get(chartOptions, axisPropsKey.concat(".min"), "");
             const max = get(chartOptions, axisPropsKey.concat(".max"), "");
@@ -1102,6 +1111,7 @@ function getAxesConfiguration(chartOptions: IChartOptions) {
                         font: '14px Avenir, "Helvetica Neue", Arial, sans-serif',
                     },
                 },
+                className,
                 ...maxProp,
                 ...minProp,
                 ...tickConfiguration,
