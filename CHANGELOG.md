@@ -15,6 +15,14 @@ The REST API versions in the table are just for your information as the values a
 
 - We ask developers to consider using the Headline component instead of the KPI component. The KPI component may be eventually marked as deprecated in one of the next major versions.
 
+## 7.1.1
+
+October 14, 2019
+
+### Fixed
+
+- The Visualization component now propagates an externally provided SDK instance to the all internal charts
+
 ## 7.1.0
 
 ### Added
