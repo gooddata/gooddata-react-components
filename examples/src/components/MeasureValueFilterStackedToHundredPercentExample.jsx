@@ -1,15 +1,24 @@
 // (C) 2007-2019 GoodData Corporation
 import React, { Component } from "react";
-import { PivotTable, Model } from "@gooddata/react-components";
+import { BarChart, Model } from "@gooddata/react-components";
 
 import "@gooddata/react-components/styles/css/main.css";
-import { projectId, franchiseFeesIdentifier, locationNameDisplayFormIdentifier } from "../utils/fixtures";
+import {
+    projectId,
+    franchiseFeesIdentifier,
+    locationNameDisplayFormIdentifier,
+    franchisedSalesIdentifier,
+} from "../utils/fixtures";
 
 const measures = [
     Model.measure(franchiseFeesIdentifier)
-        .format("#,##0")
         .localIdentifier("franchiseFees")
-        .title("Franchise Fees"),
+        .title("Franchise Fees")
+        .format("#,##0"),
+    Model.measure(franchisedSalesIdentifier)
+        .localIdentifier("franchiseSales")
+        .title("Franchise Sales")
+        .format("#,##0"),
 ];
 
 const attributes = [Model.attribute(locationNameDisplayFormIdentifier).localIdentifier("locationName")];
@@ -28,22 +37,7 @@ const greaterThanFilter = {
     },
 };
 
-const betweenFilter = {
-    measureValueFilter: {
-        measure: {
-            localIdentifier: "franchiseFees",
-        },
-        condition: {
-            range: {
-                operator: "BETWEEN",
-                from: 500000,
-                to: 800000,
-            },
-        },
-    },
-};
-
-export class FilterByValueExample extends Component {
+export class MeasureValueFilterExample extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -73,22 +67,23 @@ export class FilterByValueExample extends Component {
                 <div>
                     {this.renderPresetButton("All franchise fees", [], filters.length === 0)}
                     {this.renderPresetButton(
-                        "Franchise fees greater than 700,000",
+                        "Franchise fees greater than 700,000 (stacked to 100%)",
                         [greaterThanFilter],
-                        filters[0] === greaterThanFilter,
-                    )}
-                    {this.renderPresetButton(
-                        "Franchise fees between 500,000 and 800,000",
-                        [betweenFilter],
-                        filters[0] === betweenFilter,
+                        filters.length > 0,
                     )}
                 </div>
                 <hr className="separator" />
-                <div style={{ height: 300 }} className="s-pivot-table">
-                    <PivotTable
+                <div style={{ height: 300 }} className="s-stacked-bar">
+                    <BarChart
                         projectId={projectId}
                         measures={measures}
-                        rows={attributes}
+                        viewBy={attributes}
+                        config={{
+                            stackMeasuresToPercent: true,
+                            dataLabels: {
+                                visible: true,
+                            },
+                        }}
                         filters={filters}
                     />
                 </div>
@@ -97,4 +92,4 @@ export class FilterByValueExample extends Component {
     }
 }
 
-export default FilterByValueExample;
+export default MeasureValueFilterExample;
