@@ -3,13 +3,26 @@ import React, { Component } from "react";
 import { PivotTable, Model } from "@gooddata/react-components";
 
 import "@gooddata/react-components/styles/css/main.css";
-import { projectId, franchiseFeesIdentifier, locationNameDisplayFormIdentifier } from "../utils/fixtures";
+import {
+    projectId,
+    franchiseFeesIdentifier,
+    franchisedSalesIdentifier,
+    locationNameDisplayFormIdentifier,
+} from "../utils/fixtures";
 
 const measures = [
     Model.measure(franchiseFeesIdentifier)
-        .format("#,##0")
         .localIdentifier("franchiseFees")
-        .title("Franchise Fees"),
+        .title("Franchise Fees")
+        .format("#,##0"),
+    Model.measure(franchisedSalesIdentifier)
+        .localIdentifier("franchiseSales")
+        .title("Franchise Sales")
+        .format("#,##0"),
+    Model.arithmeticMeasure(["franchiseSales", "franchiseFees"], "change")
+        .localIdentifier("franchiseFeesFormattedAsPercentage")
+        .title("Change formatted as %")
+        .format("#,##0%"),
 ];
 
 const attributes = [Model.attribute(locationNameDisplayFormIdentifier).localIdentifier("locationName")];
@@ -17,33 +30,18 @@ const attributes = [Model.attribute(locationNameDisplayFormIdentifier).localIden
 const greaterThanFilter = {
     measureValueFilter: {
         measure: {
-            localIdentifier: "franchiseFees",
+            localIdentifier: "franchiseFeesFormattedAsPercentage",
         },
         condition: {
             comparison: {
                 operator: "GREATER_THAN",
-                value: 700000,
+                value: 10, // 1000% / 100 = 10
             },
         },
     },
 };
 
-const betweenFilter = {
-    measureValueFilter: {
-        measure: {
-            localIdentifier: "franchiseFees",
-        },
-        condition: {
-            range: {
-                operator: "BETWEEN",
-                from: 500000,
-                to: 800000,
-            },
-        },
-    },
-};
-
-export class FilterByValueExample extends Component {
+export class MeasureValueFilterExample extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -54,7 +52,7 @@ export class FilterByValueExample extends Component {
     renderPresetButton(label, appliedFilters, isActive) {
         return (
             <button
-                className={`gd-button gd-button-secondary ${isActive ? "is-active" : ""}`}
+                className={`gd-button gd-button-secondary s-filter-button ${isActive ? "is-active" : ""}`}
                 onClick={() =>
                     this.setState({
                         filters: appliedFilters,
@@ -73,14 +71,9 @@ export class FilterByValueExample extends Component {
                 <div>
                     {this.renderPresetButton("All franchise fees", [], filters.length === 0)}
                     {this.renderPresetButton(
-                        "Franchise fees greater than 700,000",
+                        "Franchise fees greater than 1000%",
                         [greaterThanFilter],
-                        filters[0] === greaterThanFilter,
-                    )}
-                    {this.renderPresetButton(
-                        "Franchise fees between 500,000 and 800,000",
-                        [betweenFilter],
-                        filters[0] === betweenFilter,
+                        filters.length > 0,
                     )}
                 </div>
                 <hr className="separator" />
@@ -97,4 +90,4 @@ export class FilterByValueExample extends Component {
     }
 }
 
-export default FilterByValueExample;
+export default MeasureValueFilterExample;
