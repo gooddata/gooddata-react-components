@@ -418,4 +418,43 @@ describe("mergeFiltersToAfm", () => {
             filters: [...additionalFilters, ...originalFilters],
         });
     });
+
+    it("should skip select all attribute filter but keep other filters", () => {
+        const originalAfm: AFM.IAfm = {
+            filters: [],
+        };
+
+        const nonAllFilters: AFM.FilterItem[] = [
+            {
+                negativeAttributeFilter: {
+                    displayForm: {
+                        identifier: "filter1",
+                    },
+                    notIn: ["a"],
+                },
+            },
+            {
+                relativeDateFilter: {
+                    dataSet: { identifier: "345" },
+                    from: 0,
+                    to: 0,
+                    granularity: "GDC.time.day",
+                },
+            },
+        ];
+
+        const allFilter: AFM.FilterItem = {
+            negativeAttributeFilter: {
+                displayForm: {
+                    identifier: "filter1",
+                },
+                notIn: [],
+            },
+        };
+
+        const result = mergeFiltersToAfm(originalAfm, [...nonAllFilters, allFilter]);
+        expect(result).toEqual({
+            filters: nonAllFilters,
+        });
+    });
 });
