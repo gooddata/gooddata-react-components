@@ -42,4 +42,3 @@ export const canExcludeCurrentPeriod = (dateFilterOption: ExtendedDateFilters.Da
     }
     return false;
 };
-
