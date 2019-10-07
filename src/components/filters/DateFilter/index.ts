@@ -17,7 +17,7 @@ const DateFilterHelpers = {
     canExcludeCurrentPeriod,
 };
 
-// This is 1:1 reexported by root index.ts and is part of SDK's public API!
+// This is 1:1 reexported by root index.ts and is part of SDK's public API
 export {
     DateFilter,
     IDateFilterCallbackProps,
