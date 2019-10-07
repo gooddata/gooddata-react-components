@@ -10,9 +10,7 @@ interface IDateFilterBodyButtonProps {
     disabled?: boolean;
 }
 
-const DateFilterBodyButtonComponent: React.FC<
-    IDateFilterBodyButtonProps & InjectedIntlProps
-> = props => (
+const DateFilterBodyButtonComponent: React.FC<IDateFilterBodyButtonProps & InjectedIntlProps> = props => (
     <Button
         type="button"
         value={props.intl.formatMessage({ id: props.messageId })}

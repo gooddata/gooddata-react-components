@@ -2,10 +2,7 @@
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { Select } from "../../../src/components/filters/DateFilter/Select/Select";
-import {
-    ISelectItem,
-    ISelectItemOption,
-} from "../../../src/components/filters/DateFilter/Select/types";
+import { ISelectItem, ISelectItemOption } from "../../../src/components/filters/DateFilter/Select/types";
 
 storiesOf("Helper components/DateFilter/Select", module).add("renders", () => {
     const items: Array<ISelectItem<string>> = [

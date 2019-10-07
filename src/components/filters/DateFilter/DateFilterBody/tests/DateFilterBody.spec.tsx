@@ -47,16 +47,12 @@ describe("ExtendedDateFilterBody", () => {
     };
 
     it("should pass the isExcludeCurrentPeriodEnabled=true to Exclude button", () => {
-        const rendered = shallow(
-            <DateFilterBody {...mockProps} isExcludeCurrentPeriodEnabled={true} />,
-        );
+        const rendered = shallow(<DateFilterBody {...mockProps} isExcludeCurrentPeriodEnabled={true} />);
         expect(rendered.find(ExcludeCurrentPeriodToggle)).not.toBeDisabled();
     });
 
     it("should pass the isExcludeCurrentPeriodEnabled=false to Exclude button", () => {
-        const rendered = shallow(
-            <DateFilterBody {...mockProps} isExcludeCurrentPeriodEnabled={false} />,
-        );
+        const rendered = shallow(<DateFilterBody {...mockProps} isExcludeCurrentPeriodEnabled={false} />);
         expect(rendered.find(ExcludeCurrentPeriodToggle)).toBeDisabled();
     });
 

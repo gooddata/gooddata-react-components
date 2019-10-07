@@ -54,10 +54,7 @@ export const isFilterOptionSelected = (
 
 const ITEM_CLASS_MOBILE = "gd-date-filter-item-mobile";
 
-export class DateFilterBody extends React.Component<
-    IDateFilterBodyProps,
-    IDateFilterBodyState
-> {
+export class DateFilterBody extends React.Component<IDateFilterBodyProps, IDateFilterBodyState> {
     public state: IDateFilterBodyState = {
         route: null,
     };
