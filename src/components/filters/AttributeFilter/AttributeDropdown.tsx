@@ -25,7 +25,7 @@ const LIST_WIDTH = 240;
 const MAX_SELECTION_SIZE = 500;
 
 export const VISIBLE_ITEMS_COUNT = 10;
-const LIMIT = 50;
+const LIMIT = MAX_SELECTION_SIZE + 50;
 const INITIAL_OFFSET = 0;
 
 const getLoadingClass = () => <LoadingMask style={{ height: 306 }} />;
