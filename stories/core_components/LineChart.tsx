@@ -26,6 +26,7 @@ import {
     CUSTOM_COLOR_PALETTE_CONFIG,
 } from "../data/configProps";
 import { ScreenshotReadyWrapper, createHighChartResolver } from "../utils/ScreenshotReadyWrapper";
+import { withAxisNamePositionConfig, withAxisNameVisibilityConfig } from "../hoc/withAxisName";
 
 const wrapperStyle = { width: 800, height: 400 };
 
@@ -369,5 +370,37 @@ storiesOf("Core components/LineChart", module)
                     ErrorComponent={null}
                 />
             </div>,
+        ),
+    )
+    .add("with axis name position", () =>
+        screenshotWrap(
+            withAxisNamePositionConfig(
+                <LineChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    config={{
+                        secondary_yaxis: {
+                            measures: [MEASURE_2.measure.localIdentifier],
+                        },
+                    }}
+                    trendBy={ATTRIBUTE_1}
+                />,
+            ),
+        ),
+    )
+    .add("with axis name visibility", () =>
+        screenshotWrap(
+            withAxisNameVisibilityConfig(
+                <LineChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    config={{
+                        secondary_yaxis: {
+                            measures: [MEASURE_2.measure.localIdentifier],
+                        },
+                    }}
+                    trendBy={ATTRIBUTE_1}
+                />,
+            ),
         ),
     );

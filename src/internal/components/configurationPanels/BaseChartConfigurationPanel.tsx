@@ -1,28 +1,29 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
+import * as classNames from "classnames";
 import { FormattedMessage } from "react-intl";
 import get = require("lodash/get");
 import includes = require("lodash/includes");
-import * as BucketNames from "../../../constants/bucketNames";
 import Bubble from "@gooddata/goodstrap/lib/Bubble/Bubble";
 import BubbleHoverTrigger from "@gooddata/goodstrap/lib/Bubble/BubbleHoverTrigger";
-import * as classNames from "classnames";
 
+import * as BucketNames from "../../../constants/bucketNames";
 import MinMaxControl from "../configurationControls//MinMaxControl";
 import ConfigurationPanelContent from "./ConfigurationPanelContent";
 import ConfigSection from "../configurationControls/ConfigSection";
 import CheckboxControl from "../configurationControls/CheckboxControl";
 import DataLabelsControl from "../configurationControls/DataLabelsControl";
+import LabelSubsection from "../configurationControls/axis/LabelSubsection";
+import NameSubsection from "../configurationControls/axis/NameSubsection";
 import {
     SHOW_DELAY_DEFAULT,
     HIDE_DELAY_DEFAULT,
     BUBBLE_ARROW_OFFSET_X,
     BUBBLE_ARROW_OFFSET_Y,
 } from "../../constants/bubble";
-import LabelSubsection from "../configurationControls/axis/LabelSubsection";
 import { IAxisProperties } from "../../interfaces/AxisType";
 import { AXIS, BASE_CHART_AXIS_CONFIG, DUAL_AXES_SUPPORTED_CHARTS } from "../../constants/axis";
-import { IVisualizationProperties } from "../../interfaces/Visualization";
+import { countItemsOnAxes } from "../../utils/mdObjectHelper";
 
 export default class BaseChartConfigurationPanel extends ConfigurationPanelContent {
     protected renderCanvasSection() {
@@ -58,13 +59,11 @@ export default class BaseChartConfigurationPanel extends ConfigurationPanelConte
     protected renderConfigurationPanel() {
         const { axes } = this.getControlProperties();
 
-        const { properties, propertiesMeta } = this.props;
-
         return (
             <BubbleHoverTrigger showDelay={SHOW_DELAY_DEFAULT} hideDelay={HIDE_DELAY_DEFAULT}>
                 <div>
                     {this.renderColorSection()}
-                    {this.getBaseChartAxisSection(properties, propertiesMeta, axes)}
+                    {this.getBaseChartAxisSection(axes)}
                     {this.renderLegendSection()}
                     {this.renderCanvasSection()}
                 </div>
@@ -122,38 +121,49 @@ export default class BaseChartConfigurationPanel extends ConfigurationPanelConte
         );
     }
 
-    protected getBaseChartAxisSection(
-        properties: IVisualizationProperties,
-        propertiesMeta: any,
-        axes: IAxisProperties[],
-    ) {
+    protected getBaseChartAxisSection(axes: IAxisProperties[]) {
+        const { type, properties, propertiesMeta, pushData, mdObject } = this.props;
         const controlsDisabled = this.isControlDisabled();
         const isViewedBy = this.isViewedBy();
+        const itemsOnAxes = countItemsOnAxes(type, properties.controls, mdObject);
 
-        return axes.map(axis => (
-            <ConfigSection
-                key={axis.name}
-                id={`${axis.name}_section`}
-                title={axis.title}
-                subtitle={axis.subtitle}
-                valuePath={`${axis.name}.visible`}
-                canBeToggled={true}
-                toggledOn={axis.visible}
-                toggleDisabled={controlsDisabled}
-                propertiesMeta={propertiesMeta}
-                properties={properties}
-                pushData={this.props.pushData}
-            >
-                <LabelSubsection
-                    disabled={controlsDisabled || (!axis.primary && !isViewedBy)}
-                    configPanelDisabled={controlsDisabled}
-                    axis={axis.name}
+        return axes.map((axis: IAxisProperties) => {
+            const disabled = controlsDisabled || (!axis.primary && !isViewedBy);
+            const hasMoreThanOneItem = itemsOnAxes[axis.name] > 1;
+            const { name, title, subtitle, visible } = axis;
+
+            return (
+                <ConfigSection
+                    key={name}
+                    id={`${name}_section`}
+                    title={title}
+                    subtitle={subtitle}
+                    valuePath={`${name}.visible`}
+                    canBeToggled={true}
+                    toggledOn={visible}
+                    toggleDisabled={controlsDisabled}
+                    propertiesMeta={propertiesMeta}
                     properties={properties}
-                    pushData={this.props.pushData}
-                />
-                {axis.primary && this.renderMinMax(axis.name)}
-            </ConfigSection>
-        ));
+                    pushData={pushData}
+                >
+                    <NameSubsection
+                        disabled={disabled || hasMoreThanOneItem}
+                        configPanelDisabled={controlsDisabled}
+                        axis={axis.name}
+                        properties={properties}
+                        pushData={pushData}
+                    />
+                    <LabelSubsection
+                        disabled={disabled}
+                        configPanelDisabled={controlsDisabled}
+                        axis={axis.name}
+                        properties={properties}
+                        pushData={pushData}
+                    />
+                    {axis.primary && this.renderMinMax(axis.name)}
+                </ConfigSection>
+            );
+        });
     }
 
     protected renderMinMax(basePath: string) {

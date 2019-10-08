@@ -10,6 +10,7 @@ import * as classNames from "classnames";
 import ConfigurationPanelContent from "./ConfigurationPanelContent";
 import ConfigSection from "../configurationControls/ConfigSection";
 import DataLabelsControl from "../configurationControls/DataLabelsControl";
+import NameSubsection from "../configurationControls/axis/NameSubsection";
 import {
     SHOW_DELAY_DEFAULT,
     HIDE_DELAY_DEFAULT,
@@ -45,6 +46,13 @@ export default class HeatMapConfigurationPanel extends ConfigurationPanelContent
                         properties={properties}
                         pushData={pushData}
                     >
+                        <NameSubsection
+                            disabled={xAxisDisabled}
+                            configPanelDisabled={controlsDisabled}
+                            axis={"xaxis"}
+                            properties={properties}
+                            pushData={pushData}
+                        />
                         <LabelSubsection
                             disabled={xAxisDisabled}
                             configPanelDisabled={controlsDisabled}
@@ -65,6 +73,13 @@ export default class HeatMapConfigurationPanel extends ConfigurationPanelContent
                         properties={properties}
                         pushData={pushData}
                     >
+                        <NameSubsection
+                            disabled={yAxisDisabled}
+                            configPanelDisabled={controlsDisabled}
+                            axis={"yaxis"}
+                            properties={properties}
+                            pushData={pushData}
+                        />
                         <LabelSubsection
                             disabled={yAxisDisabled}
                             configPanelDisabled={controlsDisabled}

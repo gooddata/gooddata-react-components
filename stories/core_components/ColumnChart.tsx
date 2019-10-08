@@ -27,6 +27,7 @@ import * as HeaderPredicateFactory from "../../src/factory/HeaderPredicateFactor
 import { wrap } from "../utils/wrap";
 import { Visualization } from "../../src/components/visualizations/Visualization";
 import { dualChartWithComputedAttribute } from "../test_data/fixtures";
+import { withAxisNamePositionConfig, withAxisNameVisibilityConfig } from "../hoc/withAxisName";
 
 const wrapperStyle = { width: 800, height: 400 };
 
@@ -244,6 +245,38 @@ storiesOf("Core components/ColumnChart", module)
                     </div>
                 </div>
             </ScreenshotReadyWrapper>,
+        ),
+    )
+    .add("with axis name position", () =>
+        screenshotWrap(
+            withAxisNamePositionConfig(
+                <ColumnChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    viewBy={ATTRIBUTE_1}
+                    config={{
+                        secondary_yaxis: {
+                            measures: [MEASURE_2.measure.localIdentifier],
+                        },
+                    }}
+                />,
+            ),
+        ),
+    )
+    .add("with axis name visibility", () =>
+        screenshotWrap(
+            withAxisNameVisibilityConfig(
+                <ColumnChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    viewBy={ATTRIBUTE_1}
+                    config={{
+                        secondary_yaxis: {
+                            measures: [MEASURE_2.measure.localIdentifier],
+                        },
+                    }}
+                />,
+            ),
         ),
     )
     .add("arithmetic measures", () =>

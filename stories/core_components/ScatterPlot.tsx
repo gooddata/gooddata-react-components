@@ -21,6 +21,7 @@ import {
 } from "../data/configProps";
 import { localIdentifierMatch } from "../../src/factory/HeaderPredicateFactory";
 import { ScreenshotReadyWrapper, createHighChartResolver } from "../utils/ScreenshotReadyWrapper";
+import { withAxisNamePositionConfig, withAxisNameVisibilityConfig } from "../hoc/withAxisName";
 
 const wrapperStyle = { width: 800, height: 400 };
 
@@ -236,4 +237,28 @@ storiesOf("Core components/ScatterPlot", module)
                 />
             </div>,
         );
-    });
+    })
+    .add("with axis name position", () =>
+        screenshotWrap(
+            withAxisNamePositionConfig(
+                <ScatterPlot
+                    projectId="storybook"
+                    xAxisMeasure={MEASURE_1}
+                    yAxisMeasure={MEASURE_2}
+                    attribute={ATTRIBUTE_1}
+                />,
+            ),
+        ),
+    )
+    .add("with axis name visibility", () =>
+        screenshotWrap(
+            withAxisNameVisibilityConfig(
+                <ScatterPlot
+                    projectId="storybook"
+                    xAxisMeasure={MEASURE_1}
+                    yAxisMeasure={MEASURE_2}
+                    attribute={ATTRIBUTE_1}
+                />,
+            ),
+        ),
+    );

@@ -5,6 +5,8 @@ import { getMeasuresFromMdObject } from "./bucketHelper";
 import * as BucketNames from "../../constants/bucketNames";
 import { IAxisConfig } from "../../interfaces/Config";
 import { IVisualizationProperties } from "../interfaces/Visualization";
+import { isBarChart } from "../../components/visualizations/utils/common";
+import { getBucketItems } from "../../helpers/mdObjBucketHelper";
 
 function isAttribute(item: VisualizationObject.BucketItem): boolean {
     const attribute = item as VisualizationObject.IVisualizationAttribute;
@@ -72,4 +74,48 @@ export function canSortStackTotalValue(
         areAllMeasuresOnSingleAxis(mdObject, get(supportedControls, "secondary_yaxis", false)) &&
         hasOneViewItem(mdObject)
     );
+}
+
+export function countItemsInMdObject(mdObject: VisualizationObject.IVisualizationObjectContent) {
+    const { buckets } = mdObject;
+
+    const viewByItemCount: number = getBucketItems(buckets, BucketNames.VIEW).length;
+    const measureItemCount: number = getBucketItems(buckets, BucketNames.MEASURES).length;
+    const secondaryMeasureItemCount: number = getBucketItems(buckets, BucketNames.SECONDARY_MEASURES).length;
+
+    return {
+        viewByItemCount,
+        measureItemCount,
+        secondaryMeasureItemCount,
+    };
+}
+
+export function countItemsOnAxes(
+    type: string,
+    controls: IVisualizationProperties,
+    mdObject: VisualizationObject.IVisualizationObjectContent,
+) {
+    const isBarChartType = isBarChart(type);
+
+    const { viewByItemCount, measureItemCount, secondaryMeasureItemCount } = countItemsInMdObject(mdObject);
+    const totalMeasureItemCount = measureItemCount + secondaryMeasureItemCount;
+
+    const secondaryMeasureCountInConfig = (isBarChartType
+        ? get(controls, "secondary_xaxis.measures", [])
+        : get(controls, "secondary_yaxis.measures", [])
+    ).length;
+
+    if (isBarChartType) {
+        return {
+            yaxis: viewByItemCount,
+            xaxis: totalMeasureItemCount - secondaryMeasureCountInConfig,
+            secondary_xaxis: secondaryMeasureCountInConfig,
+        };
+    }
+
+    return {
+        xaxis: viewByItemCount,
+        yaxis: totalMeasureItemCount - secondaryMeasureCountInConfig,
+        secondary_yaxis: secondaryMeasureCountInConfig,
+    };
 }

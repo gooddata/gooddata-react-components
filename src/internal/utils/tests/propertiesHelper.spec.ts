@@ -5,6 +5,7 @@ import {
     getReferencePointWithSupportedProperties,
     removeImmutableOptionalStackingProperties,
     isDualAxisOrSomeSecondaryAxisMeasure,
+    getHighchartsAxisNameConfiguration,
 } from "../propertiesHelper";
 import {
     emptyReferencePoint,
@@ -18,7 +19,11 @@ import {
     multipleMetricsAndCategoriesBaseUiConfig,
 } from "../../mocks/uiConfigMocks";
 import { OPTIONAL_STACKING_PROPERTIES } from "../../constants/supportedProperties";
-import { IExtendedReferencePoint, IBucketItem } from "../../interfaces/Visualization";
+import {
+    IExtendedReferencePoint,
+    IBucketItem,
+    IVisualizationProperties,
+} from "../../interfaces/Visualization";
 
 describe("propertiesHelper", () => {
     describe("getSupportedPropertiesControls", () => {
@@ -231,6 +236,46 @@ describe("propertiesHelper", () => {
             expect(isDualAxisOrSomeSecondaryAxisMeasure(extendedReferencePoint, secondaryMeasures)).toEqual(
                 false,
             );
+        });
+    });
+
+    describe("getHighchartsAxisNameConfiguration", () => {
+        it("should return same control properties when there is no name config", () => {
+            const controlsProp: IVisualizationProperties = {
+                xaxis: {
+                    visible: true,
+                    min: 100,
+                    max: 200,
+                },
+            };
+            expect(getHighchartsAxisNameConfiguration(controlsProp)).toEqual(controlsProp);
+        });
+
+        it.each([
+            ["middle", "auto"],
+            ["low", "left"],
+            ["middle", "center"],
+            ["high", "right"],
+            ["low", "bottom"],
+            ["middle", "middle"],
+            ["high", "top"],
+        ])("should return '%s' position when AD value is '%s'", (hcValue: string, adValue: string) => {
+            const controlsProp: IVisualizationProperties = {
+                xaxis: {
+                    name: {
+                        position: adValue,
+                    },
+                },
+            };
+
+            const newControlsProp = getHighchartsAxisNameConfiguration(controlsProp);
+            expect(newControlsProp).toEqual({
+                xaxis: {
+                    name: {
+                        position: hcValue,
+                    },
+                },
+            });
         });
     });
 });

@@ -20,6 +20,7 @@ import CustomLegend from "../utils/CustomLegend";
 import "../../styles/scss/charts.scss";
 import { GERMAN_SEPARATORS } from "../data/numberFormat";
 import identity = require("lodash/identity");
+import { withAxisNamePositionConfig, withAxisNameVisibilityConfig } from "../hoc/withAxisName";
 
 function getChart({
     type = "column",
@@ -1309,6 +1310,46 @@ storiesOf("Internal/HighCharts/ChartTransformation", module)
                     }}
                     {...fixtures.barChartWith4MetricsAndViewBy2Attribute}
                 />,
+            ),
+        );
+    })
+    .add("with axis name position", () => {
+        const dataSet: any = fixtures.comboWithTwoMeasuresAndViewByAttribute;
+        return screenshotWrap(
+            wrap(
+                withAxisNamePositionConfig(
+                    <ChartTransformation
+                        config={{
+                            type: "column",
+                            secondary_yaxis: {
+                                measures: ["wonMetric"],
+                            },
+                        }}
+                        {...dataSet}
+                    />,
+                ),
+                "100%",
+                "820px",
+            ),
+        );
+    })
+    .add("with axis name visibility", () => {
+        const dataSet: any = fixtures.comboWithTwoMeasuresAndViewByAttribute;
+        return screenshotWrap(
+            wrap(
+                withAxisNameVisibilityConfig(
+                    <ChartTransformation
+                        config={{
+                            type: "column",
+                            secondary_yaxis: {
+                                measures: ["wonMetric"],
+                            },
+                        }}
+                        {...dataSet}
+                    />,
+                ),
+                "100%",
+                "820px",
             ),
         );
     });

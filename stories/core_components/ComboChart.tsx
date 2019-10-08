@@ -21,6 +21,7 @@ import { GERMAN_SEPARATORS } from "../data/numberFormat";
 import { CUSTOM_COLOR_PALETTE_CONFIG } from "../data/configProps";
 import { createHighChartResolver, ScreenshotReadyWrapper } from "../utils/ScreenshotReadyWrapper";
 import { COMBO_SUPPORTED_CHARTS } from "../../src/components/visualizations/chart/chartOptions/comboChartOptions";
+import { withAxisNamePositionConfig, withAxisNameVisibilityConfig } from "../hoc/withAxisName";
 
 const wrapperStyle = { width: 800, height: 400 };
 const primaryMeasure = [MEASURE_1];
@@ -565,5 +566,29 @@ storiesOf("Core components/ComboChart", module)
                     }}
                 />
             </div>,
+        ),
+    )
+    .add("with axis name position", () =>
+        screenshotWrap(
+            withAxisNamePositionConfig(
+                <ComboChart
+                    projectId="storybook"
+                    primaryMeasures={primaryMeasure}
+                    secondaryMeasures={secondaryMeasure}
+                    viewBy={ATTRIBUTE_1}
+                />,
+            ),
+        ),
+    )
+    .add("with axis name visibility", () =>
+        screenshotWrap(
+            withAxisNameVisibilityConfig(
+                <ComboChart
+                    projectId="storybook"
+                    primaryMeasures={primaryMeasure}
+                    secondaryMeasures={secondaryMeasure}
+                    viewBy={ATTRIBUTE_1}
+                />,
+            ),
         ),
     );
