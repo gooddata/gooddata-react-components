@@ -31,6 +31,7 @@ import VisualizationByUri from "./VisualizationByUri";
 import VisualizationByIdentifier from "./VisualizationByIdentifier";
 import MeasureValueFilter from "./MeasureValueFilter";
 import DateFilter from "./DateFilter";
+import OnDrillHandling from "./OnDrillHandling";
 
 export const advancedUseCasesRoutes = [
     { path: "/advanced/global-filters", title: "Global Filters", Component: GlobalFilters },
@@ -137,6 +138,7 @@ export const hiddenPaths = [
     { path: "/hidden/bucket-executor", title: "Bucket Executor Example", Component: BucketExecutor },
     // TODO BB-1694 - Add Measure Value Filter example to the menu
     { path: "/hidden/measure-value-filter", title: "Measure Value Filter", Component: MeasureValueFilter },
+    { path: "/hidden/on-drill-drilling", title: "New drill handling by onDrill", Component: OnDrillHandling },
 ];
 
 export const backendInfoRoutes = [

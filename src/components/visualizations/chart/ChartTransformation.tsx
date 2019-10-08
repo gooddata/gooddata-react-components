@@ -7,8 +7,8 @@ import noop = require("lodash/noop");
 import { convertDrillableItemsToPredicates } from "../../../helpers/headerPredicate";
 import { getSanitizedStackingConfigFromAfm } from "../../../helpers/optionalStacking/common";
 import { IChartConfig, IChartOptions } from "../../../interfaces/Config";
-import { IDrillableItem } from "../../../interfaces/DrillEvents";
-import { OnFiredDrillEvent, OnLegendReady } from "../../../interfaces/Events";
+import { IDrillableItem, IDrillConfig } from "../../../interfaces/DrillEvents";
+import { OnFiredDrillEvent, OnLegendReady, OnDrill } from "../../../interfaces/Events";
 import { IHeaderPredicate } from "../../../interfaces/HeaderPredicate";
 import { ILegendOptions } from "../typings/legend";
 import { getChartOptions, validateData } from "./chartOptionsBuilder";
@@ -42,6 +42,7 @@ export interface IChartTransformationProps {
     mdObject?: VisualizationObject.IVisualizationObjectContent;
 
     onFiredDrillEvent: OnFiredDrillEvent;
+    onDrill?: OnDrill;
     onLegendReady: OnLegendReady;
 
     afterRender(): void;
@@ -91,13 +92,14 @@ export default class ChartTransformation extends React.Component<
             width,
             afterRender,
             onFiredDrillEvent,
+            onDrill,
             onLegendReady,
             locale,
         } = this.props;
 
         const chartConfig = this.getChartConfig(this.props);
 
-        const drillConfig = { afm, onFiredDrillEvent };
+        const drillConfig: IDrillConfig = { afm, onFiredDrillEvent, onDrill };
         const hcOptions = getHighchartsOptions(chartOptions, drillConfig, chartConfig);
 
         return {

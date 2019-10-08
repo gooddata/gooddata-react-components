@@ -13,7 +13,6 @@ import {
     validateData,
     getSeriesItemData,
     getSeries,
-    getDrillIntersection,
     getDrillableSeries,
     customEscape,
     buildTooltipFactory,
@@ -1642,84 +1641,6 @@ describe("chartOptionsBuilder", () => {
         });
     });
 
-    describe("getDrillIntersection", () => {
-        it("should return correct intersection for bar chart with stack by and view by attributes", () => {
-            const dataSet = fixtures.barChartWithStackByAndViewByAttributes;
-            const { measureGroup, viewByAttribute, stackByAttribute } = getMVS(dataSet);
-            /*
-            "measureHeaderItem": {
-                "name": "Amount",
-                "format": "#,##0.00",
-                "localIdentifier": "amountMetric",
-                "uri": "/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1279",
-                "identifier": "ah1EuQxwaCqs"
-            }
-            */
-            const measures = [measureGroup.items[0].measureHeaderItem];
-
-            const viewByItem = {
-                ...viewByAttribute.items[0].attributeHeaderItem,
-                attribute: viewByAttribute,
-            };
-
-            const stackByItem = {
-                ...stackByAttribute.items[0].attributeHeaderItem,
-                attribute: stackByAttribute,
-            };
-
-            const { afm } = dataSet.executionRequest;
-            const drillIntersection = getDrillIntersection(stackByItem, [viewByItem], measures, afm);
-            expect(drillIntersection).toEqual([
-                {
-                    id: "amountMetric",
-                    title: "Amount",
-                    header: {
-                        identifier: "ah1EuQxwaCqs",
-                        uri: "/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1279",
-                    },
-                },
-                {
-                    id: "1226",
-                    title: "Direct Sales",
-                    header: {
-                        identifier: "label.owner.department",
-                        uri: "/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1027",
-                    },
-                },
-                {
-                    id: "1225",
-                    title: "East Coast",
-                    header: {
-                        identifier: "label.owner.region",
-                        uri: "/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1024",
-                    },
-                },
-            ]);
-        });
-
-        it("should return correct intersection for pie chart measures only", () => {
-            const dataSet = fixtures.pieChartWithMetricsOnly;
-            const { measureGroup } = getMVS(dataSet);
-            const measures = [measureGroup.items[0].measureHeaderItem];
-
-            const viewByItem: any = null;
-            const stackByItem: any = null;
-
-            const { afm } = dataSet.executionRequest;
-            const drillIntersection = getDrillIntersection(stackByItem, [viewByItem], measures, afm);
-            expect(drillIntersection).toEqual([
-                {
-                    id: "lostMetric",
-                    title: "Lost",
-                    header: {
-                        identifier: "af2Ewj9Re2vK",
-                        uri: "/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1283",
-                    },
-                },
-            ]);
-        });
-    });
-
     describe("getDrillableSeries", () => {
         describe("in usecase of scatter plot with 2 measures and attribute", () => {
             const dataSet = fixtures.barChartWith3MetricsAndViewByAttribute;
@@ -1763,38 +1684,31 @@ describe("chartOptionsBuilder", () => {
             );
 
             it("should assign correct drillIntersection to pointData with drilldown true", () => {
+                const expectedIntersection = [
+                    [
+                        {
+                            header:
+                                dataSet.executionResponse.dimensions[0].headers[0].measureGroupHeader
+                                    .items[0],
+                        },
+                        {
+                            header:
+                                dataSet.executionResponse.dimensions[0].headers[0].measureGroupHeader
+                                    .items[1],
+                        },
+                        {
+                            header: {
+                                ...dataSet.executionResponse.dimensions[1].headers[0],
+                                ...dataSet.executionResult.headerItems[1][0][0],
+                            },
+                        },
+                    ],
+                ];
                 expect(
                     drillableMeasuresSeriesData.map(
                         (seriesItem: any) => seriesItem.data[0].drillIntersection,
                     ),
-                ).toEqual([
-                    [
-                        {
-                            id: "lostMetric",
-                            title: "<button>Lost</button> ...",
-                            header: {
-                                identifier: "af2Ewj9Re2vK",
-                                uri: "/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1283",
-                            },
-                        },
-                        {
-                            id: "wonMetric",
-                            title: "Won",
-                            header: {
-                                identifier: "afSEwRwdbMeQ",
-                                uri: "/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1284",
-                            },
-                        },
-                        {
-                            id: "2008",
-                            title: "<button>2008</button>",
-                            header: {
-                                identifier: "created.aag81lMifn6q",
-                                uri: "/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/158",
-                            },
-                        },
-                    ],
-                ]);
+                ).toEqual(expectedIntersection);
             });
 
             it("should fillter out points with one or both coordinates null", () => {
@@ -1883,6 +1797,26 @@ describe("chartOptionsBuilder", () => {
             );
 
             it("should assign correct drillIntersection to pointData with drilldown true", () => {
+                const expectedIntersection = [
+                    {
+                        header:
+                            dataSet.executionResponse.dimensions[1].headers[0].measureGroupHeader.items[0],
+                    },
+                    {
+                        header:
+                            dataSet.executionResponse.dimensions[1].headers[0].measureGroupHeader.items[1],
+                    },
+                    {
+                        header:
+                            dataSet.executionResponse.dimensions[1].headers[0].measureGroupHeader.items[2],
+                    },
+                    {
+                        header: {
+                            ...dataSet.executionResponse.dimensions[0].headers[0],
+                            ...dataSet.executionResult.headerItems[0][0][8],
+                        },
+                    },
+                ];
                 expect(drillableMeasuresSeriesData.length).toBe(20);
                 expect(drillableMeasuresSeriesData[8].data[0]).toEqual({
                     x: 245,
@@ -1890,40 +1824,7 @@ describe("chartOptionsBuilder", () => {
                     z: 2280481.04,
                     format: "$#,#00.00",
                     drilldown: true,
-                    drillIntersection: [
-                        {
-                            id: "784a5018a51049078e8f7e86247e08a3",
-                            title: "_Snapshot [EOP-2]",
-                            header: {
-                                identifier: "ab0bydLaaisS",
-                                uri: "/gdc/md/hzyl5wlh8rnu0ixmbzlaqpzf09ttb7c8/obj/67097",
-                            },
-                        },
-                        {
-                            id: "9e5c3cd9a93f4476a93d3494cedc6010",
-                            title: "# of Open Opps.",
-                            header: {
-                                identifier: "aaYh6Voua2yj",
-                                uri: "/gdc/md/hzyl5wlh8rnu0ixmbzlaqpzf09ttb7c8/obj/13465",
-                            },
-                        },
-                        {
-                            id: "71d50cf1d13746099b7f506576d78e4a",
-                            title: "Remaining Quota",
-                            header: {
-                                identifier: "ab4EFOAmhjOx",
-                                uri: "/gdc/md/hzyl5wlh8rnu0ixmbzlaqpzf09ttb7c8/obj/1543",
-                            },
-                        },
-                        {
-                            id: "1235",
-                            title: "Jessica Traven",
-                            header: {
-                                identifier: "label.owner.id.name",
-                                uri: "/gdc/md/hzyl5wlh8rnu0ixmbzlaqpzf09ttb7c8/obj/1028",
-                            },
-                        },
-                    ],
+                    drillIntersection: expectedIntersection,
                 });
                 drillableMeasuresSeriesData.map((seriesItem: any, index: number) => {
                     expect(seriesItem.isDrillable).toEqual(true);
@@ -2206,49 +2107,40 @@ describe("chartOptionsBuilder", () => {
                 });
 
                 it("should assign correct drillIntersection to pointData with drilldown true", () => {
-                    expect(
-                        twoDrillableMeasuresSeriesData.map(
-                            (seriesItem: any) => seriesItem.data[0].drillIntersection,
-                        ),
-                    ).toEqual([
+                    const expectedIntersection = [
                         [
                             {
-                                id: "lostMetric",
-                                title: "<button>Lost</button> ...",
-                                header: {
-                                    identifier: "af2Ewj9Re2vK",
-                                    uri: "/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1283",
-                                },
+                                header:
+                                    dataSet.executionResponse.dimensions[0].headers[0].measureGroupHeader
+                                        .items[0],
                             },
                             {
-                                id: "2008",
-                                title: "<button>2008</button>",
                                 header: {
-                                    identifier: "created.aag81lMifn6q",
-                                    uri: "/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/158",
+                                    ...dataSet.executionResponse.dimensions[1].headers[0],
+                                    ...dataSet.executionResult.headerItems[1][0][0],
                                 },
                             },
                         ],
                         undefined,
                         [
                             {
-                                id: "expectedMetric",
-                                title: "Expected",
-                                header: {
-                                    identifier: "alUEwmBtbwSh",
-                                    uri: "/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1285",
-                                },
+                                header:
+                                    dataSet.executionResponse.dimensions[0].headers[0].measureGroupHeader
+                                        .items[2],
                             },
                             {
-                                id: "2008",
-                                title: "<button>2008</button>",
                                 header: {
-                                    identifier: "created.aag81lMifn6q",
-                                    uri: "/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/158",
+                                    ...dataSet.executionResponse.dimensions[1].headers[0],
+                                    ...dataSet.executionResult.headerItems[1][0][0],
                                 },
                             },
                         ],
-                    ]);
+                    ];
+                    expect(
+                        twoDrillableMeasuresSeriesData.map(
+                            (seriesItem: any) => seriesItem.data[0].drillIntersection,
+                        ),
+                    ).toEqual(expectedIntersection);
                 });
             });
         });

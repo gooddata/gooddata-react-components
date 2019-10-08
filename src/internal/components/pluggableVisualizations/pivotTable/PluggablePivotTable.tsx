@@ -373,7 +373,7 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
             const { resultSpec, locale, custom, dimensions, config } = options;
             const { height } = dimensions;
             const { drillableItems } = custom;
-            const { afterRender, onError, onLoadingChanged, pushData } = this.callbacks;
+            const { afterRender, onError, onLoadingChanged, pushData, onDrill } = this.callbacks;
 
             const resultSpecWithDimensions: AFM.IResultSpec = {
                 ...resultSpec,
@@ -411,6 +411,7 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
             const pivotTableProps = {
                 projectId: this.projectId,
                 drillableItems,
+                onDrill,
                 totals,
                 config: configUpdated,
                 height,

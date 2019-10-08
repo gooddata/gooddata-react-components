@@ -203,6 +203,7 @@ export class BaseVisualization extends React.PureComponent<IBaseVisualizationPro
                     onError: props.onError,
                     onExportReady: props.onExportReady,
                     pushData: props.pushData,
+                    onDrill: props.onDrill,
                 },
                 featureFlags,
                 visualizationProperties,

@@ -149,7 +149,7 @@ export class PluggableHeadline extends AbstractPluggableVisualization {
         if (dataSource) {
             const { resultSpec, locale, custom, config } = options;
             const { drillableItems } = custom;
-            const { afterRender, onError, onLoadingChanged, pushData } = this.callbacks;
+            const { afterRender, onError, onLoadingChanged, pushData, onDrill } = this.callbacks;
 
             const resultSpecWithDimensions: AFM.IResultSpec = {
                 ...resultSpec,
@@ -160,6 +160,7 @@ export class PluggableHeadline extends AbstractPluggableVisualization {
                 <Headline
                     projectId={this.projectId}
                     drillableItems={drillableItems}
+                    onDrill={onDrill}
                     locale={locale}
                     config={setConfigFromFeatureFlags(config, this.featureFlags)}
                     dataSource={dataSource}

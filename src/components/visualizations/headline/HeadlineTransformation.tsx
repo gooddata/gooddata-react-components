@@ -5,7 +5,13 @@ import { InjectedIntlProps, injectIntl } from "react-intl";
 import noop = require("lodash/noop");
 import { convertDrillableItemsToPredicates } from "../../../helpers/headerPredicate";
 import { IChartConfig } from "../../../interfaces/Config";
-import { IDrillableItem, IDrillEventCallback } from "../../../interfaces/DrillEvents";
+import {
+    IDrillableItem,
+    IDrillEventCallback,
+    IDrillEventExtendedCallback,
+    IDrillEventExtended,
+    IDrillEvent,
+} from "../../../interfaces/DrillEvents";
 import { IHeaderPredicate } from "../../../interfaces/HeaderPredicate";
 import Headline, { IHeadlineFiredDrillEventItemContext } from "./Headline";
 import {
@@ -14,6 +20,7 @@ import {
     fireDrillEvent,
     getHeadlineData,
 } from "./utils/HeadlineTransformationUtils";
+import { convertHeadlineDrillIntersectionToLegacy } from "../utils/drilldownEventing";
 
 export interface IHeadlineTransformationProps {
     executionRequest: AFM.IExecution["execution"];
@@ -24,6 +31,7 @@ export interface IHeadlineTransformationProps {
     config?: IChartConfig;
 
     onFiredDrillEvent?: IDrillEventCallback;
+    onDrill?: IDrillEventExtendedCallback;
     onAfterRender?: () => void;
 }
 
@@ -36,6 +44,7 @@ class HeadlineTransformation extends React.Component<IHeadlineTransformationProp
     public static defaultProps: Partial<IHeadlineTransformationProps> = {
         drillableItems: [],
         onFiredDrillEvent: () => true,
+        onDrill: noop,
         onAfterRender: noop,
     };
 
@@ -70,6 +79,7 @@ class HeadlineTransformation extends React.Component<IHeadlineTransformationProp
                 data={dataWithUpdatedDrilling}
                 config={config}
                 onFiredDrillEvent={this.handleFiredDrillEvent}
+                onDrill={this.handleOnDrill}
                 onAfterRender={onAfterRender}
                 disableDrillUnderline={disableDrillUnderline}
             />
@@ -82,12 +92,41 @@ class HeadlineTransformation extends React.Component<IHeadlineTransformationProp
         }
     }
 
+    // legacy drill handling
     private handleFiredDrillEvent(item: IHeadlineFiredDrillEventItemContext, target: HTMLElement) {
         const { onFiredDrillEvent, executionRequest, executionResponse } = this.props;
-        const drillEventData = buildDrillEventData(item, executionRequest, executionResponse);
-
-        fireDrillEvent(onFiredDrillEvent, drillEventData, target);
+        const drillEventDataExtended: IDrillEventExtended = buildDrillEventData(
+            item,
+            executionRequest,
+            executionResponse,
+        );
+        const { executionContext, drillContext } = drillEventDataExtended;
+        const { type, element, value } = drillContext;
+        const drillEventDataOld: IDrillEvent = {
+            executionContext,
+            drillContext: {
+                type,
+                element,
+                value,
+                intersection: convertHeadlineDrillIntersectionToLegacy(
+                    drillContext.intersection,
+                    executionRequest.afm,
+                ),
+            },
+        };
+        fireDrillEvent(onFiredDrillEvent, drillEventDataOld, target);
     }
+
+    private handleOnDrill = (item: IHeadlineFiredDrillEventItemContext) => {
+        const { executionRequest, executionResponse, onDrill } = this.props;
+        const drillEventDataExtended: IDrillEventExtended = buildDrillEventData(
+            item,
+            executionRequest,
+            executionResponse,
+        );
+
+        onDrill(drillEventDataExtended);
+    };
 }
 
 export default injectIntl(HeadlineTransformation);

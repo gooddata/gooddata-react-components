@@ -24,6 +24,7 @@ export interface IHeadlineVisualizationProps {
     data: IHeadlineData;
     config?: IChartConfig;
     onFiredDrillEvent?: IHeadlineFiredDrillEvent;
+    onDrill?: IHeadlineFiredDrillEvent;
     onAfterRender?: () => void;
     disableDrillUnderline?: boolean;
 }
@@ -34,6 +35,7 @@ export interface IHeadlineVisualizationProps {
 export default class Headline extends React.Component<IHeadlineVisualizationProps> {
     public static defaultProps: Partial<IHeadlineVisualizationProps> = {
         onFiredDrillEvent: () => true,
+        onDrill: () => undefined,
         onAfterRender: noop,
         config: {},
         disableDrillUnderline: false,
@@ -97,16 +99,18 @@ export default class Headline extends React.Component<IHeadlineVisualizationProp
         elementType: HeadlineElementType,
         elementTarget: EventTarget,
     ) {
-        const { onFiredDrillEvent } = this.props;
+        const { onFiredDrillEvent, onDrill } = this.props;
 
+        const itemContext = {
+            localIdentifier: item.localIdentifier,
+            value: item.value,
+            element: elementType,
+        };
         if (onFiredDrillEvent) {
-            const itemContext = {
-                localIdentifier: item.localIdentifier,
-                value: item.value,
-                element: elementType,
-            };
-
             onFiredDrillEvent(itemContext, elementTarget);
+        }
+        if (onDrill) {
+            onDrill(itemContext, elementTarget);
         }
     }
 

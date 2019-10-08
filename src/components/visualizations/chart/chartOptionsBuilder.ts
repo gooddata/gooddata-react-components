@@ -33,7 +33,6 @@ import {
 } from "../../../helpers/executionResultHelper";
 import { unwrap } from "../../../helpers/utils";
 import { isBucketEmpty } from "../../../helpers/mdObjBucketHelper";
-import { getMasterMeasureObjQualifier } from "../../../helpers/afmHelper";
 import { isSomeHeaderPredicateMatched } from "../../../helpers/headerPredicate";
 
 import {
@@ -48,13 +47,12 @@ import {
     ISeriesItemConfig,
     ICategory,
 } from "../../../interfaces/Config";
-import { IDrillEventIntersectionElement } from "../../../interfaces/DrillEvents";
+import { IDrillEventIntersectionElementExtended } from "../../../interfaces/DrillEvents";
 import { IHeaderPredicate } from "../../../interfaces/HeaderPredicate";
 import { IMappingHeader } from "../../../interfaces/MappingHeader";
 import { getLighterColor, GRAY, WHITE, TRANSPARENT } from "../utils/color";
 
 import {
-    getAttributeElementIdFromAttributeElementUri,
     isAreaChart,
     isBarChart,
     isBubbleChart,
@@ -67,7 +65,7 @@ import {
     parseValue,
     stringifyChartTypes,
 } from "../utils/common";
-import { createDrillIntersectionElement } from "../utils/drilldownEventing";
+import { getDrillIntersection } from "../utils/drilldownEventing";
 import {
     canComboChartBeStackedInPercent,
     getComboChartSeries,
@@ -98,6 +96,7 @@ import { NORMAL_STACK, PERCENT_STACK } from "./highcharts/getOptionalStackingCon
 import { getCategoriesForTwoAttributes } from "./chartOptions/extendedStackingChartOptions";
 import { setMeasuresToSecondaryAxis } from "../../../helpers/dualAxis";
 import { isCssMultiLineTruncationSupported } from "../../../helpers/domUtils";
+import omit = require("lodash/omit");
 
 const TOOLTIP_PADDING = 10;
 
@@ -174,9 +173,17 @@ export const supportedStackingAttributesChartTypes = [
     VisualizationTypes.COMBO2,
 ];
 
-export type IUnwrappedAttributeHeadersWithItems = Execution.IAttributeHeader["attributeHeader"] & {
+type UnwrappedAttributeHeader = Execution.IAttributeHeader["attributeHeader"];
+
+export interface IUnwrappedAttributeHeaderWithItems extends UnwrappedAttributeHeader {
     items: Execution.IResultAttributeHeaderItem[];
-};
+}
+type UnwrappedAttributeHeaderItem = Execution.IResultAttributeHeaderItem["attributeHeaderItem"];
+export interface IAttributeItem extends UnwrappedAttributeHeaderItem {
+    attribute: IUnwrappedAttributeHeaderWithItems;
+}
+
+export type UnwrappedMeasureHeaderItem = Execution.IMeasureHeaderItem["measureHeaderItem"];
 
 export interface IValidationResult {
     dataTooLarge: boolean;
@@ -293,8 +300,8 @@ export function getSeriesItemData(
     seriesItem: string[],
     seriesIndex: number,
     measureGroup: Execution.IMeasureGroupHeader["measureGroupHeader"],
-    viewByAttribute: IUnwrappedAttributeHeadersWithItems,
-    stackByAttribute: IUnwrappedAttributeHeadersWithItems,
+    viewByAttribute: IUnwrappedAttributeHeaderWithItems,
+    stackByAttribute: IUnwrappedAttributeHeaderWithItems,
     type: string,
     colorStrategy: IColorStrategy,
 ) {
@@ -526,8 +533,8 @@ function isLastSerie(seriesIndex: number, dataLength: number) {
 export function getTreemapStackedSeriesDataWithViewBy(
     executionResultData: Execution.DataValue[][],
     measureGroup: Execution.IMeasureGroupHeader["measureGroupHeader"],
-    viewByAttribute: IUnwrappedAttributeHeadersWithItems,
-    stackByAttribute: IUnwrappedAttributeHeadersWithItems,
+    viewByAttribute: IUnwrappedAttributeHeaderWithItems,
+    stackByAttribute: IUnwrappedAttributeHeaderWithItems,
     colorStrategy: IColorStrategy,
 ): any[] {
     const roots: any = [];
@@ -620,8 +627,8 @@ export function getTreemapStackedSeriesDataWithMeasures(
 export function getTreemapStackedSeries(
     executionResultData: Execution.DataValue[][],
     measureGroup: Execution.IMeasureGroupHeader["measureGroupHeader"],
-    viewByAttribute: IUnwrappedAttributeHeadersWithItems,
-    stackByAttribute: IUnwrappedAttributeHeadersWithItems,
+    viewByAttribute: IUnwrappedAttributeHeaderWithItems,
+    stackByAttribute: IUnwrappedAttributeHeaderWithItems,
     colorStrategy: IColorStrategy,
 ) {
     let data = [];
@@ -662,8 +669,8 @@ export function getTreemapStackedSeries(
 export function getSeries(
     executionResultData: Execution.DataValue[][],
     measureGroup: Execution.IMeasureGroupHeader["measureGroupHeader"],
-    viewByAttribute: IUnwrappedAttributeHeadersWithItems,
-    stackByAttribute: IUnwrappedAttributeHeadersWithItems,
+    viewByAttribute: IUnwrappedAttributeHeaderWithItems,
+    stackByAttribute: IUnwrappedAttributeHeaderWithItems,
     type: string,
     mdObject: VisualizationObject.IVisualizationObjectContent,
     colorStrategy: IColorStrategy,
@@ -770,7 +777,7 @@ function isPointOnOppositeAxis(point: IPointData): boolean {
 }
 
 export function buildTooltipFactory(
-    viewByAttribute: IUnwrappedAttributeHeadersWithItems,
+    viewByAttribute: IUnwrappedAttributeHeaderWithItems,
     type: string,
     config: IChartConfig = {},
     isDualAxis: boolean = false,
@@ -807,8 +814,8 @@ export function buildTooltipFactory(
 }
 
 export function buildTooltipForTwoAttributesFactory(
-    viewByAttribute: IUnwrappedAttributeHeadersWithItems,
-    viewByParentAttribute: IUnwrappedAttributeHeadersWithItems,
+    viewByAttribute: IUnwrappedAttributeHeaderWithItems,
+    viewByParentAttribute: IUnwrappedAttributeHeaderWithItems,
     config: IChartConfig = {},
     isDualAxis: boolean = false,
 ): ITooltipFactory {
@@ -847,7 +854,7 @@ export function buildTooltipForTwoAttributesFactory(
 
 export function generateTooltipXYFn(
     measures: any,
-    stackByAttribute: IUnwrappedAttributeHeadersWithItems,
+    stackByAttribute: IUnwrappedAttributeHeaderWithItems,
     config: IChartConfig = {},
 ): ITooltipFactory {
     const { separators } = config;
@@ -921,8 +928,8 @@ export function generateTooltipHeatmapFn(
 }
 
 export function buildTooltipTreemapFactory(
-    viewByAttribute: IUnwrappedAttributeHeadersWithItems,
-    stackByAttribute: IUnwrappedAttributeHeadersWithItems,
+    viewByAttribute: IUnwrappedAttributeHeaderWithItems,
+    stackByAttribute: IUnwrappedAttributeHeaderWithItems,
     config: IChartConfig = {},
 ): ITooltipFactory {
     const { separators } = config;
@@ -960,8 +967,9 @@ export function buildTooltipTreemapFactory(
 export interface ILegacyMeasureHeader {
     uri: string; // header attribute value or measure uri
     identifier?: string;
-    localIdentifier: string;
+    localIdentifier?: string;
     name: string; // header attribute value or measure text label
+    format?: string; // format of measure
 }
 
 export interface ILegacyAttributeHeader extends ILegacyMeasureHeader {
@@ -974,77 +982,45 @@ export function isLegacyAttributeHeader(header: ILegacyHeader): header is ILegac
     return (header as ILegacyAttributeHeader).attribute !== undefined;
 }
 
-function mapDrillIntersectionElement(header: ILegacyHeader, afm: AFM.IAfm): IDrillEventIntersectionElement {
-    const { name, localIdentifier } = header;
-
-    if (isLegacyAttributeHeader(header)) {
-        const { attribute, uri } = header;
-
-        return createDrillIntersectionElement(
-            getAttributeElementIdFromAttributeElementUri(uri),
-            name,
-            attribute.uri,
-            attribute.identifier,
-        );
-    }
-
-    const masterMeasureQualifier = getMasterMeasureObjQualifier(afm, localIdentifier);
-    const uri = masterMeasureQualifier.uri || header.uri;
-    const identifier = masterMeasureQualifier.identifier || header.identifier;
-
-    return createDrillIntersectionElement(localIdentifier, name, uri, identifier);
-}
-
-export function getDrillIntersection(
-    stackByItem: any,
-    viewByItems: any[],
-    measures: any[],
-    afm: AFM.IAfm,
-): IDrillEventIntersectionElement[] {
-    const headers = without([...measures, ...viewByItems, stackByItem], null);
-
-    return headers.map(header => mapDrillIntersectionElement(header, afm));
-}
-
-function getViewBy(viewByAttribute: IUnwrappedAttributeHeadersWithItems, viewByIndex: number) {
+function getViewBy(
+    viewByAttribute: IUnwrappedAttributeHeaderWithItems,
+    viewByIndex: number,
+): {
+    viewByItemHeader: Execution.IResultAttributeHeaderItem;
+    viewByAttributeHeader: Execution.IAttributeHeader;
+} {
     let viewByItemHeader: Execution.IResultAttributeHeaderItem = null;
-    let viewByItem = null;
     let viewByAttributeHeader: Execution.IAttributeHeader = null;
 
     if (viewByAttribute) {
         viewByItemHeader = viewByAttribute.items[viewByIndex];
-        viewByItem = {
-            ...unwrap(viewByItemHeader),
-            attribute: viewByAttribute,
-        };
-        viewByAttributeHeader = { attributeHeader: viewByAttribute };
+        viewByAttributeHeader = { attributeHeader: omit(viewByAttribute, "items") };
     }
 
     return {
         viewByItemHeader,
-        viewByItem,
         viewByAttributeHeader,
     };
 }
 
-function getStackBy(stackByAttribute: IUnwrappedAttributeHeadersWithItems, stackByIndex: number) {
+function getStackBy(
+    stackByAttribute: IUnwrappedAttributeHeaderWithItems,
+    stackByIndex: number,
+): {
+    stackByItemHeader: Execution.IResultAttributeHeaderItem;
+    stackByAttributeHeader: Execution.IAttributeHeader;
+} {
     let stackByItemHeader: Execution.IResultAttributeHeaderItem = null;
-    let stackByItem = null;
     let stackByAttributeHeader: Execution.IAttributeHeader = null;
 
     if (stackByAttribute) {
         // stackBy item index is always equal to seriesIndex
         stackByItemHeader = stackByAttribute.items[stackByIndex];
-        stackByItem = {
-            ...unwrap(stackByItemHeader),
-            attribute: stackByAttribute,
-        };
-        stackByAttributeHeader = { attributeHeader: stackByAttribute };
+        stackByAttributeHeader = { attributeHeader: omit(stackByAttribute, "items") };
     }
 
     return {
         stackByItemHeader,
-        stackByItem,
         stackByAttributeHeader,
     };
 }
@@ -1052,8 +1028,8 @@ function getStackBy(stackByAttribute: IUnwrappedAttributeHeadersWithItems, stack
 export function getDrillableSeries(
     series: any,
     drillableItems: IHeaderPredicate[],
-    viewByAttributes: IUnwrappedAttributeHeadersWithItems[],
-    stackByAttribute: IUnwrappedAttributeHeadersWithItems,
+    viewByAttributes: IUnwrappedAttributeHeaderWithItems[],
+    stackByAttribute: IUnwrappedAttributeHeaderWithItems,
     executionResponse: Execution.IExecutionResponse,
     afm: AFM.IAfm,
     type: VisType,
@@ -1069,7 +1045,7 @@ export function getDrillableSeries(
         let data =
             seriesItem.data &&
             seriesItem.data.map((pointData: IPointData, pointIndex: number) => {
-                let measureHeaders: IMappingHeader[] = [];
+                let measureHeaders: Execution.IMeasureHeaderItem[] = [];
 
                 const isStackedTreemap = isTreemap(type) && !!stackByAttribute;
                 if (isScatterPlot(type)) {
@@ -1103,21 +1079,19 @@ export function getDrillableSeries(
                     stackByIndex = viewByIndex; // scatter plot uses stack by attribute but has only one serie
                 }
 
-                const { stackByItemHeader, stackByItem, stackByAttributeHeader } = getStackBy(
+                const { stackByItemHeader, stackByAttributeHeader } = getStackBy(
                     stackByAttribute,
                     stackByIndex,
                 );
 
                 const {
-                    viewByItem: viewByChildItem,
                     viewByItemHeader: viewByChildItemHeader,
                     viewByAttributeHeader: viewByChildAttributeHeader,
                 } = getViewBy(viewByChildAttribute, viewByIndex);
 
                 const {
-                    viewByItem: viewByParentItem,
                     viewByItemHeader: viewByParentItemHeader,
-                    viewByAttributeHeader: viewByParentdAttributeHeader,
+                    viewByAttributeHeader: viewByParentAttributeHeader,
                 } = getViewBy(viewByParentAttribute, viewByIndex);
 
                 // point is drillable if a drillableItem matches:
@@ -1131,7 +1105,7 @@ export function getDrillableSeries(
                         ...measureHeaders,
                         viewByChildAttributeHeader,
                         viewByChildItemHeader,
-                        viewByParentdAttributeHeader,
+                        viewByParentAttributeHeader,
                         viewByParentItemHeader,
                         stackByAttributeHeader,
                         stackByItemHeader,
@@ -1143,19 +1117,25 @@ export function getDrillableSeries(
                     isSomeHeaderPredicateMatched(drillableItems, drillableHook, afm, executionResponse),
                 );
 
-                const drillableProps: any = {
+                const drillableProps: {
+                    drilldown: boolean;
+                    drillIntersection?: IDrillEventIntersectionElementExtended[];
+                } = {
                     drilldown,
                 };
 
                 if (drilldown) {
-                    const measures = measureHeaders.map(unwrap);
-
-                    drillableProps.drillIntersection = getDrillIntersection(
-                        stackByItem,
-                        [viewByChildItem, viewByParentItem],
-                        measures,
-                        afm,
-                    );
+                    const headers: IMappingHeader[] = [
+                        ...measureHeaders,
+                        viewByChildItemHeader,
+                        viewByChildAttributeHeader,
+                        viewByParentItemHeader,
+                        viewByParentAttributeHeader,
+                        stackByItemHeader,
+                        stackByAttributeHeader,
+                    ];
+                    const sanitizedHeaders = without([...headers], null);
+                    drillableProps.drillIntersection = getDrillIntersection(sanitizedHeaders);
                     isSeriesDrillable = true;
                 }
                 return {
@@ -1181,8 +1161,8 @@ export function getDrillableSeries(
 function getCategories(
     type: string,
     measureGroup: Execution.IMeasureGroupHeader["measureGroupHeader"],
-    viewByAttribute: IUnwrappedAttributeHeadersWithItems,
-    stackByAttribute: IUnwrappedAttributeHeadersWithItems,
+    viewByAttribute: IUnwrappedAttributeHeaderWithItems,
+    stackByAttribute: IUnwrappedAttributeHeaderWithItems,
 ) {
     if (isHeatmap(type)) {
         return [
@@ -1215,7 +1195,7 @@ function getCategories(
 }
 
 function getStackingConfig(
-    stackByAttribute: IUnwrappedAttributeHeadersWithItems,
+    stackByAttribute: IUnwrappedAttributeHeaderWithItems,
     options: IChartConfig,
 ): string {
     const { type, stackMeasures, stackMeasuresToPercent } = options;
@@ -1259,7 +1239,7 @@ function preprocessMeasureGroupItems(
 function getXAxes(
     config: IChartConfig,
     measureGroup: Execution.IMeasureGroupHeader["measureGroupHeader"],
-    viewByAttribute: IUnwrappedAttributeHeadersWithItems,
+    viewByAttribute: IUnwrappedAttributeHeaderWithItems,
 ): IAxis[] {
     const { type, mdObject } = config;
     const buckets: VisualizationObject.IBucket[] = get(mdObject, "buckets", []);
@@ -1599,9 +1579,9 @@ export function getTreemapAttributes(
 
 function getTooltipFactory(
     isViewByTwoAttributes: boolean,
-    viewByAttribute: IUnwrappedAttributeHeadersWithItems,
-    viewByParentAttribute: IUnwrappedAttributeHeadersWithItems,
-    stackByAttribute: IUnwrappedAttributeHeadersWithItems,
+    viewByAttribute: IUnwrappedAttributeHeaderWithItems,
+    viewByParentAttribute: IUnwrappedAttributeHeaderWithItems,
+    stackByAttribute: IUnwrappedAttributeHeaderWithItems,
     config: IChartConfig = {},
     isDualAxis: boolean = false,
 ): ITooltipFactory {
@@ -1661,9 +1641,9 @@ export function getChartOptions(
     const { dimensions } = executionResponse;
     const isViewByTwoAttributes =
         attributeHeaderItems[VIEW_BY_DIMENSION_INDEX].length === VIEW_BY_ATTRIBUTES_LIMIT;
-    let viewByAttribute: IUnwrappedAttributeHeadersWithItems;
-    let viewByParentAttribute: IUnwrappedAttributeHeadersWithItems;
-    let stackByAttribute: IUnwrappedAttributeHeadersWithItems;
+    let viewByAttribute: IUnwrappedAttributeHeaderWithItems;
+    let viewByParentAttribute: IUnwrappedAttributeHeaderWithItems;
+    let stackByAttribute: IUnwrappedAttributeHeaderWithItems;
 
     if (isTreemap(type)) {
         const {
