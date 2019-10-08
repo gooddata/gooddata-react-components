@@ -1,6 +1,7 @@
 // (C) 2007-2018 GoodData Corporation
 import { AFM } from "@gooddata/typings";
 import get = require("lodash/get");
+import negate = require("lodash/negate");
 import { AfmUtils } from "@gooddata/gooddata-js/lib/DataLayer";
 
 export function isDerivedMeasure(measure: AFM.IMeasure): boolean {
@@ -43,7 +44,7 @@ const getDateFilter = (filters: AFM.FilterItem[]): AFM.DateFilterItem => {
 };
 
 const getAttributeFilters = (filters: AFM.FilterItem[] = []): AFM.AttributeFilterItem[] => {
-    return filters.filter(AfmUtils.isAttributeFilter);
+    return filters.filter(AfmUtils.isAttributeFilter).filter(negate(AfmUtils.isAttributeFilterSelectAll));
 };
 
 export const mergeFiltersToAfm = (afm: AFM.IAfm, additionalFilters: AFM.FilterItem[]): AFM.IAfm => {
