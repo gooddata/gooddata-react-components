@@ -174,7 +174,10 @@ const defaultProps: IDateFilterProps = {
 };
 
 const dateFilterButton = ".s-date-filter-button";
+const dateButtonFilterTitle = ".s-date-filter-title";
+const dateFilterButtonText = ".s-button-text";
 const applyButton = "button.s-date-filter-apply";
+const dateFilterBody = ".s-extended-date-filters-body";
 
 export const createDateFilter = (customProps: Partial<IDateFilterProps> = {}) => {
     const props: IDateFilterProps = { ...defaultProps, ...customProps };
@@ -186,6 +189,8 @@ export const createDateFilter = (customProps: Partial<IDateFilterProps> = {}) =>
     );
 };
 
+// common wrapper methods
+
 export type WrapperType = ReactWrapper<any, Readonly<{}>, React.Component<{}, {}, any>>;
 
 export const clickDateFilterButton = (wrapper: WrapperType) => {
@@ -194,6 +199,34 @@ export const clickDateFilterButton = (wrapper: WrapperType) => {
 
 export const clickApplyButton = (wrapper: WrapperType) => {
     wrapper.find(applyButton).simulate("click");
+    wrapper.update();
+};
+
+export const getDateFilterButtonText = (wrapper: WrapperType) => {
+    const text = wrapper.find(dateFilterButtonText);
+    return text.text();
+};
+
+// config
+
+export const getFilterTitle = (wrapper: WrapperType) => {
+    const text = wrapper.find(dateButtonFilterTitle);
+    return text.text();
+};
+
+export const getFilterMode = (wrapper: WrapperType) => {
+    const text = wrapper.find(dateButtonFilterTitle);
+    return text.text();
+};
+
+export const isDateFilterBodyVisible = (wrapper: WrapperType) => {
+    const body = wrapper.find(dateFilterBody);
+    return body.exists();
+};
+
+export const isDateFilterVisible = (wrapper: WrapperType) => {
+    const body = wrapper.find(dateFilterButton);
+    return body.exists();
 };
 
 // static filters
@@ -202,17 +235,25 @@ export const getLocalIdentifierFromItem = (item: string) => {
     return item.toUpperCase().replace(new RegExp("-", "g"), "_");
 };
 
-export const getRelativePresetByLocalIdentifier = (localIdentifier: string, relativePreset: any[]) => {
+export const getRelativePresetByItem = (item: string, relativePreset: any[]) => {
+    const localIdentifier = getLocalIdentifierFromItem(item);
     return relativePreset.find(x => {
         return x.localIdentifier === localIdentifier.toUpperCase();
     });
 };
 
 export const getStaticFilterSelectorClass = (filter: string) => {
-    return `.gd-filter-list-item.s-relative-preset-${filter}`;
+    return `button.s-relative-preset-${filter}`;
 };
 
 export const clickStaticFilter = (wrapper: WrapperType, filter: string) => {
     const filterSelector = getStaticFilterSelectorClass(filter);
     wrapper.find(filterSelector).simulate("click");
+};
+
+export const getAllStaticItemsLabels = (wrapper: WrapperType): string[] => {
+    const staticItems = wrapper
+        .find("button.gd-filter-list-item")
+        .filterWhere(item => item.html().includes("s-relative-preset-"));
+    return staticItems.map(x => x.text());
 };

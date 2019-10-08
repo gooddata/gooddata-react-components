@@ -7,8 +7,12 @@ import {
     clickStaticFilter,
     clickApplyButton,
     defaultDateFilterOptions,
-    getRelativePresetByLocalIdentifier,
-    getLocalIdentifierFromItem,
+    getRelativePresetByItem,
+    getDateFilterButtonText,
+    getAllStaticItemsLabels,
+    getFilterTitle,
+    isDateFilterBodyVisible,
+    isDateFilterVisible,
 } from "./extendedDateFilters_helpers";
 
 describe("DateFilter", () => {
@@ -16,6 +20,25 @@ describe("DateFilter", () => {
         it("DateFilter render without crash", () => {
             createDateFilter();
         });
+
+        it("DateFilter render with custom name", () => {
+            const expectedLabel = "Custom filter name";
+            const wrapper = createDateFilter({ customFilterName: expectedLabel });
+            expect(getFilterTitle(wrapper)).toEqual(expectedLabel);
+        });
+
+        it("DateFilter render readonly", () => {
+            const wrapper = createDateFilter({ dateFilterMode: "readonly" });
+            clickDateFilterButton(wrapper);
+            expect(isDateFilterBodyVisible(wrapper)).toBe(false);
+        });
+
+        it("DateFilter render hidden", () => {
+            const wrapper = createDateFilter({ dateFilterMode: "hidden" });
+            expect(isDateFilterVisible(wrapper)).toBe(false);
+        });
+
+        // TODO: ONE-4000 invalid options
     });
 
     describe("Static date filters", () => {
@@ -23,20 +46,69 @@ describe("DateFilter", () => {
             ["last-7-days", defaultDateFilterOptions.relativePreset["GDC.time.date"]],
             ["last-30-days", defaultDateFilterOptions.relativePreset["GDC.time.date"]],
             ["last-90-days", defaultDateFilterOptions.relativePreset["GDC.time.date"]],
+            ["this-month", defaultDateFilterOptions.relativePreset["GDC.time.month"]],
+            ["last-month", defaultDateFilterOptions.relativePreset["GDC.time.month"]],
+            ["last-12-months", defaultDateFilterOptions.relativePreset["GDC.time.month"]],
+            ["this-quarter", defaultDateFilterOptions.relativePreset["GDC.time.quarter"]],
+            ["last-quarter", defaultDateFilterOptions.relativePreset["GDC.time.quarter"]],
+            ["last-4-quarters", defaultDateFilterOptions.relativePreset["GDC.time.quarter"]],
+            ["this-year", defaultDateFilterOptions.relativePreset["GDC.time.year"]],
+            ["last-year", defaultDateFilterOptions.relativePreset["GDC.time.year"]],
         ])("Switch to static date filter to %s", (item: string, relativePreset: any[]) => {
             const onApply = jest.fn();
             const wrapper = createDateFilter({ onApply });
+
             clickDateFilterButton(wrapper);
             clickStaticFilter(wrapper, item);
             clickApplyButton(wrapper);
 
-            expect(onApply).toHaveBeenCalledTimes(1);
+            const expectedSelectedItem = getRelativePresetByItem(item, relativePreset);
 
-            const expectedSelectedItem = getRelativePresetByLocalIdentifier(
-                getLocalIdentifierFromItem(item),
-                relativePreset,
-            );
+            expect(onApply).toHaveBeenCalledTimes(1);
             expect(onApply).toBeCalledWith(expectedSelectedItem, false);
+        });
+
+        it.each([
+            ["last-7-days", "Last 7 days", defaultDateFilterOptions.relativePreset["GDC.time.date"]],
+            ["last-30-days", "Last 30 days", defaultDateFilterOptions.relativePreset["GDC.time.date"]],
+            ["last-90-days", "Last 90 days", defaultDateFilterOptions.relativePreset["GDC.time.date"]],
+            ["this-month", "This month", defaultDateFilterOptions.relativePreset["GDC.time.month"]],
+            ["last-month", "Last month", defaultDateFilterOptions.relativePreset["GDC.time.month"]],
+            ["last-12-months", "Last 12 months", defaultDateFilterOptions.relativePreset["GDC.time.month"]],
+            ["this-quarter", "This quarter", defaultDateFilterOptions.relativePreset["GDC.time.quarter"]],
+            ["last-quarter", "Last quarter", defaultDateFilterOptions.relativePreset["GDC.time.quarter"]],
+            [
+                "last-4-quarters",
+                "Last 4 quarters",
+                defaultDateFilterOptions.relativePreset["GDC.time.quarter"],
+            ],
+            ["this-year", "This year", defaultDateFilterOptions.relativePreset["GDC.time.year"]],
+            ["last-year", "Last year", defaultDateFilterOptions.relativePreset["GDC.time.year"]],
+        ])("Set correct button selected label %s", (item: string, label: string, relativePreset: any[]) => {
+            const selectedFilterOption = getRelativePresetByItem(item, relativePreset);
+            const wrapper = createDateFilter({ selectedFilterOption });
+            expect(getDateFilterButtonText(wrapper)).toBe(label);
+        });
+
+        it("Static filters are sorted in ascending order", () => {
+            const expextedItems = [
+                "Last 7 days",
+                "Last 30 days",
+                "Last 90 days",
+                "This month",
+                "Last month",
+                "Last 12 months",
+                "This quarter",
+                "Last quarter",
+                "Last 4 quarters",
+                "This year",
+                "Last year",
+            ];
+
+            const wrapper = createDateFilter();
+            clickDateFilterButton(wrapper);
+            const staticItems = getAllStaticItemsLabels(wrapper);
+            expect(staticItems).toEqual(expextedItems);
         });
     });
 });
