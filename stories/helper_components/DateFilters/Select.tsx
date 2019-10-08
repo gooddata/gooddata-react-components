@@ -1,8 +1,13 @@
 // (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
+import { screenshotWrap } from "@gooddata/test-storybook";
 import { Select } from "../../../src/components/filters/DateFilter/Select/Select";
 import { ISelectItem, ISelectItemOption } from "../../../src/components/filters/DateFilter/Select/types";
+
+import "../../../styles/css/dateFilter.css";
+
+const wrapperStyle = { width: 400, height: 400, padding: "1em 1em" };
 
 storiesOf("Helper components/DateFilter/Select", module).add("renders", () => {
     const items: Array<ISelectItem<string>> = [
@@ -42,5 +47,9 @@ storiesOf("Helper components/DateFilter/Select", module).add("renders", () => {
         };
     }
 
-    return <SelectExample />;
+    return screenshotWrap(
+        <div style={wrapperStyle}>
+            <SelectExample />
+        </div>,
+    );
 });

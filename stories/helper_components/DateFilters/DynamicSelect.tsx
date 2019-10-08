@@ -2,10 +2,15 @@
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
+import { screenshotWrap } from "@gooddata/test-storybook";
 import { injectIntl } from "react-intl";
 import { DynamicSelect } from "../../../src/components/filters/DateFilter/DynamicSelect/DynamicSelect";
 import { getRelativeDateFilterItems } from "../../../src/components/filters/DateFilter/DynamicSelect/utils";
 import { IntlDecorator } from "../../utils/IntlDecorators";
+
+import "../../../styles/css/dateFilter.css";
+
+const wrapperStyle = { width: 400, height: 400, padding: "1em 1em" };
 
 const DynamicSelectWithIntl = injectIntl(({ intl, ...otherProps }) => (
     <DynamicSelect
@@ -19,15 +24,31 @@ const DynamicSelectWithIntl = injectIntl(({ intl, ...otherProps }) => (
 const DynamicSelectWrapper = (props: any) => IntlDecorator(<DynamicSelectWithIntl {...props} />);
 
 storiesOf("Helper components/DateFilter/DynamicSelect", module)
-    .add("empty", () => {
-        return <DynamicSelectWrapper />;
-    })
-    .add("initial value", () => {
-        return <DynamicSelectWrapper value={-1} />;
-    })
-    .add("initial open", () => {
-        return <DynamicSelectWrapper initialIsOpen={true} />;
-    })
-    .add("initial open with value", () => {
-        return <DynamicSelectWrapper value={33} initialIsOpen={true} />;
-    });
+    .add("empty", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <DynamicSelectWrapper />
+            </div>,
+        ),
+    )
+    .add("initial value", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <DynamicSelectWrapper value={-1} />
+            </div>,
+        ),
+    )
+    .add("initial open", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <DynamicSelectWrapper initialIsOpen={true} />
+            </div>,
+        ),
+    )
+    .add("initial open with value", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <DynamicSelectWrapper value={33} initialIsOpen={true} />
+            </div>,
+        ),
+    );

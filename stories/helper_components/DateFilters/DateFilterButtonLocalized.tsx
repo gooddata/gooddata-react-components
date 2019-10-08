@@ -1,9 +1,14 @@
 // (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
+import { screenshotWrap } from "@gooddata/test-storybook";
 import { ExtendedDateFilters } from "@gooddata/typings";
 import { IntlDecorator } from "../../utils/IntlDecorators";
 import { DateFilterButtonLocalized } from "../../../src/components/filters/DateFilter/DateFilterButtonLocalized/DateFilterButtonLocalized";
+
+import "../../../styles/css/dateFilter.css";
+
+const wrapperStyle = { width: 400, height: 400, padding: "1em 1em" };
 
 const granularities: ExtendedDateFilters.DateFilterGranularity[] = [
     "GDC.time.date",
@@ -79,49 +84,55 @@ const AbsolutePresetButton: React.FC<{
 
 storiesOf("Helper components/DateFilter/DateFilterButtonLocalized", module)
     .add("allTime", () =>
-        IntlDecorator(
-            <DateFilterButtonLocalized
-                dateFilterOption={{
-                    localIdentifier: "ALL_TIME",
-                    type: "allTime",
-                    name: "All time",
-                    visible: true,
-                }}
-                isMobile={false}
-            />,
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                {IntlDecorator(
+                    <DateFilterButtonLocalized
+                        dateFilterOption={{
+                            localIdentifier: "ALL_TIME",
+                            type: "allTime",
+                            name: "All time",
+                            visible: true,
+                        }}
+                        isMobile={false}
+                    />,
+                )}
+            </div>,
         ),
     )
 
-    .add("absoluteForm", () => (
-        <>
-            {IntlDecorator(
-                <DateFilterButtonLocalized
-                    dateFilterOption={{
-                        from: new Date(Date.UTC(2018, 4, 1)).toISOString(),
-                        to: new Date(Date.UTC(2019, 3, 30)).toISOString(),
-                        localIdentifier: "ABSOLUTE_FORM",
-                        type: "absoluteForm",
-                        name: "Static period",
-                        visible: true,
-                    }}
-                    isMobile={false}
-                />,
-            )}
-            {IntlDecorator(
-                <DateFilterButtonLocalized
-                    dateFilterOption={{
-                        from: new Date(Date.UTC(2018, 4, 1)).toISOString(),
-                        to: new Date(Date.UTC(2018, 4, 1)).toISOString(),
-                        localIdentifier: "ABSOLUTE_FORM",
-                        type: "absoluteForm",
-                        name: "Static period",
-                        visible: true,
-                    }}
-                    isMobile={false}
-                />,
-            )}
-        </>
-    ))
+    .add("absoluteForm", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                {IntlDecorator(
+                    <DateFilterButtonLocalized
+                        dateFilterOption={{
+                            from: new Date(Date.UTC(2018, 4, 1)).toISOString(),
+                            to: new Date(Date.UTC(2019, 3, 30)).toISOString(),
+                            localIdentifier: "ABSOLUTE_FORM",
+                            type: "absoluteForm",
+                            name: "Static period",
+                            visible: true,
+                        }}
+                        isMobile={false}
+                    />,
+                )}
+                {IntlDecorator(
+                    <DateFilterButtonLocalized
+                        dateFilterOption={{
+                            from: new Date(Date.UTC(2018, 4, 1)).toISOString(),
+                            to: new Date(Date.UTC(2018, 4, 1)).toISOString(),
+                            localIdentifier: "ABSOLUTE_FORM",
+                            type: "absoluteForm",
+                            name: "Static period",
+                            visible: true,
+                        }}
+                        isMobile={false}
+                    />,
+                )}
+            </div>,
+        ),
+    )
 
     .add("relativeForm", () => {
         type FromTo = [number, number];
@@ -143,52 +154,67 @@ storiesOf("Helper components/DateFilter/DateFilterButtonLocalized", module)
             [-10, 10],
         ];
 
-        return fromToPairs.map(([from, to], index) => (
-            <React.Fragment key={`${from}-${to}`}>
-                {index > 0 ? <hr /> : null}
-                {granularities.map(g => (
-                    <RelativeFormButton key={g} from={from} to={to} selectedGranularity={g} />
+        return screenshotWrap(
+            <div style={wrapperStyle}>
+                {fromToPairs.map(([from, to], index) => (
+                    <React.Fragment key={`${from}-${to}`}>
+                        {index > 0 ? <hr /> : null}
+                        {granularities.map(g => (
+                            <RelativeFormButton key={g} from={from} to={to} selectedGranularity={g} />
+                        ))}
+                    </React.Fragment>
                 ))}
-            </React.Fragment>
-        ));
+            </div>,
+        );
     })
 
-    .add("absolutePreset", () => (
-        <>
-            <AbsolutePresetButton
-                from={new Date(Date.UTC(2018, 11, 20)).toISOString()}
-                to={new Date(Date.UTC(2018, 11, 30)).toISOString()}
-                name="Filter name when name is specified"
-            />
+    .add("absolutePreset", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <AbsolutePresetButton
+                    from={new Date(Date.UTC(2018, 11, 20)).toISOString()}
+                    to={new Date(Date.UTC(2018, 11, 30)).toISOString()}
+                    name="Filter name when name is specified"
+                />
 
-            <AbsolutePresetButton
-                from={new Date(Date.UTC(2018, 11, 20)).toISOString()}
-                to={new Date(Date.UTC(2018, 11, 30)).toISOString()}
-            />
-        </>
-    ))
+                <AbsolutePresetButton
+                    from={new Date(Date.UTC(2018, 11, 20)).toISOString()}
+                    to={new Date(Date.UTC(2018, 11, 30)).toISOString()}
+                />
+            </div>,
+        ),
+    )
 
-    .add("relativePreset", () => (
-        <>
-            <RelativePresetButton
-                from={-6}
-                to={0}
-                granularity="GDC.time.date"
-                name="Filter name when name is specified"
-            />
+    .add("relativePreset", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <RelativePresetButton
+                    from={-6}
+                    to={0}
+                    granularity="GDC.time.date"
+                    name="Filter name when name is specified"
+                />
 
-            <RelativePresetButton from={-6} to={0} granularity="GDC.time.date" />
-        </>
-    ))
+                <RelativePresetButton from={-6} to={0} granularity="GDC.time.date" />
+            </div>,
+        ),
+    )
 
-    .add("relativePreset with exclude", () => (
-        <>
-            <RelativePresetButton from={-6} to={-1} granularity="GDC.time.date" excludeCurrentPeriod={true} />
-            <RelativePresetButton
-                from={-6}
-                to={-1}
-                granularity="GDC.time.date"
-                excludeCurrentPeriod={false}
-            />
-        </>
-    ));
+    .add("relativePreset with exclude", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <RelativePresetButton
+                    from={-6}
+                    to={-1}
+                    granularity="GDC.time.date"
+                    excludeCurrentPeriod={true}
+                />
+                <RelativePresetButton
+                    from={-6}
+                    to={-1}
+                    granularity="GDC.time.date"
+                    excludeCurrentPeriod={false}
+                />
+            </div>,
+        ),
+    );
