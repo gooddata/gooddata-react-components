@@ -1,10 +1,43 @@
 // (C) 2019 GoodData Corporation
 import { ExtendedDateFilters } from "@gooddata/typings";
 import { testAPI } from "../DateFilter";
+import {
+    createDateFilter,
+    clickDateFilterButton,
+    clickStaticFilter,
+    clickApplyButton,
+    defaultDateFilterOptions,
+    getRelativePresetByLocalIdentifier,
+    getLocalIdentifierFromItem,
+} from "./extendedDateFilters_helpers";
 
 describe("DateFilter", () => {
-    it("renders TODO", () => {
-        expect(false).toBe(true);
+    describe("Configuration", () => {
+        it("DateFilter render without crash", () => {
+            createDateFilter();
+        });
+    });
+
+    describe("Static date filters", () => {
+        it.each([
+            ["last-7-days", defaultDateFilterOptions.relativePreset["GDC.time.date"]],
+            ["last-30-days", defaultDateFilterOptions.relativePreset["GDC.time.date"]],
+            ["last-90-days", defaultDateFilterOptions.relativePreset["GDC.time.date"]],
+        ])("Switch to static date filter to %s", (item: string, relativePreset: any[]) => {
+            const onApply = jest.fn();
+            const wrapper = createDateFilter({ onApply });
+            clickDateFilterButton(wrapper);
+            clickStaticFilter(wrapper, item);
+            clickApplyButton(wrapper);
+
+            expect(onApply).toHaveBeenCalledTimes(1);
+
+            const expectedSelectedItem = getRelativePresetByLocalIdentifier(
+                getLocalIdentifierFromItem(item),
+                relativePreset,
+            );
+            expect(onApply).toBeCalledWith(expectedSelectedItem, false);
+        });
     });
 });
 
