@@ -188,21 +188,26 @@ export class PluggableComboChart extends PluggableBaseChart {
 
     private configureChartTypes(referencePoint: IReferencePoint): IVisualizationProperties {
         const buckets: IBucket[] = get(referencePoint, BUCKETS, []);
-        const primaryChartType = get(findBucket(buckets, BucketNames.MEASURES), "chartType");
-        const secondaryChartType = get(findBucket(buckets, BucketNames.SECONDARY_MEASURES), "chartType");
+        const controls = get(referencePoint, PROPERTY_CONTROLS, {});
+        const primaryChartType = get(
+            findBucket(buckets, BucketNames.MEASURES),
+            "chartType",
+            controls.primaryChartType || VisualizationTypes.COLUMN,
+        );
+        const secondaryChartType = get(
+            findBucket(buckets, BucketNames.SECONDARY_MEASURES),
+            "chartType",
+            controls.secondaryChartType || VisualizationTypes.LINE,
+        );
 
-        if (primaryChartType || secondaryChartType) {
-            return {
-                ...referencePoint.properties,
-                controls: {
-                    ...get(referencePoint, PROPERTY_CONTROLS, {}),
-                    primaryChartType,
-                    secondaryChartType,
-                },
-            };
-        }
-
-        return referencePoint.properties;
+        return {
+            ...referencePoint.properties,
+            controls: {
+                ...controls,
+                primaryChartType,
+                secondaryChartType,
+            },
+        };
     }
 
     private isPercentDisabled(extReferencePoint: IExtendedReferencePoint): boolean {
