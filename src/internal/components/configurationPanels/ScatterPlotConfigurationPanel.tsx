@@ -14,7 +14,7 @@ import ConfigSection from "../configurationControls/ConfigSection";
 import DataLabelsControl from "../configurationControls/DataLabelsControl";
 import CheckboxControl from "../configurationControls/CheckboxControl";
 import { getMeasuresFromMdObject } from "../../utils/bucketHelper";
-import { hasAttribute } from "../../utils/mdObjectHelper";
+import { countItemsOnAxes, hasAttribute } from "../../utils/mdObjectHelper";
 import {
     SHOW_DELAY_DEFAULT,
     HIDE_DELAY_DEFAULT,
@@ -32,8 +32,10 @@ export default class ScatterPlotConfigurationPanel extends ConfigurationPanelCon
     protected renderConfigurationPanel() {
         const { xAxisVisible, gridEnabled, yAxisVisible } = this.getControlProperties();
 
-        const { propertiesMeta, properties, pushData } = this.props;
+        const { propertiesMeta, properties, pushData, mdObject, type } = this.props;
+        const controls = properties && properties.controls;
         const controlsDisabled = this.isControlDisabled();
+        const itemsOnAxes = countItemsOnAxes(type, controls, mdObject);
 
         return (
             <BubbleHoverTrigger showDelay={SHOW_DELAY_DEFAULT} hideDelay={HIDE_DELAY_DEFAULT}>
@@ -78,7 +80,7 @@ export default class ScatterPlotConfigurationPanel extends ConfigurationPanelCon
                         pushData={pushData}
                     >
                         <NameSubsection
-                            disabled={controlsDisabled}
+                            disabled={controlsDisabled || itemsOnAxes.yaxis !== 1}
                             configPanelDisabled={controlsDisabled}
                             axis={"yaxis"}
                             properties={properties}

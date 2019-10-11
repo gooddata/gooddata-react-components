@@ -13,7 +13,7 @@ import ConfigSection from "../configurationControls/ConfigSection";
 import DataLabelsControl from "../configurationControls/DataLabelsControl";
 import CheckboxControl from "../configurationControls/CheckboxControl";
 import MinMaxControl from "../configurationControls//MinMaxControl";
-import { hasTertiaryMeasures } from "../../utils/mdObjectHelper";
+import { countItemsOnAxes, hasTertiaryMeasures } from "../../utils/mdObjectHelper";
 import {
     SHOW_DELAY_DEFAULT,
     HIDE_DELAY_DEFAULT,
@@ -25,8 +25,10 @@ export default class BubbleChartConfigurationPanel extends ConfigurationPanelCon
     protected renderConfigurationPanel() {
         const { xAxisVisible, yAxisVisible, gridEnabled } = this.getControlProperties();
 
-        const { propertiesMeta, properties, pushData } = this.props;
+        const { propertiesMeta, properties, pushData, type, mdObject } = this.props;
+        const controls = properties && properties.controls;
         const controlsDisabled = this.isControlDisabled();
+        const itemsOnAxes = countItemsOnAxes(type, controls, mdObject);
 
         return (
             <BubbleHoverTrigger showDelay={SHOW_DELAY_DEFAULT} hideDelay={HIDE_DELAY_DEFAULT}>
@@ -71,7 +73,7 @@ export default class BubbleChartConfigurationPanel extends ConfigurationPanelCon
                         pushData={pushData}
                     >
                         <NameSubsection
-                            disabled={controlsDisabled}
+                            disabled={controlsDisabled || itemsOnAxes.yaxis !== 1}
                             configPanelDisabled={controlsDisabled}
                             axis={"yaxis"}
                             properties={properties}
