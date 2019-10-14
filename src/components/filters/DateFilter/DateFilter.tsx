@@ -24,7 +24,6 @@ const normalizeSelectedFilterOption = (
 
 interface IStatePropsIntersection {
     excludeCurrentPeriod: boolean;
-    isExcludeCurrentPeriodEnabled: boolean;
     selectedFilterOption: ExtendedDateFilters.DateFilterOption;
 }
 
@@ -45,16 +44,15 @@ export interface IDateFilterCallbackProps {
 
 export interface IDateFilterProps extends IDateFilterStateProps, IDateFilterCallbackProps {}
 
-// tslint:disable-next-line: no-empty-interface
 interface IDateFilterState extends IStatePropsIntersection {
     initExcludeCurrentPeriod: boolean;
     initSelectedFilterOption: ExtendedDateFilters.DateFilterOption;
+    isExcludeCurrentPeriodEnabled: boolean;
 }
 
 export class DateFilter extends React.PureComponent<IDateFilterProps, IDateFilterState> {
     public static propTypes = {
         excludeCurrentPeriod: PropTypes.bool.isRequired,
-        isExcludeCurrentPeriodEnabled: PropTypes.bool.isRequired,
         selectedFilterOption: PropTypes.object.isRequired,
         filterOptions: PropTypes.object.isRequired,
         availableGranularities: PropTypes.arrayOf(PropTypes.string).isRequired,

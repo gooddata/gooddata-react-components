@@ -38,7 +38,7 @@ describe("DateFilter", () => {
             expect(isDateFilterVisible(wrapper)).toBe(false);
         });
 
-        it("Should update selectedFilterOption correctly", () => {
+        it("Should update selectedFilterOption after first render", () => {
             const wrapper = createDateFilter();
             expect(getDateFilterButtonText(wrapper)).toBe("All time");
 

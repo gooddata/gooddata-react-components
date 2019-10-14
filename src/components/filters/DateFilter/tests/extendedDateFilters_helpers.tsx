@@ -159,7 +159,6 @@ const availableGranularities: ExtendedDateFilters.DateFilterGranularity[] = [
 
 const defaultProps: IDateFilterProps = {
     excludeCurrentPeriod: false,
-    isExcludeCurrentPeriodEnabled: true,
     selectedFilterOption: defaultDateFilterOptions.allTime,
     filterOptions: defaultDateFilterOptions,
     availableGranularities,

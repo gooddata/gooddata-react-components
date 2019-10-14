@@ -185,7 +185,6 @@ export class DateFilterComponentExample extends Component {
             <div style={{ width: 300 }}>
                 <DateFilter
                     excludeCurrentPeriod={this.state.excludeCurrentPeriod}
-                    isExcludeCurrentPeriodEnabled
                     selectedFilterOption={this.state.selectedFilterOption}
                     filterOptions={defaultDateFilterOptions}
                     availableGranularities={availableGranularities}
