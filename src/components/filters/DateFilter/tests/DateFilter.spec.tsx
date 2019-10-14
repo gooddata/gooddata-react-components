@@ -27,6 +27,9 @@ import {
     writeToRelativeFormInputTo,
     getRelativeFormInputFromValue,
     getRelativeFormInputToValue,
+    isExcludeCurrentPeriodDisabled,
+    setExcludeCurrentPeriodCheckBox,
+    isExcludeCurrentPeriodChecked,
 } from "./extendedDateFilters_helpers";
 
 describe("DateFilter", () => {
@@ -64,6 +67,7 @@ describe("DateFilter", () => {
             expect(getDateFilterButtonText(wrapper)).toBe("Last 7 days");
         });
     });
+
     describe("cancel", () => {
         it("Should close DateFilter when cancel button clicked ", async () => {
             const onCancel = jest.fn();
@@ -101,7 +105,7 @@ describe("DateFilter", () => {
             expect(getAbsoluteFormInputToValue(wrapper)).toEqual(dateToAbsoluteInputFormat(today));
         });
 
-        it.only("Should reset relative filter form when cancel clicked", async () => {
+        it("Should reset relative filter form when cancel clicked", async () => {
             const wrapper = createDateFilter();
             openRelativeFormFilter(wrapper);
             writeToRelativeFormInputFrom(wrapper, "-2");
@@ -114,6 +118,68 @@ describe("DateFilter", () => {
             expect(getRelativeFormInputToValue(wrapper)).toEqual("");
         });
     });
+
+    describe("exclude", () => {
+        it("Should has for 'All time' option Exclude current period disabled", async () => {
+            const wrapper = createDateFilter();
+            clickDateFilterButton(wrapper);
+            expect(isExcludeCurrentPeriodDisabled(wrapper)).toBe(true);
+        });
+
+        it("Should has for selected option ending in today Exclude current period enabled", async () => {
+            const wrapper = createDateFilter();
+            clickDateFilterButton(wrapper);
+            clickStaticFilter(wrapper, "last-12-months");
+            expect(isExcludeCurrentPeriodDisabled(wrapper)).toBe(false);
+        });
+
+        it("Should has for selected option not ending in today Exclude current period enabled", async () => {
+            const wrapper = createDateFilter();
+            clickDateFilterButton(wrapper);
+            clickStaticFilter(wrapper, "last-month");
+            expect(isExcludeCurrentPeriodDisabled(wrapper)).toBe(true);
+        });
+
+        it("Should has for selected option only for today Exclude current period enabled", async () => {
+            const wrapper = createDateFilter();
+            clickDateFilterButton(wrapper);
+            clickStaticFilter(wrapper, "this-year");
+            expect(isExcludeCurrentPeriodDisabled(wrapper)).toBe(true);
+        });
+
+        it("Should has for selected option 'Relative filter form' Exclude current period disabled", async () => {
+            const wrapper = createDateFilter();
+            openRelativeFormFilter(wrapper);
+            expect(isExcludeCurrentPeriodDisabled(wrapper)).toBe(true);
+        });
+
+        it("Should has for selected option 'Absolute filter form' Exclude current period disabled", async () => {
+            const wrapper = createDateFilter();
+            openAbsoluteFormFilter(wrapper);
+            expect(isExcludeCurrentPeriodDisabled(wrapper)).toBe(true);
+        });
+
+        it("Should not unchecked when switching from preset with Exclude current period checked to a preset that has it enabled", async () => {
+            const wrapper = createDateFilter();
+            clickDateFilterButton(wrapper);
+            clickStaticFilter(wrapper, "last-12-months");
+            setExcludeCurrentPeriodCheckBox(wrapper, true);
+            expect(isExcludeCurrentPeriodChecked(wrapper)).toBe(true);
+            clickStaticFilter(wrapper, "last-7-days");
+            expect(isExcludeCurrentPeriodChecked(wrapper)).toBe(true);
+        });
+
+        it("Should unchecked when switching from preset with Exclude current period checked to a preset that has it disabled", async () => {
+            const wrapper = createDateFilter();
+            clickDateFilterButton(wrapper);
+            clickStaticFilter(wrapper, "last-12-months");
+            setExcludeCurrentPeriodCheckBox(wrapper, true);
+            expect(isExcludeCurrentPeriodChecked(wrapper)).toBe(true);
+            clickStaticFilter(wrapper, "last-month");
+            expect(isExcludeCurrentPeriodChecked(wrapper)).toBe(false);
+        });
+    });
+
     describe("Static date filters", () => {
         it.each([
             ["last-7-days", defaultDateFilterOptions.relativePreset["GDC.time.date"]],

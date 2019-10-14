@@ -174,13 +174,19 @@ const defaultProps: IDateFilterProps = {
 const dateFilterButton = ".s-date-filter-button";
 const dateButtonFilterTitle = ".s-date-filter-title";
 const dateFilterButtonText = ".s-button-text";
+
 const applyButton = "button.s-date-filter-apply";
 const cancelButton = "button.s-date-filter-cancel";
+
 const dateFilterBody = ".s-extended-date-filters-body";
+
+const excludeCurrentPeriodCheckbox = ".s-exclude-current-period input";
+
 const absoluteFormButton = "button.s-absolute-form";
 const absoluteFormPicker = ".s-date-range-picker";
 const absoluteFormInputFrom = ".s-date-range-picker-from .s-date-range-picker-input-field";
 const absoluteFormInputTo = ".s-date-range-picker-to .s-date-range-picker-input-field";
+
 const relativeFormButton = "button.s-relative-form";
 const relativeFormInputFrom = ".s-relative-range-picker-from .s-relative-range-input";
 const relativeFormInputTo = ".s-relative-range-picker-to .s-relative-range-input";
@@ -340,4 +346,20 @@ export const getRelativeFormInputToValue = (wrapper: WrapperType) => {
 export const writeToRelativeFormInputTo = (wrapper: WrapperType, value: string) => {
     const input = wrapper.find(relativeFormInputTo);
     input.simulate("change", { target: { value } });
+};
+
+// exclude
+
+export const isExcludeCurrentPeriodDisabled = (wrapper: WrapperType) => {
+    const checkBox = wrapper.find(excludeCurrentPeriodCheckbox);
+    return checkBox.prop("disabled");
+};
+
+export const setExcludeCurrentPeriodCheckBox = (wrapper: WrapperType, value: boolean) => {
+    wrapper.find(excludeCurrentPeriodCheckbox).simulate("change", { target: { checked: value } });
+};
+
+export const isExcludeCurrentPeriodChecked = (wrapper: WrapperType) => {
+    const checkBox = wrapper.find(excludeCurrentPeriodCheckbox);
+    return checkBox.prop("checked");
 };
