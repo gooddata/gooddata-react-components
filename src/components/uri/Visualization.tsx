@@ -298,6 +298,7 @@ export class VisualizationWrapped extends React.Component<
 
         const config = this.createVisualizationConfig();
         const commonProps = {
+            sdk,
             projectId,
             drillableItems,
             onFiredDrillEvent,
@@ -328,7 +329,7 @@ export class VisualizationWrapped extends React.Component<
                     filtersFromProps,
                 );
                 // we do not need to pass totals={totals} because BucketPivotTable deals with changes in totals itself
-                return <PivotTableComponent {...commonProps} {...pivotBucketProps} sdk={sdk} />;
+                return <PivotTableComponent {...commonProps} {...pivotBucketProps} />;
             }
             case VisualizationTypes.HEADLINE:
                 return <HeadlineComponent {...commonProps} {...sourceProps} />;

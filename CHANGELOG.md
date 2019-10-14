@@ -25,6 +25,14 @@ The REST API versions in the table are just for your information as the values a
 
 - Sticky row update in pivot table
 
+## 7.1.1
+
+October 14, 2019
+
+### Fixed
+
+- The Visualization component now propagates an externally provided SDK instance to the all internal charts
+
 ## 7.1.0
 
 ### Added
