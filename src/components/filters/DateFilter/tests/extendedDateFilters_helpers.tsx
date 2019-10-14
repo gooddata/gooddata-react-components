@@ -175,7 +175,15 @@ const dateFilterButton = ".s-date-filter-button";
 const dateButtonFilterTitle = ".s-date-filter-title";
 const dateFilterButtonText = ".s-button-text";
 const applyButton = "button.s-date-filter-apply";
+const cancelButton = "button.s-date-filter-cancel";
 const dateFilterBody = ".s-extended-date-filters-body";
+const absoluteFormButton = "button.s-absolute-form";
+const absoluteFormPicker = ".s-date-range-picker";
+const absoluteFormInputFrom = ".s-date-range-picker-from .s-date-range-picker-input-field";
+const absoluteFormInputTo = ".s-date-range-picker-to .s-date-range-picker-input-field";
+const relativeFormButton = "button.s-relative-form";
+const relativeFormInputFrom = ".s-relative-range-picker-from .s-relative-range-input";
+const relativeFormInputTo = ".s-relative-range-picker-to .s-relative-range-input";
 
 export const createDateFilter = (customProps: Partial<IDateFilterProps> = {}) => {
     const props: IDateFilterProps = { ...defaultProps, ...customProps };
@@ -193,6 +201,11 @@ export const clickDateFilterButton = (wrapper: WrapperType) => {
 
 export const clickApplyButton = (wrapper: WrapperType) => {
     wrapper.find(applyButton).simulate("click");
+    wrapper.update();
+};
+
+export const clickCancelButton = (wrapper: WrapperType) => {
+    wrapper.find(cancelButton).simulate("click");
     wrapper.update();
 };
 
@@ -250,4 +263,81 @@ export const getAllStaticItemsLabels = (wrapper: WrapperType): string[] => {
         .find("button.gd-filter-list-item")
         .filterWhere(item => item.html().includes("s-relative-preset-"));
     return staticItems.map(x => x.text());
+};
+
+// Absolute filter form
+export const clickAbsoluteFormFilter = (wrapper: WrapperType) => {
+    wrapper.find(absoluteFormButton).simulate("click");
+};
+
+export const openAbsoluteFormFilter = (wrapper: WrapperType) => {
+    clickDateFilterButton(wrapper);
+    clickAbsoluteFormFilter(wrapper);
+};
+
+export const isAbsoluteFormVisible = (wrapper: WrapperType) => {
+    const picker = wrapper.find(absoluteFormPicker);
+    return picker.exists();
+};
+
+export const dateToAbsoluteInputFormat = (dateString: string | moment.Moment) => {
+    return moment(dateString).format("MM/DD/YYYY");
+};
+
+export const getAbsoluteFormInputFromValue = (wrapper: WrapperType) => {
+    const input = wrapper.find(absoluteFormInputFrom);
+    return input.prop("value");
+};
+
+export const writeToAbsoluteFormInputFrom = (wrapper: WrapperType, value: string) => {
+    const input = wrapper.find(absoluteFormInputFrom);
+    input.simulate("change", { target: { value } });
+};
+
+export const getAbsoluteFormInputToValue = (wrapper: WrapperType) => {
+    const input = wrapper.find(absoluteFormInputTo);
+    return input.prop("value");
+};
+
+export const writeToAbsoluteFormInputTo = (wrapper: WrapperType, value: string) => {
+    const input = wrapper.find(absoluteFormInputTo);
+    input.simulate("change", { target: { value } });
+};
+
+export const getTodayDate = () => {
+    return moment(new Date());
+};
+
+export const getMonthAgo = () => {
+    return moment(new Date()).add(-1, "month");
+};
+
+// Relative filter form
+export const clickRelativeFormFilter = (wrapper: WrapperType) => {
+    wrapper.find(relativeFormButton).simulate("click");
+};
+
+export const openRelativeFormFilter = (wrapper: WrapperType) => {
+    clickDateFilterButton(wrapper);
+    clickRelativeFormFilter(wrapper);
+};
+
+export const getRelativeFormInputFromValue = (wrapper: WrapperType) => {
+    const input = wrapper.find(relativeFormInputFrom);
+    return input.prop("value");
+};
+
+export const writeToRelativeFormInputFrom = (wrapper: WrapperType, value: string) => {
+    const input = wrapper.find(relativeFormInputFrom);
+    input.simulate("change", { target: { value } });
+};
+
+export const getRelativeFormInputToValue = (wrapper: WrapperType) => {
+    const input = wrapper.find(relativeFormInputTo);
+    return input.prop("value");
+};
+
+export const writeToRelativeFormInputTo = (wrapper: WrapperType, value: string) => {
+    const input = wrapper.find(relativeFormInputTo);
+    input.simulate("change", { target: { value } });
 };

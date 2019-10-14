@@ -13,6 +13,20 @@ import {
     getFilterTitle,
     isDateFilterBodyVisible,
     isDateFilterVisible,
+    clickCancelButton,
+    openAbsoluteFormFilter,
+    writeToAbsoluteFormInputFrom,
+    dateToAbsoluteInputFormat,
+    writeToAbsoluteFormInputTo,
+    getAbsoluteFormInputFromValue,
+    getTodayDate,
+    getMonthAgo,
+    getAbsoluteFormInputToValue,
+    openRelativeFormFilter,
+    writeToRelativeFormInputFrom,
+    writeToRelativeFormInputTo,
+    getRelativeFormInputFromValue,
+    getRelativeFormInputToValue,
 } from "./extendedDateFilters_helpers";
 
 describe("DateFilter", () => {
@@ -50,7 +64,56 @@ describe("DateFilter", () => {
             expect(getDateFilterButtonText(wrapper)).toBe("Last 7 days");
         });
     });
+    describe("cancel", () => {
+        it("Should close DateFilter when cancel button clicked ", async () => {
+            const onCancel = jest.fn();
+            const wrapper = createDateFilter({ onCancel });
+            clickDateFilterButton(wrapper);
+            clickCancelButton(wrapper);
+            expect(onCancel).toHaveBeenCalledTimes(1);
+            expect(isDateFilterBodyVisible(wrapper)).toBe(false);
+        });
 
+        it("Should not call onApply when we change filter and press cancel", async () => {
+            const onApply = jest.fn();
+            const wrapper = createDateFilter({ onApply });
+            clickDateFilterButton(wrapper);
+            clickStaticFilter(wrapper, "last-7-days");
+            clickCancelButton(wrapper);
+
+            expect(onApply).toHaveBeenCalledTimes(0);
+            expect(isDateFilterBodyVisible(wrapper)).toBe(false);
+        });
+
+        it("Should reset absolute filter form when cancel clicked", async () => {
+            const wrapper = createDateFilter();
+            openAbsoluteFormFilter(wrapper);
+            writeToAbsoluteFormInputFrom(wrapper, dateToAbsoluteInputFormat("2017-01-01"));
+            writeToAbsoluteFormInputTo(wrapper, dateToAbsoluteInputFormat("2018-01-01"));
+            clickCancelButton(wrapper);
+
+            openAbsoluteFormFilter(wrapper);
+
+            const today = getTodayDate();
+            const monthAgo = getMonthAgo();
+
+            expect(getAbsoluteFormInputFromValue(wrapper)).toEqual(dateToAbsoluteInputFormat(monthAgo));
+            expect(getAbsoluteFormInputToValue(wrapper)).toEqual(dateToAbsoluteInputFormat(today));
+        });
+
+        it.only("Should reset relative filter form when cancel clicked", async () => {
+            const wrapper = createDateFilter();
+            openRelativeFormFilter(wrapper);
+            writeToRelativeFormInputFrom(wrapper, "-2");
+            writeToRelativeFormInputTo(wrapper, "2");
+            clickCancelButton(wrapper);
+
+            openRelativeFormFilter(wrapper);
+
+            expect(getRelativeFormInputFromValue(wrapper)).toEqual("");
+            expect(getRelativeFormInputToValue(wrapper)).toEqual("");
+        });
+    });
     describe("Static date filters", () => {
         it.each([
             ["last-7-days", defaultDateFilterOptions.relativePreset["GDC.time.date"]],
