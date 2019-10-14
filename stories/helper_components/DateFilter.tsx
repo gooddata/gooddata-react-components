@@ -3,9 +3,7 @@ import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 import { screenshotWrap } from "@gooddata/test-storybook";
-import { ExtendedDateFilters } from "@gooddata/typings";
-import { IntlDecorator } from "../utils/IntlDecorators";
-import { DateFilterCore } from "../../src/components/filters/DateFilter/DateFilterCore";
+import { DateFilter } from "../../src/components/filters/DateFilter/DateFilter";
 import { defaultDateFilterOptions } from "../../src/components/filters/DateFilter/constants/config";
 
 import "../../styles/css/dateFilter.css";
@@ -13,58 +11,25 @@ import "../../styles/css/dateFilter.css";
 const wrapperStyle = { width: 400, height: 800, padding: "1em 1em" };
 
 storiesOf("Helper components/DateFilter", module).add("full-featured", () => {
-    interface IExtendedDateFilterState {
-        selectedFilterOption: ExtendedDateFilters.DateFilterOption;
-        excludeCurrentPeriod: boolean;
-    }
-
-    class DateFilterController extends React.Component<{}, IExtendedDateFilterState> {
-        constructor(props: {}) {
-            super(props);
-
-            this.state = {
-                selectedFilterOption: defaultDateFilterOptions.allTime,
-                excludeCurrentPeriod: false,
-            };
-        }
-
-        public render() {
-            return (
-                <DateFilterCore
-                    availableGranularities={[
-                        "GDC.time.date",
-                        "GDC.time.month",
-                        "GDC.time.quarter",
-                        "GDC.time.year",
-                    ]}
-                    filterOptions={defaultDateFilterOptions}
-                    selectedFilterOption={this.state.selectedFilterOption}
-                    originalSelectedFilterOption={this.state.selectedFilterOption} // just to show the value immediately
-                    onSelectedFilterOptionChange={this.setSelectedFilterOption}
-                    originalExcludeCurrentPeriod={this.state.excludeCurrentPeriod} // just to show the value immediately
-                    excludeCurrentPeriod={this.state.excludeCurrentPeriod}
-                    isEditMode={false}
-                    isExcludeCurrentPeriodEnabled={true}
-                    onExcludeCurrentPeriodChange={this.setExcludeCurrentPeriod}
-                    onApplyClick={action("applyClick")}
-                    onCancelClick={action("cancelClick")}
-                    onDropdownOpenChanged={action("dropdownOpenChanged")}
-                />
-            );
-        }
-
-        private setSelectedFilterOption = (newFilter: ExtendedDateFilters.DateFilterOption) => {
-            this.setState({
-                selectedFilterOption: newFilter,
-            });
-        };
-
-        private setExcludeCurrentPeriod = (isExcluded: boolean) => {
-            this.setState({
-                excludeCurrentPeriod: isExcluded,
-            });
-        };
-    }
-
-    return screenshotWrap(<div style={wrapperStyle}>{IntlDecorator(<DateFilterController />)}</div>);
+    return screenshotWrap(
+        <div style={wrapperStyle} className="screenshot-target">
+            <DateFilter
+                excludeCurrentPeriod={false}
+                selectedFilterOption={defaultDateFilterOptions.allTime}
+                filterOptions={defaultDateFilterOptions}
+                availableGranularities={[
+                    "GDC.time.date",
+                    "GDC.time.month",
+                    "GDC.time.quarter",
+                    "GDC.time.year",
+                ]}
+                isEditMode={false}
+                dateFilterMode="active"
+                onApply={action("applyClick")}
+                onCancel={action("cancelClick")}
+                onOpen={action("onOpen")}
+                onClose={action("onClose")}
+            />
+        </div>,
+    );
 });
