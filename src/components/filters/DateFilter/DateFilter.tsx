@@ -46,9 +46,12 @@ export interface IDateFilterCallbackProps {
 export interface IDateFilterProps extends IDateFilterStateProps, IDateFilterCallbackProps {}
 
 // tslint:disable-next-line: no-empty-interface
-interface IExtendedDateFilterControllerState extends IStatePropsIntersection {}
+interface IDateFilterState extends IStatePropsIntersection {
+    initExcludeCurrentPeriod: boolean;
+    initSelectedFilterOption: ExtendedDateFilters.DateFilterOption;
+}
 
-export class DateFilter extends React.Component<IDateFilterProps, IExtendedDateFilterControllerState> {
+export class DateFilter extends React.PureComponent<IDateFilterProps, IDateFilterState> {
     public static propTypes = {
         excludeCurrentPeriod: PropTypes.bool.isRequired,
         isExcludeCurrentPeriodEnabled: PropTypes.bool.isRequired,
@@ -71,20 +74,43 @@ export class DateFilter extends React.Component<IDateFilterProps, IExtendedDateF
         onClose: noop,
     };
 
-    constructor(props: IDateFilterProps) {
-        super(props);
+    public static getDerivedStateFromProps(
+        nextProps: IDateFilterProps,
+        prevState: IDateFilterState,
+    ): IDateFilterState {
+        if (
+            !prevState ||
+            !isEqual(nextProps.selectedFilterOption, prevState.initSelectedFilterOption) ||
+            nextProps.excludeCurrentPeriod !== prevState.initExcludeCurrentPeriod
+        ) {
+            const canExcludeCurrent = canExcludeCurrentPeriod(nextProps.selectedFilterOption);
+            return {
+                initSelectedFilterOption: nextProps.selectedFilterOption,
+                selectedFilterOption: nextProps.selectedFilterOption,
+                initExcludeCurrentPeriod: nextProps.excludeCurrentPeriod,
+                excludeCurrentPeriod: canExcludeCurrent ? nextProps.excludeCurrentPeriod : false,
+                isExcludeCurrentPeriodEnabled: canExcludeCurrent,
+            };
+        }
 
-        this.state = {
-            excludeCurrentPeriod: props.excludeCurrentPeriod,
-            isExcludeCurrentPeriodEnabled: props.isExcludeCurrentPeriodEnabled,
-            selectedFilterOption: props.selectedFilterOption,
-        };
+        return null;
     }
 
-    public componentDidUpdate(prevProps: IDateFilterProps): void {
-        this.syncStateProp(prevProps, "excludeCurrentPeriod");
-        this.syncStateProp(prevProps, "isExcludeCurrentPeriodEnabled");
-        this.syncStateProp(prevProps, "selectedFilterOption");
+    private static getStateFromSelectedOption = (
+        selectedFilterOption: ExtendedDateFilters.DateFilterOption,
+        excludeCurrentPeriod: boolean,
+    ) => {
+        const canExcludeCurrent = canExcludeCurrentPeriod(selectedFilterOption);
+        return {
+            selectedFilterOption,
+            excludeCurrentPeriod: canExcludeCurrent ? excludeCurrentPeriod : false,
+            isExcludeCurrentPeriodEnabled: canExcludeCurrent,
+        };
+    };
+
+    constructor(props: IDateFilterProps) {
+        super(props);
+        this.state = DateFilter.getDerivedStateFromProps(props, null);
     }
 
     public render(): React.ReactNode {
@@ -120,25 +146,13 @@ export class DateFilter extends React.Component<IDateFilterProps, IExtendedDateF
         );
     }
 
-    private syncStateProp = (prevProps: IDateFilterProps, propName: keyof IStatePropsIntersection): void => {
-        if (!isEqual(prevProps[propName], this.props[propName])) {
-            this.copyStatePropFromProps(propName);
-        }
-    };
-
-    private copyStatePropFromProps = (propName: keyof IStatePropsIntersection): void => {
-        this.setState({ [propName]: this.props[propName] } as any);
-    };
-
     private handleApplyClick = () => {
         const normalizedSelectedFilterOption = normalizeSelectedFilterOption(this.state.selectedFilterOption);
         this.props.onApply(normalizedSelectedFilterOption, this.state.excludeCurrentPeriod);
     };
 
     private onChangesDiscarded = () => {
-        this.copyStatePropFromProps("excludeCurrentPeriod");
-        this.copyStatePropFromProps("isExcludeCurrentPeriodEnabled");
-        this.copyStatePropFromProps("selectedFilterOption");
+        this.setState(() => DateFilter.getDerivedStateFromProps(this.props, null));
     };
 
     private onCancelClicked = () => {
@@ -162,12 +176,9 @@ export class DateFilter extends React.Component<IDateFilterProps, IExtendedDateF
     private handleSelectedFilterOptionChange = (
         selectedFilterOption: ExtendedDateFilters.DateFilterOption,
     ) => {
-        const canExcludeCurrent = canExcludeCurrentPeriod(selectedFilterOption);
-        this.setState(state => ({
-            selectedFilterOption,
-            excludeCurrentPeriod: canExcludeCurrent ? state.excludeCurrentPeriod : false, // explicitly clear exclude when it is disabled
-            isExcludeCurrentPeriodEnabled: canExcludeCurrent,
-        }));
+        this.setState(state =>
+            DateFilter.getStateFromSelectedOption(selectedFilterOption, state.excludeCurrentPeriod),
+        );
     };
 }
 

@@ -17,28 +17,38 @@ import {
 
 describe("DateFilter", () => {
     describe("Configuration", () => {
-        it("DateFilter render without crash", () => {
+        it("Should DateFilter render without crash", () => {
             createDateFilter();
         });
 
-        it("DateFilter render with custom name", () => {
+        it("Should DateFilter render with custom name", () => {
             const expectedLabel = "Custom filter name";
             const wrapper = createDateFilter({ customFilterName: expectedLabel });
             expect(getFilterTitle(wrapper)).toEqual(expectedLabel);
         });
 
-        it("DateFilter render readonly", () => {
+        it("Should DateFilter render readonly", () => {
             const wrapper = createDateFilter({ dateFilterMode: "readonly" });
             clickDateFilterButton(wrapper);
             expect(isDateFilterBodyVisible(wrapper)).toBe(false);
         });
 
-        it("DateFilter render hidden", () => {
+        it("Should DateFilter render hidden", () => {
             const wrapper = createDateFilter({ dateFilterMode: "hidden" });
             expect(isDateFilterVisible(wrapper)).toBe(false);
         });
 
-        // TODO: ONE-4000 invalid options
+        it("Should update selectedFilterOption correctly", () => {
+            const wrapper = createDateFilter();
+            expect(getDateFilterButtonText(wrapper)).toBe("All time");
+
+            const selectedFilterOption = getRelativePresetByItem(
+                "last-7-days",
+                defaultDateFilterOptions.relativePreset["GDC.time.date"],
+            );
+            wrapper.setProps({ selectedFilterOption });
+            expect(getDateFilterButtonText(wrapper)).toBe("Last 7 days");
+        });
     });
 
     describe("Static date filters", () => {
@@ -54,7 +64,7 @@ describe("DateFilter", () => {
             ["last-4-quarters", defaultDateFilterOptions.relativePreset["GDC.time.quarter"]],
             ["this-year", defaultDateFilterOptions.relativePreset["GDC.time.year"]],
             ["last-year", defaultDateFilterOptions.relativePreset["GDC.time.year"]],
-        ])("Switch to static date filter to %s", (item: string, relativePreset: any[]) => {
+        ])("Should switch to static date filter to %s", (item: string, relativePreset: any[]) => {
             const onApply = jest.fn();
             const wrapper = createDateFilter({ onApply });
 
@@ -84,13 +94,16 @@ describe("DateFilter", () => {
             ],
             ["this-year", "This year", defaultDateFilterOptions.relativePreset["GDC.time.year"]],
             ["last-year", "Last year", defaultDateFilterOptions.relativePreset["GDC.time.year"]],
-        ])("Set correct button selected label %s", (item: string, label: string, relativePreset: any[]) => {
-            const selectedFilterOption = getRelativePresetByItem(item, relativePreset);
-            const wrapper = createDateFilter({ selectedFilterOption });
-            expect(getDateFilterButtonText(wrapper)).toBe(label);
-        });
+        ])(
+            "Should set correct button selected label %s",
+            (item: string, label: string, relativePreset: any[]) => {
+                const selectedFilterOption = getRelativePresetByItem(item, relativePreset);
+                const wrapper = createDateFilter({ selectedFilterOption });
+                expect(getDateFilterButtonText(wrapper)).toBe(label);
+            },
+        );
 
-        it("Static filters are sorted in ascending order", () => {
+        it("Should static filters are sorted in ascending order", () => {
             const expextedItems = [
                 "Last 7 days",
                 "Last 30 days",

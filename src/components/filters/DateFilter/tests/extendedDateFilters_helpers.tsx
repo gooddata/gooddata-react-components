@@ -4,7 +4,6 @@ import { mount, ReactWrapper } from "enzyme";
 import moment = require("moment");
 import noop = require("lodash/noop");
 import { IDateFilterProps, DateFilter } from "../DateFilter";
-import { IntlWrapper } from "../../../core/base/IntlWrapper";
 import { ExtendedDateFilters } from "@gooddata/typings";
 
 const platformDateFormat = "YYYY-MM-DD";
@@ -182,11 +181,7 @@ const dateFilterBody = ".s-extended-date-filters-body";
 export const createDateFilter = (customProps: Partial<IDateFilterProps> = {}) => {
     const props: IDateFilterProps = { ...defaultProps, ...customProps };
 
-    return mount(
-        <IntlWrapper locale="en-US">
-            <DateFilter {...props} />
-        </IntlWrapper>,
-    );
+    return mount(<DateFilter {...props} />);
 };
 
 // common wrapper methods
