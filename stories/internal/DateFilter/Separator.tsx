@@ -8,9 +8,9 @@ import "../../../styles/css/dateFilter.css";
 
 const wrapperStyle = { width: 400, height: 400, padding: "1em 1em" };
 
-storiesOf("Helper components/DateFilter/Separator", module).add("renders", () =>
+storiesOf("Internal/DateFilter/Separator", module).add("renders", () =>
     screenshotWrap(
-        <div style={wrapperStyle}>
+        <div style={wrapperStyle} className="screenshot-target">
             <Separator />
         </div>,
     ),

@@ -8,10 +8,10 @@ import "../../../styles/css/dateFilter.css";
 
 const wrapperStyle = { width: 400, height: 400, padding: "1em 1em" };
 
-storiesOf("Helper components/DateFilter/DateFilterButton", module)
+storiesOf("Internal/DateFilter/DateFilterButton", module)
     .add("default state", () =>
         screenshotWrap(
-            <div style={wrapperStyle}>
+            <div style={wrapperStyle} className="screenshot-target">
                 <DateFilterButton title="Date range" isMobile={false}>
                     Last 7 days
                 </DateFilterButton>
@@ -20,7 +20,7 @@ storiesOf("Helper components/DateFilter/DateFilterButton", module)
     )
     .add("opened state", () =>
         screenshotWrap(
-            <div style={wrapperStyle}>
+            <div style={wrapperStyle} className="screenshot-target">
                 <DateFilterButton title="Date range" isOpen={true} isMobile={false}>
                     Last 7 days
                 </DateFilterButton>

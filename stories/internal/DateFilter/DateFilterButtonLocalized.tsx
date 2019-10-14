@@ -81,10 +81,10 @@ const AbsolutePresetButton: React.FC<{
         />,
     );
 
-storiesOf("Helper components/DateFilter/DateFilterButtonLocalized", module)
+storiesOf("Internal/DateFilter/DateFilterButtonLocalized", module)
     .add("allTime", () =>
         screenshotWrap(
-            <div style={wrapperStyle}>
+            <div style={wrapperStyle} className="screenshot-target">
                 {IntlDecorator(
                     <DateFilterButtonLocalized
                         dateFilterOption={{
@@ -102,7 +102,7 @@ storiesOf("Helper components/DateFilter/DateFilterButtonLocalized", module)
 
     .add("absoluteForm", () =>
         screenshotWrap(
-            <div style={wrapperStyle}>
+            <div style={wrapperStyle} className="screenshot-target">
                 {IntlDecorator(
                     <DateFilterButtonLocalized
                         dateFilterOption={{
@@ -169,7 +169,7 @@ storiesOf("Helper components/DateFilter/DateFilterButtonLocalized", module)
 
     .add("absolutePreset", () =>
         screenshotWrap(
-            <div style={wrapperStyle}>
+            <div style={wrapperStyle} className="screenshot-target">
                 <AbsolutePresetButton
                     from={new Date(Date.UTC(2018, 11, 20)).toISOString()}
                     to={new Date(Date.UTC(2018, 11, 30)).toISOString()}
@@ -186,7 +186,7 @@ storiesOf("Helper components/DateFilter/DateFilterButtonLocalized", module)
 
     .add("relativePreset", () =>
         screenshotWrap(
-            <div style={wrapperStyle}>
+            <div style={wrapperStyle} className="screenshot-target">
                 <RelativePresetButton
                     from={-6}
                     to={0}
@@ -201,7 +201,7 @@ storiesOf("Helper components/DateFilter/DateFilterButtonLocalized", module)
 
     .add("relativePreset with exclude", () =>
         screenshotWrap(
-            <div style={wrapperStyle}>
+            <div style={wrapperStyle} className="screenshot-target">
                 <RelativePresetButton
                     from={-6}
                     to={-1}

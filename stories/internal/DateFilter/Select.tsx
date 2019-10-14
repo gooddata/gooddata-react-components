@@ -9,7 +9,7 @@ import "../../../styles/css/dateFilter.css";
 
 const wrapperStyle = { width: 400, height: 400, padding: "1em 1em" };
 
-storiesOf("Helper components/DateFilter/Select", module).add("renders", () => {
+storiesOf("Internal/DateFilter/Select", module).add("renders", () => {
     const items: Array<ISelectItem<string>> = [
         { type: "option", value: "first", label: "First item" },
         { type: "separator" },
@@ -47,7 +47,7 @@ storiesOf("Helper components/DateFilter/Select", module).add("renders", () => {
     }
 
     return screenshotWrap(
-        <div style={wrapperStyle}>
+        <div style={wrapperStyle} className="screenshot-target">
             <SelectExample />
         </div>,
     );

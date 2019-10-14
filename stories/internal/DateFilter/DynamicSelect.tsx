@@ -23,31 +23,31 @@ const DynamicSelectWithIntl = injectIntl(({ intl, ...otherProps }) => (
 
 const DynamicSelectWrapper = (props: any) => IntlDecorator(<DynamicSelectWithIntl {...props} />);
 
-storiesOf("Helper components/DateFilter/DynamicSelect", module)
+storiesOf("Internal/DateFilter/DynamicSelect", module)
     .add("empty", () =>
         screenshotWrap(
-            <div style={wrapperStyle}>
+            <div style={wrapperStyle} className="screenshot-target">
                 <DynamicSelectWrapper />
             </div>,
         ),
     )
     .add("initial value", () =>
         screenshotWrap(
-            <div style={wrapperStyle}>
+            <div style={wrapperStyle} className="screenshot-target">
                 <DynamicSelectWrapper value={-1} />
             </div>,
         ),
     )
     .add("initial open", () =>
         screenshotWrap(
-            <div style={wrapperStyle}>
+            <div style={wrapperStyle} className="screenshot-target">
                 <DynamicSelectWrapper initialIsOpen={true} />
             </div>,
         ),
     )
     .add("initial open with value", () =>
         screenshotWrap(
-            <div style={wrapperStyle}>
+            <div style={wrapperStyle} className="screenshot-target">
                 <DynamicSelectWrapper value={33} initialIsOpen={true} />
             </div>,
         ),

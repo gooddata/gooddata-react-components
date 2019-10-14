@@ -8,7 +8,7 @@ import "../../../styles/css/dateFilter.css";
 
 const wrapperStyle = { width: 400, height: 400, padding: "1em 1em" };
 
-storiesOf("Helper components/DateFilter/NumericInput", module).add("renders", () => {
+storiesOf("Internal/DateFilter/NumericInput", module).add("renders", () => {
     class Container extends React.Component {
         public state = {
             value: "" as number | "",
@@ -35,7 +35,7 @@ storiesOf("Helper components/DateFilter/NumericInput", module).add("renders", ()
     }
 
     return screenshotWrap(
-        <div style={wrapperStyle}>
+        <div style={wrapperStyle} className="screenshot-target">
             <Container />
         </div>,
     );

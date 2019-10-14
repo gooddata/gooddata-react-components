@@ -4,15 +4,15 @@ import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 import { screenshotWrap } from "@gooddata/test-storybook";
 import { ExtendedDateFilters } from "@gooddata/typings";
-import { IntlDecorator } from "../../utils/IntlDecorators";
-import { DateFilterCore } from "../../../src/components/filters/DateFilter/DateFilterCore";
-import { defaultDateFilterOptions } from "../../../src/components/filters/DateFilter/constants/config";
+import { IntlDecorator } from "../utils/IntlDecorators";
+import { DateFilterCore } from "../../src/components/filters/DateFilter/DateFilterCore";
+import { defaultDateFilterOptions } from "../../src/components/filters/DateFilter/constants/config";
 
-import "../../../styles/css/dateFilter.css";
+import "../../styles/css/dateFilter.css";
 
 const wrapperStyle = { width: 400, height: 800, padding: "1em 1em" };
 
-storiesOf("Helper components/DateFilter/DateFilterCore", module).add("renders", () => {
+storiesOf("Helper components/DateFilter", module).add("full-featured", () => {
     interface IExtendedDateFilterState {
         selectedFilterOption: ExtendedDateFilters.DateFilterOption;
         excludeCurrentPeriod: boolean;

@@ -13,10 +13,10 @@ import "../../../styles/css/dateFilter.css";
 
 const wrapperStyle = { width: 200, height: 400, padding: "1em 1em" };
 
-storiesOf("Helper components/DateFilter/DateRangePicker", module)
+storiesOf("Internal/DateFilter/DateRangePicker", module)
     .add("renders", () =>
         screenshotWrap(
-            <div style={wrapperStyle}>
+            <div style={wrapperStyle} className="screenshot-target">
                 {IntlDecorator(
                     <DateRangePicker
                         range={{ from: new Date(), to: new Date() }}
@@ -29,7 +29,7 @@ storiesOf("Helper components/DateFilter/DateRangePicker", module)
     )
     .add("renders with Spanish locale", () =>
         screenshotWrap(
-            <div style={wrapperStyle}>
+            <div style={wrapperStyle} className="screenshot-target">
                 {IntlDecorator(
                     <DateRangePicker
                         range={{ from: new Date(), to: new Date() }}
@@ -42,7 +42,7 @@ storiesOf("Helper components/DateFilter/DateRangePicker", module)
     )
     .add("renders with custom start of week", () =>
         screenshotWrap(
-            <div style={wrapperStyle}>
+            <div style={wrapperStyle} className="screenshot-target">
                 {IntlDecorator(
                     <DateRangePicker
                         range={{ from: new Date(), to: new Date() }}
@@ -80,7 +80,7 @@ storiesOf("Helper components/DateFilter/DateRangePicker", module)
         }
 
         return screenshotWrap(
-            <div style={wrapperStyle}>
+            <div style={wrapperStyle} className="screenshot-target">
                 <Example />
             </div>,
         );
