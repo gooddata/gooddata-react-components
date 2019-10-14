@@ -35,7 +35,6 @@ storiesOf("Helper components/DateFilter/Select", module).add("renders", () => {
                         items={items}
                         value={this.state.selectedItemValue}
                         onChange={this.onSelectChange}
-                        className="testClass"
                         style={{ display: "inline-block" }}
                     />
                 </div>

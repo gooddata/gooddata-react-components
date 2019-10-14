@@ -10,7 +10,7 @@ import { IntlDecorator } from "../../utils/IntlDecorators";
 
 import "../../../styles/css/dateFilter.css";
 
-const wrapperStyle = { width: 400, height: 400, padding: "1em 1em" };
+const wrapperStyle = { width: 800, height: 400, padding: "1em 1em" };
 
 const DynamicSelectWithIntl = injectIntl(({ intl, ...otherProps }) => (
     <DynamicSelect

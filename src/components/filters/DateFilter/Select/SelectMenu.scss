@@ -3,6 +3,10 @@
 @import "~@gooddata/goodstrap/src/core/styles/mixins.scss";
 
 .gd-select-menu {
+    & * {
+        box-sizing: border-box;
+    }
+
     position: absolute;
     z-index: 5000;
     padding: 6px 0;
