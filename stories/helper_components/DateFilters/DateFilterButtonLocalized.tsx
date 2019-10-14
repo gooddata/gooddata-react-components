@@ -29,7 +29,7 @@ const RelativeFormButton: React.FC<{
                 localIdentifier: "RELATIVE_FORM",
                 from,
                 to,
-                granularity: selectedGranularity, // TODO ONE-4000 This was previously `selectedGranulatity` property name, but interface does not know such option. Maybe mistake? I Changed it to `granularality` property name. Test it and remove if passed.
+                granularity: selectedGranularity,
                 type: "relativeForm",
                 availableGranularities: granularities,
                 visible: true,
@@ -72,7 +72,6 @@ const AbsolutePresetButton: React.FC<{
             dateFilterOption={{
                 localIdentifier: "ABSOLUTE_PRESET",
                 type: "absolutePreset",
-                // granularity: "GDC.time.date", // TODO ONE-4000 This was previously in the object, but interface does not know such property. Commented out. Test it and remove if passed.
                 name,
                 from,
                 to,
