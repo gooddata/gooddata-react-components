@@ -154,7 +154,7 @@ storiesOf("Internal/DateFilter/DateFilterButtonLocalized", module)
         ];
 
         return screenshotWrap(
-            <div style={wrapperStyle}>
+            <div style={wrapperStyle} className="screenshot-target">
                 {fromToPairs.map(([from, to], index) => (
                     <React.Fragment key={`${from}-${to}`}>
                         {index > 0 ? <hr /> : null}
