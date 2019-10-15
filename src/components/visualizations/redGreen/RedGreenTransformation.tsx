@@ -33,44 +33,15 @@ class RedGreenTransformation extends React.Component<IRedGreenTransformationProp
         onAfterRender: noop,
     };
 
-    // constructor(props: IHeadlineTransformationProps & InjectedIntlProps) {
-    //     super(props);
-
-    //     this.handleFiredDrillEvent = this.handleFiredDrillEvent.bind(this);
-    // }
-
     public render() {
         const { executionResult, config, onAfterRender } = this.props;
-
-        // const data = getHeadlineData(executionResponse, executionResult, intl);
-        // const drillablePredicates = convertDrillableItemsToPredicates(drillableItems);
-        // const dataWithUpdatedDrilling = applyDrillableItems(
-        //     data,
-        //     drillablePredicates,
-        //     executionRequest,
-        //     executionResponse,
-        // );
 
         const data: IRedGreenData = {
             value: executionResult.data[0].toString(),
         };
 
-        return (
-            <RedGreen
-                data={data}
-                config={config}
-                // onFiredDrillEvent={this.handleFiredDrillEvent}
-                onAfterRender={onAfterRender}
-            />
-        );
+        return <RedGreen data={data} config={config} onAfterRender={onAfterRender} />;
     }
-
-    // private handleFiredDrillEvent(item: IHeadlineFiredDrillEventItemContext, target: HTMLElement) {
-    //     const { onFiredDrillEvent, executionRequest, executionResponse } = this.props;
-    //     const drillEventData = buildDrillEventData(item, executionRequest, executionResponse);
-
-    //     fireDrillEvent(onFiredDrillEvent, drillEventData, target);
-    // }
 }
 
 export default injectIntl(RedGreenTransformation);
