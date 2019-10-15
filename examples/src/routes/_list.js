@@ -99,7 +99,7 @@ export const sideNavigationRoutes = [
         Component: AttributeFilter,
     },
     {
-        path: "/date-filter-components",
+        path: "/date-filter-component",
         title: "Date Filter Component",
         Component: DateFilter,
     },
