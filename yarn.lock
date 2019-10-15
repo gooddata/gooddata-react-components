@@ -1192,12 +1192,12 @@
     js-cookie "^2.1.4"
     lodash "^4.17.15"
 
-"@gooddata/mock-js@^1.31.0":
-  version "1.34.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/mock-js/-/mock-js-1.34.0.tgz#95df8fb63a5f15e0b4c583035c5c224cb74daeab"
-  integrity sha512-w4Hz+PfWp3smOuoyyBep033aOx4ffCyY9Wi86r2idCHxnHdPsiIYMAI7wdVm+51ul1JaA7n3BBP8BesuFB9gzA==
+"@gooddata/mock-js@2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@gooddata/mock-js/-/mock-js-2.3.0.tgz#0959a44852a346d9994696775525c1bbd952b972"
+  integrity sha512-a1kcGHan1Kry+i81nRxNTmbZNtAtR6DFbEYvo3Sa1i+gu0GUCTaNCge/MaYJiD6jVXGSMvUMlQFQSv4aKyE9AQ==
   dependencies:
-    "@gooddata/typings" "^2.16.0"
+    "@gooddata/typings" "^2.18.0"
     "@types/seedrandom" "2.4.27"
     "@types/uuid" "3.4.3"
     body-parser "1.17.1"
@@ -1238,7 +1238,7 @@
     tslint-microsoft-contrib "6.1.0"
     tslint-react "3.6.0"
 
-"@gooddata/typings@^2.16.0", "@gooddata/typings@^2.18.0":
+"@gooddata/typings@^2.18.0":
   version "2.18.0"
   resolved "https://registry.yarnpkg.com/@gooddata/typings/-/typings-2.18.0.tgz#f048c2b34d1d2d670c7b54e5a44ac698965944ec"
   integrity sha512-A5ivk8PAO5bX4a8Ko1O90wR3+3oiPAVhjzZpOXrcv2OAfp6F+0mB4ZkPOWRcp/Xj0777uT6Nx5Pv0NqaKzqAcg==
