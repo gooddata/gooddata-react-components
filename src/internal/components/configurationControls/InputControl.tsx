@@ -151,7 +151,6 @@ export class InputControl extends React.Component<
         set(clonedProperties, `controls.${valuePath}`, modifiedData);
 
         this.setState({ value: modifiedData });
-
         pushData({ properties: clonedProperties });
 
         return modifiedData;

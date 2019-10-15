@@ -384,6 +384,16 @@
         "comment": "",
         "limit": 0
     },
+    "properties.redgreen.title": {
+        "value": "Red Green",
+        "comment": "",
+        "limit": 0
+    },
+    "properties.redgreen.limit": {
+        "value": "Red Green Limit",
+        "comment": "",
+        "limit": 0
+    },
     "properties.yaxis.title": {
         "value": "Y-Axis",
         "comment": "Vertical axis of a plot.",
