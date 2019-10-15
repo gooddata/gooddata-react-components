@@ -44,10 +44,17 @@ export default class RedGreen extends React.Component<IRedGreenVisualizationProp
         const { value } = this.props.data;
         const limit = this.props.config.redGreenLimit;
 
+        const parsedValue = Number.parseFloat(value);
+        const parsedLimit = Number.parseFloat(limit || "0");
+        const isGreen = parsedValue > parsedLimit;
+
         return (
-            <div className="red-green">
-                Limit: {limit}
-                Value: {value}
+            <div
+                className="red-green"
+                style={{ color: "white", backgroundColor: isGreen ? "green" : "red", padding: "1em" }}
+            >
+                <div>Limit: {limit}</div>
+                <div>Value: {value}</div>
             </div>
         );
     }
