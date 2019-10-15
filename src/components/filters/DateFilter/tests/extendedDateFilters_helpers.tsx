@@ -171,9 +171,14 @@ const defaultProps: IDateFilterProps = {
     onClose: noop,
 };
 
+/*export const assertFilterListItemSelected = async item => {
+    await t.expect(item.hasClass("gd-filter-list-item-selected")).eql(true);
+};*/
+
 const dateFilterButton = ".s-date-filter-button";
 const dateButtonFilterTitle = ".s-date-filter-title";
 const dateFilterButtonText = ".s-button-text";
+const dateFilterSelectedItem = ".gd-filter-list-item-selected";
 
 const applyButton = "button.s-date-filter-apply";
 const cancelButton = "button.s-date-filter-cancel";
@@ -182,14 +187,17 @@ const dateFilterBody = ".s-extended-date-filters-body";
 
 const excludeCurrentPeriodCheckbox = ".s-exclude-current-period input";
 
+const allTimeButton = "button.s-all-time";
+
 const absoluteFormButton = "button.s-absolute-form";
 const absoluteFormPicker = ".s-date-range-picker";
 const absoluteFormInputFrom = ".s-date-range-picker-from .s-date-range-picker-input-field";
 const absoluteFormInputTo = ".s-date-range-picker-to .s-date-range-picker-input-field";
 
 const relativeFormButton = "button.s-relative-form";
-const relativeFormInputFrom = ".s-relative-range-picker-from .s-relative-range-input";
-const relativeFormInputTo = ".s-relative-range-picker-to .s-relative-range-input";
+const relativeFormInputFrom = ".s-relative-range-picker-from input";
+const relativeFormInputTo = ".s-relative-range-picker-to input";
+const relativeFormGranularityTab = (intlGranularity: string) => `.gd-tab.s-granularity-${intlGranularity}`;
 
 export const createDateFilter = (customProps: Partial<IDateFilterProps> = {}) => {
     const props: IDateFilterProps = { ...defaultProps, ...customProps };
@@ -220,6 +228,16 @@ export const getDateFilterButtonText = (wrapper: WrapperType) => {
     return text.text();
 };
 
+export const setPropsFromOnApply = (
+    wrapper: WrapperType,
+    onApply: jest.Mock<any, any>,
+    indexOfCall: number,
+) => {
+    const selectedFilterOption = onApply.mock.calls[indexOfCall][0];
+    const excludeCurrentPeriod = onApply.mock.calls[indexOfCall][1];
+    wrapper.setProps({ selectedFilterOption, excludeCurrentPeriod });
+};
+
 // config
 
 export const getFilterTitle = (wrapper: WrapperType) => {
@@ -242,6 +260,11 @@ export const isDateFilterVisible = (wrapper: WrapperType) => {
     return body.exists();
 };
 
+export const getSelectedItemText = (wrapper: WrapperType) => {
+    const item = wrapper.find(dateFilterSelectedItem);
+    return item.text();
+};
+
 // static filters
 
 export const getLocalIdentifierFromItem = (item: string) => {
@@ -257,6 +280,10 @@ export const getRelativePresetByItem = (item: string, relativePreset: any[]) => 
 
 export const getStaticFilterSelectorClass = (filter: string) => {
     return `button.s-relative-preset-${filter}`;
+};
+
+export const clickAllTime = (wrapper: WrapperType) => {
+    wrapper.find(allTimeButton).simulate("click");
 };
 
 export const clickStaticFilter = (wrapper: WrapperType, filter: string) => {
@@ -336,6 +363,10 @@ export const getRelativeFormInputFromValue = (wrapper: WrapperType) => {
 export const writeToRelativeFormInputFrom = (wrapper: WrapperType, value: string) => {
     const input = wrapper.find(relativeFormInputFrom);
     input.simulate("change", { target: { value } });
+
+    const menuItem = wrapper.find(".s-select-item-focused");
+    menuItem.simulate("click");
+    // wrapper.update();
 };
 
 export const getRelativeFormInputToValue = (wrapper: WrapperType) => {
@@ -346,6 +377,15 @@ export const getRelativeFormInputToValue = (wrapper: WrapperType) => {
 export const writeToRelativeFormInputTo = (wrapper: WrapperType, value: string) => {
     const input = wrapper.find(relativeFormInputTo);
     input.simulate("change", { target: { value } });
+
+    /*const menuItem = wrapper.find(".s-select-item-focused");
+    menuItem.simulate('click')
+    wrapper.update();*/
+};
+
+export const clickRelativeFormGranularity = (wrapper: WrapperType, granularity: string) => {
+    const tab = wrapper.find(relativeFormGranularityTab(granularity));
+    tab.simulate("click");
 };
 
 // exclude

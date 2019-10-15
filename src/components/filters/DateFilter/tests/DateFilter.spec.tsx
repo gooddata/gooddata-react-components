@@ -30,6 +30,10 @@ import {
     isExcludeCurrentPeriodDisabled,
     setExcludeCurrentPeriodCheckBox,
     isExcludeCurrentPeriodChecked,
+    clickAllTime,
+    getSelectedItemText,
+    setPropsFromOnApply,
+    clickRelativeFormGranularity,
 } from "./extendedDateFilters_helpers";
 
 describe("DateFilter", () => {
@@ -110,12 +114,163 @@ describe("DateFilter", () => {
             openRelativeFormFilter(wrapper);
             writeToRelativeFormInputFrom(wrapper, "-2");
             writeToRelativeFormInputTo(wrapper, "2");
+
             clickCancelButton(wrapper);
 
             openRelativeFormFilter(wrapper);
 
             expect(getRelativeFormInputFromValue(wrapper)).toEqual("");
             expect(getRelativeFormInputToValue(wrapper)).toEqual("");
+        });
+    });
+
+    describe("reopening", () => {
+        it("Should keep all time selected when reopening", async () => {
+            const onApply = jest.fn();
+            const wrapper = createDateFilter({ onApply });
+
+            clickDateFilterButton(wrapper);
+            clickAllTime(wrapper);
+            clickApplyButton(wrapper);
+
+            setPropsFromOnApply(wrapper, onApply, 0);
+
+            expect(getDateFilterButtonText(wrapper)).toEqual("All time");
+
+            clickDateFilterButton(wrapper);
+
+            expect(getSelectedItemText(wrapper)).toEqual("All time");
+        });
+
+        it("Should keep relative preset selected when reopening", async () => {
+            const onApply = jest.fn();
+            const wrapper = createDateFilter({ onApply });
+
+            clickDateFilterButton(wrapper);
+            clickStaticFilter(wrapper, "last-month");
+            clickApplyButton(wrapper);
+
+            setPropsFromOnApply(wrapper, onApply, 0);
+
+            expect(getDateFilterButtonText(wrapper)).toEqual("Last month");
+
+            clickDateFilterButton(wrapper);
+
+            expect(getSelectedItemText(wrapper)).toEqual("Last month");
+        });
+
+        it("Should keep absolute form selected and filled when reopening", async () => {
+            const fromInputValue = dateToAbsoluteInputFormat("2017-01-01");
+            const toInputValue = dateToAbsoluteInputFormat("2018-01-01");
+
+            const onApply = jest.fn();
+            const wrapper = createDateFilter({ onApply });
+
+            openAbsoluteFormFilter(wrapper);
+            writeToAbsoluteFormInputFrom(wrapper, fromInputValue);
+            writeToAbsoluteFormInputTo(wrapper, toInputValue);
+            clickApplyButton(wrapper);
+
+            setPropsFromOnApply(wrapper, onApply, 0);
+
+            expect(getDateFilterButtonText(wrapper)).toEqual("1/1/2017–1/1/2018");
+
+            clickDateFilterButton(wrapper);
+
+            expect(getSelectedItemText(wrapper)).toEqual("Static period");
+            expect(getAbsoluteFormInputFromValue(wrapper)).toEqual(fromInputValue);
+            expect(getAbsoluteFormInputToValue(wrapper)).toEqual(toInputValue);
+        });
+
+        it.only("Should keep relative form selected and filled when reopening", async () => {
+            const onApply = jest.fn();
+            const wrapper = createDateFilter({ onApply });
+
+            openRelativeFormFilter(wrapper);
+            clickRelativeFormGranularity(wrapper, "year");
+            writeToRelativeFormInputFrom(wrapper, "-2");
+            writeToRelativeFormInputTo(wrapper, "2");
+
+            console.log(wrapper.debug());
+
+            // console.log(getRelativeFormInputFromValue(wrapper));
+            // console.log(getRelativeFormInputToValue(wrapper));
+            //
+
+            //            console.log(wrapper.debug());
+
+            clickApplyButton(wrapper);
+            expect(onApply).toHaveBeenCalledTimes(1);
+
+            /*console.log(getRelativeFormInputFromValue(wrapper));
+            console.log(getRelativeFormInputToValue(wrapper));
+
+            /*
+            openRelativeFormFilter(wrapper);
+            writeToRelativeFormInputFrom(wrapper, "-2");
+            writeToRelativeFormInputTo(wrapper, "2");
+            */
+
+            // console.log(wrapper.debug());
+
+            // clickApplyButton(wrapper);
+
+            // expect(onApply).toHaveBeenCalledTimes(1);
+            // expect(onApply).toBeCalledWith(null, true);
+
+            // setPropsFromOnApply(wrapper, onApply, 0);
+
+            // expect(getDateFilterButtonText(wrapper)).toEqual("1/1/2017–1/1/2018");
+            // setPropsFromOnApply(wrapper, onApply, 0);
+
+            /*clickDateFilterButton(wrapper);
+            expect(getRelativeFormInputFromValue(wrapper)).toEqual("2 years ago");
+            expect(getRelativeFormInputToValue(wrapper)).toEqual("2 years ahead");*/
+
+            /*writeToAbsoluteFormInputFrom(wrapper, fromInputValue);
+            writeToAbsoluteFormInputTo(wrapper, toInputValue);
+            clickApplyButton(wrapper);
+
+            setPropsFromOnApply(wrapper, onApply, 0);
+
+            expect(getDateFilterButtonText(wrapper)).toEqual("1/1/2017–1/1/2018");
+
+            clickDateFilterButton(wrapper);
+
+            expect(getSelectedItemText(wrapper)).toEqual("Static period");
+            expect(getAbsoluteFormInputFromValue(wrapper)).toEqual(fromInputValue);
+            expect(getAbsoluteFormInputToValue(wrapper)).toEqual(toInputValue);*/
+
+            /*
+            const wrapper = createDateFilter();
+            openRelativeFormFilter(wrapper);
+            writeToRelativeFormInputFrom(wrapper, "-2");
+            writeToRelativeFormInputTo(wrapper, "2");
+            clickCancelButton(wrapper);
+
+            openRelativeFormFilter(wrapper);
+
+            expect(getRelativeFormInputFromValue(wrapper)).toEqual("");
+            expect(getRelativeFormInputToValue(wrapper)).toEqual("");
+            */
+
+            /*
+             await DF.openRelativeFormFilter();
+    await DF.clickRelativeFormGranularity("year");
+    await DF.writeToRelativeFormInputFrom("-2");
+    await t.pressKey("enter");
+    await DF.writeToRelativeFormInputTo("2");
+    await t.pressKey("enter");
+    await DF.clickApply();
+
+    await DF.clickDateFilterButton();
+    await DF.assertFilterListItemSelected(DF.relativeFormButton);
+    await DF.assertRelativeFormGranularitySelected("year");
+    await DF.assertRelativeFormFromInputValue("2 years ago");
+    await DF.assertRelativeFormToInputValue("2 years ahead");
+
+
+            */
         });
     });
 
@@ -178,6 +333,36 @@ describe("DateFilter", () => {
             clickStaticFilter(wrapper, "last-month");
             expect(isExcludeCurrentPeriodChecked(wrapper)).toBe(false);
         });
+
+        it.each([
+            ["last-7-days", defaultDateFilterOptions.relativePreset["GDC.time.date"]],
+            ["last-30-days", defaultDateFilterOptions.relativePreset["GDC.time.date"]],
+            ["last-90-days", defaultDateFilterOptions.relativePreset["GDC.time.date"]],
+            ["this-month", defaultDateFilterOptions.relativePreset["GDC.time.month"]],
+            ["last-month", defaultDateFilterOptions.relativePreset["GDC.time.month"]],
+            ["last-12-months", defaultDateFilterOptions.relativePreset["GDC.time.month"]],
+            ["this-quarter", defaultDateFilterOptions.relativePreset["GDC.time.quarter"]],
+            ["last-quarter", defaultDateFilterOptions.relativePreset["GDC.time.quarter"]],
+            ["last-4-quarters", defaultDateFilterOptions.relativePreset["GDC.time.quarter"]],
+            ["this-year", defaultDateFilterOptions.relativePreset["GDC.time.year"]],
+            ["last-year", defaultDateFilterOptions.relativePreset["GDC.time.year"]],
+        ])(
+            "Should switch to static date filter to %s  with exclude this period checked",
+            (item: string, relativePreset: any[]) => {
+                const onApply = jest.fn();
+                const wrapper = createDateFilter({ onApply });
+
+                clickDateFilterButton(wrapper);
+                clickStaticFilter(wrapper, item);
+                setExcludeCurrentPeriodCheckBox(wrapper, true);
+                expect(isExcludeCurrentPeriodChecked(wrapper)).toBe(true);
+                clickApplyButton(wrapper);
+
+                const expectedSelectedItem = getRelativePresetByItem(item, relativePreset);
+                expect(onApply).toHaveBeenCalledTimes(1);
+                expect(onApply).toBeCalledWith(expectedSelectedItem, true);
+            },
+        );
     });
 
     describe("Static date filters", () => {
