@@ -364,9 +364,8 @@ export const writeToRelativeFormInputFrom = (wrapper: WrapperType, value: string
     const input = wrapper.find(relativeFormInputFrom);
     input.simulate("change", { target: { value } });
 
-    const menuItem = wrapper.find(".s-select-item-focused");
-    menuItem.simulate("click");
-    // wrapper.update();
+    /*const menuItem = wrapper.find(".s-select-item-focused");
+    menuItem.simulate("click");*/
 };
 
 export const getRelativeFormInputToValue = (wrapper: WrapperType) => {
@@ -379,8 +378,7 @@ export const writeToRelativeFormInputTo = (wrapper: WrapperType, value: string) 
     input.simulate("change", { target: { value } });
 
     /*const menuItem = wrapper.find(".s-select-item-focused");
-    menuItem.simulate('click')
-    wrapper.update();*/
+    menuItem.simulate('click')*/
 };
 
 export const clickRelativeFormGranularity = (wrapper: WrapperType, granularity: string) => {

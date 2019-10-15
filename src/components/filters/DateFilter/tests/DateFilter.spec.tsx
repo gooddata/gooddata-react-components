@@ -182,7 +182,8 @@ describe("DateFilter", () => {
             expect(getAbsoluteFormInputToValue(wrapper)).toEqual(toInputValue);
         });
 
-        it.only("Should keep relative form selected and filled when reopening", async () => {
+        it.skip("Should keep relative form selected and filled when reopening", async () => {
+            // this test is not compleat we are not able to set relative form values from and to
             const onApply = jest.fn();
             const wrapper = createDateFilter({ onApply });
 
@@ -190,69 +191,10 @@ describe("DateFilter", () => {
             clickRelativeFormGranularity(wrapper, "year");
             writeToRelativeFormInputFrom(wrapper, "-2");
             writeToRelativeFormInputTo(wrapper, "2");
-
-            console.log(wrapper.debug());
-
-            // console.log(getRelativeFormInputFromValue(wrapper));
-            // console.log(getRelativeFormInputToValue(wrapper));
-            //
-
-            //            console.log(wrapper.debug());
+            // console.log(wrapper.debug());
 
             clickApplyButton(wrapper);
             expect(onApply).toHaveBeenCalledTimes(1);
-
-            /*console.log(getRelativeFormInputFromValue(wrapper));
-            console.log(getRelativeFormInputToValue(wrapper));
-
-            /*
-            openRelativeFormFilter(wrapper);
-            writeToRelativeFormInputFrom(wrapper, "-2");
-            writeToRelativeFormInputTo(wrapper, "2");
-            */
-
-            // console.log(wrapper.debug());
-
-            // clickApplyButton(wrapper);
-
-            // expect(onApply).toHaveBeenCalledTimes(1);
-            // expect(onApply).toBeCalledWith(null, true);
-
-            // setPropsFromOnApply(wrapper, onApply, 0);
-
-            // expect(getDateFilterButtonText(wrapper)).toEqual("1/1/2017–1/1/2018");
-            // setPropsFromOnApply(wrapper, onApply, 0);
-
-            /*clickDateFilterButton(wrapper);
-            expect(getRelativeFormInputFromValue(wrapper)).toEqual("2 years ago");
-            expect(getRelativeFormInputToValue(wrapper)).toEqual("2 years ahead");*/
-
-            /*writeToAbsoluteFormInputFrom(wrapper, fromInputValue);
-            writeToAbsoluteFormInputTo(wrapper, toInputValue);
-            clickApplyButton(wrapper);
-
-            setPropsFromOnApply(wrapper, onApply, 0);
-
-            expect(getDateFilterButtonText(wrapper)).toEqual("1/1/2017–1/1/2018");
-
-            clickDateFilterButton(wrapper);
-
-            expect(getSelectedItemText(wrapper)).toEqual("Static period");
-            expect(getAbsoluteFormInputFromValue(wrapper)).toEqual(fromInputValue);
-            expect(getAbsoluteFormInputToValue(wrapper)).toEqual(toInputValue);*/
-
-            /*
-            const wrapper = createDateFilter();
-            openRelativeFormFilter(wrapper);
-            writeToRelativeFormInputFrom(wrapper, "-2");
-            writeToRelativeFormInputTo(wrapper, "2");
-            clickCancelButton(wrapper);
-
-            openRelativeFormFilter(wrapper);
-
-            expect(getRelativeFormInputFromValue(wrapper)).toEqual("");
-            expect(getRelativeFormInputToValue(wrapper)).toEqual("");
-            */
 
             /*
              await DF.openRelativeFormFilter();
