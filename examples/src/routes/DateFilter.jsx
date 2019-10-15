@@ -9,13 +9,13 @@ import DateFilterComponentExampleSRC from "!raw-loader!../components/DateFilterC
 
 export const DateFilter = () => (
     <div>
-        <h1>Date Filter Components</h1>
+        <h1>Date Filter Component</h1>
 
-        <p>These examples show how to use the Date Filter components.</p>
+        <p>These examples show how to use the Date Filter component.</p>
 
         <hr className="separator" />
 
-        <h2>Date Filter Component</h2>
+        <h2>Full-featured Date Filter</h2>
         <ExampleWithSource for={DateFilterComponentExample} source={DateFilterComponentExampleSRC} />
     </div>
 );

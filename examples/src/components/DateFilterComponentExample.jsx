@@ -1,10 +1,10 @@
 // (C) 2007-2019 GoodData Corporation
 import React, { Component } from "react";
-import moment from "moment";
 import { DateFilter } from "@gooddata/react-components";
 import "@gooddata/react-components/styles/css/dateFilter.css";
 
-const platformDateFormat = "YYYY-MM-DD";
+let dateFrom = new Date();
+dateFrom.setMonth(dateFrom.getMonth() - 1);
 
 const defaultDateFilterOptions = {
     allTime: {
@@ -16,17 +16,29 @@ const defaultDateFilterOptions = {
     absoluteForm: {
         localIdentifier: "ABSOLUTE_FORM",
         type: "absoluteForm",
-        from: moment()
-            .subtract(1, "month")
-            .startOf("day")
-            .format(platformDateFormat),
-        to: moment()
-            .startOf("day")
-            .format(platformDateFormat),
+        from: dateFrom.toISOString().substr(0, 10), // 'YYYY-MM-DD'
+        to: new Date().toISOString().substr(0, 10), // 'YYYY-MM-DD'
         name: "",
         visible: true,
     },
-    absolutePreset: [],
+    absolutePreset: [
+        {
+            from: "2019-12-24",
+            to: "2019-12-26",
+            name: "Christmas 2019",
+            localIdentifier: "christmas-2019",
+            visible: true,
+            type: "absolutePreset",
+        },
+        {
+            from: "2018-01-01",
+            to: "2018-12-31",
+            name: "Year 2018",
+            localIdentifier: "year-2018",
+            visible: true,
+            type: "absolutePreset",
+        },
+    ],
     relativeForm: {
         localIdentifier: "RELATIVE_FORM",
         type: "relativeForm",
@@ -188,7 +200,7 @@ export class DateFilterComponentExample extends Component {
                     selectedFilterOption={this.state.selectedFilterOption}
                     filterOptions={defaultDateFilterOptions}
                     availableGranularities={availableGranularities}
-                    customFilterName="Date filter name"
+                    customFilterName="Selected date"
                     dateFilterMode="active"
                     onApply={this.onApply}
                     onCancel={this.onCancel}

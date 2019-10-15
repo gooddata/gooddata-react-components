@@ -95,7 +95,7 @@ export const sideNavigationRoutes = [
     },
     {
         path: "/attribute-filter-components",
-        title: "Attribute Filter Components",
+        title: "Attribute Filter Component",
         Component: AttributeFilter,
     },
     {
