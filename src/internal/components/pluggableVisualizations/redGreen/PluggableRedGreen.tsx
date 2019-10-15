@@ -25,6 +25,7 @@ import { cloneDeep } from "lodash";
 import { METRIC, BUCKETS } from "../../../constants/bucket";
 import RedGreenConfigurationPanel from "../../configurationPanels/RedGreenConfigurationPanel";
 import { IChartConfig } from "../../../../interfaces/Config";
+import * as icon from "../../../assets/headline/bucket-title-measures.svg";
 // import { createInternalIntl } from "../../../utils/internalIntlProvider";
 // import { InjectedIntl } from "react-intl";
 
@@ -74,6 +75,8 @@ export class PluggableRedGreen extends AbstractPluggableVisualization {
                     itemsLimit: 1,
                     isShowInPercentVisible: false,
                     allowsReordering: false,
+                    title: "Measure",
+                    icon: icon as any,
                 },
             },
         };
