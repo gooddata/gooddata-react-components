@@ -41,7 +41,9 @@ export default class RedGreen extends React.Component<IRedGreenVisualizationProp
     }
 
     public render() {
-        const { limit, value } = this.props.data;
+        const { value } = this.props.data;
+        const limit = this.props.config.redGreenLimit;
+
         return (
             <div className="red-green">
                 Limit: {limit}

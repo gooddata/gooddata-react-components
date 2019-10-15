@@ -14,7 +14,7 @@ import {
 } from "../../../interfaces/Visualization";
 import { DEFAULT_LOCALE } from "../../../../constants/localization";
 import { VisualizationObject, AFM } from "@gooddata/typings";
-import { getSupportedProperties } from "../../../utils/propertiesHelper";
+// import { getSupportedProperties } from "../../../utils/propertiesHelper";
 import { VisualizationTypes, BucketNames } from "../../../..";
 import { generateDimensions } from "../../../../helpers/dimensions";
 import { RedGreen } from "../../../../components/core/RedGreen";
@@ -24,6 +24,7 @@ import { limitNumberOfMeasuresInBuckets, getAllItemsByType } from "../../../util
 import { cloneDeep } from "lodash";
 import { METRIC, BUCKETS } from "../../../constants/bucket";
 import RedGreenConfigurationPanel from "../../configurationPanels/RedGreenConfigurationPanel";
+import { IChartConfig } from "../../../../interfaces/Config";
 // import { createInternalIntl } from "../../../utils/internalIntlProvider";
 // import { InjectedIntl } from "react-intl";
 
@@ -103,9 +104,11 @@ export class PluggableRedGreen extends AbstractPluggableVisualization {
         const { dataSource } = options;
 
         if (dataSource) {
-            const { resultSpec, locale, custom, config } = options;
+            const { resultSpec, locale, custom } = options;
 
-            console.log("AAA", options);
+            const config: IChartConfig = {
+                redGreenLimit: get(this.visualizationProperties, "properties.controls.redgreen.limit", ""),
+            };
 
             const { drillableItems } = custom;
             const { afterRender, onError, onLoadingChanged, pushData } = this.callbacks;
@@ -147,7 +150,7 @@ export class PluggableRedGreen extends AbstractPluggableVisualization {
                 <RedGreenConfigurationPanel
                     locale={this.locale}
                     pushData={this.callbacks.pushData}
-                    properties={getSupportedProperties(properties, this.supportedPropertiesList)}
+                    properties={properties}
                     propertiesMeta={{ red_green_section: { collapsed: false } }}
                 />,
                 document.querySelector(this.configPanelElement),
