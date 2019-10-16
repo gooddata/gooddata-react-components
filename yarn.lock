@@ -1216,10 +1216,10 @@
   resolved "https://registry.yarnpkg.com/@gooddata/numberjs/-/numberjs-3.2.2.tgz#4164b4d7d39385ed63cea7ad0ed53b4d7dbfd276"
   integrity sha512-KJpzlPmDNEjALb1gVN99mWNWN7ILIeAVn0SxT/cFUgtGxtXOHolZnXDsakUtdeJTg2O6u93CZqcOSwsQ981fUA==
 
-"@gooddata/test-storybook@3.1.1":
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/@gooddata/test-storybook/-/test-storybook-3.1.1.tgz#7ec8f5390c3a7ca477d87b2d3b61e1e498e1768c"
-  integrity sha512-TFsNz5H2FfUI26BxSLd2ZqkPG1/Hp5edYdA/6e3areKGhI+YAbsAC677N3K8KICLhroZpw+fjjQWEXp4YoXBug==
+"@gooddata/test-storybook@3.1.1-alpha-pbenes-pb-files-directive-2019-10-16T08-44-34-763Z":
+  version "3.1.1-alpha-pbenes-pb-files-directive-2019-10-16T08-44-34-763Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/test-storybook/-/test-storybook-3.1.1-alpha-pbenes-pb-files-directive-2019-10-16T08-44-34-763Z.tgz#e6c649d1825b6ccd2bb85a820559aba4faff0d1e"
+  integrity sha512-3390PO+m9hLN97vquF5/OuGqpn7pjjgmw8YdhzpyufJhq2DA1i2rHrQ9AoJBHoS4W2KoN0yDDqNOJfdpDWN6KQ==
   dependencies:
     acorn "^5.1.1"
     acorn-jsx "^4.0.1"
