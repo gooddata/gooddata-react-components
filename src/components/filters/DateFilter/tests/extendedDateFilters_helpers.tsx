@@ -28,7 +28,24 @@ export const defaultDateFilterOptions: ExtendedDateFilters.IDateFilterOptionsByT
         name: "",
         visible: true,
     },
-    absolutePreset: [],
+    absolutePreset: [
+        {
+            from: "2019-12-24",
+            to: "2019-12-26",
+            name: "Christmas 2019",
+            localIdentifier: "CHRISTMAS_2019",
+            visible: true,
+            type: "absolutePreset",
+        },
+        {
+            from: "2018-01-01",
+            to: "2018-12-31",
+            name: "Year 2018",
+            localIdentifier: "YEAR_2018",
+            visible: true,
+            type: "absolutePreset",
+        },
+    ],
     relativeForm: {
         localIdentifier: "RELATIVE_FORM",
         type: "relativeForm",
@@ -265,13 +282,13 @@ export const getSelectedItemText = (wrapper: WrapperType) => {
     return item.text();
 };
 
-// static filters
+// relative presets
 
 export const getLocalIdentifierFromItem = (item: string) => {
     return item.toUpperCase().replace(new RegExp("-", "g"), "_");
 };
 
-export const getRelativePresetByItem = (item: string, relativePreset: any[]) => {
+export const getPresetByItem = (item: string, relativePreset: any[]) => {
     const localIdentifier = getLocalIdentifierFromItem(item);
     return relativePreset.find(x => {
         return x.localIdentifier === localIdentifier.toUpperCase();
@@ -280,6 +297,10 @@ export const getRelativePresetByItem = (item: string, relativePreset: any[]) => 
 
 export const getStaticFilterSelectorClass = (filter: string) => {
     return `button.s-relative-preset-${filter}`;
+};
+
+export const getAbsoluteFilterSelectorClass = (filter: string) => {
+    return `button.s-absolute-preset-${filter}`;
 };
 
 export const clickAllTime = (wrapper: WrapperType) => {
@@ -296,6 +317,12 @@ export const getAllStaticItemsLabels = (wrapper: WrapperType): string[] => {
         .find("button.gd-filter-list-item")
         .filterWhere(item => item.html().includes("s-relative-preset-"));
     return staticItems.map(x => x.text());
+};
+
+// absolute presets
+export const clickAbsoluteFilter = (wrapper: WrapperType, filter: string) => {
+    const filterSelector = getAbsoluteFilterSelectorClass(filter);
+    wrapper.find(filterSelector).simulate("click");
 };
 
 // Absolute filter form
@@ -360,30 +387,42 @@ export const getRelativeFormInputFromValue = (wrapper: WrapperType) => {
     return input.prop("value");
 };
 
-export const writeToRelativeFormInputFrom = (wrapper: WrapperType, value: string) => {
-    const input = wrapper.find(relativeFormInputFrom);
-    input.simulate("change", { target: { value } });
-
-    /*const menuItem = wrapper.find(".s-select-item-focused");
-    menuItem.simulate("click");*/
-};
-
 export const getRelativeFormInputToValue = (wrapper: WrapperType) => {
     const input = wrapper.find(relativeFormInputTo);
     return input.prop("value");
 };
 
-export const writeToRelativeFormInputTo = (wrapper: WrapperType, value: string) => {
+export const setRelativeFormInputs = (wrapper: WrapperType, from: string, to: string) => {
+    // it is necessary set value TO first and than FROM because strange menu opening in RelativeDateFilter copoment
+    // if FROM is set first than in TO is problem to select menu item  (is not visible)
+    writeToRelativeFormInputTo(wrapper, to);
+    writeToRelativeFormInputFrom(wrapper, from);
+};
+
+const writeToRelativeFormInputTo = (wrapper: WrapperType, value: string) => {
     const input = wrapper.find(relativeFormInputTo);
     input.simulate("change", { target: { value } });
 
-    /*const menuItem = wrapper.find(".s-select-item-focused");
-    menuItem.simulate('click')*/
+    const menuItem = wrapper.find(".s-select-item-focused");
+    menuItem.simulate("click");
+};
+
+const writeToRelativeFormInputFrom = (wrapper: WrapperType, value: string) => {
+    const input = wrapper.find(relativeFormInputFrom);
+    input.simulate("change", { target: { value } });
+
+    const menuItem = wrapper.find(".s-select-item-focused");
+    menuItem.simulate("click");
 };
 
 export const clickRelativeFormGranularity = (wrapper: WrapperType, granularity: string) => {
     const tab = wrapper.find(relativeFormGranularityTab(granularity));
     tab.simulate("click");
+};
+
+export const isRelativeFormGranularitySelected = (wrapper: WrapperType, granularity: string) => {
+    const tab = wrapper.find(relativeFormGranularityTab(granularity));
+    return tab.hasClass("is-active");
 };
 
 // exclude
