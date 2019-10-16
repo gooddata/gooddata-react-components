@@ -5,7 +5,7 @@ import { getMeasuresFromMdObject } from "./bucketHelper";
 import * as BucketNames from "../../constants/bucketNames";
 import { IAxisConfig } from "../../interfaces/Config";
 import { IVisualizationProperties } from "../interfaces/Visualization";
-import { isBarChart } from "../../components/visualizations/utils/common";
+import { isBarChart, isBubbleChart, isScatterPlot } from "../../components/visualizations/utils/common";
 import { getBucketItems } from "../../helpers/mdObjBucketHelper";
 
 function isAttribute(item: VisualizationObject.BucketItem): boolean {
@@ -77,6 +77,10 @@ export function canSortStackTotalValue(
 }
 
 export function countItemsInMdObject(mdObject: VisualizationObject.IVisualizationObjectContent) {
+    if (!mdObject) {
+        return {};
+    }
+
     const { buckets } = mdObject;
 
     const viewByItemCount: number = getBucketItems(buckets, BucketNames.VIEW).length;
@@ -110,6 +114,13 @@ export function countItemsOnAxes(
             yaxis: viewByItemCount,
             xaxis: totalMeasureItemCount - secondaryMeasureCountInConfig,
             secondary_xaxis: secondaryMeasureCountInConfig,
+        };
+    }
+
+    if (isScatterPlot(type) || isBubbleChart(type)) {
+        return {
+            xaxis: measureItemCount,
+            yaxis: secondaryMeasureItemCount,
         };
     }
 
