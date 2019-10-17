@@ -25,6 +25,14 @@ The REST API versions in the table are just for your information as the values a
 
 - Sticky row update in pivot table
 
+## 7.1.2
+
+October 17, 2019
+
+### Fixed
+
+- Use latest @gooddata/numberjs dependent package
+
 ## 7.1.1
 
 October 14, 2019
@@ -47,7 +55,7 @@ October 14, 2019
     - React `^16.5.2`
     - Lodash `^4.17.11`
     - And other smaller third-party libraries
-    
+
 - The `IExportConfig` type is renamed to `IExtendedExportConfig` and moved to react-components
 ```
 // old way
@@ -81,7 +89,7 @@ const exportConfig: VisEvents.IExtendedExportConfig = {
 June 28, 2019
 
 ### Fixed
- 
+
 - Drill event intersection element id. Now item localIdentifier has correctly higher priority over measure/attribute id
 
 ## 7.0.0
@@ -104,9 +112,9 @@ June 28, 2019
 ## 6.3.3
 
 June 28, 2019
- 
+
 ### Fixed
- 
+
 - Drill event intersection element id. Now item localIdentifier has correctly higher priority over measure/attribute id
 
 ## 6.3.2
