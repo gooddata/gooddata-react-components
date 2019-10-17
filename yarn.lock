@@ -1211,10 +1211,10 @@
     seedrandom "2.4.3"
     uuid "3.1.0"
 
-"@gooddata/numberjs@^3.1.2":
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/@gooddata/numberjs/-/numberjs-3.2.2.tgz#4164b4d7d39385ed63cea7ad0ed53b4d7dbfd276"
-  integrity sha512-KJpzlPmDNEjALb1gVN99mWNWN7ILIeAVn0SxT/cFUgtGxtXOHolZnXDsakUtdeJTg2O6u93CZqcOSwsQ981fUA==
+"@gooddata/numberjs@^3.2.3":
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/@gooddata/numberjs/-/numberjs-3.2.3.tgz#3035684383cc9cb8ea5be41a98e9e916355691ac"
+  integrity sha512-0MO6PI+pPFqj2eoqy7ws+FfY0rBcZeEZnma/HTzipwddSIyP6A2K3oO9a7fPhA9jygcjZeXdfnjqT01OA0o3Lw==
 
 "@gooddata/test-storybook@3.1.1":
   version "3.1.1"
