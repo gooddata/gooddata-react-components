@@ -2,11 +2,11 @@
 import { config } from "./utils/config";
 import { loginUsingLoginForm } from "./utils/helpers";
 import * as DF from "./utils/dateFilter";
+import { Selector, t } from "testcafe";
 
 const allTimeTitle = "All time";
 
-fixture
-    .only("Date Filter Component")
+fixture("Date Filter basic interactions")
     .page(config.url)
     .beforeEach(loginUsingLoginForm(`${config.url}/date-filter-component`));
 
@@ -91,4 +91,34 @@ test("Reopening a relative form should keep it selected and filled", async t => 
     await DF.assertRelativeFormGranularitySelected("year");
     await DF.assertRelativeFormFromInputValue("2 years ago");
     await DF.assertRelativeFormToInputValue("2 years ahead");
+});
+
+fixture
+    .only("Date Filter with visualization")
+    .page(config.url)
+    .beforeEach(loginUsingLoginForm(`${config.url}/date-filter-component`));
+
+test("Applying date should rexecute and filter visualization using the value", async t => {
+    const fromInputValue = DF.dateToAbsoluteInputFormat("2016-01-01");
+    const toInputValue = DF.dateToAbsoluteInputFormat("2016-01-31");
+
+    const expectedValues = "2,707,184";
+    const chartValues = Selector(".highcharts-data-labels");
+
+    await t
+        .expect(chartValues.exists)
+        .ok()
+        .expect(chartValues.textContent)
+        .notEql(expectedValues);
+
+    await DF.openAbsoluteFormFilter(1);
+    await DF.writeToAbsoluteFormInputFrom(fromInputValue);
+    await DF.writeToAbsoluteFormInputTo(toInputValue);
+    await DF.clickApply(1);
+
+    await t
+        .expect(chartValues.exists)
+        .ok()
+        .expect(chartValues.textContent)
+        .eql(expectedValues);
 });

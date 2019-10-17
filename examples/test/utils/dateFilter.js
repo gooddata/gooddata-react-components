@@ -37,23 +37,23 @@ const writeToInput = async (input, text) => {
 // Dropdown
 //
 
-export const assertDateFilterBodyVisibility = async visible => {
-    await t.expect(dateFilterBody.exists).eql(visible);
+export const assertDateFilterBodyVisibility = async (visibl, formIndex = 0) => {
+    await t.expect(dateFilterBody.nth(formIndex).exists).eql(visible);
 };
 
-export const assertDateFilterButtonText = async text => {
-    await t.expect(dateFilterButtonText.innerText).eql(text);
+export const assertDateFilterButtonText = async (text, formIndex = 0) => {
+    await t.expect(dateFilterButtonText.nth(formIndex).innerText).eql(text);
 };
 
-export const clickDateFilterButton = async () => {
-    await t.click(dateFilterButton);
+export const clickDateFilterButton = async (formIndex = 0) => {
+    await t.click(dateFilterButton.nth(formIndex));
 };
 
 export const clickApply = async () => {
     await t.click(applyButton);
 };
 
-export const clickCancel = async () => {
+export const clickCancel = async (formIndex = 0) => {
     await t.click(cancelButton);
 };
 
@@ -96,7 +96,7 @@ export const clickAbsoluteFormFilter = async () => {
 };
 
 export const openAbsoluteFormFilter = async () => {
-    await clickDateFilterButton();
+    await clickDateFilterButton(1);
     await clickAbsoluteFormFilter();
 };
 

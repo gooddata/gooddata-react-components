@@ -4,8 +4,10 @@ import React from "react";
 import ExampleWithSource from "../components/utils/ExampleWithSource";
 
 import DateFilterComponentExample from "../components/DateFilterComponentExample";
+import DateFilterWithColumnChartExample from "../components/DateFilterWithColumnChartExample";
 
 import DateFilterComponentExampleSRC from "!raw-loader!../components/DateFilterComponentExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
+import DateFilterWithColumnChartExampleSRC from "!raw-loader!../components/DateFilterWithColumnChartExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 
 export const DateFilter = () => (
     <div>
@@ -15,8 +17,19 @@ export const DateFilter = () => (
 
         <hr className="separator" />
 
-        <h2>Full-featured Date Filter</h2>
+        <h2>Date Filter</h2>
+        <p>This example shows a full-featured date filter component.</p>
         <ExampleWithSource for={DateFilterComponentExample} source={DateFilterComponentExampleSRC} />
+
+        <h2>Filtering a report</h2>
+        <p>
+            This example shows how to add date filter component into a report. Presets and relative date
+            selector is restricted to years.
+        </p>
+        <ExampleWithSource
+            for={DateFilterWithColumnChartExample}
+            source={DateFilterWithColumnChartExampleSRC}
+        />
     </div>
 );
 
