@@ -109,6 +109,11 @@ export class DateFilter extends React.PureComponent<IDateFilterProps, IDateFilte
     constructor(props: IDateFilterProps) {
         super(props);
         this.state = DateFilter.getDerivedStateFromProps(props, null);
+
+        // tslint:disable-next-line:no-console
+        console.warn(
+            "DateFilter component is still in beta. Component and its API may change in the future.",
+        );
     }
 
     public render(): React.ReactNode {
