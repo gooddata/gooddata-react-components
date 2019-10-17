@@ -28,7 +28,9 @@ export default class BubbleChartConfigurationPanel extends ConfigurationPanelCon
         const { propertiesMeta, properties, pushData, type, mdObject } = this.props;
         const controls = properties && properties.controls;
         const controlsDisabled = this.isControlDisabled();
-        const itemsOnAxes = countItemsOnAxes(type, controls, mdObject);
+        const { xaxis: itemsOnXAxis, yaxis: itemsOnYAxis } = countItemsOnAxes(type, controls, mdObject);
+        const xAxisNameSectionDisabled = controlsDisabled || itemsOnXAxis !== 1;
+        const yAxisNameSectionDisabled = controlsDisabled || itemsOnYAxis !== 1;
 
         return (
             <BubbleHoverTrigger showDelay={SHOW_DELAY_DEFAULT} hideDelay={HIDE_DELAY_DEFAULT}>
@@ -46,7 +48,7 @@ export default class BubbleChartConfigurationPanel extends ConfigurationPanelCon
                         pushData={pushData}
                     >
                         <NameSubsection
-                            disabled={controlsDisabled}
+                            disabled={xAxisNameSectionDisabled}
                             configPanelDisabled={controlsDisabled}
                             axis={"xaxis"}
                             properties={properties}
@@ -73,7 +75,7 @@ export default class BubbleChartConfigurationPanel extends ConfigurationPanelCon
                         pushData={pushData}
                     >
                         <NameSubsection
-                            disabled={controlsDisabled || itemsOnAxes.yaxis !== 1}
+                            disabled={yAxisNameSectionDisabled}
                             configPanelDisabled={controlsDisabled}
                             axis={"yaxis"}
                             properties={properties}
