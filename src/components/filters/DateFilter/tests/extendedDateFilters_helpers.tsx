@@ -210,6 +210,9 @@ const absoluteFormButton = "button.s-absolute-form";
 const absoluteFormPicker = ".s-date-range-picker";
 const absoluteFormInputFrom = ".s-date-range-picker-from .s-date-range-picker-input-field";
 const absoluteFormInputTo = ".s-date-range-picker-to .s-date-range-picker-input-field";
+const absoluteFormError = ".s-absolute-range-error";
+const absoluteCalendarFrom = ".s-date-range-calendar-from";
+const absoluteCalendarTo = ".s-date-range-calendar-to";
 
 const relativeFormButton = "button.s-relative-form";
 const relativeFormInputFrom = ".s-relative-range-picker-from input";
@@ -233,6 +236,10 @@ export const clickDateFilterButton = (wrapper: WrapperType) => {
 export const clickApplyButton = (wrapper: WrapperType) => {
     wrapper.find(applyButton).simulate("click");
     wrapper.update();
+};
+
+export const isApplyButtonDisabled = (wrapper: WrapperType) => {
+    return wrapper.find(applyButton).hasClass("disabled");
 };
 
 export const clickCancelButton = (wrapper: WrapperType) => {
@@ -370,6 +377,28 @@ export const getTodayDate = () => {
 
 export const getMonthAgo = () => {
     return moment(new Date()).add(-1, "month");
+};
+
+export const isAbsoluteFormErrorVisible = (wrapper: WrapperType) => {
+    return wrapper.find(absoluteFormError).exists();
+};
+
+export const isAbsoluteCalendarFromVisible = (wrapper: WrapperType) => {
+    wrapper.update();
+    return wrapper.find(absoluteCalendarFrom).exists();
+};
+
+export const isAbsoluteCalendarToVisible = (wrapper: WrapperType) => {
+    wrapper.update();
+    return wrapper.find(absoluteCalendarTo).exists();
+};
+
+export const clickAbsoluteFormInputFrom = (wrapper: WrapperType) => {
+    wrapper.find(absoluteFormInputFrom).simulate("click");
+};
+
+export const clickAbsoluteFormInputTo = (wrapper: WrapperType) => {
+    wrapper.find(absoluteFormInputTo).simulate("click");
 };
 
 // Relative filter form
