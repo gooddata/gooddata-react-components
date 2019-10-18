@@ -21,6 +21,8 @@ import "../../styles/scss/charts.scss";
 import { GERMAN_SEPARATORS } from "../data/numberFormat";
 import identity = require("lodash/identity");
 import { withAxisNamePositionConfig, withAxisNameVisibilityConfig } from "../hoc/withAxisName";
+import { withChartAlignmentConfigs } from "../hoc/withChartAlignmentConfigs";
+import { VisualizationTypes } from "../../src/constants/visualizationTypes";
 
 function getChart({
     type = "column",
@@ -1350,6 +1352,23 @@ storiesOf("Internal/HighCharts/ChartTransformation", module)
                 ),
                 "100%",
                 "820px",
+            ),
+        );
+    })
+    .add("with different chart alignments", () => {
+        const dataSet: any = fixtures.pieChartWithMetricsOnly;
+        return screenshotWrap(
+            wrap(
+                withChartAlignmentConfigs(
+                    <ChartTransformation
+                        config={{
+                            type: VisualizationTypes.DONUT,
+                        }}
+                        {...dataSet}
+                    />,
+                ),
+                "100%",
+                905,
             ),
         );
     });

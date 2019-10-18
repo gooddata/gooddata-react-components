@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import cloneDeep = require("lodash/cloneDeep");
 import get = require("lodash/get");
@@ -17,6 +17,7 @@ import { VisualizationTypes } from "../../../constants/visualizationTypes";
 import { OnLegendReady } from "../../../interfaces/Events";
 import { IChartConfig } from "../../../interfaces/Config";
 import Highcharts from "./highcharts/highchartsEntryPoint";
+import { alignChart } from "./highcharts/helpers";
 
 export const FLUID_LEGEND_THRESHOLD = 768;
 
@@ -95,6 +96,8 @@ export default class HighChartsRenderer extends React.PureComponent<
         this.setState({
             showFluidLegend: this.shouldShowFluid(),
         });
+
+        this.realignPieOrDonutChart();
     }
 
     public shouldShowFluid() {
@@ -277,14 +280,26 @@ export default class HighChartsRenderer extends React.PureComponent<
             },
         );
 
-        const renderLegendFirst = legend.position === TOP || (legend.position === LEFT && !showFluidLegend);
+        const isLegendRenderedFirst: boolean =
+            legend.position === TOP || (legend.position === LEFT && !showFluidLegend);
 
         return (
             <div className={classes}>
-                {renderLegendFirst && this.renderLegend()}
+                {isLegendRenderedFirst && this.renderLegend()}
                 {this.renderHighcharts()}
-                {!renderLegendFirst && this.renderLegend()}
+                {!isLegendRenderedFirst && this.renderLegend()}
             </div>
         );
+    }
+
+    private realignPieOrDonutChart() {
+        const {
+            chartOptions: { type },
+        } = this.props;
+        const { chartRef } = this;
+
+        if (isPieOrDonutChart(type) && chartRef) {
+            alignChart(chartRef.getChart());
+        }
     }
 }
