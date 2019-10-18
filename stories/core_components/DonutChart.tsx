@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { screenshotWrap } from "@gooddata/test-storybook";
@@ -24,6 +24,7 @@ import {
 } from "../data/configProps";
 
 import { ScreenshotReadyWrapper, createHighChartResolver } from "../utils/ScreenshotReadyWrapper";
+import { withChartAlignmentConfigs } from "../hoc/withChartAlignmentConfigs";
 
 const wrapperStyle = { width: 400, height: 400 };
 
@@ -276,5 +277,10 @@ storiesOf("Core components/DonutChart", module)
                     ErrorComponent={null}
                 />
             </div>,
+        ),
+    )
+    .add("with different chart alignments", () =>
+        screenshotWrap(
+            withChartAlignmentConfigs(<DonutChart projectId="storybook" measures={[MEASURE_1, MEASURE_2]} />),
         ),
     );

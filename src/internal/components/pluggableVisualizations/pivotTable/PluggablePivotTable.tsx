@@ -49,6 +49,7 @@ import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 import { PivotTable } from "../../../../components/core/PivotTable";
 import { generateDimensions } from "../../../../helpers/dimensions";
 import { DEFAULT_LOCALE } from "../../../../constants/localization";
+import { DASHBOARDS_ENVIRONMENT } from "../../../constants/properties";
 
 export const getColumnAttributes = (buckets: IBucket[]): IBucketItem[] => {
     return getItemsFromBuckets(
@@ -395,7 +396,7 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
             const totals: VisualizationObject.IVisualizationTotal[] = (rowsBucket && rowsBucket.totals) || [];
 
             let configUpdated = config;
-            if (this.environment !== "dashboards") {
+            if (this.environment !== DASHBOARDS_ENVIRONMENT) {
                 // Menu aggregations turned off in KD
                 configUpdated = merge(
                     {
@@ -427,7 +428,7 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
                 intl: this.intl,
             };
 
-            if (this.environment === "dashboards") {
+            if (this.environment === DASHBOARDS_ENVIRONMENT) {
                 if (isNil(height)) {
                     render(
                         <Measure client={true}>

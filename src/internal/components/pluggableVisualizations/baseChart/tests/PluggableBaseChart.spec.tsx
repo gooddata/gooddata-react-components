@@ -13,6 +13,7 @@ import { VisualizationEnvironment } from "../../../../../components/uri/Visualiz
 import { ChartType, VisualizationTypes } from "../../../../../constants/visualizationTypes";
 import { BaseChart } from "../../../../../components/core/base/BaseChart";
 import { DEFAULT_LOCALE } from "../../../../../constants/localization";
+import { DASHBOARDS_ENVIRONMENT } from "../../../../constants/properties";
 
 jest.mock("react-dom", () => {
     const renderObject = {
@@ -30,7 +31,7 @@ jest.mock("react-dom", () => {
 });
 
 describe("PluggableBaseChart", () => {
-    const dashboardEnvironment: VisualizationEnvironment = "dashboards";
+    const dashboardEnvironment: VisualizationEnvironment = DASHBOARDS_ENVIRONMENT;
     const noneEnvironment: VisualizationEnvironment = "none";
     const dummyLocale: ILocale = "en-US";
 
@@ -65,7 +66,7 @@ describe("PluggableBaseChart", () => {
         let validVisualizationProperties = visualizationProperties;
         if (!visualizationProperties) {
             validVisualizationProperties =
-                environment === "dashboards"
+                environment === DASHBOARDS_ENVIRONMENT
                     ? { legend: { position: "right", responsive: true } }
                     : { legend: { position: "auto" } };
         }
@@ -144,7 +145,7 @@ describe("PluggableBaseChart", () => {
 
         const props = { ...defaultProps, environment: dashboardEnvironment };
         const expectedHeight = 5;
-        const environment = "dashboards";
+        const environment = DASHBOARDS_ENVIRONMENT;
 
         const visualization = createComponent(props);
         const options: IVisProps = {
@@ -178,7 +179,7 @@ describe("PluggableBaseChart", () => {
 
         const props = { ...defaultProps, environment: dashboardEnvironment };
         const expectedHeight = 5;
-        const environment = "dashboards";
+        const environment = DASHBOARDS_ENVIRONMENT;
 
         const visualization = createComponent(props);
         const options: IVisProps = {

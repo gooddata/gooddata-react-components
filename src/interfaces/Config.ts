@@ -259,3 +259,5 @@ export interface IClientRect {
     x?: number;
     y?: number;
 }
+
+export type ChartAlignTypes = "top" | "bottom" | "middle";

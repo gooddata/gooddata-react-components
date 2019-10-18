@@ -14,6 +14,7 @@ import "../../styles/scss/charts.scss";
 import { GERMAN_NUMBER_FORMAT } from "../data/numberFormat";
 import { VisualizationTypes } from "../../src";
 import { withAxisNamePositionConfig, withAxisNameVisibilityConfig } from "../hoc/withAxisName";
+import { withChartAlignmentConfigs } from "../hoc/withChartAlignmentConfigs";
 
 export interface IDynamicVisualizationState {
     chartType: string;
@@ -548,6 +549,22 @@ storiesOf("Internal/Visualization", module)
                 ),
                 "100%",
                 "820px",
+            ),
+        ),
+    )
+    .add("with different chart alignments", () =>
+        screenshotWrap(
+            wrap(
+                withChartAlignmentConfigs(
+                    <Visualization
+                        {...fixtures.pieChartWithMetricsOnly}
+                        config={{
+                            type: VisualizationTypes.DONUT,
+                        }}
+                    />,
+                ),
+                "100%",
+                905,
             ),
         ),
     );
