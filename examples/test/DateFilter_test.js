@@ -187,8 +187,7 @@ test("Absolute date filter calendar - clicked days from outside month", async ()
     await DF.assertDateFilterButtonText(DF.datesToAbsoluteFilterButtonFormat(from, to));
 });
 
-fixture
-    .only("Relative Date Filter form")
+fixture("Relative Date Filter form")
     .page(config.url)
     .beforeEach(loginUsingLoginForm(`${config.url}/date-filter-component`));
 
