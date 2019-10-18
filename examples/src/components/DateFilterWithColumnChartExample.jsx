@@ -124,7 +124,7 @@ export class DateFilterComponentExample extends Component {
         });
 
         return (
-            <>
+            <React.Fragment>
                 <div style={{ width: 200 }}>
                     <DateFilter
                         excludeCurrentPeriod={this.state.excludeCurrentPeriod}
@@ -149,7 +149,7 @@ export class DateFilterComponentExample extends Component {
                         filters={dateFilter ? [dateFilter] : []}
                     />
                 </div>
-            </>
+            </React.Fragment>
         );
     }
 }

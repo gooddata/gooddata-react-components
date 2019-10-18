@@ -41,7 +41,7 @@ const writeToInput = async (input, text) => {
 // Dropdown
 //
 
-export const assertDateFilterBodyVisibility = async (visibl, formIndex = 0) => {
+export const assertDateFilterBodyVisibility = async (visible, formIndex = 0) => {
     await t.expect(dateFilterBody.nth(formIndex).exists).eql(visible);
 };
 
