@@ -215,6 +215,8 @@ const absoluteCalendarFrom = ".s-date-range-calendar-from";
 const absoluteCalendarTo = ".s-date-range-calendar-to";
 
 const relativeFormButton = "button.s-relative-form";
+const relativeFormPicker = ".s-relative-range-picker";
+const relativeFormSelectMenu = ".s-select-menu";
 const relativeFormInputFrom = ".s-relative-range-picker-from input";
 const relativeFormInputTo = ".s-relative-range-picker-to input";
 const relativeFormGranularityTab = (intlGranularity: string) => `.gd-tab.s-granularity-${intlGranularity}`;
@@ -452,6 +454,14 @@ export const clickRelativeFormGranularity = (wrapper: WrapperType, granularity: 
 export const isRelativeFormGranularitySelected = (wrapper: WrapperType, granularity: string) => {
     const tab = wrapper.find(relativeFormGranularityTab(granularity));
     return tab.hasClass("is-active");
+};
+
+export const isRelativeFormVisible = (wrapper: WrapperType) => {
+    return wrapper.find(relativeFormPicker).exists();
+};
+
+export const isRelativeFormSelectMenuVisible = (wrapper: WrapperType) => {
+    return wrapper.find(relativeFormSelectMenu).exists();
 };
 
 // exclude

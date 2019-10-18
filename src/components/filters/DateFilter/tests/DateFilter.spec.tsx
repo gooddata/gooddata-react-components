@@ -40,10 +40,9 @@ import {
     clickAbsoluteFormFilter,
     isAbsoluteFormErrorVisible,
     isApplyButtonDisabled,
-    isAbsoluteCalendarFromVisible,
-    isAbsoluteCalendarToVisible,
-    clickAbsoluteFormInputFrom,
-    clickAbsoluteFormInputTo,
+    isRelativeFormVisible,
+    clickRelativeFormFilter,
+    isRelativeFormSelectMenuVisible,
 } from "./extendedDateFilters_helpers";
 
 describe("DateFilter", () => {
@@ -509,25 +508,6 @@ describe("DateFilter", () => {
             expect(getAbsoluteFormInputToValue(wrapper)).toEqual(expectedTo);
         });
 
-        it.skip("Should hide Absolute date filter calendars when from and to fields has not focus", () => {
-            // TODO: not done test("Absolute date filter calendar appears when from field has focus", async () => {
-            const wrapper = createDateFilter();
-            clickDateFilterButton(wrapper);
-            clickAbsoluteFormFilter(wrapper);
-
-            /*expect(isAbsoluteCalendarFromVisible(wrapper)).toBe(false);
-            expect(isAbsoluteCalendarToVisible(wrapper)).toBe(false);*/
-
-            clickAbsoluteFormInputFrom(wrapper);
-            /*expect(isAbsoluteCalendarFromVisible(wrapper)).toBe(true);
-            expect(isAbsoluteCalendarToVisible(wrapper)).toBe(false);*/
-
-            clickAbsoluteFormInputTo(wrapper);
-
-            expect(isAbsoluteCalendarFromVisible(wrapper)).toBe(false);
-            expect(isAbsoluteCalendarToVisible(wrapper)).toBe(true);
-        });
-
         it("Should not have errors with valid input", () => {
             const wrapper = createDateFilter();
             clickDateFilterButton(wrapper);
@@ -579,6 +559,48 @@ describe("DateFilter", () => {
 
             expect(isAbsoluteFormErrorVisible(wrapper)).toBe(false);
             expect(isApplyButtonDisabled(wrapper)).toBe(false);
+        });
+    });
+
+    describe("Relative form", () => {
+        it("Should open relative form", () => {
+            const wrapper = createDateFilter();
+            clickDateFilterButton(wrapper);
+            expect(isRelativeFormVisible(wrapper)).toBe(false);
+            clickRelativeFormFilter(wrapper);
+            expect(isRelativeFormVisible(wrapper)).toBe(true);
+            clickAllTime(wrapper);
+            expect(isRelativeFormVisible(wrapper)).toBe(false);
+        });
+
+        it("Should have select menu closed by default", async () => {
+            const wrapper = createDateFilter();
+            clickDateFilterButton(wrapper);
+            clickRelativeFormFilter(wrapper);
+            expect(isRelativeFormSelectMenuVisible(wrapper)).toBe(false);
+        });
+
+        it("Should have default granularity months", async () => {
+            const wrapper = createDateFilter();
+            clickDateFilterButton(wrapper);
+            clickRelativeFormFilter(wrapper);
+            expect(isRelativeFormGranularitySelected(wrapper, "month")).toBe(true);
+        });
+
+        it("Should clears the form when Granularity changed", async () => {
+            const wrapper = createDateFilter();
+            clickDateFilterButton(wrapper);
+            clickRelativeFormFilter(wrapper);
+
+            clickRelativeFormGranularity(wrapper, "month");
+
+            setRelativeFormInputs(wrapper, "-2", "2");
+
+            expect(getRelativeFormInputFromValue(wrapper)).toEqual("2 months ago");
+
+            clickRelativeFormGranularity(wrapper, "year");
+
+            expect(getRelativeFormInputFromValue(wrapper)).toEqual("");
         });
     });
 });

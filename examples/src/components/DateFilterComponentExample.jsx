@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { DateFilter } from "@gooddata/react-components";
 import "@gooddata/react-components/styles/css/dateFilter.css";
 
-let dateFrom = new Date();
+const dateFrom = new Date();
 dateFrom.setMonth(dateFrom.getMonth() - 1);
 
 const defaultDateFilterOptions = {

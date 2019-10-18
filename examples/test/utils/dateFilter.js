@@ -15,11 +15,15 @@ const absoluteFormInputFrom = absoluteFormPicker.find(
 const absoluteFormInputTo = absoluteFormPicker.find(
     ".s-date-range-picker-to .s-date-range-picker-input-field",
 );
+const absoluteCalendarFrom = Selector(".s-date-range-calendar-from");
+const absoluteCalendarTo = Selector(".s-date-range-calendar-to");
 
 export const relativeFormButton = dateFilterBody.find(".s-relative-form");
 export const relativeFormPickerFromInput = Selector(".s-relative-range-picker-from .s-relative-range-input");
 export const relativeFormPickerToInput = Selector(".s-relative-range-picker-to .s-relative-range-input");
 const getRelativeFormGranularityTab = intlGranularity => Selector(`.gd-tab.s-granularity-${intlGranularity}`);
+const relativeFormSelectMenu = Selector(".s-select-menu");
+const relativeFormSelectMenuItems = relativeFormSelectMenu.find(".s-relative-date-filter-option");
 
 const applyButton = dateFilterBody.find(".s-date-filter-apply");
 const cancelButton = dateFilterBody.find(".s-date-filter-cancel");
@@ -53,8 +57,12 @@ export const clickApply = async () => {
     await t.click(applyButton);
 };
 
-export const clickCancel = async (formIndex = 0) => {
+export const clickCancel = async () => {
     await t.click(cancelButton);
+};
+
+export const datesToAbsoluteFilterButtonFormat = (dateStringFrom, dateStringTo) => {
+    return `${moment(dateStringFrom).format("M/D/YYYY")}–${moment(dateStringTo).format("M/D/YYYY")}`;
 };
 
 //
@@ -95,8 +103,8 @@ export const clickAbsoluteFormFilter = async () => {
     await t.click(absoluteFormButton);
 };
 
-export const openAbsoluteFormFilter = async () => {
-    await clickDateFilterButton(1);
+export const openAbsoluteFormFilter = async (formIndex = 0) => {
+    await clickDateFilterButton(formIndex);
     await clickAbsoluteFormFilter();
 };
 
@@ -118,6 +126,42 @@ export const assertAbsoluteFormToInputValue = async expected => {
 
 export const dateToAbsoluteInputFormat = dateString => {
     return moment(dateString).format("MM/DD/YYYY");
+};
+
+export const assertAbsoluteCalendarFromVisibility = async visible => {
+    await t.expect(absoluteCalendarFrom.exists).eql(visible);
+};
+
+export const assertAbsoluteCalendarToVisibility = async visible => {
+    await t.expect(absoluteCalendarTo.exists).eql(visible);
+};
+
+export const clickAbsoluteFormInputFrom = async () => {
+    await t.click(absoluteFormInputFrom);
+};
+
+export const clickAbsoluteFormInputTo = async () => {
+    await t.click(absoluteFormInputTo);
+};
+
+export const openAbsoluteCalendarAndSetToFixedDate = async (from, to) => {
+    await openAbsoluteFormFilter();
+
+    // Before we start interacting with calendar, we set it to exact day to
+    // make sure all our relative operations (go one month back) are relative
+    // to the same date and not to the default date that is floating.
+    await writeToAbsoluteFormInputFrom(from);
+    await writeToAbsoluteFormInputTo(to);
+};
+
+export const clickAbsoluteCalendarDay = async dayNumber => {
+    const day = Selector(".DayPicker-Day:not(.DayPicker-Day--outside)").nth(dayNumber - 1);
+    await t.click(day);
+};
+
+export const clickAbsoluteCalendarOutsideDayAfterThisMonth = async dayNumber => {
+    const day = Selector(".DayPicker-Week:last-child .DayPicker-Day--outside").nth(dayNumber - 1);
+    await t.click(day);
 };
 
 //
@@ -157,4 +201,26 @@ export const assertRelativeFormFromInputValue = async expected => {
 
 export const assertRelativeFormToInputValue = async expected => {
     await t.expect(relativeFormPickerToInput.value).eql(expected);
+};
+
+export const assertRelativeFormSelectFocusedMenuItem = async text => {
+    const item = await relativeFormSelectMenuItems.withExactText(text);
+    await t.expect(item.exists).eql(true);
+    await t
+        .expect(item.hasClass("s-select-item-focused"))
+        .eql(true, `Item with text "${await item.innerText}" is not focused`);
+};
+
+export const confirmRelativeInputOption = async () => {
+    await t.pressKey("enter");
+};
+
+export const clickOnRelativeInputOption = async text => {
+    const item = await relativeFormSelectMenuItems.withExactText(text);
+    await t.click(item);
+};
+
+export const assertRelativeFormSelectMenuContent = async labels => {
+    const joinedLabels = Array.isArray(labels) ? labels.join("") : labels;
+    return t.expect(relativeFormSelectMenu.textContent).eql(joinedLabels);
 };
