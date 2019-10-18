@@ -106,6 +106,7 @@
     "yup": "^0.24.1"
   },
   "dependencies": {
+    "@gooddata/frontend-npm-scripts": "1.1.0",
     "@gooddata/gooddata-js": "^11.19.3",
     "@gooddata/goodstrap": "^63.4.0",
     "@gooddata/js-utils": "^3.5.0",
@@ -214,6 +215,10 @@
   "lint-staged": {
     "{src,stories,styles,__mocks__,examples/server/src,examples/src,examples/test}/**/*.{ts,js,tsx,jsx,json,scss,md,yaml,html}": [
       "prettier --write",
+      "git add"
+    ],
+    "{src,stories,styles,__mocks__,examples/server/src,examples/src,examples/test}/**/*.{ts,js,tsx,jsx,scss}": [
+      "npx gdc-fix-copyright",
       "git add"
     ]
   }
