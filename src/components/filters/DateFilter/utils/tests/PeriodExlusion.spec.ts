@@ -146,7 +146,7 @@ describe("applyExcludeCurrentPeriod", () => {
                 localIdentifier: "LAST_30_DAYS",
             },
             {
-                from: -29,
+                from: -30,
                 to: -1,
                 granularity: "GDC.time.date",
                 type: "relativePreset",
