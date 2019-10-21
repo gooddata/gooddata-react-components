@@ -109,12 +109,10 @@ const formatRelativeDateRange = (
     from: number,
     to: number,
     granularity: ExtendedDateFilters.DateFilterGranularity,
-    excludeCurrentPeriod: boolean,
     translator: IDateAndMessageTranslator,
 ): string => {
     const intlGranularity = granularityIntlCodes[granularity];
-    const toAdjusted = excludeCurrentPeriod && to === -1 && to !== from ? 0 : to;
-    const { formatter } = relativeDateRangeFormatters.find(f => f.predicate(from, toAdjusted));
+    const { formatter } = relativeDateRangeFormatters.find(f => f.predicate(from, to));
     return formatter(from, to, intlGranularity, translator);
 };
 
@@ -133,51 +131,33 @@ const getAbsolutePresetFilterRepresentation = (
 
 const getRelativeFormFilterRepresentation = (
     filter: ExtendedDateFilters.IRelativeDateFilterForm,
-    excludeCurrentPeriod: boolean,
     translator: IDateAndMessageTranslator,
 ): string =>
     typeof filter.from === "number" && typeof filter.to === "number"
-        ? formatRelativeDateRange(
-              filter.from,
-              filter.to,
-              filter.granularity,
-              excludeCurrentPeriod,
-              translator,
-          )
+        ? formatRelativeDateRange(filter.from, filter.to, filter.granularity, translator)
         : "";
 
 const getRelativePresetFilterRepresentation = (
     filter: ExtendedDateFilters.IRelativeDateFilterPreset,
-    excludeCurrentPeriod: boolean,
     translator: IDateAndMessageTranslator,
-): string =>
-    formatRelativeDateRange(filter.from, filter.to, filter.granularity, excludeCurrentPeriod, translator);
+): string => formatRelativeDateRange(filter.from, filter.to, filter.granularity, translator);
 
-// excludeCurrentPeriod is extra metadata that is needed by translation, but it is only used by relative filters
-// so the data structure is little inconsistent - for example when we translate absoluteForm we need to pass
-// excludeCurrentPeriod that is completely unrelated to absolute filter and is not used in absolute translations.
-// So in the future, if there will be need for more metadata, consider adding wrapper union type that would wrap
-// DateFilterOption along with additional metadata related to given filter. eg.:
-// | { filter: IRelativeDateFilterPreset, excludeCurrentPeriod: boolean } |
-// | { filter: IAbsoluteFilterForm } |
-// ...
 /**
  * Gets the filter title favoring custom name if specified.
  * @returns {string} Representation of the filter (e.g. "My preset", "From 2 weeks ago to 1 week ahead")
  */
 export const getDateFilterTitle = (
     filter: ExtendedDateFilters.DateFilterOption,
-    excludeCurrentPeriod: boolean,
     translator: IDateAndMessageTranslator,
 ): string => {
     switch (filter.type) {
         case "absoluteForm":
         case "relativeForm":
-            return getDateFilterRepresentation(filter, excludeCurrentPeriod, translator);
+            return getDateFilterRepresentation(filter, translator);
         case "allTime":
         case "absolutePreset":
         case "relativePreset":
-            return filter.name || getDateFilterRepresentation(filter, excludeCurrentPeriod, translator);
+            return filter.name || getDateFilterRepresentation(filter, translator);
         default:
             throw new Error("Unknown DateFilterOption type");
     }
@@ -189,7 +169,6 @@ export const getDateFilterTitle = (
  */
 export const getDateFilterRepresentation = (
     filter: ExtendedDateFilters.DateFilterOption,
-    excludeCurrentPeriod: boolean,
     translator: IDateAndMessageTranslator,
 ): string => {
     switch (filter.type) {
@@ -200,9 +179,9 @@ export const getDateFilterRepresentation = (
         case "allTime":
             return getAllTimeFilterRepresentation(translator);
         case "relativeForm":
-            return getRelativeFormFilterRepresentation(filter, excludeCurrentPeriod, translator);
+            return getRelativeFormFilterRepresentation(filter, translator);
         case "relativePreset":
-            return getRelativePresetFilterRepresentation(filter, excludeCurrentPeriod, translator);
+            return getRelativePresetFilterRepresentation(filter, translator);
         default:
             throw new Error("Unknown DateFilterOption type");
     }

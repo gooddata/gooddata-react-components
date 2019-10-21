@@ -9,7 +9,6 @@ import { DateFilterTextLocalized } from "../DateFilterTextLocalized/DateFilterTe
 interface IAbsolutePresetFilterItemsProps {
     filterOptions: ExtendedDateFilters.IAbsoluteDateFilterPreset[];
     selectedFilterOption: ExtendedDateFilters.DateFilterOption;
-    excludeCurrentPeriod: boolean;
     className?: string;
     onSelectedFilterOptionChange: (option: ExtendedDateFilters.DateFilterOption) => void;
 }
@@ -18,7 +17,6 @@ export const AbsolutePresetFilterItems: React.FC<IAbsolutePresetFilterItemsProps
     filterOptions,
     selectedFilterOption,
     onSelectedFilterOptionChange,
-    excludeCurrentPeriod,
     className,
 }) => (
     <>
@@ -30,7 +28,7 @@ export const AbsolutePresetFilterItems: React.FC<IAbsolutePresetFilterItemsProps
                 onClick={() => onSelectedFilterOptionChange(item)}
                 className={cx(`s-absolute-preset-${kebabCase(item.localIdentifier)}`, className)}
             >
-                <DateFilterTextLocalized filter={item} excludeCurrentPeriod={excludeCurrentPeriod} />
+                <DateFilterTextLocalized filter={item} />
             </ListItem>
         ))}
     </>
