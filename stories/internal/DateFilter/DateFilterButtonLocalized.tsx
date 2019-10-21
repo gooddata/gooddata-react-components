@@ -44,8 +44,7 @@ const RelativePresetButton: React.FC<{
     to: number;
     granularity: ExtendedDateFilters.DateFilterGranularity;
     name?: string;
-    excludeCurrentPeriod?: boolean;
-}> = ({ from, to, granularity, name, excludeCurrentPeriod = false }) =>
+}> = ({ from, to, granularity, name }) =>
     IntlDecorator(
         <DateFilterButtonLocalized
             dateFilterOption={{
@@ -57,7 +56,6 @@ const RelativePresetButton: React.FC<{
                 to,
                 visible: true,
             }}
-            excludeCurrentPeriod={excludeCurrentPeriod}
             isMobile={false}
         />,
     );
@@ -199,21 +197,10 @@ storiesOf("Internal/DateFilter/DateFilterButtonLocalized", module)
         ),
     )
 
-    .add("relativePreset with exclude", () =>
+    .add("relativePreset without exclude", () =>
         screenshotWrap(
             <div style={wrapperStyle} className="screenshot-target">
-                <RelativePresetButton
-                    from={-6}
-                    to={-1}
-                    granularity="GDC.time.date"
-                    excludeCurrentPeriod={true}
-                />
-                <RelativePresetButton
-                    from={-6}
-                    to={-1}
-                    granularity="GDC.time.date"
-                    excludeCurrentPeriod={false}
-                />
+                <RelativePresetButton from={-6} to={-1} granularity="GDC.time.date" />
             </div>,
         ),
     );
