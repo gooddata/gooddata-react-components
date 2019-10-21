@@ -282,18 +282,11 @@ export class DateFilterBody extends React.Component<IDateFilterBodyProps, IDateF
     };
 
     private renderAbsolutePreset = () => {
-        const {
-            filterOptions,
-            selectedFilterOption,
-            onSelectedFilterOptionChange,
-            excludeCurrentPeriod,
-            isMobile,
-        } = this.props;
+        const { filterOptions, selectedFilterOption, onSelectedFilterOptionChange, isMobile } = this.props;
         return filterOptions.absolutePreset && filterOptions.absolutePreset.length > 0 ? (
             <AbsolutePresetFilterItems
                 filterOptions={filterOptions.absolutePreset}
                 selectedFilterOption={selectedFilterOption}
-                excludeCurrentPeriod={excludeCurrentPeriod}
                 onSelectedFilterOptionChange={onSelectedFilterOptionChange}
                 className={isMobile && ITEM_CLASS_MOBILE}
             />

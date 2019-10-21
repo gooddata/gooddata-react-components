@@ -9,7 +9,6 @@ export interface IDateFilterButtonLocalizedProps {
     dateFilterOption: ExtendedDateFilters.DateFilterOption;
     isOpen?: boolean;
     isMobile: boolean;
-    excludeCurrentPeriod?: boolean;
     customFilterName?: string;
     disabled?: boolean;
 }
@@ -18,7 +17,6 @@ export const DateFilterButtonLocalized: React.FC<IDateFilterButtonLocalizedProps
     dateFilterOption,
     isOpen = false,
     isMobile = true,
-    excludeCurrentPeriod = false,
     customFilterName,
     disabled,
 }) => {
@@ -30,10 +28,7 @@ export const DateFilterButtonLocalized: React.FC<IDateFilterButtonLocalizedProps
             disabled={disabled}
         >
             <span className="s-button-text">
-                <DateFilterTextLocalized
-                    filter={dateFilterOption}
-                    excludeCurrentPeriod={excludeCurrentPeriod}
-                />
+                <DateFilterTextLocalized filter={dateFilterOption} />
             </span>
         </DateFilterButton>
     );

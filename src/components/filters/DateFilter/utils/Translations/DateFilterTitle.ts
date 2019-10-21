@@ -109,12 +109,10 @@ const formatRelativeDateRange = (
     from: number,
     to: number,
     granularity: ExtendedDateFilters.DateFilterGranularity,
-    excludeCurrentPeriod: boolean,
     translator: IDateAndMessageTranslator,
 ): string => {
     const intlGranularity = granularityIntlCodes[granularity];
-    const toAdjusted = excludeCurrentPeriod && to === -1 && to !== from ? 0 : to;
-    const { formatter } = relativeDateRangeFormatters.find(f => f.predicate(from, toAdjusted));
+    const { formatter } = relativeDateRangeFormatters.find(f => f.predicate(from, to));
     return formatter(from, to, intlGranularity, translator);
 };
 
@@ -133,45 +131,32 @@ const getAbsolutePresetFilterRepresentation = (
 
 const getRelativeFormFilterRepresentation = (
     filter: ExtendedDateFilters.IRelativeDateFilterForm,
-    excludeCurrentPeriod: boolean,
     translator: IDateAndMessageTranslator,
 ): string =>
     typeof filter.from === "number" && typeof filter.to === "number"
-        ? formatRelativeDateRange(
-              filter.from,
-              filter.to,
-              filter.granularity,
-              excludeCurrentPeriod,
-              translator,
-          )
+        ? formatRelativeDateRange(filter.from, filter.to, filter.granularity, translator)
         : "";
 
 const getRelativePresetFilterRepresentation = (
     filter: ExtendedDateFilters.IRelativeDateFilterPreset,
-    excludeCurrentPeriod: boolean,
     translator: IDateAndMessageTranslator,
-): string =>
-    formatRelativeDateRange(filter.from, filter.to, filter.granularity, excludeCurrentPeriod, translator);
+): string => formatRelativeDateRange(filter.from, filter.to, filter.granularity, translator);
 
 const getDateFilterRepresentationByFilterType = (
     filter: ExtendedDateFilters.DateFilterOption,
-    excludeCurrentPeriod: boolean,
     translator: IDateAndMessageTranslator,
 ) => {
     if (
         ExtendedDateFilters.isAbsoluteDateFilterForm(filter) ||
         ExtendedDateFilters.isRelativeDateFilterForm(filter)
     ) {
-        return getDateFilterRepresentationUsingTranslator(filter, excludeCurrentPeriod, translator);
+        return getDateFilterRepresentationUsingTranslator(filter, translator);
     } else if (
         ExtendedDateFilters.isAllTimeDateFilter(filter) ||
         ExtendedDateFilters.isAbsoluteDateFilterPreset(filter) ||
         ExtendedDateFilters.isRelativeDateFilterPreset(filter)
     ) {
-        return (
-            filter.name ||
-            getDateFilterRepresentationUsingTranslator(filter, excludeCurrentPeriod, translator)
-        );
+        return filter.name || getDateFilterRepresentationUsingTranslator(filter, translator);
     } else {
         throw new Error("Unknown DateFilterOption type");
     }
@@ -191,12 +176,11 @@ const getDateFilterRepresentationByFilterType = (
  */
 export const getDateFilterTitle = (
     filter: ExtendedDateFilters.DateFilterOption,
-    excludeCurrentPeriod: boolean,
     locale: Localization.ILocale,
 ): string => {
     const translator = IntlStore.getIntl(locale);
 
-    return getDateFilterRepresentationByFilterType(filter, excludeCurrentPeriod, translator);
+    return getDateFilterRepresentationByFilterType(filter, translator);
 };
 
 /**
@@ -205,9 +189,8 @@ export const getDateFilterTitle = (
  */
 export const getDateFilterTitleUsingTranslator = (
     filter: ExtendedDateFilters.DateFilterOption,
-    excludeCurrentPeriod: boolean,
     translator: IDateAndMessageTranslator,
-): string => getDateFilterRepresentationByFilterType(filter, excludeCurrentPeriod, translator);
+): string => getDateFilterRepresentationByFilterType(filter, translator);
 
 /**
  * Gets the filter representation regardless of custom name.
@@ -215,7 +198,6 @@ export const getDateFilterTitleUsingTranslator = (
  */
 const getDateFilterRepresentationUsingTranslator = (
     filter: ExtendedDateFilters.DateFilterOption,
-    excludeCurrentPeriod: boolean,
     translator: IDateAndMessageTranslator,
 ): string => {
     if (ExtendedDateFilters.isAbsoluteDateFilterForm(filter)) {
@@ -225,9 +207,9 @@ const getDateFilterRepresentationUsingTranslator = (
     } else if (ExtendedDateFilters.isAllTimeDateFilter(filter)) {
         return getAllTimeFilterRepresentation(translator);
     } else if (ExtendedDateFilters.isRelativeDateFilterForm(filter)) {
-        return getRelativeFormFilterRepresentation(filter, excludeCurrentPeriod, translator);
+        return getRelativeFormFilterRepresentation(filter, translator);
     } else if (ExtendedDateFilters.isRelativeDateFilterPreset(filter)) {
-        return getRelativePresetFilterRepresentation(filter, excludeCurrentPeriod, translator);
+        return getRelativePresetFilterRepresentation(filter, translator);
     } else {
         throw new Error("Unknown DateFilterOption type");
     }
@@ -235,10 +217,9 @@ const getDateFilterRepresentationUsingTranslator = (
 
 export const getDateFilterRepresentation = (
     filter: ExtendedDateFilters.DateFilterOption,
-    excludeCurrentPeriod: boolean,
     locale: Localization.ILocale,
 ): string => {
     const translator = IntlStore.getIntl(locale);
 
-    return getDateFilterRepresentationUsingTranslator(filter, excludeCurrentPeriod, translator);
+    return getDateFilterRepresentationUsingTranslator(filter, translator);
 };

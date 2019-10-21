@@ -22,7 +22,6 @@ describe("ExtendedDateFilterBody", () => {
         const defaultProps: IDateFilterButtonLocalizedProps = {
             isMobile: false,
             dateFilterOption: allTime,
-            excludeCurrentPeriod: false,
         };
         return <DateFilterButtonLocalized {...defaultProps} {...props} />;
     };
