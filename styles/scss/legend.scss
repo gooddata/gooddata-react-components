@@ -1,4 +1,9 @@
 // (C) 2007-2018 GoodData Corporation
+@import "~@gooddata/goodstrap/lib/Bubble/styles/mixins";
+@import "~@gooddata/goodstrap/lib/core/styles/variables";
+@import "~@gooddata/goodstrap/lib/core/styles/mixins";
+@import "variables";
+
 $responsive-legend: "only screen and (max-width: 767px)";
 
 @media #{$responsive-legend} {

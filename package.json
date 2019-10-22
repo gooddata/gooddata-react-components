@@ -8,7 +8,6 @@
   "license": "BSD-3-Clause",
   "files": [
     "dist",
-    "src",
     "styles",
     "LICENSE"
   ],

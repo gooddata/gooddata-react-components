@@ -25,6 +25,10 @@ The REST API versions in the table are just for your information as the values a
 
 - Sticky row update in pivot table
 
+### Removed
+
+- Removed source files from published package
+
 ## 7.1.2
 
 October 17, 2019
