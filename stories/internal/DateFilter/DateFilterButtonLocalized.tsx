@@ -197,10 +197,15 @@ storiesOf("Internal/DateFilter/DateFilterButtonLocalized", module)
         ),
     )
 
-    .add("relativePreset without exclude", () =>
+    .add("relativePreset with exclude", () =>
         screenshotWrap(
             <div style={wrapperStyle} className="screenshot-target">
-                <RelativePresetButton from={-6} to={-1} granularity="GDC.time.date" />
+                <RelativePresetButton
+                    from={-6}
+                    to={-1}
+                    granularity="GDC.time.date"
+                    excludeCurrentPeriod={true}
+                />
             </div>,
         ),
     );
