@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import { AFM } from "@gooddata/typings";
 import get = require("lodash/get");
 import negate = require("lodash/negate");
@@ -39,16 +39,21 @@ export function getMasterMeasureObjQualifier(afm: AFM.IAfm, localIdentifier: AFM
     return null;
 }
 
-const getDateFilter = (filters: AFM.FilterItem[]): AFM.DateFilterItem => {
+const getDateFilter = (filters: AFM.ExtendedFilter[]): AFM.DateFilterItem => {
     return filters.find(AfmUtils.isDateFilter);
 };
 
-const getAttributeFilters = (filters: AFM.FilterItem[] = []): AFM.AttributeFilterItem[] => {
+const getAttributeFilters = (filters: AFM.ExtendedFilter[] = []): AFM.AttributeFilterItem[] => {
     return filters.filter(AfmUtils.isAttributeFilter).filter(negate(AfmUtils.isAttributeFilterSelectAll));
 };
 
-export const mergeFiltersToAfm = (afm: AFM.IAfm, additionalFilters: AFM.FilterItem[]): AFM.IAfm => {
+const getMeasureValueFilters = (filters: AFM.ExtendedFilter[] = []): AFM.IMeasureValueFilter[] => {
+    return filters.filter(AFM.isMeasureValueFilter);
+};
+
+export const mergeFiltersToAfm = (afm: AFM.IAfm, additionalFilters: AFM.ExtendedFilter[]): AFM.IAfm => {
     const attributeFilters = getAttributeFilters(additionalFilters);
     const dateFilter = getDateFilter(additionalFilters);
-    return AfmUtils.appendFilters(afm, attributeFilters, dateFilter);
+    const measureValueFilters = getMeasureValueFilters(additionalFilters);
+    return AfmUtils.appendFilters(afm, attributeFilters, dateFilter, measureValueFilters);
 };

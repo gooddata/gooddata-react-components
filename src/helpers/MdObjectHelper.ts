@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import get = require("lodash/get");
 import { VisualizationObject, AFM, VisualizationInput } from "@gooddata/typings";
 import { DataLayer } from "@gooddata/gooddata-js";
@@ -57,7 +57,7 @@ function buildArithmeticMeasureTitleProps(
 
 export const mdObjectToPivotBucketProps = (
     mdObject: VisualizationObject.IVisualizationObject,
-    filtersFromProps: AFM.FilterItem[],
+    filtersFromProps: AFM.ExtendedFilter[],
 ): IPivotTableBucketProps => {
     const measureBucket = mdObject.content.buckets.find(bucket => bucket.localIdentifier === MEASURES);
     const rowBucket = mdObject.content.buckets.find(bucket => bucket.localIdentifier === ATTRIBUTE);
@@ -81,10 +81,10 @@ export const mdObjectToPivotBucketProps = (
 
     const afm = mergeFiltersToAfm(afmWithoutMergedFilters, filtersFromProps);
 
-    const filters: VisualizationInput.IFilter[] = (afm.filters || []).filter(afmFilter => {
-        // Filter out expression filters which are not supported in bucket interface
-        return AFM.isDateFilter(afmFilter) || AFM.isAttributeFilter(afmFilter);
-    }) as AFM.FilterItem[];
+    // Filter out expression filters which are not supported in bucket interface
+    const filters: VisualizationInput.IFilter[] = (afm.filters || []).filter(
+        afmFilter => !AFM.isExpressionFilter(afmFilter),
+    ) as VisualizationObject.VisualizationObjectExtendedFilter[];
 
     return {
         measures,

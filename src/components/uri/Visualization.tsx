@@ -54,7 +54,7 @@ export interface IVisualizationProps extends IEvents {
     identifier?: string;
     locale?: Localization.ILocale;
     config?: IChartConfig;
-    filters?: AFM.FilterItem[];
+    filters?: AFM.ExtendedFilter[];
     drillableItems?: Array<IDrillableItem | IHeaderPredicate>;
     uriResolver?: (sdk: SDK, projectId: string, uri?: string, identifier?: string) => Promise<string>;
     fetchVisObject?: (
@@ -370,7 +370,7 @@ export class VisualizationWrapped extends React.Component<
     private async prepareDataSources(
         projectId: string,
         identifier: string,
-        filters: AFM.FilterItem[] = [],
+        filters: AFM.ExtendedFilter[] = [],
     ): Promise<IVisualizationExecInfo> {
         const { uriResolver, fetchVisObject, fetchVisualizationClass, locale, getFeatureFlags } = this.props;
 
@@ -403,7 +403,7 @@ export class VisualizationWrapped extends React.Component<
         };
     }
 
-    private createDataSource(afm: AFM.IAfm, filters: AFM.FilterItem[]): Promise<IDataSource> {
+    private createDataSource(afm: AFM.IAfm, filters: AFM.ExtendedFilter[]): Promise<IDataSource> {
         const { projectId, experimentalVisExecution } = this.props;
 
         if (experimentalVisExecution) {

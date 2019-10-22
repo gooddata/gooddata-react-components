@@ -1,4 +1,4 @@
-// (C) 2018 GoodData Corporation
+// (C) 2018-2019 GoodData Corporation
 import { VisualizationInput } from "@gooddata/typings";
 import { getQualifierObject } from "./utils";
 
@@ -68,7 +68,7 @@ export class MeasureBuilder extends MeasureBuilderBase<VisualizationInput.IMeasu
         return this;
     };
 
-    public filters = (...filters: VisualizationInput.IFilter[]) => {
+    public filters = (...filters: VisualizationInput.IMeasureFilter[]) => {
         this.measure.definition.measureDefinition.filters = filters;
         return this;
     };
