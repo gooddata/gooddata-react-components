@@ -149,6 +149,48 @@ describe("PluggableHeadline", () => {
             reactCreateElementSpy.mockReset();
             reactRenderSpy.mockReset();
         });
+
+        it("should correctly set config.disableDrillUnderline from FeatureFlag disableKpiDashboardHeadlineUnderline", () => {
+            const fakeElement: any = "fake element";
+            const reactCreateElementSpy = jest
+                .spyOn(React, "createElement")
+                .mockImplementation(() => fakeElement);
+            const reactRenderSpy = jest.spyOn(ReactDom, "render").mockImplementation(jest.fn());
+
+            const headline = createComponent({
+                featureFlags: {
+                    disableKpiDashboardHeadlineUnderline: true,
+                },
+            });
+
+            const options: IVisProps = getTestOptions();
+
+            headline.update(options, null, testMocks.emptyMdObject);
+
+            expect(reactCreateElementSpy.mock.calls[0][0]).toBe(Headline);
+            expect(reactCreateElementSpy.mock.calls[0][1]).toEqual({
+                projectId: "PROJECTID",
+                config: {
+                    disableDrillUnderline: true,
+                },
+                drillableItems: options.custom.drillableItems,
+                locale: options.locale,
+                dataSource: options.dataSource,
+                resultSpec: {
+                    ...options.resultSpec,
+                    dimensions: [{ itemIdentifiers: ["measureGroup"] }],
+                },
+                afterRender: defaultProps.callbacks.afterRender,
+                onLoadingChanged: defaultProps.callbacks.onLoadingChanged,
+                pushData: defaultProps.callbacks.pushData,
+                onError: defaultProps.callbacks.onError,
+                ErrorComponent: null,
+                LoadingComponent: null,
+            });
+
+            reactCreateElementSpy.mockReset();
+            reactRenderSpy.mockReset();
+        });
     });
 
     describe("getExtendedReferencePoint", () => {

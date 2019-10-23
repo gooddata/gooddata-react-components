@@ -377,6 +377,40 @@ storiesOf("URI components", module)
             </div>,
         ),
     )
+    .add("headline with drillableItems", () =>
+        screenshotWrap(
+            <div style={{ width: 800, height: 400 }}>
+                <Visualization
+                    projectId="storybook"
+                    uri={"/gdc/md/storybook/obj/1004"}
+                    drillableItems={[{ uri: "/gdc/md/storybook/obj/1" }]}
+                    onFiredDrillEvent={action("onFiredDrillEvent")}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
+    .add("headline with drillableItems disableDrillUnderline", () =>
+        screenshotWrap(
+            <div style={{ width: 800, height: 400 }}>
+                <Visualization
+                    projectId="storybook"
+                    uri={"/gdc/md/storybook/obj/1004"}
+                    drillableItems={[{ uri: "/gdc/md/storybook/obj/1" }]}
+                    onFiredDrillEvent={action("onFiredDrillEvent")}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                    // tslint:disable-next-line:jsx-no-lambda
+                    getFeatureFlags={async () => {
+                        return { disableKpiDashboardHeadlineUnderline: true };
+                    }}
+                />
+            </div>,
+        ),
+    )
     .add("headline with German number format", () =>
         screenshotWrap(
             <div style={{ width: 800, height: 400 }}>

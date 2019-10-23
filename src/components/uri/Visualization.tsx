@@ -37,7 +37,7 @@ import { convertErrors, generateErrorMap, IErrorMap } from "../../helpers/errorH
 import { isTreemap } from "../visualizations/utils/common";
 import { getColorMappingPredicate, getColorPaletteFromColors } from "../visualizations/utils/color";
 import { getCachedOrLoad } from "../../helpers/sdkCache";
-import { getFeatureFlags } from "../../helpers/featureFlags";
+import { getFeatureFlags, setConfigFromFeatureFlags } from "../../helpers/featureFlags";
 import { mergeFiltersToAfm } from "../../helpers/afmHelper";
 import { _experimentalDataSourceFactory } from "./experimentalDataSource";
 import IVisualizationObjectContent = VisualizationObject.IVisualizationObjectContent;
@@ -361,7 +361,10 @@ export class VisualizationWrapped extends React.Component<
         const { mdObject, colorPalette } = this.state;
         const mdObjectContent = mdObject && mdObject.content;
 
-        return mergeChartConfigWithProperties(config, mdObjectContent, colorPalette);
+        return setConfigFromFeatureFlags(
+            mergeChartConfigWithProperties(config, mdObjectContent, colorPalette),
+            this.state.featureFlags,
+        );
     }
 
     private async prepareDataSources(
