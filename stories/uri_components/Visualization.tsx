@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
@@ -473,4 +473,31 @@ storiesOf("URI components", module)
                 <Visualization projectId="storybook" uri={"/gdc/md/storybook/obj/1002"} />
             </div>
         </div>
-    ));
+    ))
+    .add("Table with measure value filter in visualization object and one additional in filter prop", () =>
+        screenshotWrap(
+            <div style={{ width: 800, height: 400 }}>
+                <Visualization
+                    projectId="storybook"
+                    identifier="measure-value-filters"
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    filters={[
+                        {
+                            measureValueFilter: {
+                                measure: {
+                                    localIdentifier: "m2",
+                                },
+                                condition: {
+                                    comparison: {
+                                        operator: "GREATER_THAN",
+                                        value: 500,
+                                    },
+                                },
+                            },
+                        },
+                    ]}
+                />
+            </div>,
+        ),
+    );

@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import { AFM } from "@gooddata/typings";
 import {
     getMasterMeasureObjQualifier,
@@ -455,6 +455,46 @@ describe("mergeFiltersToAfm", () => {
         const result = mergeFiltersToAfm(originalAfm, [...nonAllFilters, allFilter]);
         expect(result).toEqual({
             filters: nonAllFilters,
+        });
+    });
+
+    it("should add new measure value filters and keep the original ones", () => {
+        const originalFilters: AFM.ExtendedFilter[] = [
+            {
+                measureValueFilter: {
+                    measure: {
+                        localIdentifier: "m1",
+                    },
+                    condition: {
+                        comparison: {
+                            operator: "GREATER_THAN",
+                            value: 42,
+                        },
+                    },
+                },
+            },
+        ];
+        const originalAfm: AFM.IAfm = {
+            filters: originalFilters,
+        };
+        const additionalFilters: AFM.ExtendedFilter[] = [
+            {
+                measureValueFilter: {
+                    measure: {
+                        localIdentifier: "m2",
+                    },
+                    condition: {
+                        comparison: {
+                            operator: "GREATER_THAN",
+                            value: 420,
+                        },
+                    },
+                },
+            },
+        ];
+        const result = mergeFiltersToAfm(originalAfm, additionalFilters);
+        expect(result).toEqual({
+            filters: [...originalFilters, ...additionalFilters],
         });
     });
 });

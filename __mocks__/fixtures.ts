@@ -151,6 +151,19 @@ export const pivotTableMDO: IVisualization = {
                         },
                     },
                 },
+                {
+                    measureValueFilter: {
+                        measure: {
+                            localIdentifier: "m1",
+                        },
+                        condition: {
+                            comparison: {
+                                operator: "GREATER_THAN",
+                                value: 42,
+                            },
+                        },
+                    },
+                },
             ],
             properties: JSON.stringify({
                 sortItems: [

@@ -2503,6 +2503,36 @@ const getBaseProjectSchema = (title, identifier) => {
                 }],
                 properties: "{\"controls\":{\"secondary_yaxis\":{\"measures\":[\"2\"]},\"primaryChartType\":\"column\",\"secondaryChartType\":\"line\"}}"
             },
+            {
+                title: 'Table with measure value filters',
+                identifier: 'measure-value-filters',
+                type: 'local:table',
+                filters: [{
+                    type: "measureComparison",
+                    identifier: "m1",
+                    operator: "GREATER_THAN",
+                    value: 500
+                }],
+                buckets: [{
+                    localIdentifier: 'measures',
+                    items: [{
+                        localIdentifier: 'm1',
+                        identifier: '1'
+                    }, {
+                        localIdentifier: 'm2',
+                        identifier: '2'
+                    }]
+                }, {
+                    localIdentifier: 'attribute',
+                    items: [{
+                        localIdentifier: 'a1',
+                        displayForm: '4.df'
+                    }, {
+                        localIdentifier: 'a2',
+                        displayForm: '5.df'
+                    }]
+                }]
+            },
         ]
     }
 };

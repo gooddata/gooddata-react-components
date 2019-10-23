@@ -1151,12 +1151,12 @@
     firstline "^2.0.2"
     line-replace "^1.0.2"
 
-"@gooddata/gooddata-js@^11.19.3":
-  version "11.19.3"
-  resolved "https://registry.yarnpkg.com/@gooddata/gooddata-js/-/gooddata-js-11.19.3.tgz#3a522e60b396532f6c122a27f9b95ae1e8aabf62"
-  integrity sha512-wcnUXL6gSLxKKCPwIfLo+6EZ00WZ5QzeR3xTRUoTXdzQdn/ZhlmkUTJslhmoOYzOF3fbSlseDh1wOUiAIz/jEA==
+"@gooddata/gooddata-js@^11.20.0":
+  version "11.20.0"
+  resolved "https://registry.yarnpkg.com/@gooddata/gooddata-js/-/gooddata-js-11.20.0.tgz#6b3d449f38e74ff87eb4456dd32c8933b3769a80"
+  integrity sha512-cUCUNhDtjwSx2O3DTtsNf4uIxexXbf9PIPP3ByE4bv8sWNg13qqBIt3UuodEmF9rEaU3p+9ROLlCeB1YMla3sA==
   dependencies:
-    "@gooddata/typings" "^2.18.0"
+    "@gooddata/typings" "^2.19.0"
     es6-promise "^3.0.2"
     fetch-cookie "^0.7.0"
     invariant "^2.2.2"
@@ -1253,10 +1253,10 @@
     tslint-microsoft-contrib "6.1.0"
     tslint-react "3.6.0"
 
-"@gooddata/typings@^2.18.0":
-  version "2.18.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/typings/-/typings-2.18.0.tgz#f048c2b34d1d2d670c7b54e5a44ac698965944ec"
-  integrity sha512-A5ivk8PAO5bX4a8Ko1O90wR3+3oiPAVhjzZpOXrcv2OAfp6F+0mB4ZkPOWRcp/Xj0777uT6Nx5Pv0NqaKzqAcg==
+"@gooddata/typings@^2.18.0", "@gooddata/typings@^2.19.0":
+  version "2.19.0"
+  resolved "https://registry.yarnpkg.com/@gooddata/typings/-/typings-2.19.0.tgz#59f6d825b3671bd17df13bf7020b2b856d94d923"
+  integrity sha512-/r66t4g97WlO++dXPl17q5GF09l5LNrqbuPfKDOKtokUE3UiQYpUty/u975SkEg41TF1UlCw40Sikqo+AuanYw==
   dependencies:
     lodash "^4.17.11"
 

@@ -1,15 +1,15 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import { AFM, VisualizationObject } from "@gooddata/typings";
 import { DataLayer } from "@gooddata/gooddata-js";
 
 export function convertBucketsToMdObject(
     buckets: VisualizationObject.IBucket[],
-    filters?: VisualizationObject.VisualizationObjectFilter[],
+    filters?: VisualizationObject.VisualizationObjectExtendedFilter[],
     uri?: string,
 ): VisualizationObject.IVisualizationObjectContent {
     const visClassUri = uri ? uri : "/does/not/matter";
 
-    const visualizationObject = {
+    return {
         visualizationClass: {
             uri: visClassUri,
         },
@@ -17,13 +17,11 @@ export function convertBucketsToMdObject(
         buckets,
         filters,
     };
-
-    return visualizationObject;
 }
 
 export function convertBucketsToAFM(
     buckets: VisualizationObject.IBucket[],
-    filters?: VisualizationObject.VisualizationObjectFilter[],
+    filters?: VisualizationObject.VisualizationObjectExtendedFilter[],
 ): AFM.IAfm {
     const { afm } = DataLayer.toAfmResultSpec(convertBucketsToMdObject(buckets, filters));
     return afm;

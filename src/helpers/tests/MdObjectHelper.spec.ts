@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import { VisualizationObject, AFM, VisualizationInput } from "@gooddata/typings";
 import MdObjectHelper from "../MdObjectHelper";
 import { visualizationObjects, pivotTableMDO } from "../../../__mocks__/fixtures";
@@ -169,7 +169,7 @@ describe("MdObjectHelper", () => {
 
     describe("mdObjectToPivotBucketProps", () => {
         it("should convert MDO to pivot table bucket props", () => {
-            const filtersFromProps: AFM.FilterItem[] = [
+            const filtersFromProps: AFM.ExtendedFilter[] = [
                 {
                     relativeDateFilter: {
                         to: 0,
@@ -177,6 +177,19 @@ describe("MdObjectHelper", () => {
                         granularity: "GDC.time.quarter",
                         dataSet: {
                             uri: "/gdc/md/myproject/obj/921",
+                        },
+                    },
+                },
+                {
+                    measureValueFilter: {
+                        measure: {
+                            localIdentifier: "m2",
+                        },
+                        condition: {
+                            comparison: {
+                                operator: "GREATER_THAN",
+                                value: 420,
+                            },
                         },
                     },
                 },
@@ -247,6 +260,19 @@ describe("MdObjectHelper", () => {
 
             const expectedFilters: VisualizationInput.IFilter[] = [
                 {
+                    measureValueFilter: {
+                        measure: {
+                            localIdentifier: "m1",
+                        },
+                        condition: {
+                            comparison: {
+                                operator: "GREATER_THAN",
+                                value: 42,
+                            },
+                        },
+                    },
+                },
+                {
                     relativeDateFilter: {
                         dataSet: {
                             uri: "/gdc/md/myproject/obj/921",
@@ -254,6 +280,19 @@ describe("MdObjectHelper", () => {
                         from: -3,
                         granularity: "GDC.time.quarter",
                         to: 0,
+                    },
+                },
+                {
+                    measureValueFilter: {
+                        measure: {
+                            localIdentifier: "m2",
+                        },
+                        condition: {
+                            comparison: {
+                                operator: "GREATER_THAN",
+                                value: 420,
+                            },
+                        },
                     },
                 },
             ];

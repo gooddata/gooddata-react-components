@@ -22,6 +22,7 @@
     "@babel/preset-react": "7.0.0",
     "@babel/runtime": "7.4.4",
     "@gooddata/eslint-config": "^1.0.0",
+    "@gooddata/frontend-npm-scripts": "1.1.0",
     "@gooddata/mock-js": "2.3.1",
     "@gooddata/test-storybook": "3.1.1",
     "@gooddata/tslint-config": "1.0.0",
@@ -106,12 +107,11 @@
     "yup": "^0.24.1"
   },
   "dependencies": {
-    "@gooddata/frontend-npm-scripts": "1.1.0",
-    "@gooddata/gooddata-js": "^11.19.3",
+    "@gooddata/gooddata-js": "^11.20.0",
     "@gooddata/goodstrap": "^64.0.0",
     "@gooddata/js-utils": "^3.5.0",
     "@gooddata/numberjs": "^3.2.3",
-    "@gooddata/typings": "^2.18.0",
+    "@gooddata/typings": "^2.19.0",
     "ag-grid-community": "20.0.0",
     "ag-grid-react": "20.0.0",
     "classnames": "^2.2.6",
