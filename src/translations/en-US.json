@@ -789,5 +789,40 @@
         "value": "Date is not in {format} format",
         "comment": "Placeholder '{format}' is used for showing date format. Example 'Date is not in MMMM/YY/DD format'. Don't translate placeholder '{format}'.",
         "limit": 0
+    },
+    "mvf.operator.all": {
+        "value": "all",
+        "comment": "Covers all the operators like 'Greater than', 'Less than', etc.",
+        "limit": 0
+    },
+    "mvf.operator.greaterThan": {
+        "value": "greater than",
+        "comment": "",
+        "limit": 0
+    },
+    "mvf.operator.greaterThanOrEqualTo": {
+        "value": "greater than or equal to",
+        "comment": "",
+        "limit": 0
+    },
+    "mvf.operator.lessThan": {
+        "value": "less than",
+        "comment": "",
+        "limit": 0
+    },
+    "mvf.operator.lessThanOrEqualTo": {
+        "value": "less than or equal to",
+        "comment": "",
+        "limit": 0
+    },
+    "mvf.operator.between": {
+        "value": "between",
+        "comment": "",
+        "limit": 0
+    },
+    "mvf.operator.notBetween": {
+        "value": "not between",
+        "comment": "",
+        "limit": 0
     }
 }

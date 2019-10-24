@@ -13,35 +13,13 @@ const measures = [
 ];
 
 const attributes = [Model.attribute(locationNameDisplayFormIdentifier).localIdentifier("locationName")];
-
-const greaterThanFilter = {
-    measureValueFilter: {
-        measure: {
-            localIdentifier: "franchiseFees",
-        },
-        condition: {
-            comparison: {
-                operator: "GREATER_THAN",
-                value: 700000,
-            },
-        },
-    },
-};
-
-const betweenFilter = {
-    measureValueFilter: {
-        measure: {
-            localIdentifier: "franchiseFees",
-        },
-        condition: {
-            range: {
-                operator: "BETWEEN",
-                from: 500000,
-                to: 800000,
-            },
-        },
-    },
-};
+const greaterThanFilter = Model.measureValueFilter.getFilter("franchiseFees", "GREATER_THAN", {
+    value: 700000,
+});
+const betweenFilter = Model.measureValueFilter.getFilter("franchiseFees", "BETWEEN", {
+    from: 500000,
+    to: 800000,
+});
 
 export class FilterByValueExample extends Component {
     constructor(props) {
