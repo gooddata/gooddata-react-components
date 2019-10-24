@@ -10,7 +10,7 @@ export class ScrollNotificationDiv extends React.PureComponent<IScrollNotificati
 
     constructor(props: IScrollNotificationDiv) {
         super(props);
-        this.divRef = (React as any).createRef();
+        this.divRef = React.createRef<HTMLDivElement>();
     }
 
     public render() {

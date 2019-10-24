@@ -20,6 +20,7 @@ The REST API versions in the table are just for your information as the values a
 ### Added
 
 - Support for measure value filters
+- DateFilter component (beta version)
 
 ### Fixed
 

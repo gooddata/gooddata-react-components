@@ -13,7 +13,7 @@ import get = require("lodash/get");
 import noop = require("lodash/noop");
 import isEqual = require("lodash/isEqual");
 import { AFM, VisualizationObject, VisualizationClass, Localization } from "@gooddata/typings";
-import { injectIntl, intlShape, InjectedIntlProps } from "react-intl";
+import { injectIntl, InjectedIntlProps } from "react-intl";
 import { IHeaderPredicate } from "../../interfaces/HeaderPredicate";
 import { IntlWrapper } from "../core/base/IntlWrapper";
 import { BaseChart } from "../core/base/BaseChart";
@@ -135,10 +135,7 @@ export class VisualizationWrapped extends React.Component<
     IVisualizationProps & InjectedIntlProps,
     IVisualizationState
 > {
-    public static propTypes = {
-        ...VisualizationPropType,
-        intl: intlShape.isRequired,
-    };
+    public static propTypes = VisualizationPropType;
 
     public static defaultProps: Partial<IVisualizationProps> = {
         onError: noop,

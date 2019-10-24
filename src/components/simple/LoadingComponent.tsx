@@ -52,14 +52,14 @@ export class LoadingComponent extends React.Component<ILoadingProps, null> {
         const duration = baseAnimationDuration / speed;
         const delay = duration / -5;
 
-        const dotStyles = {
+        const dotStyles: React.CSSProperties = {
             transformOrigin: "4px 4px",
             animation: `GDC-pop ${duration}s infinite`,
             animationDelay: `${delay * 2}s`,
             fill: color,
         };
 
-        const wrapperStyles = {
+        const wrapperStyles: React.CSSProperties = {
             textAlign: "center",
             display: inline ? "inline-flex" : "flex",
             verticalAlign: "middle",
@@ -70,23 +70,23 @@ export class LoadingComponent extends React.Component<ILoadingProps, null> {
             height,
             width,
         };
-        const svgStyles = {
+        const svgStyles: React.CSSProperties = {
             maxHeight: "100%",
             maxWidth: "100%",
             flex: "0 1 auto",
             width: imageWidth,
             height: imageHeight,
         };
-        const dot1Styles = dotStyles;
-        const dot2Styles = {
+        const dot1Styles: React.CSSProperties = dotStyles;
+        const dot2Styles: React.CSSProperties = {
             ...dotStyles,
             transformOrigin: "18px 4px",
             animationDelay: `${delay}s`,
         };
-        const dot3Styles = {
+        const dot3Styles: React.CSSProperties = {
             ...dotStyles,
             transformOrigin: "32px 4px",
-            animationDelay: 0,
+            animationDelay: "0",
         };
 
         return (

@@ -25,7 +25,7 @@ export class ScreenshotReadyWrapper extends React.Component<
         super(props);
 
         this.state = { ready: false };
-        this.componentRef = (React as any).createRef();
+        this.componentRef = React.createRef<HTMLDivElement>();
     }
 
     public componentDidMount() {
