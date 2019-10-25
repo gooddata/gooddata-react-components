@@ -967,6 +967,25 @@ storiesOf("Internal/Drilldown", module)
             ),
         ),
     )
+    .add("Headline drillable primary value disableDrillUnderline", () =>
+        screenshotWrap(
+            wrap(
+                <HeadlineTransformation
+                    executionRequest={headlineWithOneMeasure.executionRequest}
+                    executionResponse={headlineWithOneMeasure.executionResponse}
+                    executionResult={headlineWithOneMeasure.executionResult}
+                    drillableItems={[
+                        headerPredicateFactory.uriMatch("/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1283"),
+                    ]}
+                    onFiredDrillEvent={action("onFiredDrillEvent")}
+                    onAfterRender={action("onAfterRender")}
+                    config={{ disableDrillUnderline: true }}
+                />,
+                "auto",
+                300,
+            ),
+        ),
+    )
     .add("Headline drillable secondary value", () =>
         screenshotWrap(
             wrap(
@@ -980,6 +999,26 @@ storiesOf("Internal/Drilldown", module)
                     ]}
                     onFiredDrillEvent={action("onFiredDrillEvent")}
                     onAfterRender={action("onAfterRender")}
+                />,
+                "auto",
+                300,
+            ),
+        ),
+    )
+    .add("Headline drillable secondary value disableDrillUnderline", () =>
+        screenshotWrap(
+            wrap(
+                <HeadlineTransformation
+                    executionRequest={headlineWithTwoMeasures.executionRequest}
+                    executionResponse={headlineWithTwoMeasures.executionResponse}
+                    executionResult={headlineWithTwoMeasures.executionResult}
+                    drillableItems={[
+                        headerPredicateFactory.uriMatch("/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1283"),
+                        { uri: "/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1284" },
+                    ]}
+                    onFiredDrillEvent={action("onFiredDrillEvent")}
+                    onAfterRender={action("onAfterRender")}
+                    config={{ disableDrillUnderline: true }}
                 />,
                 "auto",
                 300,

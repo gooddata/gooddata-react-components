@@ -82,6 +82,7 @@ export interface IChartConfig extends IMeasuresStackConfig {
     primaryChartType?: VisualizationObject.VisualizationType;
     secondaryChartType?: VisualizationObject.VisualizationType;
     forceDisableDrillOnAxes?: boolean;
+    disableDrillUnderline?: boolean;
 }
 
 export interface IStackLabels {

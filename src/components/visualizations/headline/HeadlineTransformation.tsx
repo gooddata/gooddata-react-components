@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import { AFM, Execution } from "@gooddata/typings";
 import * as React from "react";
 import { InjectedIntlProps, injectIntl } from "react-intl";
@@ -64,15 +64,22 @@ class HeadlineTransformation extends React.Component<IHeadlineTransformationProp
             executionRequest,
             executionResponse,
         );
-
+        const disableDrillUnderline = this.getDisableDrillUnderlineFromConfig();
         return (
             <Headline
                 data={dataWithUpdatedDrilling}
                 config={config}
                 onFiredDrillEvent={this.handleFiredDrillEvent}
                 onAfterRender={onAfterRender}
+                disableDrillUnderline={disableDrillUnderline}
             />
         );
+    }
+
+    private getDisableDrillUnderlineFromConfig() {
+        if (this.props.config) {
+            return this.props.config.disableDrillUnderline;
+        }
     }
 
     private handleFiredDrillEvent(item: IHeadlineFiredDrillEventItemContext, target: HTMLElement) {

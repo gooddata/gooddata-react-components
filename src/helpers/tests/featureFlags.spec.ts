@@ -1,6 +1,7 @@
 // (C) 2007-2019 GoodData Corporation
-import { factory as createSdk, SDK } from "@gooddata/gooddata-js";
-import { getFeatureFlags } from "../featureFlags";
+import { factory as createSdk, SDK, IFeatureFlags } from "@gooddata/gooddata-js";
+import { getFeatureFlags, setConfigFromFeatureFlags } from "../featureFlags";
+import { IChartConfig } from "../..";
 
 describe("getFeatureFlags", () => {
     const projectId = "project";
@@ -21,5 +22,24 @@ describe("getFeatureFlags", () => {
         const sdk = getSdkWithFeatureFlags(featureFlags);
         const resultFeatureFlags = await getFeatureFlags(sdk, projectId);
         expect(resultFeatureFlags).toEqual(featureFlags);
+    });
+});
+
+describe("setConfigFromFeatureFlags", () => {
+    it("should return correct config from feature flags", async () => {
+        const config: IChartConfig = {};
+        const featureFlags: IFeatureFlags = {
+            disableKpiDashboardHeadlineUnderline: true,
+        };
+        const expectedConfig = {
+            disableDrillUnderline: true,
+        };
+        expect(setConfigFromFeatureFlags(config, featureFlags)).toEqual(expectedConfig);
+    });
+
+    it("should return correct config from undefined feature flags", async () => {
+        const config: IChartConfig = {};
+        const featureFlags: IFeatureFlags = undefined;
+        expect(setConfigFromFeatureFlags(config, featureFlags)).toEqual(config);
     });
 });

@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
@@ -299,6 +299,28 @@ storiesOf("Internal/Headline/Drilldown eventing", module)
             ),
         ),
     )
+    .add("One measure disableDrillUnderline", () =>
+        screenshotWrap(
+            wrap(
+                <Headline
+                    data={{
+                        primaryItem: {
+                            localIdentifier: "m1",
+                            value: "53336",
+                            format: "#,##0.00",
+                            title: "Sum of Clicks",
+                            isDrillable: true,
+                        },
+                    }}
+                    onAfterRender={action("onAfterRender")}
+                    onFiredDrillEvent={action("onFiredDrillEvent")}
+                    disableDrillUnderline={true}
+                />,
+                "auto",
+                300,
+            ),
+        ),
+    )
     .add("Two measures", () =>
         screenshotWrap(
             wrap(
@@ -325,6 +347,39 @@ storiesOf("Internal/Headline/Drilldown eventing", module)
                     }}
                     onAfterRender={action("onAfterRender")}
                     onFiredDrillEvent={action("onFiredDrillEvent")}
+                />,
+                "auto",
+                300,
+            ),
+        ),
+    )
+    .add("Two measures disableDrillUnderline", () =>
+        screenshotWrap(
+            wrap(
+                <Headline
+                    data={{
+                        primaryItem: {
+                            localIdentifier: "m1",
+                            value: "42225.01",
+                            title: "Sum of Clicks",
+                            isDrillable: true,
+                        },
+                        secondaryItem: {
+                            localIdentifier: "m2",
+                            value: "32225.01",
+                            title: "Sum of Taps",
+                            isDrillable: true,
+                        },
+                        tertiaryItem: {
+                            localIdentifier: "tertiaryIdentifier",
+                            value: "31",
+                            title: "Versus",
+                            format: null,
+                        },
+                    }}
+                    onAfterRender={action("onAfterRender")}
+                    onFiredDrillEvent={action("onFiredDrillEvent")}
+                    disableDrillUnderline={true}
                 />,
                 "auto",
                 300,

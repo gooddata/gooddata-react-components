@@ -1,11 +1,17 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import { mount } from "enzyme";
 import cloneDeep = require("lodash/cloneDeep");
 import noop = require("lodash/noop");
 import { testUtils } from "@gooddata/js-utils";
 import { SDK, ApiResponseError } from "@gooddata/gooddata-js";
-import { Table, BaseChart, LoadingComponent, ErrorComponent } from "../../tests/mocks";
+import {
+    Table,
+    BaseChart,
+    LoadingComponent,
+    ErrorComponent,
+    HeadlineTransformation,
+} from "../../tests/mocks";
 import { visualizationObjects, visualizationClasses } from "../../../../__mocks__/fixtures";
 
 import { AFM, VisualizationObject, VisualizationClass } from "@gooddata/typings";
@@ -483,6 +489,63 @@ describe("VisualizationWrapped", () => {
             expect(wrapper.find(BaseChart).length).toBe(1);
             const BaseChartElement = wrapper.find(BaseChart).get(0);
             expect(BaseChartElement.props.config).toEqual(expectedMdObject);
+        });
+    });
+
+    it("Should correctly propagate disableKpiDashboardHeadlineUnderline feature flag to config as disableDrillUnderline", () => {
+        const getFeatureFlags = async () => {
+            return { disableKpiDashboardHeadlineUnderline: true };
+        };
+
+        const props = {
+            sdk,
+            projectId,
+            identifier: CHART_IDENTIFIER,
+            BaseChartComponent: HeadlineTransformation,
+            PivotTableComponent: Table,
+            LoadingComponent,
+            ErrorComponent,
+            fetchVisObject,
+            fetchVisualizationClass,
+            uriResolver,
+            intl,
+            getFeatureFlags,
+        };
+
+        const wrapper = mount(<VisualizationWrapped {...props as any} />);
+
+        return testUtils.delay(SLOW + 1).then(() => {
+            wrapper.update();
+            const headline = wrapper.find(HeadlineTransformation);
+            expect(headline.length).toBe(1);
+            const config = headline.prop("config");
+            expect(config.disableDrillUnderline).toBeTruthy();
+        });
+    });
+
+    it("Should set undefined to config as disableDrillUnderline when FF is missing", () => {
+        const props = {
+            sdk,
+            projectId,
+            identifier: CHART_IDENTIFIER,
+            BaseChartComponent: HeadlineTransformation,
+            PivotTableComponent: Table,
+            LoadingComponent,
+            ErrorComponent,
+            fetchVisObject,
+            fetchVisualizationClass,
+            uriResolver,
+            intl,
+        };
+
+        const wrapper = mount(<VisualizationWrapped {...props as any} />);
+
+        return testUtils.delay(SLOW + 1).then(() => {
+            wrapper.update();
+            const headline = wrapper.find(HeadlineTransformation);
+            expect(headline.length).toBe(1);
+            const config = headline.prop("config");
+            expect(config.disableDrillUnderline).toBe(undefined);
         });
     });
 

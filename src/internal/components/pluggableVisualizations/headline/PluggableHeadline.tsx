@@ -22,6 +22,7 @@ import {
     IVisualizationProperties,
     IBucketItem,
     IBucket,
+    IFeatureFlags,
 } from "../../../interfaces/Visualization";
 import {
     sanitizeUnusedFilters,
@@ -55,6 +56,7 @@ import { Headline } from "../../../../components/core/Headline";
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 import { generateDimensions } from "../../../../helpers/dimensions";
 import { DEFAULT_LOCALE } from "../../../../constants/localization";
+import { setConfigFromFeatureFlags } from "../../../../helpers/featureFlags";
 
 export class PluggableHeadline extends AbstractPluggableVisualization {
     protected configPanelElement: string;
@@ -64,6 +66,7 @@ export class PluggableHeadline extends AbstractPluggableVisualization {
     private locale: ILocale;
     private visualizationProperties: IVisualizationProperties;
     private element: string;
+    private featureFlags?: IFeatureFlags;
 
     constructor(props: IVisConstruct) {
         super();
@@ -72,6 +75,7 @@ export class PluggableHeadline extends AbstractPluggableVisualization {
         this.configPanelElement = props.configPanelElement;
         this.callbacks = props.callbacks;
         this.locale = props.locale ? props.locale : DEFAULT_LOCALE;
+        this.featureFlags = props.featureFlags;
         this.intl = createInternalIntl(this.locale);
     }
 
@@ -157,7 +161,7 @@ export class PluggableHeadline extends AbstractPluggableVisualization {
                     projectId={this.projectId}
                     drillableItems={drillableItems}
                     locale={locale}
-                    config={config}
+                    config={setConfigFromFeatureFlags(config, this.featureFlags)}
                     dataSource={dataSource}
                     resultSpec={resultSpecWithDimensions}
                     afterRender={afterRender}

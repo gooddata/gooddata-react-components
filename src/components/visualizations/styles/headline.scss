@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 @import "~@gooddata/goodstrap/lib/core/styles/typo-mixins";
 
 .headline {
@@ -37,7 +37,6 @@
 
         &.is-drillable {
             cursor: pointer;
-
             .headline-value-wrapper,
             .headline-title-wrapper {
                 transition: opacity 0.4s;
@@ -65,13 +64,15 @@
 
     .headline-item-link {
         .headline-value {
-            &:not(.headline-value--empty)::after {
+            &::after {
                 content: "";
                 position: absolute;
                 right: 0;
                 bottom: 0;
                 left: 0;
                 display: block;
+            }
+            &:not(.headline-value--empty).headline-link-style-underline::after {
                 border-bottom: 2px solid;
             }
         }
@@ -79,8 +80,11 @@
 
     .headline-secondary-item .headline-item-link {
         .headline-value {
-            &:not(.headline-value--empty)::after {
+            &.headline-link-style-underline::after {
                 border-bottom: 1px solid;
+            }
+            &.headline-value--empty::after {
+                border-bottom: none;
             }
         }
     }
