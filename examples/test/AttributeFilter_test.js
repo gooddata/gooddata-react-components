@@ -45,7 +45,7 @@ test("Positive, negative and error attribute filters", async t => {
     await t
         .hover(lineChart)
         .expect(markers.count)
-        .eql(11, "Line chart renders incorrectly")
+        .eql(11, "Line chart renders incorrectly ")
         .click(dropdownButton)
         .click(clearButton)
         .click(applyButton)
