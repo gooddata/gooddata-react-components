@@ -1,6 +1,6 @@
 // (C) 2007-2019 GoodData Corporation
 import { IExportConfig, IExportResponse } from "@gooddata/gooddata-js";
-import { IDrillEventCallback } from "./DrillEvents";
+import { IDrillEventCallback, IDrillEventExtendedCallback } from "./DrillEvents";
 import { RuntimeError } from "../errors/RuntimeError";
 
 export interface ILoadingState {
@@ -11,6 +11,7 @@ export type OnError = (error: RuntimeError) => void;
 export type OnLoadingChanged = (loadingState: ILoadingState) => void;
 export type OnLoadingFinish = (result: object) => void;
 export type OnFiredDrillEvent = IDrillEventCallback;
+export type OnDrill = IDrillEventExtendedCallback;
 
 export interface IExtendedExportConfig extends IExportConfig {
     includeFilterContext?: boolean;
@@ -36,4 +37,5 @@ export interface IEvents {
     onLoadingChanged?: OnLoadingChanged;
     onLoadingFinish?: OnLoadingFinish;
     onFiredDrillEvent?: OnFiredDrillEvent;
+    onDrill?: OnDrill;
 }

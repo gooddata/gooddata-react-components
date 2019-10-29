@@ -561,11 +561,14 @@ describe("HeadlineTransformationUtils", () => {
                     value: "42",
                     intersection: [
                         {
-                            id: "m1",
-                            title: "Lost",
                             header: {
-                                uri: "/gdc/md/project_id/obj/1",
-                                identifier: "",
+                                measureHeaderItem: {
+                                    name: "Lost",
+                                    format: "$#,##0.00",
+                                    localIdentifier: "m1",
+                                    uri: "/gdc/md/project_id/obj/1",
+                                    identifier: "metric.lost",
+                                },
                             },
                         },
                     ],
@@ -605,11 +608,14 @@ describe("HeadlineTransformationUtils", () => {
                     value: "42",
                     intersection: [
                         {
-                            id: "m1",
-                            title: "Lost",
                             header: {
-                                identifier: "metric.lost",
-                                uri: "",
+                                measureHeaderItem: {
+                                    name: "Lost",
+                                    format: "$#,##0.00",
+                                    localIdentifier: "m1",
+                                    uri: "/gdc/md/project_id/obj/1",
+                                    identifier: "metric.lost",
+                                },
                             },
                         },
                     ],
@@ -659,11 +665,12 @@ describe("HeadlineTransformationUtils", () => {
                     value: "12345678",
                     intersection: [
                         {
-                            id: "m2",
-                            title: "Found",
                             header: {
-                                uri: "/gdc/md/project_id/obj/2",
-                                identifier: "",
+                                measureHeaderItem: {
+                                    name: "Found",
+                                    format: "$#,##0.00",
+                                    localIdentifier: "m2",
+                                },
                             },
                         },
                     ],

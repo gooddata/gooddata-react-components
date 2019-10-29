@@ -2,7 +2,7 @@
 import { Execution } from "@gooddata/typings";
 import {
     getTreemapAttributes,
-    IUnwrappedAttributeHeadersWithItems,
+    IUnwrappedAttributeHeaderWithItems,
 } from "../components/visualizations/chart/chartOptionsBuilder";
 import { STACK_BY_DIMENSION_INDEX } from "../components/visualizations/chart/constants";
 import { isTreemap } from "../components/visualizations/utils/common";
@@ -13,7 +13,7 @@ export function getStackByAttribute(
     config: IChartConfig,
     dimensions: Execution.IResultDimension[],
     attributeHeaderItems: Execution.IResultHeaderItem[][][],
-): IUnwrappedAttributeHeadersWithItems {
+): IUnwrappedAttributeHeaderWithItems {
     const { type, mdObject } = config;
 
     if (isTreemap(type)) {

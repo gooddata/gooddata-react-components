@@ -7,17 +7,17 @@ import * as CustomEventPolyfill from "custom-event";
 import * as invariant from "invariant";
 import { AFM, Execution } from "@gooddata/typings";
 import { InjectedIntl } from "react-intl";
-import { getMasterMeasureObjQualifier } from "../../../../helpers/afmHelper";
 import { isSomeHeaderPredicateMatched } from "../../../../helpers/headerPredicate";
 import { IHeaderPredicate } from "../../../../interfaces/HeaderPredicate";
 import {
     IDrillEvent,
     IDrillEventCallback,
-    IDrillEventContextHeadline,
+    IDrillEventIntersectionElementExtended,
+    IDrillEventExtended,
+    IDrillEventContextHeadlineExtended,
 } from "../../../../interfaces/DrillEvents";
 import { VisualizationTypes, HeadlineElementType } from "../../../../constants/visualizationTypes";
 import { IHeadlineData, IHeadlineDataItem } from "../../../../interfaces/Headlines";
-import { createDrillIntersectionElement } from "../../utils/drilldownEventing";
 
 export interface IHeadlineExecutionData {
     measureHeaderItem: Execution.IMeasureHeaderItem["measureHeaderItem"];
@@ -199,27 +199,18 @@ export function buildDrillEventData(
     itemContext: IHeadlineDrillItemContext,
     executionRequest: AFM.IExecution["execution"],
     executionResponse: Execution.IExecutionResponse,
-): IDrillEvent {
+): IDrillEventExtended {
     const measureHeaderItem = findMeasureHeaderItem(itemContext.localIdentifier, executionResponse);
     if (!measureHeaderItem) {
         throw new Error("The metric uri has not been found in execution response!");
     }
 
-    const masterMeasureQualifier = getMasterMeasureObjQualifier(
-        executionRequest.afm,
-        itemContext.localIdentifier,
-    );
-    if (!masterMeasureQualifier) {
-        throw new Error("The metric ids has not been found in execution request!");
-    }
-
-    const intersectionElement = createDrillIntersectionElement(
-        measureHeaderItem.localIdentifier,
-        measureHeaderItem.name,
-        masterMeasureQualifier.uri,
-        masterMeasureQualifier.identifier,
-    );
-    const drillContext: IDrillEventContextHeadline = {
+    const intersectionElement: IDrillEventIntersectionElementExtended = {
+        header: {
+            measureHeaderItem,
+        },
+    };
+    const drillContext: IDrillEventContextHeadlineExtended = {
         type: VisualizationTypes.HEADLINE,
         element: itemContext.element,
         value: itemContext.value,

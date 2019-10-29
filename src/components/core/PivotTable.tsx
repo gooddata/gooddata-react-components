@@ -2,7 +2,6 @@
 import { AFM, Execution, VisualizationObject } from "@gooddata/typings";
 import {
     BodyScrollEvent,
-    ColDef,
     ColumnResizedEvent,
     GridApi,
     GridReadyEvent,
@@ -32,9 +31,16 @@ import {
     getMeasureCellStyle,
 } from "../../helpers/tableCell";
 
-import { IDrillEvent, IDrillEventContextTable } from "../../interfaces/DrillEvents";
+import {
+    IDrillEvent,
+    IDrillEventContextTable,
+    IDrillEventContextTableExtended,
+    IDrillEventExtended,
+    IDrillEventIntersectionElementExtended,
+    isDrillEventContextTableExtended,
+} from "../../interfaces/DrillEvents";
 import { IHeaderPredicate } from "../../interfaces/HeaderPredicate";
-import { IMappingHeader } from "../../interfaces/MappingHeader";
+import { IMappingHeader, isMappingHeaderAttribute } from "../../interfaces/MappingHeader";
 import { IMenuAggregationClickConfig, IPivotTableConfig } from "../../interfaces/PivotTable";
 import { IDataSourceProviderInjectedProps } from "../afm/DataSourceProvider";
 import { LoadingComponent } from "../simple/LoadingComponent";
@@ -61,7 +67,7 @@ import {
     ROW_SUBTOTAL,
 } from "./pivotTable/agGridConst";
 import { createAgGridDataSource } from "./pivotTable/agGridDataSource";
-import { getDrillIntersection, getDrillRowData } from "./pivotTable/agGridDrilling";
+import { getDrillRowData, convertDrillIntersectionToLegacy } from "./pivotTable/agGridDrilling";
 import { getSortsFromModel, isSortedByFirstAttibute } from "./pivotTable/agGridSorting";
 import {
     ICustomGridOptions,
@@ -97,6 +103,7 @@ import noop = require("lodash/noop");
 import sumBy = require("lodash/sumBy");
 
 import InjectedIntlProps = ReactIntl.InjectedIntlProps;
+import { getDrillIntersection } from "../visualizations/utils/drilldownEventing";
 
 export interface IPivotTableProps extends ICommonChartProps, IDataSourceProviderInjectedProps {
     totals?: VisualizationObject.IVisualizationTotal[];
@@ -109,7 +116,7 @@ export interface IPivotTableProps extends ICommonChartProps, IDataSourceProvider
 }
 
 export interface IPivotTableState {
-    columnDefs: ColDef[];
+    columnDefs: IGridHeader[];
     // rowData an an array of different objects depending on the content of the table.
     rowData: IGridRow[];
     execution: Execution.IExecutionResponses;
@@ -465,9 +472,71 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         this.updateStickyRow();
     };
 
+    private getAttributeHeader(colId: string, columnDefs: IGridHeader[]): Execution.IAttributeHeader {
+        const matchingColDef: IGridHeader = columnDefs.find(
+            (columnDef: IGridHeader) => columnDef.field === colId,
+        );
+        if (matchingColDef && matchingColDef.drillItems.length === 1) {
+            const drillItemHeader = matchingColDef.drillItems[0];
+            if (isMappingHeaderAttribute(drillItemHeader)) {
+                return drillItemHeader;
+            }
+        }
+        return null;
+    }
+
+    private getItemAndAttributeHeaders = (
+        attributeItemHeaders: { [colId: string]: IMappingHeader },
+        columnDefs: IGridHeader[],
+    ): IMappingHeader[] => {
+        return Object.keys(attributeItemHeaders).reduce((headers: IMappingHeader[], colId: string) => {
+            const attributeHeader = this.getAttributeHeader(colId, columnDefs);
+            if (attributeHeader) {
+                headers.push(attributeItemHeaders[colId]);
+                headers.push(attributeHeader);
+            }
+            return headers;
+        }, []);
+    };
+
+    private getAttributeDrillItemsForMeasureDrill = (
+        cellEvent: IGridCellEvent,
+        columnDefs: IGridHeader[],
+    ): IMappingHeader[] => {
+        const rowDrillItems = get(cellEvent, ["data", "headerItemMap"]);
+        return this.getItemAndAttributeHeaders(rowDrillItems, columnDefs);
+    };
+
+    private isSomeTotal = (rowType: string) => {
+        const isRowTotal = rowType === ROW_TOTAL;
+        const isRowSubtotal = rowType === ROW_SUBTOTAL;
+        return isRowTotal || isRowSubtotal;
+    };
+
+    private getRowDrillItem = (cellEvent: IGridCellEvent) =>
+        get(cellEvent, ["data", "headerItemMap", cellEvent.colDef.field]);
+
+    private getDrillItems = (cellEvent: IGridCellEvent): IMappingHeader[] => {
+        const { colDef } = cellEvent;
+        const rowDrillItem = this.getRowDrillItem(cellEvent);
+        return rowDrillItem ? [rowDrillItem, ...colDef.drillItems] : colDef.drillItems;
+    };
+
+    private getDrillIntersection = (
+        cellEvent: IGridCellEvent,
+        drillItems: IMappingHeader[],
+        columnDefs: IGridHeader[],
+    ): IDrillEventIntersectionElementExtended[] => {
+        const rowDrillItem = this.getRowDrillItem(cellEvent);
+        const completeDrillItems: IMappingHeader[] = rowDrillItem
+            ? drillItems
+            : [...drillItems, ...this.getAttributeDrillItemsForMeasureDrill(cellEvent, columnDefs)];
+        return getDrillIntersection(completeDrillItems);
+    };
+
     private cellClicked = (cellEvent: IGridCellEvent) => {
         const {
-            onFiredDrillEvent,
+            onDrill,
             execution: { executionResponse },
         } = this.props;
         const { columnDefs } = this.state;
@@ -477,17 +546,12 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         const { colDef, rowIndex } = cellEvent;
 
         const rowType = get(cellEvent, ["data", "type"], "");
-        const isRowTotal = rowType === ROW_TOTAL;
-        const isRowSubtotal = rowType === ROW_SUBTOTAL;
 
-        if (isRowTotal || isRowSubtotal) {
+        if (this.isSomeTotal(rowType)) {
             return false;
         }
 
-        const rowDrillItem = get(cellEvent, ["data", "headerItemMap", colDef.field]);
-        const drillItems: IMappingHeader[] = rowDrillItem
-            ? [...colDef.drillItems, rowDrillItem]
-            : colDef.drillItems;
+        const drillItems: IMappingHeader[] = this.getDrillItems(cellEvent);
 
         const drillableHeaders = drillItems.filter((drillItem: IMappingHeader) =>
             isSomeHeaderPredicateMatched(drillablePredicates, drillItem, afm, executionResponse),
@@ -500,9 +564,10 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         const leafColumnDefs = getTreeLeaves(columnDefs);
         const columnIndex = leafColumnDefs.findIndex(gridHeader => gridHeader.field === colDef.field);
         const row = getDrillRowData(leafColumnDefs, cellEvent.data);
-        const intersection = getDrillIntersection(drillItems, afm);
 
-        const drillContext: IDrillEventContextTable = {
+        const intersection = this.getDrillIntersection(cellEvent, drillItems, columnDefs);
+
+        const drillContextExtended: IDrillEventContextTableExtended = {
             type: VisualizationTypes.TABLE,
             element: "cell",
             columnIndex,
@@ -510,21 +575,47 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             row,
             intersection,
         };
-        const drillEvent: IDrillEvent = {
+        const drillEventExtended: IDrillEventExtended = {
             executionContext: afm,
-            drillContext,
+            drillContext: drillContextExtended,
         };
 
-        if (onFiredDrillEvent(drillEvent)) {
-            // This is needed for /analyze/embedded/ drilling with post message
-            // tslint:disable-next-line:max-line-length
-            // More info: https://github.com/gooddata/gdc-analytical-designer/blob/develop/test/drillEventing/drillEventing_page.html
-            const event = new CustomEvent("drill", {
-                detail: drillEvent,
-                bubbles: true,
-            });
-            cellEvent.event.target.dispatchEvent(event);
-            return true;
+        if (onDrill) {
+            onDrill(drillEventExtended);
+        }
+
+        return this.handleLegacyOnFireDrillEvent(drillEventExtended, cellEvent);
+    };
+
+    private handleLegacyOnFireDrillEvent = (
+        drillEventExtended: IDrillEventExtended,
+        cellEvent: IGridCellEvent,
+    ): boolean => {
+        const { onFiredDrillEvent } = this.props;
+        const { executionContext, drillContext } = drillEventExtended;
+        // this type guard is here only for casting because drillContext came from event as IDrillEventContextExtended
+        if (isDrillEventContextTableExtended(drillContext)) {
+            // Old drill event for backward compatibility
+            const drillContextLegacy: IDrillEventContextTable = {
+                ...drillContext,
+                intersection: convertDrillIntersectionToLegacy(drillContext.intersection, executionContext),
+            };
+            const drillEvent: IDrillEvent = {
+                executionContext,
+                drillContext: drillContextLegacy,
+            };
+
+            if (onFiredDrillEvent(drillEvent)) {
+                // This is needed for /analyze/embedded/ drilling with post message
+                // tslint:disable-next-line:max-line-length
+                // More info: https://github.com/gooddata/gdc-analytical-designer/blob/develop/test/drillEventing/drillEventing_page.html
+                const event = new CustomEvent("drill", {
+                    detail: drillEvent,
+                    bubbles: true,
+                });
+                cellEvent.event.target.dispatchEvent(event);
+                return true;
+            }
         }
         return false;
     };

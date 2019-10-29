@@ -22,6 +22,7 @@ import { getFunnelConfiguration } from "./highcharts/funnelConfiguration";
 import { getHeatmapConfiguration } from "./highcharts/heatmapConfiguration";
 import { getBubbleConfiguration } from "./highcharts/bubbleConfiguration";
 import { VisualizationTypes } from "../../../constants/visualizationTypes";
+import { IDrillConfig } from "../../../interfaces/DrillEvents";
 
 const chartConfigurationMap = {
     [VisualizationTypes.LINE]: getLineConfiguration,
@@ -39,7 +40,11 @@ const chartConfigurationMap = {
     [VisualizationTypes.BUBBLE]: getBubbleConfiguration,
 };
 
-export function getHighchartsOptions(chartOptions: IChartOptions, drillConfig: any, config?: IChartConfig) {
+export function getHighchartsOptions(
+    chartOptions: IChartOptions,
+    drillConfig: IDrillConfig,
+    config?: IChartConfig,
+) {
     const getConfigurationByType = chartConfigurationMap[chartOptions.type];
     invariant(
         getConfigurationByType,

@@ -252,6 +252,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
             const afterRender = get(this.callbacks, "afterRender", noop);
 
             const { drillableItems } = custom;
+            const { onDrill } = this.callbacks;
 
             const allProperties: IVisualizationProperties = get(
                 visualizationProperties,
@@ -288,6 +289,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
                     afterRender={afterRender}
                     environment={this.environment}
                     drillableItems={drillableItems}
+                    onDrill={onDrill}
                     onError={this.onError}
                     onExportReady={this.onExportReady}
                     onLoadingChanged={this.onLoadingChanged}

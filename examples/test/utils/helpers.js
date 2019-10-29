@@ -141,3 +141,11 @@ export const checkRenderChart = async (selector, t) => {
         .expect(chart.textContent)
         .ok();
 };
+
+export const checkDrill = async (t, output, selector = ".s-output") => {
+    const outputElement = Selector(selector);
+    await t.expect(outputElement.exists).ok();
+    if (outputElement) {
+        await t.expect(outputElement.textContent).eql(output);
+    }
+};

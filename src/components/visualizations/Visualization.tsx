@@ -8,7 +8,7 @@ import isFunction = require("lodash/isFunction");
 import omitBy = require("lodash/omitBy");
 import Highcharts from "./chart/highcharts/highchartsEntryPoint";
 import { IChartConfig } from "../../interfaces/Config";
-import { OnFiredDrillEvent } from "../../interfaces/Events";
+import { OnFiredDrillEvent, OnDrill } from "../../interfaces/Events";
 
 import { Execution } from "@gooddata/typings";
 
@@ -30,6 +30,7 @@ export interface IVisualizationProps {
     locale?: string;
 
     onFiredDrillEvent?: OnFiredDrillEvent;
+    onDrill?: OnDrill;
     afterRender?: () => void;
     onDataTooLarge(): void;
     onNegativeValues(): void;
@@ -42,6 +43,7 @@ export class Visualization extends React.Component<IVisualizationProps> {
         locale: "en-US",
         numericSymbols: [] as string[],
         onFiredDrillEvent: () => true,
+        onDrill: noop,
         afterRender: noop,
     };
 
@@ -98,6 +100,7 @@ export class Visualization extends React.Component<IVisualizationProps> {
                 executionResult,
                 drillableItems,
                 onFiredDrillEvent,
+                onDrill,
                 afterRender,
                 onDataTooLarge,
                 onNegativeValues,
@@ -118,6 +121,7 @@ export class Visualization extends React.Component<IVisualizationProps> {
                     executionResult={executionResult}
                     afterRender={afterRender}
                     onFiredDrillEvent={onFiredDrillEvent}
+                    onDrill={onDrill}
                     onDataTooLarge={onDataTooLarge}
                     onNegativeValues={onNegativeValues}
                     onLegendReady={onLegendReady}
