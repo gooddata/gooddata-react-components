@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { screenshotWrap } from "@gooddata/test-storybook";
@@ -28,6 +28,7 @@ import { RGBType } from "@gooddata/gooddata-js";
 import { VisualizationObject } from "@gooddata/typings";
 import { PositionType } from "../../src/components/visualizations/typings/legend";
 import { createHighChartResolver, ScreenshotReadyWrapper } from "../utils/ScreenshotReadyWrapper";
+import { withChartAlignmentConfigs } from "../hoc/withChartAlignmentConfigs";
 
 const wrapperStyle = { width: 400, height: 400 };
 
@@ -223,5 +224,10 @@ storiesOf("Core components/PieChart", module)
                     ErrorComponent={null}
                 />
             </div>,
+        ),
+    )
+    .add("with different chart alignments", () =>
+        screenshotWrap(
+            withChartAlignmentConfigs(<PieChart projectId="storybook" measures={[MEASURE_1, MEASURE_2]} />),
         ),
     );

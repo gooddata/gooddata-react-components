@@ -22,6 +22,7 @@ import {
     IReferences,
     IBucket,
     IBucketItem,
+    IGdcConfig,
 } from "../../../interfaces/Visualization";
 import { IColorConfiguration } from "../../../interfaces/Colors";
 import {
@@ -73,6 +74,8 @@ import { RuntimeError } from "../../../../errors/RuntimeError";
 import ColorUtils from "../../../../components/visualizations/utils/color";
 import * as VisEvents from "../../../../interfaces/Events";
 import { DEFAULT_LOCALE } from "../../../../constants/localization";
+import { DASHBOARDS_ENVIRONMENT } from "../../../constants/properties";
+import { IChartConfig, IColorMapping } from "../../../../interfaces/Config";
 
 export class PluggableBaseChart extends AbstractPluggableVisualization {
     protected projectId: string;
@@ -96,7 +99,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
     protected axis: string;
     protected secondaryAxis: AxisType;
     protected locale: ILocale;
-    private environment: string;
+    protected environment: string;
     private element: string;
 
     constructor(props: IVisConstruct) {
@@ -244,7 +247,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
             const { height } = dimensions;
 
             // keep height undef for AD; causes indigo-visualizations to pick default 100%
-            const resultingHeight = this.environment === "dashboards" ? height : undefined;
+            const resultingHeight = this.environment === DASHBOARDS_ENVIRONMENT ? height : undefined;
 
             const afterRender = get(this.callbacks, "afterRender", noop);
 
@@ -417,6 +420,30 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
         }
     };
 
+    protected buildVisualizationConfig(
+        mdObject: VisualizationObject.IVisualizationObjectContent,
+        config: IGdcConfig,
+        supportedControls: IVisualizationProperties,
+    ): IChartConfig {
+        const colorMapping: IColorMappingProperty[] = get(supportedControls, "colorMapping");
+
+        const validColorMapping: IColorMapping[] =
+            colorMapping &&
+            colorMapping
+                .filter(mapping => mapping != null)
+                .map(mapItem => ({
+                    predicate: ColorUtils.getColorMappingPredicate(mapItem.id),
+                    color: mapItem.color,
+                }));
+
+        return {
+            mdObject,
+            ...config,
+            ...supportedControls,
+            colorMapping: validColorMapping && validColorMapping.length > 0 ? validColorMapping : null,
+        };
+    }
+
     private getOpenAsReportConfig(properties: IVisualizationProperties) {
         const hasMapping = hasColorMapping(properties);
         const isSupported = this.isOpenAsReportSupported();
@@ -454,7 +481,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
 
         // Set legend position by bucket items and environment
         set(supportedControls, "legend.position", legendPosition);
-        if (this.environment === "dashboards") {
+        if (this.environment === DASHBOARDS_ENVIRONMENT) {
             set(supportedControls, "legend.responsive", true);
         }
 
@@ -494,35 +521,11 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
         if (legendPosition === "auto") {
             // Legend has right position always on dashboards or if report is stacked
             if (this.type === "heatmap") {
-                return this.environment === "dashboards" ? "right" : "top";
+                return this.environment === DASHBOARDS_ENVIRONMENT ? "right" : "top";
             }
-            return isStacked(mdObject) || this.environment === "dashboards" ? "right" : "auto";
+            return isStacked(mdObject) || this.environment === DASHBOARDS_ENVIRONMENT ? "right" : "auto";
         }
 
         return legendPosition;
-    }
-
-    private buildVisualizationConfig(
-        mdObject: VisualizationObject.IVisualizationObjectContent,
-        config: any,
-        supportedControls: any,
-    ) {
-        const colorMapping: IColorMappingProperty[] = get(supportedControls, "colorMapping");
-
-        const validColorMapping =
-            colorMapping &&
-            colorMapping
-                .filter(mapping => mapping != null)
-                .map(mapItem => ({
-                    predicate: ColorUtils.getColorMappingPredicate(mapItem.id),
-                    color: mapItem.color,
-                }));
-
-        return {
-            mdObject,
-            ...config,
-            ...supportedControls,
-            colorMapping: validColorMapping && validColorMapping.length > 0 ? validColorMapping : null,
-        };
     }
 }

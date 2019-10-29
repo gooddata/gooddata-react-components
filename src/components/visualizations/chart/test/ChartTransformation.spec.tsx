@@ -1,14 +1,16 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import { shallow, mount } from "enzyme";
 import noop = require("lodash/noop");
 
 import ChartTransformation from "../ChartTransformation";
 import * as fixtures from "../../../../../stories/test_data/fixtures";
-import { TOP } from "../legend/PositionTypes";
 import HighChartsRenderer from "../HighChartsRenderer";
 import { IChartConfig, IColorPaletteItem } from "../../../../interfaces/Config";
 import { getRgbString } from "../../utils/color";
+import Chart from "../Chart";
+import { VisualizationTypes } from "../../../../constants/visualizationTypes";
+import { TOP, BOTTOM, MIDDLE } from "../../../../constants/alignments";
 
 describe("ChartTransformation", () => {
     const defaultProps = {
@@ -438,4 +440,36 @@ describe("ChartTransformation", () => {
             expect(wrapper.find(HighChartsRenderer)).toHaveLength(1);
         });
     });
+
+    describe.each([[VisualizationTypes.PIE], [VisualizationTypes.DONUT]])(
+        "%s chart alignments",
+        (type: string) => {
+            function createComponent(chartConfig: IChartConfig) {
+                const props = {
+                    ...fixtures.pieChartWithMetricsOnly,
+                    config: {
+                        type,
+                        ...chartConfig,
+                    },
+                    onDataTooLarge: noop,
+                };
+                return mount(<ChartTransformation {...props} />);
+            }
+
+            it.each([[TOP], [MIDDLE], [BOTTOM]])(
+                "should props.verticalAlign be %s",
+                (verticalAlign: string) => {
+                    const wrapper = createComponent({ chart: { verticalAlign } });
+                    const chartProps = wrapper.find(Chart).props();
+                    expect(chartProps.config.chart.verticalAlign).toBe(verticalAlign);
+                },
+            );
+
+            it("should props.verticalAlign be undefined", () => {
+                const wrapper = createComponent({});
+                const chartProps = wrapper.find(Chart).props();
+                expect(chartProps.config.chart.verticalAlign).toBe(undefined);
+            });
+        },
+    );
 });
