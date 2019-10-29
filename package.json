@@ -229,5 +229,8 @@
       "npx gdc-fix-copyright",
       "git add"
     ]
+  },
+  "engines": {
+    "node": "^8.10.0"
   }
 }
