@@ -1,8 +1,8 @@
 // (C) 2019 GoodData Corporation
 import capitalize = require("lodash/capitalize");
 import * as moment from "moment";
-import { ExtendedDateFilters } from "@gooddata/typings";
-
+import { ExtendedDateFilters, Localization } from "@gooddata/typings";
+import IntlStore from "../../../../../helpers/IntlStore";
 import { granularityIntlCodes } from "../../constants/i18n";
 import { IMessageTranslator, IDateTranslator, IDateAndMessageTranslator } from "./Translators";
 
@@ -153,6 +153,30 @@ const getRelativePresetFilterRepresentation = (
 ): string =>
     formatRelativeDateRange(filter.from, filter.to, filter.granularity, excludeCurrentPeriod, translator);
 
+const getDateFilterRepresentationByFilterType = (
+    filter: ExtendedDateFilters.DateFilterOption,
+    excludeCurrentPeriod: boolean,
+    translator: IDateAndMessageTranslator,
+) => {
+    if (
+        ExtendedDateFilters.isAbsoluteDateFilterForm(filter) ||
+        ExtendedDateFilters.isRelativeDateFilterForm(filter)
+    ) {
+        return getDateFilterRepresentationUsingTranslator(filter, excludeCurrentPeriod, translator);
+    } else if (
+        ExtendedDateFilters.isAllTimeDateFilter(filter) ||
+        ExtendedDateFilters.isAbsoluteDateFilterPreset(filter) ||
+        ExtendedDateFilters.isRelativeDateFilterPreset(filter)
+    ) {
+        return (
+            filter.name ||
+            getDateFilterRepresentationUsingTranslator(filter, excludeCurrentPeriod, translator)
+        );
+    } else {
+        throw new Error("Unknown DateFilterOption type");
+    }
+};
+
 // excludeCurrentPeriod is extra metadata that is needed by translation, but it is only used by relative filters
 // so the data structure is little inconsistent - for example when we translate absoluteForm we need to pass
 // excludeCurrentPeriod that is completely unrelated to absolute filter and is not used in absolute translations.
@@ -168,29 +192,28 @@ const getRelativePresetFilterRepresentation = (
 export const getDateFilterTitle = (
     filter: ExtendedDateFilters.DateFilterOption,
     excludeCurrentPeriod: boolean,
-    translator: IDateAndMessageTranslator,
+    locale: Localization.ILocale,
 ): string => {
-    if (
-        ExtendedDateFilters.isAbsoluteDateFilterForm(filter) ||
-        ExtendedDateFilters.isRelativeDateFilterForm(filter)
-    ) {
-        return getDateFilterRepresentation(filter, excludeCurrentPeriod, translator);
-    } else if (
-        ExtendedDateFilters.isAllTimeDateFilter(filter) ||
-        ExtendedDateFilters.isAbsoluteDateFilterPreset(filter) ||
-        ExtendedDateFilters.isRelativeDateFilterPreset(filter)
-    ) {
-        return filter.name || getDateFilterRepresentation(filter, excludeCurrentPeriod, translator);
-    } else {
-        throw new Error("Unknown DateFilterOption type");
-    }
+    const translator = IntlStore.getIntl(locale);
+
+    return getDateFilterRepresentationByFilterType(filter, excludeCurrentPeriod, translator);
 };
+
+/**
+ * Gets the filter title favoring custom name if specified. This function is only for mock purpose.
+ * @returns {string} Representation of the filter (e.g. "My preset", "From 2 weeks ago to 1 week ahead")
+ */
+export const getDateFilterTitleUsingTranslator = (
+    filter: ExtendedDateFilters.DateFilterOption,
+    excludeCurrentPeriod: boolean,
+    translator: IDateAndMessageTranslator,
+): string => getDateFilterRepresentationByFilterType(filter, excludeCurrentPeriod, translator);
 
 /**
  * Gets the filter representation regardless of custom name.
  * @returns {string} Representation of the filter (e.g. "From 2 weeks ago to 1 week ahead")
  */
-export const getDateFilterRepresentation = (
+const getDateFilterRepresentationUsingTranslator = (
     filter: ExtendedDateFilters.DateFilterOption,
     excludeCurrentPeriod: boolean,
     translator: IDateAndMessageTranslator,
@@ -208,4 +231,14 @@ export const getDateFilterRepresentation = (
     } else {
         throw new Error("Unknown DateFilterOption type");
     }
+};
+
+export const getDateFilterRepresentation = (
+    filter: ExtendedDateFilters.DateFilterOption,
+    excludeCurrentPeriod: boolean,
+    locale: Localization.ILocale,
+): string => {
+    const translator = IntlStore.getIntl(locale);
+
+    return getDateFilterRepresentationUsingTranslator(filter, excludeCurrentPeriod, translator);
 };

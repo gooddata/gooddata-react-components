@@ -1,6 +1,7 @@
 // (C) 2019 GoodData Corporation
 import { ExtendedDateFilters } from "@gooddata/typings";
-import { getDateFilterTitle } from "../DateFilterTitle";
+import { getDateFilterTitleUsingTranslator, getDateFilterTitle } from "../DateFilterTitle";
+import { IDateAndMessageTranslator } from "../Translators";
 import {
     allTimeFilter,
     absoluteFormFilter,
@@ -8,12 +9,16 @@ import {
     absolutePresetFilter,
     relativePresetFilter,
 } from "./fixtures";
-import { serializingTranslator } from "../Translators";
 
-describe("getDateFilterTitle", () => {
+const serializingTranslator: IDateAndMessageTranslator = {
+    formatDate: (id, options) => `${id}__${JSON.stringify(options)}`,
+    formatMessage: (id, values) => `${id.id}__${JSON.stringify(values)}`,
+};
+
+describe("getDateFilterTitleUsingTranslator", () => {
     it("should return the correct translation for allTime filter", () => {
         const expected = "filters.allTime.title__undefined";
-        const actual = getDateFilterTitle(allTimeFilter, false, serializingTranslator);
+        const actual = getDateFilterTitleUsingTranslator(allTimeFilter, false, serializingTranslator);
         expect(actual).toEqual(expected);
     });
 
@@ -23,7 +28,7 @@ describe("getDateFilterTitle", () => {
         const expectedFrom = `2019-01-01__${JSON.stringify(expectedOptions)}`;
         const expectedTo = `2019-02-01__${JSON.stringify(expectedOptions)}`;
         const expected = `${expectedFrom}\u2013${expectedTo}`;
-        const actual = getDateFilterTitle(absoluteFormFilter, false, serializingTranslator);
+        const actual = getDateFilterTitleUsingTranslator(absoluteFormFilter, false, serializingTranslator);
         expect(actual).toEqual(expected);
     });
 
@@ -31,13 +36,17 @@ describe("getDateFilterTitle", () => {
         // make sure the formatter receives proper formatting options
         const expectedOptions = { year: "numeric", month: "numeric", day: "numeric" };
         const expected = `2019-01-01__${JSON.stringify(expectedOptions)}`;
-        const actual = getDateFilterTitle(absoluteFormFilterOneDay, false, serializingTranslator);
+        const actual = getDateFilterTitleUsingTranslator(
+            absoluteFormFilterOneDay,
+            false,
+            serializingTranslator,
+        );
         expect(actual).toEqual(expected);
     });
 
     it("should return the correct translation for absolute preset filter", () => {
         const expected = "foo";
-        const actual = getDateFilterTitle(absolutePresetFilter, false, serializingTranslator);
+        const actual = getDateFilterTitleUsingTranslator(absolutePresetFilter, false, serializingTranslator);
         expect(actual).toEqual(expected);
     });
 
@@ -109,7 +118,7 @@ describe("getDateFilterTitle", () => {
             };
 
             const expected = `${expectedId}__${JSON.stringify(expectedValues)}`;
-            const actual = getDateFilterTitle(filter, false, serializingTranslator);
+            const actual = getDateFilterTitleUsingTranslator(filter, false, serializingTranslator);
             expect(actual).toEqual(expected);
         },
     );
@@ -191,14 +200,14 @@ describe("getDateFilterTitle", () => {
             };
 
             const expected = `${expectedId}__${JSON.stringify(expectedValues)}`;
-            const actual = getDateFilterTitle(filter, exclude, serializingTranslator);
+            const actual = getDateFilterTitleUsingTranslator(filter, exclude, serializingTranslator);
             expect(actual).toEqual(expected);
         },
     );
 
     it("should return the correct translation for relative preset filter with name", () => {
         const expected = "foo";
-        const actual = getDateFilterTitle(relativePresetFilter, false, serializingTranslator);
+        const actual = getDateFilterTitleUsingTranslator(relativePresetFilter, false, serializingTranslator);
         expect(actual).toEqual(expected);
     });
 
@@ -207,7 +216,16 @@ describe("getDateFilterTitle", () => {
         const expectedId = "filters.interval.days.mixed";
         const expectedValues = { from: 5, to: 5 };
         const expected = `${expectedId}__${JSON.stringify(expectedValues)}`;
-        const actual = getDateFilterTitle(filter, false, serializingTranslator);
+        const actual = getDateFilterTitleUsingTranslator(filter, false, serializingTranslator);
+        expect(actual).toEqual(expected);
+    });
+});
+
+describe("getDateFilterTitle", () => {
+    it("should return title build using real translations for some date option", () => {
+        const filter = { ...relativePresetFilter, name: "" };
+        const expected = "From 5 days ago to 5 days ahead";
+        const actual = getDateFilterTitle(filter, false, "en-US");
         expect(actual).toEqual(expected);
     });
 });
