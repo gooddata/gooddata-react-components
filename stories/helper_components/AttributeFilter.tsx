@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
@@ -40,6 +40,12 @@ const attributeFilterWithIdentifierFilterWithSelection: IAttributeFilterProps = 
     onApply: action("apply"),
 };
 
+const attributeFilterWithOnApplyWithFilterDefinition: IAttributeFilterProps = {
+    projectId: "storybook",
+    filter: Model.positiveAttributeFilter("3.df", ["Andorra"], true),
+    onApplyWithFilterDefinition: action("onApplyWithFilterDefinition"),
+};
+
 storiesOf("Helper components/AttributeFilter", module).add("AttributeFilter definitions", () => (
     <div style={{ minHeight: 500 }}>
         <p>Attribute definition by uri</p>
@@ -54,5 +60,7 @@ storiesOf("Helper components/AttributeFilter", module).add("AttributeFilter defi
         <AttributeFilter {...attributeFilterWithIdentifierFilterWithSelection} />
         <p>Attribute filter for mobile</p>
         <AttributeFilter {...attributeFilterWithUri} fullscreenOnMobile={true} />
+        <p>Attribute filter with onApplyWithFilterDefinition</p>
+        <AttributeFilter {...attributeFilterWithOnApplyWithFilterDefinition} />
     </div>
 ));
