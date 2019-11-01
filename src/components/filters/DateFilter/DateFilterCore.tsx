@@ -73,7 +73,6 @@ export const DateFilterCore: React.FC<IDateFilterCoreProps> = ({
                                 originalSelectedFilterOption,
                                 originalExcludeCurrentPeriod,
                             )}
-                            excludeCurrentPeriod={originalExcludeCurrentPeriod}
                             customFilterName={customFilterName}
                         />
                     );

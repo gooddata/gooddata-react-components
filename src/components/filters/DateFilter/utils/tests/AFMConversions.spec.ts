@@ -104,7 +104,7 @@ describe("mapOptionToAfm", () => {
 
     it("should convert relative date filter preset value to AFM relative date filter definition with excluding current period", () => {
         const actual = mapOptionToAfm({ ...relativeDateFilterPresetValue, from: -30, to: 0 }, dataSet, true);
-        expect(actual).toMatchObject({ relativeDateFilter: { from: -30, to: -1 } });
+        expect(actual).toMatchObject({ relativeDateFilter: { from: -31, to: -1 } });
     });
 
     it("should throw error when type is uknown and TS is not used", () => {

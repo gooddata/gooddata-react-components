@@ -6,14 +6,12 @@ import { getDateFilterTitle } from "../utils/Translations/DateFilterTitle";
 
 interface IDateFilterTextLocalizedProps {
     filter: ExtendedDateFilters.DateFilterOption;
-    excludeCurrentPeriod: boolean;
 }
 
 const DateFilterTextLocalizedComponent: React.FC<IDateFilterTextLocalizedProps & InjectedIntlProps> = ({
     filter,
-    excludeCurrentPeriod,
     intl,
-}) => <>{getDateFilterTitle(filter, excludeCurrentPeriod, intl.locale as Localization.ILocale)}</>;
+}) => <>{getDateFilterTitle(filter, intl.locale as Localization.ILocale)}</>;
 
 export const DateFilterTextLocalized = injectIntl<IDateFilterTextLocalizedProps>(
     DateFilterTextLocalizedComponent,

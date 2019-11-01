@@ -46,12 +46,7 @@ export const RelativePresetFilterItems: React.FC<{
                             onClick={() => onSelectedFilterOptionChange(item)}
                             className={cx(`s-relative-preset-${kebabCase(item.localIdentifier)}`, className)}
                         >
-                            <DateFilterTextLocalized
-                                filter={item}
-                                // always consider excludeCurrentPeriod false here to make sure
-                                // the preset names do not change with excludeCurrentPeriod (RAIL-1648)
-                                excludeCurrentPeriod={false}
-                            />
+                            <DateFilterTextLocalized filter={item} />
                         </ListItem>
                     ))}
                 </React.Fragment>

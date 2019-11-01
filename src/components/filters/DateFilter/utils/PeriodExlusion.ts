@@ -25,6 +25,7 @@ export const applyExcludeCurrentPeriod = (
 
         return {
             ...dateFilterOption,
+            from: shouldExcludeCurrent ? dateFilterOption.from - 1 : dateFilterOption.from,
             to: shouldExcludeCurrent ? -1 : to,
         };
     } else {

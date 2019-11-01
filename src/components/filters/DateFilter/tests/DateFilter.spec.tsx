@@ -301,6 +301,29 @@ describe("DateFilter", () => {
                 expect(onApply).toBeCalledWith(expectedSelectedItem, true);
             },
         );
+
+        it("Should use adjusted period as a title with Exclude current period", () => {
+            const onApply = jest.fn();
+            const wrapper = createDateFilter({ onApply });
+            clickDateFilterButton(wrapper);
+            clickStaticFilter(wrapper, "last-12-months");
+            setExcludeCurrentPeriodCheckBox(wrapper, true);
+            clickApplyButton(wrapper);
+            setPropsFromOnApply(wrapper, onApply, 0);
+
+            expect(getDateFilterButtonText(wrapper)).toEqual("From 12 to 1 month ago");
+        });
+
+        it("Should use original period title without Exclude current period", () => {
+            const onApply = jest.fn();
+            const wrapper = createDateFilter({ onApply });
+            clickDateFilterButton(wrapper);
+            clickStaticFilter(wrapper, "last-12-months");
+            clickApplyButton(wrapper);
+            setPropsFromOnApply(wrapper, onApply, 0);
+
+            expect(getDateFilterButtonText(wrapper)).toEqual("Last 12 months");
+        });
     });
 
     describe("Relative presets", () => {

@@ -18,7 +18,7 @@ const serializingTranslator: IDateAndMessageTranslator = {
 describe("getDateFilterTitleUsingTranslator", () => {
     it("should return the correct translation for allTime filter", () => {
         const expected = "filters.allTime.title__undefined";
-        const actual = getDateFilterTitleUsingTranslator(allTimeFilter, false, serializingTranslator);
+        const actual = getDateFilterTitleUsingTranslator(allTimeFilter, serializingTranslator);
         expect(actual).toEqual(expected);
     });
 
@@ -28,7 +28,7 @@ describe("getDateFilterTitleUsingTranslator", () => {
         const expectedFrom = `2019-01-01__${JSON.stringify(expectedOptions)}`;
         const expectedTo = `2019-02-01__${JSON.stringify(expectedOptions)}`;
         const expected = `${expectedFrom}\u2013${expectedTo}`;
-        const actual = getDateFilterTitleUsingTranslator(absoluteFormFilter, false, serializingTranslator);
+        const actual = getDateFilterTitleUsingTranslator(absoluteFormFilter, serializingTranslator);
         expect(actual).toEqual(expected);
     });
 
@@ -36,17 +36,13 @@ describe("getDateFilterTitleUsingTranslator", () => {
         // make sure the formatter receives proper formatting options
         const expectedOptions = { year: "numeric", month: "numeric", day: "numeric" };
         const expected = `2019-01-01__${JSON.stringify(expectedOptions)}`;
-        const actual = getDateFilterTitleUsingTranslator(
-            absoluteFormFilterOneDay,
-            false,
-            serializingTranslator,
-        );
+        const actual = getDateFilterTitleUsingTranslator(absoluteFormFilterOneDay, serializingTranslator);
         expect(actual).toEqual(expected);
     });
 
     it("should return the correct translation for absolute preset filter", () => {
         const expected = "foo";
-        const actual = getDateFilterTitleUsingTranslator(absolutePresetFilter, false, serializingTranslator);
+        const actual = getDateFilterTitleUsingTranslator(absolutePresetFilter, serializingTranslator);
         expect(actual).toEqual(expected);
     });
 
@@ -118,96 +114,14 @@ describe("getDateFilterTitleUsingTranslator", () => {
             };
 
             const expected = `${expectedId}__${JSON.stringify(expectedValues)}`;
-            const actual = getDateFilterTitleUsingTranslator(filter, false, serializingTranslator);
-            expect(actual).toEqual(expected);
-        },
-    );
-
-    type RelativeFilterExcludeTestData = [
-        number,
-        number,
-        ExtendedDateFilters.DateFilterGranularity,
-        boolean,
-        string,
-        any
-    ];
-    it.each([
-        // days
-        [0, 0, "GDC.time.date", false, "filters.thisDay.title", undefined],
-        [0, 0, "GDC.time.date", true, "filters.thisDay.title", undefined],
-        [-1, -1, "GDC.time.date", false, "filters.lastDay.title", undefined],
-        [-1, -1, "GDC.time.date", true, "filters.lastDay.title", undefined],
-        [1, 1, "GDC.time.date", false, "filters.nextDay.title", undefined],
-        [1, 1, "GDC.time.date", true, "filters.nextDay.title", undefined],
-        [-6, -1, "GDC.time.date", false, "filters.interval.days.past", { from: 6, to: 1 }],
-        [-6, -1, "GDC.time.date", true, "filters.lastNDays", { n: 7 }],
-        // weeks
-        [0, 0, "GDC.time.week_us", false, "filters.thisWeek.title", undefined],
-        [0, 0, "GDC.time.week_us", true, "filters.thisWeek.title", undefined],
-        [-1, -1, "GDC.time.week_us", false, "filters.lastWeek.title", undefined],
-        [-1, -1, "GDC.time.week_us", true, "filters.lastWeek.title", undefined],
-        [1, 1, "GDC.time.week_us", false, "filters.nextWeek.title", undefined],
-        [1, 1, "GDC.time.week_us", true, "filters.nextWeek.title", undefined],
-        [-6, -1, "GDC.time.week_us", false, "filters.interval.weeks.past", { from: 6, to: 1 }],
-        [-6, -1, "GDC.time.week_us", true, "filters.lastNWeeks", { n: 7 }],
-        // months
-        [0, 0, "GDC.time.month", false, "filters.thisMonth.title", undefined],
-        [0, 0, "GDC.time.month", true, "filters.thisMonth.title", undefined],
-        [-1, -1, "GDC.time.month", false, "filters.lastMonth.title", undefined],
-        [-1, -1, "GDC.time.month", true, "filters.lastMonth.title", undefined],
-        [1, 1, "GDC.time.month", false, "filters.nextMonth.title", undefined],
-        [1, 1, "GDC.time.month", true, "filters.nextMonth.title", undefined],
-        [-6, -1, "GDC.time.month", false, "filters.interval.months.past", { from: 6, to: 1 }],
-        [-6, -1, "GDC.time.month", true, "filters.lastNMonths", { n: 7 }],
-        // quarters
-        [0, 0, "GDC.time.quarter", false, "filters.thisQuarter.title", undefined],
-        [0, 0, "GDC.time.quarter", true, "filters.thisQuarter.title", undefined],
-        [-1, -1, "GDC.time.quarter", false, "filters.lastQuarter.title", undefined],
-        [-1, -1, "GDC.time.quarter", true, "filters.lastQuarter.title", undefined],
-        [1, 1, "GDC.time.quarter", false, "filters.nextQuarter.title", undefined],
-        [1, 1, "GDC.time.quarter", true, "filters.nextQuarter.title", undefined],
-        [-6, -1, "GDC.time.quarter", false, "filters.interval.quarters.past", { from: 6, to: 1 }],
-        [-6, -1, "GDC.time.quarter", true, "filters.lastNQuarters", { n: 7 }],
-        // years
-        [0, 0, "GDC.time.year", false, "filters.thisYear.title", undefined],
-        [0, 0, "GDC.time.year", true, "filters.thisYear.title", undefined],
-        [-1, -1, "GDC.time.year", false, "filters.lastYear.title", undefined],
-        [-1, -1, "GDC.time.year", true, "filters.lastYear.title", undefined],
-        [1, 1, "GDC.time.year", false, "filters.nextYear.title", undefined],
-        [1, 1, "GDC.time.year", true, "filters.nextYear.title", undefined],
-        [-6, -1, "GDC.time.year", false, "filters.interval.years.past", { from: 6, to: 1 }],
-        [-6, -1, "GDC.time.year", true, "filters.lastNYears", { n: 7 }],
-    ] as RelativeFilterExcludeTestData[])(
-        "should return the correct translation for relative form filter when using exclude current period " +
-            "(from: %i, to: %i, granularity: %s)",
-        (
-            from: number,
-            to: number,
-            granularity: ExtendedDateFilters.DateFilterGranularity,
-            exclude: boolean,
-            expectedId: string,
-            expectedValues: {},
-        ) => {
-            const filter: ExtendedDateFilters.IRelativeDateFilterForm = {
-                localIdentifier: "RELATIVE_FORM",
-                type: "relativeForm",
-                granularity,
-                from,
-                to,
-                availableGranularities: [granularity],
-                name: "",
-                visible: true,
-            };
-
-            const expected = `${expectedId}__${JSON.stringify(expectedValues)}`;
-            const actual = getDateFilterTitleUsingTranslator(filter, exclude, serializingTranslator);
+            const actual = getDateFilterTitleUsingTranslator(filter, serializingTranslator);
             expect(actual).toEqual(expected);
         },
     );
 
     it("should return the correct translation for relative preset filter with name", () => {
         const expected = "foo";
-        const actual = getDateFilterTitleUsingTranslator(relativePresetFilter, false, serializingTranslator);
+        const actual = getDateFilterTitleUsingTranslator(relativePresetFilter, serializingTranslator);
         expect(actual).toEqual(expected);
     });
 
@@ -216,7 +130,7 @@ describe("getDateFilterTitleUsingTranslator", () => {
         const expectedId = "filters.interval.days.mixed";
         const expectedValues = { from: 5, to: 5 };
         const expected = `${expectedId}__${JSON.stringify(expectedValues)}`;
-        const actual = getDateFilterTitleUsingTranslator(filter, false, serializingTranslator);
+        const actual = getDateFilterTitleUsingTranslator(filter, serializingTranslator);
         expect(actual).toEqual(expected);
     });
 });
@@ -225,7 +139,7 @@ describe("getDateFilterTitle", () => {
     it("should return title build using real translations for some date option", () => {
         const filter = { ...relativePresetFilter, name: "" };
         const expected = "From 5 days ago to 5 days ahead";
-        const actual = getDateFilterTitle(filter, false, "en-US");
+        const actual = getDateFilterTitle(filter, "en-US");
         expect(actual).toEqual(expected);
     });
 });
