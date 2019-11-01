@@ -2454,6 +2454,42 @@ const getBaseProjectSchema = (title, identifier) => {
                 properties: "{\"controls\":{\"grid\":{\"enabled\":false}}}"
             },
             {
+                title: 'Chart with X and Y axis name aligned to left and top respectively',
+                identifier: 'aligned-axis-name',
+                type: 'local:bar',
+                filters: [],
+                buckets: [{
+                    localIdentifier: 'measures',
+                    items: [{
+                        localIdentifier: 'm1',
+                        filters: [],
+                        identifier: '1',
+                        alias: 'Amount'
+                    }]
+                }, {
+                    localIdentifier: 'view',
+                    items: [{
+                        localIdentifier: 'a1',
+                        displayForm: 'attr.closed.year.df',
+                        alias: 'Date'
+                    }]
+                }],
+                properties: JSON.stringify({
+                    controls: {
+                        xaxis: {
+                            name: {
+                                position: "left"
+                            }
+                        },
+                        yaxis: {
+                            name: {
+                                position: "top"
+                            }
+                        }
+                    }
+                })
+            },
+            {
                 identifier: '1010',
                 title: 'Table',
                 type: 'local:table',

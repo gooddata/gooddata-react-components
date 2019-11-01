@@ -12,7 +12,11 @@ import {
     ErrorComponent,
     HeadlineTransformation,
 } from "../../tests/mocks";
-import { visualizationObjects, visualizationClasses } from "../../../../__mocks__/fixtures";
+import {
+    visualizationObjects,
+    visualizationClasses,
+    getVisObjectWithAxisNamePosition,
+} from "../../../../__mocks__/fixtures";
 
 import { AFM, VisualizationObject, VisualizationClass } from "@gooddata/typings";
 import { Visualization, IntlVisualization, VisualizationWrapped } from "../Visualization";
@@ -784,5 +788,44 @@ describe("VisualizationWrapped", () => {
         await testUtils.delay(SLOW + 1);
         wrapper.update();
         expect(getFeatureFlags).toHaveBeenCalledTimes(1);
+    });
+
+    describe("axis name position configuration", () => {
+        it.each([
+            ["yaxis", "high", "top"],
+            ["yaxis", "low", "bottom"],
+            ["yaxis", "middle", "middle"],
+            ["yaxis", "middle", "auto"],
+            ["xaxis", "high", "right"],
+            ["xaxis", "low", "left"],
+            ["xaxis", "middle", "center"],
+            ["xaxis", "middle", "auto"],
+        ])(
+            "should align %s name to %s",
+            async (axisName: string, expectedHCPosition: string, position: string) => {
+                const props = {
+                    sdk,
+                    projectId,
+                    identifier: `identifier-${position}`,
+                    BaseChartComponent: BaseChart,
+                    LoadingComponent,
+                    ErrorComponent,
+                    intl,
+                    fetchVisualizationClass,
+                    fetchVisObject: () =>
+                        Promise.resolve(getVisObjectWithAxisNamePosition(axisName, position)),
+                    uriResolver: () => `/gdc/md/myproject/obj/axis-name-aligned-to-${position}`,
+                };
+
+                const wrapper = mount(<VisualizationWrapped {...props as any} />);
+
+                await testUtils.delay(SLOW + 1);
+                wrapper.update();
+
+                const baseChart = wrapper.find(BaseChart);
+                const baseChartConfig = baseChart.prop("config");
+                expect(baseChartConfig[axisName]).toEqual({ name: { position: expectedHCPosition } });
+            },
+        );
     });
 });
