@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { screenshotWrap } from "@gooddata/test-storybook";
@@ -968,6 +968,29 @@ storiesOf("Core components/BarChart", module)
                             },
                         },
                     ]}
+                />
+            </div>,
+        ),
+    )
+    .add("align axis labels to right and secondary axis labels to left", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BarChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2, MEASURE_3]}
+                    config={{
+                        xaxis: {
+                            rotation: "90",
+                        },
+                        secondary_xaxis: {
+                            measures: [MEASURE_3.measure.localIdentifier],
+                            rotation: "90",
+                        },
+                    }}
+                    viewBy={ATTRIBUTE_1}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
                 />
             </div>,
         ),
