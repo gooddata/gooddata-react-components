@@ -1,10 +1,18 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import { AFM, Execution, VisualizationObject } from "@gooddata/typings";
 import { IColorAssignment, IColorPalette } from "./Config";
 
 export interface IColorsData {
     colorAssignments: IColorAssignment[];
     colorPalette: IColorPalette;
+}
+
+export type DrillableItemType = "measure";
+
+export interface IDrillableItemPushData {
+    type: DrillableItemType;
+    localIdentifier: AFM.Identifier;
+    title: string;
 }
 
 export interface IPushData {
@@ -15,4 +23,5 @@ export interface IPushData {
     };
     propertiesMeta?: any;
     colors?: IColorsData;
+    possibleDrillableItems?: IDrillableItemPushData[];
 }

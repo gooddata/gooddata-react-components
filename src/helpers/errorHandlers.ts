@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import { Execution, VisualizationObject } from "@gooddata/typings";
 import { ApiResponseError } from "@gooddata/gooddata-js";
 import { InjectedIntl } from "react-intl";
@@ -125,19 +125,15 @@ export function isEmptyResult(responses: Execution.IExecutionResponses): boolean
     return isNullExecutionResult(responses) || isEmptyDataResult(responses);
 }
 
-export function checkEmptyResult(responses: Execution.IExecutionResponses) {
-    if (isEmptyResult(responses)) {
-        throw {
-            name: "EmptyResultError",
-            response: {
-                status: HttpStatusCodes.NO_CONTENT,
-                json: () => Promise.resolve(null),
-                text: () => Promise.resolve(null),
-            },
-        };
-    }
-
-    return responses;
+export function throwEmptyResultError() {
+    throw {
+        name: "EmptyResultError",
+        response: {
+            status: HttpStatusCodes.NO_CONTENT,
+            json: () => Promise.resolve(null),
+            text: () => Promise.resolve(null),
+        },
+    };
 }
 
 export const hasDuplicateIdentifiers = (buckets: VisualizationObject.IBucket[]) => {
