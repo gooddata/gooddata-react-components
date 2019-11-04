@@ -64,15 +64,14 @@ function areAllMeasuresOnSingleAxis(
     return numberOfMeasureOnSecondaryAxis === 0 || measureCount === numberOfMeasureOnSecondaryAxis;
 }
 
-// don't support sort by total value for dual axis and group of categories
+// don't support sort by total value for dual axis
 export function canSortStackTotalValue(
     mdObject: VisualizationObject.IVisualizationObjectContent,
     supportedControls: IVisualizationProperties,
 ): boolean {
     return (
         get(supportedControls, "stackMeasures", false) &&
-        areAllMeasuresOnSingleAxis(mdObject, get(supportedControls, "secondary_yaxis", false)) &&
-        hasOneViewItem(mdObject)
+        areAllMeasuresOnSingleAxis(mdObject, get(supportedControls, "secondary_yaxis", false))
     );
 }
 

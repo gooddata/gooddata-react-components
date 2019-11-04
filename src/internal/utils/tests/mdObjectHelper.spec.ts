@@ -130,35 +130,6 @@ describe("mdObjectHelper", () => {
             expect(canSortStackTotalValue(mdObject, supportedControls)).toBe(false);
         });
 
-        it("should return false if have two view by attribute", () => {
-            const secondAttribute: VisualizationObject.BucketItem = {
-                visualizationAttribute: {
-                    localIdentifier: "a2",
-                    displayForm: {
-                        uri: "/gdc/3",
-                    },
-                },
-            };
-
-            const mdObject: VisualizationObject.IVisualizationObjectContent = {
-                buckets: [
-                    {
-                        localIdentifier: "measures",
-                        items: [measure, secondMeasure],
-                    },
-                    {
-                        localIdentifier: "view",
-                        items: [visualizationAttribute, secondAttribute],
-                    },
-                ],
-                visualizationClass,
-            };
-            const supportedControls: IVisualizationProperties = {
-                stackMeasures: true,
-            };
-            expect(canSortStackTotalValue(mdObject, supportedControls)).toBe(false);
-        });
-
         it("should return true if have one view by and many measures", () => {
             const mdObject: VisualizationObject.IVisualizationObjectContent = {
                 buckets: [
