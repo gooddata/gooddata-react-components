@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import * as PropTypes from "prop-types";
 import pick = require("lodash/pick");
@@ -16,7 +16,7 @@ import * as Model from "../../../helpers/model";
 
 export interface IAttributeFilterProps {
     projectId: string;
-    onApply: (...params: any[]) => any; // TODO: make the types more specific (FET-282)
+    onApply?: (...params: any[]) => any; // TODO: make the types more specific (FET-282)
     onApplyWithFilterDefinition?: (
         filter: VisualizationInput.IPositiveAttributeFilter | VisualizationInput.INegativeAttributeFilter,
     ) => void;
@@ -92,7 +92,7 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps> 
         identifier: PropTypes.string,
         filter: PropTypes.object,
         projectId: PropTypes.string.isRequired,
-        onApply: PropTypes.func.isRequired,
+        onApply: PropTypes.func,
         onApplyWithFilterDefinition: PropTypes.func,
         fullscreenOnMobile: PropTypes.bool,
         FilterLoading: PropTypes.func,
@@ -111,6 +111,7 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps> 
         FilterError: DefaultFilterError,
         fullscreenOnMobile: false,
         title: null,
+        onApply: noop,
         onApplyWithFilterDefinition: noop,
     };
 

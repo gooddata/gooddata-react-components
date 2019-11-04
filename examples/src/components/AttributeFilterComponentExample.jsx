@@ -12,6 +12,11 @@ export class AttributeFilterComponentExample extends Component {
         console.log("AttributeFilterComponentExample onApply", ...params);
     }
 
+    onApplyWithFilterDefinition(...params) {
+        // eslint-disable-next-line no-console
+        console.log("AttributeFilterComponentExample onApplyWithFilterDefinition", ...params);
+    }
+
     render() {
         return (
             <div>
@@ -35,6 +40,13 @@ export class AttributeFilterComponentExample extends Component {
                     projectId={projectId}
                     filter={Model.positiveAttributeFilter(employeeNameIdentifier, ["Abbie Adams"], true)}
                     onApply={this.onApply}
+                />
+                <br />
+                <div>attribute filter with new onApplyWithFilterDefinition</div>
+                <AttributeFilter
+                    projectId={projectId}
+                    filter={Model.positiveAttributeFilter(employeeNameIdentifier, ["Abbie Adams"], true)}
+                    onApplyWithFilterDefinition={this.onApplyWithFilterDefinition}
                 />
             </div>
         );
