@@ -3,7 +3,7 @@
 @import "~@gooddata/goodstrap/lib/core/styles/variables.scss";
 
 .gd-date-filter-form-wrapper-desktop.gd-date-filter-form-wrapper {
-    @extend %gd-font-base;
+    @include gd-font-base;
     font-size: nth(map-get($gd-typo, font-sizes), 4);
     margin: 0 0 0 10px;
     padding: 10px;
