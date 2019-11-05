@@ -222,6 +222,20 @@ storiesOf("URI components", module)
             </div>,
         ),
     )
+    .add("chart with X and Y axis name aligned to left and top respectively", () =>
+        screenshotWrap(
+            <div style={{ width: 800, height: 400 }}>
+                <Visualization
+                    projectId="storybook"
+                    uri={"/gdc/md/storybook/obj/aligned-axis-name"}
+                    onError={onErrorHandler}
+                    locale="en-US"
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
     .add("chart with previous period measures", () =>
         screenshotWrap(
             <div style={{ width: 800, height: 400 }}>

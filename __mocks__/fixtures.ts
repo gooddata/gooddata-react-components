@@ -1355,3 +1355,52 @@ export const comboVizObjectContent: VisualizationObject.IVisualizationObjectCont
         },
     ],
 };
+
+export const getVisObjectWithAxisNamePosition = (axisName: string, position: string) => ({
+    content: {
+        visualizationClass: {
+            uri: "/gdc/md/myproject/obj/column",
+        },
+        buckets: [
+            {
+                localIdentifier: "measures",
+                items: measures,
+            },
+            {
+                localIdentifier: "view",
+                items: [
+                    {
+                        visualizationAttribute: {
+                            localIdentifier: "a1",
+                            displayForm: {
+                                uri: "/gdc/md/myproject/obj/851",
+                            },
+                        },
+                    },
+                ],
+            },
+        ],
+        properties: JSON.stringify({
+            controls: {
+                [axisName]: {
+                    name: {
+                        position,
+                    },
+                },
+            },
+        }),
+    },
+    meta: {
+        isProduction: true,
+        summary: "",
+        created: new Date("2015-05-23T09:24:41Z"),
+        identifier: `identifier-${position}`,
+        author: "/gdc/account/profile/johndoe",
+        uri: `/gdc/md/myproject/obj/axis-name-aligned-to-${position}`,
+        deprecated: false,
+        title: "Axis Name Position Configuration",
+        tags: "",
+        contributor: "/gdc/account/profile/johndoe",
+        category: "visualizationObject",
+    },
+});

@@ -41,6 +41,7 @@ import { getFeatureFlags, setConfigFromFeatureFlags } from "../../helpers/featur
 import { mergeFiltersToAfm } from "../../helpers/afmHelper";
 import { _experimentalDataSourceFactory } from "./experimentalDataSource";
 import IVisualizationObjectContent = VisualizationObject.IVisualizationObjectContent;
+import { getHighchartsAxisNameConfiguration } from "../../internal/utils/propertiesHelper";
 export { Requireable };
 
 const { ExecuteAfmAdapter, toAfmResultSpec, createSubject } = DataLayer;
@@ -553,8 +554,10 @@ function mergeChartConfigWithProperties(
               })
             : undefined;
 
+    const propsWithHCAxisNameConfig = getHighchartsAxisNameConfiguration(properties);
+
     return {
-        ...properties,
+        ...propsWithHCAxisNameConfig,
         colorMapping,
         ...config,
         colorPalette,
