@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
-import { render, unmountComponentAtNode } from "react-dom";
+import { render } from "react-dom";
 import { InjectedIntl } from "react-intl";
 import { AFM, VisualizationObject } from "@gooddata/typings";
 
@@ -57,6 +57,7 @@ import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 import { generateDimensions } from "../../../../helpers/dimensions";
 import { DEFAULT_LOCALE } from "../../../../constants/localization";
 import { setConfigFromFeatureFlags } from "../../../../helpers/featureFlags";
+import { unmountComponentsAtNodes } from "../../../utils/domHelper";
 
 export class PluggableHeadline extends AbstractPluggableVisualization {
     protected configPanelElement: string;
@@ -80,10 +81,7 @@ export class PluggableHeadline extends AbstractPluggableVisualization {
     }
 
     public unmount() {
-        unmountComponentAtNode(document.querySelector(this.element));
-        if (document.querySelector(this.configPanelElement)) {
-            unmountComponentAtNode(document.querySelector(this.configPanelElement));
-        }
+        unmountComponentsAtNodes([this.element, this.configPanelElement]);
     }
 
     public update(
