@@ -1,9 +1,5 @@
 // (C) 2019 GoodData Corporation
-import {
-    convertDateToPlatformDateString,
-    convertPlatformDateStringToDate,
-    createDateFromString,
-} from "../DateConversions";
+import { convertDateToPlatformDateString, convertPlatformDateStringToDate } from "../DateConversions";
 
 describe("convertDateToPlatformDate", () => {
     it("should convert Date object to string in platform date", () => {
@@ -23,11 +19,6 @@ describe("convertDateToPlatformDate", () => {
 });
 
 describe("convertPlatformDateStringToDate", () => {
-    it("should convert platform date string to Date object", () => {
-        const date = convertPlatformDateStringToDate("2019-12-01");
-        expect(date.toISOString()).toBe(new Date(2019, 11, 1).toISOString());
-    });
-
     it("should return undefined to undefined input value", () => {
         const date = convertPlatformDateStringToDate(undefined);
         expect(date).toBe(undefined);
@@ -37,21 +28,14 @@ describe("convertPlatformDateStringToDate", () => {
         const date = convertPlatformDateStringToDate(null);
         expect(date).toBe(null);
     });
-});
 
-describe("createDateFromString", () => {
     it("should convert platform date string to Date object", () => {
+        const getTime = jest.spyOn(Date.prototype, "getTime").mockReturnValue(1575158400000);
+        const getTimezoneOffset = jest.spyOn(Date.prototype, "getTimezoneOffset").mockReturnValue(270);
         const date = convertPlatformDateStringToDate("2019-12-01");
-        expect(date.toISOString()).toBe(new Date(2019, 11, 1).toISOString());
-    });
 
-    it("should return undefined when input value is null", () => {
-        const date = createDateFromString(null);
-        expect(date).toBe(undefined);
-    });
-
-    it("should return undefined when input value is empty", () => {
-        const date = createDateFromString("");
-        expect(date).toBe(undefined);
+        expect(date.toISOString()).toBe(new Date(1575174600000).toISOString());
+        getTime.mockRestore();
+        getTimezoneOffset.mockRestore();
     });
 });

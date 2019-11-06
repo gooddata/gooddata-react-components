@@ -5,7 +5,7 @@ import { DayPickerProps } from "react-day-picker";
 import MomentLocaleUtils from "react-day-picker/moment";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import { injectIntl, InjectedIntlProps } from "react-intl";
-import { createDateFromString, convertDateToPlatformDateString } from "../utils/DateConversions";
+import { convertDateToPlatformDateString, convertPlatformDateStringToDate } from "../utils/DateConversions";
 import { DateRangePickerInputField } from "./DateRangePickerInputField";
 import { mergeDayPickerProps, areRangeBoundsCrossed } from "./utils";
 import { DateRangePickerError } from "./DateRangePickerError";
@@ -62,7 +62,7 @@ export class DateRangePickerComponent extends React.Component<IDateRangePickerPr
                 )}
                 placeholder={intl.formatMessage({ id: "filters.from" })}
                 // tslint:disable-next-line:jsx-no-lambda
-                onChange={event => this.handleFromChange(createDateFromString(event.target.value))}
+                onChange={event => this.handleFromChange(convertPlatformDateStringToDate(event.target.value))}
                 value={convertDateToPlatformDateString(from)}
             />
         ) : (
@@ -93,7 +93,7 @@ export class DateRangePickerComponent extends React.Component<IDateRangePickerPr
                 )}
                 placeholder={intl.formatMessage({ id: "filters.to" })}
                 // tslint:disable-next-line:jsx-no-lambda
-                onChange={event => this.handleToChange(createDateFromString(event.target.value))}
+                onChange={event => this.handleToChange(convertPlatformDateStringToDate(event.target.value))}
                 value={convertDateToPlatformDateString(to)}
             />
         ) : (

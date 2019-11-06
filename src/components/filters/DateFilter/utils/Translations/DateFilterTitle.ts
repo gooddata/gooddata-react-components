@@ -1,10 +1,11 @@
 // (C) 2019 GoodData Corporation
 import capitalize = require("lodash/capitalize");
-import * as moment from "moment";
+import isEqual = require("lodash/isEqual");
 import { ExtendedDateFilters, Localization } from "@gooddata/typings";
 import IntlStore from "../../../../../helpers/IntlStore";
 import { granularityIntlCodes } from "../../constants/i18n";
 import { IMessageTranslator, IDateTranslator, IDateAndMessageTranslator } from "./Translators";
+import { convertPlatformDateStringToDate } from "../DateConversions";
 
 const formatAbsoluteDate = (date: Date | string, translator: IDateTranslator) =>
     translator.formatDate(date, {
@@ -17,10 +18,18 @@ const formatAbsoluteDateRange = (
     from: Date | string,
     to: Date | string,
     translator: IDateTranslator,
-): string =>
-    moment(from).isSame(moment(to), "day")
-        ? formatAbsoluteDate(from, translator)
-        : `${formatAbsoluteDate(from, translator)}\u2013${formatAbsoluteDate(to, translator)}`;
+): string => {
+    const fromDate = convertPlatformDateStringToDate(from);
+    const toDate = convertPlatformDateStringToDate(to);
+    const fromTitle = formatAbsoluteDate(fromDate, translator);
+    const toTitle = formatAbsoluteDate(toDate, translator);
+
+    if (isEqual(fromTitle, toTitle)) {
+        return fromTitle;
+    }
+
+    return `${fromTitle}\u2013${toTitle}`;
+};
 
 const relativeDateRangeFormatters: Array<{
     predicate: (from: number, to: number) => boolean;
