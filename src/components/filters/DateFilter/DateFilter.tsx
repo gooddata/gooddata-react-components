@@ -30,12 +30,13 @@ interface IStatePropsIntersection {
     selectedFilterOption: ExtendedDateFilters.DateFilterOption;
 }
 
-export interface IDateFilterStateProps extends IStatePropsIntersection {
+export interface IDateFilterOwnProps extends IStatePropsIntersection {
     filterOptions: ExtendedDateFilters.IDateFilterOptionsByType;
     availableGranularities: ExtendedDateFilters.DateFilterGranularity[];
     isEditMode?: boolean;
     customFilterName?: string;
     dateFilterMode: ExtendedDateFilters.DashboardDateFilterConfigMode;
+    locale?: string;
 }
 
 export interface IDateFilterCallbackProps {
@@ -45,7 +46,7 @@ export interface IDateFilterCallbackProps {
     onClose?: () => void;
 }
 
-export interface IDateFilterProps extends IDateFilterStateProps, IDateFilterCallbackProps {}
+export interface IDateFilterProps extends IDateFilterOwnProps, IDateFilterCallbackProps {}
 
 interface IDateFilterState extends IStatePropsIntersection {
     initExcludeCurrentPeriod: boolean;
@@ -62,6 +63,7 @@ export class DateFilter extends React.PureComponent<IDateFilterProps, IDateFilte
         isEditMode: PropTypes.bool,
         customFilterName: PropTypes.string,
         dateFilterMode: PropTypes.oneOf(["readonly", "hidden", "active"]).isRequired,
+        locale: PropTypes.string,
         onApply: PropTypes.func.isRequired,
         onCancel: PropTypes.func,
         onOpen: PropTypes.func,
@@ -70,6 +72,7 @@ export class DateFilter extends React.PureComponent<IDateFilterProps, IDateFilte
 
     public static defaultProps: Partial<IDateFilterProps> = {
         isEditMode: false,
+        locale: "en-US",
         onCancel: noop,
         onOpen: noop,
         onClose: noop,
@@ -131,6 +134,7 @@ export class DateFilter extends React.PureComponent<IDateFilterProps, IDateFilte
             excludeCurrentPeriod: originalExcludeCurrentPeriod,
             availableGranularities,
             isEditMode,
+            locale,
         } = this.props;
         const { excludeCurrentPeriod, selectedFilterOption, isExcludeCurrentPeriodEnabled } = this.state;
         return dateFilterMode === "hidden" ? null : (
@@ -145,6 +149,7 @@ export class DateFilter extends React.PureComponent<IDateFilterProps, IDateFilte
                 filterOptions={filterOptions}
                 selectedFilterOption={selectedFilterOption}
                 originalSelectedFilterOption={originalSelectedFilterOption}
+                locale={locale}
                 onApplyClick={this.handleApplyClick}
                 onCancelClick={this.onCancelClicked}
                 onDropdownOpenChanged={this.onDropdownOpenChanged}
