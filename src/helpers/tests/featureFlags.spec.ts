@@ -1,7 +1,7 @@
 // (C) 2007-2019 GoodData Corporation
 import { factory as createSdk, SDK, IFeatureFlags } from "@gooddata/gooddata-js";
 import { getFeatureFlags, setConfigFromFeatureFlags } from "../featureFlags";
-import { IChartConfig } from "../..";
+import { IChartConfig } from "../../interfaces/Config";
 
 describe("getFeatureFlags", () => {
     const projectId = "project";

@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import * as PropTypes from "prop-types";
 import { SDK, factory as createSdk, IValidElementsResponse, IElement } from "@gooddata/gooddata-js";
@@ -7,7 +7,7 @@ import { AFM } from "@gooddata/typings";
 import get = require("lodash/get");
 import isEqual = require("lodash/isEqual");
 import { getObjectIdFromUri, setTelemetryHeaders } from "../../../helpers/utils";
-import { ErrorStates } from "../../../index";
+import { ErrorStates } from "../../../constants/errorStates";
 
 export interface IPaging {
     count: number;

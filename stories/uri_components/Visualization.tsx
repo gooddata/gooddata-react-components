@@ -548,4 +548,32 @@ storiesOf("URI components", module)
                 />
             </div>,
         ),
+    )
+    .add("xirr", () =>
+        screenshotWrap(
+            <div style={{ width: 800, height: 400 }}>
+                <Visualization
+                    projectId="storybook"
+                    identifier="xirr-simple"
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
+    .add("xirr with drillableItems", () =>
+        screenshotWrap(
+            <div style={{ width: 800, height: 400 }}>
+                <Visualization
+                    projectId="storybook"
+                    identifier="xirr-simple"
+                    drillableItems={[{ uri: "/gdc/md/storybook/obj/5" }]}
+                    onFiredDrillEvent={action("onFiredDrillEvent")}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
     );

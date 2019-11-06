@@ -11,6 +11,7 @@ import {
     LoadingComponent,
     ErrorComponent,
     HeadlineTransformation,
+    Xirr,
 } from "../../tests/mocks";
 import {
     visualizationObjects,
@@ -34,8 +35,10 @@ const projectId = "myproject";
 const CHART_URI = `/gdc/md/${projectId}/obj/1`;
 const TABLE_URI = `/gdc/md/${projectId}/obj/2`;
 const TREEMAP_URI = `/gdc/md/${projectId}/obj/3`;
+const XIRR_URI = `/gdc/md/${projectId}/obj/4`;
 const CHART_IDENTIFIER = "chart";
 const TABLE_IDENTIFIER = "table";
+const XIRR_IDENTIFIER = "xirr";
 
 const SLOW = 20;
 const FAST = 5;
@@ -105,6 +108,10 @@ function uriResolver(_sdk: SDK, _projectId: string, uri: string, identifier: str
 
     if (uri === TREEMAP_URI) {
         return getResponse(TREEMAP_URI, FAST);
+    }
+
+    if (identifier === XIRR_IDENTIFIER || uri === XIRR_URI) {
+        return getResponse(XIRR_URI, FAST);
     }
 
     return Promise.reject("Unknown identifier");
@@ -213,6 +220,26 @@ describe("VisualizationWrapped", () => {
             expect(wrapper.state("dataSource")).not.toBeNull();
             expect(wrapper.state("resultSpec")).toEqual(expectedResultSpec);
             expect(wrapper.state("totals")).toEqual(expectedTotals);
+        });
+    });
+
+    it("should render xirr", () => {
+        const props = {
+            sdk,
+            projectId,
+            fetchVisObject,
+            fetchVisualizationClass,
+            uriResolver,
+            intl,
+            XirrComponent: Xirr,
+            identifier: XIRR_IDENTIFIER,
+        };
+
+        const wrapper = mount(<Visualization {...props as any} />);
+
+        return testUtils.delay(SLOW + 1).then(() => {
+            wrapper.update();
+            expect(wrapper.find(Xirr).length).toBe(1);
         });
     });
 

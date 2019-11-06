@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
 import { setMeasuresToSecondaryAxis } from "../dualAxis";
-import { IChartConfig } from "../..";
+import { IChartConfig } from "../../interfaces/Config";
 import { comboWithThreeMeasuresAndViewByAttributeMdObject } from "../../../stories/test_data/fixtures";
 
 describe("setMeasuresToSecondaryAxis", () => {

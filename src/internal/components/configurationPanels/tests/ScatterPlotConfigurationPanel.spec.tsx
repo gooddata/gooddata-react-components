@@ -6,7 +6,7 @@ import { IConfigurationPanelContentProps } from "../ConfigurationPanelContent";
 import ConfigSection from "../../configurationControls/ConfigSection";
 import NameSubsection from "../../configurationControls/axis/NameSubsection";
 import { DEFAULT_LOCALE } from "../../../../constants/localization";
-import { VisualizationTypes } from "../../../..";
+import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 
 describe("ScatterPlotConfigurationPanel", () => {
     function createComponent(

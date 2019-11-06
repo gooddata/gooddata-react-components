@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import get = require("lodash/get");
 import flatMap = require("lodash/flatMap");
 
@@ -7,7 +7,8 @@ import { string as stringUtils } from "@gooddata/js-utils";
 
 import DerivedMeasureTitleSuffixFactory from "../factory/DerivedMeasureTitleSuffixFactory";
 import ArithmeticMeasureTitleFactory from "../factory/ArithmeticMeasureTitleFactory";
-import { IMeasureTitleProps, OverTimeComparisonType, OverTimeComparisonTypes } from "..";
+import { OverTimeComparisonType, OverTimeComparisonTypes } from "../interfaces/OverTimeComparison";
+import { IMeasureTitleProps } from "../interfaces/MeasureTitle";
 import IMeasureDefinitionType = VisualizationObject.IMeasureDefinitionType;
 import IMeasure = VisualizationObject.IMeasure;
 import IBucket = VisualizationObject.IBucket;

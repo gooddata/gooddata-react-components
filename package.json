@@ -112,7 +112,7 @@
   },
   "dependencies": {
     "@gooddata/gooddata-js": "^11.20.0",
-    "@gooddata/goodstrap": "^64.3.0",
+    "@gooddata/goodstrap": "^64.6.0",
     "@gooddata/js-utils": "^3.5.0",
     "@gooddata/numberjs": "^3.2.3",
     "@gooddata/typings": "^2.19.0",
@@ -120,6 +120,7 @@
     "ag-grid-react": "20.0.0",
     "classnames": "^2.2.6",
     "custom-event": "^1.0.1",
+    "date-fns": "^2.7.0",
     "downshift": "^3.2.7",
     "fixed-data-table-2": "0.7.17",
     "highcharts": "7.1.1",

@@ -1280,6 +1280,65 @@ export const visualizationObjects: IVisualization[] = [
             },
         },
     },
+    {
+        visualizationObject: {
+            content: {
+                buckets: [
+                    {
+                        localIdentifier: "measures",
+                        items: [
+                            {
+                                measure: {
+                                    localIdentifier: "m1",
+                                    definition: {
+                                        measureDefinition: {
+                                            aggregation: "sum",
+                                            item: {
+                                                uri: "/gdc/md/myproject/obj/9423",
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                    {
+                        localIdentifier: "attribute",
+                        items: [
+                            {
+                                visualizationAttribute: {
+                                    localIdentifier: "a1",
+                                    displayForm: { uri: "/gdc/md/myproject/obj/9362" },
+                                },
+                            },
+                        ],
+                    },
+                ],
+                filters: [
+                    {
+                        relativeDateFilter: {
+                            granularity: "GDC.time.year",
+                            dataSet: { uri: "/gdc/md/myproject/obj/9371" },
+                        },
+                    },
+                ],
+                visualizationClass: { uri: "/gdc/md/myproject/obj/xirr" },
+            },
+            meta: {
+                author: "/gdc/account/profile/johndoe",
+                uri: "/gdc/md/myproject/obj/4",
+                tags: "",
+                created: new Date("2015-05-23T09:24:41Z"),
+                identifier: "aa5CDaafphgJBh2iJ0OcfSpg",
+                deprecated: false,
+                summary: "",
+                isProduction: true,
+                title: "XIRR",
+                category: "visualizationObject",
+                contributor: "/gdc/account/profile/johndoe",
+            },
+        },
+    },
 ];
 
 export const visualizationClasses: IVisualizationClassWrapped[] = [
@@ -1322,6 +1381,20 @@ export const visualizationClasses: IVisualizationClassWrapped[] = [
             meta: {
                 title: "Treemap",
                 uri: "/gdc/md/myproject/obj/treemap",
+            },
+        },
+    },
+    {
+        visualizationClass: {
+            content: {
+                url: "local:xirr",
+                icon: "",
+                iconSelected: "",
+                checksum: "",
+            },
+            meta: {
+                title: "XIRR",
+                uri: "/gdc/md/myproject/obj/xirr",
             },
         },
     },

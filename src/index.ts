@@ -43,6 +43,7 @@ import { BubbleChart } from "./components/BubbleChart";
 import { PivotTable } from "./components/PivotTable";
 import { Table } from "./components/Table";
 import { Headline } from "./components/Headline";
+import { Xirr } from "./components/Xirr";
 import { ScatterPlot } from "./components/ScatterPlot";
 import { ComboChart } from "./components/ComboChart";
 import { FunnelChart } from "./components/FunnelChart";
@@ -99,6 +100,7 @@ export {
     BucketExecutor,
     generateDimensions,
     Headline,
+    Xirr,
     IBaseChartProps,
     IPivotTableProps,
     ICommonVisualizationProps,
