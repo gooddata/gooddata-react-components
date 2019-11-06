@@ -8,7 +8,7 @@ import { DateFilterButtonLocalized } from "../../../src/components/filters/DateF
 
 import "../../../styles/css/dateFilter.css";
 
-const wrapperStyle = { width: 400, height: 400, padding: "1em 1em" };
+const wrapperStyle = { width: 400, height: 450, padding: "1em 1em" };
 
 const granularities: ExtendedDateFilters.DateFilterGranularity[] = [
     "GDC.time.date",
