@@ -3,7 +3,7 @@
 
 .gd-extended-date-filter-body {
     .gd-filter-list-item {
-        @extend %gd-font-base;
+        @include gd-font-base;
         font-size: nth(map-get($gd-typo, font-sizes), 5);
         line-height: nth(map-get($gd-typo, line-heights), 1);
         display: flex;
