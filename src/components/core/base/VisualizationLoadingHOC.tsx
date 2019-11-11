@@ -1,6 +1,5 @@
 // (C) 2007-2019 GoodData Corporation
 import * as React from "react";
-
 import noop = require("lodash/noop");
 import get = require("lodash/get");
 import isEqual = require("lodash/isEqual");

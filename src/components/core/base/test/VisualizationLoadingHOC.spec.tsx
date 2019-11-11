@@ -341,8 +341,7 @@ describe("VisualizationLoadingHOC", () => {
         });
 
         return testUtils.delay().then(() => {
-            expect(pushData).toHaveBeenCalled();
-            expect(pushData.mock.calls[0][0]).toMatchObject({
+            expect(pushData).toHaveBeenCalledWith({
                 possibleDrillableItems: [
                     {
                         localIdentifier: "1st_measure_local_identifier",
@@ -366,8 +365,7 @@ describe("VisualizationLoadingHOC", () => {
         );
 
         return testUtils.delay().then(() => {
-            expect(pushData).toHaveBeenCalled();
-            expect(pushData.mock.calls[0][0]).toMatchObject({
+            expect(pushData).toHaveBeenCalledWith({
                 possibleDrillableItems: [
                     {
                         localIdentifier: "1st_measure_local_identifier",
