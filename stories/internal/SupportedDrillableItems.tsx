@@ -11,12 +11,12 @@ import { BarChart } from "../../src/components/BarChart";
 import { IPushData } from "../../src/interfaces/PushData";
 
 const pushData = (data: IPushData) => {
-    if (data.possibleDrillableItems) {
-        action("possibleDrillableItems")(data);
+    if (data.supportedDrillableItems) {
+        action("supportedDrillableItems")(data);
     }
 };
 
-storiesOf("Internal/PossibleDrillableItems", module)
+storiesOf("Internal/SupportedDrillableItems", module)
     .add("Headline", () =>
         wrap(
             <Headline

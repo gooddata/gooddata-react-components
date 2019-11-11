@@ -321,7 +321,7 @@ describe("VisualizationLoadingHOC", () => {
         return testUtils.delay().then(() => {
             expect(pushData).toHaveBeenCalled();
             expect(pushData.mock.calls[0][0]).toMatchObject({
-                possibleDrillableItems: [
+                supportedDrillableItems: [
                     {
                         type: "measure",
                         title: "Lost",
@@ -332,7 +332,7 @@ describe("VisualizationLoadingHOC", () => {
         });
     });
 
-    it("should push possibleDrillableItems when executing with NO DATA result", () => {
+    it("should push supportedDrillableItems when executing with NO DATA result", () => {
         const pushData = jest.fn();
         createComponent({
             dataSource: emptyDataSource,
@@ -342,7 +342,7 @@ describe("VisualizationLoadingHOC", () => {
 
         return testUtils.delay().then(() => {
             expect(pushData).toHaveBeenCalledWith({
-                possibleDrillableItems: [
+                supportedDrillableItems: [
                     {
                         localIdentifier: "1st_measure_local_identifier",
                         title: "Lost",
@@ -353,7 +353,7 @@ describe("VisualizationLoadingHOC", () => {
         });
     });
 
-    it("should push possibleDrillableItems with empty result from getPage", () => {
+    it("should push supportedDrillableItems with empty result from getPage", () => {
         const pushData = jest.fn();
         createComponent(
             {
@@ -366,7 +366,7 @@ describe("VisualizationLoadingHOC", () => {
 
         return testUtils.delay().then(() => {
             expect(pushData).toHaveBeenCalledWith({
-                possibleDrillableItems: [
+                supportedDrillableItems: [
                     {
                         localIdentifier: "1st_measure_local_identifier",
                         title: "Lost",

@@ -204,13 +204,13 @@ export function visualizationLoadingHOC<
                         ...rawExecution,
                         executionResult: executionResultWithResolvedEmptyValues,
                     };
-                    const possibleDrillableItems = this.getPossibleDrillableItems(result.executionResponse);
+                    const supportedDrillableItems = this.getSupportedDrillableItems(result.executionResponse);
                     // This returns only current page,
                     // gooddata-js mergePages doesn't support discontinuous page ranges yet
                     this.setState({ result, error: null });
                     this.props.pushData({
                         result,
-                        possibleDrillableItems,
+                        supportedDrillableItems,
                     });
                     this.onLoadingChanged({ isLoading: false });
                     this.props.onExportReady(this.createExportFunction(result)); // Pivot tables
@@ -301,7 +301,7 @@ export function visualizationLoadingHOC<
             );
         }
 
-        private getPossibleDrillableItems(response: Execution.IExecutionResponse): IDrillableItemPushData[] {
+        private getSupportedDrillableItems(response: Execution.IExecutionResponse): IDrillableItemPushData[] {
             return this.getAllMeasureHeaderItems(response).map(
                 (measure: Execution.IMeasureHeaderItem): IDrillableItemPushData => ({
                     type: "measure",
@@ -315,8 +315,8 @@ export function visualizationLoadingHOC<
             this.subject = DataLayer.createSubject<Execution.IExecutionResponses>(
                 result => {
                     this.setState({ result });
-                    const possibleDrillableItems = this.getPossibleDrillableItems(result.executionResponse);
-                    this.props.pushData({ result, possibleDrillableItems });
+                    const supportedDrillableItems = this.getSupportedDrillableItems(result.executionResponse);
+                    this.props.pushData({ result, supportedDrillableItems });
                     this.onLoadingChanged({ isLoading: false });
                     this.props.onExportReady(this.createExportFunction(result)); // Charts / Tables
                 },
@@ -423,8 +423,8 @@ export function visualizationLoadingHOC<
         };
 
         private pushDataForEmptyResponse(executionResponse: Execution.IExecutionResponse) {
-            const possibleDrillableItems = this.getPossibleDrillableItems(executionResponse);
-            this.props.pushData({ possibleDrillableItems });
+            const supportedDrillableItems = this.getSupportedDrillableItems(executionResponse);
+            this.props.pushData({ supportedDrillableItems });
         }
     }
 

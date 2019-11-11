@@ -23,5 +23,5 @@ export interface IPushData {
     };
     propertiesMeta?: any;
     colors?: IColorsData;
-    possibleDrillableItems?: IDrillableItemPushData[];
+    supportedDrillableItems?: IDrillableItemPushData[];
 }
