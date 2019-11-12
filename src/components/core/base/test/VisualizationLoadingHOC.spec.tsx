@@ -305,10 +305,11 @@ describe("VisualizationLoadingHOC", () => {
         });
 
         return testUtils.delay().then(() => {
-            expect(pushData).toHaveBeenCalled();
-            expect(pushData.mock.calls[0][0]).toMatchObject({
-                result: oneMeasureResponse,
-            });
+            expect(pushData).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    result: oneMeasureResponse,
+                }),
+            );
         });
     });
 
@@ -319,16 +320,17 @@ describe("VisualizationLoadingHOC", () => {
         });
 
         return testUtils.delay().then(() => {
-            expect(pushData).toHaveBeenCalled();
-            expect(pushData.mock.calls[0][0]).toMatchObject({
-                supportedDrillableItems: [
-                    {
-                        type: "measure",
-                        title: "Lost",
-                        localIdentifier: "1st_measure_local_identifier",
-                    },
-                ],
-            });
+            expect(pushData).toBeCalledWith(
+                expect.objectContaining({
+                    supportedDrillableItems: [
+                        {
+                            type: "measure",
+                            title: "Lost",
+                            localIdentifier: "1st_measure_local_identifier",
+                        },
+                    ],
+                }),
+            );
         });
     });
 
@@ -447,10 +449,11 @@ describe("VisualizationLoadingHOC", () => {
             );
 
             return testUtils.delay().then(() => {
-                expect(pushData).toHaveBeenCalled();
-                expect(pushData.mock.calls[0][0]).toMatchObject({
-                    result: oneMeasureResponse,
-                });
+                expect(pushData).toHaveBeenCalledWith(
+                    expect.objectContaining({
+                        result: oneMeasureResponse,
+                    }),
+                );
                 expect(onLoadingChanged).toHaveBeenCalledWith({ isLoading: false });
             });
         });
