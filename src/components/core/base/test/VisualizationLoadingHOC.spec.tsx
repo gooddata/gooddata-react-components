@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import * as PropTypes from "prop-types";
 import { mount } from "enzyme";
@@ -305,8 +305,76 @@ describe("VisualizationLoadingHOC", () => {
         });
 
         return testUtils.delay().then(() => {
+            expect(pushData).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    result: oneMeasureResponse,
+                }),
+            );
+        });
+    });
+
+    it("should call pushData callback with available drill items", () => {
+        const pushData = jest.fn();
+        createComponent({
+            pushData,
+        });
+
+        return testUtils.delay().then(() => {
+            expect(pushData).toBeCalledWith(
+                expect.objectContaining({
+                    supportedDrillableItems: [
+                        {
+                            type: "measure",
+                            title: "Lost",
+                            localIdentifier: "1st_measure_local_identifier",
+                        },
+                    ],
+                }),
+            );
+        });
+    });
+
+    it("should push supportedDrillableItems when executing with NO DATA result", () => {
+        const pushData = jest.fn();
+        createComponent({
+            dataSource: emptyDataSource,
+            onError: noop,
+            pushData,
+        });
+
+        return testUtils.delay().then(() => {
             expect(pushData).toHaveBeenCalledWith({
-                result: oneMeasureResponse,
+                supportedDrillableItems: [
+                    {
+                        localIdentifier: "1st_measure_local_identifier",
+                        title: "Lost",
+                        type: "measure",
+                    },
+                ],
+            });
+        });
+    });
+
+    it("should push supportedDrillableItems with empty result from getPage", () => {
+        const pushData = jest.fn();
+        createComponent(
+            {
+                dataSource: emptyDataSource,
+                onError: noop,
+                pushData,
+            },
+            false,
+        );
+
+        return testUtils.delay().then(() => {
+            expect(pushData).toHaveBeenCalledWith({
+                supportedDrillableItems: [
+                    {
+                        localIdentifier: "1st_measure_local_identifier",
+                        title: "Lost",
+                        type: "measure",
+                    },
+                ],
             });
         });
     });
@@ -381,9 +449,11 @@ describe("VisualizationLoadingHOC", () => {
             );
 
             return testUtils.delay().then(() => {
-                expect(pushData).toHaveBeenCalledWith({
-                    result: oneMeasureResponse,
-                });
+                expect(pushData).toHaveBeenCalledWith(
+                    expect.objectContaining({
+                        result: oneMeasureResponse,
+                    }),
+                );
                 expect(onLoadingChanged).toHaveBeenCalledWith({ isLoading: false });
             });
         });

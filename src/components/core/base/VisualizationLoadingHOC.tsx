@@ -4,6 +4,8 @@ import noop = require("lodash/noop");
 import get = require("lodash/get");
 import isEqual = require("lodash/isEqual");
 import omit = require("lodash/omit");
+import flatten = require("lodash/flatten");
+
 import {
     factory as createSdk,
     DataLayer,
@@ -18,7 +20,7 @@ import { ErrorStates } from "../../../constants/errorStates";
 import { IEvents, IExportFunction, IExtendedExportConfig, ILoadingState } from "../../../interfaces/Events";
 import { IDrillableItem } from "../../../interfaces/DrillEvents";
 import { ISubject } from "../../../helpers/async";
-import { convertErrors, checkEmptyResult } from "../../../helpers/errorHandlers";
+import { convertErrors, throwEmptyResultError, isEmptyResult } from "../../../helpers/errorHandlers";
 import { IHeaderPredicate } from "../../../interfaces/HeaderPredicate";
 import { IDataSourceProviderInjectedProps } from "../../afm/DataSourceProvider";
 import { injectIntl, InjectedIntl } from "react-intl";
@@ -27,7 +29,7 @@ import { IntlWrapper } from "../../core/base/IntlWrapper";
 import { LoadingComponent, ILoadingProps } from "../../simple/LoadingComponent";
 import { ErrorComponent, IErrorProps } from "../../simple/ErrorComponent";
 import { RuntimeError } from "../../../errors/RuntimeError";
-import { IPushData } from "../../../interfaces/PushData";
+import { IPushData, IDrillableItemPushData } from "../../../interfaces/PushData";
 import { IChartConfig } from "../../../interfaces/Config";
 import { setTelemetryHeaders } from "../../../helpers/utils";
 import { fixEmptyHeaderItems } from "./utils/fixEmptyHeaderItems";
@@ -61,7 +63,9 @@ export interface ILoadingInjectedProps {
     intl: InjectedIntl;
     // if autoExecuteDataSource is false, this callback is passed to the inner component and handles loading
     getPage?: IGetPage;
+
     onDataTooLarge(): void;
+
     onNegativeValues(): void;
 }
 
@@ -187,7 +191,7 @@ export function visualizationLoadingHOC<
             const pagePromise = this.createPagePromise(resultSpec, limit, offset);
 
             return pagePromise
-                .then(checkEmptyResult)
+                .then(this.handleEmptyResult)
                 .then((rawExecution: Execution.IExecutionResponses) => {
                     const emptyHeaderString = `(${this.props.intl.formatMessage({
                         id: "visualization.emptyValue",
@@ -200,11 +204,13 @@ export function visualizationLoadingHOC<
                         ...rawExecution,
                         executionResult: executionResultWithResolvedEmptyValues,
                     };
+                    const supportedDrillableItems = this.getSupportedDrillableItems(result.executionResponse);
                     // This returns only current page,
                     // gooddata-js mergePages doesn't support discontinuous page ranges yet
                     this.setState({ result, error: null });
                     this.props.pushData({
                         result,
+                        supportedDrillableItems,
                     });
                     this.onLoadingChanged({ isLoading: false });
                     this.props.onExportReady(this.createExportFunction(result)); // Pivot tables
@@ -281,15 +287,42 @@ export function visualizationLoadingHOC<
             }
         };
 
+        private getAllMeasureHeaderItems(
+            response: Execution.IExecutionResponse,
+        ): Execution.IMeasureHeaderItem[] {
+            return flatten(
+                flatten(
+                    flatten(response.dimensions).map(
+                        (dimension: Execution.IResultDimension) => dimension.headers,
+                    ),
+                )
+                    .filter((header: Execution.IHeader) => Execution.isMeasureGroupHeader(header))
+                    .map((header: Execution.IMeasureGroupHeader) => header.measureGroupHeader.items),
+            );
+        }
+
+        private getSupportedDrillableItems(response: Execution.IExecutionResponse): IDrillableItemPushData[] {
+            return this.getAllMeasureHeaderItems(response).map(
+                (measure: Execution.IMeasureHeaderItem): IDrillableItemPushData => ({
+                    type: "measure",
+                    localIdentifier: measure.measureHeaderItem.localIdentifier,
+                    title: measure.measureHeaderItem.name,
+                }),
+            );
+        }
+
         private initSubject() {
             this.subject = DataLayer.createSubject<Execution.IExecutionResponses>(
                 result => {
                     this.setState({ result });
-                    this.props.pushData({ result });
+                    const supportedDrillableItems = this.getSupportedDrillableItems(result.executionResponse);
+                    this.props.pushData({ result, supportedDrillableItems });
                     this.onLoadingChanged({ isLoading: false });
                     this.props.onExportReady(this.createExportFunction(result)); // Charts / Tables
                 },
-                error => this.onError(error),
+                error => {
+                    return this.onError(error);
+                },
             );
         }
 
@@ -333,7 +366,7 @@ export function visualizationLoadingHOC<
 
             const promise = dataSource
                 .getData(resultSpec)
-                .then(checkEmptyResult)
+                .then(this.handleEmptyResult)
                 .catch((error: ApiResponseError) => {
                     throw convertErrors(error);
                 });
@@ -378,6 +411,20 @@ export function visualizationLoadingHOC<
             return (_exportConfig: IExtendedExportConfig): Promise<IExportResponse> => {
                 return Promise.reject(error);
             };
+        }
+
+        private handleEmptyResult = (responses: Execution.IExecutionResponses) => {
+            if (!isEmptyResult(responses)) {
+                return responses;
+            }
+
+            this.pushDataForEmptyResponse(responses.executionResponse);
+            throwEmptyResultError();
+        };
+
+        private pushDataForEmptyResponse(executionResponse: Execution.IExecutionResponse) {
+            const supportedDrillableItems = this.getSupportedDrillableItems(executionResponse);
+            this.props.pushData({ supportedDrillableItems });
         }
     }
 

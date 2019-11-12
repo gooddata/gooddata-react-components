@@ -1,6 +1,6 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as HttpStatusCodes from "http-status-codes";
-import { checkEmptyResult, convertErrors, generateErrorMap, hasDuplicateIdentifiers } from "../errorHandlers";
+import { convertErrors, generateErrorMap, hasDuplicateIdentifiers, isEmptyResult } from "../errorHandlers";
 import { ApiResponseError } from "@gooddata/gooddata-js";
 import "isomorphic-fetch";
 
@@ -106,29 +106,19 @@ describe("convertErrors", () => {
     });
 });
 
-describe("checkEmptyResult", () => {
-    it("should throw 204 if executionResult does not contain any data", () => {
+describe("isEmptyResult", () => {
+    it("should return true if executionResult does not contain any data", () => {
         expect.hasAssertions();
-
-        try {
-            checkEmptyResult(emptyResponse);
-        } catch (obj) {
-            expect(obj.response.status).toEqual(204);
-        }
+        expect(isEmptyResult(emptyResponse)).toBe(true);
     });
 
-    it("should throw 204 if executionResult is null", () => {
+    it("should return true if executionResult is null", () => {
         expect.hasAssertions();
-
-        try {
-            checkEmptyResult(emptyResponseWithNull);
-        } catch (obj) {
-            expect(obj.response.status).toEqual(204);
-        }
+        expect(isEmptyResult(emptyResponseWithNull)).toBe(true);
     });
 
-    it("should not throw 204 if executionResult does not contain any data, but contain headers", () => {
-        expect(() => checkEmptyResult(attributeOnlyResponse)).not.toThrow();
+    it("should return false if executionResult does not contain any data, but contain headers", () => {
+        expect(isEmptyResult(attributeOnlyResponse)).toBe(false);
     });
 });
 
