@@ -9,6 +9,7 @@ import {
     absolutePresetFilter,
     relativePresetFilter,
 } from "./fixtures";
+import { convertPlatformDateStringToDate } from "../../DateConversions";
 
 const serializingTranslator: IDateAndMessageTranslator = {
     formatDate: (id, options) => `${id}__${JSON.stringify(options)}`,
@@ -25,8 +26,12 @@ describe("getDateFilterTitleUsingTranslator", () => {
     it("should return the correct translation for absolute form filter", () => {
         // make sure the formatter receives proper formatting options
         const expectedOptions = { year: "numeric", month: "numeric", day: "numeric" };
-        const expectedFrom = `2019-01-01__${JSON.stringify(expectedOptions)}`;
-        const expectedTo = `2019-02-01__${JSON.stringify(expectedOptions)}`;
+        const expectedFrom = `${convertPlatformDateStringToDate("2019-01-01")}__${JSON.stringify(
+            expectedOptions,
+        )}`;
+        const expectedTo = `${convertPlatformDateStringToDate("2019-02-01")}__${JSON.stringify(
+            expectedOptions,
+        )}`;
         const expected = `${expectedFrom}\u2013${expectedTo}`;
         const actual = getDateFilterTitleUsingTranslator(absoluteFormFilter, serializingTranslator);
         expect(actual).toEqual(expected);
@@ -35,7 +40,9 @@ describe("getDateFilterTitleUsingTranslator", () => {
     it("should return the correct translation for absolute form filter for one day", () => {
         // make sure the formatter receives proper formatting options
         const expectedOptions = { year: "numeric", month: "numeric", day: "numeric" };
-        const expected = `2019-01-01__${JSON.stringify(expectedOptions)}`;
+        const expected = `${convertPlatformDateStringToDate("2019-01-01")}__${JSON.stringify(
+            expectedOptions,
+        )}`;
         const actual = getDateFilterTitleUsingTranslator(absoluteFormFilterOneDay, serializingTranslator);
         expect(actual).toEqual(expected);
     });
