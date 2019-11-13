@@ -42,7 +42,7 @@ function getConfig(nameConfig: IAxisNameConfig) {
 export function withAxisNamePositionConfig(element: JSX.Element): JSX.Element {
     return (
         <ScreenshotReadyWrapper resolver={createHighChartResolver(3)}>
-            <div>
+            <>
                 {["low", "middle", "high"].map((position: Highcharts.AxisTitleAlignValue) => {
                     const positionConfig = getConfig({ position });
                     return (
@@ -56,15 +56,15 @@ export function withAxisNamePositionConfig(element: JSX.Element): JSX.Element {
                         </>
                     );
                 })}
-            </div>
+            </>
         </ScreenshotReadyWrapper>
     );
 }
 
 export function withAxisNameVisibilityConfig(element: JSX.Element): JSX.Element {
     return (
-        <ScreenshotReadyWrapper resolver={createHighChartResolver(3)}>
-            <div>
+        <ScreenshotReadyWrapper resolver={createHighChartResolver(2)}>
+            <>
                 {[false, true].map((visible: boolean) => {
                     const visibilityConfig = getConfig({ visible });
                     return (
@@ -78,7 +78,7 @@ export function withAxisNameVisibilityConfig(element: JSX.Element): JSX.Element 
                         </>
                     );
                 })}
-            </div>
+            </>
         </ScreenshotReadyWrapper>
     );
 }
