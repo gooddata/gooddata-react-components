@@ -22,6 +22,33 @@ export const dummyDataSource: DataLayer.DataSource.IDataSource<Execution.IExecut
     getFingerprint: () => "{}",
 };
 
+export const dataSourceWithOneMeasureTwoViews: DataLayer.DataSource.IDataSource<
+    Execution.IExecutionResponses
+> = {
+    getData: () => Promise.resolve(emptyExecutionResponse),
+    getPage: () => Promise.resolve(emptyExecutionResponse),
+    getAfm: () => executionObjectMock.oneMeasureTwoViews.execution.afm,
+    getFingerprint: () => JSON.stringify(executionObjectMock.oneMeasureTwoViews.execution.afm),
+};
+
+export const dataSourceWithOneMeasureTwoViewsStacked: DataLayer.DataSource.IDataSource<
+    Execution.IExecutionResponses
+> = {
+    getData: () => Promise.resolve(emptyExecutionResponse),
+    getPage: () => Promise.resolve(emptyExecutionResponse),
+    getAfm: () => executionObjectMock.oneMeasureTwoViewsStacked.execution.afm,
+    getFingerprint: () => JSON.stringify(executionObjectMock.oneMeasureTwoViewsStacked.execution.afm),
+};
+
+export const dataSourceWithTwoMeasuresTwoViews: DataLayer.DataSource.IDataSource<
+    Execution.IExecutionResponses
+> = {
+    getData: () => Promise.resolve(emptyExecutionResponse),
+    getPage: () => Promise.resolve(emptyExecutionResponse),
+    getAfm: () => executionObjectMock.twoMeasuresTwoViews.execution.afm,
+    getFingerprint: () => JSON.stringify(executionObjectMock.twoMeasuresTwoViews.execution.afm),
+};
+
 export const dataSourceWithTotals: DataLayer.DataSource.IDataSource<Execution.IExecutionResponses> = {
     getData: () => Promise.resolve(emptyExecutionResponse),
     getPage: () => Promise.resolve(emptyExecutionResponse),
@@ -64,6 +91,15 @@ export const stackedBaseChartResultSpec: AFM.IResultSpec = {
     ],
     sorts: [],
 };
+
+export const oneMeasureTwoViewsResultSpec: AFM.IResultSpec =
+    executionObjectMock.oneMeasureTwoViews.execution.resultSpec;
+
+export const oneMeasureTwoViewsStackedResultSpec: AFM.IResultSpec =
+    executionObjectMock.oneMeasureTwoViewsStacked.execution.resultSpec;
+
+export const twoMeasuresTwoViewsResultSpec: AFM.IResultSpec =
+    executionObjectMock.twoMeasuresTwoViews.execution.resultSpec;
 
 export const EMPTY_TITLE = "empty_title";
 
@@ -362,6 +398,65 @@ export const twoViewItemsMdObject: VisualizationObject.IVisualizationObjectConte
     ],
 };
 
+export const oneMeasureTwoViewsStackedMdObject: VisualizationObject.IVisualizationObjectContent = {
+    visualizationClass: {
+        uri: "/gdc/md/mockproject/obj/column",
+    },
+    buckets: [
+        {
+            localIdentifier: BucketNames.MEASURES,
+            items: [
+                {
+                    measure: {
+                        localIdentifier: "m1",
+                        definition: {
+                            measureDefinition: {
+                                item: {
+                                    uri: "/gdc/md/project/obj/1280",
+                                },
+                            },
+                        },
+                    },
+                },
+            ],
+        },
+        {
+            localIdentifier: BucketNames.VIEW,
+            items: [
+                {
+                    visualizationAttribute: {
+                        localIdentifier: "a1",
+                        displayForm: {
+                            uri: "/gdc/md/project/obj/1027",
+                        },
+                    },
+                },
+                {
+                    visualizationAttribute: {
+                        localIdentifier: "a2",
+                        displayForm: {
+                            uri: "/gdc/md/project/obj/1028",
+                        },
+                    },
+                },
+            ],
+        },
+        {
+            localIdentifier: BucketNames.STACK,
+            items: [
+                {
+                    visualizationAttribute: {
+                        localIdentifier: "a3",
+                        displayForm: {
+                            uri: "/gdc/md/project/obj/1029",
+                        },
+                    },
+                },
+            ],
+        },
+    ],
+};
+
 export const twoMeasuresMdObject: VisualizationObject.IVisualizationObjectContent = {
     visualizationClass: {
         uri: "/gdc/md/mockproject/obj/column",
@@ -404,6 +499,68 @@ export const twoMeasuresMdObject: VisualizationObject.IVisualizationObjectConten
                         localIdentifier: "a1",
                         displayForm: {
                             uri: "/gdc/md/project/obj/1027",
+                        },
+                    },
+                },
+            ],
+        },
+        {
+            localIdentifier: BucketNames.STACK,
+            items: [],
+        },
+    ],
+};
+
+export const twoMeasuresTwoViewsMdObject: VisualizationObject.IVisualizationObjectContent = {
+    visualizationClass: {
+        uri: "/gdc/md/mockproject/obj/column",
+    },
+    buckets: [
+        {
+            localIdentifier: BucketNames.MEASURES,
+            items: [
+                {
+                    measure: {
+                        localIdentifier: "m1",
+                        definition: {
+                            measureDefinition: {
+                                item: {
+                                    uri: "/gdc/md/project/obj/1279",
+                                },
+                            },
+                        },
+                    },
+                },
+                {
+                    measure: {
+                        localIdentifier: "m2",
+                        definition: {
+                            measureDefinition: {
+                                item: {
+                                    uri: "/gdc/md/project/obj/1280",
+                                },
+                            },
+                        },
+                    },
+                },
+            ],
+        },
+        {
+            localIdentifier: BucketNames.VIEW,
+            items: [
+                {
+                    visualizationAttribute: {
+                        localIdentifier: "a1",
+                        displayForm: {
+                            uri: "/gdc/md/project/obj/1027",
+                        },
+                    },
+                },
+                {
+                    visualizationAttribute: {
+                        localIdentifier: "a2",
+                        displayForm: {
+                            uri: "/gdc/md/project/obj/1028",
                         },
                     },
                 },

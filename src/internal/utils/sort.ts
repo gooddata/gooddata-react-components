@@ -64,16 +64,25 @@ export function getAttributeSortItem(
     return attributeSortItem;
 }
 
-export function getFirstAttributeIdentifier(
-    resultSpec: AFM.IResultSpec,
-    dimensionIndex: number,
-): string | null {
+function ignoreMeasureGroup(item: string): boolean {
+    return item !== MEASUREGROUP;
+}
+
+function getDimensionItems(resultSpec: AFM.IResultSpec, dimensionIndex: number): AFM.Identifier[] {
     const dimensionItems: AFM.Identifier[] = get(
         resultSpec,
         ["dimensions", dimensionIndex, "itemIdentifiers"],
         [],
     );
-    return dimensionItems.find(a => a !== MEASUREGROUP) || null;
+    return dimensionItems.filter(ignoreMeasureGroup) || [];
+}
+
+export function getFirstAttributeIdentifier(
+    resultSpec: AFM.IResultSpec,
+    dimensionIndex: number,
+): string | null {
+    const dimensionItems = getDimensionItems(resultSpec, dimensionIndex);
+    return dimensionItems[0] || null;
 }
 
 function getFirstMeasureSort(afm: AFM.IAfm): AFM.SortItem[] {
@@ -108,10 +117,26 @@ function getDefaultBarChartSort(
     resultSpec: AFM.IResultSpec,
     canSortStackTotalValue: boolean = false,
 ): AFM.SortItem[] {
+    const measureItemsCount: number = get(afm, "measures", []).length;
+    const viewByDimensionItems = getDimensionItems(resultSpec, VIEW_BY_DIMENSION);
     const viewByAttributeIdentifier = getFirstAttributeIdentifier(resultSpec, VIEW_BY_DIMENSION);
     const stackByAttributeIdentifier = getFirstAttributeIdentifier(resultSpec, STACK_BY_DIMENSION);
 
-    if ((viewByAttributeIdentifier && stackByAttributeIdentifier) || canSortStackTotalValue) {
+    if (viewByDimensionItems.length === 2) {
+        if (measureItemsCount >= 2 && !canSortStackTotalValue) {
+            return [
+                getAttributeSortItem(viewByDimensionItems[0], SORT_DIR_DESC, true),
+                ...getFirstMeasureSort(afm),
+            ];
+        }
+
+        return [
+            getAttributeSortItem(viewByDimensionItems[0], SORT_DIR_DESC, true),
+            getAttributeSortItem(viewByDimensionItems[1], SORT_DIR_DESC, true),
+        ];
+    }
+
+    if (viewByAttributeIdentifier && (stackByAttributeIdentifier || canSortStackTotalValue)) {
         return [getAttributeSortItem(viewByAttributeIdentifier, SORT_DIR_DESC, true)];
     }
 

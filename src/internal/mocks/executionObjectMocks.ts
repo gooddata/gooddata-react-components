@@ -1,39 +1,33 @@
 // (C) 2019 GoodData Corporation
 import { AFM } from "@gooddata/typings";
 
+function createMeasure(id: number): AFM.IMeasure {
+    return {
+        definition: {
+            measure: {
+                item: {
+                    uri: `/gdc/md/project/obj/${1278 + id}`,
+                },
+            },
+        },
+        localIdentifier: `m${id}`,
+    };
+}
+
+function createAttribute(id: number): AFM.IAttribute {
+    return {
+        displayForm: {
+            uri: `/gdc/md/project/obj/${1026 + id}`,
+        },
+        localIdentifier: `a${id}`,
+    };
+}
+
 const withoutTotals: AFM.IExecution = {
     execution: {
         afm: {
-            measures: [
-                {
-                    definition: {
-                        measure: {
-                            item: {
-                                uri: "/gdc/md/project/obj/1279",
-                            },
-                        },
-                    },
-                    localIdentifier: "m1",
-                },
-                {
-                    definition: {
-                        measure: {
-                            item: {
-                                uri: "/gdc/md/project/obj/1280",
-                            },
-                        },
-                    },
-                    localIdentifier: "m2",
-                },
-            ],
-            attributes: [
-                {
-                    displayForm: {
-                        uri: "/gdc/md/project/obj/1027",
-                    },
-                    localIdentifier: "a1",
-                },
-            ],
+            measures: [createMeasure(1), createMeasure(2)],
+            attributes: [createAttribute(1)],
         },
         resultSpec: {
             dimensions: [
@@ -51,36 +45,8 @@ const withoutTotals: AFM.IExecution = {
 const withTotals: AFM.IExecution = {
     execution: {
         afm: {
-            measures: [
-                {
-                    definition: {
-                        measure: {
-                            item: {
-                                uri: "/gdc/md/project/obj/1279",
-                            },
-                        },
-                    },
-                    localIdentifier: "m1",
-                },
-                {
-                    definition: {
-                        measure: {
-                            item: {
-                                uri: "/gdc/md/project/obj/1280",
-                            },
-                        },
-                    },
-                    localIdentifier: "m2",
-                },
-            ],
-            attributes: [
-                {
-                    displayForm: {
-                        uri: "/gdc/md/project/obj/1027",
-                    },
-                    localIdentifier: "a1",
-                },
-            ],
+            measures: [createMeasure(1), createMeasure(2)],
+            attributes: [createAttribute(1)],
             nativeTotals: [
                 {
                     measureIdentifier: "m2",
@@ -123,7 +89,67 @@ const withTotals: AFM.IExecution = {
     },
 };
 
+const oneMeasureTwoViews: AFM.IExecution = {
+    execution: {
+        afm: {
+            measures: [createMeasure(1)],
+            attributes: [createAttribute(1), createAttribute(2)],
+        },
+        resultSpec: {
+            dimensions: [
+                {
+                    itemIdentifiers: ["measureGroup"],
+                },
+                {
+                    itemIdentifiers: ["a1", "a2"],
+                },
+            ],
+        },
+    },
+};
+
+const oneMeasureTwoViewsStacked: AFM.IExecution = {
+    execution: {
+        afm: {
+            measures: [createMeasure(1)],
+            attributes: [createAttribute(1), createAttribute(2), createAttribute(3)],
+        },
+        resultSpec: {
+            dimensions: [
+                {
+                    itemIdentifiers: ["a3"],
+                },
+                {
+                    itemIdentifiers: ["a1", "a2", "measureGroup"],
+                },
+            ],
+        },
+    },
+};
+
+const twoMeasuresTwoViews: AFM.IExecution = {
+    execution: {
+        afm: {
+            measures: [createMeasure(1), createMeasure(2)],
+            attributes: [createAttribute(1), createAttribute(2)],
+        },
+        resultSpec: {
+            dimensions: [
+                {
+                    itemIdentifiers: ["measureGroup"],
+                },
+                {
+                    itemIdentifiers: ["a1", "a2"],
+                },
+            ],
+        },
+    },
+};
+
 export const executionObjectMock = {
+    oneMeasureTwoViews,
+    oneMeasureTwoViewsStacked,
+    twoMeasuresTwoViews,
     withTotals,
     withoutTotals,
 };
