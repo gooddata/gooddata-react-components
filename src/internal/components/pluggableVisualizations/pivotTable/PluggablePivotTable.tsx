@@ -7,12 +7,13 @@ import isNil = require("lodash/isNil");
 import includes = require("lodash/includes");
 import * as React from "react";
 import Measure from "react-measure";
-import { render, unmountComponentAtNode } from "react-dom";
+import { render } from "react-dom";
 import { InjectedIntl } from "react-intl";
 import { AFM, VisualizationObject } from "@gooddata/typings";
 import produce from "immer";
 import { configurePercent, configureOverTimeComparison } from "../../../utils/bucketConfig";
 import UnsupportedConfigurationPanel from "../../configurationPanels/UnsupportedConfigurationPanel";
+import { unmountComponentsAtNodes } from "../../../utils/domHelper";
 
 import * as VisEvents from "../../../../interfaces/Events";
 import * as BucketNames from "../../../../constants/bucketNames";
@@ -267,10 +268,7 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
     }
 
     public unmount() {
-        unmountComponentAtNode(document.querySelector(this.element));
-        if (document.querySelector(this.configPanelElement)) {
-            unmountComponentAtNode(document.querySelector(this.configPanelElement));
-        }
+        unmountComponentsAtNodes([this.element, this.configPanelElement]);
     }
 
     public update(

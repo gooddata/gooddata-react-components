@@ -7,7 +7,7 @@ import get = require("lodash/get");
 import noop = require("lodash/noop");
 import tail = require("lodash/tail");
 import set = require("lodash/set");
-import { render, unmountComponentAtNode } from "react-dom";
+import { render } from "react-dom";
 import { AFM, VisualizationObject } from "@gooddata/typings";
 import {
     IReferencePoint,
@@ -76,6 +76,7 @@ import * as VisEvents from "../../../../interfaces/Events";
 import { DEFAULT_LOCALE } from "../../../../constants/localization";
 import { DASHBOARDS_ENVIRONMENT } from "../../../constants/properties";
 import { IChartConfig, IColorMapping } from "../../../../interfaces/Config";
+import { unmountComponentsAtNodes } from "../../../utils/domHelper";
 
 export class PluggableBaseChart extends AbstractPluggableVisualization {
     protected projectId: string;
@@ -127,10 +128,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
     }
 
     public unmount() {
-        unmountComponentAtNode(document.querySelector(this.element));
-        if (document.querySelector(this.configPanelElement)) {
-            unmountComponentAtNode(document.querySelector(this.configPanelElement));
-        }
+        unmountComponentsAtNodes([this.element, this.configPanelElement]);
     }
 
     public update(
