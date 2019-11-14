@@ -972,26 +972,34 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
-    .add("align axis labels to right and secondary axis labels to left", () =>
-        screenshotWrap(
-            <div style={wrapperStyle}>
-                <BarChart
-                    projectId="storybook"
-                    measures={[MEASURE_1, MEASURE_2, MEASURE_3]}
-                    config={{
-                        xaxis: {
-                            rotation: "90",
-                        },
-                        secondary_xaxis: {
-                            measures: [MEASURE_3.measure.localIdentifier],
-                            rotation: "90",
-                        },
-                    }}
-                    viewBy={ATTRIBUTE_1}
-                    onError={onErrorHandler}
-                    LoadingComponent={null}
-                    ErrorComponent={null}
-                />
-            </div>,
-        ),
-    );
+    .add("align axis labels", () => {
+        const rotations: string[] = ["90", "-90", "60", "-60"];
+        return screenshotWrap(
+            <ScreenshotReadyWrapper resolver={createHighChartResolver(rotations.length)}>
+                {rotations.map((rotation: string) => (
+                    <>
+                        <div className="storybook-title">label rotation = {rotation}</div>
+                        <div style={wrapperStyle}>
+                            <BarChart
+                                projectId="storybook"
+                                measures={[MEASURE_1, MEASURE_2, MEASURE_3]}
+                                config={{
+                                    xaxis: {
+                                        rotation,
+                                    },
+                                    secondary_xaxis: {
+                                        measures: [MEASURE_3.measure.localIdentifier],
+                                        rotation,
+                                    },
+                                }}
+                                viewBy={ATTRIBUTE_1}
+                                onError={onErrorHandler}
+                                LoadingComponent={null}
+                                ErrorComponent={null}
+                            />
+                        </div>
+                    </>
+                ))}
+            </ScreenshotReadyWrapper>,
+        );
+    });

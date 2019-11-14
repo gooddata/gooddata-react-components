@@ -73,7 +73,7 @@ describe("getAxisLabelConfigurationForDualBarChart", () => {
             ],
         ],
         [
-            "top and bottom",
+            "top and bottom with 90 rotation",
             {
                 yAxisProps: {
                     rotation: "90",
@@ -92,6 +92,81 @@ describe("getAxisLabelConfigurationForDualBarChart", () => {
                 {
                     labels: {
                         align: "left",
+                        y: undefined,
+                    },
+                },
+            ],
+        ],
+        [
+            "top and bottom with -90 rotation",
+            {
+                yAxisProps: {
+                    rotation: "-90",
+                },
+                secondary_yAxisProps: {
+                    rotation: "-90",
+                },
+            },
+            [
+                {
+                    labels: {
+                        align: "left",
+                        y: 8,
+                    },
+                },
+                {
+                    labels: {
+                        align: "right",
+                        y: undefined,
+                    },
+                },
+            ],
+        ],
+        [
+            "top and bottom with 60 rotation",
+            {
+                yAxisProps: {
+                    rotation: "60",
+                },
+                secondary_yAxisProps: {
+                    rotation: "60",
+                },
+            },
+            [
+                {
+                    labels: {
+                        align: "right",
+                        y: 8,
+                    },
+                },
+                {
+                    labels: {
+                        align: "left",
+                        y: undefined,
+                    },
+                },
+            ],
+        ],
+        [
+            "top and bottom with -60 rotation",
+            {
+                yAxisProps: {
+                    rotation: "-60",
+                },
+                secondary_yAxisProps: {
+                    rotation: "-60",
+                },
+            },
+            [
+                {
+                    labels: {
+                        align: "left",
+                        y: 8,
+                    },
+                },
+                {
+                    labels: {
+                        align: "right",
                         y: undefined,
                     },
                 },

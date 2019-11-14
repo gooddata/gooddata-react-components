@@ -5,8 +5,23 @@ import {
     ALIGN_LEFT,
     ALIGN_RIGHT,
     BOTTOM_AXIS_MARGIN,
+    ROTATE_60_DEGREES,
     ROTATE_90_DEGREES,
+    ROTATE_NEGATIVE_60_DEGREES,
+    ROTATE_NEGATIVE_90_DEGREES,
 } from "../../../../constants/axisLabel";
+
+function getLabelOptions(index: number, aligns: Highcharts.AlignValue[]): Highcharts.XAxisOptions {
+    const isOppositeAxis: boolean = index === 1;
+    const align: Highcharts.AlignValue = aligns[index];
+    const y: number = isOppositeAxis ? undefined : BOTTOM_AXIS_MARGIN;
+    return {
+        labels: {
+            align,
+            y,
+        },
+    };
+}
 
 export function getAxisLabelConfigurationForDualBarChart(chartOptions: IChartOptions) {
     const { type, yAxes = [] } = chartOptions;
@@ -22,18 +37,17 @@ export function getAxisLabelConfigurationForDualBarChart(chartOptions: IChartOpt
     const yAxesConfig: Highcharts.XAxisOptions[] = [yAxisProps, secondary_yAxisProps].map(
         (axis: IAxisConfig = {}, index: number): Highcharts.XAxisOptions => {
             const { rotation } = axis;
-            const isOppositeAxis: boolean = index === 1;
 
-            if (rotation === ROTATE_90_DEGREES) {
-                const align: Highcharts.AlignValue = isOppositeAxis ? ALIGN_LEFT : ALIGN_RIGHT;
-                return {
-                    labels: {
-                        align,
-                        y: isOppositeAxis ? undefined : BOTTOM_AXIS_MARGIN,
-                    },
-                };
+            switch (rotation) {
+                case ROTATE_60_DEGREES:
+                case ROTATE_90_DEGREES:
+                    return getLabelOptions(index, [ALIGN_RIGHT, ALIGN_LEFT]);
+                case ROTATE_NEGATIVE_60_DEGREES:
+                case ROTATE_NEGATIVE_90_DEGREES:
+                    return getLabelOptions(index, [ALIGN_LEFT, ALIGN_RIGHT]);
+                default:
+                    return undefined;
             }
-            return undefined;
         },
     );
 
