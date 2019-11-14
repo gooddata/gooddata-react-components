@@ -17,8 +17,8 @@ function getJSONFromText(data: string): object {
     }
 }
 
-function isApiResponseError(error: TypeError | ApiResponseError): error is ApiResponseError {
-    return (error as ApiResponseError).response !== undefined;
+export function isApiResponseError(error: TypeError | ApiResponseError): error is ApiResponseError {
+    return error && (error as ApiResponseError).response !== undefined;
 }
 
 export interface IErrorMap {
@@ -125,15 +125,19 @@ export function isEmptyResult(responses: Execution.IExecutionResponses): boolean
     return isNullExecutionResult(responses) || isEmptyDataResult(responses);
 }
 
-export function throwEmptyResultError() {
-    throw {
-        name: "EmptyResultError",
-        response: {
-            status: HttpStatusCodes.NO_CONTENT,
-            json: () => Promise.resolve(null),
-            text: () => Promise.resolve(null),
-        },
-    };
+export function checkEmptyResult(responses: Execution.IExecutionResponses) {
+    if (isEmptyResult(responses)) {
+        throw {
+            name: "EmptyResultError",
+            response: {
+                status: HttpStatusCodes.NO_CONTENT,
+                json: () => Promise.resolve(responses),
+                text: () => Promise.resolve(null),
+            },
+        };
+    }
+
+    return responses;
 }
 
 export const hasDuplicateIdentifiers = (buckets: VisualizationObject.IBucket[]) => {

@@ -20,7 +20,7 @@ import { ErrorStates } from "../../../constants/errorStates";
 import { IEvents, IExportFunction, IExtendedExportConfig, ILoadingState } from "../../../interfaces/Events";
 import { IDrillableItem } from "../../../interfaces/DrillEvents";
 import { ISubject } from "../../../helpers/async";
-import { convertErrors, throwEmptyResultError, isEmptyResult } from "../../../helpers/errorHandlers";
+import { convertErrors, checkEmptyResult, isApiResponseError } from "../../../helpers/errorHandlers";
 import { IHeaderPredicate } from "../../../interfaces/HeaderPredicate";
 import { IDataSourceProviderInjectedProps } from "../../afm/DataSourceProvider";
 import { injectIntl, InjectedIntl } from "react-intl";
@@ -191,7 +191,7 @@ export function visualizationLoadingHOC<
             const pagePromise = this.createPagePromise(resultSpec, limit, offset);
 
             return pagePromise
-                .then(this.handleEmptyResult)
+                .then(checkEmptyResult)
                 .then((rawExecution: Execution.IExecutionResponses) => {
                     const emptyHeaderString = `(${this.props.intl.formatMessage({
                         id: "visualization.emptyValue",
@@ -326,6 +326,18 @@ export function visualizationLoadingHOC<
             );
         }
 
+        private pushDataForNoContentResponse(error: RuntimeError) {
+            if (!isApiResponseError(error.cause) || error.getMessage() !== ErrorStates.NO_DATA) {
+                return;
+            }
+
+            const response: Promise<Execution.IExecutionResponses> = error.cause.response.json();
+            response.then(r => {
+                const supportedDrillableItems = this.getSupportedDrillableItems(r.executionResponse);
+                this.props.pushData({ supportedDrillableItems });
+            });
+        }
+
         private onLoadingChanged(loadingState: ILoadingState) {
             this.props.onLoadingChanged(loadingState);
 
@@ -343,6 +355,7 @@ export function visualizationLoadingHOC<
         private onError(error: RuntimeError, dataSource = this.props.dataSource) {
             if (DataLayer.DataSourceUtils.dataSourcesMatch(this.props.dataSource, dataSource)) {
                 this.setState({ error: error.getMessage() });
+                this.pushDataForNoContentResponse(error);
                 this.onLoadingChanged({ isLoading: false });
                 this.props.onExportReady(this.createExportErrorFunction(error));
                 this.props.onError(error);
@@ -366,7 +379,7 @@ export function visualizationLoadingHOC<
 
             const promise = dataSource
                 .getData(resultSpec)
-                .then(this.handleEmptyResult)
+                .then(checkEmptyResult)
                 .catch((error: ApiResponseError) => {
                     throw convertErrors(error);
                 });
@@ -411,20 +424,6 @@ export function visualizationLoadingHOC<
             return (_exportConfig: IExtendedExportConfig): Promise<IExportResponse> => {
                 return Promise.reject(error);
             };
-        }
-
-        private handleEmptyResult = (responses: Execution.IExecutionResponses) => {
-            if (!isEmptyResult(responses)) {
-                return responses;
-            }
-
-            this.pushDataForEmptyResponse(responses.executionResponse);
-            throwEmptyResultError();
-        };
-
-        private pushDataForEmptyResponse(executionResponse: Execution.IExecutionResponse) {
-            const supportedDrillableItems = this.getSupportedDrillableItems(executionResponse);
-            this.props.pushData({ supportedDrillableItems });
         }
     }
 
