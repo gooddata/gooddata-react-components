@@ -111,7 +111,7 @@
     "yup": "^0.24.1"
   },
   "dependencies": {
-    "@gooddata/gooddata-js": "^11.20.0",
+    "@gooddata/gooddata-js": "^11.21.0",
     "@gooddata/goodstrap": "^64.6.0",
     "@gooddata/js-utils": "^3.5.0",
     "@gooddata/numberjs": "^3.2.3",
