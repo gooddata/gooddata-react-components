@@ -1,12 +1,11 @@
 // (C) 2019 GoodData Corporation
 import get = require("lodash/get");
 import { VisualizationObject } from "@gooddata/typings";
-import { getMeasuresFromMdObject } from "./bucketHelper";
 import * as BucketNames from "../../constants/bucketNames";
-import { IAxisConfig } from "../../interfaces/Config";
 import { IVisualizationProperties } from "../interfaces/Visualization";
 import { isBarChart, isBubbleChart, isScatterPlot } from "../../components/visualizations/utils/common";
 import { getBucketItems } from "../../helpers/mdObjBucketHelper";
+import { areAllMeasuresOnSingleAxis, getMeasuresFromMdObject } from "../../helpers/MdObjectHelper";
 
 function isAttribute(item: VisualizationObject.BucketItem): boolean {
     const attribute = item as VisualizationObject.IVisualizationAttribute;
@@ -53,15 +52,6 @@ export function isStacked(mdObject: VisualizationObject.IVisualizationObjectCont
 
 export function hasMeasures(mdObject: VisualizationObject.IVisualizationObjectContent): boolean {
     return mdObject && getMeasuresFromMdObject(mdObject).length > 0;
-}
-
-function areAllMeasuresOnSingleAxis(
-    mdObject: VisualizationObject.IVisualizationObjectContent,
-    secondaryYAxis: IAxisConfig,
-): boolean {
-    const measureCount = getMeasuresFromMdObject(mdObject).length;
-    const numberOfMeasureOnSecondaryAxis = secondaryYAxis ? secondaryYAxis.measures.length : 0;
-    return numberOfMeasureOnSecondaryAxis === 0 || measureCount === numberOfMeasureOnSecondaryAxis;
 }
 
 // don't support sort by total value for dual axis

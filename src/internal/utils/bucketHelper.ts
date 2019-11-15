@@ -1,7 +1,6 @@
 // (C) 2019 GoodData Corporation
 import set = require("lodash/set");
 import get = require("lodash/get");
-import has = require("lodash/has");
 import uniq = require("lodash/uniq");
 import uniqBy = require("lodash/uniqBy");
 import negate = require("lodash/negate");
@@ -387,16 +386,6 @@ export function getTotalsFromBucket(
 export function getUniqueAttributes(buckets: IBucket[]) {
     const attributes = getAllItemsByType(buckets, [ATTRIBUTE, DATE]);
     return uniqBy(attributes, attribute => get(attribute, "attribute"));
-}
-
-export function getMeasuresFromMdObject(mdObject: VisualizationObject.IVisualizationObjectContent) {
-    return get(mdObject, "buckets").reduce((acc, bucket) => {
-        const measureDefinition = get(bucket, "items", [] as any).filter((item: any) =>
-            has(item, "measure.definition.measureDefinition"),
-        );
-
-        return acc.concat(measureDefinition);
-    }, []);
 }
 
 export function getMeasures(buckets: IBucket[]) {

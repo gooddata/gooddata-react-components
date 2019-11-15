@@ -7,8 +7,6 @@ import {
     removeInvalidSort,
     getBucketItemIdentifiers,
     getSortIdentifiers,
-    getAttributeSortItem,
-    getFirstAttributeIdentifier,
     setSortItems,
 } from "../sort";
 import { IVisualizationProperties, IExtendedReferencePoint } from "../../interfaces/Visualization";
@@ -346,25 +344,6 @@ describe("createSorts", () => {
 describe("getBucketItemIdentifiers", () => {
     it("should get all identifiers", () => {
         expect(getBucketItemIdentifiers(referencePoint)).toEqual(["m1", "m2", "m3", "a1"]);
-    });
-});
-
-describe("getAttributeSortItem", () => {
-    it("should return an attribute sort item", () => {
-        expect(getAttributeSortItem("a1", SORT_DIR_DESC, true)).toEqual({
-            attributeSortItem: { aggregation: "sum", attributeIdentifier: "a1", direction: "desc" },
-        });
-        expect(getAttributeSortItem("a2")).toEqual({
-            attributeSortItem: { attributeIdentifier: "a2", direction: "asc" },
-        });
-    });
-});
-
-describe("getFirstAttributeIdentifier", () => {
-    it("should return an attribute sort item", () => {
-        expect(getFirstAttributeIdentifier(stackedResultSpec, 0)).toEqual("a2");
-        expect(getFirstAttributeIdentifier(stackedResultSpec, 1)).toEqual("a1");
-        expect(getFirstAttributeIdentifier(stackedResultSpec, 2)).toEqual(null);
     });
 });
 

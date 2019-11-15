@@ -13,8 +13,8 @@ import MinMaxControl from "../configurationControls//MinMaxControl";
 import ConfigSection from "../configurationControls/ConfigSection";
 import DataLabelsControl from "../configurationControls/DataLabelsControl";
 import CheckboxControl from "../configurationControls/CheckboxControl";
-import { getMeasuresFromMdObject } from "../../utils/bucketHelper";
 import { countItemsOnAxes, hasAttribute } from "../../utils/mdObjectHelper";
+import { getMeasuresFromMdObject } from "../../../helpers/MdObjectHelper";
 import {
     SHOW_DELAY_DEFAULT,
     HIDE_DELAY_DEFAULT,

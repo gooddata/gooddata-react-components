@@ -1,6 +1,8 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import { AFM } from "@gooddata/typings";
-import { getDefaultTreemapSort } from "../sorts";
+import { getAttributeSortItem, getDefaultTreemapSort, getFirstAttributeIdentifier } from "../sorts";
+
+import { DESC } from "../../constants/sort";
 
 describe("sorts", () => {
     const measure1 = {
@@ -48,18 +50,18 @@ describe("sorts", () => {
         attributes: [attribute1, attribute2],
     };
 
-    const stackedResultSpec: AFM.IResultSpec = {
-        dimensions: [
-            {
-                itemIdentifiers: ["a1", "a2"],
-            },
-            {
-                itemIdentifiers: [],
-            },
-        ],
-    };
-
     describe("getDefaultTreemapSort", () => {
+        const stackedResultSpec: AFM.IResultSpec = {
+            dimensions: [
+                {
+                    itemIdentifiers: ["a1", "a2"],
+                },
+                {
+                    itemIdentifiers: [],
+                },
+            ],
+        };
+
         it("should get empty sort for only a single attribute", () => {
             const sort = getDefaultTreemapSort(nonStackedAfm, nonStackedResultSpec);
             expect(sort).toEqual([]);
@@ -87,6 +89,36 @@ describe("sorts", () => {
                     },
                 },
             ]);
+        });
+    });
+
+    describe("getAttributeSortItem", () => {
+        it("should return an attribute sort item", () => {
+            expect(getAttributeSortItem("a1", DESC, true)).toEqual({
+                attributeSortItem: { aggregation: "sum", attributeIdentifier: "a1", direction: "desc" },
+            });
+            expect(getAttributeSortItem("a2")).toEqual({
+                attributeSortItem: { attributeIdentifier: "a2", direction: "asc" },
+            });
+        });
+    });
+
+    describe("getFirstAttributeIdentifier", () => {
+        const stackedResultSpec: AFM.IResultSpec = {
+            dimensions: [
+                {
+                    itemIdentifiers: ["measureGroup", "a2"],
+                },
+                {
+                    itemIdentifiers: ["a1"],
+                },
+            ],
+        };
+
+        it("should return an attribute sort item", () => {
+            expect(getFirstAttributeIdentifier(stackedResultSpec, 0)).toEqual("a2");
+            expect(getFirstAttributeIdentifier(stackedResultSpec, 1)).toEqual("a1");
+            expect(getFirstAttributeIdentifier(stackedResultSpec, 2)).toEqual(null);
         });
     });
 });
