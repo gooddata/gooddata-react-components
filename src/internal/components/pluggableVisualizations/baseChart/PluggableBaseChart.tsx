@@ -247,10 +247,8 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
             // keep height undef for AD; causes indigo-visualizations to pick default 100%
             const resultingHeight = this.environment === DASHBOARDS_ENVIRONMENT ? height : undefined;
 
-            const afterRender = get(this.callbacks, "afterRender", noop);
-
             const { drillableItems } = custom;
-            const { onDrill } = this.callbacks;
+            const { afterRender, onDrill, onFiredDrillEvent } = this.callbacks;
 
             const allProperties: IVisualizationProperties = get(
                 visualizationProperties,
@@ -288,6 +286,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
                     environment={this.environment}
                     drillableItems={drillableItems}
                     onDrill={onDrill}
+                    onFiredDrillEvent={onFiredDrillEvent}
                     onError={this.onError}
                     onExportReady={this.onExportReady}
                     onLoadingChanged={this.onLoadingChanged}

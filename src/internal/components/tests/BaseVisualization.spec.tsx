@@ -126,6 +126,20 @@ describe("BaseVisualization", () => {
         expect(wrapper.find("div.gd-base-visualization").length).toBe(1);
     });
 
+    describe("Drill visualization instance", () => {
+        it("should propagate onFiredDrillEvent props correctly", () => {
+            const onFiredDrillEvent = noop;
+
+            const { tableConstructorCall } = getDummyComponent({
+                onFiredDrillEvent,
+            });
+
+            expect(tableConstructorCall).toHaveBeenCalledTimes(1);
+            const args = tableConstructorCall.mock.calls[0][0];
+            expect(args.callbacks.onFiredDrillEvent).toEqual(onFiredDrillEvent);
+        });
+    });
+
     describe("feature flags in visualization instance", () => {
         it("should propagate feature flags", () => {
             const { tableConstructorCall } = getDummyComponent({
