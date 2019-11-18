@@ -68,8 +68,8 @@ export function getClickableElementNameByChartType(type: VisType): ChartElementT
     }
 }
 
-function fireEvent(onFiredDrillEvent: OnFiredDrillEvent, data: any, target: EventTarget) {
-    const returnValue = onFiredDrillEvent(data);
+export function fireDrillEvent(onFiredDrillEvent: OnFiredDrillEvent, data: any, target: EventTarget) {
+    const returnValue = onFiredDrillEvent && onFiredDrillEvent(data);
 
     // if user-specified onFiredDrillEvent fn returns false, do not fire default DOM event
     if (returnValue !== false) {
@@ -223,7 +223,7 @@ const chartClickDebounced = debounce(
             drillContext: drillContextLegacy,
         };
 
-        fireEvent(onFiredDrillEvent, drillEventLegacy, target);
+        fireDrillEvent(onFiredDrillEvent, drillEventLegacy, target);
     },
 );
 
@@ -282,7 +282,7 @@ const tickLabelClickDebounce = debounce(
             drillContext,
         };
 
-        fireEvent(onFiredDrillEvent, data, target);
+        fireDrillEvent(onFiredDrillEvent, data, target);
     },
 );
 
@@ -322,7 +322,7 @@ export function cellClick(drillConfig: IDrillConfig, event: ICellDrillEvent, tar
         drillContext,
     };
 
-    fireEvent(onFiredDrillEvent, data, target);
+    fireDrillEvent(onFiredDrillEvent, data, target);
 }
 
 export function createDrillIntersectionElement(

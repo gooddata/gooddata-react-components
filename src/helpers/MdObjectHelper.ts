@@ -2,7 +2,7 @@
 import get = require("lodash/get");
 import { VisualizationObject, AFM, VisualizationInput } from "@gooddata/typings";
 import { DataLayer } from "@gooddata/gooddata-js";
-import { IMeasureTitleProps, IArithmeticMeasureTitleProps } from "..";
+import { IMeasureTitleProps, IArithmeticMeasureTitleProps } from "../interfaces/MeasureTitle";
 import { ATTRIBUTE, MEASURES, COLUMNS } from "../constants/bucketNames";
 import IMeasure = VisualizationObject.IMeasure;
 import IArithmeticMeasureDefinition = VisualizationObject.IArithmeticMeasureDefinition;

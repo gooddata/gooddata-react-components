@@ -1,33 +1,25 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import cloneDeep = require("lodash/cloneDeep");
 import get = require("lodash/get");
 import isEmpty = require("lodash/isEmpty");
 import isNumber = require("lodash/isNumber");
-import * as CustomEventPolyfill from "custom-event";
 import * as invariant from "invariant";
 import { AFM, Execution } from "@gooddata/typings";
 import { InjectedIntl } from "react-intl";
 import { isSomeHeaderPredicateMatched } from "../../../../helpers/headerPredicate";
 import { IHeaderPredicate } from "../../../../interfaces/HeaderPredicate";
 import {
-    IDrillEvent,
-    IDrillEventCallback,
     IDrillEventIntersectionElementExtended,
     IDrillEventExtended,
     IDrillEventContextHeadlineExtended,
 } from "../../../../interfaces/DrillEvents";
-import { VisualizationTypes, HeadlineElementType } from "../../../../constants/visualizationTypes";
+import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 import { IHeadlineData, IHeadlineDataItem } from "../../../../interfaces/Headlines";
+import { IHeadlineDrillItemContext } from "../types";
 
 export interface IHeadlineExecutionData {
     measureHeaderItem: Execution.IMeasureHeaderItem["measureHeaderItem"];
     value: Execution.DataValue;
-}
-
-export interface IHeadlineDrillItemContext {
-    localIdentifier: AFM.Identifier;
-    value: string;
-    element: HeadlineElementType;
 }
 
 function createHeadlineDataItem(executionDataItem: IHeadlineExecutionData): IHeadlineDataItem {
@@ -202,7 +194,7 @@ export function buildDrillEventData(
 ): IDrillEventExtended {
     const measureHeaderItem = findMeasureHeaderItem(itemContext.localIdentifier, executionResponse);
     if (!measureHeaderItem) {
-        throw new Error("The metric uri has not been found in execution response!");
+        throw new Error("The measure uri has not been found in execution response!");
     }
 
     const intersectionElement: IDrillEventIntersectionElementExtended = {
@@ -221,28 +213,4 @@ export function buildDrillEventData(
         executionContext: executionRequest.afm,
         drillContext,
     };
-}
-
-/**
- * Fire a new drill event built from the provided data to the target that have a 'dispatchEvent' method.
- *
- * @param drillEventFunction - custom drill event function which could process and prevent default post message event.
- * @param drillEventData - The event data in {executionContext, drillContext} format.
- * @param target - The target where the built event must be dispatched.
- */
-export function fireDrillEvent(
-    drillEventFunction: IDrillEventCallback,
-    drillEventData: IDrillEvent,
-    target: EventTarget,
-) {
-    const shouldDispatchPostMessage = drillEventFunction && drillEventFunction(drillEventData);
-
-    if (shouldDispatchPostMessage !== false) {
-        target.dispatchEvent(
-            new CustomEventPolyfill("drill", {
-                detail: drillEventData,
-                bubbles: true,
-            }),
-        );
-    }
 }

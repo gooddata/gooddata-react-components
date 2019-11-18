@@ -1,8 +1,8 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import isNil = require("lodash/isNil");
 import { VisualizationObject } from "@gooddata/typings";
 import { IAreaChartProps } from "../../components/AreaChart";
-import { IChartConfig } from "../..";
+import { IChartConfig } from "../../interfaces/Config";
 import BucketItem = VisualizationObject.BucketItem;
 import IVisualizationAttribute = VisualizationObject.IVisualizationAttribute;
 import { getViewByTwoAttributes } from "./common";

@@ -1,28 +1,20 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
 import { render } from "react-dom";
-import { InjectedIntl } from "react-intl";
 import { AFM, VisualizationObject } from "@gooddata/typings";
 
 import cloneDeep = require("lodash/cloneDeep");
-import get = require("lodash/get");
 
 import * as BucketNames from "../../../../constants/bucketNames";
 import { METRIC } from "../../../constants/bucket";
 
 import { configurePercent, configureOverTimeComparison } from "../../../utils/bucketConfig";
-import UnsupportedConfigurationPanel from "../../configurationPanels/UnsupportedConfigurationPanel";
 import {
     IReferencePoint,
     IExtendedReferencePoint,
-    IVisCallbacks,
-    IVisConstruct,
     IVisProps,
-    ILocale,
-    IVisualizationProperties,
     IBucketItem,
     IBucket,
-    IFeatureFlags,
 } from "../../../interfaces/Visualization";
 import {
     sanitizeUnusedFilters,
@@ -39,7 +31,6 @@ import {
     getDefaultHeadlineUiConfig,
     getHeadlineUiConfig,
 } from "../../../utils/uiConfigHelpers/headlineUiConfigHelper";
-import { createInternalIntl } from "../../../utils/internalIntlProvider";
 import {
     findComplementaryOverTimeComparisonMeasure,
     findSecondMasterMeasure,
@@ -47,53 +38,14 @@ import {
     setHeadlineRefPointBuckets,
 } from "./headlineBucketHelper";
 import { hasGlobalDateFilter } from "../../../utils/bucketRules";
-import { AbstractPluggableVisualization } from "../AbstractPluggableVisualization";
-import {
-    getReferencePointWithSupportedProperties,
-    getSupportedProperties,
-} from "../../../utils/propertiesHelper";
+import { getReferencePointWithSupportedProperties } from "../../../utils/propertiesHelper";
 import { Headline } from "../../../../components/core/Headline";
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 import { generateDimensions } from "../../../../helpers/dimensions";
-import { DEFAULT_LOCALE } from "../../../../constants/localization";
 import { setConfigFromFeatureFlags } from "../../../../helpers/featureFlags";
-import { unmountComponentsAtNodes } from "../../../utils/domHelper";
+import { PluggableBaseHeadline } from "../baseHeadline/PluggableBaseHeadline";
 
-export class PluggableHeadline extends AbstractPluggableVisualization {
-    protected configPanelElement: string;
-    private projectId: string;
-    private callbacks: IVisCallbacks;
-    private intl: InjectedIntl;
-    private locale: ILocale;
-    private visualizationProperties: IVisualizationProperties;
-    private element: string;
-    private featureFlags?: IFeatureFlags;
-
-    constructor(props: IVisConstruct) {
-        super();
-        this.projectId = props.projectId;
-        this.element = props.element;
-        this.configPanelElement = props.configPanelElement;
-        this.callbacks = props.callbacks;
-        this.locale = props.locale ? props.locale : DEFAULT_LOCALE;
-        this.featureFlags = props.featureFlags;
-        this.intl = createInternalIntl(this.locale);
-    }
-
-    public unmount() {
-        unmountComponentsAtNodes([this.element, this.configPanelElement]);
-    }
-
-    public update(
-        options: IVisProps,
-        visualizationProperties: IVisualizationProperties,
-        mdObject: VisualizationObject.IVisualizationObjectContent,
-    ) {
-        this.visualizationProperties = visualizationProperties;
-        this.renderVisualization(options, mdObject);
-        this.renderConfigurationPanel();
-    }
-
+export class PluggableHeadline extends PluggableBaseHeadline {
     public getExtendedReferencePoint(referencePoint: Readonly<IReferencePoint>) {
         const referencePointCloned = cloneDeep(referencePoint);
         let newReferencePoint: IExtendedReferencePoint = {
@@ -171,25 +123,6 @@ export class PluggableHeadline extends AbstractPluggableVisualization {
                     ErrorComponent={null}
                 />,
                 document.querySelector(this.element),
-            );
-        }
-    }
-
-    protected renderConfigurationPanel() {
-        if (document.querySelector(this.configPanelElement)) {
-            const properties: IVisualizationProperties = get(
-                this.visualizationProperties,
-                "properties",
-                {},
-            ) as IVisualizationProperties;
-
-            render(
-                <UnsupportedConfigurationPanel
-                    locale={this.locale}
-                    pushData={this.callbacks.pushData}
-                    properties={getSupportedProperties(properties, this.supportedPropertiesList)}
-                />,
-                document.querySelector(this.configPanelElement),
             );
         }
     }

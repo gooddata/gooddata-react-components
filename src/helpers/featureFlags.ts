@@ -1,7 +1,7 @@
 // (C) 2007-2019 GoodData Corporation
 import { IFeatureFlags, SDK } from "@gooddata/gooddata-js";
 import { getCachedOrLoad } from "./sdkCache";
-import { IChartConfig } from "..";
+import { IChartConfig } from "../interfaces/Config";
 
 export async function getFeatureFlags(sdk: SDK, projectId: string): Promise<IFeatureFlags> {
     const apiCallIdentifier = `getFeatureFlags.${projectId}`;

@@ -20,6 +20,7 @@ import { BaseChart } from "../core/base/BaseChart";
 import { IChartConfig, IColorPaletteItem } from "../../interfaces/Config";
 import { PivotTable } from "../PivotTable";
 import { Headline } from "../core/Headline";
+import { Xirr } from "../core/Xirr";
 import { IEvents, OnLegendReady } from "../../interfaces/Events";
 import { VisualizationPropType, Requireable } from "../../proptypes/Visualization";
 import { VisualizationTypes, VisType } from "../../constants/visualizationTypes";
@@ -70,6 +71,7 @@ export interface IVisualizationProps extends IEvents {
     BaseChartComponent?: any;
     PivotTableComponent?: any;
     HeadlineComponent?: any;
+    XirrComponent?: any;
     ErrorComponent?: React.ComponentType<IErrorProps>;
     LoadingComponent?: React.ComponentType<ILoadingProps>;
     onLegendReady?: OnLegendReady;
@@ -149,6 +151,7 @@ export class VisualizationWrapped extends React.Component<
         BaseChartComponent: BaseChart,
         PivotTableComponent: PivotTable,
         HeadlineComponent: Headline,
+        XirrComponent: Xirr,
         ErrorComponent,
         LoadingComponent,
         onExportReady: noop,
@@ -282,6 +285,7 @@ export class VisualizationWrapped extends React.Component<
             BaseChartComponent,
             PivotTableComponent,
             HeadlineComponent,
+            XirrComponent,
             LoadingComponent,
             ErrorComponent,
             onExportReady,
@@ -333,6 +337,8 @@ export class VisualizationWrapped extends React.Component<
             }
             case VisualizationTypes.HEADLINE:
                 return <HeadlineComponent {...commonProps} {...sourceProps} />;
+            case VisualizationTypes.XIRR:
+                return <XirrComponent {...commonProps} {...sourceProps} />;
             default:
                 return (
                     <BaseChartComponent

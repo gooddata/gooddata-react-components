@@ -1,39 +1,17 @@
 // (C) 2007-2019 GoodData Corporation
-import { AFM, Execution } from "@gooddata/typings";
 import * as React from "react";
 import { InjectedIntlProps, injectIntl } from "react-intl";
 import noop = require("lodash/noop");
 import { convertDrillableItemsToPredicates } from "../../../helpers/headerPredicate";
-import { IChartConfig } from "../../../interfaces/Config";
-import {
-    IDrillableItem,
-    IDrillEventCallback,
-    IDrillEventExtendedCallback,
-    IDrillEventExtended,
-    IDrillEvent,
-} from "../../../interfaces/DrillEvents";
-import { IHeaderPredicate } from "../../../interfaces/HeaderPredicate";
+import { IDrillEventExtended, IDrillEvent } from "../../../interfaces/DrillEvents";
 import Headline, { IHeadlineFiredDrillEventItemContext } from "./Headline";
 import {
     applyDrillableItems,
     buildDrillEventData,
-    fireDrillEvent,
     getHeadlineData,
 } from "./utils/HeadlineTransformationUtils";
-import { convertHeadlineDrillIntersectionToLegacy } from "../utils/drilldownEventing";
-
-export interface IHeadlineTransformationProps {
-    executionRequest: AFM.IExecution["execution"];
-    executionResponse: Execution.IExecutionResponse;
-    executionResult: Execution.IExecutionResult;
-
-    drillableItems?: Array<IDrillableItem | IHeaderPredicate>;
-    config?: IChartConfig;
-
-    onFiredDrillEvent?: IDrillEventCallback;
-    onDrill?: IDrillEventExtendedCallback;
-    onAfterRender?: () => void;
-}
+import { convertHeadlineDrillIntersectionToLegacy, fireDrillEvent } from "../utils/drilldownEventing";
+import { IHeadlineTransformationProps } from "./types";
 
 /**
  * The React component that handles the transformation of the execution objects into the data accepted by the {Headline}

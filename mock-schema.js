@@ -32,6 +32,13 @@ const pivotTableGrandtotalSubtotalAfmExecutions = [
         executionResult: require("./stories/test_data/pivot_table_with_grandtotal_subtotal_2_measures_result.json"),
     }];
 
+const xirrAfmExecutions = [
+    {
+        execution: require("./stories/test_data/xirr_simple_request.json"),
+        executionResponse: require("./stories/test_data/xirr_simple_response.json"),
+        executionResult: require("./stories/test_data/xirr_simple_result.json"),
+    }];
+
 const getBaseProjectSchema = (title, identifier) => {
     return {
         project: {
@@ -2214,6 +2221,7 @@ const getBaseProjectSchema = (title, identifier) => {
             ...pivotTableAfmExecutions,
             ...pivotTableSubtotalsAfmExecutions,
             ...pivotTableGrandtotalSubtotalAfmExecutions,
+            ...xirrAfmExecutions
         ],
         visualizationClasses: [{
             title: 'Table',
@@ -2236,6 +2244,9 @@ const getBaseProjectSchema = (title, identifier) => {
         }, {
             title: 'Headline',
             url: 'local:headline'
+        }, {
+            title: 'XIRR',
+            url: 'local:xirr'
         }],
         visualizationObjects: [{
                 identifier: '1001',
@@ -2566,6 +2577,26 @@ const getBaseProjectSchema = (title, identifier) => {
                     }, {
                         localIdentifier: 'a2',
                         displayForm: '5.df'
+                    }]
+                }]
+            },
+            {
+                title: 'XIRR simple example',
+                identifier: 'xirr-simple',
+                type: 'local:xirr',
+                filters: [],
+                buckets: [{
+                    localIdentifier: 'measures',
+                    items: [{
+                        localIdentifier: 'm_1',
+                        identifier: '5',
+                        aggregation: 'sum'
+                    }]
+                }, {
+                    localIdentifier: 'attribute',
+                    items: [{
+                        localIdentifier: 'a_1',
+                        displayForm: '10'
                     }]
                 }]
             },

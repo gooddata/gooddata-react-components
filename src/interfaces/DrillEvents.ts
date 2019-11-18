@@ -10,6 +10,7 @@ import {
     TableType,
     VisElementType,
     VisType,
+    XirrType,
 } from "../constants/visualizationTypes";
 import { TableRowForDrilling } from "./Table";
 import { OnFiredDrillEvent, OnDrill } from "./Events";
@@ -111,6 +112,17 @@ export interface IDrillEventContextHeadlineBase {
 export interface IDrillEventContextHeadline extends IDrillEventContextHeadlineBase, IDrillEventIntersection {}
 export interface IDrillEventContextHeadlineExtended
     extends IDrillEventContextHeadlineBase,
+        IDrillEventIntersectionExtended {}
+
+// Drill context for XIRR
+export interface IDrillEventContextXirrBase {
+    type: XirrType;
+    element: HeadlineElementType; // XIRR uses Headline internally, so its drill context is the same as that of Headline
+    value: string;
+}
+export interface IDrillEventContextXirr extends IDrillEventContextXirrBase, IDrillEventIntersection {}
+export interface IDrillEventContextXirrExtended
+    extends IDrillEventContextXirrBase,
         IDrillEventIntersectionExtended {}
 
 // Drill context for chart
