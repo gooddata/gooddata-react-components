@@ -1,6 +1,6 @@
 // (C) 2018-2019 GoodData Corporation
 import { VisualizationInput } from "@gooddata/typings";
-import { getQualifierObject } from "./utils";
+import { getObjQualifier } from "./utils";
 
 export interface IPreviousPeriodDateDataSetSimple {
     dataSet: VisualizationInput.ObjQualifier | string;
@@ -53,7 +53,7 @@ export class MeasureBuilder extends MeasureBuilderBase<VisualizationInput.IMeasu
         super();
         this.measure.definition = {
             measureDefinition: {
-                item: getQualifierObject(identifier),
+                item: getObjQualifier(identifier),
             },
         };
     }
@@ -94,7 +94,7 @@ export class PoPMeasureBuilder extends MeasureBuilderBase<VisualizationInput.IPo
         this.measure.definition = {
             popMeasureDefinition: {
                 measureIdentifier,
-                popAttribute: getQualifierObject(popAttribute),
+                popAttribute: getObjQualifier(popAttribute),
             },
         };
     }
@@ -111,7 +111,7 @@ export class PreviousPeriodMeasureBuilder extends MeasureBuilderBase<
                 dateDataSets: dateDataSets.map(
                     (d): VisualizationInput.IPreviousPeriodDateDataSet => ({
                         ...d,
-                        dataSet: typeof d.dataSet === "string" ? getQualifierObject(d.dataSet) : d.dataSet,
+                        dataSet: typeof d.dataSet === "string" ? getObjQualifier(d.dataSet) : d.dataSet,
                     }),
                 ),
             },
