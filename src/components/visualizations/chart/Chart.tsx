@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import isEqual = require("lodash/isEqual");
 import noop = require("lodash/noop");
 import * as React from "react";
@@ -65,6 +65,10 @@ export default class Chart extends React.Component<IChartProps> {
 
     public setChartRef(ref: HTMLElement) {
         this.chartRef = ref;
+    }
+
+    public getHighchartRef(): HTMLElement {
+        return this.chartRef;
     }
 
     public getChart(): Highcharts.Chart {
