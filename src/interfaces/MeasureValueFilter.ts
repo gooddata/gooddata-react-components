@@ -16,7 +16,9 @@ export const isComparisonTypeOperator = (operator: string): operator is AFM.Comp
     operator === Operators.GREATER_THAN ||
     operator === Operators.GREATER_THAN_OR_EQUAL_TO ||
     operator === Operators.LESS_THAN ||
-    operator === Operators.LESS_THAN_OR_EQUAL_TO;
+    operator === Operators.LESS_THAN_OR_EQUAL_TO ||
+    operator === Operators.EQUAL_TO ||
+    operator === Operators.NOT_EQUAL_TO;
 
 export const isRangeTypeOperator = (operator: string): operator is AFM.RangeConditionOperator =>
     operator === Operators.BETWEEN || operator === Operators.NOT_BETWEEN;

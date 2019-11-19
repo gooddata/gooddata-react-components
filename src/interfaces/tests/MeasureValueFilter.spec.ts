@@ -9,6 +9,8 @@ describe("isComparisonTypeOperator", () => {
         ${Operators.GREATER_THAN_OR_EQUAL_TO} | ${true}
         ${Operators.LESS_THAN}                | ${true}
         ${Operators.LESS_THAN_OR_EQUAL_TO}    | ${true}
+        ${Operators.EQUAL_TO}                 | ${true}
+        ${Operators.NOT_EQUAL_TO}             | ${true}
         ${Operators.BETWEEN}                  | ${false}
         ${Operators.NOT_BETWEEN}              | ${false}
         ${"SOMETHING_ELSE"}                   | ${false}
@@ -26,6 +28,8 @@ describe("isRangeTypeOperator", () => {
         ${Operators.GREATER_THAN_OR_EQUAL_TO} | ${false}
         ${Operators.LESS_THAN}                | ${false}
         ${Operators.LESS_THAN_OR_EQUAL_TO}    | ${false}
+        ${Operators.EQUAL_TO}                 | ${false}
+        ${Operators.NOT_EQUAL_TO}             | ${false}
         ${"SOMETHING_ELSE"}                   | ${false}
     `("should return $result for given $operator operator", ({ operator, result }) => {
         expect(isRangeTypeOperator(operator)).toEqual(result);
