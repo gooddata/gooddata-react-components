@@ -409,7 +409,8 @@ export function visualizationLoadingHOC<
                     title,
                 };
                 if (includeFilterContext) {
-                    exportConfigRequest.showFilters = dataSource.getAfm().filters;
+                    exportConfigRequest.showFilters = true;
+                    exportConfigRequest.afm = dataSource.getAfm();
                 }
 
                 return this.sdk.report.exportResult(

@@ -565,7 +565,8 @@ describe("VisualizationLoadingHOC", () => {
                 const exportConfig: IExportConfig = {
                     format: XLSX,
                     mergeHeaders: true,
-                    showFilters: oneAttributeOneMeasureOneFilterDataSource.getAfm().filters,
+                    showFilters: true,
+                    afm: oneAttributeOneMeasureOneFilterDataSource.getAfm(),
                     title: "Untitled",
                 };
 
