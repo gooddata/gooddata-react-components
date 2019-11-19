@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
-import { shallow } from "enzyme";
+import { shallow, ShallowWrapper } from "enzyme";
 import { ExtendedDateFilters } from "@gooddata/typings";
 import { DateFilterBody, IDateFilterBodyProps } from "../DateFilterBody";
 import { ExcludeCurrentPeriodToggle } from "../../ExcludeCurrentPeriodToggle/ExcludeCurrentPeriodToggle";
@@ -63,5 +63,38 @@ describe("ExtendedDateFilterBody", () => {
     it("should not display edit mode message in normal mode", () => {
         const rendered = shallow(<DateFilterBody {...mockProps} isEditMode={false} />);
         expect(rendered.find(EditModeMessage)).not.toExist();
+    });
+
+    describe("calculateHeight", () => {
+        const resizeWindow = (x: number, y: number) => {
+            (window.innerWidth as number) = x;
+            (window.innerHeight as number) = y;
+        };
+
+        const getBodyWrapper = (component: ShallowWrapper) => {
+            return component.find(".gd-extended-date-filter-body-wrapper");
+        };
+
+        const getBodyScroller = (component: ShallowWrapper) => {
+            return component.find(".gd-extended-date-filter-body-scrollable");
+        };
+
+        it("should not resize body wrapper and scroller", () => {
+            const rendered = shallow(<DateFilterBody {...mockProps} isEditMode={false} />);
+            expect(getBodyWrapper(rendered).props().style).toEqual({});
+            expect(getBodyScroller(rendered).props().style).toEqual({});
+        });
+
+        it("should resize body wrapper and scroller in horizontal mobile layout", () => {
+            resizeWindow(896, 414);
+            const rendered = shallow(<DateFilterBody {...mockProps} isEditMode={false} />);
+            expect(getBodyWrapper(rendered).props().style).toEqual({
+                display: "block",
+                height: "323px",
+            });
+            expect(getBodyScroller(rendered).props().style).toEqual({
+                minHeight: "323px",
+            });
+        });
     });
 });

@@ -21,6 +21,11 @@ import { DateFilterHeader } from "./DateFilterHeader";
 import { DateFilterBodyButton } from "./DateFilterBodyButton";
 import { AbsolutePresetFilterItems } from "./AbsolutePresetFilterItems";
 
+const ACTIONS_BUTTONS_HEIGHT = 53;
+const EXCLUDE_OPEN_PERIOD_HEIGHT = 30; // height of 'Exclude open period' checkbox component
+const MARGIN_BOTTOM = 8;
+const MOBILE_WIDTH = 414; // iPhone 11 Pro Max
+
 export interface IDateFilterBodyProps {
     filterOptions: ExtendedDateFilters.IDateFilterOptionsByType;
     selectedFilterOption: ExtendedDateFilters.DateFilterOption;
@@ -89,6 +94,16 @@ export class DateFilterBody extends React.Component<IDateFilterBodyProps, IDateF
         } = this.props;
         const { route } = this.state;
 
+        const showExcludeCurrent: boolean = !isMobile || isExcludeCurrentPeriodEnabled;
+        const bodyHeight: number = this.calculateHeight(showExcludeCurrent);
+        let wrapperStyle: React.CSSProperties = {};
+        let scrollerStyle: React.CSSProperties = {};
+        if (bodyHeight) {
+            // display: flex causes the scroller is cut off when scrolling
+            wrapperStyle = { display: "block", height: `${bodyHeight}px` };
+            scrollerStyle = { minHeight: `${bodyHeight}px` };
+        }
+
         return (
             <div
                 className={cx(
@@ -114,17 +129,21 @@ export class DateFilterBody extends React.Component<IDateFilterBodyProps, IDateF
                             selectedFilterOption,
                         ),
                     })}
+                    style={wrapperStyle}
                 >
                     {isEditMode && !isMobile && <EditModeMessage />}
                     {isMobile ? (
                         this.renderMobileContent()
                     ) : (
-                        <VisibleScrollbar className="gd-extended-date-filter-body-scrollable">
+                        <VisibleScrollbar
+                            className="gd-extended-date-filter-body-scrollable"
+                            style={scrollerStyle}
+                        >
                             {this.renderDefaultContent()}
                         </VisibleScrollbar>
                     )}
                 </div>
-                {!isMobile || isExcludeCurrentPeriodEnabled ? this.renderExcludeCurrent() : null}
+                {showExcludeCurrent ? this.renderExcludeCurrent() : null}
                 <div className={cx("gd-extended-date-filter-actions")}>
                     <div className="gd-extended-date-filter-actions-buttons">
                         <DateFilterBodyButton
@@ -358,4 +377,13 @@ export class DateFilterBody extends React.Component<IDateFilterBodyProps, IDateF
             </>
         );
     }
+
+    private calculateHeight = (showExcludeCurrent: boolean): number => {
+        // Mobile in Horizontal Layout
+        if (window.innerHeight <= MOBILE_WIDTH) {
+            const excludeOpenPeriodHeight = showExcludeCurrent ? EXCLUDE_OPEN_PERIOD_HEIGHT : 0;
+            return window.innerHeight - excludeOpenPeriodHeight - ACTIONS_BUTTONS_HEIGHT - MARGIN_BOTTOM;
+        }
+        return undefined;
+    };
 }
