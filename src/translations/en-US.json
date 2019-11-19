@@ -815,6 +815,16 @@
         "comment": "",
         "limit": 0
     },
+    "mvf.operator.equalTo": {
+        "value": "equal to",
+        "comment": "",
+        "limit": 0
+    },
+    "mvf.operator.notEqualTo": {
+        "value": "not equal to",
+        "comment": "",
+        "limit": 0
+    },
     "mvf.operator.between": {
         "value": "between",
         "comment": "",

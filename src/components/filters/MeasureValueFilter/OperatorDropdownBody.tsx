@@ -55,6 +55,17 @@ export default class OperatorDropdownBody extends React.PureComponent<IOperatorD
                         />
                         <Separator />
                         <OperatorDropdownItem
+                            operator={Operators.EQUAL_TO}
+                            selectedOperator={selectedOperator}
+                            onClick={onSelect}
+                        />
+                        <OperatorDropdownItem
+                            operator={Operators.NOT_EQUAL_TO}
+                            selectedOperator={selectedOperator}
+                            onClick={onSelect}
+                        />
+                        <Separator />
+                        <OperatorDropdownItem
                             operator={Operators.BETWEEN}
                             selectedOperator={selectedOperator}
                             onClick={onSelect}

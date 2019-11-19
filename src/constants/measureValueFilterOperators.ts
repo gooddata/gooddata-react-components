@@ -9,5 +9,8 @@ export const GREATER_THAN_OR_EQUAL_TO: AFM.ComparisonConditionOperator = "GREATE
 export const LESS_THAN: AFM.ComparisonConditionOperator = "LESS_THAN";
 export const LESS_THAN_OR_EQUAL_TO: AFM.ComparisonConditionOperator = "LESS_THAN_OR_EQUAL_TO";
 
+export const EQUAL_TO: AFM.ComparisonConditionOperator = "EQUAL_TO";
+export const NOT_EQUAL_TO: AFM.ComparisonConditionOperator = "NOT_EQUAL_TO";
+
 export const BETWEEN: AFM.RangeConditionOperator = "BETWEEN";
 export const NOT_BETWEEN: AFM.RangeConditionOperator = "NOT_BETWEEN";
