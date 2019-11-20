@@ -1,7 +1,8 @@
 // (C) 2007-2019 GoodData Corporation
 import { Selector } from "testcafe";
 import { config } from "./utils/config";
-import { loginUsingLoginForm } from "./utils/helpers";
+import { currentUser5 as customUserRole } from "./utils/userRole";
+// import { loginUsingLoginForm } from "./utils/helpers";
 
 const clearButton = Selector(".s-clear");
 const selectAllButton = Selector(".s-select_all");
@@ -10,8 +11,12 @@ const attributeFiltersOverlay = Selector(".gd-attribute-filter-overlay");
 const attributeFilterItems = attributeFiltersOverlay.find(".s-attribute-filter-list-item");
 
 fixture("Attribute filter components")
-    .page(config.url)
-    .beforeEach(loginUsingLoginForm(`${config.url}/attribute-filter-components`));
+    .page(`${config.url}`)
+    // .beforeEach(loginUsingLoginForm(`${config.url}/attribute-filter-components`));
+    .beforeEach(async t => {
+        await t.useRole(customUserRole);
+        await t.navigateTo(`${config.url}/attribute-filter-components`); // if you use currentUser4 - comment this line
+    });
 
 test("Dropdown filter opens, clears, selects all and applies", async t => {
     const dropdownButton = Selector(".s-tested-component .gd-button.s-employee_name");

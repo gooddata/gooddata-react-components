@@ -65,6 +65,7 @@ elif [ "$CONFIG" = "visual" ]; then
         --assertion-timeout $ASSERTION_TIMEOUT \
         --selector-timeout $SELECTOR_TIMEOUT \
         $TESTS_PATH \
+        --disable-page-caching \
         "$@"
 
 elif [ "$CONFIG" = "live" ]; then
