@@ -6,6 +6,7 @@ import {
     factory as createSdk,
     DataLayer,
     ApiResponse,
+    IProperties,
     IPropertiesControls,
     IFeatureFlags,
 } from "@gooddata/gooddata-js";
@@ -17,7 +18,7 @@ import { injectIntl, InjectedIntlProps } from "react-intl";
 import { IHeaderPredicate } from "../../interfaces/HeaderPredicate";
 import { IntlWrapper } from "../core/base/IntlWrapper";
 import { BaseChart } from "../core/base/BaseChart";
-import { IChartConfig, IColorPaletteItem } from "../../interfaces/Config";
+import { IAxisConfig, IChartConfig, IColorPaletteItem } from "../../interfaces/Config";
 import { PivotTable } from "../PivotTable";
 import { Headline } from "../core/Headline";
 import { Xirr } from "../core/Xirr";
@@ -27,15 +28,18 @@ import { VisualizationTypes, VisType } from "../../constants/visualizationTypes"
 import { IDataSource } from "../../interfaces/DataSource";
 import { ISubject } from "../../helpers/async";
 import { getVisualizationTypeFromVisualizationClass } from "../../helpers/visualizationType";
-import MdObjectHelper, { mdObjectToPivotBucketProps } from "../../helpers/MdObjectHelper";
+import MdObjectHelper, {
+    areAllMeasuresOnSingleAxis,
+    mdObjectToPivotBucketProps,
+} from "../../helpers/MdObjectHelper";
 import { fillMissingTitles } from "../../helpers/measureTitleHelper";
 import { LoadingComponent, ILoadingProps } from "../simple/LoadingComponent";
 import { ErrorComponent, IErrorProps } from "../simple/ErrorComponent";
 import { IDrillableItem, generateDimensions, RuntimeError } from "../../";
 import { setTelemetryHeaders } from "../../helpers/utils";
-import { getDefaultTreemapSort } from "../../helpers/sorts";
+import { getDefaultBarChartSort, getDefaultTreemapSort } from "../../helpers/sorts";
 import { convertErrors, generateErrorMap, IErrorMap } from "../../helpers/errorHandlers";
-import { isTreemap } from "../visualizations/utils/common";
+import { isBarChart, isTreemap } from "../visualizations/utils/common";
 import { getColorMappingPredicate, getColorPaletteFromColors } from "../visualizations/utils/color";
 import { getCachedOrLoad } from "../../helpers/sdkCache";
 import { getFeatureFlags, setConfigFromFeatureFlags } from "../../helpers/featureFlags";
@@ -43,6 +47,7 @@ import { mergeFiltersToAfm } from "../../helpers/afmHelper";
 import { _experimentalDataSourceFactory } from "./experimentalDataSource";
 import IVisualizationObjectContent = VisualizationObject.IVisualizationObjectContent;
 import { getHighchartsAxisNameConfiguration } from "../../internal/utils/propertiesHelper";
+
 export { Requireable };
 
 const { ExecuteAfmAdapter, toAfmResultSpec, createSubject } = DataLayer;
@@ -397,7 +402,23 @@ export class VisualizationWrapped extends React.Component<
         this.visualizationUri = visualizationUri;
         this.exportTitle = get(mdObject, "meta.title", "");
 
-        const { afm, resultSpec } = buildAfmResultSpec(mdObject.content, visualizationType, locale);
+        const mdObjectContent: IVisualizationObjectContent = mdObject.content;
+        const mdObjectContentProperties: IProperties | undefined =
+            mdObjectContent && mdObjectContent.properties && JSON.parse(mdObject.content.properties);
+        const secondaryYAxis: IAxisConfig =
+            get(this.props.config, ["secondary_yaxis"], undefined) ||
+            get(mdObjectContentProperties, ["controls", "secondary_yaxis"], undefined);
+        // don't support sort by total value for dual axis
+        const canSortStackTotalValue: boolean =
+            get(mdObjectContentProperties, ["controls", "stackMeasures"], false) &&
+            areAllMeasuresOnSingleAxis(mdObject.content, secondaryYAxis);
+
+        const { afm, resultSpec } = buildAfmResultSpec(
+            mdObject.content,
+            visualizationType,
+            locale,
+            canSortStackTotalValue,
+        );
         const mdObjectTotals = MdObjectHelper.getTotals(mdObject);
 
         const dataSource = await this.createDataSource(afm, filters);
@@ -493,30 +514,44 @@ function buildAfmResultSpec(
     visObj: IVisualizationObjectContent,
     visType: VisType,
     locale: Localization.ILocale,
+    canSortStackTotalValue?: boolean,
 ): IConvertedAFM {
     const updatedVisObj = fillMissingTitles(visObj, locale);
     const genericAfmResultSpec = toAfmResultSpec(updatedVisObj);
 
-    return buildAfmResultSpecForVis(updatedVisObj, visType, genericAfmResultSpec);
+    return buildAfmResultSpecForVis(updatedVisObj, visType, genericAfmResultSpec, canSortStackTotalValue);
 }
 
 function buildAfmResultSpecForVis(
     visObj: IVisualizationObjectContent,
     visType: VisType,
     afmResultSpec: IConvertedAFM,
+    canSortStackTotalValue?: boolean,
 ) {
     const resultSpecWithDimensions = {
         ...afmResultSpec.resultSpec,
         dimensions: generateDimensions(visObj, visType),
     };
 
+    const barChartDefaultSorting = isBarChart(visType)
+        ? {
+              sorts: getDefaultBarChartSort(
+                  afmResultSpec.afm,
+                  resultSpecWithDimensions,
+                  canSortStackTotalValue,
+              ),
+          }
+        : {};
+
     const treemapDefaultSorting = isTreemap(visType)
         ? {
               sorts: getDefaultTreemapSort(afmResultSpec.afm, resultSpecWithDimensions),
           }
         : {};
+
     const resultSpec = {
         ...resultSpecWithDimensions,
+        ...barChartDefaultSorting,
         ...treemapDefaultSorting,
     };
 

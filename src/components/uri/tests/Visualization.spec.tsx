@@ -32,6 +32,7 @@ import { IColorPalette } from "../../../interfaces/Config";
 import { clearSdkCache } from "../../../helpers/sdkCache";
 
 const projectId = "myproject";
+const BARCHART_URI = `/gdc/md/${projectId}/obj/76383`;
 const CHART_URI = `/gdc/md/${projectId}/obj/1`;
 const TABLE_URI = `/gdc/md/${projectId}/obj/2`;
 const TREEMAP_URI = `/gdc/md/${projectId}/obj/3`;
@@ -104,6 +105,10 @@ function uriResolver(_sdk: SDK, _projectId: string, uri: string, identifier: str
 
     if (identifier === CHART_IDENTIFIER || uri === CHART_URI) {
         return getResponse(CHART_URI, SLOW);
+    }
+
+    if (uri === BARCHART_URI) {
+        return getResponse(BARCHART_URI, FAST);
     }
 
     if (uri === TREEMAP_URI) {
@@ -738,6 +743,47 @@ describe("VisualizationWrapped", () => {
                 expect(mutatedSdk.project.getColorPaletteWithGuids).toHaveBeenCalledTimes(1);
             });
         });
+    });
+
+    it("should add default sorting to the BarChart", async () => {
+        const props = {
+            sdk,
+            projectId,
+            uri: BARCHART_URI,
+            fetchVisObject,
+            fetchVisualizationClass,
+            uriResolver,
+            intl,
+            BaseChartComponent: BaseChart,
+        };
+
+        const wrapper = mount(<VisualizationWrapped {...props as any} />);
+        await testUtils.delay(FAST + 1);
+        wrapper.update();
+
+        const BaseChartElement = wrapper.find(BaseChart).get(0);
+
+        expect(BaseChartElement.props.resultSpec.sorts).toEqual([
+            {
+                attributeSortItem: {
+                    aggregation: "sum",
+                    attributeIdentifier: "a1",
+                    direction: "desc",
+                },
+            },
+            {
+                measureSortItem: {
+                    direction: "desc",
+                    locators: [
+                        {
+                            measureLocatorItem: {
+                                measureIdentifier: "m1",
+                            },
+                        },
+                    ],
+                },
+            },
+        ]);
     });
 
     it("should add default sorting to the Treemap", () => {

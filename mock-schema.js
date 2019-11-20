@@ -1,5 +1,32 @@
 // (C) 2007-2019 GoodData Corporation
 
+const barChartAfmExecutions = [
+    {
+        _description: 'Bar chart with 2M, 1VB and stackMeasures is true',
+        execution: require('./stories/test_data/bar_chart_with_2M_1VB_stackMeasures_request.json'),
+        executionResponse: require('./stories/test_data/bar_chart_with_2M_1VB_stackMeasures_response.json'),
+        executionResult: require('./stories/test_data/bar_chart_with_2M_1VB_stackMeasures_result.json')
+    },
+    {
+        _description: 'Bar chart with 2M, 2VB and stackMeasures is true',
+        execution: require('./stories/test_data/bar_chart_with_2M_2VB_stackMeasures_request.json'),
+        executionResponse: require('./stories/test_data/bar_chart_with_2M_2VB_stackMeasures_response.json'),
+        executionResult: require('./stories/test_data/bar_chart_with_2M_2VB_stackMeasures_result.json')
+    },
+    {
+        _description: 'Bar chart with 1M, 2VB and 1 SB',
+        execution: require('./stories/test_data/bar_chart_with_1M_2VB_1SB_request.json'),
+        executionResponse: require('./stories/test_data/bar_chart_with_1M_2VB_1SB_response.json'),
+        executionResult: require('./stories/test_data/bar_chart_with_1M_2VB_1SB_result.json')
+    },
+    {
+        _description: 'Bar chart with 2M and 2VB',
+        execution: require('./stories/test_data/bar_chart_with_2M_2VB_request.json'),
+        executionResponse: require('./stories/test_data/bar_chart_with_2M_2VB_response.json'),
+        executionResult: require('./stories/test_data/bar_chart_with_2M_2VB_result.json')
+    },
+];
+
 const heatmapAfmExecutions = [{
         execution: require('./stories/test_data/heat_map_with_58_rows_mock_request.json'),
         executionResult: require('./stories/test_data/heat_map_with_58_rows_mock_result.json')
@@ -38,6 +65,134 @@ const xirrAfmExecutions = [
         executionResponse: require("./stories/test_data/xirr_simple_response.json"),
         executionResult: require("./stories/test_data/xirr_simple_result.json"),
     }];
+
+const barChartVisualizationObjects = [
+    {
+        title: 'Bar chart with 2M, 1VB and stackMeasures is true',
+        identifier: 'bar-chart-2M-1VB-stackMeasures',
+        type: 'local:bar',
+        filters: [],
+        buckets: [{
+            localIdentifier: 'measures',
+            items: [{
+                localIdentifier: 'm1',
+                filters: [],
+                identifier: '1',
+                alias: 'Amount'
+            }, {
+                localIdentifier: 'm2',
+                filters: [],
+                identifier: '2',
+                alias: 'Amount [BOP]'
+            }]
+        }, {
+            localIdentifier: 'view',
+            items: [{
+                localIdentifier: 'a1',
+                displayForm: '4.df',
+                alias: 'Product'
+            }]
+        }],
+        properties: '{"controls":{"stackMeasures":true}}',
+    },
+    {
+        title: 'Bar chart with 2M, 2VB and stackMeasures is true',
+        identifier: 'bar-chart-2M-2VB-stackMeasures',
+        type: 'local:bar',
+        filters: [],
+        buckets: [{
+            localIdentifier: 'measures',
+            items: [{
+                localIdentifier: 'm1',
+                filters: [],
+                identifier: '1',
+                alias: 'Amount'
+            }, {
+                localIdentifier: 'm2',
+                filters: [],
+                identifier: '2',
+                alias: 'Amount [BOP]'
+            }]
+        }, {
+            localIdentifier: 'view',
+            items: [{
+                localIdentifier: 'a1',
+                displayForm: '4.df',
+                alias: 'Product'
+            }, {
+                localIdentifier: 'a2',
+                displayForm: '5.df',
+                alias: 'Stage Name'
+            }]
+        }],
+        properties: '{"controls":{"stackMeasures":true}}',
+    },
+    {
+        title: 'Bar chart with 1M, 2VB and 1SB',
+        identifier: 'bar-chart-1M-2VB-1SB',
+        type: 'local:bar',
+        filters: [],
+        buckets: [{
+            localIdentifier: 'measures',
+            items: [{
+                localIdentifier: 'm1',
+                filters: [],
+                identifier: '1',
+                alias: 'Amount'
+            }]
+        }, {
+            localIdentifier: 'view',
+            items: [{
+                localIdentifier: 'a1',
+                displayForm: '4.df',
+                alias: 'Product'
+            }, {
+                localIdentifier: 'a2',
+                displayForm: '5.df',
+                alias: 'Stage Name'
+            }]
+        }, {
+            localIdentifier: 'stack',
+            items: [{
+
+                localIdentifier: 'a3',
+                displayForm: '6.df',
+                alias: 'Region',
+            }]
+        }],
+    },
+    {
+        title: 'Bar chart with 2M and 2VB',
+        identifier: 'bar-chart-2M-2VB',
+        type: 'local:bar',
+        filters: [],
+        buckets: [{
+            localIdentifier: 'measures',
+            items: [{
+                localIdentifier: 'm1',
+                filters: [],
+                identifier: '1',
+                alias: 'Amount'
+            }, {
+                localIdentifier: 'm2',
+                filters: [],
+                identifier: '2',
+                alias: 'Amount [BOP]'
+            }]
+        }, {
+            localIdentifier: 'view',
+            items: [{
+                localIdentifier: 'a1',
+                displayForm: '4.df',
+                alias: 'Product'
+            }, {
+                localIdentifier: 'a2',
+                displayForm: '5.df',
+                alias: 'Stage Name'
+            }]
+        }],
+    },
+];
 
 const getBaseProjectSchema = (title, identifier) => {
     return {
@@ -2217,6 +2372,7 @@ const getBaseProjectSchema = (title, identifier) => {
                     }
                 }
             },
+            ...barChartAfmExecutions,
             ...heatmapAfmExecutions,
             ...pivotTableAfmExecutions,
             ...pivotTableSubtotalsAfmExecutions,
@@ -2600,6 +2756,7 @@ const getBaseProjectSchema = (title, identifier) => {
                     }]
                 }]
             },
+            ...barChartVisualizationObjects
         ]
     }
 };

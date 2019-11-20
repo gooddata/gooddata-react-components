@@ -576,4 +576,76 @@ storiesOf("URI components", module)
                 />
             </div>,
         ),
+    )
+    // bar chart default sort
+    .add("Bar chart with 2M and 1VB will be sorted by first measure", () =>
+        screenshotWrap(
+            <div style={{ width: 800, height: 400 }}>
+                <Visualization
+                    projectId="storybook"
+                    uri="/gdc/md/storybook/obj/1007"
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
+    .add("Bar chart with 2M, 1VB and stackMeasures is true will be sorted by total values", () =>
+        screenshotWrap(
+            <div style={{ width: 800, height: 400 }}>
+                <Visualization
+                    projectId="storybook"
+                    identifier="bar-chart-2M-1VB-stackMeasures"
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
+    .add(
+        "Bar chart with 2M, 2VB and stackMeasures is true will be sorted by size of the group, then size of each member of the group",
+        () =>
+            screenshotWrap(
+                <div style={{ width: 800, height: 400 }}>
+                    <Visualization
+                        projectId="storybook"
+                        identifier="bar-chart-2M-2VB-stackMeasures"
+                        onError={onErrorHandler}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                    />
+                </div>,
+            ),
+    )
+    .add(
+        "Bar chart with 1M, 2VB and 1SB will be sorted by size of the group, then size of each member of the group",
+        () =>
+            screenshotWrap(
+                <div style={{ width: 800, height: 400 }}>
+                    <Visualization
+                        projectId="storybook"
+                        identifier="bar-chart-1M-2VB-1SB"
+                        onError={onErrorHandler}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                    />
+                </div>,
+            ),
+    )
+    .add(
+        "Bar chart with 2M and 2VB will be sorted by size of the group, then first measure of each member of the group",
+        () =>
+            screenshotWrap(
+                <div style={{ width: 800, height: 400 }}>
+                    <Visualization
+                        projectId="storybook"
+                        identifier="bar-chart-2M-2VB"
+                        onError={onErrorHandler}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                    />
+                </div>,
+            ),
     );

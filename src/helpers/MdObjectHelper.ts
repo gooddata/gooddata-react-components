@@ -8,6 +8,7 @@ import IMeasure = VisualizationObject.IMeasure;
 import IArithmeticMeasureDefinition = VisualizationObject.IArithmeticMeasureDefinition;
 import { IPivotTableBucketProps } from "../components/PivotTable";
 import { mergeFiltersToAfm } from "./afmHelper";
+import { IAxisConfig } from "../interfaces/Config";
 
 function getTotals(
     mdObject: VisualizationObject.IVisualizationObject,
@@ -95,6 +96,26 @@ export const mdObjectToPivotBucketProps = (
         totals,
     };
 };
+
+export function getMeasuresFromMdObject(
+    mdObject: VisualizationObject.IVisualizationObjectContent,
+): VisualizationObject.BucketItem[] {
+    return get(mdObject, "buckets").reduce((acc, bucket) => {
+        const measureItems: VisualizationObject.BucketItem[] = get(bucket, "items", []).filter(
+            VisualizationObject.isMeasure,
+        );
+        return acc.concat(measureItems);
+    }, []);
+}
+
+export function areAllMeasuresOnSingleAxis(
+    mdObject: VisualizationObject.IVisualizationObjectContent,
+    secondaryYAxis: IAxisConfig,
+): boolean {
+    const measureCount = getMeasuresFromMdObject(mdObject).length;
+    const numberOfMeasureOnSecondaryAxis = secondaryYAxis ? secondaryYAxis.measures.length : 0;
+    return numberOfMeasureOnSecondaryAxis === 0 || measureCount === numberOfMeasureOnSecondaryAxis;
+}
 
 export default {
     getTotals,
