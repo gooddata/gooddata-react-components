@@ -1182,6 +1182,13 @@ export const fullySpecifiedXirrUiConfig: IUiConfig = {
             title: "Measure",
             canAddItems: false,
         },
+        filters: {
+            accepts: [ATTRIBUTE, DATE],
+            itemsLimit: MAX_FILTERS_COUNT,
+            allowsReordering: false,
+            enabled: true,
+            isShowInPercentEnabled: false,
+        },
         attribute: {
             accepts: [DATE],
             itemsLimit: DEFAULT_XIRR_ATTRIBUTES_COUNT,

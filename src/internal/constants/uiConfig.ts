@@ -535,6 +535,7 @@ export const DEFAULT_XIRR_UICONFIG: IUiConfig = {
             accepts: [DATE],
             itemsLimit: DEFAULT_XIRR_ATTRIBUTES_COUNT,
         },
+        ...defaultFilters,
     },
     ...defaultRootUiConfigProperties,
     ...disabledExportConfig,
