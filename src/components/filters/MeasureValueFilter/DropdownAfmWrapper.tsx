@@ -8,27 +8,25 @@ import { Dropdown } from "./Dropdown";
 
 export interface IDropdownProps {
     filter?: AFM.IMeasureValueFilter;
-    button?: React.ComponentType<any>;
-    onApply: (filter: AFM.IMeasureValueFilter, measureIdentifier: string) => void;
-    locale?: string;
-    measureTitle?: string;
+    onApply: (filter: AFM.IMeasureValueFilter) => void;
+    onCancel: () => void;
     measureIdentifier: string;
-    displayDropdown?: boolean;
+    locale?: string;
+    anchorEl?: EventTarget | string;
 }
 
 export class DropdownAfmWrapper extends React.PureComponent<IDropdownProps> {
     public render() {
-        const { button, measureTitle, locale, filter, displayDropdown } = this.props;
+        const { filter, onCancel, locale, anchorEl } = this.props;
 
         return (
             <Dropdown
-                displayDropdown={displayDropdown}
-                button={button}
                 onApply={this.onApply}
-                measureTitle={measureTitle}
-                locale={locale}
+                onCancel={onCancel}
                 operator={(filter && Model.measureValueFilterOperator(filter)) || null}
                 value={(filter && Model.measureValueFilterValue(filter)) || null}
+                locale={locale}
+                anchorEl={anchorEl}
             />
         );
     }
@@ -37,10 +35,10 @@ export class DropdownAfmWrapper extends React.PureComponent<IDropdownProps> {
         const { measureIdentifier, onApply } = this.props;
 
         if (operator === null) {
-            onApply(null, measureIdentifier);
+            onApply(null);
         } else {
             const filter = Model.getFilter(measureIdentifier, operator, value);
-            onApply(filter, measureIdentifier);
+            onApply(filter);
         }
     };
 }

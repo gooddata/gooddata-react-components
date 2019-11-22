@@ -4,28 +4,16 @@ import { injectIntl, InjectedIntlProps } from "react-intl";
 import { IntlWrapper } from "../../core/base/IntlWrapper";
 import { IValue } from "../../../interfaces/MeasureValueFilter";
 import Overlay from "@gooddata/goodstrap/lib/core/Overlay";
-import { DropdownButton as DefaultDropdownButton } from "./DropdownButton";
 import { DropdownBody } from "./DropdownBody";
-import { getOperatorTranslationKey } from "../../../helpers/measureValueFilterOperator";
 import * as Operators from "../../../constants/measureValueFilterOperators";
 
-export interface IDropdownButtonProps {
-    isActive?: boolean;
-    onClick: (e: React.SyntheticEvent) => void;
-    measureTitle?: string;
-    operator?: string;
-    operatorTitle?: string;
-    value?: IValue;
-}
-
 export interface IDropdownOwnProps {
-    button?: React.ComponentType<IDropdownButtonProps>;
     onApply: (operator: string, value?: IValue) => void;
-    locale?: string;
-    measureTitle?: string;
+    onCancel: () => void;
     operator?: string;
     value?: IValue;
-    displayDropdown?: boolean;
+    locale?: string;
+    anchorEl: EventTarget | string;
 }
 
 export type IDropdownProps = IDropdownOwnProps & InjectedIntlProps;
@@ -36,78 +24,36 @@ interface IDropdownState {
 
 class DropdownWrapped extends React.PureComponent<IDropdownProps, IDropdownState> {
     public static defaultProps: Partial<IDropdownOwnProps> = {
-        button: DefaultDropdownButton,
         value: {},
         operator: null,
-        displayDropdown: false,
     };
 
-    private toggleButtonRef: EventTarget = null;
-
-    constructor(props: IDropdownProps) {
-        super(props);
-
-        const { displayDropdown } = props;
-
-        this.state = {
-            displayDropdown,
-        };
-    }
-
     public render() {
-        const { intl, button: DropdownButton, measureTitle, operator, value, locale } = this.props;
-        const { displayDropdown } = this.state;
+        const { operator, value, locale, onCancel, anchorEl } = this.props;
 
         const selectedOperator = operator !== null ? operator : Operators.ALL;
-        const operatorTitle = intl.formatMessage({
-            id: getOperatorTranslationKey(selectedOperator),
-        });
 
         return (
-            <>
-                <DropdownButton
-                    isActive={displayDropdown}
-                    onClick={this.toggle}
-                    measureTitle={measureTitle}
-                    operatorTitle={operatorTitle}
+            <Overlay
+                alignTo={anchorEl}
+                alignPoints={[{ align: "bl tl" }]}
+                closeOnOutsideClick={true}
+                closeOnParentScroll={true}
+                closeOnMouseDrag={true}
+                onClose={onCancel}
+            >
+                <DropdownBody
                     operator={selectedOperator}
                     value={value}
+                    locale={locale}
+                    onCancel={onCancel}
+                    onApply={this.onApply}
                 />
-                {displayDropdown ? (
-                    <Overlay
-                        alignTo={this.toggleButtonRef}
-                        alignPoints={[{ align: "bl tl" }]}
-                        closeOnOutsideClick={true}
-                        closeOnParentScroll={true}
-                        closeOnMouseDrag={true}
-                        onClose={this.closeDropdown}
-                    >
-                        <DropdownBody
-                            operator={selectedOperator}
-                            value={value}
-                            locale={locale}
-                            onCancel={this.closeDropdown}
-                            onApply={this.onApply}
-                        />
-                    </Overlay>
-                ) : null}
-            </>
+            </Overlay>
         );
     }
 
-    private toggle = (e: React.SyntheticEvent) => {
-        this.toggleButtonRef = !this.state.displayDropdown ? e.currentTarget : null;
-
-        this.setState(state => ({ ...state, displayDropdown: !state.displayDropdown }));
-    };
-
-    private closeDropdown = () => {
-        this.toggleButtonRef = null;
-        this.setState({ displayDropdown: false });
-    };
-
     private onApply = (operator: string, value?: IValue) => {
-        this.closeDropdown();
         this.props.onApply(operator, value);
     };
 }

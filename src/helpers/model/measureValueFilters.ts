@@ -55,12 +55,18 @@ function getFilter(identifier: string, operator: string, value: IValue) {
     invariant(operator, `Operator ${operator} is not supported, filter could not be created`);
 }
 
+const isComparisonCondition = (condition: any): condition is AFM.IComparisonCondition =>
+    !isEmpty(condition) && typeof (condition as AFM.IComparisonCondition).comparison !== "undefined";
+
+const isRangeCondition = (condition: any): condition is AFM.IRangeCondition =>
+    !isEmpty(condition) && typeof (condition as AFM.IRangeCondition).range !== "undefined";
+
 const isMeasureValueComparisonFilter = (obj: any): obj is IMeasureValueComparisonFilter =>
     !isEmpty(obj) &&
-    (obj as IMeasureValueComparisonFilter).measureValueFilter.condition.comparison !== undefined;
+    isComparisonCondition((obj as IMeasureValueComparisonFilter).measureValueFilter.condition);
 
 const isMeasureValueRangeFilter = (obj: any): obj is IMeasureValueRangeFilter =>
-    !isEmpty(obj) && (obj as IMeasureValueRangeFilter).measureValueFilter.condition.range !== undefined;
+    !isEmpty(obj) && isRangeCondition((obj as IMeasureValueRangeFilter).measureValueFilter.condition);
 
 function measureValueFilterOperator(filter: AFM.IMeasureValueFilter): MeasureValueFilterConditionOperator {
     if (isMeasureValueComparisonFilter(filter)) {
@@ -84,10 +90,10 @@ function measureValueFilterValue(filter: AFM.IMeasureValueFilter): IValue {
 }
 
 export const measureValueFilter = {
+    isComparisonCondition,
+    isRangeCondition,
     isComparisonTypeOperator,
     isRangeTypeOperator,
-    getComparisonFilter,
-    getRangeFilter,
     getFilter,
     isMeasureValueComparisonFilter,
     isMeasureValueRangeFilter,

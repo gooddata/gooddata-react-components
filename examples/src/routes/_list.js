@@ -241,6 +241,7 @@ export const hiddenPaths = [
         title: "Measure Value Filter",
         Component: MeasureValueFilter,
     },
+    // TODO BB-1694 - Add Measure Value Filter example to the menu
     {
         path: "/hidden/measure-value-filter-component",
         title: "Measure Value Filter Component",
