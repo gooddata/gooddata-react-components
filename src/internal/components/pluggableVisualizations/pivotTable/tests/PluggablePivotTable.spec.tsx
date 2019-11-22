@@ -26,12 +26,12 @@ import {
     IBucketFilter,
     IBucketFilterElement,
 } from "../../../../interfaces/Visualization";
-import noop = require("lodash/noop");
-import cloneDeep = require("lodash/cloneDeep");
-import SpyInstance = jest.SpyInstance;
 import { IDrillableItem } from "../../../../../interfaces/DrillEvents";
 import { PivotTable } from "../../../../../components/core/PivotTable";
 import { DEFAULT_LOCALE } from "../../../../../constants/localization";
+import noop = require("lodash/noop");
+import cloneDeep = require("lodash/cloneDeep");
+import SpyInstance = jest.SpyInstance;
 
 const getMockReferencePoint = (
     measures: IBucketItem[] = [],
@@ -1044,9 +1044,11 @@ describe("isSortItemVisible", () => {
         const measureValueFilter: IBucketFilter = {
             measureLocalIdentifier: "id",
             condition: {
-                operator: "BETWEEN",
-                from: 0,
-                to: 0,
+                range: {
+                    operator: "BETWEEN",
+                    from: 0,
+                    to: 0,
+                },
             },
         };
 
