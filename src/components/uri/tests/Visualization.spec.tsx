@@ -887,6 +887,7 @@ describe("VisualizationWrapped", () => {
                     fetchVisualizationClass,
                     fetchVisObject: () =>
                         Promise.resolve(getVisObjectWithAxisNamePosition(axisName, position)),
+                    getFeatureFlags: () => ({ enableAxisNameConfiguration: true }),
                     uriResolver: () => `/gdc/md/myproject/obj/axis-name-aligned-to-${position}`,
                 };
 
@@ -900,5 +901,33 @@ describe("VisualizationWrapped", () => {
                 expect(baseChartConfig[axisName]).toEqual({ name: { position: expectedHCPosition } });
             },
         );
+
+        it("should not align name", async () => {
+            const axisName: string = "xaxis";
+            const position: string = "left";
+            const expectedHCPosition: string = "middle";
+            const props = {
+                sdk,
+                projectId,
+                identifier: `identifier-${position}`,
+                BaseChartComponent: BaseChart,
+                LoadingComponent,
+                ErrorComponent,
+                intl,
+                fetchVisualizationClass,
+                fetchVisObject: () => Promise.resolve(getVisObjectWithAxisNamePosition(axisName, position)),
+                getFeatureFlags: () => ({ enableAxisNameConfiguration: false }),
+                uriResolver: () => `/gdc/md/myproject/obj/axis-name-aligned-to-${position}`,
+            };
+
+            const wrapper = mount(<VisualizationWrapped {...props as any} />);
+
+            await testUtils.delay(SLOW + 1);
+            wrapper.update();
+
+            const baseChart = wrapper.find(BaseChart);
+            const baseChartConfig = baseChart.prop("config");
+            expect(baseChartConfig[axisName]).toEqual({ name: { position: expectedHCPosition } });
+        });
     });
 });
