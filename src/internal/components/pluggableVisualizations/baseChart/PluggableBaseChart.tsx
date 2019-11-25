@@ -487,7 +487,8 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
             set(supportedControls, "legend.responsive", true);
         }
 
-        supportedControls = getHighchartsAxisNameConfiguration(supportedControls);
+        supportedControls = getHighchartsAxisNameConfiguration(supportedControls, this.featureFlags
+            .enableAxisNameConfiguration as boolean);
 
         return {
             ...defaultControls,
