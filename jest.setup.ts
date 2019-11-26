@@ -2,7 +2,9 @@
 import { configure } from 'enzyme';
 import * as EnzymeAdapter from 'enzyme-adapter-react-16';
 import 'jest-enzyme';
-import * as raf from 'raf';
+import * as requestAnimationFrame from 'raf';
+import "@formatjs/intl-pluralrules";
+import "@formatjs/intl-pluralrules/polyfill-locales";
 
-raf.polyfill();
+requestAnimationFrame.polyfill();
 configure({ adapter: new EnzymeAdapter() });

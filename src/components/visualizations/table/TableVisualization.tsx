@@ -2,7 +2,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as classNames from "classnames";
-import { injectIntl } from "react-intl";
+import { injectIntl, WrappedComponentProps } from "react-intl";
 import debounce = require("lodash/debounce");
 import isEqual = require("lodash/isEqual");
 import noop = require("lodash/noop");
@@ -68,7 +68,6 @@ import {
     shouldShowTotals,
 } from "./totals/utils";
 import { TotalCell } from "./totals/TotalCell";
-import InjectedIntlProps = ReactIntl.InjectedIntlProps;
 import { IIndexedTotalItem, ITotalWithData } from "../../../interfaces/Totals";
 import { IDrillConfig } from "../../../interfaces/DrillEvents";
 import { DEFAULT_HEADER_HEIGHT, DEFAULT_ROW_HEIGHT } from "./constants/layout";
@@ -153,10 +152,12 @@ export interface ITableVisualizationState {
 }
 
 export class TableVisualizationClass extends React.Component<
-    ITableVisualizationProps & InjectedIntlProps & IContainerProps,
+    ITableVisualizationProps & WrappedComponentProps & IContainerProps,
     ITableVisualizationState
 > {
-    public static defaultProps: Partial<ITableVisualizationProps & IContainerProps> = {
+    public static defaultProps: Partial<
+        ITableVisualizationProps & WrappedComponentProps & IContainerProps
+    > = {
         afterRender: noop,
         containerHeight: null,
         containerMaxHeight: null,
@@ -205,7 +206,7 @@ export class TableVisualizationClass extends React.Component<
     private tableWrapRef: Element;
     private totalsRemoveComponentRef: RemoveRows;
 
-    constructor(props: ITableVisualizationProps & InjectedIntlProps & IContainerProps) {
+    constructor(props: ITableVisualizationProps & WrappedComponentProps & IContainerProps) {
         super(props);
 
         this.state = {

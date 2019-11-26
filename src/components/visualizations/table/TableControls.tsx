@@ -1,6 +1,6 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
-import { InjectedIntlProps, injectIntl } from "react-intl";
+import { WrappedComponentProps, injectIntl } from "react-intl";
 
 import Button from "@gooddata/goodstrap/lib/Button/Button";
 
@@ -12,8 +12,8 @@ export interface ITableControlsProps {
     isLessButtonVisible?: boolean;
 }
 
-export class TableControlsClass extends React.Component<ITableControlsProps & InjectedIntlProps> {
-    public static defaultProps: Partial<ITableControlsProps> = {
+export class TableControlsClass extends React.Component<ITableControlsProps & WrappedComponentProps> {
+    public static defaultProps: Partial<ITableControlsProps & WrappedComponentProps> = {
         isMoreButtonDisabled: false,
         isMoreButtonVisible: false,
         isLessButtonVisible: false,

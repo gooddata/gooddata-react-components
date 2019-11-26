@@ -4,7 +4,7 @@ import * as classNames from "classnames";
 import noop = require("lodash/noop");
 import uniqueId = require("lodash/uniqueId");
 import { Cell } from "fixed-data-table-2";
-import { injectIntl, InjectedIntlProps } from "react-intl";
+import { injectIntl, WrappedComponentProps } from "react-intl";
 import { ISeparators } from "@gooddata/numberjs";
 import { VisualizationObject } from "@gooddata/typings";
 import { isMappingHeaderMeasureItem, IMappingHeader } from "../../../../interfaces/MappingHeader";
@@ -38,8 +38,8 @@ export interface ITotalCellProps {
     onRowAdd?: (columnIndex: number, totalType: VisualizationObject.TotalType) => void;
 }
 
-export class TotalCellPure extends React.Component<ITotalCellProps & InjectedIntlProps> {
-    public static defaultProps: Partial<ITotalCellProps> = {
+export class TotalCellPure extends React.Component<ITotalCellProps & WrappedComponentProps> {
+    public static defaultProps: Partial<ITotalCellProps & WrappedComponentProps> = {
         editAllowed: false,
         onCellMouseOver: noop,
         onCellMouseLeave: noop,

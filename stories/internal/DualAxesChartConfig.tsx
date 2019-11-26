@@ -73,10 +73,10 @@ const renderSupportedCharts = (dataset: any, config?: IChartConfig, minmaxInfo =
     );
 
 const getMinMaxConfig: any = (
-    minLeft = undefined as string,
-    maxLeft = undefined as string,
-    minRight = undefined as string,
-    maxRight = undefined as string,
+    minLeft: string = undefined,
+    maxLeft: string = undefined,
+    minRight: string = undefined,
+    maxRight: string = undefined,
 ) => ({
     config: {
         yaxis: {

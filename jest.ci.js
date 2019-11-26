@@ -1,7 +1,8 @@
-const pkg = require('./package.json');
+// (C) 2019 GoodData Corporation
+const jestConfig = require('./jest.config.js');
 
 const config = {
-    ...pkg.jest,
+    ...jestConfig,
     "collectCoverage": true,
     "coverageDirectory": "<rootDir>/ci/results/coverage",
     "coverageReporters": ["json", "cobertura", "lcov"],

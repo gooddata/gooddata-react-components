@@ -7,6 +7,7 @@ import { Portal } from "react-portal";
 import { AFM } from "@gooddata/typings";
 import { testUtils } from "@gooddata/js-utils";
 import "jest";
+import { WrappedComponentProps } from "react-intl";
 
 import {
     TableVisualization,
@@ -31,7 +32,6 @@ import {
     TABLE_ROWS_2A_3M,
 } from "../fixtures/2attributes3measures";
 import { TotalCell } from "../totals/TotalCell";
-import InjectedIntlProps = ReactIntl.InjectedIntlProps;
 import { ITotalWithData } from "../../../../interfaces/Totals";
 import { withIntl, wrapWithIntl } from "../../utils/intlUtils";
 import * as headerPredicateFactory from "../../../../factory/HeaderPredicateFactory";
@@ -59,7 +59,7 @@ const WrappedTable: React.ComponentClass<Partial<ITableVisualizationProps & ICon
 describe("Table", () => {
     function renderTable(
         customProps: Partial<ITableVisualizationProps> = {},
-    ): ReactWrapper<ITableVisualizationProps & InjectedIntlProps, any> {
+    ): ReactWrapper<ITableVisualizationProps & WrappedComponentProps, any> {
         const props: Partial<ITableVisualizationProps & IContainerProps> = {
             containerWidth: 600,
             containerHeight: 400,
@@ -75,7 +75,7 @@ describe("Table", () => {
 
     it("should fit container dimensions", () => {
         const wrapper: ReactWrapper<
-            ITableVisualizationProps & InjectedIntlProps,
+            ITableVisualizationProps & WrappedComponentProps,
             ITableVisualizationState
         > = renderTable();
         expect(wrapper.find(Table).prop("width")).toEqual(600);
@@ -102,7 +102,7 @@ describe("Table", () => {
 
     it("should render column headers", () => {
         const wrapper: ReactWrapper<
-            ITableVisualizationProps & InjectedIntlProps,
+            ITableVisualizationProps & WrappedComponentProps,
             ITableVisualizationState
         > = renderTable();
         expect(wrapper.find(Table).prop("children")).toHaveLength(3);
@@ -110,7 +110,7 @@ describe("Table", () => {
 
     it("should align measure columns to the right", () => {
         const wrapper: ReactWrapper<
-            ITableVisualizationProps & InjectedIntlProps,
+            ITableVisualizationProps & WrappedComponentProps,
             ITableVisualizationState
         > = renderTable();
         const columns = wrapper.find(Table).prop("children");
@@ -121,7 +121,7 @@ describe("Table", () => {
 
     it("should distribute width evenly between columns", () => {
         const wrapper: ReactWrapper<
-            ITableVisualizationProps & InjectedIntlProps,
+            ITableVisualizationProps & WrappedComponentProps,
             ITableVisualizationState
         > = renderTable();
         const columns = wrapper.find(Table).prop("children");
@@ -130,7 +130,7 @@ describe("Table", () => {
 
     describe("renderers", () => {
         function renderCell(
-            wrapper: ReactWrapper<ITableVisualizationProps & InjectedIntlProps, ITableVisualizationState>,
+            wrapper: ReactWrapper<ITableVisualizationProps & WrappedComponentProps, ITableVisualizationState>,
             columnKey: number,
         ): JSX.Element {
             const columns = wrapper.find(Table).prop("children");
@@ -140,7 +140,7 @@ describe("Table", () => {
 
         it("should format measures", () => {
             const wrapper: ReactWrapper<
-                ITableVisualizationProps & InjectedIntlProps,
+                ITableVisualizationProps & WrappedComponentProps,
                 ITableVisualizationState
             > = renderTable();
             const span: JSX.Element = renderCell(wrapper, 2);
@@ -151,7 +151,7 @@ describe("Table", () => {
 
         it("should render attributes as strings", () => {
             const wrapper: ReactWrapper<
-                ITableVisualizationProps & InjectedIntlProps,
+                ITableVisualizationProps & WrappedComponentProps,
                 ITableVisualizationState
             > = renderTable();
             const span = renderCell(wrapper, 0);
@@ -162,7 +162,7 @@ describe("Table", () => {
 
         it("should render title into header", () => {
             const wrapper: ReactWrapper<
-                ITableVisualizationProps & InjectedIntlProps,
+                ITableVisualizationProps & WrappedComponentProps,
                 ITableVisualizationState
             > = renderTable();
             expect(
@@ -175,7 +175,7 @@ describe("Table", () => {
 
         it("should bind onclick when cell drillable", () => {
             const wrapper: ReactWrapper<
-                ITableVisualizationProps & InjectedIntlProps,
+                ITableVisualizationProps & WrappedComponentProps,
                 ITableVisualizationState
             > = renderTable({
                 drillablePredicates: [
@@ -190,7 +190,7 @@ describe("Table", () => {
 
         it("should not bind onclick when cell not drillable", () => {
             const wrapper: ReactWrapper<
-                ITableVisualizationProps & InjectedIntlProps,
+                ITableVisualizationProps & WrappedComponentProps,
                 ITableVisualizationState
             > = renderTable({
                 drillablePredicates: [
@@ -207,7 +207,7 @@ describe("Table", () => {
         describe("default header renderer", () => {
             it("should render up arrow", () => {
                 const wrapper: ReactWrapper<
-                    ITableVisualizationProps & InjectedIntlProps,
+                    ITableVisualizationProps & WrappedComponentProps,
                     ITableVisualizationState
                 > = renderTable({ sortBy: 0, sortDir: ASC });
                 const columns = wrapper.find(Table).prop("children");
@@ -220,7 +220,7 @@ describe("Table", () => {
 
             it("should render down arrow", () => {
                 const wrapper: ReactWrapper<
-                    ITableVisualizationProps & InjectedIntlProps,
+                    ITableVisualizationProps & WrappedComponentProps,
                     ITableVisualizationState
                 > = renderTable({ sortBy: 0, sortDir: DESC });
                 const columns = wrapper.find(Table).prop("children");
@@ -233,7 +233,7 @@ describe("Table", () => {
 
             it("should render arrow on second column", () => {
                 const wrapper: ReactWrapper<
-                    ITableVisualizationProps & InjectedIntlProps,
+                    ITableVisualizationProps & WrappedComponentProps,
                     ITableVisualizationState
                 > = renderTable({ sortBy: 1, sortDir: ASC });
                 const columns = wrapper.find(Table).prop("children");
@@ -246,7 +246,7 @@ describe("Table", () => {
 
             it("should not render arrow if sort info is missing", () => {
                 const wrapper: ReactWrapper<
-                    ITableVisualizationProps & InjectedIntlProps,
+                    ITableVisualizationProps & WrappedComponentProps,
                     ITableVisualizationState
                 > = renderTable({ sortBy: 0, sortDir: null });
                 const columns = wrapper.find(Table).prop("children");
@@ -260,7 +260,7 @@ describe("Table", () => {
         describe("tooltip header renderer", () => {
             it("should render title into header", () => {
                 const wrapper: ReactWrapper<
-                    ITableVisualizationProps & InjectedIntlProps,
+                    ITableVisualizationProps & WrappedComponentProps,
                     ITableVisualizationState
                 > = renderTable({ sortInTooltip: true });
 
@@ -311,7 +311,7 @@ describe("Table", () => {
         describe("totals edit not allowed", () => {
             it("should not has footer when no totals provided", () => {
                 const wrapper: ReactWrapper<
-                    ITableVisualizationProps & InjectedIntlProps,
+                    ITableVisualizationProps & WrappedComponentProps,
                     ITableVisualizationState
                 > = renderTable({
                     ...DATA_2A_3M,
@@ -326,7 +326,7 @@ describe("Table", () => {
 
             it("should has footer when some totals provided", () => {
                 const wrapper: ReactWrapper<
-                    ITableVisualizationProps & InjectedIntlProps,
+                    ITableVisualizationProps & WrappedComponentProps,
                     ITableVisualizationState
                 > = renderTable({
                     totalsWithData: TOTALS,
@@ -342,7 +342,7 @@ describe("Table", () => {
 
             it("should render total cells when totals are provided", () => {
                 const wrapper: ReactWrapper<
-                    ITableVisualizationProps & InjectedIntlProps,
+                    ITableVisualizationProps & WrappedComponentProps,
                     ITableVisualizationState
                 > = renderTable({
                     totalsWithData: TOTALS,
@@ -354,7 +354,7 @@ describe("Table", () => {
 
             it("should not render any footer cells when no totals are provided", () => {
                 const wrapper: ReactWrapper<
-                    ITableVisualizationProps & InjectedIntlProps,
+                    ITableVisualizationProps & WrappedComponentProps,
                     ITableVisualizationState
                 > = renderTable(DATA_2A_3M);
 
@@ -363,7 +363,7 @@ describe("Table", () => {
 
             it("should not render any total cell when totals are provided but data contains only measures", () => {
                 const wrapper: ReactWrapper<
-                    ITableVisualizationProps & InjectedIntlProps,
+                    ITableVisualizationProps & WrappedComponentProps,
                     ITableVisualizationState
                 > = renderTable({
                     totalsWithData: TOTALS,
@@ -377,7 +377,7 @@ describe("Table", () => {
 
             it("should not render total cell when totals are provided and there is only row in data", () => {
                 const wrapper: ReactWrapper<
-                    ITableVisualizationProps & InjectedIntlProps,
+                    ITableVisualizationProps & WrappedComponentProps,
                     ITableVisualizationState
                 > = renderTable({
                     totalsWithData: TOTALS,
@@ -391,7 +391,7 @@ describe("Table", () => {
 
             it("should reset footer when component is updated with no totals", () => {
                 const wrapper: ReactWrapper<
-                    ITableVisualizationProps & InjectedIntlProps,
+                    ITableVisualizationProps & WrappedComponentProps,
                     ITableVisualizationState
                 > = renderTable({
                     totalsWithData: TOTALS,
@@ -409,7 +409,7 @@ describe("Table", () => {
 
             it("should update footer height when component is updated with different totals", () => {
                 const wrapper: ReactWrapper<
-                    ITableVisualizationProps & InjectedIntlProps,
+                    ITableVisualizationProps & WrappedComponentProps,
                     ITableVisualizationState
                 > = renderTable({
                     totalsWithData: TOTALS,
@@ -441,7 +441,7 @@ describe("Table", () => {
         describe("totals edit allowed", () => {
             it("should has footer even when no totals defined", () => {
                 const wrapper: ReactWrapper<
-                    ITableVisualizationProps & InjectedIntlProps,
+                    ITableVisualizationProps & WrappedComponentProps,
                     ITableVisualizationState
                 > = renderTable({
                     totalsEditAllowed: true,
@@ -457,7 +457,7 @@ describe("Table", () => {
 
             it("should set editable class name to table", () => {
                 const wrapper: ReactWrapper<
-                    ITableVisualizationProps & InjectedIntlProps,
+                    ITableVisualizationProps & WrappedComponentProps,
                     ITableVisualizationState
                 > = renderTable({
                     totalsEditAllowed: true,
@@ -469,7 +469,7 @@ describe("Table", () => {
 
             it("should render remove buttons block when totals are provided", () => {
                 const wrapper: ReactWrapper<
-                    ITableVisualizationProps & InjectedIntlProps,
+                    ITableVisualizationProps & WrappedComponentProps,
                     ITableVisualizationState
                 > = renderTable({
                     totalsWithData: TOTALS,
@@ -482,7 +482,7 @@ describe("Table", () => {
 
             it("should bind mouse events on table body cells", () => {
                 const wrapper: ReactWrapper<
-                    ITableVisualizationProps & InjectedIntlProps,
+                    ITableVisualizationProps & WrappedComponentProps,
                     ITableVisualizationState
                 > = renderTable({
                     totalsWithData: TOTALS,
@@ -510,7 +510,7 @@ describe("Table", () => {
                 const onTotalsEdit = jest.fn();
 
                 const wrapper: ReactWrapper<
-                    ITableVisualizationProps & InjectedIntlProps,
+                    ITableVisualizationProps & WrappedComponentProps,
                     ITableVisualizationState
                 > = renderTable({
                     totalsEditAllowed: true,

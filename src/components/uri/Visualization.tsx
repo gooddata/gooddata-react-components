@@ -14,7 +14,7 @@ import get = require("lodash/get");
 import noop = require("lodash/noop");
 import isEqual = require("lodash/isEqual");
 import { AFM, VisualizationObject, VisualizationClass, Localization } from "@gooddata/typings";
-import { injectIntl, InjectedIntlProps } from "react-intl";
+import { injectIntl, WrappedComponentProps } from "react-intl";
 import { IHeaderPredicate } from "../../interfaces/HeaderPredicate";
 import { IntlWrapper } from "../core/base/IntlWrapper";
 import { BaseChart } from "../core/base/BaseChart";
@@ -145,12 +145,12 @@ function fetchVisualizationClass(
 }
 
 export class VisualizationWrapped extends React.Component<
-    IVisualizationProps & InjectedIntlProps,
+    IVisualizationProps & WrappedComponentProps,
     IVisualizationState
 > {
     public static propTypes = VisualizationPropType;
 
-    public static defaultProps: Partial<IVisualizationProps> = {
+    public static defaultProps: Partial<IVisualizationProps & WrappedComponentProps> = {
         onError: noop,
         onLegendReady: noop,
         filters: [],
@@ -182,7 +182,7 @@ export class VisualizationWrapped extends React.Component<
 
     private isUnmounted: boolean;
 
-    constructor(props: IVisualizationProps & InjectedIntlProps) {
+    constructor(props: IVisualizationProps & WrappedComponentProps) {
         super(props);
 
         this.state = {
@@ -259,7 +259,7 @@ export class VisualizationWrapped extends React.Component<
         return propKeys.some(propKey => !isEqual(this.props[propKey], nextProps[propKey]));
     }
 
-    public componentWillReceiveProps(nextProps: IVisualizationProps & InjectedIntlProps) {
+    public componentWillReceiveProps(nextProps: IVisualizationProps & WrappedComponentProps) {
         if (nextProps.sdk && this.props.sdk !== nextProps.sdk) {
             this.sdk = nextProps.sdk.clone();
             setTelemetryHeaders(this.sdk, "Visualization", nextProps);

@@ -3,7 +3,7 @@ import cloneDeep = require("lodash/cloneDeep");
 import get = require("lodash/get");
 import set = require("lodash/set");
 import forEach = require("lodash/forEach");
-import { InjectedIntl } from "react-intl";
+import { IntlShape } from "react-intl";
 
 import * as BucketNames from "../../../constants/bucketNames";
 import { IExtendedReferencePoint, IBucket, IUiConfig, IBucketUiConfig } from "../../interfaces/Visualization";
@@ -20,7 +20,7 @@ import * as pieMeasuresIcon from "../../assets/pie/bucket-title-measures.svg";
 import * as pieViewIcon from "../../assets/pie/bucket-title-view.svg";
 import { hasColorMapping } from "../propertiesHelper";
 
-function setPieChartBucketWarningMessages(referencePoint: IExtendedReferencePoint, intl?: InjectedIntl) {
+function setPieChartBucketWarningMessages(referencePoint: IExtendedReferencePoint, intl?: IntlShape) {
     const buckets: IBucket[] = get(referencePoint, BUCKETS);
     const updatedUiConfig: IUiConfig = cloneDeep(get(referencePoint, UICONFIG));
 
@@ -51,7 +51,7 @@ function setPieChartBucketWarningMessages(referencePoint: IExtendedReferencePoin
 
 export function setPieChartUiConfig(
     referencePoint: IExtendedReferencePoint,
-    intl: InjectedIntl,
+    intl: IntlShape,
     visualizationType: string,
 ): IExtendedReferencePoint {
     const referencePointConfigured = cloneDeep(referencePoint);

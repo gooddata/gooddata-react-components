@@ -1,7 +1,7 @@
 // (C) 2007-2019 GoodData Corporation
 import { Execution, VisualizationObject } from "@gooddata/typings";
 import { ApiResponseError } from "@gooddata/gooddata-js";
-import { InjectedIntl } from "react-intl";
+import { IntlShape } from "react-intl";
 import { ErrorStates, ErrorCodes } from "../constants/errorStates";
 import get = require("lodash/get");
 import includes = require("lodash/includes");
@@ -29,7 +29,7 @@ export interface IErrorMap {
     };
 }
 
-export function generateErrorMap(intl: InjectedIntl): IErrorMap {
+export function generateErrorMap(intl: IntlShape): IErrorMap {
     const errorMap = {
         [ErrorStates.DATA_TOO_LARGE_TO_DISPLAY]: {
             icon: "icon-cloud-rain",

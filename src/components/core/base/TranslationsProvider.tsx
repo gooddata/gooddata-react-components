@@ -1,6 +1,6 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
-import { injectIntl, InjectedIntlProps } from "react-intl";
+import { injectIntl, WrappedComponentProps } from "react-intl";
 
 export interface ITranslationsProviderProps {
     children: any;
@@ -12,7 +12,7 @@ export interface ITranslationsComponentProps {
 }
 
 export class TranslationsProvider extends React.PureComponent<
-    ITranslationsProviderProps & InjectedIntlProps
+    ITranslationsProviderProps & WrappedComponentProps
 > {
     public render() {
         const props: ITranslationsComponentProps = {

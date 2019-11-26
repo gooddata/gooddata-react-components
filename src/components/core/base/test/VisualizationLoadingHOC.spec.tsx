@@ -93,7 +93,7 @@ describe("VisualizationLoadingHOC", () => {
             LoadingComponent,
             afterRender: jest.fn(),
             pushData: jest.fn(),
-            locale: "en-USA",
+            locale: "en-US",
             drillableItems: [] as IDrillableItem[],
             onFiredDrillEvent: jest.fn(),
         };

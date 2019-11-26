@@ -1,8 +1,9 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import { AFM, Execution } from "@gooddata/typings";
 import { Header, Item, ItemsWrapper } from "@gooddata/goodstrap/lib/List/MenuList";
 import * as classNames from "classnames";
+import { IntlShape } from "react-intl";
 
 import { getNthAttributeLocalIdentifier, getNthAttributeName } from "../../../helpers/executionResultHelper";
 import SubMenu from "../../menu/SubMenu";
@@ -13,7 +14,7 @@ import menuHelper from "./aggregationsMenuHelper";
 const MENU_HEADER_OFFSET = -36;
 
 export interface IAggregationsSubMenuProps {
-    intl: ReactIntl.InjectedIntl;
+    intl: IntlShape;
     totalType: AFM.TotalType;
     toggler: JSX.Element;
     isMenuOpened?: boolean;

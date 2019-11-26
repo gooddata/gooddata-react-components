@@ -1,12 +1,12 @@
 // (C) 2019 GoodData Corporation
-import { InjectedIntl } from "react-intl";
+import { IntlFormatters } from "react-intl";
 
 export interface IMessageTranslator {
-    formatMessage: InjectedIntl["formatMessage"];
+    formatMessage: IntlFormatters["formatMessage"];
 }
 
 export interface IDateTranslator {
-    formatDate: InjectedIntl["formatDate"];
+    formatDate: IntlFormatters["formatDate"];
 }
 
 export interface IDateAndMessageTranslator extends IDateTranslator, IMessageTranslator {}

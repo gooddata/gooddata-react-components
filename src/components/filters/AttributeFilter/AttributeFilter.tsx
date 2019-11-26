@@ -3,7 +3,7 @@ import * as React from "react";
 import * as PropTypes from "prop-types";
 import pick = require("lodash/pick");
 import noop = require("lodash/noop");
-import { injectIntl, InjectedIntlProps } from "react-intl";
+import { injectIntl, WrappedComponentProps } from "react-intl";
 import { SDK, factory as createSdk } from "@gooddata/gooddata-js";
 import { AFM, VisualizationInput } from "@gooddata/typings";
 
@@ -44,7 +44,7 @@ const DefaultFilterLoading = injectIntl(({ intl }) => {
 export interface IFilterErrorProps {
     error: string;
 }
-const DefaultFilterError = injectIntl(({ intl, error }: IFilterErrorProps & InjectedIntlProps) => {
+const DefaultFilterError = injectIntl(({ intl, error }: IFilterErrorProps & WrappedComponentProps) => {
     // tslint:disable-next-line:no-console
     console.error(error);
     const text = intl.formatMessage({ id: "gs.filter.error" });

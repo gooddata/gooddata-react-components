@@ -1,6 +1,6 @@
 // (C) 2007-2019 GoodData Corporation
 import * as React from "react";
-import { injectIntl, InjectedIntlProps } from "react-intl";
+import { injectIntl, WrappedComponentProps } from "react-intl";
 import classNames from "classnames";
 import noop = require("lodash/noop");
 import capitalize = require("lodash/capitalize");
@@ -17,7 +17,7 @@ export interface IOperatorDropdownItemOwnProps {
     onClick: (identifier: string) => void;
 }
 
-export type IOperatorDropdownItemProps = IOperatorDropdownItemOwnProps & InjectedIntlProps;
+export type IOperatorDropdownItemProps = IOperatorDropdownItemOwnProps & WrappedComponentProps;
 
 export class OperatorDropdownItem extends React.PureComponent<IOperatorDropdownItemProps> {
     public static defaultProps: any = {

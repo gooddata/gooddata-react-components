@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
-import { InjectedIntlProps, injectIntl } from "react-intl";
+import { WrappedComponentProps, injectIntl } from "react-intl";
 import noop = require("lodash/noop");
 
 import { IDrillEvent, IDrillEventExtended } from "../../../interfaces/DrillEvents";
@@ -10,8 +10,8 @@ import { convertDrillableItemsToPredicates } from "../../../helpers/headerPredic
 import { getHeadlineData, applyDrillableItems, buildDrillEventData } from "./utils/XirrTransformationUtils";
 import { IHeadlineTransformationProps } from "./types";
 
-class XirrTransformation extends React.Component<IHeadlineTransformationProps & InjectedIntlProps> {
-    public static defaultProps: Partial<IHeadlineTransformationProps> = {
+class XirrTransformation extends React.Component<IHeadlineTransformationProps & WrappedComponentProps> {
+    public static defaultProps: Partial<IHeadlineTransformationProps & WrappedComponentProps> = {
         drillableItems: [],
         onFiredDrillEvent: () => true,
         onDrill: noop,

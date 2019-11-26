@@ -1,13 +1,15 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import { mount, ReactWrapper } from "enzyme";
-import { InjectedIntlProps } from "react-intl";
+import { WrappedComponentProps } from "react-intl";
 import { ITableSortBubbleContentProps, TableSortBubbleContent } from "../TableSortBubbleContent";
 import { ASC, DESC } from "../../../../constants/sort";
 import { withIntl } from "../../utils/intlUtils";
 
 describe("TableSortBubbleContent", () => {
-    function createBubble(customProps = {}): ReactWrapper<ITableSortBubbleContentProps & InjectedIntlProps> {
+    function createBubble(
+        customProps = {},
+    ): ReactWrapper<ITableSortBubbleContentProps & WrappedComponentProps> {
         const props: ITableSortBubbleContentProps = {
             title: "Foo",
             ...customProps,
@@ -19,7 +21,7 @@ describe("TableSortBubbleContent", () => {
     }
 
     it("should render 2 sort buttons", () => {
-        const wrapper: ReactWrapper<ITableSortBubbleContentProps & InjectedIntlProps> = createBubble();
+        const wrapper: ReactWrapper<ITableSortBubbleContentProps & WrappedComponentProps> = createBubble();
         expect(wrapper.find(".button-sort-asc")).toHaveLength(1);
         expect(wrapper.find(".button-sort-desc")).toHaveLength(1);
     });
@@ -30,7 +32,9 @@ describe("TableSortBubbleContent", () => {
             onSortChange,
             onClose: jest.fn(),
         };
-        const wrapper: ReactWrapper<ITableSortBubbleContentProps & InjectedIntlProps> = createBubble(props);
+        const wrapper: ReactWrapper<ITableSortBubbleContentProps & WrappedComponentProps> = createBubble(
+            props,
+        );
 
         wrapper.find(".button-sort-asc").simulate("click");
         expect(onSortChange.mock.calls[0][0]).toEqual(ASC);
@@ -45,7 +49,9 @@ describe("TableSortBubbleContent", () => {
         const props: Partial<ITableSortBubbleContentProps> = {
             onClose: jest.fn(),
         };
-        const wrapper: ReactWrapper<ITableSortBubbleContentProps & InjectedIntlProps> = createBubble(props);
+        const wrapper: ReactWrapper<ITableSortBubbleContentProps & WrappedComponentProps> = createBubble(
+            props,
+        );
         wrapper.find(".close-button").simulate("click");
 
         expect(props.onClose).toHaveBeenCalledTimes(1);

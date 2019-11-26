@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
 import * as cx from "classnames";
@@ -40,6 +40,7 @@ export default class StaticLegend extends React.PureComponent<any, any> {
                 {this.renderPagingButton("up", this.showPrevPage, page === 1)}
                 <FormattedMessage
                     id="visualizations.of"
+                    tagName="span"
                     values={{
                         page: <strong>{page}</strong>,
                         pagesCount,

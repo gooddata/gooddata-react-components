@@ -1,8 +1,8 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import * as classNames from "classnames";
 import noop = require("lodash/noop");
-import { injectIntl, FormattedMessage, InjectedIntlProps } from "react-intl";
+import { injectIntl, FormattedMessage, WrappedComponentProps } from "react-intl";
 
 export interface ITotalItem {
     title: string;
@@ -16,8 +16,8 @@ export interface IDropdownItemProps {
     onSelect: (item: object) => void;
 }
 
-export class PureDropdownItem extends React.PureComponent<IDropdownItemProps & InjectedIntlProps> {
-    constructor(props: IDropdownItemProps & InjectedIntlProps) {
+export class PureDropdownItem extends React.PureComponent<IDropdownItemProps & WrappedComponentProps> {
+    constructor(props: IDropdownItemProps & WrappedComponentProps) {
         super(props);
 
         this.onSelect = this.onSelect.bind(this);

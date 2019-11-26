@@ -10,10 +10,13 @@ import {
     relativePresetFilter,
 } from "./fixtures";
 import { convertPlatformDateStringToDate } from "../../DateConversions";
+import { MessageDescriptor } from "react-intl";
+import { PrimitiveType } from "intl-messageformat";
 
 const serializingTranslator: IDateAndMessageTranslator = {
     formatDate: (id, options) => `${id}__${JSON.stringify(options)}`,
-    formatMessage: (id, values) => `${id.id}__${JSON.stringify(values)}`,
+    formatMessage: (id: MessageDescriptor, values?: Record<string, PrimitiveType>) =>
+        `${id.id}__${JSON.stringify(values)}`,
 };
 
 describe("getDateFilterTitleUsingTranslator", () => {

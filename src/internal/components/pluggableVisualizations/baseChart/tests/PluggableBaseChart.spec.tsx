@@ -1,6 +1,7 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
 import noop = require("lodash/noop");
+import pick = require("lodash/pick");
 import { VisualizationObject } from "@gooddata/typings";
 import { ILocale, IVisProps, IBucket, IFilters } from "../../../../interfaces/Visualization";
 import * as BucketNames from "../../../../../constants/bucketNames";
@@ -170,7 +171,9 @@ describe("PluggableBaseChart", () => {
         );
 
         const renderCallsCount = spyOnRender.mock.calls.length;
-        expect(spyOnRender.mock.calls[renderCallsCount - 1][0]).toMatchObject(expectedBaseChartElement);
+        expect(spyOnRender.mock.calls[renderCallsCount - 1][0]).toMatchObject(
+            pick(expectedBaseChartElement, ["legend", "height"]),
+        );
     });
 
     it("should render chart with legend on right when it is auto positioned and environment is dashboards", () => {
@@ -210,7 +213,9 @@ describe("PluggableBaseChart", () => {
         );
 
         const renderCallsCount = spyOnRender.mock.calls.length;
-        expect(spyOnRender.mock.calls[renderCallsCount - 1][0]).toMatchObject(expectedBaseChartElement);
+        expect(spyOnRender.mock.calls[renderCallsCount - 1][0]).toMatchObject(
+            pick(expectedBaseChartElement, "legend"),
+        );
     });
 
     it("should render chart with legend on right when it is auto positioned and visualization is stacked", () => {
@@ -259,7 +264,9 @@ describe("PluggableBaseChart", () => {
         );
 
         const renderCallsCount = spyOnRender.mock.calls.length;
-        expect(spyOnRender.mock.calls[renderCallsCount - 1][0]).toMatchObject(expectedBaseChartElement);
+        expect(spyOnRender.mock.calls[renderCallsCount - 1][0]).toMatchObject(
+            pick(expectedBaseChartElement, "legend"),
+        );
     });
 
     it("should render configuration panel with correct properties", () => {
@@ -328,7 +335,9 @@ describe("PluggableBaseChart", () => {
         );
 
         const renderCallsCount = spyOnRender.mock.calls.length;
-        expect(spyOnRender.mock.calls[renderCallsCount - 1][0]).toMatchObject(expectedBaseChartElement);
+        expect(spyOnRender.mock.calls[renderCallsCount - 1][0]).toMatchObject(
+            pick(expectedBaseChartElement, "height"),
+        );
     });
 
     it(

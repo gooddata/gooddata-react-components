@@ -3,7 +3,7 @@ import cloneDeep = require("lodash/cloneDeep");
 import get = require("lodash/get");
 import set = require("lodash/set");
 import forEach = require("lodash/forEach");
-import { InjectedIntl } from "react-intl";
+import { IntlShape } from "react-intl";
 
 import * as BucketNames from "../../../constants/bucketNames";
 import { IExtendedReferencePoint, IBucket, IUiConfig, IBucketUiConfig } from "../../interfaces/Visualization";
@@ -21,7 +21,7 @@ import * as lineTrendIcon from "../../assets/line/bucket-title-trend.svg";
 import * as lineSegmentIcon from "../../assets/line/bucket-title-segment.svg";
 import { hasColorMapping } from "../propertiesHelper";
 
-function setLineChartBucketWarningMessages(referencePoint: IExtendedReferencePoint, intl?: InjectedIntl) {
+function setLineChartBucketWarningMessages(referencePoint: IExtendedReferencePoint, intl?: IntlShape) {
     const buckets: IBucket[] = get(referencePoint, BUCKETS);
     const updatedUiConfig: IUiConfig = cloneDeep(get(referencePoint, UICONFIG));
 
@@ -54,7 +54,7 @@ function setLineChartBucketWarningMessages(referencePoint: IExtendedReferencePoi
 
 export function setLineChartUiConfig(
     referencePoint: IExtendedReferencePoint,
-    intl: InjectedIntl,
+    intl: IntlShape,
     visualizationType: string,
 ): IExtendedReferencePoint {
     const referencePointConfigured = cloneDeep(referencePoint);

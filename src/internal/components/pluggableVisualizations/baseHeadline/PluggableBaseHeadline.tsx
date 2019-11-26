@@ -17,14 +17,14 @@ import {
 import { getSupportedProperties } from "../../../utils/propertiesHelper";
 import { createInternalIntl } from "../../../utils/internalIntlProvider";
 import { DEFAULT_LOCALE } from "../../../../constants/localization";
-import { InjectedIntl } from "react-intl";
+import { IntlShape } from "react-intl";
 
 export abstract class PluggableBaseHeadline extends AbstractPluggableVisualization {
     protected projectId: string;
     protected configPanelElement: string;
     protected element: string;
     protected locale: ILocale;
-    protected intl: InjectedIntl;
+    protected intl: IntlShape;
     protected callbacks: IVisCallbacks;
     protected featureFlags?: IFeatureFlags;
 

@@ -3,7 +3,7 @@ import cloneDeep = require("lodash/cloneDeep");
 import get = require("lodash/get");
 import set = require("lodash/set");
 import forEach = require("lodash/forEach");
-import { InjectedIntl } from "react-intl";
+import { IntlShape } from "react-intl";
 
 import * as BucketNames from "../../../constants/bucketNames";
 import { IExtendedReferencePoint, IBucket, IUiConfig, IBucketUiConfig } from "../../interfaces/Visualization";
@@ -20,7 +20,7 @@ import * as treemapMeasuresIcon from "../../assets/treemap/bucket-title-measures
 import * as treemapViewIcon from "../../assets/treemap/bucket-title-view.svg";
 import * as treemapSegmentIcon from "../../assets/treemap/bucket-title-segment.svg";
 
-function setTreemapBucketWarningMessages(referencePoint: IExtendedReferencePoint, intl?: InjectedIntl) {
+function setTreemapBucketWarningMessages(referencePoint: IExtendedReferencePoint, intl?: IntlShape) {
     const buckets: IBucket[] = get(referencePoint, BUCKETS);
     const updatedUiConfig: IUiConfig = cloneDeep(get(referencePoint, UICONFIG));
 
@@ -59,7 +59,7 @@ function setTreemapBucketWarningMessages(referencePoint: IExtendedReferencePoint
 
 export function setTreemapUiConfig(
     referencePoint: IExtendedReferencePoint,
-    intl: InjectedIntl,
+    intl: IntlShape,
     visualizationType: string,
 ): IExtendedReferencePoint {
     const referencePointConfigured = cloneDeep(referencePoint);

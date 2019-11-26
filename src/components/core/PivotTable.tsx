@@ -14,6 +14,7 @@ import * as classNames from "classnames";
 import * as CustomEvent from "custom-event";
 import * as invariant from "invariant";
 import * as React from "react";
+import { WrappedComponentProps } from "react-intl";
 
 import "../../../styles/css/pivotTable.css";
 
@@ -102,7 +103,6 @@ import isEqual = require("lodash/isEqual");
 import noop = require("lodash/noop");
 import sumBy = require("lodash/sumBy");
 
-import InjectedIntlProps = ReactIntl.InjectedIntlProps;
 import { getDrillIntersection } from "../visualizations/utils/drilldownEventing";
 
 export interface IPivotTableProps extends ICommonChartProps, IDataSourceProviderInjectedProps {
@@ -129,7 +129,7 @@ export interface IPivotTableState {
 export type IPivotTableInnerProps = IPivotTableProps &
     ILoadingInjectedProps &
     IDataSourceProviderInjectedProps &
-    InjectedIntlProps;
+    WrappedComponentProps;
 
 const DEFAULT_ROW_HEIGHT = 28;
 const AG_NUMERIC_CELL_CLASSNAME = "ag-numeric-cell";
