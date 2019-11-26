@@ -121,6 +121,11 @@ const configuration = {
             'Combo chart with onFiredDrillEvent': {
                 readySelector: '.screenshot-ready-wrapper-done'
             }
+        },
+        'Internal/HighCharts/ChartTransformation': {
+            'Over height bottom legend': {
+                readySelector: '.screenshot-ready-wrapper-done'
+            }
         }
     }
 };

@@ -23,6 +23,7 @@ import identity = require("lodash/identity");
 import { withAxisNamePositionConfig, withAxisNameVisibilityConfig } from "../hoc/withAxisName";
 import { withChartAlignmentConfigs } from "../hoc/withChartAlignmentConfigs";
 import { VisualizationTypes } from "../../src/constants/visualizationTypes";
+import { createHighChartResolver, ScreenshotReadyWrapper } from "../utils/ScreenshotReadyWrapper";
 
 function getChart({
     type = "column",
@@ -1030,6 +1031,16 @@ storiesOf("Internal/HighCharts/ChartTransformation", module)
                 legendPosition: "right",
                 dataSet: fixtures.barChartWith60MetricsAndViewByAttribute,
             }),
+        ),
+    )
+    .add("Over height bottom legend", () =>
+        screenshotWrap(
+            <ScreenshotReadyWrapper resolver={createHighChartResolver(1)}>
+                {getChart({
+                    legendPosition: "bottom",
+                    dataSet: fixtures.barChartWith150MetricsAndViewByAttribute,
+                })}
+            </ScreenshotReadyWrapper>,
         ),
     )
     .add("Legend with mobile paging", () => (

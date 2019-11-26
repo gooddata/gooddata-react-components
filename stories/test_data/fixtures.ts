@@ -438,6 +438,8 @@ export const barChartWith18MetricsAndViewByAttribute: any = barChartWithNTimes3M
 
 export const barChartWith60MetricsAndViewByAttribute: any = barChartWithNTimes3MetricsAndViewByAttribute(18);
 
+export const barChartWith150MetricsAndViewByAttribute: any = barChartWithNTimes3MetricsAndViewByAttribute(54);
+
 export const barChartWith6PopMeasuresAndViewByAttribute = (() => {
     const n = 6;
     let dataSet: any = immutableSet(
