@@ -10,6 +10,20 @@ describe("xirrBucketHelper", () => {
         items: [referencePointMocks.masterMeasureItems[0]],
     };
 
+    const arithmeticMeasureBucket: IBucket = {
+        localIdentifier: BucketNames.MEASURES,
+        items: [
+            referencePointMocks.arithmeticMeasureItems[0],
+            referencePointMocks.masterMeasureItems[0],
+            referencePointMocks.masterMeasureItems[1],
+        ],
+    };
+
+    const popMeasureBucket: IBucket = {
+        localIdentifier: BucketNames.MEASURES,
+        items: [referencePointMocks.derivedMeasureItems[0], referencePointMocks.masterMeasureItems[0]],
+    };
+
     const emptyMeasureBucket: IBucket = {
         localIdentifier: BucketNames.MEASURES,
         items: [],
@@ -477,6 +491,36 @@ describe("xirrBucketHelper", () => {
                 "treemap with date attribute in segment",
                 [
                     validMeasureBucket,
+                    {
+                        localIdentifier: BucketNames.VIEW,
+                        items: [referencePointMocks.attributeItems[0]],
+                    },
+                    {
+                        localIdentifier: BucketNames.SEGMENT,
+                        items: [referencePointMocks.dateItem],
+                    },
+                ],
+                [validMeasureBucket, validAttributeBucket],
+            ],
+            [
+                "bar chart with arithmetic measure in the first place (RAIL-1931)",
+                [
+                    arithmeticMeasureBucket,
+                    {
+                        localIdentifier: BucketNames.VIEW,
+                        items: [referencePointMocks.attributeItems[0]],
+                    },
+                    {
+                        localIdentifier: BucketNames.SEGMENT,
+                        items: [referencePointMocks.dateItem],
+                    },
+                ],
+                [validMeasureBucket, validAttributeBucket],
+            ],
+            [
+                "bar chart with PoP measure in the first place (RAIL-1931)",
+                [
+                    popMeasureBucket,
                     {
                         localIdentifier: BucketNames.VIEW,
                         items: [referencePointMocks.attributeItems[0]],
