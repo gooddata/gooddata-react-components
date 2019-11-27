@@ -1,7 +1,8 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
 
 @import "./_settings.scss";
+@import "~@gooddata/goodstrap/lib/core/styles/variables.scss";
 @import "~@gooddata/goodstrap/lib/core/styles/typo-mixins.scss";
 @import "~@gooddata/goodstrap/lib/core/styles/Overlay.scss";
 @import "~@gooddata/goodstrap/lib/core/styles/Spinner.scss";
@@ -16,6 +17,8 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
 
         // TODO: Importing Messages doesn't work. Error styles are termporarily hardcoded here
         .gd-message {
+            @include gd-font-primary;
+
             position: relative;
             box-sizing: border-box;
             display: inline-block;
@@ -23,7 +26,6 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
             padding: 4px 8px 4px 10px;
             min-height: 1px;
             border-radius: 3px;
-            font-family: avenir, "Helvetica Neue", arial, sans-serif;
             font-size: 14px;
             text-align: left;
             color: #e54d42;

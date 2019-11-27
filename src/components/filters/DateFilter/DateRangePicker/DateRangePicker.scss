@@ -156,11 +156,12 @@ $gd-day-picker-width: 268px;
         }
 
         .DayPicker-Caption {
+            @include gd-font-primary;
+
             display: table-caption;
             margin-left: 0.25em;
             margin-right: 0.25em;
             margin-bottom: 1em;
-            font-family: Avenir;
             font-size: 17px;
             text-align: center;
             color: #000;
@@ -176,9 +177,10 @@ $gd-day-picker-width: 268px;
         }
 
         .DayPicker-Weekday {
+            @include gd-font-primary;
+
             display: table-cell;
             padding-bottom: 0.5em;
-            font-family: Avenir;
             font-weight: 400;
             font-size: 13px;
             text-align: center;
@@ -200,9 +202,10 @@ $gd-day-picker-width: 268px;
         }
 
         .DayPicker-Day {
+            @include gd-font-primary;
+
             display: table-cell;
             padding: 0.3125em 0.55em;
-            font-family: Avenir;
             font-size: 14px;
             font-weight: 700;
             text-align: center;

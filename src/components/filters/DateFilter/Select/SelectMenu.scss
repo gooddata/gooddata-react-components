@@ -4,6 +4,8 @@
 @import "~@gooddata/goodstrap/lib/core/styles/mixins.scss";
 
 .gd-select-menu {
+    @include gd-font-primary;
+
     & * {
         box-sizing: border-box;
     }
@@ -13,7 +15,6 @@
     padding: 6px 0;
     line-height: 1.4rem;
     border-radius: 3px;
-    font-family: $gd-font-primary;
     background-color: #fff;
     min-width: 100%;
 

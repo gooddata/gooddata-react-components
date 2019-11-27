@@ -1031,7 +1031,7 @@ function getAxesConfiguration(chartOptions: IChartOptions) {
                     ...labelsEnabled,
                     style: {
                         color: styleVariables.gdColorStateBlank,
-                        font: '12px Avenir, "Helvetica Neue", Arial, sans-serif',
+                        font: "12px 'Lato', 'Helvetica Neue', arial, sans-serif",
                     },
                     ...rotationProp,
                 },
@@ -1040,7 +1040,7 @@ function getAxesConfiguration(chartOptions: IChartOptions) {
                     margin: 15,
                     style: {
                         color: styleVariables.gdColorLink,
-                        font: '14px Avenir, "Helvetica Neue", Arial, sans-serif',
+                        font: "14px 'Lato', 'Helvetica Neue', arial, sans-serif",
                     },
                 },
                 opposite,
@@ -1099,7 +1099,7 @@ function getAxesConfiguration(chartOptions: IChartOptions) {
                     ...labelsEnabled,
                     style: {
                         color: styleVariables.gdColorStateBlank,
-                        font: '12px Avenir, "Helvetica Neue", Arial, sans-serif',
+                        font: "12px 'Lato', 'Helvetica Neue', arial, sans-serif",
                     },
                     autoRotation: [-90],
                     ...rotationProp,
@@ -1111,7 +1111,7 @@ function getAxesConfiguration(chartOptions: IChartOptions) {
                     style: {
                         textOverflow: "ellipsis",
                         color: styleVariables.gdColorLink,
-                        font: '14px Avenir, "Helvetica Neue", Arial, sans-serif',
+                        font: "14px 'Lato', 'Helvetica Neue', arial, sans-serif",
                     },
                 },
                 className,

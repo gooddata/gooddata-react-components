@@ -1176,10 +1176,10 @@
     rxjs "^5.5.6"
     uuid "^3.2.1"
 
-"@gooddata/goodstrap@^64.6.0":
-  version "64.6.2"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-64.6.2.tgz#d968fcab8ee412f330d330d18a3cebd292cbb799"
-  integrity sha512-Y5UylyE0/Q+tdEh2ayhApnGj46g1Gh4CabUoUEXno1CIShaouT/G6wKByu6fcp+Y1o0MSce1f8Nop5v3KjOuKw==
+"@gooddata/goodstrap@64.6.7-alpha-nikolacech-fet-395-2019-11-27T14-40-26-117Z":
+  version "64.6.7-alpha-nikolacech-fet-395-2019-11-27T14-40-26-117Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-64.6.7-alpha-nikolacech-fet-395-2019-11-27T14-40-26-117Z.tgz#f181d0c9cd7a6c8b30c71caa6a85f559bff91575"
+  integrity sha512-Pz8YfArqGQj08ea4Hk+FA7CkjwjwgqKHH8L/6w7P9zvwAdlO19wfKM98CCUck9RnG5hgknWU+Q2HW3Irj85AnA==
   dependencies:
     "@gooddata/js-utils" "^3.5.0"
     babel-runtime "6.25.0"

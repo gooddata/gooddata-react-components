@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 @import "~@gooddata/goodstrap/lib/core/styles/variables";
 @import "~@gooddata/goodstrap/lib/Button/styles/variables";
 
@@ -6,7 +6,7 @@ $ag-icons-path: "~ag-grid-community/src/styles/ag-theme-balham/icons/";
 
 $border-color: transparent;
 $font-size: 12px;
-$font-family: $gd-font-primary;
+$font-family: "Lato", "Helvetica Neue", arial, sans-serif;
 $foreground-color: $gd-color-text;
 $default-background: $gd-color-white;
 $header-background-color: $gd-color-white;
@@ -23,6 +23,8 @@ $header-cell-resize-width: 20px;
 .gd-table-component {
     @import "~ag-grid-community/src/styles/ag-grid";
     @import "~ag-grid-community/src/styles/ag-theme-balham/sass/ag-theme-balham";
+
+    @include gd-font-primary;
 
     .gd-table {
         .ag-root-wrapper {

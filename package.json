@@ -112,7 +112,7 @@
   },
   "dependencies": {
     "@gooddata/gooddata-js": "^11.21.1",
-    "@gooddata/goodstrap": "^64.6.0",
+    "@gooddata/goodstrap": "64.6.7-alpha-nikolacech-fet-395-2019-11-27T14-40-26-117Z",
     "@gooddata/js-utils": "^3.5.0",
     "@gooddata/numberjs": "^3.2.3",
     "@gooddata/typings": "^2.19.0",

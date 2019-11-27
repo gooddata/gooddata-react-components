@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
 
 @import "~fixed-data-table-2/dist/fixed-data-table.css";
@@ -14,9 +14,10 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
 @import "variables";
 
 .indigo-table-component {
+    @include gd-font-primary;
+
     position: relative;
     overflow: hidden;
-    font-family: "Avenir", "Helvetica Neue", Arial, sans-serif;
     font-size: 12px;
     font-weight: normal;
     line-height: 100%;

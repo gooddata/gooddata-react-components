@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import { SDK, DataLayer } from "@gooddata/gooddata-js";
 import { colors2Object, ISeparators, numberFormat } from "@gooddata/numberjs";
@@ -83,7 +83,7 @@ export const KpiError = (props: IErrorProps) => {
                 fontWeight: 700,
                 verticalAlign: "middle",
                 color: "#94a1ad",
-                fontFamily: "avenir, Helvetica Neue, arial, sans-serif",
+                fontFamily: "'Lato', 'Helvetica Neue', arial, sans-serif",
             }}
         >
             {message}

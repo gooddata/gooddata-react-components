@@ -114,7 +114,7 @@ const BASE_TEMPLATE: any = {
     chart: {
         animation: false,
         style: {
-            fontFamily: 'Avenir, "Helvetica Neue", Arial, sans-serif',
+            fontFamily: "'Lato', 'Helvetica Neue', arial, sans-serif",
         },
         events: {
             afterGetContainer() {

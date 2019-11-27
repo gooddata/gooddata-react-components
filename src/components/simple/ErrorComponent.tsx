@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import * as PropTypes from "prop-types";
 import { Requireable } from "prop-types"; // tslint:disable-line:no-duplicate-imports
@@ -42,7 +42,7 @@ export class ErrorComponent extends React.Component<IErrorProps, null> {
             justifyContent: "center",
             whiteSpace: "normal",
             lineHeight: "normal",
-            fontFamily: "avenir, Helvetica Neue, arial, sans-serif",
+            fontFamily: "'Lato', 'Helvetica Neue', arial, sans-serif",
         },
     };
 

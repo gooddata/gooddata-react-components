@@ -42,9 +42,10 @@ $responsive-legend: "only screen and (max-width: 767px)";
 
     .series-item,
     .series-axis-indicator {
+        @include gd-font-primary;
+
         display: flex;
         align-items: center;
-        font-family: $gd-font-primary;
         cursor: pointer;
 
         .series-icon {
@@ -198,7 +199,7 @@ $responsive-legend: "only screen and (max-width: 767px)";
     }
 
     &.heatmap-legend {
-        font-family: $gd-font-primary;
+        @include gd-font-primary;
 
         .labels {
             display: flex;
