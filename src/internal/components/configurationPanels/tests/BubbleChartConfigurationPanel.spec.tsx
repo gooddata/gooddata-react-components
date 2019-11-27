@@ -133,6 +133,9 @@ describe("BubbleChartconfigurationPanel", () => {
 
     describe("axis name configuration", () => {
         const defaultProps: IConfigurationPanelContentProps = {
+            featureFlags: {
+                enableAxisNameConfiguration: true,
+            },
             isError: false,
             isLoading: false,
             locale: DEFAULT_LOCALE,
@@ -272,5 +275,23 @@ describe("BubbleChartconfigurationPanel", () => {
                 expect(yAxisSection.props().disabled).toEqual(expectedYAxisSectionDisabled);
             },
         );
+
+        it("should not render name sections in configuration panel", () => {
+            const mdObject = {
+                buckets: [] as any,
+                visualizationClass,
+            };
+
+            const wrapper = createComponent({
+                ...defaultProps,
+                featureFlags: {
+                    enableAxisNameConfiguration: false,
+                },
+                mdObject,
+            });
+
+            const axisSections = wrapper.find(NameSubsection);
+            expect(axisSections.exists()).toEqual(false);
+        });
     });
 });

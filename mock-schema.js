@@ -1,5 +1,9 @@
 // (C) 2007-2019 GoodData Corporation
 
+const featureFlags = {
+    enableAxisNameConfiguration: true,
+};
+
 const barChartAfmExecutions = [
     {
         _description: 'Bar chart with 2M, 1VB and stackMeasures is true',
@@ -2757,7 +2761,8 @@ const getBaseProjectSchema = (title, identifier) => {
                 }]
             },
             ...barChartVisualizationObjects
-        ]
+        ],
+        featureFlags
     }
 };
 

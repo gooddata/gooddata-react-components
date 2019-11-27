@@ -372,12 +372,12 @@ export class VisualizationWrapped extends React.Component<
 
     private createVisualizationConfig(): IChartConfig {
         const { config } = this.props;
-        const { mdObject, colorPalette } = this.state;
+        const { featureFlags, mdObject, colorPalette } = this.state;
         const mdObjectContent = mdObject && mdObject.content;
 
         return setConfigFromFeatureFlags(
-            mergeChartConfigWithProperties(config, mdObjectContent, colorPalette),
-            this.state.featureFlags,
+            mergeChartConfigWithProperties(config, mdObjectContent, colorPalette, featureFlags),
+            featureFlags,
         );
     }
 
@@ -578,6 +578,7 @@ function mergeChartConfigWithProperties(
     config: IChartConfig,
     visObj: IVisualizationObjectContent,
     fallbackPalette: IColorPaletteItem[],
+    featureFlags: IFeatureFlags,
 ): IChartConfig {
     const properties: IPropertiesControls | undefined =
         visObj && visObj.properties && JSON.parse(visObj.properties).controls;
@@ -595,7 +596,10 @@ function mergeChartConfigWithProperties(
               })
             : undefined;
 
-    const propsWithHCAxisNameConfig = getHighchartsAxisNameConfiguration(properties);
+    const propsWithHCAxisNameConfig = getHighchartsAxisNameConfiguration(
+        properties,
+        featureFlags.enableAxisNameConfiguration as boolean,
+    );
 
     return {
         ...propsWithHCAxisNameConfig,

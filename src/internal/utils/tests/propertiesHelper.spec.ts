@@ -248,7 +248,7 @@ describe("propertiesHelper", () => {
                     max: 200,
                 },
             };
-            expect(getHighchartsAxisNameConfiguration(controlsProp)).toEqual(controlsProp);
+            expect(getHighchartsAxisNameConfiguration(controlsProp, true)).toEqual(controlsProp);
         });
 
         it.each([
@@ -268,11 +268,29 @@ describe("propertiesHelper", () => {
                 },
             };
 
-            const newControlsProp = getHighchartsAxisNameConfiguration(controlsProp);
+            const newControlsProp = getHighchartsAxisNameConfiguration(controlsProp, true);
             expect(newControlsProp).toEqual({
                 xaxis: {
                     name: {
                         position: hcValue,
+                    },
+                },
+            });
+        });
+
+        it("should return default position", () => {
+            const controlsProp: IVisualizationProperties = {
+                xaxis: {
+                    name: {
+                        position: "left",
+                    },
+                },
+            };
+            const newControlsProp = getHighchartsAxisNameConfiguration(controlsProp, false);
+            expect(newControlsProp).toEqual({
+                xaxis: {
+                    name: {
+                        position: "middle",
                     },
                 },
             });
