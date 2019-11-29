@@ -25,6 +25,10 @@ export function getDimensionTotals(bucket: VisualizationObject.IBucket): AFM.ITo
     );
 }
 
+export function getGeoChartDimensions(_buckets: VisualizationObject.IBucket[]): AFM.IDimension[] {
+    return [];
+}
+
 export function getPivotTableDimensions(buckets: VisualizationObject.IBucket[]): AFM.IDimension[] {
     const rowAttributes: VisualizationObject.IBucket = buckets.find(
         // ATTRIBUTE for backwards compatibility with Table component. Actually ROWS

@@ -19,6 +19,7 @@ import { IHeaderPredicate } from "../../interfaces/HeaderPredicate";
 import { IntlWrapper } from "../core/base/IntlWrapper";
 import { BaseChart } from "../core/base/BaseChart";
 import { IAxisConfig, IChartConfig, IColorPaletteItem } from "../../interfaces/Config";
+import { GeoChart } from "../core/GeoChart";
 import { PivotTable } from "../PivotTable";
 import { Headline } from "../core/Headline";
 import { Xirr } from "../core/Xirr";
@@ -79,6 +80,7 @@ export interface IVisualizationProps extends IEvents {
     ) => Promise<VisualizationClass.IVisualizationClass>;
     getFeatureFlags?: (sdk: SDK, projectId: string) => Promise<IFeatureFlags>;
     BaseChartComponent?: any;
+    GeoChartComponent?: any;
     PivotTableComponent?: any;
     HeadlineComponent?: any;
     XirrComponent?: any;
@@ -159,6 +161,7 @@ export class VisualizationWrapped extends React.Component<
         fetchVisualizationClass,
         getFeatureFlags,
         BaseChartComponent: BaseChart,
+        GeoChartComponent: GeoChart,
         PivotTableComponent: PivotTable,
         HeadlineComponent: Headline,
         XirrComponent: Xirr,
@@ -293,6 +296,7 @@ export class VisualizationWrapped extends React.Component<
             onLoadingChanged,
             locale,
             BaseChartComponent,
+            GeoChartComponent,
             PivotTableComponent,
             HeadlineComponent,
             XirrComponent,
@@ -331,7 +335,32 @@ export class VisualizationWrapped extends React.Component<
             dataSource,
         };
 
-        switch (type) {
+        // TODO: test only
+        const xxxType = VisualizationTypes.GEO || type;
+
+        switch (xxxType) {
+            case VisualizationTypes.GEO: {
+                return (
+                    <GeoChartComponent
+                        {...commonProps}
+                        {...sourceProps}
+                        onLegendReady={onLegendReady}
+                        type={type}
+                    />
+                );
+
+                // const processedVisualizationObject = {
+                //     ...mdObject,
+                //     content: fillMissingTitles(mdObject.content, locale),
+                // };
+                // this.exportTitle = get(processedVisualizationObject, "meta.title", "");
+                // const pivotBucketProps = mdObjectToPivotBucketProps(
+                //     processedVisualizationObject,
+                //     filtersFromProps,
+                // );
+                // // we do not need to pass totals={totals} because BucketPivotTable deals with changes in totals itself
+                // return <GeoChartComponent {...commonProps} {...sourceProps} {...pivotBucketProps} />;
+            }
             case VisualizationTypes.TABLE: {
                 const processedVisualizationObject = {
                     ...mdObject,

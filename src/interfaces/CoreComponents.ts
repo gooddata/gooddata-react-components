@@ -14,4 +14,5 @@ export interface ICoreComponents {
     PivotTable: React.ComponentClass<IPivotTableProps>;
     ScatterPlot: React.ComponentClass<IChartProps>;
     FunnelChart: React.ComponentClass<IChartProps>;
+    GeoChart: React.ComponentClass<IChartProps>;
 }
