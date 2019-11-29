@@ -207,9 +207,9 @@ describe("createSorts", () => {
                     attributes: [A1],
                 };
                 const expectedSort: AFM.SortItem[] = [SORTED_BY_M1];
-                expect(createSorts("bar", afm, emptyResultSpec, emptyVisualizationProperties)).toEqual(
-                    expectedSort,
-                );
+                expect(
+                    createSorts("bar", afm, emptyResultSpec, emptyVisualizationProperties, false, true),
+                ).toEqual(expectedSort);
             });
 
             it("should sort by group for bar chart with 1 measure and 2 viewBy", () => {
@@ -226,9 +226,9 @@ describe("createSorts", () => {
                     ],
                 };
                 const expectedSort: AFM.SortItem[] = [SORTED_BY_A1_AGGREGATION, SORTED_BY_A2_AGGREGATION];
-                expect(createSorts("bar", afm, resultSpec, emptyVisualizationProperties)).toEqual(
-                    expectedSort,
-                );
+                expect(
+                    createSorts("bar", afm, resultSpec, emptyVisualizationProperties, false, true),
+                ).toEqual(expectedSort);
             });
 
             it("should sort by group for bar chart with 1 measure, 2 viewBy and 1 stackBy", () => {
@@ -245,9 +245,9 @@ describe("createSorts", () => {
                     ],
                 };
                 const expectedSort: AFM.SortItem[] = [SORTED_BY_A1_AGGREGATION, SORTED_BY_A2_AGGREGATION];
-                expect(createSorts("bar", afm, resultSpec, emptyVisualizationProperties)).toEqual(
-                    expectedSort,
-                );
+                expect(
+                    createSorts("bar", afm, resultSpec, emptyVisualizationProperties, false, true),
+                ).toEqual(expectedSort);
             });
 
             it("should sort by group and first measure for bar chart with 2 measures and 2 viewBy", () => {
@@ -264,9 +264,9 @@ describe("createSorts", () => {
                     ],
                 };
                 const expectedSort: AFM.SortItem[] = [SORTED_BY_A1_AGGREGATION, SORTED_BY_M1];
-                expect(createSorts("bar", afm, resultSpec, emptyVisualizationProperties)).toEqual(
-                    expectedSort,
-                );
+                expect(
+                    createSorts("bar", afm, resultSpec, emptyVisualizationProperties, false, true),
+                ).toEqual(expectedSort);
             });
 
             it("should sort by group for bar chart with 2 measures, 2 viewBy and canSortStackTotalValue is true", () => {
@@ -283,16 +283,42 @@ describe("createSorts", () => {
                     ],
                 };
                 const expectedSort: AFM.SortItem[] = [SORTED_BY_A1_AGGREGATION, SORTED_BY_A2_AGGREGATION];
-                expect(createSorts("bar", afm, resultSpec, emptyVisualizationProperties, true)).toEqual(
+                expect(createSorts("bar", afm, resultSpec, emptyVisualizationProperties, true, true)).toEqual(
                     expectedSort,
                 );
             });
 
+            it("should not sort by total group", () => {
+                const afm: AFM.IAfm = {
+                    measures: [M1],
+                    attributes: [A1, A2],
+                };
+                const resultSpec: AFM.IResultSpec = {
+                    dimensions: [
+                        { itemIdentifiers: ["measureGroup"] },
+                        {
+                            itemIdentifiers: ["a1", "a2"],
+                        },
+                    ],
+                };
+                const expectedSort: AFM.SortItem[] = [SORTED_BY_M1];
+                expect(
+                    createSorts("bar", afm, resultSpec, emptyVisualizationProperties, false, false),
+                ).toEqual(expectedSort);
+            });
+
             it("should return area sort for stacked bar chart", () => {
                 const expectedSort: AFM.SortItem[] = [SORTED_BY_M1];
-                expect(createSorts("bar", stackedAfm, emptyResultSpec, emptyVisualizationProperties)).toEqual(
-                    expectedSort,
-                );
+                expect(
+                    createSorts(
+                        "bar",
+                        stackedAfm,
+                        emptyResultSpec,
+                        emptyVisualizationProperties,
+                        false,
+                        true,
+                    ),
+                ).toEqual(expectedSort);
             });
         });
 

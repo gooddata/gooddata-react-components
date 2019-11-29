@@ -4,7 +4,7 @@ import get = require("lodash/get");
 import { DataLayer } from "@gooddata/gooddata-js";
 import { AFM, Execution, VisualizationObject } from "@gooddata/typings";
 import { OverTimeComparisonTypes } from "../../../../../interfaces/OverTimeComparison";
-import { IVisProps, IVisualizationProperties } from "../../../../interfaces/Visualization";
+import { IVisConstruct, IVisProps, IVisualizationProperties } from "../../../../interfaces/Visualization";
 import { PluggableBarChart } from "../PluggableBarChart";
 import * as referencePointMocks from "../../../../mocks/referencePointMocks";
 import { AXIS } from "../../../../constants/axis";
@@ -26,7 +26,7 @@ jest.mock("react-dom", () => {
 });
 
 describe("PluggableBarChart", () => {
-    const defaultProps = {
+    const defaultProps: IVisConstruct = {
         projectId: "PROJECTID",
         element: "body",
         configPanelElement: null as string,
@@ -34,9 +34,16 @@ describe("PluggableBarChart", () => {
             afterRender: noop,
             pushData: noop,
         },
+        featureFlags: {
+            enableSortingByTotalGroup: true,
+        },
     };
 
-    function createComponent(props = defaultProps) {
+    function createComponent(customProps?: Partial<IVisConstruct>) {
+        const props: IVisConstruct = {
+            ...defaultProps,
+            ...customProps,
+        };
         return new PluggableBarChart(props);
     }
 
@@ -289,6 +296,45 @@ describe("PluggableBarChart", () => {
                             },
                         ],
                         direction: "desc",
+                    },
+                },
+            ]);
+        });
+
+        it("should not sort bar chart by total group", () => {
+            const renderObject = require("react-dom");
+            const spyOnRender = jest.spyOn(renderObject, "render");
+
+            const visualization = createComponent({
+                featureFlags: {
+                    enableSortingByTotalGroup: false,
+                },
+            });
+
+            const options: IVisProps = {
+                dataSource: testMocks.dataSourceWithTwoMeasuresTwoViews,
+                resultSpec: testMocks.twoMeasuresTwoViewsResultSpec,
+                dimensions: { height: null },
+                locale: "en-US",
+                custom: {
+                    stickyHeaderOffset: 3,
+                },
+            };
+            visualization.update(
+                options,
+                defaultVisualizationProperties,
+                testMocks.twoMeasuresTwoViewsMdObject,
+                undefined,
+            );
+
+            const renderCallsCount = spyOnRender.mock.calls.length;
+            const renderChartElement: any = spyOnRender.mock.calls[renderCallsCount - 1][0];
+
+            expect(renderChartElement.props.resultSpec.sorts).toMatchObject([
+                {
+                    measureSortItem: {
+                        direction: "desc",
+                        locators: [{ measureLocatorItem: { measureIdentifier: "m1" } }],
                     },
                 },
             ]);
