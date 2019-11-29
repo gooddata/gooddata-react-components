@@ -755,6 +755,7 @@ describe("VisualizationWrapped", () => {
             uriResolver,
             intl,
             BaseChartComponent: BaseChart,
+            getFeatureFlags: () => Promise.resolve({ enableSortingByTotalGroup: true }),
         };
 
         const wrapper = mount(<VisualizationWrapped {...props as any} />);
@@ -784,6 +785,28 @@ describe("VisualizationWrapped", () => {
                 },
             },
         ]);
+    });
+
+    it("should not add default sorting to the BarChart", async () => {
+        const props = {
+            sdk,
+            projectId,
+            uri: BARCHART_URI,
+            fetchVisObject,
+            fetchVisualizationClass,
+            uriResolver,
+            intl,
+            BaseChartComponent: BaseChart,
+            getFeatureFlags: () => Promise.resolve({ enableSortingByTotalGroup: false }),
+        };
+
+        const wrapper = mount(<VisualizationWrapped {...props as any} />);
+        await testUtils.delay(FAST + 1);
+        wrapper.update();
+
+        const BaseChartElement = wrapper.find(BaseChart).get(0);
+
+        expect(BaseChartElement.props.resultSpec.sorts).toEqual(undefined);
     });
 
     it("should add default sorting to the Treemap", () => {

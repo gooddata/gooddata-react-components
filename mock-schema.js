@@ -2,6 +2,7 @@
 
 const featureFlags = {
     enableAxisNameConfiguration: true,
+    enableSortingByTotalGroup: true,
 };
 
 const barChartAfmExecutions = [
