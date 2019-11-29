@@ -174,13 +174,15 @@ const isAttributeSortItemVisible = (_sortItem: AFM.IAttributeSortItem, _filters:
     true;
 
 const isMeasureSortItemMatchedByFilter = (sortItem: AFM.IMeasureSortItem, filter: IBucketFilter): boolean =>
-    filter.selectedElements.some(selectedElement =>
-        sortItem.measureSortItem.locators.some(
-            locator =>
-                !AFM.isMeasureLocatorItem(locator) &&
-                locator.attributeLocatorItem.element === selectedElement.uri,
-        ),
-    );
+    filter.selectedElements
+        ? filter.selectedElements.some(selectedElement =>
+              sortItem.measureSortItem.locators.some(
+                  locator =>
+                      !AFM.isMeasureLocatorItem(locator) &&
+                      locator.attributeLocatorItem.element === selectedElement.uri,
+              ),
+          )
+        : false;
 
 const isMeasureSortItemVisible = (sortItem: AFM.IMeasureSortItem, filters: IBucketFilter[]): boolean =>
     filters.reduce((isVisible, filter) => {
