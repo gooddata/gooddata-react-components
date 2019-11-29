@@ -107,24 +107,35 @@ export function getDefaultBarChartSort(
     afm: AFM.IAfm,
     resultSpec: AFM.IResultSpec,
     canSortStackTotalValue: boolean = false,
+    enableSortingByTotalGroup: boolean = false,
 ): AFM.SortItem[] {
     const measureItemsCount: number = get(afm, "measures", []).length;
     const viewByDimensionItems = getDimensionItems(resultSpec, VIEW_BY_DIMENSION);
     const viewByAttributeIdentifier = getFirstAttributeIdentifier(resultSpec, VIEW_BY_DIMENSION);
     const stackByAttributeIdentifier = getFirstAttributeIdentifier(resultSpec, STACK_BY_DIMENSION);
 
-    if (viewByDimensionItems.length === 2) {
-        if (measureItemsCount >= 2 && !canSortStackTotalValue) {
-            return [getAttributeSortItem(viewByDimensionItems[0], DESC, true), ...getFirstMeasureSort(afm)];
+    let shouldSortByFirstViewByAttribute: boolean | string =
+        (viewByAttributeIdentifier && stackByAttributeIdentifier) || canSortStackTotalValue;
+    if (enableSortingByTotalGroup) {
+        if (viewByDimensionItems.length === 2) {
+            if (measureItemsCount >= 2 && !canSortStackTotalValue) {
+                return [
+                    getAttributeSortItem(viewByDimensionItems[0], DESC, true),
+                    ...getFirstMeasureSort(afm),
+                ];
+            }
+
+            return [
+                getAttributeSortItem(viewByDimensionItems[0], DESC, true),
+                getAttributeSortItem(viewByDimensionItems[1], DESC, true),
+            ];
         }
 
-        return [
-            getAttributeSortItem(viewByDimensionItems[0], DESC, true),
-            getAttributeSortItem(viewByDimensionItems[1], DESC, true),
-        ];
+        shouldSortByFirstViewByAttribute =
+            viewByAttributeIdentifier && (stackByAttributeIdentifier || canSortStackTotalValue);
     }
 
-    if (viewByAttributeIdentifier && (stackByAttributeIdentifier || canSortStackTotalValue)) {
+    if (shouldSortByFirstViewByAttribute) {
         return [getAttributeSortItem(viewByAttributeIdentifier, DESC, true)];
     }
 

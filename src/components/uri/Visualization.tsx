@@ -52,6 +52,11 @@ export { Requireable };
 
 const { ExecuteAfmAdapter, toAfmResultSpec, createSubject } = DataLayer;
 
+interface ISortingConfigs {
+    canSortStackTotalValue: boolean;
+    enableSortingByTotalGroup: boolean;
+}
+
 export type VisualizationEnvironment = "none" | "dashboards";
 
 export interface IVisualizationProps extends IEvents {
@@ -413,11 +418,15 @@ export class VisualizationWrapped extends React.Component<
             get(mdObjectContentProperties, ["controls", "stackMeasures"], false) &&
             areAllMeasuresOnSingleAxis(mdObject.content, secondaryYAxis);
 
+        const sortingConfigs: ISortingConfigs = {
+            canSortStackTotalValue,
+            enableSortingByTotalGroup: featureFlags.enableSortingByTotalGroup as boolean,
+        };
         const { afm, resultSpec } = buildAfmResultSpec(
             mdObject.content,
             visualizationType,
             locale,
-            canSortStackTotalValue,
+            sortingConfigs,
         );
         const mdObjectTotals = MdObjectHelper.getTotals(mdObject);
 
@@ -514,34 +523,37 @@ function buildAfmResultSpec(
     visObj: IVisualizationObjectContent,
     visType: VisType,
     locale: Localization.ILocale,
-    canSortStackTotalValue?: boolean,
+    sortingConfigs: ISortingConfigs,
 ): IConvertedAFM {
     const updatedVisObj = fillMissingTitles(visObj, locale);
     const genericAfmResultSpec = toAfmResultSpec(updatedVisObj);
 
-    return buildAfmResultSpecForVis(updatedVisObj, visType, genericAfmResultSpec, canSortStackTotalValue);
+    return buildAfmResultSpecForVis(updatedVisObj, visType, genericAfmResultSpec, sortingConfigs);
 }
 
 function buildAfmResultSpecForVis(
     visObj: IVisualizationObjectContent,
     visType: VisType,
     afmResultSpec: IConvertedAFM,
-    canSortStackTotalValue?: boolean,
+    sortingConfigs: ISortingConfigs,
 ) {
     const resultSpecWithDimensions = {
         ...afmResultSpec.resultSpec,
         dimensions: generateDimensions(visObj, visType),
     };
 
-    const barChartDefaultSorting = isBarChart(visType)
-        ? {
-              sorts: getDefaultBarChartSort(
-                  afmResultSpec.afm,
-                  resultSpecWithDimensions,
-                  canSortStackTotalValue,
-              ),
-          }
-        : {};
+    const { canSortStackTotalValue = false, enableSortingByTotalGroup = false } = sortingConfigs;
+    const barChartDefaultSorting =
+        enableSortingByTotalGroup && isBarChart(visType)
+            ? {
+                  sorts: getDefaultBarChartSort(
+                      afmResultSpec.afm,
+                      resultSpecWithDimensions,
+                      canSortStackTotalValue,
+                      enableSortingByTotalGroup,
+                  ),
+              }
+            : {};
 
     const treemapDefaultSorting = isTreemap(visType)
         ? {

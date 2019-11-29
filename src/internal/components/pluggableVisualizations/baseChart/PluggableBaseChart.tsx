@@ -263,12 +263,14 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
                 dimensions: this.getDimensions(mdObject),
             };
 
+            const enableSortingByTotalGroup = this.featureFlags.enableSortingByTotalGroup as boolean;
             const sorts: AFM.SortItem[] = createSorts(
                 this.type,
                 dataSource.getAfm(),
                 resultSpecWithDimensions,
                 allProperties,
-                canSortStackTotalValue(mdObject, supportedControls),
+                canSortStackTotalValue(mdObject, supportedControls, enableSortingByTotalGroup),
+                enableSortingByTotalGroup,
             );
 
             const resultSpecWithSorts = {

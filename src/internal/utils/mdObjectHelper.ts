@@ -58,11 +58,17 @@ export function hasMeasures(mdObject: VisualizationObject.IVisualizationObjectCo
 export function canSortStackTotalValue(
     mdObject: VisualizationObject.IVisualizationObjectContent,
     supportedControls: IVisualizationProperties,
+    enableSortingByTotalGroup: boolean = false,
 ): boolean {
-    return (
+    const isSingleAxisAndStacked: boolean =
         get(supportedControls, "stackMeasures", false) &&
-        areAllMeasuresOnSingleAxis(mdObject, get(supportedControls, "secondary_yaxis", false))
-    );
+        areAllMeasuresOnSingleAxis(mdObject, get(supportedControls, "secondary_yaxis", false));
+
+    if (enableSortingByTotalGroup) {
+        return isSingleAxisAndStacked;
+    }
+
+    return isSingleAxisAndStacked && hasOneViewItem(mdObject);
 }
 
 export function countItemsInMdObject(mdObject: VisualizationObject.IVisualizationObjectContent) {
