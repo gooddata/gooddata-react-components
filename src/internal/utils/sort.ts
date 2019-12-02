@@ -71,6 +71,7 @@ export function createSorts(
     resultSpec: AFM.IResultSpec,
     visualizationProperties: IVisualizationProperties,
     canSortStackTotalValue: boolean = false,
+    enableSortingByTotalGroup: boolean = false,
 ): AFM.SortItem[] {
     const sortItems = get(visualizationProperties, "sortItems", []) as AFM.SortItem[];
     const sanitizedSortItems: AFM.SortItem[] = sanitizeSorts(afm, sortItems);
@@ -88,7 +89,12 @@ export function createSorts(
         case VisualizationTypes.LINE:
             return [];
         case VisualizationTypes.BAR:
-            return SortsHelper.getDefaultBarChartSort(afm, resultSpec, canSortStackTotalValue);
+            return SortsHelper.getDefaultBarChartSort(
+                afm,
+                resultSpec,
+                canSortStackTotalValue,
+                enableSortingByTotalGroup,
+            );
         case VisualizationTypes.TREEMAP:
             return SortsHelper.getDefaultTreemapSort(afm, resultSpec);
     }
