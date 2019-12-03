@@ -29,7 +29,7 @@ const newtonRaphson = (fun: NumericFunction, derivative: NumericFunction, guess:
         previousValue = result;
         result = previousValue - fun(result) / derivative(result);
         if (++iteration >= iterationLimit) {
-            throw new Error("newtonRaphson failed to converge");
+            return NaN;
         }
     } while (Math.abs(result - previousValue) > errorLimit);
 

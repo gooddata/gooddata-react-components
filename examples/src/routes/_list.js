@@ -33,6 +33,7 @@ import MeasureValueFilter from "./MeasureValueFilter";
 import MeasureValueFilterComponent from "./MeasureValueFilterComponent";
 import DateFilter from "./DateFilter";
 import OnDrillHandling from "./OnDrillHandling";
+import Xirr from "./Xirr";
 
 export const advancedUseCasesRoutes = [
     {
@@ -250,6 +251,11 @@ export const hiddenPaths = [
         path: "/hidden/on-drill-drilling",
         title: "New drill handling by onDrill",
         Component: OnDrillHandling,
+    },
+    {
+        path: "/hidden/xirr",
+        title: "XIRR visualization",
+        Component: Xirr,
     },
 ];
 
