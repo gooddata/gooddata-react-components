@@ -23,13 +23,13 @@ import {
 } from "../../../constants/uiConfig";
 
 import {
-    sanitizeUnusedFilters,
+    sanitizeFilters,
     getMeasureItems,
     removeAllDerivedMeasures,
     removeAllArithmeticMeasuresFromDerived,
     getStackItems,
     getAttributeItemsWithoutStacks,
-    isDate,
+    isDateBucketItem,
     limitNumberOfMeasuresInBuckets,
 } from "../../../utils/bucketHelper";
 
@@ -73,7 +73,7 @@ export class PluggableTreemap extends PluggableBaseChart {
         if (nonStackAttributes.length > 1 && isEmpty(stacks)) {
             // first attribute is taken, find next available non-date attribute
             const attributesWithoutFirst = tail(nonStackAttributes);
-            const nonDate = attributesWithoutFirst.filter(attribute => !isDate(attribute));
+            const nonDate = attributesWithoutFirst.filter(attribute => !isDateBucketItem(attribute));
             stacks = nonDate.slice(0, 1);
         }
 
@@ -101,7 +101,7 @@ export class PluggableTreemap extends PluggableBaseChart {
         );
         newReferencePoint = removeSort(newReferencePoint);
 
-        return Promise.resolve(sanitizeUnusedFilters(newReferencePoint, clonedReferencePoint));
+        return Promise.resolve(sanitizeFilters(newReferencePoint));
     }
 
     protected renderConfigurationPanel() {

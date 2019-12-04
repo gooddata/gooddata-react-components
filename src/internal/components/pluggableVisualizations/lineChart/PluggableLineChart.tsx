@@ -18,13 +18,13 @@ import { DEFAULT_LINE_UICONFIG, UICONFIG_AXIS } from "../../../constants/uiConfi
 import { BUCKETS } from "../../../constants/bucket";
 
 import {
-    sanitizeUnusedFilters,
+    sanitizeFilters,
     getMeasureItems,
     getAttributeItemsWithoutStacks,
     getStackItems,
     getDateItems,
     getAllAttributeItemsWithPreference,
-    isDate,
+    isDateBucketItem,
     filterOutDerivedMeasures,
     getFilteredMeasuresForStackedCharts,
 } from "../../../utils/bucketHelper";
@@ -79,10 +79,16 @@ export class PluggableLineChart extends PluggableBaseChart {
             attributes = dateItems.slice(0, 1);
             stacks =
                 masterMeasures.length <= 1 && allAttributes.length > 1
-                    ? allAttributes.filter((attribute: IBucketItem) => !isDate(attribute)).slice(0, 1)
+                    ? allAttributes
+                          .filter((attribute: IBucketItem) => !isDateBucketItem(attribute))
+                          .slice(0, 1)
                     : stacks;
         } else {
-            if (masterMeasures.length <= 1 && allAttributes.length > 1 && !isDate(get(allAttributes, "1"))) {
+            if (
+                masterMeasures.length <= 1 &&
+                allAttributes.length > 1 &&
+                !isDateBucketItem(get(allAttributes, "1"))
+            ) {
                 stacks = allAttributes.slice(1, 2);
             }
 
@@ -118,7 +124,7 @@ export class PluggableLineChart extends PluggableBaseChart {
         );
         newReferencePoint = removeSort(newReferencePoint);
 
-        return Promise.resolve(sanitizeUnusedFilters(newReferencePoint, clonedReferencePoint));
+        return Promise.resolve(sanitizeFilters(newReferencePoint));
     }
 
     protected renderConfigurationPanel() {
