@@ -20,8 +20,8 @@ The REST API versions in the table are just for your information as the values a
 
 ### Added
 
-- Support for measure value filters
 - DateFilter component (beta version)
+- Vertical alignment configuration for Donut and Pie charts
 
 ### Fixed
 
