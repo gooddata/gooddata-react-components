@@ -153,5 +153,14 @@
     "filters.year.excludeCurrentPeriod": "Excluir este ano",
     "filters.excludeCurrentPeriod.unavailable": "Não disponível para o intervalo de datas selecionado",
     "filters.staticPeriod": "Período estático",
-    "filters.staticPeriod.incorrectFormat": "A data não se encontra no formato {format}"
+    "filters.staticPeriod.incorrectFormat": "A data não se encontra no formato {format}",
+    "mvf.operator.all": "todos",
+    "mvf.operator.greaterThan": "maior que",
+    "mvf.operator.greaterThanOrEqualTo": "maior ou igual a",
+    "mvf.operator.lessThan": "menor que",
+    "mvf.operator.lessThanOrEqualTo": "menor ou igual a",
+    "mvf.operator.equalTo": "igual a",
+    "mvf.operator.notEqualTo": "não igual a",
+    "mvf.operator.between": "entre",
+    "mvf.operator.notBetween": "não entre"
 }
