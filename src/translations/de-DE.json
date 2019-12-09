@@ -82,10 +82,10 @@
     "filters.thisMonth.title": "Diesen Monat",
     "filters.lastMonth.title": "Letzter Monat",
     "filters.nextMonth.title": "Nächsten Monat",
-    "filters.thisQuarter.title": "In diesem Quartal",
+    "filters.thisQuarter.title": "In diesen Quartal",
     "filters.lastQuarter.title": "Letztes Quartal",
     "filters.nextQuarter.title": "Nächstes Quartal",
-    "filters.thisYear.title": "In diesem Jahr",
+    "filters.thisYear.title": "In diesen Jahr",
     "filters.lastYear.title": "Letztes Jahr",
     "filters.nextYear.title": "Nächstes Jahr",
     "filters.lastNDays": "{n, plural, one {Letzter # Tag} other {Letzte # Tage}}",
@@ -153,5 +153,14 @@
     "filters.year.excludeCurrentPeriod": "Dieses Jahr ausschließen",
     "filters.excludeCurrentPeriod.unavailable": "Für die ausgewählte Zeitspanne nicht verfügbar",
     "filters.staticPeriod": "Statischer Zeitraum",
-    "filters.staticPeriod.incorrectFormat": "Datum ist nicht im {format} Format"
+    "filters.staticPeriod.incorrectFormat": "Datum ist nicht im {format} Format",
+    "mvf.operator.all": "alle",
+    "mvf.operator.greaterThan": "größer als",
+    "mvf.operator.greaterThanOrEqualTo": "größer gleich",
+    "mvf.operator.lessThan": "kleiner als",
+    "mvf.operator.lessThanOrEqualTo": "kleiner gleich",
+    "mvf.operator.equalTo": "gleich",
+    "mvf.operator.notEqualTo": "nicht gleich",
+    "mvf.operator.between": "zwischen",
+    "mvf.operator.notBetween": "nicht zwischen"
 }

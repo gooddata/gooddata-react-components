@@ -153,5 +153,14 @@
     "filters.year.excludeCurrentPeriod": "排除此年",
     "filters.excludeCurrentPeriod.unavailable": "不可用于所选范围",
     "filters.staticPeriod": "统计时间段",
-    "filters.staticPeriod.incorrectFormat": "日期不是 {format} 格式"
+    "filters.staticPeriod.incorrectFormat": "日期不是 {format} 格式",
+    "mvf.operator.all": "全部",
+    "mvf.operator.greaterThan": "大于",
+    "mvf.operator.greaterThanOrEqualTo": "大于或等于",
+    "mvf.operator.lessThan": "小于",
+    "mvf.operator.lessThanOrEqualTo": "小于或等于",
+    "mvf.operator.equalTo": "等于",
+    "mvf.operator.notEqualTo": "不等于",
+    "mvf.operator.between": "介于",
+    "mvf.operator.notBetween": "不介于"
 }
