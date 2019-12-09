@@ -114,7 +114,7 @@
     "@gooddata/gooddata-js": "^12.0.0",
     "@gooddata/goodstrap": "^65.0.0",
     "@gooddata/js-utils": "^3.5.0",
-    "@gooddata/numberjs": "^3.2.3",
+    "@gooddata/numberjs": "^3.2.4",
     "@gooddata/typings": "^2.19.0",
     "ag-grid-community": "20.0.0",
     "ag-grid-react": "20.0.0",
