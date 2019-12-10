@@ -29,11 +29,7 @@ export class AttributeFilterComponentExample extends Component {
                     />
                 </div>
                 <div>attribute defined by display form uri</div>
-                <AttributeFilter
-                    projectId={projectId}
-                    uri={employeeNameDisplayFormUri}
-                    onApply={this.onApply}
-                />
+                <AttributeFilter uri={employeeNameDisplayFormUri} onApply={this.onApply} />
                 <br />
                 <div>attribute defined by filter definition, including selection</div>
                 <AttributeFilter

@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import * as PropTypes from "prop-types";
 import InvertableList from "@gooddata/goodstrap/lib/List/InvertableList";
@@ -49,7 +49,7 @@ export interface IAttributeMetadata {
 
 export interface IAttributeDropdownProps {
     attributeDisplayForm: IAttributeDisplayForm;
-    projectId: string;
+    projectId?: string; // remove it in SDK 8 because it is not used anywhere - breaking change
     selection: IAttributeElement[];
     isInverted: boolean;
     onApply: (selection: IAttributeElement[], isInverted: boolean) => void;
@@ -130,7 +130,7 @@ export class AttributeDropdownWrapped extends React.PureComponent<
 > {
     public static propTypes = {
         attributeDisplayForm: PropTypes.object.isRequired,
-        projectId: PropTypes.string.isRequired,
+        projectId: PropTypes.string,
         selection: PropTypes.array,
         isInverted: PropTypes.bool,
 
@@ -150,6 +150,7 @@ export class AttributeDropdownWrapped extends React.PureComponent<
     public static defaultProps: Partial<IAttributeDropdownProps> = {
         fullscreenOnMobile: false,
         title: null,
+        projectId: null,
         selection: new Array<IAttributeElement>(),
 
         getListItem: () => <AttributeFilterItem />,
