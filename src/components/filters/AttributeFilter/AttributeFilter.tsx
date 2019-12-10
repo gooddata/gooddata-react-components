@@ -15,14 +15,15 @@ import { IAttributeElement } from "./model";
 import * as Model from "../../../helpers/model";
 
 export interface IAttributeFilterProps {
-    projectId: string;
     onApply?: (...params: any[]) => any; // TODO: make the types more specific (FET-282)
     onApplyWithFilterDefinition?: (
         filter: VisualizationInput.IPositiveAttributeFilter | VisualizationInput.INegativeAttributeFilter,
     ) => void;
     sdk?: SDK;
-    // one of these three needs to be provided
+    // one of: uri | projectId + identifier | filter by df uri | projectId + filter by df identifier
+    // needs to be provided
     uri?: string;
+    projectId?: string;
     identifier?: string;
     filter?: VisualizationInput.IPositiveAttributeFilter | VisualizationInput.INegativeAttributeFilter;
     locale?: string;
@@ -91,7 +92,7 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps> 
         uri: PropTypes.string,
         identifier: PropTypes.string,
         filter: PropTypes.object,
-        projectId: PropTypes.string.isRequired,
+        projectId: PropTypes.string,
         onApply: PropTypes.func,
         onApplyWithFilterDefinition: PropTypes.func,
         fullscreenOnMobile: PropTypes.bool,
@@ -102,6 +103,7 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps> 
     };
 
     public static defaultProps: Partial<IAttributeFilterProps> = {
+        projectId: null,
         uri: null,
         identifier: null,
         filter: null,
