@@ -376,6 +376,14 @@ describe("MdObjectHelper", () => {
             expect(isSingleAxis).toEqual(true);
         });
 
+        it("should return true if measures is undefined on secondary axis config", () => {
+            const isSingleAxis = areAllMeasuresOnSingleAxis(
+                visualizationObjects[0].visualizationObject.content,
+                {},
+            );
+            expect(isSingleAxis).toEqual(true);
+        });
+
         it("should return false if measures are on 2 axes", () => {
             const isSingleAxis = areAllMeasuresOnSingleAxis(
                 visualizationObjects[0].visualizationObject.content,
