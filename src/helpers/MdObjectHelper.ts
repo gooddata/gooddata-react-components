@@ -113,7 +113,7 @@ export function areAllMeasuresOnSingleAxis(
     secondaryYAxis: IAxisConfig,
 ): boolean {
     const measureCount = getMeasuresFromMdObject(mdObject).length;
-    const numberOfMeasureOnSecondaryAxis = secondaryYAxis ? secondaryYAxis.measures.length : 0;
+    const numberOfMeasureOnSecondaryAxis = get(secondaryYAxis, "measures.length", 0);
     return numberOfMeasureOnSecondaryAxis === 0 || measureCount === numberOfMeasureOnSecondaryAxis;
 }
 
