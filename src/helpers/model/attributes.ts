@@ -1,13 +1,13 @@
-// (C) 2018 GoodData Corporation
+// (C) 2018-2019 GoodData Corporation
 import { VisualizationObject } from "@gooddata/typings";
-import { getQualifierObject } from "./utils";
+import { getObjQualifier } from "./utils";
 
 export class AttributeBuilder implements VisualizationObject.IVisualizationAttribute {
     private static lastAttributeId = 0;
     public visualizationAttribute: VisualizationObject.IVisualizationAttribute["visualizationAttribute"];
     constructor(displayForm: string) {
         this.visualizationAttribute = {
-            displayForm: getQualifierObject(displayForm),
+            displayForm: getObjQualifier(displayForm),
             localIdentifier: `va_${AttributeBuilder.lastAttributeId++}`,
         };
     }

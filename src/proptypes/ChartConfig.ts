@@ -14,4 +14,5 @@ export const ChartConfigPropType = PropTypes.shape({
         series: PropTypes.number,
         categories: PropTypes.number,
     }),
+    forceDisableDrillOnAxes: PropTypes.bool,
 });

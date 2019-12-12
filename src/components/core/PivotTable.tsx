@@ -2,7 +2,6 @@
 import { AFM, Execution, VisualizationObject } from "@gooddata/typings";
 import {
     BodyScrollEvent,
-    ColDef,
     ColumnResizedEvent,
     GridApi,
     GridReadyEvent,
@@ -32,9 +31,16 @@ import {
     getMeasureCellStyle,
 } from "../../helpers/tableCell";
 
-import { IDrillEvent, IDrillEventContextTable } from "../../interfaces/DrillEvents";
+import {
+    IDrillEvent,
+    IDrillEventContextTable,
+    IDrillEventContextTableExtended,
+    IDrillEventExtended,
+    IDrillEventIntersectionElementExtended,
+    isDrillEventContextTableExtended,
+} from "../../interfaces/DrillEvents";
 import { IHeaderPredicate } from "../../interfaces/HeaderPredicate";
-import { IMappingHeader } from "../../interfaces/MappingHeader";
+import { IMappingHeader, isMappingHeaderAttribute } from "../../interfaces/MappingHeader";
 import { IMenuAggregationClickConfig, IPivotTableConfig } from "../../interfaces/PivotTable";
 import { IDataSourceProviderInjectedProps } from "../afm/DataSourceProvider";
 import { LoadingComponent } from "../simple/LoadingComponent";
@@ -61,7 +67,7 @@ import {
     ROW_SUBTOTAL,
 } from "./pivotTable/agGridConst";
 import { createAgGridDataSource } from "./pivotTable/agGridDataSource";
-import { getDrillIntersection, getDrillRowData } from "./pivotTable/agGridDrilling";
+import { getDrillRowData, convertDrillIntersectionToLegacy } from "./pivotTable/agGridDrilling";
 import { getSortsFromModel, isSortedByFirstAttibute } from "./pivotTable/agGridSorting";
 import {
     ICustomGridOptions,
@@ -72,6 +78,7 @@ import {
 } from "./pivotTable/agGridTypes";
 import {
     cellRenderer,
+    generateAgGridComponentKey,
     getMeasureFormat,
     getRowNodeId,
     getTreeLeaves,
@@ -83,19 +90,20 @@ import ColumnHeader from "./pivotTable/ColumnHeader";
 import { GroupingProviderFactory, IGroupingProvider } from "./pivotTable/GroupingProvider";
 import { RowLoadingElement } from "./pivotTable/RowLoadingElement";
 import {
-    initStickyHeaders,
+    initializeStickyRow,
+    IScrollPosition,
     stickyRowExists,
-    updateStickyHeaders,
-    updateStickyHeadersPosition,
-} from "./pivotTable/stickyGroupHandler";
+    updateStickyRowContentClasses,
+    updateStickyRowPosition,
+} from "./pivotTable/stickyRowHandler";
 import cloneDeep = require("lodash/cloneDeep");
-
 import get = require("lodash/get");
 import isEqual = require("lodash/isEqual");
 import noop = require("lodash/noop");
 import sumBy = require("lodash/sumBy");
 
 import InjectedIntlProps = ReactIntl.InjectedIntlProps;
+import { getDrillIntersection } from "../visualizations/utils/drilldownEventing";
 
 export interface IPivotTableProps extends ICommonChartProps, IDataSourceProviderInjectedProps {
     totals?: VisualizationObject.IVisualizationTotal[];
@@ -108,7 +116,7 @@ export interface IPivotTableProps extends ICommonChartProps, IDataSourceProvider
 }
 
 export interface IPivotTableState {
-    columnDefs: ColDef[];
+    columnDefs: IGridHeader[];
     // rowData an an array of different objects depending on the content of the table.
     rowData: IGridRow[];
     execution: Execution.IExecutionResponses;
@@ -126,6 +134,9 @@ export type IPivotTableInnerProps = IPivotTableProps &
 const DEFAULT_ROW_HEIGHT = 28;
 const AG_NUMERIC_CELL_CLASSNAME = "ag-numeric-cell";
 const AG_NUMERIC_HEADER_CLASSNAME = "ag-numeric-header";
+
+export const WATCHING_TABLE_RENDERED_INTERVAL = 500;
+export const WATCHING_TABLE_RENDERED_MAX_TIME = 15000;
 
 /**
  * Pivot Table react component
@@ -146,8 +157,13 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     private gridApi: GridApi;
     private containerRef: HTMLDivElement;
     private groupingProvider: IGroupingProvider;
-    private lastScrollTop: number = 0;
-    private lastScrollLeft: number = 0;
+    private lastScrollPosition: IScrollPosition = {
+        top: 0,
+        left: 0,
+    };
+
+    private watchingIntervalId: number | null;
+    private watchingTimeoutId: number | null;
 
     constructor(props: IPivotTableInnerProps) {
         super(props);
@@ -271,7 +287,10 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
                         {...gridOptions}
                         // To force Ag grid rerender because AFAIK there is no way
                         // to tell Ag grid header cell to rerender
-                        key={this.state.agGridRerenderNumber}
+                        key={generateAgGridComponentKey(
+                            this.props.dataSource.getAfm(),
+                            this.state.agGridRerenderNumber,
+                        )}
                     />
                 </div>
             </div>
@@ -410,27 +429,114 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         this.setGridDataSource();
 
         if (this.props.groupRows) {
-            initStickyHeaders(this.gridApi);
+            initializeStickyRow(this.gridApi);
         }
     };
 
+    private startWatchingTableRendered = () => {
+        const missingContainerRef = !this.containerRef; // table having no data will be unmounted, it causes ref null
+        const isTableVisible = !this.isTableHidden(); // table has data and takes place of Loading icon
+        if (missingContainerRef || isTableVisible) {
+            this.stopWatchingTableRendered();
+        }
+    };
+
+    private stopWatchingTableRendered = () => {
+        clearInterval(this.watchingIntervalId);
+        this.watchingIntervalId = null;
+
+        clearTimeout(this.watchingTimeoutId);
+        this.watchingTimeoutId = null;
+
+        this.props.afterRender();
+    };
+
+    private onFirstDataRendered = () => {
+        // Since issue here is not resolved, https://github.com/ag-grid/ag-grid/issues/3263,
+        // work-around by using 'setInterval'
+        this.watchingIntervalId = window.setInterval(
+            this.startWatchingTableRendered,
+            WATCHING_TABLE_RENDERED_INTERVAL,
+        );
+
+        // after 15s, this table might or not (due to long backend execution) be rendered
+        // either way, 'afterRender' should be called to notify to KPI dashboard
+        // if KPI dashboard is in export mode, its content could be exported as much as possible even without this table
+        this.watchingTimeoutId = window.setTimeout(
+            this.stopWatchingTableRendered,
+            WATCHING_TABLE_RENDERED_MAX_TIME,
+        );
+    };
+
     private onModelUpdated = () => {
-        if (!stickyRowExists(this.gridApi)) {
-            return;
+        this.updateStickyRow();
+    };
+
+    private getAttributeHeader(colId: string, columnDefs: IGridHeader[]): Execution.IAttributeHeader {
+        const matchingColDef: IGridHeader = columnDefs.find(
+            (columnDef: IGridHeader) => columnDef.field === colId,
+        );
+        if (matchingColDef && matchingColDef.drillItems.length === 1) {
+            const drillItemHeader = matchingColDef.drillItems[0];
+            if (isMappingHeaderAttribute(drillItemHeader)) {
+                return drillItemHeader;
+            }
         }
-        if (this.props.groupRows) {
-            updateStickyHeadersPosition(this.gridApi);
-        }
-        const scrollTop = this.lastScrollTop;
-        const scrollLeft = this.lastScrollLeft;
-        this.lastScrollTop = 0;
-        this.lastScrollLeft = 0;
-        this.updateStickyRow(scrollTop, scrollLeft);
+        return null;
+    }
+
+    private getItemAndAttributeHeaders = (
+        attributeItemHeaders: { [colId: string]: IMappingHeader },
+        columnDefs: IGridHeader[],
+    ): IMappingHeader[] => {
+        return Object.keys(attributeItemHeaders).reduce((headers: IMappingHeader[], colId: string) => {
+            const attributeHeader = this.getAttributeHeader(colId, columnDefs);
+            if (attributeHeader) {
+                headers.push(attributeItemHeaders[colId]);
+                headers.push(attributeHeader);
+            }
+            return headers;
+        }, []);
+    };
+
+    private getAttributeDrillItemsForMeasureDrill = (
+        cellEvent: IGridCellEvent,
+        columnDefs: IGridHeader[],
+    ): IMappingHeader[] => {
+        const rowDrillItems = get(cellEvent, ["data", "headerItemMap"]);
+        return this.getItemAndAttributeHeaders(rowDrillItems, columnDefs);
+    };
+
+    private isSomeTotal = (rowType: string) => {
+        const isRowTotal = rowType === ROW_TOTAL;
+        const isRowSubtotal = rowType === ROW_SUBTOTAL;
+        return isRowTotal || isRowSubtotal;
+    };
+
+    private getRowDrillItem = (cellEvent: IGridCellEvent) =>
+        get(cellEvent, ["data", "headerItemMap", cellEvent.colDef.field]);
+
+    private getDrillItems = (cellEvent: IGridCellEvent): IMappingHeader[] => {
+        const { colDef } = cellEvent;
+        const rowDrillItem = this.getRowDrillItem(cellEvent);
+        return rowDrillItem ? [rowDrillItem, ...colDef.drillItems] : colDef.drillItems;
+    };
+
+    private getDrillIntersection = (
+        cellEvent: IGridCellEvent,
+        drillItems: IMappingHeader[],
+        columnDefs: IGridHeader[],
+    ): IDrillEventIntersectionElementExtended[] => {
+        const rowDrillItem = this.getRowDrillItem(cellEvent);
+        const completeDrillItems: IMappingHeader[] = rowDrillItem
+            ? drillItems
+            : [...drillItems, ...this.getAttributeDrillItemsForMeasureDrill(cellEvent, columnDefs)];
+        return getDrillIntersection(completeDrillItems);
     };
 
     private cellClicked = (cellEvent: IGridCellEvent) => {
         const {
-            onFiredDrillEvent,
+            onDrill,
             execution: { executionResponse },
         } = this.props;
         const { columnDefs } = this.state;
@@ -440,17 +546,12 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         const { colDef, rowIndex } = cellEvent;
 
         const rowType = get(cellEvent, ["data", "type"], "");
-        const isRowTotal = rowType === ROW_TOTAL;
-        const isRowSubtotal = rowType === ROW_SUBTOTAL;
 
-        if (isRowTotal || isRowSubtotal) {
+        if (this.isSomeTotal(rowType)) {
             return false;
         }
 
-        const rowDrillItem = get(cellEvent, ["data", "headerItemMap", colDef.field]);
-        const drillItems: IMappingHeader[] = rowDrillItem
-            ? [...colDef.drillItems, rowDrillItem]
-            : colDef.drillItems;
+        const drillItems: IMappingHeader[] = this.getDrillItems(cellEvent);
 
         const drillableHeaders = drillItems.filter((drillItem: IMappingHeader) =>
             isSomeHeaderPredicateMatched(drillablePredicates, drillItem, afm, executionResponse),
@@ -463,9 +564,10 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         const leafColumnDefs = getTreeLeaves(columnDefs);
         const columnIndex = leafColumnDefs.findIndex(gridHeader => gridHeader.field === colDef.field);
         const row = getDrillRowData(leafColumnDefs, cellEvent.data);
-        const intersection = getDrillIntersection(drillItems, afm);
 
-        const drillContext: IDrillEventContextTable = {
+        const intersection = this.getDrillIntersection(cellEvent, drillItems, columnDefs);
+
+        const drillContextExtended: IDrillEventContextTableExtended = {
             type: VisualizationTypes.TABLE,
             element: "cell",
             columnIndex,
@@ -473,21 +575,47 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             row,
             intersection,
         };
-        const drillEvent: IDrillEvent = {
+        const drillEventExtended: IDrillEventExtended = {
             executionContext: afm,
-            drillContext,
+            drillContext: drillContextExtended,
         };
 
-        if (onFiredDrillEvent(drillEvent)) {
-            // This is needed for /analyze/embedded/ drilling with post message
-            // tslint:disable-next-line:max-line-length
-            // More info: https://github.com/gooddata/gdc-analytical-designer/blob/develop/test/drillEventing/drillEventing_page.html
-            const event = new CustomEvent("drill", {
-                detail: drillEvent,
-                bubbles: true,
-            });
-            cellEvent.event.target.dispatchEvent(event);
-            return true;
+        if (onDrill) {
+            onDrill(drillEventExtended);
+        }
+
+        return this.handleLegacyOnFireDrillEvent(drillEventExtended, cellEvent);
+    };
+
+    private handleLegacyOnFireDrillEvent = (
+        drillEventExtended: IDrillEventExtended,
+        cellEvent: IGridCellEvent,
+    ): boolean => {
+        const { onFiredDrillEvent } = this.props;
+        const { executionContext, drillContext } = drillEventExtended;
+        // this type guard is here only for casting because drillContext came from event as IDrillEventContextExtended
+        if (isDrillEventContextTableExtended(drillContext)) {
+            // Old drill event for backward compatibility
+            const drillContextLegacy: IDrillEventContextTable = {
+                ...drillContext,
+                intersection: convertDrillIntersectionToLegacy(drillContext.intersection, executionContext),
+            };
+            const drillEvent: IDrillEvent = {
+                executionContext,
+                drillContext: drillContextLegacy,
+            };
+
+            if (onFiredDrillEvent(drillEvent)) {
+                // This is needed for /analyze/embedded/ drilling with post message
+                // tslint:disable-next-line:max-line-length
+                // More info: https://github.com/gooddata/gdc-analytical-designer/blob/develop/test/drillEventing/drillEventing_page.html
+                const event = new CustomEvent("drill", {
+                    detail: drillEvent,
+                    bubbles: true,
+                });
+                cellEvent.event.target.dispatchEvent(event);
+                return true;
+            }
         }
         return false;
     };
@@ -537,7 +665,11 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     };
 
     private onBodyScroll = (event: BodyScrollEvent) => {
-        this.updateStickyRow(Math.max(event.top, 0), event.left);
+        const scrollPosition: IScrollPosition = {
+            top: Math.max(event.top, 0),
+            left: event.left,
+        };
+        this.updateStickyRowContent(scrollPosition);
     };
 
     private preventHeaderResizerEvents = (event: Event) => {
@@ -568,7 +700,6 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             // Initial data
             columnDefs,
             rowData,
-
             defaultColDef: {
                 cellClass: this.getCellClass(null),
                 headerComponentFramework: ColumnHeader as any,
@@ -608,6 +739,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             infiniteInitialRowCount: pageSize,
             maxBlocksInCache: 10,
             onGridReady: this.onGridReady,
+            onFirstDataRendered: this.onFirstDataRendered,
             onModelUpdated: this.onModelUpdated,
             onBodyScroll: this.onBodyScroll,
 
@@ -764,21 +896,38 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         return convertDrillableItemsToPredicates(this.props.drillableItems);
     }
 
-    private updateStickyRow(scrollTop: number, scrollLeft: number): void {
-        if (this.props.groupRows && this.gridApi) {
-            updateStickyHeaders(
-                scrollTop,
-                scrollLeft,
-                this.lastScrollTop,
-                this.lastScrollLeft,
+    private isStickyRowAvailable(): boolean {
+        const gridApi = this.getGridApi();
+        return this.props.groupRows && gridApi && stickyRowExists(gridApi);
+    }
+
+    private updateStickyRow(): void {
+        if (this.isStickyRowAvailable()) {
+            updateStickyRowPosition(this.getGridApi());
+
+            const scrollPosition: IScrollPosition = { ...this.lastScrollPosition };
+            this.lastScrollPosition = {
+                top: 0,
+                left: 0,
+            };
+
+            this.updateStickyRowContent(scrollPosition);
+        }
+    }
+
+    private updateStickyRowContent(scrollPosition: IScrollPosition): void {
+        if (this.isStickyRowAvailable()) {
+            updateStickyRowContentClasses(
+                scrollPosition,
+                this.lastScrollPosition,
                 DEFAULT_ROW_HEIGHT,
-                this.gridApi,
+                this.getGridApi(),
                 this.groupingProvider,
                 ApiWrapper,
             );
         }
-        this.lastScrollTop = scrollTop;
-        this.lastScrollLeft = scrollLeft;
+
+        this.lastScrollPosition = { ...scrollPosition };
     }
 
     private getTotalBodyHeight(executionResult: Execution.IExecutionResult): number {

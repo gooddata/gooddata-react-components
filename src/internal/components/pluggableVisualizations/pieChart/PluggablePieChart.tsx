@@ -6,7 +6,14 @@ import get = require("lodash/get");
 import set = require("lodash/set");
 import * as BucketNames from "../../../../constants/bucketNames";
 
-import { IVisConstruct, IReferencePoint, IExtendedReferencePoint } from "../../../interfaces/Visualization";
+import { VisualizationObject } from "@gooddata/typings";
+import {
+    IVisConstruct,
+    IReferencePoint,
+    IExtendedReferencePoint,
+    IVisualizationProperties,
+    IGdcConfig,
+} from "../../../interfaces/Visualization";
 import { configurePercent, configureOverTimeComparison } from "../../../utils/bucketConfig";
 import { PluggableBaseChart } from "../baseChart/PluggableBaseChart";
 import PieChartConfigurationPanel from "../../configurationPanels/PieChartConfigurationPanel";
@@ -33,6 +40,9 @@ import { setPieChartUiConfig } from "../../../utils/uiConfigHelpers/pieChartUiCo
 import { removeSort } from "../../../utils/sort";
 import { getReferencePointWithSupportedProperties } from "../../../utils/propertiesHelper";
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
+import { IChartConfig } from "../../../../interfaces/Config";
+import { DASHBOARDS_ENVIRONMENT } from "../../../constants/properties";
+import { TOP } from "../../../../constants/alignments";
 
 export class PluggablePieChart extends PluggableBaseChart {
     constructor(props: IVisConstruct) {
@@ -119,5 +129,22 @@ export class PluggablePieChart extends PluggableBaseChart {
                 document.querySelector(this.configPanelElement),
             );
         }
+    }
+
+    protected buildVisualizationConfig(
+        mdObject: VisualizationObject.IVisualizationObjectContent,
+        config: IGdcConfig,
+        supportedControls: IVisualizationProperties,
+    ): IChartConfig {
+        const baseVisualizationConfig = super.buildVisualizationConfig(mdObject, config, supportedControls);
+        if (this.environment === DASHBOARDS_ENVIRONMENT) {
+            return {
+                ...baseVisualizationConfig,
+                chart: {
+                    verticalAlign: TOP,
+                },
+            };
+        }
+        return baseVisualizationConfig;
     }
 }

@@ -76,7 +76,7 @@ export class ConfigurationColumnChartExample extends Component {
 
         return (
             <div>
-                <div style={{ height: 300 }} className="s-visualization-column">
+                <div className="s-visualization-column">
                     <button className="s-change-palette" onClick={this.onPaletteChange}>
                         Change palette
                     </button>
@@ -88,12 +88,13 @@ export class ConfigurationColumnChartExample extends Component {
                     <button className="s-change-separator" onClick={this.onSeparatorChange}>
                         Change separator
                     </button>
-
-                    <Visualization
-                        projectId={projectId}
-                        identifier={columnsVisualizationIdentifier}
-                        config={config}
-                    />
+                    <div style={{ height: 300 }}>
+                        <Visualization
+                            projectId={projectId}
+                            identifier={columnsVisualizationIdentifier}
+                            config={config}
+                        />
+                    </div>
                 </div>
             </div>
         );

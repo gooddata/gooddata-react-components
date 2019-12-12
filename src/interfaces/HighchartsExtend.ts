@@ -1,5 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
-import * as Highcharts from "highcharts";
+// (C) 2019 GoodData Corporation
 
 export type IHighchartsAxis = Partial<Highcharts.Axis> &
     Partial<Highcharts.ExtremesObject> &

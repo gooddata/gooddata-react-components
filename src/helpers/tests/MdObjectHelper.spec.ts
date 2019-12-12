@@ -1,6 +1,6 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import { VisualizationObject, AFM, VisualizationInput } from "@gooddata/typings";
-import MdObjectHelper from "../MdObjectHelper";
+import MdObjectHelper, { areAllMeasuresOnSingleAxis, getMeasuresFromMdObject } from "../MdObjectHelper";
 import { visualizationObjects, pivotTableMDO } from "../../../__mocks__/fixtures";
 
 describe("MdObjectHelper", () => {
@@ -169,7 +169,7 @@ describe("MdObjectHelper", () => {
 
     describe("mdObjectToPivotBucketProps", () => {
         it("should convert MDO to pivot table bucket props", () => {
-            const filtersFromProps: AFM.FilterItem[] = [
+            const filtersFromProps: AFM.ExtendedFilter[] = [
                 {
                     relativeDateFilter: {
                         to: 0,
@@ -177,6 +177,19 @@ describe("MdObjectHelper", () => {
                         granularity: "GDC.time.quarter",
                         dataSet: {
                             uri: "/gdc/md/myproject/obj/921",
+                        },
+                    },
+                },
+                {
+                    measureValueFilter: {
+                        measure: {
+                            localIdentifier: "m2",
+                        },
+                        condition: {
+                            comparison: {
+                                operator: "GREATER_THAN",
+                                value: 420,
+                            },
                         },
                     },
                 },
@@ -247,6 +260,19 @@ describe("MdObjectHelper", () => {
 
             const expectedFilters: VisualizationInput.IFilter[] = [
                 {
+                    measureValueFilter: {
+                        measure: {
+                            localIdentifier: "m1",
+                        },
+                        condition: {
+                            comparison: {
+                                operator: "GREATER_THAN",
+                                value: 42,
+                            },
+                        },
+                    },
+                },
+                {
                     relativeDateFilter: {
                         dataSet: {
                             uri: "/gdc/md/myproject/obj/921",
@@ -254,6 +280,19 @@ describe("MdObjectHelper", () => {
                         from: -3,
                         granularity: "GDC.time.quarter",
                         to: 0,
+                    },
+                },
+                {
+                    measureValueFilter: {
+                        measure: {
+                            localIdentifier: "m2",
+                        },
+                        condition: {
+                            comparison: {
+                                operator: "GREATER_THAN",
+                                value: 420,
+                            },
+                        },
                     },
                 },
             ];
@@ -278,6 +317,79 @@ describe("MdObjectHelper", () => {
             expect(pivotTableBucketProps.rows).toEqual(expectedRows);
             expect(pivotTableBucketProps.filters).toEqual(expectedFilters);
             expect(pivotTableBucketProps.totals).toEqual(expectedTotals);
+        });
+    });
+
+    describe("getMeasuresFromMdObject", () => {
+        it("should return measures from MDO", () => {
+            const measures = getMeasuresFromMdObject(visualizationObjects[0].visualizationObject.content);
+
+            const expectedMeasures: VisualizationInput.IMeasure[] = [
+                {
+                    measure: {
+                        definition: {
+                            measureDefinition: {
+                                filters: [],
+                                item: {
+                                    uri: "/gdc/md/myproject/obj/3276",
+                                },
+                            },
+                        },
+                        localIdentifier: "m1",
+                        title: "# Logged-in Users",
+                    },
+                },
+                {
+                    measure: {
+                        definition: {
+                            measureDefinition: {
+                                filters: [],
+                                item: {
+                                    uri: "/gdc/md/myproject/obj/1995",
+                                },
+                            },
+                        },
+                        localIdentifier: "m2",
+                        title: "# Users Opened AD",
+                    },
+                },
+            ];
+
+            expect(measures).toEqual(expectedMeasures);
+        });
+    });
+
+    describe("areAllMeasuresOnSingleAxis", () => {
+        it("should return true if all measures are on primary axis", () => {
+            const isSingleAxis = areAllMeasuresOnSingleAxis(
+                visualizationObjects[0].visualizationObject.content,
+                undefined,
+            );
+            expect(isSingleAxis).toEqual(true);
+        });
+
+        it("should return true if all measures are on secondary axis", () => {
+            const isSingleAxis = areAllMeasuresOnSingleAxis(
+                visualizationObjects[0].visualizationObject.content,
+                { measures: ["m1", "m2"] },
+            );
+            expect(isSingleAxis).toEqual(true);
+        });
+
+        it("should return true if measures is undefined on secondary axis config", () => {
+            const isSingleAxis = areAllMeasuresOnSingleAxis(
+                visualizationObjects[0].visualizationObject.content,
+                {},
+            );
+            expect(isSingleAxis).toEqual(true);
+        });
+
+        it("should return false if measures are on 2 axes", () => {
+            const isSingleAxis = areAllMeasuresOnSingleAxis(
+                visualizationObjects[0].visualizationObject.content,
+                { measures: ["m1"] },
+            );
+            expect(isSingleAxis).toEqual(false);
         });
     });
 });

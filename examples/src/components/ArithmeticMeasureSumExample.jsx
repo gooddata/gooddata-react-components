@@ -12,6 +12,38 @@ import {
     locationStateDisplayFormIdentifier,
 } from "../utils/fixtures";
 
+const localIdentifiers = {
+    franchiseFeesAdRoyalty: "franchiseFeesAdRoyalty",
+    franchiseFeesOngoingRoyalty: "franchiseFeesOngoingRoyalty",
+    franchiseFeesSum: "franchiseFeesSum",
+    franchiseFeesDifference: "franchiseFeesDifference",
+};
+
+const measures = [
+    Model.measure(franchiseFeesAdRoyaltyIdentifier)
+        .localIdentifier(localIdentifiers.franchiseFeesAdRoyalty)
+        .format("#,##0"),
+    Model.measure(franchiseFeesIdentifierOngoingRoyalty)
+        .localIdentifier(localIdentifiers.franchiseFeesOngoingRoyalty)
+        .format("#,##0"),
+    Model.arithmeticMeasure(
+        [localIdentifiers.franchiseFeesOngoingRoyalty, localIdentifiers.franchiseFeesAdRoyalty],
+        "sum",
+    )
+        .localIdentifier(localIdentifiers.franchiseFeesSum)
+        .format("#,##0")
+        .title("$ Ongoing / Ad Royalty Sum"),
+    Model.arithmeticMeasure(
+        [localIdentifiers.franchiseFeesOngoingRoyalty, localIdentifiers.franchiseFeesAdRoyalty],
+        "difference",
+    )
+        .localIdentifier(localIdentifiers.franchiseFeesDifference)
+        .format("#,##0")
+        .title("$ Ongoing / Ad Royalty Difference"),
+];
+
+const attributes = [Model.attribute(locationStateDisplayFormIdentifier).localIdentifier("month")];
+
 export class ArithmeticMeasureSumExample extends Component {
     onLoadingChanged(...params) {
         // eslint-disable-next-line no-console
@@ -24,38 +56,6 @@ export class ArithmeticMeasureSumExample extends Component {
     }
 
     render() {
-        const localIdentifiers = {
-            franchiseFeesAdRoyalty: "franchiseFeesAdRoyalty",
-            franchiseFeesOngoingRoyalty: "franchiseFeesOngoingRoyalty",
-            franchiseFeesSum: "franchiseFeesSum",
-            franchiseFeesDifference: "franchiseFeesDifference",
-        };
-
-        const measures = [
-            Model.measure(franchiseFeesAdRoyaltyIdentifier)
-                .localIdentifier(localIdentifiers.franchiseFeesAdRoyalty)
-                .format("#,##0"),
-            Model.measure(franchiseFeesIdentifierOngoingRoyalty)
-                .localIdentifier(localIdentifiers.franchiseFeesOngoingRoyalty)
-                .format("#,##0"),
-            Model.arithmeticMeasure(
-                [localIdentifiers.franchiseFeesOngoingRoyalty, localIdentifiers.franchiseFeesAdRoyalty],
-                "sum",
-            )
-                .localIdentifier(localIdentifiers.franchiseFeesSum)
-                .format("#,##0")
-                .title("$ Ongoing / Ad Royalty Sum"),
-            Model.arithmeticMeasure(
-                [localIdentifiers.franchiseFeesOngoingRoyalty, localIdentifiers.franchiseFeesAdRoyalty],
-                "difference",
-            )
-                .localIdentifier(localIdentifiers.franchiseFeesDifference)
-                .format("#,##0")
-                .title("$ Ongoing / Ad Royalty Difference"),
-        ];
-
-        const attributes = [Model.attribute(locationStateDisplayFormIdentifier).localIdentifier("month")];
-
         return (
             <div style={{ height: 200 }} className="s-table">
                 <Table

@@ -1,6 +1,7 @@
 // (C) 2019 GoodData Corporation
 import noop = require("lodash/noop");
 import get = require("lodash/get");
+import merge = require("lodash/merge");
 import cloneDeep = require("lodash/cloneDeep");
 import { VisualizationObject } from "@gooddata/typings";
 import { PluggableComboChart } from "../PluggableComboChart";
@@ -16,6 +17,7 @@ import { UICONFIG_AXIS, COMBO_CHART_UICONFIG } from "../../../../constants/uiCon
 import { COMBO_CHART_SUPPORTED_PROPERTIES } from "../../../../constants/supportedProperties";
 import { VisualizationTypes } from "../../../../../constants/visualizationTypes";
 import { OverTimeComparisonTypes } from "../../../../../interfaces/OverTimeComparison";
+import { PROPERTY_CONTROLS } from "../../../../constants/properties";
 
 describe("PluggableComboChart", () => {
     const defaultProps = {
@@ -468,6 +470,65 @@ describe("PluggableComboChart", () => {
                 },
                 refPointMock.buckets[2],
             ]);
+        });
+    });
+
+    describe("default chart type", () => {
+        it("should return default chart type", async () => {
+            const refPointMock = referencePointMocks.multipleMetricBucketsAndCategoryReferencePoint;
+            const extRefPoint: IExtendedReferencePoint = await getExtendedReferencePoint(refPointMock);
+            const controls = get(extRefPoint, PROPERTY_CONTROLS, {});
+
+            expect(controls.primaryChartType).toBe("column");
+            expect(controls.secondaryChartType).toBe("line");
+        });
+
+        it("should return chart type in bucket", async () => {
+            const refPointMock = merge(
+                {},
+                referencePointMocks.multipleMetricBucketsAndCategoryReferencePoint,
+                {
+                    buckets: [
+                        {
+                            chartType: VisualizationTypes.LINE,
+                        },
+                        {
+                            chartType: VisualizationTypes.COLUMN,
+                        },
+                    ],
+                    properties: {
+                        controls: {
+                            primaryChartType: VisualizationTypes.COLUMN,
+                            secondaryChartType: VisualizationTypes.AREA,
+                        },
+                    },
+                },
+            );
+            const extRefPoint: IExtendedReferencePoint = await getExtendedReferencePoint(refPointMock);
+            const controls = get(extRefPoint, PROPERTY_CONTROLS, {});
+
+            expect(controls.primaryChartType).toBe("line");
+            expect(controls.secondaryChartType).toBe("column");
+        });
+
+        it("should return chart type in properties.controls", async () => {
+            const refPointMock = merge(
+                {},
+                referencePointMocks.multipleMetricBucketsAndCategoryReferencePoint,
+                {
+                    properties: {
+                        controls: {
+                            primaryChartType: VisualizationTypes.LINE,
+                            secondaryChartType: VisualizationTypes.AREA,
+                        },
+                    },
+                },
+            );
+            const extRefPoint: IExtendedReferencePoint = await getExtendedReferencePoint(refPointMock);
+            const controls = get(extRefPoint, PROPERTY_CONTROLS, {});
+
+            expect(controls.primaryChartType).toBe("line");
+            expect(controls.secondaryChartType).toBe("area");
         });
     });
 });

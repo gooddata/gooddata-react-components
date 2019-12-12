@@ -346,6 +346,19 @@ const groupRowsPresets = {
     },
 };
 
+const drillHandlingPresets = {
+    onFiredDrillEvent: {
+        label: "Old onFiredDrillEvent",
+        key: "onFiredDrillEvent",
+        value: true,
+    },
+    onDrill: {
+        label: "New onDrill",
+        key: "onDrill",
+        value: false,
+    },
+};
+
 export const getDrillableItems = drillableKeys => {
     return Object.keys(drillableKeys)
         .filter(itemKey => drillableKeys[itemKey])
@@ -385,6 +398,7 @@ export class PivotTableDrillingExample extends Component {
             pivotTableSizeKey: "default",
             maxHeightPresetKey: "none",
             groupRowsKey: "disabledGrouping",
+            drillHandlingKey: "onFiredDrillEvent",
         };
     }
 
@@ -448,7 +462,13 @@ export class PivotTableDrillingExample extends Component {
         });
     };
 
-    onDrill = drillEvent => {
+    onDrillHandlingChange = drillHandlingKey => {
+        this.setState({
+            drillHandlingKey,
+        });
+    };
+
+    onFiredDrillEvent = drillEvent => {
         // eslint-disable-next-line no-console
         console.log(
             "onFiredDrillEvent",
@@ -459,6 +479,14 @@ export class PivotTableDrillingExample extends Component {
             drillEvent,
         });
         return true;
+    };
+
+    onDrill = drillEvent => {
+        // eslint-disable-next-line no-console
+        console.log("onDrill", drillEvent, JSON.stringify(drillEvent.drillContext.intersection, null, 2));
+        this.setState({
+            drillEvent,
+        });
     };
 
     render() {
@@ -474,6 +502,7 @@ export class PivotTableDrillingExample extends Component {
             pivotTableSizeKey,
             maxHeightPresetKey,
             groupRowsKey,
+            drillHandlingKey,
         } = this.state;
         const { bucketProps } = bucketPresets[bucketPresetKey];
         const { sortBy } = sortingPresets[sortingPresetKey];
@@ -509,6 +538,9 @@ export class PivotTableDrillingExample extends Component {
         });
 
         const groupRows = getGroupRows(groupRowsKey);
+        const drillHandlerProp = {
+            [drillHandlingKey]: this[drillHandlingKey],
+        };
 
         return (
             <div>
@@ -686,6 +718,24 @@ export class PivotTableDrillingExample extends Component {
                         );
                     })}
                 </div>
+                <div className="presets">
+                    Drill handling:{" "}
+                    {Object.keys(drillHandlingPresets).map(presetItemKey => {
+                        const { key, label } = drillHandlingPresets[presetItemKey];
+                        return (
+                            <ElementWithParam
+                                key={key}
+                                className={`preset-option gd-button gd-button-secondary s-group-rows-preset-${key} ${
+                                    drillHandlingKey === key ? " is-active" : ""
+                                }`}
+                                onClick={this.onDrillHandlingChange}
+                                params={[key]}
+                            >
+                                {label}
+                            </ElementWithParam>
+                        );
+                    })}
+                </div>
 
                 <div
                     className={`s-pivot-table-${bucketPresetKey}`}
@@ -703,7 +753,7 @@ export class PivotTableDrillingExample extends Component {
                         {...bucketPropsWithFilters}
                         {...filtersProp}
                         drillableItems={drillableItems}
-                        onFiredDrillEvent={this.onDrill}
+                        {...drillHandlerProp}
                         sortBy={sortBy}
                         config={{
                             maxHeight: maxHeightPresets[maxHeightPresetKey].value,
@@ -722,7 +772,7 @@ export class PivotTableDrillingExample extends Component {
                         {...tableBucketProps}
                         {...filtersProp}
                         drillableItems={drillableItems}
-                        onFiredDrillEvent={this.onDrill}
+                        onFiredDrillEvent={this.onFiredDrillEvent}
                         sortBy={sortBy}
                         totals={grandTotalsOnly}
                     />

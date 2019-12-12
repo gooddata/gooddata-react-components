@@ -16,6 +16,7 @@ import VisualizationPieExample from "../components/VisualizationPieByIdentifierE
 import VisualizationDonutExample from "../components/VisualizationDonutByIdentifierExample";
 import VisualizationTreemapExample from "../components/VisualizationTreemapByIdentifierExample";
 import VisualizationHeatmapExample from "../components/VisualizationHeatmapByIdentifierExample";
+import VisualizationComboExample from "../components/VisualizationComboByIdentifierExample";
 
 import VisualizationColumnChartExampleSRC from "!raw-loader!../components/VisualizationColumnChartByIdentifierExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import VisualizationTableExampleSRC from "!raw-loader!../components/VisualizationTableByIdentifierExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
@@ -30,6 +31,7 @@ import VisualizationPieExampleSRC from "!raw-loader!../components/VisualizationP
 import VisualizationDonutExampleSRC from "!raw-loader!../components/VisualizationDonutByIdentifierExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import VisualizationTreemapExampleSRC from "!raw-loader!../components/VisualizationTreemapByIdentifierExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import VisualizationHeatmapExampleSRC from "!raw-loader!../components/VisualizationHeatmapByIdentifierExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
+import VisualizationComboExampleSRC from "!raw-loader!../components/VisualizationComboByIdentifierExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 
 export const VisualizationByIdentifier = () => (
     <div>
@@ -110,6 +112,11 @@ export const VisualizationByIdentifier = () => (
 
         <h2 id="heatmap">Heatmap</h2>
         <ExampleWithSource for={VisualizationHeatmapExample} source={VisualizationHeatmapExampleSRC} />
+
+        <hr className="separator" />
+
+        <h2 id="combo">Combo Chart</h2>
+        <ExampleWithSource for={VisualizationComboExample} source={VisualizationComboExampleSRC} />
     </div>
 );
 

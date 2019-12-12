@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
@@ -98,6 +98,20 @@ storiesOf("URI components", module)
                     onError={onErrorHandler}
                     LoadingComponent={null}
                     ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
+    .add("table example - experimental execution", () =>
+        screenshotWrap(
+            <div style={{ width: 800, height: 400 }}>
+                <Visualization
+                    projectId="storybook"
+                    uri={"/gdc/md/storybook/obj/1001"}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                    experimentalVisExecution={true}
                 />
             </div>,
         ),
@@ -208,6 +222,20 @@ storiesOf("URI components", module)
             </div>,
         ),
     )
+    .add("chart with X and Y axis name aligned to left and top respectively", () =>
+        screenshotWrap(
+            <div style={{ width: 800, height: 400 }}>
+                <Visualization
+                    projectId="storybook"
+                    uri={"/gdc/md/storybook/obj/aligned-axis-name"}
+                    onError={onErrorHandler}
+                    locale="en-US"
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
     .add("chart with previous period measures", () =>
         screenshotWrap(
             <div style={{ width: 800, height: 400 }}>
@@ -231,6 +259,20 @@ storiesOf("URI components", module)
                     onError={onErrorHandler}
                     LoadingComponent={null}
                     ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
+    .add("chart example - experimental execution", () =>
+        screenshotWrap(
+            <div style={{ width: 800, height: 400 }}>
+                <Visualization
+                    projectId="storybook"
+                    uri={"/gdc/md/storybook/obj/1002"}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                    experimentalVisExecution={true}
                 />
             </div>,
         ),
@@ -349,6 +391,40 @@ storiesOf("URI components", module)
             </div>,
         ),
     )
+    .add("headline with drillableItems", () =>
+        screenshotWrap(
+            <div style={{ width: 800, height: 400 }}>
+                <Visualization
+                    projectId="storybook"
+                    uri={"/gdc/md/storybook/obj/1004"}
+                    drillableItems={[{ uri: "/gdc/md/storybook/obj/1" }]}
+                    onFiredDrillEvent={action("onFiredDrillEvent")}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
+    .add("headline with drillableItems disableDrillUnderline", () =>
+        screenshotWrap(
+            <div style={{ width: 800, height: 400 }}>
+                <Visualization
+                    projectId="storybook"
+                    uri={"/gdc/md/storybook/obj/1004"}
+                    drillableItems={[{ uri: "/gdc/md/storybook/obj/1" }]}
+                    onFiredDrillEvent={action("onFiredDrillEvent")}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                    // tslint:disable-next-line:jsx-no-lambda
+                    getFeatureFlags={async () => {
+                        return { disableKpiDashboardHeadlineUnderline: true };
+                    }}
+                />
+            </div>,
+        ),
+    )
     .add("headline with German number format", () =>
         screenshotWrap(
             <div style={{ width: 800, height: 400 }}>
@@ -388,6 +464,9 @@ storiesOf("URI components", module)
                     uri={"/gdc/md/storybook/obj/1011"}
                     onError={onErrorHandler}
                     LoadingComponent={null}
+                    config={{
+                        dualAxis: false,
+                    }}
                 />
             </div>,
         ),
@@ -400,6 +479,9 @@ storiesOf("URI components", module)
                     identifier="1011"
                     onError={onErrorHandler}
                     LoadingComponent={null}
+                    config={{
+                        dualAxis: false,
+                    }}
                 />
             </div>,
         ),
@@ -413,6 +495,7 @@ storiesOf("URI components", module)
                     config={{
                         primaryChartType: "line",
                         secondaryChartType: "area",
+                        dualAxis: false,
                     }}
                     onError={onErrorHandler}
                     LoadingComponent={null}
@@ -438,4 +521,131 @@ storiesOf("URI components", module)
                 <Visualization projectId="storybook" uri={"/gdc/md/storybook/obj/1002"} />
             </div>
         </div>
-    ));
+    ))
+    .add("Table with measure value filter in visualization object and one additional in filter prop", () =>
+        screenshotWrap(
+            <div style={{ width: 800, height: 400 }}>
+                <Visualization
+                    projectId="storybook"
+                    identifier="measure-value-filters"
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    filters={[
+                        {
+                            measureValueFilter: {
+                                measure: {
+                                    localIdentifier: "m2",
+                                },
+                                condition: {
+                                    comparison: {
+                                        operator: "GREATER_THAN",
+                                        value: 500,
+                                    },
+                                },
+                            },
+                        },
+                    ]}
+                />
+            </div>,
+        ),
+    )
+    .add("xirr", () =>
+        screenshotWrap(
+            <div style={{ width: 800, height: 400 }}>
+                <Visualization
+                    projectId="storybook"
+                    identifier="xirr-simple"
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
+    .add("xirr with drillableItems", () =>
+        screenshotWrap(
+            <div style={{ width: 800, height: 400 }}>
+                <Visualization
+                    projectId="storybook"
+                    identifier="xirr-simple"
+                    drillableItems={[{ uri: "/gdc/md/storybook/obj/5" }]}
+                    onFiredDrillEvent={action("onFiredDrillEvent")}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
+    // bar chart default sort
+    .add("Bar chart with 2M and 1VB will be sorted by first measure", () =>
+        screenshotWrap(
+            <div style={{ width: 800, height: 400 }}>
+                <Visualization
+                    projectId="storybook"
+                    uri="/gdc/md/storybook/obj/1007"
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
+    .add("Bar chart with 2M, 1VB and stackMeasures is true will be sorted by total values", () =>
+        screenshotWrap(
+            <div style={{ width: 800, height: 400 }}>
+                <Visualization
+                    projectId="storybook"
+                    identifier="bar-chart-2M-1VB-stackMeasures"
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
+    .add(
+        "Bar chart with 2M, 2VB and stackMeasures is true will be sorted by size of the group, then size of each member of the group",
+        () =>
+            screenshotWrap(
+                <div style={{ width: 800, height: 400 }}>
+                    <Visualization
+                        projectId="storybook"
+                        identifier="bar-chart-2M-2VB-stackMeasures"
+                        onError={onErrorHandler}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                    />
+                </div>,
+            ),
+    )
+    .add(
+        "Bar chart with 1M, 2VB and 1SB will be sorted by size of the group, then size of each member of the group",
+        () =>
+            screenshotWrap(
+                <div style={{ width: 800, height: 400 }}>
+                    <Visualization
+                        projectId="storybook"
+                        identifier="bar-chart-1M-2VB-1SB"
+                        onError={onErrorHandler}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                    />
+                </div>,
+            ),
+    )
+    .add(
+        "Bar chart with 2M and 2VB will be sorted by size of the group, then first measure of each member of the group",
+        () =>
+            screenshotWrap(
+                <div style={{ width: 800, height: 400 }}>
+                    <Visualization
+                        projectId="storybook"
+                        identifier="bar-chart-2M-2VB"
+                        onError={onErrorHandler}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                    />
+                </div>,
+            ),
+    );

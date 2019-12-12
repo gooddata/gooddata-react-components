@@ -1,11 +1,7 @@
 // (C) 2007-2019 GoodData Corporation
 import { Execution } from "@gooddata/typings";
 import { getCategoriesForTwoAttributes } from "../extendedStackingChartOptions";
-import {
-    getDrillableSeries,
-    getSeries,
-    IUnwrappedAttributeHeadersWithItems,
-} from "../../chartOptionsBuilder";
+import { getDrillableSeries, getSeries, IUnwrappedAttributeHeaderWithItems } from "../../chartOptionsBuilder";
 import { barChartWith4MetricsAndViewBy2Attribute } from "../../../../../../stories/test_data/fixtures";
 import { getMVSForViewByTwoAttributes } from "../../test/helper";
 import { MeasureColorStrategy } from "../../colorFactory";
@@ -26,7 +22,7 @@ describe("getCategoriesForTwoAttributes", () => {
     };
 
     it("should return categories for two attributes", () => {
-        const viewByAttribute: IUnwrappedAttributeHeadersWithItems = {
+        const viewByAttribute: IUnwrappedAttributeHeaderWithItems = {
             ...attributeHeader,
             items: [
                 {
@@ -61,7 +57,7 @@ describe("getCategoriesForTwoAttributes", () => {
                 },
             ],
         };
-        const viewByParentAttribute: IUnwrappedAttributeHeadersWithItems = {
+        const viewByParentAttribute: IUnwrappedAttributeHeaderWithItems = {
             ...attributeHeader,
             items: [
                 {
@@ -115,7 +111,7 @@ describe("getCategoriesForTwoAttributes", () => {
     });
 
     it("should return categories when attribute names have numerical values", () => {
-        const viewByAttribute: IUnwrappedAttributeHeadersWithItems = {
+        const viewByAttribute: IUnwrappedAttributeHeaderWithItems = {
             ...attributeHeader,
             items: [
                 {
@@ -138,7 +134,7 @@ describe("getCategoriesForTwoAttributes", () => {
                 },
             ],
         };
-        const viewByParentAttribute: IUnwrappedAttributeHeadersWithItems = {
+        const viewByParentAttribute: IUnwrappedAttributeHeaderWithItems = {
             ...attributeHeader,
             items: [
                 {
@@ -180,11 +176,11 @@ describe("getCategoriesForTwoAttributes", () => {
     });
 
     it("should return empty category", () => {
-        const viewByAttribute: IUnwrappedAttributeHeadersWithItems = {
+        const viewByAttribute: IUnwrappedAttributeHeaderWithItems = {
             ...attributeHeader,
             items: [],
         };
-        const viewByParentAttribute: IUnwrappedAttributeHeadersWithItems = {
+        const viewByParentAttribute: IUnwrappedAttributeHeaderWithItems = {
             ...attributeHeader,
             items: [],
         };
@@ -222,24 +218,18 @@ describe("getDrillableSeriesWithParentAttribute", () => {
     );
     const drillIntersectionItems = [
         {
-            id: "c2fa878519934f39aefe9325638f2beb",
-            title: "_Close [BOP]",
-            header: { uri: "/gdc/md/jroecoqa7jywstxy1hxp8lwl2c4nc10t/obj/9211", identifier: "aaeb7jTCfexV" },
+            header: dataSet.executionResponse.dimensions[0].headers[0].measureGroupHeader.items[0],
         },
         {
-            id: "1225",
-            title: "East Coast",
             header: {
-                uri: "/gdc/md/jroecoqa7jywstxy1hxp8lwl2c4nc10t/obj/1024",
-                identifier: "label.owner.region",
+                attributeHeader: dataSet.executionResponse.dimensions[1].headers[1].attributeHeader,
+                attributeHeaderItem: dataSet.executionResult.headerItems[1][1][0].attributeHeaderItem,
             },
         },
         {
-            id: "1226",
-            title: "Direct Sales",
             header: {
-                uri: "/gdc/md/jroecoqa7jywstxy1hxp8lwl2c4nc10t/obj/1027",
-                identifier: "label.owner.department",
+                attributeHeader: dataSet.executionResponse.dimensions[1].headers[0].attributeHeader,
+                attributeHeaderItem: dataSet.executionResult.headerItems[1][0][0].attributeHeaderItem,
             },
         },
     ];

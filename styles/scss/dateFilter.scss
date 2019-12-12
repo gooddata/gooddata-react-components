@@ -1,0 +1,29 @@
+// (C) 2007-2019 GoodData Corporation
+$gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
+
+@import "~@gooddata/goodstrap/lib/core/styles/Tabs";
+@import "~@gooddata/goodstrap/lib/Form/styles/Form";
+@import "~@gooddata/goodstrap/lib/core/styles/IndigoFont";
+@import "~@gooddata/goodstrap/lib/core/styles/Overlay";
+@import "~@gooddata/goodstrap/lib/Dialog/styles/Dialog";
+@import "~@gooddata/goodstrap/lib/Button/styles/Button";
+@import "~@gooddata/goodstrap/lib/List/styles/List";
+@import "~@gooddata/goodstrap/lib/Dropdown/styles/Dropdown";
+@import "~@gooddata/goodstrap/lib/Bubble/styles/Bubble";
+
+@import "../../src/components/filters/DateFilter/DynamicSelect/DynamicSelect.scss";
+@import "../../src/components/filters/DateFilter/Select/Select.scss";
+@import "../../src/components/filters/DateFilter/Select/SelectMenu.scss";
+@import "../../src/components/filters/DateFilter/Select/SelectOption.scss";
+@import "../../src/components/filters/DateFilter/DateFilterButton/DateFilterButton.scss";
+@import "../../src/components/filters/DateFilter/DateFilterFormWrapper/DateFilterFormWrapper.scss";
+@import "../../src/components/filters/DateFilter/DateRangePicker/DateRangePicker.scss";
+@import "../../src/components/filters/DateFilter/DateFilterBody/DateFilterBody.scss";
+@import "../../src/components/filters/DateFilter/DateFilterBody/DateFilterHeader.scss";
+@import "../../src/components/filters/DateFilter/ListItem/ListItem.scss";
+@import "../../src/components/filters/DateFilter/ListItemTooltip/ListItemTooltip.scss";
+@import "../../src/components/filters/DateFilter/NumericInput/NumericInput.scss";
+@import "../../src/components/filters/DateFilter/RelativeDateFilterForm/GranularityTabs.scss";
+@import "../../src/components/filters/DateFilter/RelativeRangePicker/RelativeRangePicker.scss";
+@import "../../src/components/filters/DateFilter/Separator/Separator.scss";
+@import "../../src/components/filters/DateFilter/VisibleScrollbar/VisibleScrollbar.scss";

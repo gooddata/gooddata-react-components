@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import * as PropTypes from "prop-types";
 import { IAttributeDisplayForm } from "./model";
@@ -10,24 +10,25 @@ export interface IAttributeLoaderMetadataProps {
 
 export interface IAttributeLoaderProps {
     metadata: IAttributeLoaderMetadataProps;
-    projectId: string;
+    projectId?: string;
     uri?: string;
     identifier?: string;
 
-    children(props: IAttributeLoaderChildren): any;
+    children(props: IAttributeLoaderChildrenProps): any;
 }
 
 export interface IAttributeLoaderState {
     attributeDisplayForm: IAttributeDisplayForm;
     isLoading: boolean;
     isUsingIdentifier: boolean;
-    error?: any;
+    error?: string;
 }
 
-export interface IAttributeLoaderChildren {
+export interface IAttributeLoaderChildrenProps {
     attributeDisplayForm: IAttributeDisplayForm;
     isLoading: boolean;
     isUsingIdentifier: boolean;
+    error?: string;
 }
 
 function getAttributeUri(
@@ -65,7 +66,7 @@ function getAttributeDisplayForm(
 
 export class AttributeLoader extends React.PureComponent<IAttributeLoaderProps, IAttributeLoaderState> {
     public static propTypes = {
-        projectId: PropTypes.string.isRequired,
+        projectId: PropTypes.string,
         uri: PropTypes.string,
         identifier: PropTypes.string,
         metadata: PropTypes.shape({
@@ -77,6 +78,7 @@ export class AttributeLoader extends React.PureComponent<IAttributeLoaderProps, 
     public static defaultProps: Partial<IAttributeLoaderProps> = {
         uri: null,
         identifier: null,
+        projectId: null,
     };
 
     constructor(props: IAttributeLoaderProps) {
@@ -109,11 +111,12 @@ export class AttributeLoader extends React.PureComponent<IAttributeLoaderProps, 
     }
 
     public render() {
-        const { attributeDisplayForm, isLoading, isUsingIdentifier } = this.state;
+        const { attributeDisplayForm, isLoading, isUsingIdentifier, error } = this.state;
         return this.props.children({
             attributeDisplayForm,
             isLoading,
             isUsingIdentifier,
+            error,
         });
     }
 

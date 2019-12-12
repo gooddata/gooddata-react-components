@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
@@ -9,9 +9,8 @@ import { headlineWithOneMeasure } from "../data/headlineExecutionFixtures";
 import "../../styles/scss/headline.scss";
 import { GERMAN_SEPARATORS } from "../data/numberFormat";
 
-storiesOf("Internal/HeadlineTransformation", module).add(
-    "HeadlineTransformation with German number format",
-    () =>
+storiesOf("Internal/HeadlineTransformation", module)
+    .add("HeadlineTransformation with German number format", () =>
         screenshotWrap(
             wrap(
                 <HeadlineTransformation
@@ -32,4 +31,26 @@ storiesOf("Internal/HeadlineTransformation", module).add(
                 300,
             ),
         ),
-);
+    )
+    .add("HeadlineTransformation disableDrillUnderline", () =>
+        screenshotWrap(
+            wrap(
+                <HeadlineTransformation
+                    executionRequest={headlineWithOneMeasure.executionRequest}
+                    executionResponse={headlineWithOneMeasure.executionResponse}
+                    executionResult={headlineWithOneMeasure.executionResult}
+                    drillableItems={[
+                        {
+                            identifier: "af2Ewj9Re2vK",
+                            uri: "/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1283",
+                        },
+                    ]}
+                    config={{ ...GERMAN_SEPARATORS, disableDrillUnderline: true }}
+                    onFiredDrillEvent={action("onFiredDrillEvent")}
+                    onAfterRender={action("onAfterRender")}
+                />,
+                "auto",
+                300,
+            ),
+        ),
+    );

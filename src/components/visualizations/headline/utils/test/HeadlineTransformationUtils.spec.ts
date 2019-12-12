@@ -1,14 +1,7 @@
-// (C) 2007-2018 GoodData Corporation
-import { IDrillEvent } from "../../../../../interfaces/DrillEvents";
+// (C) 2007-2019 GoodData Corporation
 import { IHeadlineData } from "../../../../../interfaces/Headlines";
 import * as headerPredicateFactory from "../../../../../factory/HeaderPredicateFactory";
-import {
-    getHeadlineData,
-    applyDrillableItems,
-    buildDrillEventData,
-    fireDrillEvent,
-    IHeadlineDrillItemContext,
-} from "../HeadlineTransformationUtils";
+import { getHeadlineData, applyDrillableItems, buildDrillEventData } from "../HeadlineTransformationUtils";
 import {
     SINGLE_URI_METRIC_EXECUTION_REQUEST,
     SINGLE_IDENTIFIER_METRIC_EXECUTION_REQUEST,
@@ -29,6 +22,7 @@ import {
     SAME_MEASURE_VALUES_EXECUTION_RESULT,
 } from "../../test/fixtures/two_measures";
 import { createIntlMock } from "../../../utils/intlUtils";
+import { IHeadlineDrillItemContext } from "../../types";
 
 describe("HeadlineTransformationUtils", () => {
     describe("getData", () => {
@@ -561,11 +555,14 @@ describe("HeadlineTransformationUtils", () => {
                     value: "42",
                     intersection: [
                         {
-                            id: "m1",
-                            title: "Lost",
                             header: {
-                                uri: "/gdc/md/project_id/obj/1",
-                                identifier: "",
+                                measureHeaderItem: {
+                                    name: "Lost",
+                                    format: "$#,##0.00",
+                                    localIdentifier: "m1",
+                                    uri: "/gdc/md/project_id/obj/1",
+                                    identifier: "metric.lost",
+                                },
                             },
                         },
                     ],
@@ -605,11 +602,14 @@ describe("HeadlineTransformationUtils", () => {
                     value: "42",
                     intersection: [
                         {
-                            id: "m1",
-                            title: "Lost",
                             header: {
-                                identifier: "metric.lost",
-                                uri: "",
+                                measureHeaderItem: {
+                                    name: "Lost",
+                                    format: "$#,##0.00",
+                                    localIdentifier: "m1",
+                                    uri: "/gdc/md/project_id/obj/1",
+                                    identifier: "metric.lost",
+                                },
                             },
                         },
                     ],
@@ -659,11 +659,12 @@ describe("HeadlineTransformationUtils", () => {
                     value: "12345678",
                     intersection: [
                         {
-                            id: "m2",
-                            title: "Found",
                             header: {
-                                uri: "/gdc/md/project_id/obj/2",
-                                identifier: "",
+                                measureHeaderItem: {
+                                    name: "Found",
+                                    format: "$#,##0.00",
+                                    localIdentifier: "m2",
+                                },
                             },
                         },
                     ],
@@ -684,78 +685,6 @@ describe("HeadlineTransformationUtils", () => {
                     SINGLE_METRIC_EXECUTION_RESPONSE,
                 ),
             ).toThrow();
-        });
-    });
-
-    describe("fireDrillEvent", () => {
-        it("should dispatch expected drill post message", () => {
-            const eventData = {
-                executionContext: {},
-                drillContext: {},
-            };
-            const eventHandler = jest.fn();
-            const target = {
-                dispatchEvent: eventHandler,
-            };
-
-            fireDrillEvent(undefined, eventData as IDrillEvent, (target as any) as EventTarget);
-
-            expect(eventHandler).toHaveBeenCalledTimes(1);
-            expect(eventHandler).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    detail: {
-                        executionContext: {},
-                        drillContext: {},
-                    },
-                    bubbles: true,
-                    type: "drill",
-                }),
-            );
-        });
-
-        it("should dispatch expected drill event and post message to the provided target", () => {
-            const eventData = {
-                executionContext: {},
-                drillContext: {},
-            };
-            const eventHandler = jest.fn();
-            const target = {
-                dispatchEvent: eventHandler,
-            };
-            const drillEventFunction = jest.fn(() => true);
-
-            fireDrillEvent(drillEventFunction, eventData as IDrillEvent, (target as any) as EventTarget);
-
-            expect(drillEventFunction).toHaveBeenCalledTimes(1);
-            expect(eventHandler).toHaveBeenCalledTimes(1);
-            expect(eventHandler).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    detail: {
-                        executionContext: {},
-                        drillContext: {},
-                    },
-                    bubbles: true,
-                    type: "drill",
-                }),
-            );
-        });
-
-        it("should dispatch expected drill event, but prevent drill post message", () => {
-            const eventData = {
-                executionContext: {},
-                drillContext: {},
-            };
-            const eventHandler = jest.fn();
-            const target = {
-                dispatchEvent: eventHandler,
-            };
-
-            const drillEventFunction = jest.fn(() => false);
-
-            fireDrillEvent(drillEventFunction, eventData as IDrillEvent, (target as any) as EventTarget);
-
-            expect(eventHandler).toHaveBeenCalledTimes(0);
-            expect(drillEventFunction).toHaveBeenCalledTimes(1);
         });
     });
 });

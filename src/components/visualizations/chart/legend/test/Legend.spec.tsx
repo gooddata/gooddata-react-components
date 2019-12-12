@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import noop = require("lodash/noop");
 import { mount } from "enzyme";
@@ -33,6 +33,7 @@ describe("Legend", () => {
             legendLayout: "vertical",
             series,
             onItemClick: noop,
+            validateOverHeight: noop,
             position: "top",
             ...userProps,
         };

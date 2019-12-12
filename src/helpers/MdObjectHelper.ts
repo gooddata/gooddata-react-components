@@ -1,13 +1,14 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import get = require("lodash/get");
 import { VisualizationObject, AFM, VisualizationInput } from "@gooddata/typings";
 import { DataLayer } from "@gooddata/gooddata-js";
-import { IMeasureTitleProps, IArithmeticMeasureTitleProps } from "..";
+import { IMeasureTitleProps, IArithmeticMeasureTitleProps } from "../interfaces/MeasureTitle";
 import { ATTRIBUTE, MEASURES, COLUMNS } from "../constants/bucketNames";
 import IMeasure = VisualizationObject.IMeasure;
 import IArithmeticMeasureDefinition = VisualizationObject.IArithmeticMeasureDefinition;
 import { IPivotTableBucketProps } from "../components/PivotTable";
 import { mergeFiltersToAfm } from "./afmHelper";
+import { IAxisConfig } from "../interfaces/Config";
 
 function getTotals(
     mdObject: VisualizationObject.IVisualizationObject,
@@ -57,7 +58,7 @@ function buildArithmeticMeasureTitleProps(
 
 export const mdObjectToPivotBucketProps = (
     mdObject: VisualizationObject.IVisualizationObject,
-    filtersFromProps: AFM.FilterItem[],
+    filtersFromProps: AFM.ExtendedFilter[],
 ): IPivotTableBucketProps => {
     const measureBucket = mdObject.content.buckets.find(bucket => bucket.localIdentifier === MEASURES);
     const rowBucket = mdObject.content.buckets.find(bucket => bucket.localIdentifier === ATTRIBUTE);
@@ -81,10 +82,10 @@ export const mdObjectToPivotBucketProps = (
 
     const afm = mergeFiltersToAfm(afmWithoutMergedFilters, filtersFromProps);
 
-    const filters: VisualizationInput.IFilter[] = (afm.filters || []).filter(afmFilter => {
-        // Filter out expression filters which are not supported in bucket interface
-        return AFM.isDateFilter(afmFilter) || AFM.isAttributeFilter(afmFilter);
-    }) as AFM.FilterItem[];
+    // Filter out expression filters which are not supported in bucket interface
+    const filters: VisualizationInput.IFilter[] = (afm.filters || []).filter(
+        afmFilter => !AFM.isExpressionFilter(afmFilter),
+    ) as VisualizationObject.VisualizationObjectExtendedFilter[];
 
     return {
         measures,
@@ -95,6 +96,26 @@ export const mdObjectToPivotBucketProps = (
         totals,
     };
 };
+
+export function getMeasuresFromMdObject(
+    mdObject: VisualizationObject.IVisualizationObjectContent,
+): VisualizationObject.BucketItem[] {
+    return get(mdObject, "buckets").reduce((acc, bucket) => {
+        const measureItems: VisualizationObject.BucketItem[] = get(bucket, "items", []).filter(
+            VisualizationObject.isMeasure,
+        );
+        return acc.concat(measureItems);
+    }, []);
+}
+
+export function areAllMeasuresOnSingleAxis(
+    mdObject: VisualizationObject.IVisualizationObjectContent,
+    secondaryYAxis: IAxisConfig,
+): boolean {
+    const measureCount = getMeasuresFromMdObject(mdObject).length;
+    const numberOfMeasureOnSecondaryAxis = get(secondaryYAxis, "measures.length", 0);
+    return numberOfMeasureOnSecondaryAxis === 0 || measureCount === numberOfMeasureOnSecondaryAxis;
+}
 
 export default {
     getTotals,

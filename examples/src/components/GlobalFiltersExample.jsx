@@ -18,6 +18,10 @@ import { Layout } from "../components/utils/Layout";
 import { CustomLoading } from "../components/utils/CustomLoading";
 import { CustomError } from "../components/utils/CustomError";
 
+const measures = [Model.measure(averageDailyTotalSales).alias("$ Avg Daily Total Sales")];
+const menuCategoryAttribute = Model.attribute(menuCategoryAttributeDFIdentifier);
+const menuItemNameAttribute = Model.attribute(menuItemNameAttributeDFIdentifier).alias("Menu Item name");
+
 export class EmployeeProfile extends React.Component {
     static propTypes = {
         validElements: PropTypes.object.isRequired,
@@ -92,13 +96,6 @@ export class EmployeeProfile extends React.Component {
         );
 
         const employeeFilter = Model.positiveAttributeFilter(employeeNameIdentifier, [selectedEmployeeUri]);
-
-        const measures = [Model.measure(averageDailyTotalSales).alias("$ Avg Daily Total Sales")];
-        const menuCategoryAttribute = Model.attribute(menuCategoryAttributeDFIdentifier);
-        const menuItemNameAttribute = Model.attribute(menuItemNameAttributeDFIdentifier).alias(
-            "Menu Item name",
-        );
-
         const selectedEmployee = validElements.items.find(item => item.element.uri === selectedEmployeeUri)
             .element;
         const employeeName = selectedEmployee.title;

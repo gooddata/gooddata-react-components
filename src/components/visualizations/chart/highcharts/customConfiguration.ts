@@ -1,5 +1,4 @@
 // (C) 2007-2019 GoodData Corporation
-import * as cx from "classnames";
 import noop = require("lodash/noop");
 import isString = require("lodash/isString");
 import set = require("lodash/set");
@@ -14,6 +13,7 @@ import every = require("lodash/every");
 import isNil = require("lodash/isNil");
 import pickBy = require("lodash/pickBy");
 import * as numberJS from "@gooddata/numberjs";
+import * as cx from "classnames";
 
 import { styleVariables } from "../../styles/variables";
 import { supportedDualAxesChartTypes, supportedTooltipFollowPointerChartTypes } from "../chartOptionsBuilder";
@@ -24,15 +24,10 @@ import {
     IAxis,
     IChartOptions,
     ISeriesItem,
+    IPointData,
 } from "../../../../interfaces/Config";
 import { percentFormatter } from "../../../../helpers/utils";
-import {
-    formatAsPercent,
-    getLabelStyle,
-    getLabelsVisibilityConfig,
-    getShapeVisiblePart,
-    isInPercent,
-} from "./dataLabelsHelpers";
+import { formatAsPercent, getLabelStyle, getLabelsVisibilityConfig, isInPercent } from "./dataLabelsHelpers";
 import { HOVER_BRIGHTNESS, MINIMUM_HC_SAFE_BRIGHTNESS } from "./commonConfiguration";
 import { AXIS_LINE_COLOR, getLighterColor } from "../../utils/color";
 import {
@@ -45,6 +40,7 @@ import {
     isHeatmap,
     isScatterPlot,
     isBubbleChart,
+    isComboChart,
 } from "../../utils/common";
 import { shouldFollowPointer } from "../../../visualizations/chart/highcharts/helpers";
 import {
@@ -58,6 +54,9 @@ import getOptionalStackingConfiguration from "./getOptionalStackingConfiguration
 import { IDrillConfig } from "../../../../interfaces/DrillEvents";
 import { getZeroAlignConfiguration } from "./getZeroAlignConfiguration";
 import { canComboChartBeStackedInPercent } from "../chartOptions/comboChartOptions";
+import { getAxisNameConfiguration } from "./getAxisNameConfiguration";
+import { getChartAlignmentConfiguration } from "./getChartAlignmentConfiguration";
+import { getAxisLabelConfigurationForDualBarChart } from "./getAxisLabelConfigurationForDualBarChart";
 
 const { stripColors, numberFormat }: any = numberJS;
 
@@ -68,10 +67,15 @@ const ALIGN_RIGHT = "right";
 const ALIGN_CENTER = "center";
 
 const TOOLTIP_ARROW_OFFSET = 23;
-const TOOLTIP_FULLSCREEN_THRESHOLD = 480;
-const TOOLTIP_MAX_WIDTH = 366;
+const TOOLTIP_MAX_WIDTH = 320;
 const TOOLTIP_BAR_CHART_VERTICAL_OFFSET = 5;
 const TOOLTIP_VERTICAL_OFFSET = 14;
+const BAR_COLUMN_TOOLTIP_TOP_OFFSET = 8;
+const BAR_COLUMN_TOOLTIP_LEFT_OFFSET = 5;
+const HIGHCHARTS_TOOLTIP_TOP_LEFT_OFFSET = 16;
+
+// in viewport <= 480, tooltip width is equal to chart container width
+const TOOLTIP_FULLSCREEN_THRESHOLD = 480;
 
 const escapeAngleBrackets = (str: any) => str && str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -246,7 +250,13 @@ function getTooltipVerticalOffset(chartType: any, stacking: any, point: any) {
     return TOOLTIP_VERTICAL_OFFSET;
 }
 
-function positionTooltip(chartType: any, stacking: any, labelWidth: any, labelHeight: any, point: any) {
+export function getTooltipPositionInChartContainer(
+    chartType: string,
+    stacking: string,
+    labelWidth: number,
+    labelHeight: number,
+    point: IPointData,
+) {
     const dataPointEnd = getDataPointEnd(chartType, point.negative, point.plotX, point.h, stacking);
     const arrowPosition = getArrowHorizontalPosition(chartType, stacking, dataPointEnd, point.h);
     const chartWidth = this.chart.plotWidth;
@@ -267,91 +277,75 @@ function positionTooltip(chartType: any, stacking: any, labelWidth: any, labelHe
     };
 }
 
-const showFullscreenTooltip = () => {
+function getHighchartTooltipTopOffset(chartType: string): number {
+    if (isBarChart(chartType) || isColumnChart(chartType) || isComboChart(chartType)) {
+        return BAR_COLUMN_TOOLTIP_TOP_OFFSET;
+    }
+    return HIGHCHARTS_TOOLTIP_TOP_LEFT_OFFSET;
+}
+
+function getHighchartTooltipLeftOffset(chartType: string): number {
+    if (isBarChart(chartType) || isColumnChart(chartType) || isComboChart(chartType)) {
+        return BAR_COLUMN_TOOLTIP_LEFT_OFFSET;
+    }
+    return HIGHCHARTS_TOOLTIP_TOP_LEFT_OFFSET;
+}
+
+export function getTooltipPositionInViewPort(
+    chartType: string,
+    stacking: string,
+    labelWidth: number,
+    labelHeight: number,
+    point: IPointData,
+) {
+    const { x, y } = getTooltipPositionInChartContainer.call(
+        this,
+        chartType,
+        stacking,
+        labelWidth,
+        labelHeight,
+        point,
+    );
+    const { top: containerTop, left: containerLeft } = this.chart.container.getBoundingClientRect();
+    const leftOffset = pageXOffset + containerLeft - getHighchartTooltipLeftOffset(chartType);
+    const topOffset = pageYOffset + containerTop - getHighchartTooltipTopOffset(chartType);
+
+    return {
+        x: isTooltipShownInFullScreen() ? leftOffset : leftOffset + x,
+        y: topOffset + y,
+    };
+}
+
+const isTooltipShownInFullScreen = () => {
     return document.documentElement.clientWidth <= TOOLTIP_FULLSCREEN_THRESHOLD;
 };
 
-function isPointBasedChart(chartType: string) {
-    const pointBasedTypes = [
-        VisualizationTypes.LINE,
-        VisualizationTypes.AREA,
-        VisualizationTypes.TREEMAP,
-        VisualizationTypes.SCATTER,
-    ];
-    return isOneOfTypes(chartType, pointBasedTypes);
-}
-
-function formatTooltip(chartType: any, stacking: any, tooltipCallback: any) {
+function formatTooltip(tooltipCallback: any) {
     const { chart } = this.series;
     const { color: pointColor } = this.point;
+    const chartWidth = chart.spacingBox.width;
+    const isFullScreenTooltip = isTooltipShownInFullScreen();
+    const maxTooltipContentWidth = isFullScreenTooltip ? chartWidth : Math.min(chartWidth, TOOLTIP_MAX_WIDTH);
 
     // when brushing, do not show tooltip
     if (chart.mouseIsDown) {
         return false;
     }
 
-    const dataPointEnd =
-        isPointBasedChart(chartType) || !this.point.tooltipPos
-            ? this.point.plotX
-            : getDataPointEnd(
-                  chartType,
-                  this.point.negative,
-                  this.point.tooltipPos[0],
-                  this.point.tooltipPos[2],
-                  stacking,
-              );
-
-    const ignorePointHeight = isPointBasedChart(chartType) || !this.point.shapeArgs;
-
-    const dataPointHeight = ignorePointHeight ? 0 : this.point.shapeArgs.height;
-
-    const arrowPosition = getArrowHorizontalPosition(chartType, stacking, dataPointEnd, dataPointHeight);
-
-    const chartWidth = chart.plotWidth;
-    const align = getArrowAlignment(arrowPosition, chartWidth);
-    const defaultArrowPosition = arrowPosition > chartWidth ? chartWidth : arrowPosition * 2;
-    const arrowPositionForTail = getArrowPositionForTail(defaultArrowPosition, this.point, chartType, chart);
-
     const strokeStyle = pointColor ? `border-top-color: ${pointColor};` : "";
-    const tailStyle = showFullscreenTooltip()
-        ? `style="left: ${arrowPositionForTail + chart.plotLeft}px;"`
-        : "";
+    const tooltipStyle = isFullScreenTooltip ? `width: ${maxTooltipContentWidth}px;` : "";
 
-    const getTailClasses = (classname: any) => {
-        return cx(classname, {
-            [align]: !showFullscreenTooltip(),
-        });
-    };
-
-    const tooltipContent = tooltipCallback(this.point, this.percentage); // null disables whole tooltip
+    // null disables whole tooltip
+    const tooltipContent: string = tooltipCallback(this.point, maxTooltipContentWidth, this.percentage);
 
     return tooltipContent !== null
-        ? `<div class="hc-tooltip gd-viz-tooltip">
+        ? `<div class="hc-tooltip gd-viz-tooltip" style="${tooltipStyle}">
             <span class="stroke gd-viz-tooltip-stroke" style="${strokeStyle}"></span>
-            <div class="content gd-viz-tooltip-content">
+            <div class="content gd-viz-tooltip-content" style="max-width: ${maxTooltipContentWidth}px;">
                 ${tooltipContent}
             </div>
-            <div class="${getTailClasses(
-                "gd-viz-tooltip-tail tail1 gd-viz-tooltip-tail1",
-            )}" ${tailStyle}></div>
-            <div class="${getTailClasses(
-                "gd-viz-tooltip-tail tail2 gd-viz-tooltip-tail2",
-            )}" ${tailStyle}></div>
         </div>`
         : null;
-}
-
-function getArrowPositionForTail(defaultArrowPosition: number, point: any, chartType: any, chart: any) {
-    let arrowPositionForTail = defaultArrowPosition / 2;
-    if (isBarChart(chartType) && point.shapeArgs && chart) {
-        const visiblePart = getShapeVisiblePart(point.shapeArgs, chart, defaultArrowPosition);
-        arrowPositionForTail = visiblePart / 2;
-        // truncated shapes are moved to negative coordinates and tooltip needs compensation
-        if (point.shapeArgs.y < 0) {
-            arrowPositionForTail = chart.plotWidth - arrowPositionForTail;
-        }
-    }
-    return arrowPositionForTail;
 }
 
 function formatLabel(value: any, format: any, config: IChartConfig = {}) {
@@ -395,6 +389,7 @@ function level1LabelsFormatter(config?: IChartConfig) {
         config,
     )})`;
 }
+
 function level2LabelsFormatter(config?: IChartConfig) {
     return `${get(this, "point.name")} (${formatLabel(
         get(this, "point.value"),
@@ -468,8 +463,9 @@ function getTooltipConfiguration(chartOptions: IChartOptions) {
                   borderRadius: 0,
                   shadow: false,
                   useHTML: true,
-                  positioner: partial(positionTooltip, chartType, stacking),
-                  formatter: partial(formatTooltip, chartType, stacking, tooltipAction),
+                  outside: true,
+                  positioner: partial(getTooltipPositionInViewPort, chartType, stacking),
+                  formatter: partial(formatTooltip, tooltipAction),
                   ...followPointer,
               },
           }
@@ -986,6 +982,7 @@ function getYAxisTickConfiguration(chartOptions: IChartOptions, axisPropsKey: st
 }
 
 function getAxesConfiguration(chartOptions: IChartOptions) {
+    const { forceDisableDrillOnAxes = false } = chartOptions;
     const type = chartOptions.type as ChartType;
 
     return {
@@ -1003,7 +1000,9 @@ function getAxesConfiguration(chartOptions: IChartOptions) {
 
             const opposite = get(axis, "opposite", false);
             const axisType: string = axis.opposite ? "secondary" : "primary";
-            const className: string = `s-highcharts-${axisType}-yaxis`;
+            const className: string = cx(`s-highcharts-${axisType}-yaxis`, {
+                "gd-axis-label-drilling-disabled": forceDisableDrillOnAxes,
+            });
             const axisPropsKey = opposite ? "secondary_yAxisProps" : "yAxisProps";
 
             // For bar chart take x axis options
@@ -1061,6 +1060,9 @@ function getAxesConfiguration(chartOptions: IChartOptions) {
 
             const opposite = get(axis, "opposite", false);
             const axisPropsKey = opposite ? "secondary_xAxisProps" : "xAxisProps";
+            const className: string = cx({
+                "gd-axis-label-drilling-disabled": forceDisableDrillOnAxes,
+            });
 
             const min = get(chartOptions, axisPropsKey.concat(".min"), "");
             const max = get(chartOptions, axisPropsKey.concat(".max"), "");
@@ -1112,6 +1114,7 @@ function getAxesConfiguration(chartOptions: IChartOptions) {
                         font: '14px Avenir, "Helvetica Neue", Arial, sans-serif',
                     },
                 },
+                className,
                 ...maxProp,
                 ...minProp,
                 ...tickConfiguration,
@@ -1140,6 +1143,9 @@ export function getCustomizedConfiguration(
         // and should be after 'getStackingConfiguration' to get stackLabels config
         getOptionalStackingConfiguration,
         getZeroAlignConfiguration,
+        getAxisNameConfiguration,
+        getChartAlignmentConfiguration,
+        getAxisLabelConfigurationForDualBarChart,
     ];
 
     const commonData = configurators.reduce((config: any, configurator: any) => {

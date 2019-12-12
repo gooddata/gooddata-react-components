@@ -1,10 +1,12 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
+import { IConvertedAFM } from "@gooddata/gooddata-js/lib/DataLayer/converters/toAfmResultSpec";
 import * as React from "react";
 import {
     SDK,
     factory as createSdk,
     DataLayer,
     ApiResponse,
+    IProperties,
     IPropertiesControls,
     IFeatureFlags,
 } from "@gooddata/gooddata-js";
@@ -12,36 +14,48 @@ import get = require("lodash/get");
 import noop = require("lodash/noop");
 import isEqual = require("lodash/isEqual");
 import { AFM, VisualizationObject, VisualizationClass, Localization } from "@gooddata/typings";
-import { injectIntl, intlShape, InjectedIntlProps } from "react-intl";
+import { injectIntl, InjectedIntlProps } from "react-intl";
 import { IHeaderPredicate } from "../../interfaces/HeaderPredicate";
 import { IntlWrapper } from "../core/base/IntlWrapper";
 import { BaseChart } from "../core/base/BaseChart";
-import { IChartConfig, IColorPaletteItem } from "../../interfaces/Config";
-import { SortableTable } from "../core/SortableTable";
+import { IAxisConfig, IChartConfig, IColorPaletteItem } from "../../interfaces/Config";
 import { PivotTable } from "../PivotTable";
 import { Headline } from "../core/Headline";
+import { Xirr } from "../core/Xirr";
 import { IEvents, OnLegendReady } from "../../interfaces/Events";
 import { VisualizationPropType, Requireable } from "../../proptypes/Visualization";
 import { VisualizationTypes, VisType } from "../../constants/visualizationTypes";
 import { IDataSource } from "../../interfaces/DataSource";
 import { ISubject } from "../../helpers/async";
 import { getVisualizationTypeFromVisualizationClass } from "../../helpers/visualizationType";
-import MdObjectHelper, { mdObjectToPivotBucketProps } from "../../helpers/MdObjectHelper";
+import MdObjectHelper, {
+    areAllMeasuresOnSingleAxis,
+    mdObjectToPivotBucketProps,
+} from "../../helpers/MdObjectHelper";
 import { fillMissingTitles } from "../../helpers/measureTitleHelper";
 import { LoadingComponent, ILoadingProps } from "../simple/LoadingComponent";
 import { ErrorComponent, IErrorProps } from "../simple/ErrorComponent";
 import { IDrillableItem, generateDimensions, RuntimeError } from "../../";
 import { setTelemetryHeaders } from "../../helpers/utils";
-import { getDefaultTreemapSort } from "../../helpers/sorts";
+import { getDefaultBarChartSort, getDefaultTreemapSort } from "../../helpers/sorts";
 import { convertErrors, generateErrorMap, IErrorMap } from "../../helpers/errorHandlers";
-import { isTreemap } from "../visualizations/utils/common";
+import { isBarChart, isTreemap } from "../visualizations/utils/common";
 import { getColorMappingPredicate, getColorPaletteFromColors } from "../visualizations/utils/color";
 import { getCachedOrLoad } from "../../helpers/sdkCache";
-import { getFeatureFlags } from "../../helpers/featureFlags";
+import { getFeatureFlags, setConfigFromFeatureFlags } from "../../helpers/featureFlags";
 import { mergeFiltersToAfm } from "../../helpers/afmHelper";
+import { _experimentalDataSourceFactory } from "./experimentalDataSource";
+import IVisualizationObjectContent = VisualizationObject.IVisualizationObjectContent;
+import { getHighchartsAxisNameConfiguration } from "../../internal/utils/propertiesHelper";
+
 export { Requireable };
 
 const { ExecuteAfmAdapter, toAfmResultSpec, createSubject } = DataLayer;
+
+interface ISortingConfigs {
+    canSortStackTotalValue: boolean;
+    enableSortingByTotalGroup: boolean;
+}
 
 export type VisualizationEnvironment = "none" | "dashboards";
 
@@ -52,7 +66,7 @@ export interface IVisualizationProps extends IEvents {
     identifier?: string;
     locale?: Localization.ILocale;
     config?: IChartConfig;
-    filters?: AFM.FilterItem[];
+    filters?: AFM.ExtendedFilter[];
     drillableItems?: Array<IDrillableItem | IHeaderPredicate>;
     uriResolver?: (sdk: SDK, projectId: string, uri?: string, identifier?: string) => Promise<string>;
     fetchVisObject?: (
@@ -65,12 +79,18 @@ export interface IVisualizationProps extends IEvents {
     ) => Promise<VisualizationClass.IVisualizationClass>;
     getFeatureFlags?: (sdk: SDK, projectId: string) => Promise<IFeatureFlags>;
     BaseChartComponent?: any;
-    TableComponent?: any;
     PivotTableComponent?: any;
     HeadlineComponent?: any;
+    XirrComponent?: any;
     ErrorComponent?: React.ComponentType<IErrorProps>;
     LoadingComponent?: React.ComponentType<ILoadingProps>;
     onLegendReady?: OnLegendReady;
+    /**
+     * If specified and true, the Visualization component will use new executeVisualization API to obtain
+     * data to visualize; this functionality is experimental at the moment and is intended for GoodData internal
+     * testing and validation.
+     */
+    experimentalVisExecution?: boolean;
 }
 
 export interface IVisualizationState {
@@ -128,10 +148,7 @@ export class VisualizationWrapped extends React.Component<
     IVisualizationProps & InjectedIntlProps,
     IVisualizationState
 > {
-    public static propTypes = {
-        ...VisualizationPropType,
-        intl: intlShape.isRequired,
-    };
+    public static propTypes = VisualizationPropType;
 
     public static defaultProps: Partial<IVisualizationProps> = {
         onError: noop,
@@ -142,12 +159,13 @@ export class VisualizationWrapped extends React.Component<
         fetchVisualizationClass,
         getFeatureFlags,
         BaseChartComponent: BaseChart,
-        TableComponent: SortableTable,
         PivotTableComponent: PivotTable,
         HeadlineComponent: Headline,
+        XirrComponent: Xirr,
         ErrorComponent,
         LoadingComponent,
         onExportReady: noop,
+        experimentalVisExecution: false,
     };
 
     private visualizationUri: string;
@@ -269,69 +287,35 @@ export class VisualizationWrapped extends React.Component<
             projectId,
             drillableItems,
             onFiredDrillEvent,
+            onDrill,
             onLegendReady,
             onError,
             onLoadingChanged,
             locale,
-            config: baseConfig,
-            intl,
             BaseChartComponent,
-            TableComponent,
             PivotTableComponent,
             HeadlineComponent,
+            XirrComponent,
             LoadingComponent,
             ErrorComponent,
             onExportReady,
             filters: filtersFromProps,
         } = this.props;
-        const { resultSpec, type, totals, error, isLoading, mdObject } = this.state;
-        const mdObjectContent = mdObject && mdObject.content;
-        const properties: IPropertiesControls | undefined =
-            mdObjectContent && mdObjectContent.properties && JSON.parse(mdObjectContent.properties).controls;
-
-        const colorPalette =
-            baseConfig && baseConfig.colorPalette ? baseConfig.colorPalette : this.state.colorPalette;
-
-        const colorMapping =
-            properties && properties.colorMapping
-                ? properties.colorMapping.map(mapping => {
-                      const predicate = getColorMappingPredicate(mapping.id);
-                      return {
-                          predicate,
-                          color: mapping.color,
-                      };
-                  })
-                : undefined;
-
-        const config = {
-            ...properties,
-            colorMapping,
-            ...baseConfig,
-            colorPalette,
-            mdObject: mdObjectContent,
-        };
+        const { resultSpec, type, error, isLoading, mdObject } = this.state;
 
         if (error) {
-            const errorProps = this.errorMap[error.getMessage()];
-
-            return ErrorComponent ? (
-                <ErrorComponent
-                    code={error.getMessage()}
-                    message={intl.formatMessage({ id: "visualization.ErrorMessageGeneric" })}
-                    description={intl.formatMessage({ id: "visualization.ErrorDescriptionGeneric" })}
-                    {...errorProps}
-                />
-            ) : null;
-        }
-        if (isLoading || !dataSource) {
+            return this.renderError(error);
+        } else if (isLoading || !dataSource) {
             return LoadingComponent ? <LoadingComponent /> : null;
         }
 
+        const config = this.createVisualizationConfig();
         const commonProps = {
             sdk,
             projectId,
             drillableItems,
             onFiredDrillEvent,
+            onDrill,
             onError,
             onLoadingChanged,
             LoadingComponent,
@@ -348,9 +332,7 @@ export class VisualizationWrapped extends React.Component<
         };
 
         switch (type) {
-            case VisualizationTypes.TABLE:
-                return <TableComponent {...commonProps} {...sourceProps} totals={totals} />;
-            case VisualizationTypes.PIVOT_TABLE: {
+            case VisualizationTypes.TABLE: {
                 const processedVisualizationObject = {
                     ...mdObject,
                     content: fillMissingTitles(mdObject.content, locale),
@@ -365,6 +347,8 @@ export class VisualizationWrapped extends React.Component<
             }
             case VisualizationTypes.HEADLINE:
                 return <HeadlineComponent {...commonProps} {...sourceProps} />;
+            case VisualizationTypes.XIRR:
+                return <XirrComponent {...commonProps} {...sourceProps} />;
             default:
                 return (
                     <BaseChartComponent
@@ -377,55 +361,76 @@ export class VisualizationWrapped extends React.Component<
         }
     }
 
-    public async prepareDataSources(
+    private renderError(error: RuntimeError) {
+        const { intl, ErrorComponent } = this.props;
+        const errorProps = this.errorMap[error.getMessage()];
+
+        return ErrorComponent ? (
+            <ErrorComponent
+                code={error.getMessage()}
+                message={intl.formatMessage({ id: "visualization.ErrorMessageGeneric" })}
+                description={intl.formatMessage({ id: "visualization.ErrorDescriptionGeneric" })}
+                {...errorProps}
+            />
+        ) : null;
+    }
+
+    private createVisualizationConfig(): IChartConfig {
+        const { config } = this.props;
+        const { featureFlags, mdObject, colorPalette } = this.state;
+        const mdObjectContent = mdObject && mdObject.content;
+
+        return setConfigFromFeatureFlags(
+            mergeChartConfigWithProperties(config, mdObjectContent, colorPalette, featureFlags),
+            featureFlags,
+        );
+    }
+
+    private async prepareDataSources(
         projectId: string,
         identifier: string,
-        filters: AFM.FilterItem[] = [],
+        filters: AFM.ExtendedFilter[] = [],
     ): Promise<IVisualizationExecInfo> {
         const { uriResolver, fetchVisObject, fetchVisualizationClass, locale, getFeatureFlags } = this.props;
 
+        // gather all essential information from backend
+
         const visualizationUri = await uriResolver(this.sdk, projectId, this.visualizationUri, identifier);
-        this.visualizationUri = visualizationUri;
-
         const mdObject = await fetchVisObject(this.sdk, visualizationUri);
-
         const visualizationClassUri: string = MdObjectHelper.getVisualizationClassUri(mdObject);
-
-        this.exportTitle = get(mdObject, "meta.title", "");
-
         const visualizationClass = await fetchVisualizationClass(this.sdk, visualizationClassUri);
-        const processedVisualizationObject = fillMissingTitles(mdObject.content, locale);
-
-        const mdObjectTotals = MdObjectHelper.getTotals(mdObject);
-
-        const { afm: afmWithoutMergedFilters, resultSpec: resultSpecSorting } = toAfmResultSpec(
-            processedVisualizationObject,
-        );
-
-        const afm = mergeFiltersToAfm(afmWithoutMergedFilters, filters);
-
         const featureFlags = await getFeatureFlags(this.sdk, projectId);
-
         const visualizationType: VisType = await getVisualizationTypeFromVisualizationClass(
             visualizationClass,
-            featureFlags,
         );
-        // keep resultSpec creation in sync with AD
-        const resultSpecWithDimensions = {
-            ...resultSpecSorting,
-            dimensions: generateDimensions(mdObject.content, visualizationType),
-        };
-        const treemapDefaultSorting = isTreemap(visualizationType)
-            ? {
-                  sorts: getDefaultTreemapSort(afm, resultSpecWithDimensions),
-              }
-            : {};
-        const resultSpec = {
-            ...resultSpecWithDimensions,
-            ...treemapDefaultSorting,
-        };
 
-        const dataSource = await this.adapter.createDataSource(afm);
+        this.visualizationUri = visualizationUri;
+        this.exportTitle = get(mdObject, "meta.title", "");
+
+        const mdObjectContent: IVisualizationObjectContent = mdObject.content;
+        const mdObjectContentProperties: IProperties | undefined =
+            mdObjectContent && mdObjectContent.properties && JSON.parse(mdObject.content.properties);
+        const secondaryYAxis: IAxisConfig =
+            get(this.props.config, ["secondary_yaxis"], undefined) ||
+            get(mdObjectContentProperties, ["controls", "secondary_yaxis"], undefined);
+        // don't support sort by total value for dual axis
+        const canSortStackTotalValue: boolean =
+            get(mdObjectContentProperties, ["controls", "stackMeasures"], false) &&
+            areAllMeasuresOnSingleAxis(mdObject.content, secondaryYAxis);
+
+        const sortingConfigs: ISortingConfigs = {
+            canSortStackTotalValue,
+            enableSortingByTotalGroup: featureFlags.enableSortingByTotalGroup as boolean,
+        };
+        const { afm, resultSpec } = buildAfmResultSpec(
+            mdObject.content,
+            visualizationType,
+            locale,
+            sortingConfigs,
+        );
+        const mdObjectTotals = MdObjectHelper.getTotals(mdObject);
+
+        const dataSource = await this.createDataSource(afm, filters);
 
         return {
             type: visualizationType,
@@ -435,6 +440,34 @@ export class VisualizationWrapped extends React.Component<
             mdObject,
             featureFlags,
         };
+    }
+
+    private createDataSource(afm: AFM.IAfm, filters: AFM.ExtendedFilter[]): Promise<IDataSource> {
+        const { projectId, experimentalVisExecution } = this.props;
+
+        if (experimentalVisExecution) {
+            /*
+             * using experimental executeVisualization endpoint allows server to apply additional security
+             * measures on what is the client allowed to see/calculate.
+             *
+             * ideally, this factory would only take project+uri+filters => that is enough for the backend.
+             *
+             * however in practice, the returned data source MUST return valid AFM as this is later retrieved from the
+             * dataSource and is used for various purposes (such as coloring the charts)
+             *
+             * We have ONE-3961 as followup to take this out of experimental mode.
+             */
+            return _experimentalDataSourceFactory(this.sdk, projectId, this.visualizationUri, afm, filters);
+        }
+
+        /*
+         * the use of data source adapter leads to calls to execute AFM; custom filters for
+         * the Visualization must be merged with AFM on the client-side
+         *
+         * we also need to sync the projectId to properly handle cases when projectId changes
+         */
+        this.adapter.projectId = projectId;
+        return this.adapter.createDataSource(mergeFiltersToAfm(afm, filters));
     }
 
     private hasExternalColorPalette() {
@@ -474,6 +507,119 @@ export class VisualizationWrapped extends React.Component<
             this.setState(newState, callBack);
         }
     }
+}
+
+/**
+ * Given visualization object and type of visualization, this function builds AFM + ResultSpec combination
+ * to be used for AFM Execution of the given vis object.
+ *
+ * The function ensures that any missing measure titles are filled in and that the ResultSpec matches the type of visualization.
+ *
+ * @param visObj content of visualization object
+ * @param visType type of visualization - as recognized by SDK
+ * @param locale locale to use when filling missing measure titles
+ */
+function buildAfmResultSpec(
+    visObj: IVisualizationObjectContent,
+    visType: VisType,
+    locale: Localization.ILocale,
+    sortingConfigs: ISortingConfigs,
+): IConvertedAFM {
+    const updatedVisObj = fillMissingTitles(visObj, locale);
+    const genericAfmResultSpec = toAfmResultSpec(updatedVisObj);
+
+    return buildAfmResultSpecForVis(updatedVisObj, visType, genericAfmResultSpec, sortingConfigs);
+}
+
+function buildAfmResultSpecForVis(
+    visObj: IVisualizationObjectContent,
+    visType: VisType,
+    afmResultSpec: IConvertedAFM,
+    sortingConfigs: ISortingConfigs,
+) {
+    const resultSpecWithDimensions = {
+        ...afmResultSpec.resultSpec,
+        dimensions: generateDimensions(visObj, visType),
+    };
+
+    const { canSortStackTotalValue = false, enableSortingByTotalGroup = false } = sortingConfigs;
+    const barChartDefaultSorting =
+        enableSortingByTotalGroup && isBarChart(visType)
+            ? {
+                  sorts: getDefaultBarChartSort(
+                      afmResultSpec.afm,
+                      resultSpecWithDimensions,
+                      canSortStackTotalValue,
+                      enableSortingByTotalGroup,
+                  ),
+              }
+            : {};
+
+    const treemapDefaultSorting = isTreemap(visType)
+        ? {
+              sorts: getDefaultTreemapSort(afmResultSpec.afm, resultSpecWithDimensions),
+          }
+        : {};
+
+    const resultSpec = {
+        ...resultSpecWithDimensions,
+        ...barChartDefaultSorting,
+        ...treemapDefaultSorting,
+    };
+
+    return {
+        afm: afmResultSpec.afm,
+        resultSpec,
+    };
+}
+
+/**
+ * Given chart config and visualization object, this function will:
+ * - merge chart customization contained within vis obj properties with the provided chart config
+ * - apply chart coloring according to information in vis object properties
+ *
+ * Chart coloring will use palette included in the config; if there is no palette it will fall back to the
+ * provided palette
+ *
+ * @param config base configuration of the chart
+ * @param visObj content of visualization obtain that MAY contain properties to merge with the base configuration
+ * @param fallbackPalette color palette to fall back to in case there is no palette stored in `config`
+ * @returns new instance of IChartConfig
+ */
+function mergeChartConfigWithProperties(
+    config: IChartConfig,
+    visObj: IVisualizationObjectContent,
+    fallbackPalette: IColorPaletteItem[],
+    featureFlags: IFeatureFlags,
+): IChartConfig {
+    const properties: IPropertiesControls | undefined =
+        visObj && visObj.properties && JSON.parse(visObj.properties).controls;
+
+    const colorPalette = config && config.colorPalette ? config.colorPalette : fallbackPalette;
+
+    const colorMapping =
+        properties && properties.colorMapping
+            ? properties.colorMapping.map(mapping => {
+                  const predicate = getColorMappingPredicate(mapping.id);
+                  return {
+                      predicate,
+                      color: mapping.color,
+                  };
+              })
+            : undefined;
+
+    const propsWithHCAxisNameConfig = getHighchartsAxisNameConfiguration(
+        properties,
+        featureFlags.enableAxisNameConfiguration as boolean,
+    );
+
+    return {
+        ...propsWithHCAxisNameConfig,
+        colorMapping,
+        ...config,
+        colorPalette,
+        mdObject: visObj,
+    };
 }
 
 export const IntlVisualization = injectIntl(VisualizationWrapped);

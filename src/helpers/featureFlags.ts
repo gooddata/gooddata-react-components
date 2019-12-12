@@ -1,6 +1,7 @@
 // (C) 2007-2019 GoodData Corporation
 import { IFeatureFlags, SDK } from "@gooddata/gooddata-js";
 import { getCachedOrLoad } from "./sdkCache";
+import { IChartConfig } from "../interfaces/Config";
 
 export async function getFeatureFlags(sdk: SDK, projectId: string): Promise<IFeatureFlags> {
     const apiCallIdentifier = `getFeatureFlags.${projectId}`;
@@ -12,4 +13,10 @@ export async function getFeatureFlags(sdk: SDK, projectId: string): Promise<IFea
         console.error(`unable to retrieve featureFlags for project ${projectId}`, error);
         throw Error(error);
     }
+}
+
+export function setConfigFromFeatureFlags(config: IChartConfig, featureFlags: IFeatureFlags): IChartConfig {
+    return featureFlags && featureFlags.disableKpiDashboardHeadlineUnderline === true
+        ? { ...config, disableDrillUnderline: true }
+        : config;
 }

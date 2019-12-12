@@ -13,6 +13,46 @@ import {
     franchiseFeesIdentifierOngoingRoyalty,
 } from "../utils/fixtures";
 
+const measures = [
+    Model.measure(franchiseFeesIdentifier)
+        .format("#,##0")
+        .localIdentifier("franchiseFeesIdentifier"),
+    Model.measure(franchiseFeesAdRoyaltyIdentifier)
+        .format("#,##0")
+        .localIdentifier("franchiseFeesAdRoyaltyIdentifier"),
+    Model.measure(franchiseFeesInitialFranchiseFeeIdentifier)
+        .format("#,##0")
+        .localIdentifier("franchiseFeesInitialFranchiseFeeIdentifier"),
+    Model.measure(franchiseFeesIdentifierOngoingRoyalty)
+        .format("#,##0")
+        .localIdentifier("franchiseFeesIdentifierOngoingRoyalty"),
+];
+
+const totals = [
+    {
+        measureIdentifier: "franchiseFeesIdentifier",
+        type: "avg",
+        attributeIdentifier: "month",
+    },
+    {
+        measureIdentifier: "franchiseFeesAdRoyaltyIdentifier",
+        type: "avg",
+        attributeIdentifier: "month",
+    },
+    {
+        measureIdentifier: "franchiseFeesInitialFranchiseFeeIdentifier",
+        type: "avg",
+        attributeIdentifier: "month",
+    },
+    {
+        measureIdentifier: "franchiseFeesIdentifierOngoingRoyalty",
+        type: "avg",
+        attributeIdentifier: "month",
+    },
+];
+
+const attributes = [Model.attribute(monthDateIdentifier).localIdentifier("month")];
+
 export class TableExample extends Component {
     onLoadingChanged(...params) {
         // eslint-disable-next-line no-console
@@ -25,46 +65,6 @@ export class TableExample extends Component {
     }
 
     render() {
-        const measures = [
-            Model.measure(franchiseFeesIdentifier)
-                .format("#,##0")
-                .localIdentifier("franchiseFeesIdentifier"),
-            Model.measure(franchiseFeesAdRoyaltyIdentifier)
-                .format("#,##0")
-                .localIdentifier("franchiseFeesAdRoyaltyIdentifier"),
-            Model.measure(franchiseFeesInitialFranchiseFeeIdentifier)
-                .format("#,##0")
-                .localIdentifier("franchiseFeesInitialFranchiseFeeIdentifier"),
-            Model.measure(franchiseFeesIdentifierOngoingRoyalty)
-                .format("#,##0")
-                .localIdentifier("franchiseFeesIdentifierOngoingRoyalty"),
-        ];
-
-        const totals = [
-            {
-                measureIdentifier: "franchiseFeesIdentifier",
-                type: "avg",
-                attributeIdentifier: "month",
-            },
-            {
-                measureIdentifier: "franchiseFeesAdRoyaltyIdentifier",
-                type: "avg",
-                attributeIdentifier: "month",
-            },
-            {
-                measureIdentifier: "franchiseFeesInitialFranchiseFeeIdentifier",
-                type: "avg",
-                attributeIdentifier: "month",
-            },
-            {
-                measureIdentifier: "franchiseFeesIdentifierOngoingRoyalty",
-                type: "avg",
-                attributeIdentifier: "month",
-            },
-        ];
-
-        const attributes = [Model.attribute(monthDateIdentifier).localIdentifier("month")];
-
         return (
             <div style={{ height: 300 }} className="s-table">
                 <Table

@@ -1,6 +1,12 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as HttpStatusCodes from "http-status-codes";
-import { checkEmptyResult, convertErrors, generateErrorMap, hasDuplicateIdentifiers } from "../errorHandlers";
+import {
+    convertErrors,
+    generateErrorMap,
+    hasDuplicateIdentifiers,
+    isEmptyResult,
+    checkEmptyResult,
+} from "../errorHandlers";
 import { ApiResponseError } from "@gooddata/gooddata-js";
 import "isomorphic-fetch";
 
@@ -106,6 +112,22 @@ describe("convertErrors", () => {
     });
 });
 
+describe("isEmptyResult", () => {
+    it("should return true if executionResult does not contain any data", () => {
+        expect.hasAssertions();
+        expect(isEmptyResult(emptyResponse)).toBe(true);
+    });
+
+    it("should return true if executionResult is null", () => {
+        expect.hasAssertions();
+        expect(isEmptyResult(emptyResponseWithNull)).toBe(true);
+    });
+
+    it("should return false if executionResult does not contain any data, but contain headers", () => {
+        expect(isEmptyResult(attributeOnlyResponse)).toBe(false);
+    });
+});
+
 describe("checkEmptyResult", () => {
     it("should throw 204 if executionResult does not contain any data", () => {
         expect.hasAssertions();
@@ -129,6 +151,17 @@ describe("checkEmptyResult", () => {
 
     it("should not throw 204 if executionResult does not contain any data, but contain headers", () => {
         expect(() => checkEmptyResult(attributeOnlyResponse)).not.toThrow();
+    });
+
+    it("should forward the response if executionResult is empty", async () => {
+        expect.hasAssertions();
+
+        try {
+            checkEmptyResult(emptyResponse);
+        } catch (obj) {
+            const expected = await obj.response.json();
+            expect(expected).toEqual(emptyResponse);
+        }
     });
 });
 

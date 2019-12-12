@@ -1,14 +1,12 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import isEqual = require("lodash/isEqual");
 import noop = require("lodash/noop");
 import * as React from "react";
 import { initChartPlugins } from "./highcharts/chartPlugins";
 import { IChartConfig } from "../../../interfaces/Config";
+import Highcharts from "./highcharts/highchartsEntryPoint";
 
-// Have only one entrypoint to highcharts and drill module
-// tslint:disable-next-line
-export const HighchartsMore = require("highcharts/highcharts-more");
-export const Highcharts = require("highcharts/highcharts"); // tslint:disable-line
+const HighchartsMore = require("highcharts/highcharts-more"); // tslint:disable-line
 const drillmodule = require("highcharts/modules/drilldown"); // tslint:disable-line
 const treemapModule = require("highcharts/modules/treemap"); // tslint:disable-line
 const funnelModule = require("highcharts/modules/funnel"); // tslint:disable-line
@@ -67,6 +65,10 @@ export default class Chart extends React.Component<IChartProps> {
 
     public setChartRef(ref: HTMLElement) {
         this.chartRef = ref;
+    }
+
+    public getHighchartRef(): HTMLElement {
+        return this.chartRef;
     }
 
     public getChart(): Highcharts.Chart {

@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { screenshotWrap } from "@gooddata/test-storybook";
@@ -26,6 +26,7 @@ import { Execution } from "@gooddata/typings";
 import { attributeItemNameMatch } from "../../src/factory/HeaderPredicateFactory";
 import { RGBType } from "@gooddata/gooddata-js";
 import { ScreenshotReadyWrapper, createHighChartResolver } from "../utils/ScreenshotReadyWrapper";
+import { withAxisNamePositionConfig, withAxisNameVisibilityConfig } from "../hoc/withAxisName";
 
 const wrapperStyle = { width: 800, height: 400 };
 
@@ -314,6 +315,38 @@ storiesOf("Core components/BarChart", module)
             </ScreenshotReadyWrapper>,
         ),
     )
+    .add("with axis name position", () =>
+        screenshotWrap(
+            withAxisNamePositionConfig(
+                <BarChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    viewBy={ATTRIBUTE_1}
+                    config={{
+                        secondary_xaxis: {
+                            measures: [MEASURE_2.measure.localIdentifier],
+                        },
+                    }}
+                />,
+            ),
+        ),
+    )
+    .add("with axis name visibility", () =>
+        screenshotWrap(
+            withAxisNameVisibilityConfig(
+                <BarChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    viewBy={ATTRIBUTE_1}
+                    config={{
+                        secondary_xaxis: {
+                            measures: [MEASURE_2.measure.localIdentifier],
+                        },
+                    }}
+                />,
+            ),
+        ),
+    )
     .add("arithmetic measures", () =>
         screenshotWrap(
             <div style={wrapperStyle}>
@@ -477,6 +510,21 @@ storiesOf("Core components/BarChart", module)
                         HeaderPredicateFactory.uriMatch("/gdc/md/storybook/obj/4/elements?id=1"),
                         HeaderPredicateFactory.uriMatch("/gdc/md/storybook/obj/4/elements?id=3"),
                     ]}
+                />
+            </div>,
+        ),
+    )
+    .add("force disable drilling on axes", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BarChart
+                    projectId="storybook"
+                    measures={[MEASURE_1]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    drillableItems={[
+                        HeaderPredicateFactory.uriMatch("/gdc/md/storybook/obj/5/elements?id=1"),
+                    ]}
+                    config={{ forceDisableDrillOnAxes: true }}
                 />
             </div>,
         ),
@@ -893,4 +941,65 @@ storiesOf("Core components/BarChart", module)
                 />
             </div>,
         ),
-    );
+    )
+
+    .add("Data label must update vertical align in the middle when filtering one value", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BarChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    filters={[
+                        {
+                            positiveAttributeFilter: {
+                                displayForm: {
+                                    uri: "/gdc/md/storybook/obj/4.df",
+                                },
+                                in: ["/gdc/md/storybook/obj/4/elements?id=1"],
+                            },
+                        },
+                        {
+                            positiveAttributeFilter: {
+                                displayForm: {
+                                    uri: "/gdc/md/storybook/obj/5.df",
+                                },
+                                in: ["/gdc/md/storybook/obj/5/elements?id=1"],
+                            },
+                        },
+                    ]}
+                />
+            </div>,
+        ),
+    )
+    .add("align axis labels", () => {
+        const rotations: string[] = ["90", "-90", "60", "-60"];
+        return screenshotWrap(
+            <ScreenshotReadyWrapper resolver={createHighChartResolver(rotations.length)}>
+                {rotations.map((rotation: string) => (
+                    <>
+                        <div className="storybook-title">label rotation = {rotation}</div>
+                        <div style={wrapperStyle}>
+                            <BarChart
+                                projectId="storybook"
+                                measures={[MEASURE_1, MEASURE_2, MEASURE_3]}
+                                config={{
+                                    xaxis: {
+                                        rotation,
+                                    },
+                                    secondary_xaxis: {
+                                        measures: [MEASURE_3.measure.localIdentifier],
+                                        rotation,
+                                    },
+                                }}
+                                viewBy={ATTRIBUTE_1}
+                                onError={onErrorHandler}
+                                LoadingComponent={null}
+                                ErrorComponent={null}
+                            />
+                        </div>
+                    </>
+                ))}
+            </ScreenshotReadyWrapper>,
+        );
+    });

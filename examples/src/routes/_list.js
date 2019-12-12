@@ -29,20 +29,53 @@ import ArithmeticMeasure from "./ArithmeticMeasure";
 import Export from "./Export";
 import VisualizationByUri from "./VisualizationByUri";
 import VisualizationByIdentifier from "./VisualizationByIdentifier";
+import MeasureValueFilter from "./MeasureValueFilter";
+import MeasureValueFilterComponent from "./MeasureValueFilterComponent";
+import DateFilter from "./DateFilter";
+import OnDrillHandling from "./OnDrillHandling";
+import Xirr from "./Xirr";
 
 export const advancedUseCasesRoutes = [
-    { path: "/advanced/global-filters", title: "Global Filters", Component: GlobalFilters },
-    { path: "/advanced/dynamic-measures", title: "Dynamic Measures", Component: DynamicMeasures },
-    { path: "/advanced/date-picker", title: "Date Picker", Component: DatePicker },
-    { path: "/advanced/responsive", title: "Responsive Chart", Component: ResponsiveChart },
-    { path: "/advanced/custom-legend", title: "Custom Legend", Component: CustomLegend },
-    { path: "/advanced/parent-filter", title: "Parent Filter", Component: ParentFilter },
+    {
+        path: "/advanced/global-filters",
+        title: "Global Filters",
+        Component: GlobalFilters,
+    },
+    {
+        path: "/advanced/dynamic-measures",
+        title: "Dynamic Measures",
+        Component: DynamicMeasures,
+    },
+    {
+        path: "/advanced/date-picker",
+        title: "Date Picker",
+        Component: DatePicker,
+    },
+    {
+        path: "/advanced/responsive",
+        title: "Responsive Chart",
+        Component: ResponsiveChart,
+    },
+    {
+        path: "/advanced/custom-legend",
+        title: "Custom Legend",
+        Component: CustomLegend,
+    },
+    {
+        path: "/advanced/parent-filter",
+        title: "Parent Filter",
+        Component: ParentFilter,
+    },
     {
         path: "/advanced/loading-and-error",
         title: "Loading and Error Components",
         Component: LoadingAndError,
     },
-    { path: "/advanced/chart-configuration", title: "Chart Configuration", Component: ChartConfiguration },
+    {
+        path: "/advanced/chart-configuration",
+        title: "Chart Configuration",
+        Component: ChartConfiguration,
+    },
 ];
 
 export const visualizationUseCasesRoutes = [
@@ -64,20 +97,54 @@ export const drillingUseCasesRoutes = [
         title: "Drill With External Data",
         Component: DrillWithExternalData,
     },
-    { path: "/drilling/pivot-table-drilling", title: "Pivot table drilling", Component: PivotTableDrilling },
+    {
+        path: "/drilling/pivot-table-drilling",
+        title: "Pivot table drilling",
+        Component: PivotTableDrilling,
+    },
 ];
 
-export const nextRoutes = [{ path: "/next/combo-chart", title: "Combo chart", Component: ComboChart }];
+export const nextRoutes = [
+    {
+        path: "/next/combo-chart",
+        title: "Combo chart",
+        Component: ComboChart,
+    },
+];
 
 const VisualizationUseCasesRoutes = props =>
-    WithSubRoutes({ ...props, subRoutes: visualizationUseCasesRoutes });
-const AdvancedUseCasesRoutes = props => WithSubRoutes({ ...props, subRoutes: advancedUseCasesRoutes });
-const DrillingUseCasesRoutes = props => WithSubRoutes({ ...props, subRoutes: drillingUseCasesRoutes });
-const NextRoutes = props => WithSubRoutes({ ...props, subRoutes: nextRoutes });
+    WithSubRoutes({
+        ...props,
+        subRoutes: visualizationUseCasesRoutes,
+    });
+const AdvancedUseCasesRoutes = props =>
+    WithSubRoutes({
+        ...props,
+        subRoutes: advancedUseCasesRoutes,
+    });
+const DrillingUseCasesRoutes = props =>
+    WithSubRoutes({
+        ...props,
+        subRoutes: drillingUseCasesRoutes,
+    });
+const NextRoutes = props =>
+    WithSubRoutes({
+        ...props,
+        subRoutes: nextRoutes,
+    });
 
 export const sideNavigationRoutes = [
-    { path: "/", title: "Basic Components", Component: BasicComponents, exact: true },
-    { path: "/pivot-table", title: "Pivot Table", Component: PivotTableDemo },
+    {
+        path: "/",
+        title: "Basic Components",
+        Component: BasicComponents,
+        exact: true,
+    },
+    {
+        path: "/pivot-table",
+        title: "Pivot Table",
+        Component: PivotTableDemo,
+    },
     {
         path: "/visualization",
         pathMatch: "full",
@@ -85,7 +152,11 @@ export const sideNavigationRoutes = [
         title: "Visualization Component",
         Component: VisualizationUseCasesRoutes,
     },
-    { path: "/sorting", title: "Sorting", Component: Sorting },
+    {
+        path: "/sorting",
+        title: "Sorting",
+        Component: Sorting,
+    },
     {
         path: "/time-over-time-comparison",
         title: "Time Over Time Comparison",
@@ -93,11 +164,24 @@ export const sideNavigationRoutes = [
     },
     {
         path: "/attribute-filter-components",
-        title: "Attribute Filter Components",
+        title: "Attribute Filter Component",
         Component: AttributeFilter,
     },
-    { path: "/arithmetic-measures", title: "Arithmetic Measures", Component: ArithmeticMeasure },
-    { path: "/execute", title: "Execute Component", Component: Execute },
+    {
+        path: "/date-filter-component",
+        title: "Date Filter Component",
+        Component: DateFilter,
+    },
+    {
+        path: "/arithmetic-measures",
+        title: "Arithmetic Measures",
+        Component: ArithmeticMeasure,
+    },
+    {
+        path: "/execute",
+        title: "Execute Component",
+        Component: Execute,
+    },
     {
         path: "/advanced",
         pathMatch: "full",
@@ -105,7 +189,11 @@ export const sideNavigationRoutes = [
         title: "Advanced Use Cases",
         Component: AdvancedUseCasesRoutes,
     },
-    { path: "/export", title: "Export", Component: Export },
+    {
+        path: "/export",
+        title: "Export",
+        Component: Export,
+    },
     {
         path: "/drilling",
         pathMatch: "full",
@@ -123,23 +211,82 @@ export const sideNavigationRoutes = [
 ];
 
 export const hiddenPaths = [
-    { path: "/hidden/multiple-domains", title: "Multiple Domains", Component: MultipleDomains },
-    { path: "/hidden/aggregation-test", title: "Aggregation Test", Component: AggregationTest },
-    { path: "/hidden/pivot-table", title: "Pivot Table", Component: PivotTable },
-    { path: "/hidden/pivot-table-dynamic", title: "Pivot Table Dynamic", Component: PivotTableDynamic },
-    { path: "/hidden/bucket-executor", title: "Bucket Executor Example", Component: BucketExecutor },
+    {
+        path: "/hidden/multiple-domains",
+        title: "Multiple Domains",
+        Component: MultipleDomains,
+    },
+    {
+        path: "/hidden/aggregation-test",
+        title: "Aggregation Test",
+        Component: AggregationTest,
+    },
+    {
+        path: "/hidden/pivot-table",
+        title: "Pivot Table",
+        Component: PivotTable,
+    },
+    {
+        path: "/hidden/pivot-table-dynamic",
+        title: "Pivot Table Dynamic",
+        Component: PivotTableDynamic,
+    },
+    {
+        path: "/hidden/bucket-executor",
+        title: "Bucket Executor Example",
+        Component: BucketExecutor,
+    },
+    // TODO BB-1694 - Add Measure Value Filter example to the menu
+    {
+        path: "/hidden/measure-value-filter",
+        title: "Measure Value Filter",
+        Component: MeasureValueFilter,
+    },
+    {
+        path: "/hidden/measure-value-filter-component",
+        title: "Measure Value Filter Component",
+        Component: MeasureValueFilterComponent,
+    },
+    {
+        path: "/hidden/on-drill-drilling",
+        title: "New drill handling by onDrill",
+        Component: OnDrillHandling,
+    },
+    {
+        path: "/hidden/xirr",
+        title: "XIRR visualization",
+        Component: Xirr,
+    },
 ];
 
 export const backendInfoRoutes = [
-    { path: "/about-this-project", title: "About This Project", Component: AboutThisProject },
+    {
+        path: "/about-this-project",
+        title: "About This Project",
+        Component: AboutThisProject,
+    },
 ];
 
 export const userRoutes = [
-    { path: "/login", title: "Login", Component: Login },
-    { path: "/registration", title: "Registration", Component: Registration },
+    {
+        path: "/login",
+        title: "Login",
+        Component: Login,
+    },
+    {
+        path: "/registration",
+        title: "Registration",
+        Component: Registration,
+    },
 ];
 
-export const topNavigationRoutes = [{ path: "/", title: "Live Examples", Component: BasicComponents }];
+export const topNavigationRoutes = [
+    {
+        path: "/",
+        title: "Live Examples",
+        Component: BasicComponents,
+    },
+];
 
 export const routes = [
     ...sideNavigationRoutes,

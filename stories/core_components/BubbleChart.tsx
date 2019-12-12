@@ -23,6 +23,7 @@ import {
 import { attributeItemNameMatch } from "../../src/factory/HeaderPredicateFactory";
 
 import { ScreenshotReadyWrapper, createHighChartResolver } from "../utils/ScreenshotReadyWrapper";
+import { withAxisNamePositionConfig, withAxisNameVisibilityConfig } from "../hoc/withAxisName";
 
 const wrapperStyle = { width: 800, height: 400 };
 
@@ -409,4 +410,30 @@ storiesOf("Core components/BubbleChart", module)
                 />
             </div>,
         );
-    });
+    })
+    .add("with axis name position", () =>
+        screenshotWrap(
+            withAxisNamePositionConfig(
+                <BubbleChart
+                    projectId="storybook"
+                    xAxisMeasure={MEASURE_1}
+                    yAxisMeasure={MEASURE_2}
+                    size={MEASURE_3}
+                    viewBy={ATTRIBUTE_1}
+                />,
+            ),
+        ),
+    )
+    .add("with axis name visibility", () =>
+        screenshotWrap(
+            withAxisNameVisibilityConfig(
+                <BubbleChart
+                    projectId="storybook"
+                    xAxisMeasure={MEASURE_1}
+                    yAxisMeasure={MEASURE_2}
+                    size={MEASURE_3}
+                    viewBy={ATTRIBUTE_1}
+                />,
+            ),
+        ),
+    );

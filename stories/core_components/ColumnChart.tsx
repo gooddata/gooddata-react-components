@@ -27,6 +27,7 @@ import * as HeaderPredicateFactory from "../../src/factory/HeaderPredicateFactor
 import { wrap } from "../utils/wrap";
 import { Visualization } from "../../src/components/visualizations/Visualization";
 import { dualChartWithComputedAttribute } from "../test_data/fixtures";
+import { withAxisNamePositionConfig, withAxisNameVisibilityConfig } from "../hoc/withAxisName";
 
 const wrapperStyle = { width: 800, height: 400 };
 
@@ -246,6 +247,38 @@ storiesOf("Core components/ColumnChart", module)
             </ScreenshotReadyWrapper>,
         ),
     )
+    .add("with axis name position", () =>
+        screenshotWrap(
+            withAxisNamePositionConfig(
+                <ColumnChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    viewBy={ATTRIBUTE_1}
+                    config={{
+                        secondary_yaxis: {
+                            measures: [MEASURE_2.measure.localIdentifier],
+                        },
+                    }}
+                />,
+            ),
+        ),
+    )
+    .add("with axis name visibility", () =>
+        screenshotWrap(
+            withAxisNameVisibilityConfig(
+                <ColumnChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    viewBy={ATTRIBUTE_1}
+                    config={{
+                        secondary_yaxis: {
+                            measures: [MEASURE_2.measure.localIdentifier],
+                        },
+                    }}
+                />,
+            ),
+        ),
+    )
     .add("arithmetic measures", () =>
         screenshotWrap(
             <div style={wrapperStyle}>
@@ -353,6 +386,21 @@ storiesOf("Core components/ColumnChart", module)
                         HeaderPredicateFactory.uriMatch("/gdc/md/storybook/obj/4/elements?id=1"),
                         HeaderPredicateFactory.uriMatch("/gdc/md/storybook/obj/4/elements?id=3"),
                     ]}
+                />
+            </div>,
+        ),
+    )
+    .add("force disable drilling on axes", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <ColumnChart
+                    projectId="storybook"
+                    measures={[MEASURE_1]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    drillableItems={[
+                        HeaderPredicateFactory.uriMatch("/gdc/md/storybook/obj/5/elements?id=1"),
+                    ]}
+                    config={{ forceDisableDrillOnAxes: true }}
                 />
             </div>,
         ),

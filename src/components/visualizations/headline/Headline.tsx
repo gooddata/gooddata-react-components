@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import * as classNames from "classnames";
 import noop = require("lodash/noop");
@@ -24,7 +24,9 @@ export interface IHeadlineVisualizationProps {
     data: IHeadlineData;
     config?: IChartConfig;
     onFiredDrillEvent?: IHeadlineFiredDrillEvent;
+    onDrill?: IHeadlineFiredDrillEvent;
     onAfterRender?: () => void;
+    disableDrillUnderline?: boolean;
 }
 
 /**
@@ -33,8 +35,10 @@ export interface IHeadlineVisualizationProps {
 export default class Headline extends React.Component<IHeadlineVisualizationProps> {
     public static defaultProps: Partial<IHeadlineVisualizationProps> = {
         onFiredDrillEvent: () => true,
+        onDrill: () => undefined,
         onAfterRender: noop,
         config: {},
+        disableDrillUnderline: false,
     };
 
     constructor(props: IHeadlineVisualizationProps) {
@@ -95,16 +99,18 @@ export default class Headline extends React.Component<IHeadlineVisualizationProp
         elementType: HeadlineElementType,
         elementTarget: EventTarget,
     ) {
-        const { onFiredDrillEvent } = this.props;
+        const { onFiredDrillEvent, onDrill } = this.props;
 
+        const itemContext = {
+            localIdentifier: item.localIdentifier,
+            value: item.value,
+            element: elementType,
+        };
         if (onFiredDrillEvent) {
-            const itemContext = {
-                localIdentifier: item.localIdentifier,
-                value: item.value,
-                element: elementType,
-            };
-
             onFiredDrillEvent(itemContext, elementTarget);
+        }
+        if (onDrill) {
+            onDrill(itemContext, elementTarget);
         }
     }
 
@@ -133,7 +139,9 @@ export default class Headline extends React.Component<IHeadlineVisualizationProp
         return (
             <div className="gd-flex-item headline-compare-section-item headline-tertiary-item s-headline-tertiary-item">
                 <div className={this.getValueWrapperClasses(formattedItem)}>{formattedItem.value}</div>
-                <div className="headline-title-wrapper s-headline-title-wrapper">{tertiaryItem.title}</div>
+                <div className="headline-title-wrapper s-headline-title-wrapper" title={tertiaryItem.title}>
+                    {tertiaryItem.title}
+                </div>
             </div>
         );
     }
@@ -159,7 +167,9 @@ export default class Headline extends React.Component<IHeadlineVisualizationProp
                 >
                     <ResponsiveText>{secondaryValue}</ResponsiveText>
                 </div>
-                <div className="headline-title-wrapper s-headline-title-wrapper">{secondaryItem.title}</div>
+                <div className="headline-title-wrapper s-headline-title-wrapper" title={secondaryItem.title}>
+                    {secondaryItem.title}
+                </div>
             </div>
         );
     }
@@ -191,6 +201,7 @@ export default class Headline extends React.Component<IHeadlineVisualizationProp
         const valueClassNames = classNames(["headline-value", "s-headline-value"], {
             "headline-value--empty": formattedItem.isValueEmpty,
             "s-headline-value--empty": formattedItem.isValueEmpty,
+            "headline-link-style-underline": !this.props.disableDrillUnderline,
         });
 
         return <div className={valueClassNames}>{formattedItem.value}</div>;

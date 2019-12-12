@@ -1,6 +1,6 @@
-// (C) 2018 GoodData Corporation
+// (C) 2018-2019 GoodData Corporation
 import { VisualizationInput } from "@gooddata/typings";
-import { getQualifierObject } from "./utils";
+import { getObjQualifier } from "./utils";
 
 export function positiveAttributeFilter(
     qualifier: string,
@@ -9,9 +9,9 @@ export function positiveAttributeFilter(
 ): VisualizationInput.IPositiveAttributeFilter {
     return {
         positiveAttributeFilter: {
-            displayForm: getQualifierObject(qualifier),
+            displayForm: getObjQualifier(qualifier),
             in: inValues,
-            textFilter,
+            ...(textFilter && { textFilter }),
         },
     };
 }
@@ -23,9 +23,9 @@ export function negativeAttributeFilter(
 ): VisualizationInput.INegativeAttributeFilter {
     return {
         negativeAttributeFilter: {
-            displayForm: getQualifierObject(qualifier),
+            displayForm: getObjQualifier(qualifier),
             notIn: notInValues,
-            textFilter,
+            ...(textFilter && { textFilter }),
         },
     };
 }
@@ -37,7 +37,7 @@ export function absoluteDateFilter(
 ): VisualizationInput.IAbsoluteDateFilter {
     return {
         absoluteDateFilter: {
-            dataSet: getQualifierObject(dataSet),
+            dataSet: getObjQualifier(dataSet),
             from,
             to,
         },
@@ -52,7 +52,7 @@ export function relativeDateFilter(
 ): VisualizationInput.IRelativeDateFilter {
     return {
         relativeDateFilter: {
-            dataSet: getQualifierObject(dataSet),
+            dataSet: getObjQualifier(dataSet),
             granularity,
             from,
             to,
@@ -74,7 +74,7 @@ export class AttributeFilterBuilder {
     public in(...values: string[]): VisualizationInput.IPositiveAttributeFilter {
         return {
             positiveAttributeFilter: {
-                displayForm: getQualifierObject(this.qualifier),
+                displayForm: getObjQualifier(this.qualifier),
                 in: values,
                 textFilter: true,
             },
@@ -90,7 +90,7 @@ export class AttributeFilterBuilder {
     public notIn(...values: string[]): VisualizationInput.INegativeAttributeFilter {
         return {
             negativeAttributeFilter: {
-                displayForm: getQualifierObject(this.qualifier),
+                displayForm: getObjQualifier(this.qualifier),
                 notIn: values,
                 textFilter: true,
             },
@@ -106,7 +106,7 @@ export class AttributeFilterBuilder {
     public inUris(...uris: string[]): VisualizationInput.IPositiveAttributeFilter {
         return {
             positiveAttributeFilter: {
-                displayForm: getQualifierObject(this.qualifier),
+                displayForm: getObjQualifier(this.qualifier),
                 in: uris,
                 textFilter: false,
             },
@@ -122,7 +122,7 @@ export class AttributeFilterBuilder {
     public notInUris(...uris: string[]): VisualizationInput.INegativeAttributeFilter {
         return {
             negativeAttributeFilter: {
-                displayForm: getQualifierObject(this.qualifier),
+                displayForm: getObjQualifier(this.qualifier),
                 notIn: uris,
                 textFilter: false,
             },

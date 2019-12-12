@@ -4,7 +4,7 @@ import noop = require("lodash/noop");
 import { storiesOf } from "@storybook/react";
 import { action, decorateAction } from "@storybook/addon-actions";
 import { screenshotWrap } from "@gooddata/test-storybook";
-import { Execution } from "@gooddata/typings";
+import { Execution, VisualizationInput } from "@gooddata/typings";
 
 import { Visualization } from "../../src/components/visualizations/Visualization";
 import * as headerPredicateFactory from "../../src/factory/HeaderPredicateFactory";
@@ -29,7 +29,7 @@ import {
     EXECUTION_RESULT_AM,
     TABLE_HEADERS_AM,
 } from "../../src/components/visualizations/table/fixtures/arithmericMeasures";
-import { PivotTable } from "../../src";
+import { PivotTable, Model } from "../../src";
 import { ATTRIBUTE_1, MEASURE_1, MEASURE_2, MEASURE_AM_1_2 } from "../data/componentProps";
 import HeadlineTransformation from "../../src/components/visualizations/headline/HeadlineTransformation";
 import {
@@ -66,6 +66,32 @@ const defaultColumnChartProps = {
 document.addEventListener("drill", eventAction("drill"));
 
 storiesOf("Internal/Drilldown", module)
+    .add("force disable drill on axes", () => {
+        const dataSet = fixtures.barChartWith6PopMeasuresAndViewByAttribute;
+        return screenshotWrap(
+            wrap(
+                <Visualization
+                    drillableItems={[
+                        {
+                            uri: dataSet.executionRequest.afm.attributes[0].displayForm.uri,
+                        },
+                    ]}
+                    config={{
+                        type: "column",
+                        legend: {
+                            enabled: true,
+                            position: "top",
+                        },
+                        legendLayout: "vertical",
+                        colorPalette: fixtures.customPalette,
+                        forceDisableDrillOnAxes: true,
+                    }}
+                    {...dataSet}
+                    onDataTooLarge={noop}
+                />,
+            ),
+        );
+    })
     .add("Column chart with 6 pop measures and view by attribute", () => {
         const dataSet = fixtures.barChartWith6PopMeasuresAndViewByAttribute;
         return screenshotWrap(
@@ -531,6 +557,48 @@ storiesOf("Internal/Drilldown", module)
             </div>,
         ),
     )
+    .add("Pivot table with subtotal and drillable measure", () => {
+        const measures = [
+            Model.measure("/gdc/md/aiugpog6irti75nk93qc1wd1t2wl3xfs/obj/1144").localIdentifier("m1"),
+            Model.measure("/gdc/md/aiugpog6irti75nk93qc1wd1t2wl3xfs/obj/1145").localIdentifier("m2"),
+        ];
+
+        const attributes = [
+            Model.attribute("/gdc/md/aiugpog6irti75nk93qc1wd1t2wl3xfs/obj/1024").localIdentifier("a1"),
+            Model.attribute("/gdc/md/aiugpog6irti75nk93qc1wd1t2wl3xfs/obj/1027").localIdentifier("a2"),
+        ];
+
+        const totals: VisualizationInput.ITotal[] = [
+            {
+                measureIdentifier: "m1",
+                type: "sum",
+                attributeIdentifier: "a1",
+            },
+            {
+                measureIdentifier: "m2",
+                type: "sum",
+                attributeIdentifier: "a2",
+            },
+        ];
+
+        return screenshotWrap(
+            <div style={{ width: 600, height: 300 }}>
+                <PivotTable
+                    projectId="storybook"
+                    measures={measures}
+                    rows={attributes}
+                    totals={totals}
+                    drillableItems={[
+                        headerPredicateFactory.localIdentifierMatch(
+                            "26cc9aa4d9af4fb48582d42966de5893", // mocked response localidentifier
+                        ),
+                    ]}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        );
+    })
     .add("Combo chart with onFiredDrillEvent", () => {
         const dataSet = {
             ...fixtures.comboWithTwoMeasuresAndViewByAttribute,
@@ -544,6 +612,7 @@ storiesOf("Internal/Drilldown", module)
                             onFiredDrillEvent={action("onFiredDrillEvent")}
                             config={{
                                 type: "combo",
+                                dualAxis: false,
                                 mdObject: fixtures.comboWithTwoMeasuresAndViewByAttributeMdObject,
                             }}
                             onDataTooLarge={noop}
@@ -567,6 +636,7 @@ storiesOf("Internal/Drilldown", module)
                             onFiredDrillEvent={onFiredDrillEvent}
                             config={{
                                 type: "combo",
+                                dualAxis: false,
                                 mdObject: fixtures.comboWithTwoMeasuresAndViewByAttributeMdObject,
                             }}
                             onDataTooLarge={noop}
@@ -939,6 +1009,25 @@ storiesOf("Internal/Drilldown", module)
             ),
         ),
     )
+    .add("Headline drillable primary value disableDrillUnderline", () =>
+        screenshotWrap(
+            wrap(
+                <HeadlineTransformation
+                    executionRequest={headlineWithOneMeasure.executionRequest}
+                    executionResponse={headlineWithOneMeasure.executionResponse}
+                    executionResult={headlineWithOneMeasure.executionResult}
+                    drillableItems={[
+                        headerPredicateFactory.uriMatch("/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1283"),
+                    ]}
+                    onFiredDrillEvent={action("onFiredDrillEvent")}
+                    onAfterRender={action("onAfterRender")}
+                    config={{ disableDrillUnderline: true }}
+                />,
+                "auto",
+                300,
+            ),
+        ),
+    )
     .add("Headline drillable secondary value", () =>
         screenshotWrap(
             wrap(
@@ -952,6 +1041,26 @@ storiesOf("Internal/Drilldown", module)
                     ]}
                     onFiredDrillEvent={action("onFiredDrillEvent")}
                     onAfterRender={action("onAfterRender")}
+                />,
+                "auto",
+                300,
+            ),
+        ),
+    )
+    .add("Headline drillable secondary value disableDrillUnderline", () =>
+        screenshotWrap(
+            wrap(
+                <HeadlineTransformation
+                    executionRequest={headlineWithTwoMeasures.executionRequest}
+                    executionResponse={headlineWithTwoMeasures.executionResponse}
+                    executionResult={headlineWithTwoMeasures.executionResult}
+                    drillableItems={[
+                        headerPredicateFactory.uriMatch("/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1283"),
+                        { uri: "/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1284" },
+                    ]}
+                    onFiredDrillEvent={action("onFiredDrillEvent")}
+                    onAfterRender={action("onAfterRender")}
+                    config={{ disableDrillUnderline: true }}
                 />,
                 "auto",
                 300,
@@ -977,4 +1086,68 @@ storiesOf("Internal/Drilldown", module)
                 300,
             ),
         ),
-    );
+    )
+    .add("Headline drillable with new onDrill callback", () =>
+        screenshotWrap(
+            wrap(
+                <HeadlineTransformation
+                    executionRequest={headlineWithAMMeasure.executionRequest}
+                    executionResponse={headlineWithAMMeasure.executionResponse}
+                    executionResult={headlineWithAMMeasure.executionResult}
+                    drillableItems={[
+                        headerPredicateFactory.composedFromUri(
+                            "/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1283",
+                        ),
+                    ]}
+                    onDrill={action("onDrill")}
+                    onAfterRender={action("onAfterRender")}
+                />,
+                "auto",
+                300,
+            ),
+        ),
+    )
+    .add("Pivot table drillable with new onDrill callback", () =>
+        screenshotWrap(
+            <div style={{ width: 600, height: 300 }}>
+                <PivotTable
+                    projectId="storybook"
+                    onDrill={action("onDrill")}
+                    measures={[MEASURE_1, MEASURE_2]}
+                    rows={[ATTRIBUTE_1]}
+                    drillableItems={[
+                        { uri: "/gdc/md/storybook/obj/2" },
+                        headerPredicateFactory.uriMatch("/gdc/md/storybook/obj/1"),
+                    ]}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
+    .add("URI Visualization drillable with new onDrill callback", () => {
+        const dataSet = fixtures.barChartWith6PopMeasuresAndViewByAttribute;
+        return screenshotWrap(
+            wrap(
+                <Visualization
+                    drillableItems={[
+                        {
+                            uri: dataSet.executionRequest.afm.attributes[0].displayForm.uri,
+                        },
+                    ]}
+                    onDrill={action("onDrill")}
+                    config={{
+                        type: "column",
+                        legend: {
+                            enabled: true,
+                            position: "top",
+                        },
+                        legendLayout: "vertical",
+                        colorPalette: fixtures.customPalette,
+                    }}
+                    {...dataSet}
+                    onDataTooLarge={noop}
+                />,
+            ),
+        );
+    });

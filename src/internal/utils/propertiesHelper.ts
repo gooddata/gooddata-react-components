@@ -17,7 +17,7 @@ import {
 import { BUCKETS, SHOW_ON_SECONDARY_AXIS } from "../constants/bucket";
 import { PROPERTY_CONTROLS, PROPERTY_CONTROLS_DUAL_AXIS } from "../constants/properties";
 import { UICONFIG_AXIS } from "../constants/uiConfig";
-import { AxisType } from "../interfaces/AxisType";
+import { AxisType, IAxisNameProperties } from "../interfaces/AxisType";
 import { OPTIONAL_STACKING_PROPERTIES } from "../constants/supportedProperties";
 
 export function getSupportedPropertiesControls(
@@ -162,4 +162,52 @@ export function removeImmutableOptionalStackingProperties(
         (property: string) =>
             !immutableProperties.some((immutableProperty: string) => immutableProperty === property),
     );
+}
+
+// mapping between AD and SDK values
+const AXIS_NAME_POSITION_MAPPING = {
+    auto: "middle",
+
+    bottom: "low",
+    middle: "middle",
+    top: "high",
+
+    left: "low",
+    center: "middle",
+    right: "high",
+};
+
+const AXIS_TYPES: string[] = ["xaxis", "yaxis", "secondary_xaxis", "secondary_yaxis"];
+
+export function getHighchartsAxisNameConfiguration(
+    controlProperties: IVisualizationProperties,
+    enableAxisNameConfiguration: boolean = false,
+): IVisualizationProperties {
+    const axisProperties: IVisualizationProperties = AXIS_TYPES.reduce(
+        (result: IVisualizationProperties, axis: string) => {
+            const axisNameConfig: IAxisNameProperties = get(controlProperties, `${axis}.name`);
+
+            if (isEmpty(axisNameConfig)) {
+                return result;
+            }
+
+            axisNameConfig.position =
+                AXIS_NAME_POSITION_MAPPING[
+                    enableAxisNameConfiguration ? axisNameConfig.position : AXIS_NAME_POSITION_MAPPING.auto
+                ];
+
+            result[axis] = {
+                ...controlProperties[axis],
+                name: axisNameConfig,
+            };
+
+            return result;
+        },
+        {},
+    );
+
+    return {
+        ...controlProperties,
+        ...axisProperties,
+    };
 }
