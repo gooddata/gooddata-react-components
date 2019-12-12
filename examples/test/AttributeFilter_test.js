@@ -14,7 +14,7 @@ fixture("Attribute filter components")
     .beforeEach(loginUsingLoginForm(`${config.url}/attribute-filter-components`));
 
 test("Dropdown filter opens, clears, selects all and applies", async t => {
-    const dropdownButton = Selector(".gd-button.s-employee_name");
+    const dropdownButton = Selector(".s-tested-component .gd-button.s-employee_name");
 
     await t
         .click(dropdownButton)

@@ -2,6 +2,7 @@
 import { ISeparators } from "@gooddata/numberjs";
 import { VisualizationObject } from "@gooddata/typings";
 import { IColorItem, IColor } from "@gooddata/gooddata-js";
+import Highcharts from "../components/visualizations/chart/highcharts/highchartsEntryPoint";
 import { PositionType } from "../components/visualizations/typings/legend";
 import { VisType } from "../constants/visualizationTypes";
 import { IDataLabelsConfig } from "../interfaces/Config";
@@ -80,6 +81,8 @@ export interface IChartConfig extends IMeasuresStackConfig {
     dualAxis?: boolean;
     primaryChartType?: VisualizationObject.VisualizationType;
     secondaryChartType?: VisualizationObject.VisualizationType;
+    forceDisableDrillOnAxes?: boolean;
+    disableDrillUnderline?: boolean;
 }
 
 export interface IStackLabels {
@@ -108,6 +111,11 @@ export interface IStackMeasuresConfig {
     yAxis?: IHighChartAxis[];
 }
 
+export interface IAxisNameConfig {
+    visible?: boolean;
+    position?: Highcharts.AxisTitleAlignValue;
+}
+
 export interface IAxisConfig {
     visible?: boolean;
     labelsEnabled?: boolean;
@@ -118,6 +126,7 @@ export interface IAxisConfig {
     stacks?: IStackItem;
     series?: ISeriesItem[];
     stackTotalGroup?: Highcharts.SVGAttributes;
+    name?: IAxisNameConfig;
 }
 
 export interface IAxis {
@@ -166,7 +175,7 @@ export interface IShapeArgsConfig {
 
 export interface IChartOptions {
     type?: string;
-    stacking?: any;
+    stacking?: string;
     hasStackByAttribute?: boolean;
     hasViewByAttribute?: boolean;
     isViewByTwoAttributes?: boolean;
@@ -184,6 +193,7 @@ export interface IChartOptions {
     colorAxis?: Highcharts.ColorAxisOptions;
     colorAssignments?: IColorAssignment[];
     colorPalette?: IColorPalette;
+    forceDisableDrillOnAxes?: boolean;
 }
 
 export interface IPatternOptionsObject {
@@ -249,3 +259,5 @@ export interface IClientRect {
     x?: number;
     y?: number;
 }
+
+export type ChartAlignTypes = "top" | "bottom" | "middle";

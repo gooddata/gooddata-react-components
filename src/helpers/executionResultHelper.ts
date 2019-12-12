@@ -1,7 +1,7 @@
 // (C) 2007-2018 GoodData Corporation
 import { Execution } from "@gooddata/typings";
 import * as invariant from "invariant";
-import { IUnwrappedAttributeHeadersWithItems } from "../components/visualizations/chart/chartOptionsBuilder";
+import { IUnwrappedAttributeHeaderWithItems } from "../components/visualizations/chart/chartOptionsBuilder";
 import { IMappingHeader } from "../interfaces/MappingHeader";
 import { getMappingHeaderLocalIdentifier } from "./mappingHeader";
 
@@ -62,7 +62,7 @@ export function findAttributeInDimension(
     dimension: any,
     attributeHeaderItemsDimension: any,
     indexInDimension?: number,
-): IUnwrappedAttributeHeadersWithItems {
+): IUnwrappedAttributeHeaderWithItems {
     return findInDimensionHeaders(
         [dimension],
         (

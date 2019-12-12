@@ -61,7 +61,54 @@ const attributeFilterItemPropTypes = PropTypes.oneOfType([
     PropTypes.shape(negativeAttributeFilterPropTypes),
 ]);
 
-const filterItemPropTypes = PropTypes.oneOfType([dateFilterItemPropTypes, attributeFilterItemPropTypes]);
+const localIdentifierQualifierPropTypes = {
+    localIdentifier: PropTypes.string.isRequired,
+};
+
+const qualifierPropTypes = PropTypes.oneOfType([
+    objQualifierPropTypes,
+    PropTypes.shape(localIdentifierQualifierPropTypes),
+]);
+
+const comparisonConditionPropTypes = {
+    comparison: PropTypes.shape({
+        operator: PropTypes.oneOf([
+            "GREATER_THAN",
+            "GREATER_THAN_OR_EQUAL_TO",
+            "LESS_THAN",
+            "LESS_THAN_OR_EQUAL_TO",
+            "EQUAL_TO",
+            "NOT_EQUAL_TO",
+        ]).isRequired,
+        value: PropTypes.number.isRequired,
+    }).isRequired,
+};
+
+const rangeConditionPropTypes = {
+    range: PropTypes.shape({
+        operator: PropTypes.oneOf(["BETWEEN", "NOT_BETWEEN"]).isRequired,
+        from: PropTypes.number.isRequired,
+        to: PropTypes.number.isRequired,
+    }).isRequired,
+};
+
+const measureValueFilterConditionPropTypes = PropTypes.oneOfType([
+    PropTypes.shape(comparisonConditionPropTypes),
+    PropTypes.shape(rangeConditionPropTypes),
+]);
+
+const measureValueFilterItemPropTypes = PropTypes.shape({
+    measureValueFilter: PropTypes.shape({
+        measure: qualifierPropTypes.isRequired,
+        condition: measureValueFilterConditionPropTypes,
+    }).isRequired,
+});
+
+const filterItemPropTypes = PropTypes.oneOfType([
+    dateFilterItemPropTypes,
+    attributeFilterItemPropTypes,
+    measureValueFilterItemPropTypes,
+]);
 
 const compatibilityFilterPropTypes = PropTypes.oneOfType([
     PropTypes.shape(expressionFilterPropTypes),

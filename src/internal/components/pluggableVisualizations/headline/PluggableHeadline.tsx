@@ -1,25 +1,18 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
-import { render, unmountComponentAtNode } from "react-dom";
-import { InjectedIntl } from "react-intl";
+import { render } from "react-dom";
 import { AFM, VisualizationObject } from "@gooddata/typings";
 
 import cloneDeep = require("lodash/cloneDeep");
-import get = require("lodash/get");
 
 import * as BucketNames from "../../../../constants/bucketNames";
 import { METRIC } from "../../../constants/bucket";
 
 import { configurePercent, configureOverTimeComparison } from "../../../utils/bucketConfig";
-import UnsupportedConfigurationPanel from "../../configurationPanels/UnsupportedConfigurationPanel";
 import {
     IReferencePoint,
     IExtendedReferencePoint,
-    IVisCallbacks,
-    IVisConstruct,
     IVisProps,
-    ILocale,
-    IVisualizationProperties,
     IBucketItem,
     IBucket,
 } from "../../../interfaces/Visualization";
@@ -38,7 +31,6 @@ import {
     getDefaultHeadlineUiConfig,
     getHeadlineUiConfig,
 } from "../../../utils/uiConfigHelpers/headlineUiConfigHelper";
-import { createInternalIntl } from "../../../utils/internalIntlProvider";
 import {
     findComplementaryOverTimeComparisonMeasure,
     findSecondMasterMeasure,
@@ -46,52 +38,14 @@ import {
     setHeadlineRefPointBuckets,
 } from "./headlineBucketHelper";
 import { hasGlobalDateFilter } from "../../../utils/bucketRules";
-import { AbstractPluggableVisualization } from "../AbstractPluggableVisualization";
-import {
-    getReferencePointWithSupportedProperties,
-    getSupportedProperties,
-} from "../../../utils/propertiesHelper";
+import { getReferencePointWithSupportedProperties } from "../../../utils/propertiesHelper";
 import { Headline } from "../../../../components/core/Headline";
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 import { generateDimensions } from "../../../../helpers/dimensions";
-import { DEFAULT_LOCALE } from "../../../../constants/localization";
+import { setConfigFromFeatureFlags } from "../../../../helpers/featureFlags";
+import { PluggableBaseHeadline } from "../baseHeadline/PluggableBaseHeadline";
 
-export class PluggableHeadline extends AbstractPluggableVisualization {
-    protected configPanelElement: string;
-    private projectId: string;
-    private callbacks: IVisCallbacks;
-    private intl: InjectedIntl;
-    private locale: ILocale;
-    private visualizationProperties: IVisualizationProperties;
-    private element: string;
-
-    constructor(props: IVisConstruct) {
-        super();
-        this.projectId = props.projectId;
-        this.element = props.element;
-        this.configPanelElement = props.configPanelElement;
-        this.callbacks = props.callbacks;
-        this.locale = props.locale ? props.locale : DEFAULT_LOCALE;
-        this.intl = createInternalIntl(this.locale);
-    }
-
-    public unmount() {
-        unmountComponentAtNode(document.querySelector(this.element));
-        if (document.querySelector(this.configPanelElement)) {
-            unmountComponentAtNode(document.querySelector(this.configPanelElement));
-        }
-    }
-
-    public update(
-        options: IVisProps,
-        visualizationProperties: IVisualizationProperties,
-        mdObject: VisualizationObject.IVisualizationObjectContent,
-    ) {
-        this.visualizationProperties = visualizationProperties;
-        this.renderVisualization(options, mdObject);
-        this.renderConfigurationPanel();
-    }
-
+export class PluggableHeadline extends PluggableBaseHeadline {
     public getExtendedReferencePoint(referencePoint: Readonly<IReferencePoint>) {
         const referencePointCloned = cloneDeep(referencePoint);
         let newReferencePoint: IExtendedReferencePoint = {
@@ -145,7 +99,14 @@ export class PluggableHeadline extends AbstractPluggableVisualization {
         if (dataSource) {
             const { resultSpec, locale, custom, config } = options;
             const { drillableItems } = custom;
-            const { afterRender, onError, onLoadingChanged, pushData } = this.callbacks;
+            const {
+                afterRender,
+                onError,
+                onLoadingChanged,
+                pushData,
+                onDrill,
+                onFiredDrillEvent,
+            } = this.callbacks;
 
             const resultSpecWithDimensions: AFM.IResultSpec = {
                 ...resultSpec,
@@ -156,8 +117,10 @@ export class PluggableHeadline extends AbstractPluggableVisualization {
                 <Headline
                     projectId={this.projectId}
                     drillableItems={drillableItems}
+                    onDrill={onDrill}
+                    onFiredDrillEvent={onFiredDrillEvent}
                     locale={locale}
-                    config={config}
+                    config={setConfigFromFeatureFlags(config, this.featureFlags)}
                     dataSource={dataSource}
                     resultSpec={resultSpecWithDimensions}
                     afterRender={afterRender}
@@ -168,25 +131,6 @@ export class PluggableHeadline extends AbstractPluggableVisualization {
                     ErrorComponent={null}
                 />,
                 document.querySelector(this.element),
-            );
-        }
-    }
-
-    protected renderConfigurationPanel() {
-        if (document.querySelector(this.configPanelElement)) {
-            const properties: IVisualizationProperties = get(
-                this.visualizationProperties,
-                "properties",
-                {},
-            ) as IVisualizationProperties;
-
-            render(
-                <UnsupportedConfigurationPanel
-                    locale={this.locale}
-                    pushData={this.callbacks.pushData}
-                    properties={getSupportedProperties(properties, this.supportedPropertiesList)}
-                />,
-                document.querySelector(this.configPanelElement),
             );
         }
     }

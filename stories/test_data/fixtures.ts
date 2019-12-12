@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import { range, cloneDeep } from "lodash";
 import { VisualizationObject } from "@gooddata/typings";
 
@@ -437,6 +437,8 @@ export function barChartWithNTimes3MetricsAndViewByAttribute(n = 1) {
 export const barChartWith18MetricsAndViewByAttribute: any = barChartWithNTimes3MetricsAndViewByAttribute(6);
 
 export const barChartWith60MetricsAndViewByAttribute: any = barChartWithNTimes3MetricsAndViewByAttribute(18);
+
+export const barChartWith150MetricsAndViewByAttribute: any = barChartWithNTimes3MetricsAndViewByAttribute(54);
 
 export const barChartWith6PopMeasuresAndViewByAttribute = (() => {
     const n = 6;

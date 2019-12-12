@@ -11,6 +11,12 @@ import {
     franchiseFeesIdentifierOngoingRoyalty,
 } from "../utils/fixtures";
 
+const measures = [
+    Model.measure(franchiseFeesAdRoyaltyIdentifier).format("#,##0"),
+    Model.measure(franchiseFeesInitialFranchiseFeeIdentifier).format("#,##0"),
+    Model.measure(franchiseFeesIdentifierOngoingRoyalty).format("#,##0"),
+];
+
 export class DonutChartExample extends Component {
     onLoadingChanged(...params) {
         // eslint-disable-next-line no-console
@@ -23,12 +29,6 @@ export class DonutChartExample extends Component {
     }
 
     render() {
-        const measures = [
-            Model.measure(franchiseFeesAdRoyaltyIdentifier).format("#,##0"),
-            Model.measure(franchiseFeesInitialFranchiseFeeIdentifier).format("#,##0"),
-            Model.measure(franchiseFeesIdentifierOngoingRoyalty).format("#,##0"),
-        ];
-
         return (
             <div style={{ height: 300 }} className="s-donut-chart">
                 <DonutChart

@@ -4,13 +4,14 @@ import invoke = require("lodash/invoke");
 import get = require("lodash/get");
 import set = require("lodash/set");
 import isEmpty = require("lodash/isEmpty");
-import { css } from "highcharts";
+import Highcharts from "./highchartsEntryPoint";
 import { chartClick } from "../../utils/drilldownEventing";
 import { styleVariables } from "../../styles/variables";
 import { isOneOfTypes } from "../../utils/common";
 import { supportedDualAxesChartTypes } from "../chartOptionsBuilder";
 import { setupDrilldown } from "../events/setupDrilldownToParentAttribute";
 import { IHighchartsAxisExtend } from "../../../../interfaces/HighchartsExtend";
+import { IDrillConfig } from "../../../../interfaces/DrillEvents";
 
 const isTouchDevice = "ontouchstart" in window || navigator.msMaxTouchPoints;
 const HIGHCHART_PLOT_LIMITED_RANGE = 1e5;
@@ -24,7 +25,7 @@ export const MINIMUM_HC_SAFE_BRIGHTNESS = Number.MIN_VALUE;
 
 function handleTooltipOffScreen(renderTo: Highcharts.HTMLDOMElement) {
     // allow tooltip over the container wrapper
-    css(renderTo, { overflow: "visible" });
+    Highcharts.css(renderTo, { overflow: "visible" });
 }
 
 function fixNumericalAxisOutOfMinMaxRange(axis: IHighchartsAxisExtend) {
@@ -132,7 +133,7 @@ const BASE_TEMPLATE: any = {
     ],
 };
 
-function registerDrilldownHandler(configuration: any, chartOptions: any, drillConfig: any) {
+function registerDrilldownHandler(configuration: any, chartOptions: any, drillConfig: IDrillConfig) {
     set(configuration, "chart.events.drilldown", function chartDrilldownHandler(
         event: Highcharts.DrilldownEventObject,
     ) {
@@ -153,7 +154,7 @@ function registerRenderHandler(configuration: any, chartOptions: any) {
     return configuration;
 }
 
-export function getCommonConfiguration(chartOptions: any, drillConfig: any) {
+export function getCommonConfiguration(chartOptions: any, drillConfig: IDrillConfig) {
     const commonConfiguration = cloneDeep(BASE_TEMPLATE);
     const handlers = [registerDrilldownHandler, registerRenderHandler];
 

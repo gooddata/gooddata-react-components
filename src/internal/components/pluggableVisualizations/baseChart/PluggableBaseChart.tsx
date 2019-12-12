@@ -7,7 +7,7 @@ import get = require("lodash/get");
 import noop = require("lodash/noop");
 import tail = require("lodash/tail");
 import set = require("lodash/set");
-import { render, unmountComponentAtNode } from "react-dom";
+import { render } from "react-dom";
 import { AFM, VisualizationObject } from "@gooddata/typings";
 import {
     IReferencePoint,
@@ -22,6 +22,7 @@ import {
     IReferences,
     IBucket,
     IBucketItem,
+    IGdcConfig,
 } from "../../../interfaces/Visualization";
 import { IColorConfiguration } from "../../../interfaces/Colors";
 import {
@@ -30,13 +31,14 @@ import {
     isEmptyObject,
     getReferencePointWithSupportedProperties,
     getSupportedProperties,
+    getHighchartsAxisNameConfiguration,
 } from "../../../utils/propertiesHelper";
 import { DEFAULT_BASE_CHART_UICONFIG, MAX_CATEGORIES_COUNT, UICONFIG } from "../../../constants/uiConfig";
 import { BASE_CHART_SUPPORTED_PROPERTIES } from "../../../constants/supportedProperties";
 
 import { BUCKETS } from "../../../constants/bucket";
 import { configurePercent, configureOverTimeComparison } from "../../../utils/bucketConfig";
-import { isStacked } from "../../../utils/mdObjectHelper";
+import { isStacked, canSortStackTotalValue } from "../../../utils/mdObjectHelper";
 
 import {
     sanitizeUnusedFilters,
@@ -72,6 +74,9 @@ import { RuntimeError } from "../../../../errors/RuntimeError";
 import ColorUtils from "../../../../components/visualizations/utils/color";
 import * as VisEvents from "../../../../interfaces/Events";
 import { DEFAULT_LOCALE } from "../../../../constants/localization";
+import { DASHBOARDS_ENVIRONMENT } from "../../../constants/properties";
+import { IChartConfig, IColorMapping } from "../../../../interfaces/Config";
+import { unmountComponentsAtNodes } from "../../../utils/domHelper";
 
 export class PluggableBaseChart extends AbstractPluggableVisualization {
     protected projectId: string;
@@ -95,7 +100,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
     protected axis: string;
     protected secondaryAxis: AxisType;
     protected locale: ILocale;
-    private environment: string;
+    protected environment: string;
     private element: string;
 
     constructor(props: IVisConstruct) {
@@ -123,10 +128,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
     }
 
     public unmount() {
-        unmountComponentAtNode(document.querySelector(this.element));
-        if (document.querySelector(this.configPanelElement)) {
-            unmountComponentAtNode(document.querySelector(this.configPanelElement));
-        }
+        unmountComponentsAtNodes([this.element, this.configPanelElement]);
     }
 
     public update(
@@ -243,11 +245,10 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
             const { height } = dimensions;
 
             // keep height undef for AD; causes indigo-visualizations to pick default 100%
-            const resultingHeight = this.environment === "dashboards" ? height : undefined;
-
-            const afterRender = get(this.callbacks, "afterRender", noop);
+            const resultingHeight = this.environment === DASHBOARDS_ENVIRONMENT ? height : undefined;
 
             const { drillableItems } = custom;
+            const { afterRender, onDrill, onFiredDrillEvent } = this.callbacks;
 
             const allProperties: IVisualizationProperties = get(
                 visualizationProperties,
@@ -255,18 +256,21 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
                 {},
             ) as IVisualizationProperties;
 
-            const supportedControls = this.getSupportedControls(mdObject);
+            const supportedControls: IVisualizationProperties = this.getSupportedControls(mdObject);
 
             const resultSpecWithDimensions: AFM.IResultSpec = {
                 ...options.resultSpec,
                 dimensions: this.getDimensions(mdObject),
             };
 
+            const enableSortingByTotalGroup = this.featureFlags.enableSortingByTotalGroup as boolean;
             const sorts: AFM.SortItem[] = createSorts(
                 this.type,
                 dataSource.getAfm(),
                 resultSpecWithDimensions,
                 allProperties,
+                canSortStackTotalValue(mdObject, supportedControls, enableSortingByTotalGroup),
+                enableSortingByTotalGroup,
             );
 
             const resultSpecWithSorts = {
@@ -283,6 +287,8 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
                     afterRender={afterRender}
                     environment={this.environment}
                     drillableItems={drillableItems}
+                    onDrill={onDrill}
+                    onFiredDrillEvent={onFiredDrillEvent}
                     onError={this.onError}
                     onExportReady={this.onExportReady}
                     onLoadingChanged={this.onLoadingChanged}
@@ -415,6 +421,30 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
         }
     };
 
+    protected buildVisualizationConfig(
+        mdObject: VisualizationObject.IVisualizationObjectContent,
+        config: IGdcConfig,
+        supportedControls: IVisualizationProperties,
+    ): IChartConfig {
+        const colorMapping: IColorMappingProperty[] = get(supportedControls, "colorMapping");
+
+        const validColorMapping: IColorMapping[] =
+            colorMapping &&
+            colorMapping
+                .filter(mapping => mapping != null)
+                .map(mapItem => ({
+                    predicate: ColorUtils.getColorMappingPredicate(mapItem.id),
+                    color: mapItem.color,
+                }));
+
+        return {
+            mdObject,
+            ...config,
+            ...supportedControls,
+            colorMapping: validColorMapping && validColorMapping.length > 0 ? validColorMapping : null,
+        };
+    }
+
     private getOpenAsReportConfig(properties: IVisualizationProperties) {
         const hasMapping = hasColorMapping(properties);
         const isSupported = this.isOpenAsReportSupported();
@@ -438,7 +468,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
     }
 
     private getSupportedControls(mdObject: VisualizationObject.IVisualizationObjectContent) {
-        const supportedControls = cloneDeep(get(this.visualizationProperties, "controls", {}));
+        let supportedControls = cloneDeep(get(this.visualizationProperties, "controls", {}));
         const defaultControls = getSupportedPropertiesControls(
             this.defaultControlsProperties,
             this.supportedPropertiesList,
@@ -452,9 +482,12 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
 
         // Set legend position by bucket items and environment
         set(supportedControls, "legend.position", legendPosition);
-        if (this.environment === "dashboards") {
+        if (this.environment === DASHBOARDS_ENVIRONMENT) {
             set(supportedControls, "legend.responsive", true);
         }
+
+        supportedControls = getHighchartsAxisNameConfiguration(supportedControls, this.featureFlags
+            .enableAxisNameConfiguration as boolean);
 
         return {
             ...defaultControls,
@@ -490,35 +523,11 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
         if (legendPosition === "auto") {
             // Legend has right position always on dashboards or if report is stacked
             if (this.type === "heatmap") {
-                return this.environment === "dashboards" ? "right" : "top";
+                return this.environment === DASHBOARDS_ENVIRONMENT ? "right" : "top";
             }
-            return isStacked(mdObject) || this.environment === "dashboards" ? "right" : "auto";
+            return isStacked(mdObject) || this.environment === DASHBOARDS_ENVIRONMENT ? "right" : "auto";
         }
 
         return legendPosition;
-    }
-
-    private buildVisualizationConfig(
-        mdObject: VisualizationObject.IVisualizationObjectContent,
-        config: any,
-        supportedControls: any,
-    ) {
-        const colorMapping: IColorMappingProperty[] = get(supportedControls, "colorMapping");
-
-        const validColorMapping =
-            colorMapping &&
-            colorMapping
-                .filter(mapping => mapping != null)
-                .map(mapItem => ({
-                    predicate: ColorUtils.getColorMappingPredicate(mapItem.id),
-                    color: mapItem.color,
-                }));
-
-        return {
-            mdObject,
-            ...config,
-            ...supportedControls,
-            colorMapping: validColorMapping && validColorMapping.length > 0 ? validColorMapping : null,
-        };
     }
 }

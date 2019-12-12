@@ -33,6 +33,7 @@ export class HeadlineStateless extends BaseVisualization<
             resultSpec,
             execution,
             onFiredDrillEvent,
+            onDrill,
             config,
         } = this.props;
 
@@ -44,6 +45,7 @@ export class HeadlineStateless extends BaseVisualization<
                             onAfterRender={afterRender}
                             onFiredDrillEvent={onFiredDrillEvent}
                             drillableItems={drillableItems}
+                            onDrill={onDrill}
                             config={config}
                             executionRequest={{
                                 afm: dataSource.getAfm(),

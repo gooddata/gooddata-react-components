@@ -7,12 +7,13 @@ import isNil = require("lodash/isNil");
 import includes = require("lodash/includes");
 import * as React from "react";
 import Measure from "react-measure";
-import { render, unmountComponentAtNode } from "react-dom";
+import { render } from "react-dom";
 import { InjectedIntl } from "react-intl";
 import { AFM, VisualizationObject } from "@gooddata/typings";
 import produce from "immer";
 import { configurePercent, configureOverTimeComparison } from "../../../utils/bucketConfig";
 import UnsupportedConfigurationPanel from "../../configurationPanels/UnsupportedConfigurationPanel";
+import { unmountComponentsAtNodes } from "../../../utils/domHelper";
 
 import * as VisEvents from "../../../../interfaces/Events";
 import * as BucketNames from "../../../../constants/bucketNames";
@@ -49,6 +50,7 @@ import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 import { PivotTable } from "../../../../components/core/PivotTable";
 import { generateDimensions } from "../../../../helpers/dimensions";
 import { DEFAULT_LOCALE } from "../../../../constants/localization";
+import { DASHBOARDS_ENVIRONMENT } from "../../../constants/properties";
 
 export const getColumnAttributes = (buckets: IBucket[]): IBucketItem[] => {
     return getItemsFromBuckets(
@@ -172,13 +174,15 @@ const isAttributeSortItemVisible = (_sortItem: AFM.IAttributeSortItem, _filters:
     true;
 
 const isMeasureSortItemMatchedByFilter = (sortItem: AFM.IMeasureSortItem, filter: IBucketFilter): boolean =>
-    filter.selectedElements.some(selectedElement =>
-        sortItem.measureSortItem.locators.some(
-            locator =>
-                !AFM.isMeasureLocatorItem(locator) &&
-                locator.attributeLocatorItem.element === selectedElement.uri,
-        ),
-    );
+    filter.selectedElements
+        ? filter.selectedElements.some(selectedElement =>
+              sortItem.measureSortItem.locators.some(
+                  locator =>
+                      !AFM.isMeasureLocatorItem(locator) &&
+                      locator.attributeLocatorItem.element === selectedElement.uri,
+              ),
+          )
+        : false;
 
 const isMeasureSortItemVisible = (sortItem: AFM.IMeasureSortItem, filters: IBucketFilter[]): boolean =>
     filters.reduce((isVisible, filter) => {
@@ -266,10 +270,7 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
     }
 
     public unmount() {
-        unmountComponentAtNode(document.querySelector(this.element));
-        if (document.querySelector(this.configPanelElement)) {
-            unmountComponentAtNode(document.querySelector(this.configPanelElement));
-        }
+        unmountComponentsAtNodes([this.element, this.configPanelElement]);
     }
 
     public update(
@@ -343,7 +344,7 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
                         ),
                     };
 
-                    setPivotTableUiConfig(referencePointDraft, this.intl, VisualizationTypes.PIVOT_TABLE);
+                    setPivotTableUiConfig(referencePointDraft, this.intl, VisualizationTypes.TABLE);
                     configurePercent(referencePointDraft, false);
                     configureOverTimeComparison(referencePointDraft);
                     Object.assign(
@@ -373,7 +374,14 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
             const { resultSpec, locale, custom, dimensions, config } = options;
             const { height } = dimensions;
             const { drillableItems } = custom;
-            const { afterRender, onError, onLoadingChanged, pushData } = this.callbacks;
+            const {
+                afterRender,
+                onError,
+                onLoadingChanged,
+                pushData,
+                onDrill,
+                onFiredDrillEvent,
+            } = this.callbacks;
 
             const resultSpecWithDimensions: AFM.IResultSpec = {
                 ...resultSpec,
@@ -395,7 +403,7 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
             const totals: VisualizationObject.IVisualizationTotal[] = (rowsBucket && rowsBucket.totals) || [];
 
             let configUpdated = config;
-            if (this.environment !== "dashboards") {
+            if (this.environment !== DASHBOARDS_ENVIRONMENT) {
                 // Menu aggregations turned off in KD
                 configUpdated = merge(
                     {
@@ -411,6 +419,8 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
             const pivotTableProps = {
                 projectId: this.projectId,
                 drillableItems,
+                onDrill,
+                onFiredDrillEvent,
                 totals,
                 config: configUpdated,
                 height,
@@ -427,13 +437,13 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
                 intl: this.intl,
             };
 
-            if (this.environment === "dashboards") {
+            if (this.environment === DASHBOARDS_ENVIRONMENT) {
                 if (isNil(height)) {
                     render(
                         <Measure client={true}>
                             {({ measureRef, contentRect }: any) => {
                                 const usedHeight = Math.floor(contentRect.client.height || 0);
-                                const pivotWrapperStyle = {
+                                const pivotWrapperStyle: React.CSSProperties = {
                                     height: "100%",
                                     textAlign: "left",
                                 };
@@ -502,6 +512,6 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
     }
 
     protected getDimensions(mdObject: VisualizationObject.IVisualizationObjectContent): AFM.IDimension[] {
-        return generateDimensions(mdObject, VisualizationTypes.PIVOT_TABLE);
+        return generateDimensions(mdObject, VisualizationTypes.TABLE);
     }
 }

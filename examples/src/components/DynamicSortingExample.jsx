@@ -13,6 +13,12 @@ import {
     projectId,
 } from "../utils/fixtures";
 
+const measures = [Model.measure(totalSalesIdentifier).localIdentifier(totalSalesIdentifier)];
+const attribute = Model.attribute(monthDateIdentifier).localIdentifier(monthDateIdentifier);
+const stackBy = Model.attribute(locationStateDisplayFormIdentifier).localIdentifier(
+    locationStateDisplayFormIdentifier,
+);
+
 export class DynamicSortingExample extends Component {
     constructor(props) {
         super(props);
@@ -154,9 +160,11 @@ export class DynamicSortingExample extends Component {
                         display: flex;
                         flex-wrap: wrap;
                     }
+
                     .sorting-option {
                         margin: 5px 10px;
                     }
+
                     .sorting-label {
                         margin: 5px 10px;
                         padding: 6px 0;
@@ -204,11 +212,9 @@ export class DynamicSortingExample extends Component {
                 <div style={{ height: 600 }} className="s-dynamic-sorting-chart">
                     <ColumnChart
                         projectId={projectId}
-                        measures={[Model.measure(totalSalesIdentifier).localIdentifier(totalSalesIdentifier)]}
-                        viewBy={Model.attribute(monthDateIdentifier).localIdentifier(monthDateIdentifier)}
-                        stackBy={Model.attribute(locationStateDisplayFormIdentifier).localIdentifier(
-                            locationStateDisplayFormIdentifier,
-                        )}
+                        measures={measures}
+                        viewBy={attribute}
+                        stackBy={stackBy}
                         sortBy={sortOption.sortBy(direction)}
                     />
                 </div>

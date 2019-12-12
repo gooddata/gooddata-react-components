@@ -18,11 +18,13 @@ import { Visualization, VisualizationEnvironment } from "./components/uri/Visual
 import { ErrorStates, ErrorCodes } from "./constants/errorStates";
 import { VisualizationTypes, ChartType } from "./constants/visualizationTypes";
 import { Execute } from "./execution/Execute";
-import { IDrillableItem } from "./interfaces/DrillEvents";
+import { IDrillableItem, IDrillEventExtended } from "./interfaces/DrillEvents";
 import { IHeaderPredicate } from "./interfaces/HeaderPredicate";
-import { IPushData, IColorsData } from "./interfaces/PushData";
+import { IPushData, IDrillableItemPushData, IColorsData } from "./interfaces/PushData";
 import { AttributeFilter } from "./components/filters/AttributeFilter/AttributeFilter";
 import { AttributeElements } from "./components/filters/AttributeFilter/AttributeElements";
+import { DropdownAfmWrapper as MeasureValueFilterDropdown } from "./components/filters/MeasureValueFilter/DropdownAfmWrapper";
+import * as MeasureValueFilterOperators from "./constants/measureValueFilterOperators";
 import * as PropTypes from "./proptypes/index";
 import { generateDimensions } from "./helpers/dimensions";
 import * as BucketNames from "./constants/bucketNames";
@@ -43,10 +45,12 @@ import { BubbleChart } from "./components/BubbleChart";
 import { PivotTable } from "./components/PivotTable";
 import { Table } from "./components/Table";
 import { Headline } from "./components/Headline";
+import { Xirr } from "./components/Xirr";
 import { ScatterPlot } from "./components/ScatterPlot";
 import { ComboChart } from "./components/ComboChart";
 import { FunnelChart } from "./components/FunnelChart";
 import { Heatmap } from "./components/Heatmap";
+import { withJsxExport } from "./components/withJsxExport";
 import * as ChartConfiguration from "./interfaces/Config";
 // tslint:disable-next-line:no-duplicate-imports
 import { ILegendConfig, IChartConfig, IColorPalette, IColorPaletteItem } from "./interfaces/Config";
@@ -75,10 +79,14 @@ const CoreComponents: ICoreComponents = {
     FunnelChart: CoreFunnelChart,
 };
 
+export * from "./components/filters/DateFilter";
+
 export {
     AfmComponents,
     AttributeElements,
     AttributeFilter,
+    MeasureValueFilterDropdown,
+    MeasureValueFilterOperators,
     BarChart,
     BucketNames,
     CatalogHelper,
@@ -96,16 +104,19 @@ export {
     BucketExecutor,
     generateDimensions,
     Headline,
+    Xirr,
     IBaseChartProps,
     IPivotTableProps,
     ICommonVisualizationProps,
     IDataSourceProviderInjectedProps,
     IDrillableItem,
+    IDrillEventExtended,
     ILegendConfig,
     IChartConfig,
     IColorPalette,
     IColorPaletteItem,
     IPushData,
+    IDrillableItemPushData,
     IColorsData,
     isEmptyResult,
     Kpi,
@@ -140,4 +151,5 @@ export {
     IHeaderPredicate,
     HeaderPredicateFactory,
     MappingHeader,
+    withJsxExport,
 };

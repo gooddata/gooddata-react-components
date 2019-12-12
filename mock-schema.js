@@ -1,5 +1,37 @@
 // (C) 2007-2019 GoodData Corporation
 
+const featureFlags = {
+    enableAxisNameConfiguration: true,
+    enableSortingByTotalGroup: true,
+};
+
+const barChartAfmExecutions = [
+    {
+        _description: 'Bar chart with 2M, 1VB and stackMeasures is true',
+        execution: require('./stories/test_data/bar_chart_with_2M_1VB_stackMeasures_request.json'),
+        executionResponse: require('./stories/test_data/bar_chart_with_2M_1VB_stackMeasures_response.json'),
+        executionResult: require('./stories/test_data/bar_chart_with_2M_1VB_stackMeasures_result.json')
+    },
+    {
+        _description: 'Bar chart with 2M, 2VB and stackMeasures is true',
+        execution: require('./stories/test_data/bar_chart_with_2M_2VB_stackMeasures_request.json'),
+        executionResponse: require('./stories/test_data/bar_chart_with_2M_2VB_stackMeasures_response.json'),
+        executionResult: require('./stories/test_data/bar_chart_with_2M_2VB_stackMeasures_result.json')
+    },
+    {
+        _description: 'Bar chart with 1M, 2VB and 1 SB',
+        execution: require('./stories/test_data/bar_chart_with_1M_2VB_1SB_request.json'),
+        executionResponse: require('./stories/test_data/bar_chart_with_1M_2VB_1SB_response.json'),
+        executionResult: require('./stories/test_data/bar_chart_with_1M_2VB_1SB_result.json')
+    },
+    {
+        _description: 'Bar chart with 2M and 2VB',
+        execution: require('./stories/test_data/bar_chart_with_2M_2VB_request.json'),
+        executionResponse: require('./stories/test_data/bar_chart_with_2M_2VB_response.json'),
+        executionResult: require('./stories/test_data/bar_chart_with_2M_2VB_result.json')
+    },
+];
+
 const heatmapAfmExecutions = [{
         execution: require('./stories/test_data/heat_map_with_58_rows_mock_request.json'),
         executionResult: require('./stories/test_data/heat_map_with_58_rows_mock_result.json')
@@ -31,6 +63,141 @@ const pivotTableGrandtotalSubtotalAfmExecutions = [
         executionResponse: require("./stories/test_data/pivot_table_with_grandtotal_subtotal_2_measures_response.json"),
         executionResult: require("./stories/test_data/pivot_table_with_grandtotal_subtotal_2_measures_result.json"),
     }];
+
+const xirrAfmExecutions = [
+    {
+        execution: require("./stories/test_data/xirr_simple_request.json"),
+        executionResponse: require("./stories/test_data/xirr_simple_response.json"),
+        executionResult: require("./stories/test_data/xirr_simple_result.json"),
+    }];
+
+const barChartVisualizationObjects = [
+    {
+        title: 'Bar chart with 2M, 1VB and stackMeasures is true',
+        identifier: 'bar-chart-2M-1VB-stackMeasures',
+        type: 'local:bar',
+        filters: [],
+        buckets: [{
+            localIdentifier: 'measures',
+            items: [{
+                localIdentifier: 'm1',
+                filters: [],
+                identifier: '1',
+                alias: 'Amount'
+            }, {
+                localIdentifier: 'm2',
+                filters: [],
+                identifier: '2',
+                alias: 'Amount [BOP]'
+            }]
+        }, {
+            localIdentifier: 'view',
+            items: [{
+                localIdentifier: 'a1',
+                displayForm: '4.df',
+                alias: 'Product'
+            }]
+        }],
+        properties: '{"controls":{"stackMeasures":true}}',
+    },
+    {
+        title: 'Bar chart with 2M, 2VB and stackMeasures is true',
+        identifier: 'bar-chart-2M-2VB-stackMeasures',
+        type: 'local:bar',
+        filters: [],
+        buckets: [{
+            localIdentifier: 'measures',
+            items: [{
+                localIdentifier: 'm1',
+                filters: [],
+                identifier: '1',
+                alias: 'Amount'
+            }, {
+                localIdentifier: 'm2',
+                filters: [],
+                identifier: '2',
+                alias: 'Amount [BOP]'
+            }]
+        }, {
+            localIdentifier: 'view',
+            items: [{
+                localIdentifier: 'a1',
+                displayForm: '4.df',
+                alias: 'Product'
+            }, {
+                localIdentifier: 'a2',
+                displayForm: '5.df',
+                alias: 'Stage Name'
+            }]
+        }],
+        properties: '{"controls":{"stackMeasures":true}}',
+    },
+    {
+        title: 'Bar chart with 1M, 2VB and 1SB',
+        identifier: 'bar-chart-1M-2VB-1SB',
+        type: 'local:bar',
+        filters: [],
+        buckets: [{
+            localIdentifier: 'measures',
+            items: [{
+                localIdentifier: 'm1',
+                filters: [],
+                identifier: '1',
+                alias: 'Amount'
+            }]
+        }, {
+            localIdentifier: 'view',
+            items: [{
+                localIdentifier: 'a1',
+                displayForm: '4.df',
+                alias: 'Product'
+            }, {
+                localIdentifier: 'a2',
+                displayForm: '5.df',
+                alias: 'Stage Name'
+            }]
+        }, {
+            localIdentifier: 'stack',
+            items: [{
+
+                localIdentifier: 'a3',
+                displayForm: '6.df',
+                alias: 'Region',
+            }]
+        }],
+    },
+    {
+        title: 'Bar chart with 2M and 2VB',
+        identifier: 'bar-chart-2M-2VB',
+        type: 'local:bar',
+        filters: [],
+        buckets: [{
+            localIdentifier: 'measures',
+            items: [{
+                localIdentifier: 'm1',
+                filters: [],
+                identifier: '1',
+                alias: 'Amount'
+            }, {
+                localIdentifier: 'm2',
+                filters: [],
+                identifier: '2',
+                alias: 'Amount [BOP]'
+            }]
+        }, {
+            localIdentifier: 'view',
+            items: [{
+                localIdentifier: 'a1',
+                displayForm: '4.df',
+                alias: 'Product'
+            }, {
+                localIdentifier: 'a2',
+                displayForm: '5.df',
+                alias: 'Stage Name'
+            }]
+        }],
+    },
+];
 
 const getBaseProjectSchema = (title, identifier) => {
     return {
@@ -2210,10 +2377,12 @@ const getBaseProjectSchema = (title, identifier) => {
                     }
                 }
             },
+            ...barChartAfmExecutions,
             ...heatmapAfmExecutions,
             ...pivotTableAfmExecutions,
             ...pivotTableSubtotalsAfmExecutions,
             ...pivotTableGrandtotalSubtotalAfmExecutions,
+            ...xirrAfmExecutions
         ],
         visualizationClasses: [{
             title: 'Table',
@@ -2236,6 +2405,9 @@ const getBaseProjectSchema = (title, identifier) => {
         }, {
             title: 'Headline',
             url: 'local:headline'
+        }, {
+            title: 'XIRR',
+            url: 'local:xirr'
         }],
         visualizationObjects: [{
                 identifier: '1001',
@@ -2454,6 +2626,42 @@ const getBaseProjectSchema = (title, identifier) => {
                 properties: "{\"controls\":{\"grid\":{\"enabled\":false}}}"
             },
             {
+                title: 'Chart with X and Y axis name aligned to left and top respectively',
+                identifier: 'aligned-axis-name',
+                type: 'local:bar',
+                filters: [],
+                buckets: [{
+                    localIdentifier: 'measures',
+                    items: [{
+                        localIdentifier: 'm1',
+                        filters: [],
+                        identifier: '1',
+                        alias: 'Amount'
+                    }]
+                }, {
+                    localIdentifier: 'view',
+                    items: [{
+                        localIdentifier: 'a1',
+                        displayForm: 'attr.closed.year.df',
+                        alias: 'Date'
+                    }]
+                }],
+                properties: JSON.stringify({
+                    controls: {
+                        xaxis: {
+                            name: {
+                                position: "left"
+                            }
+                        },
+                        yaxis: {
+                            name: {
+                                position: "top"
+                            }
+                        }
+                    }
+                })
+            },
+            {
                 identifier: '1010',
                 title: 'Table',
                 type: 'local:table',
@@ -2503,7 +2711,59 @@ const getBaseProjectSchema = (title, identifier) => {
                 }],
                 properties: "{\"controls\":{\"secondary_yaxis\":{\"measures\":[\"2\"]},\"primaryChartType\":\"column\",\"secondaryChartType\":\"line\"}}"
             },
-        ]
+            {
+                title: 'Table with measure value filters',
+                identifier: 'measure-value-filters',
+                type: 'local:table',
+                filters: [{
+                    type: "measureComparison",
+                    identifier: "m1",
+                    operator: "GREATER_THAN",
+                    value: 500
+                }],
+                buckets: [{
+                    localIdentifier: 'measures',
+                    items: [{
+                        localIdentifier: 'm1',
+                        identifier: '1'
+                    }, {
+                        localIdentifier: 'm2',
+                        identifier: '2'
+                    }]
+                }, {
+                    localIdentifier: 'attribute',
+                    items: [{
+                        localIdentifier: 'a1',
+                        displayForm: '4.df'
+                    }, {
+                        localIdentifier: 'a2',
+                        displayForm: '5.df'
+                    }]
+                }]
+            },
+            {
+                title: 'XIRR simple example',
+                identifier: 'xirr-simple',
+                type: 'local:xirr',
+                filters: [],
+                buckets: [{
+                    localIdentifier: 'measures',
+                    items: [{
+                        localIdentifier: 'm_1',
+                        identifier: '5',
+                        aggregation: 'sum'
+                    }]
+                }, {
+                    localIdentifier: 'attribute',
+                    items: [{
+                        localIdentifier: 'a_1',
+                        displayForm: '10'
+                    }]
+                }]
+            },
+            ...barChartVisualizationObjects
+        ],
+        featureFlags
     }
 };
 

@@ -8,12 +8,24 @@ The REST API versions in the table are just for your information as the values a
 
 |GoodData.UI Version | REST API version
 |:---:|:---:
+|\>= 7.2.0|4
 |\>= 6.1.0|3
 |<= 6.0.0|2
 
 ## Unreleased/planned
 
 - We ask developers to consider using the Headline component instead of the KPI component. The KPI component may be eventually marked as deprecated in one of the next major versions.
+
+## 7.2.0
+
+### Added
+
+- DateFilter component (beta version)
+- Vertical alignment configuration for Donut and Pie charts
+
+### Fixed
+
+- Sticky row update in pivot table
 
 ## 7.1.2
 

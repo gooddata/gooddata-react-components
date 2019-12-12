@@ -17,7 +17,7 @@ export default class ColorPaletteItem extends React.PureComponent<IColorPaletteI
 
     constructor(props: IColorPaletteItemProps) {
         super(props);
-        this.itemRef = (React as any).createRef();
+        this.itemRef = React.createRef<HTMLDivElement>();
     }
 
     public render() {

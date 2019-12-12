@@ -151,6 +151,19 @@ export const pivotTableMDO: IVisualization = {
                         },
                     },
                 },
+                {
+                    measureValueFilter: {
+                        measure: {
+                            localIdentifier: "m1",
+                        },
+                        condition: {
+                            comparison: {
+                                operator: "GREATER_THAN",
+                                value: 42,
+                            },
+                        },
+                    },
+                },
             ],
             properties: JSON.stringify({
                 sortItems: [
@@ -1267,9 +1280,152 @@ export const visualizationObjects: IVisualization[] = [
             },
         },
     },
+    {
+        visualizationObject: {
+            content: {
+                buckets: [
+                    {
+                        localIdentifier: "measures",
+                        items: [
+                            {
+                                measure: {
+                                    localIdentifier: "m1",
+                                    definition: {
+                                        measureDefinition: {
+                                            aggregation: "sum",
+                                            item: {
+                                                uri: "/gdc/md/myproject/obj/9423",
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                    {
+                        localIdentifier: "attribute",
+                        items: [
+                            {
+                                visualizationAttribute: {
+                                    localIdentifier: "a1",
+                                    displayForm: { uri: "/gdc/md/myproject/obj/9362" },
+                                },
+                            },
+                        ],
+                    },
+                ],
+                filters: [
+                    {
+                        relativeDateFilter: {
+                            granularity: "GDC.time.year",
+                            dataSet: { uri: "/gdc/md/myproject/obj/9371" },
+                        },
+                    },
+                ],
+                visualizationClass: { uri: "/gdc/md/myproject/obj/xirr" },
+            },
+            meta: {
+                author: "/gdc/account/profile/johndoe",
+                uri: "/gdc/md/myproject/obj/4",
+                tags: "",
+                created: new Date("2015-05-23T09:24:41Z"),
+                identifier: "aa5CDaafphgJBh2iJ0OcfSpg",
+                deprecated: false,
+                summary: "",
+                isProduction: true,
+                title: "XIRR",
+                category: "visualizationObject",
+                contributor: "/gdc/account/profile/johndoe",
+            },
+        },
+    },
+    {
+        visualizationObject: {
+            content: {
+                visualizationClass: { uri: "/gdc/md/myproject/obj/bar" },
+                buckets: [
+                    {
+                        localIdentifier: "measures",
+                        items: [
+                            {
+                                measure: {
+                                    localIdentifier: "m1",
+                                    title: "Amount",
+                                    definition: {
+                                        measureDefinition: {
+                                            item: {
+                                                uri: "/gdc/md/myproject/obj/8172",
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            {
+                                measure: {
+                                    localIdentifier: "m2",
+                                    title: "Amount [BOP]",
+                                    definition: {
+                                        measureDefinition: {
+                                            item: {
+                                                uri: "/gdc/md/myproject/obj/8173",
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                    {
+                        localIdentifier: "view",
+                        items: [
+                            {
+                                visualizationAttribute: {
+                                    localIdentifier: "a1",
+                                    displayForm: { uri: "/gdc/md/myproject/obj/851" },
+                                },
+                            },
+                            {
+                                visualizationAttribute: {
+                                    localIdentifier: "a2",
+                                    displayForm: { uri: "/gdc/md/myproject/obj/852" },
+                                },
+                            },
+                        ],
+                    },
+                ],
+            },
+            meta: {
+                author: "/gdc/account/profile/johndoe",
+                uri: "/gdc/md/myproject/obj/76383",
+                tags: "",
+                created: new Date("2015-05-23T09:24:41Z"),
+                identifier: "bar_chart_2M_2VB",
+                deprecated: false,
+                summary: "",
+                isProduction: true,
+                title: "Bar Chart with 2M 2VB",
+                category: "visualizationObject",
+                contributor: "/gdc/account/profile/johndoe",
+            },
+        },
+    },
 ];
 
 export const visualizationClasses: IVisualizationClassWrapped[] = [
+    {
+        visualizationClass: {
+            content: {
+                url: "local:bar",
+                icon: "",
+                iconSelected: "",
+                checksum: "",
+            },
+            meta: {
+                title: "Bar chart",
+                uri: "/gdc/md/myproject/obj/bar",
+            },
+        },
+    },
     {
         visualizationClass: {
             content: {
@@ -1312,6 +1468,20 @@ export const visualizationClasses: IVisualizationClassWrapped[] = [
             },
         },
     },
+    {
+        visualizationClass: {
+            content: {
+                url: "local:xirr",
+                icon: "",
+                iconSelected: "",
+                checksum: "",
+            },
+            meta: {
+                title: "XIRR",
+                uri: "/gdc/md/myproject/obj/xirr",
+            },
+        },
+    },
 ];
 
 export const comboVizObjectContent: VisualizationObject.IVisualizationObjectContent = {
@@ -1342,3 +1512,52 @@ export const comboVizObjectContent: VisualizationObject.IVisualizationObjectCont
         },
     ],
 };
+
+export const getVisObjectWithAxisNamePosition = (axisName: string, position: string) => ({
+    content: {
+        visualizationClass: {
+            uri: "/gdc/md/myproject/obj/column",
+        },
+        buckets: [
+            {
+                localIdentifier: "measures",
+                items: measures,
+            },
+            {
+                localIdentifier: "view",
+                items: [
+                    {
+                        visualizationAttribute: {
+                            localIdentifier: "a1",
+                            displayForm: {
+                                uri: "/gdc/md/myproject/obj/851",
+                            },
+                        },
+                    },
+                ],
+            },
+        ],
+        properties: JSON.stringify({
+            controls: {
+                [axisName]: {
+                    name: {
+                        position,
+                    },
+                },
+            },
+        }),
+    },
+    meta: {
+        isProduction: true,
+        summary: "",
+        created: new Date("2015-05-23T09:24:41Z"),
+        identifier: `identifier-${position}`,
+        author: "/gdc/account/profile/johndoe",
+        uri: `/gdc/md/myproject/obj/axis-name-aligned-to-${position}`,
+        deprecated: false,
+        title: "Axis Name Position Configuration",
+        tags: "",
+        contributor: "/gdc/account/profile/johndoe",
+        category: "visualizationObject",
+    },
+});

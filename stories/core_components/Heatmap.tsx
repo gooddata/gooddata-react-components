@@ -26,6 +26,7 @@ import {
 } from "../data/configProps";
 import { localIdentifierMatch } from "../../src/factory/HeaderPredicateFactory";
 import { ScreenshotReadyWrapper, createHighChartResolver } from "../utils/ScreenshotReadyWrapper";
+import { withAxisNamePositionConfig, withAxisNameVisibilityConfig } from "../hoc/withAxisName";
 
 const wrapperStyle = { width: 800, height: 400 };
 const wrapperWiderStyle = { width: 1000, height: 400 };
@@ -397,5 +398,29 @@ storiesOf("Core components/Heatmap", module)
                     ErrorComponent={null}
                 />
             </div>,
+        ),
+    )
+    .add("with axis name position", () =>
+        screenshotWrap(
+            withAxisNamePositionConfig(
+                <Heatmap
+                    projectId="storybook"
+                    measure={MEASURE_1}
+                    rows={ATTRIBUTE_1}
+                    columns={ATTRIBUTE_2}
+                />,
+            ),
+        ),
+    )
+    .add("with axis name visibility", () =>
+        screenshotWrap(
+            withAxisNameVisibilityConfig(
+                <Heatmap
+                    projectId="storybook"
+                    measure={MEASURE_1}
+                    rows={ATTRIBUTE_1}
+                    columns={ATTRIBUTE_2}
+                />,
+            ),
         ),
     );

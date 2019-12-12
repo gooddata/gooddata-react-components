@@ -4,6 +4,8 @@ import noop = require("lodash/noop");
 import get = require("lodash/get");
 import isEqual = require("lodash/isEqual");
 import omit = require("lodash/omit");
+import flatten = require("lodash/flatten");
+
 import {
     factory as createSdk,
     DataLayer,
@@ -18,7 +20,7 @@ import { ErrorStates } from "../../../constants/errorStates";
 import { IEvents, IExportFunction, IExtendedExportConfig, ILoadingState } from "../../../interfaces/Events";
 import { IDrillableItem } from "../../../interfaces/DrillEvents";
 import { ISubject } from "../../../helpers/async";
-import { convertErrors, checkEmptyResult } from "../../../helpers/errorHandlers";
+import { convertErrors, checkEmptyResult, isApiResponseError } from "../../../helpers/errorHandlers";
 import { IHeaderPredicate } from "../../../interfaces/HeaderPredicate";
 import { IDataSourceProviderInjectedProps } from "../../afm/DataSourceProvider";
 import { injectIntl, InjectedIntl } from "react-intl";
@@ -27,7 +29,7 @@ import { IntlWrapper } from "../../core/base/IntlWrapper";
 import { LoadingComponent, ILoadingProps } from "../../simple/LoadingComponent";
 import { ErrorComponent, IErrorProps } from "../../simple/ErrorComponent";
 import { RuntimeError } from "../../../errors/RuntimeError";
-import { IPushData } from "../../../interfaces/PushData";
+import { IPushData, IDrillableItemPushData } from "../../../interfaces/PushData";
 import { IChartConfig } from "../../../interfaces/Config";
 import { setTelemetryHeaders } from "../../../helpers/utils";
 import { fixEmptyHeaderItems } from "./utils/fixEmptyHeaderItems";
@@ -61,7 +63,9 @@ export interface ILoadingInjectedProps {
     intl: InjectedIntl;
     // if autoExecuteDataSource is false, this callback is passed to the inner component and handles loading
     getPage?: IGetPage;
+
     onDataTooLarge(): void;
+
     onNegativeValues(): void;
 }
 
@@ -157,7 +161,7 @@ export function visualizationLoadingHOC<
 
             return (
                 <InnerComponent
-                    key="InnerComponent"
+                    key={"InnerComponent"}
                     {...props}
                     execution={result}
                     onDataTooLarge={this.onDataTooLarge}
@@ -200,11 +204,13 @@ export function visualizationLoadingHOC<
                         ...rawExecution,
                         executionResult: executionResultWithResolvedEmptyValues,
                     };
+                    const supportedDrillableItems = this.getSupportedDrillableItems(result.executionResponse);
                     // This returns only current page,
                     // gooddata-js mergePages doesn't support discontinuous page ranges yet
                     this.setState({ result, error: null });
                     this.props.pushData({
                         result,
+                        supportedDrillableItems,
                     });
                     this.onLoadingChanged({ isLoading: false });
                     this.props.onExportReady(this.createExportFunction(result)); // Pivot tables
@@ -281,16 +287,55 @@ export function visualizationLoadingHOC<
             }
         };
 
+        private getAllMeasureHeaderItems(
+            response: Execution.IExecutionResponse,
+        ): Execution.IMeasureHeaderItem[] {
+            return flatten(
+                flatten(
+                    flatten(response.dimensions).map(
+                        (dimension: Execution.IResultDimension) => dimension.headers,
+                    ),
+                )
+                    .filter((header: Execution.IHeader) => Execution.isMeasureGroupHeader(header))
+                    .map((header: Execution.IMeasureGroupHeader) => header.measureGroupHeader.items),
+            );
+        }
+
+        private getSupportedDrillableItems(response: Execution.IExecutionResponse): IDrillableItemPushData[] {
+            return this.getAllMeasureHeaderItems(response).map(
+                (measure: Execution.IMeasureHeaderItem): IDrillableItemPushData => ({
+                    type: "measure",
+                    localIdentifier: measure.measureHeaderItem.localIdentifier,
+                    title: measure.measureHeaderItem.name,
+                }),
+            );
+        }
+
         private initSubject() {
             this.subject = DataLayer.createSubject<Execution.IExecutionResponses>(
                 result => {
                     this.setState({ result });
-                    this.props.pushData({ result });
+                    const supportedDrillableItems = this.getSupportedDrillableItems(result.executionResponse);
+                    this.props.pushData({ result, supportedDrillableItems });
                     this.onLoadingChanged({ isLoading: false });
                     this.props.onExportReady(this.createExportFunction(result)); // Charts / Tables
                 },
-                error => this.onError(error),
+                error => {
+                    return this.onError(error);
+                },
             );
+        }
+
+        private pushDataForNoContentResponse(error: RuntimeError) {
+            if (!isApiResponseError(error.cause) || error.getMessage() !== ErrorStates.NO_DATA) {
+                return;
+            }
+
+            const response: Promise<Execution.IExecutionResponses> = error.cause.response.json();
+            response.then(r => {
+                const supportedDrillableItems = this.getSupportedDrillableItems(r.executionResponse);
+                this.props.pushData({ supportedDrillableItems });
+            });
         }
 
         private onLoadingChanged(loadingState: ILoadingState) {
@@ -310,6 +355,7 @@ export function visualizationLoadingHOC<
         private onError(error: RuntimeError, dataSource = this.props.dataSource) {
             if (DataLayer.DataSourceUtils.dataSourcesMatch(this.props.dataSource, dataSource)) {
                 this.setState({ error: error.getMessage() });
+                this.pushDataForNoContentResponse(error);
                 this.onLoadingChanged({ isLoading: false });
                 this.props.onExportReady(this.createExportErrorFunction(error));
                 this.props.onError(error);
@@ -363,7 +409,8 @@ export function visualizationLoadingHOC<
                     title,
                 };
                 if (includeFilterContext) {
-                    exportConfigRequest.showFilters = dataSource.getAfm().filters;
+                    exportConfigRequest.showFilters = true;
+                    exportConfigRequest.afm = dataSource.getAfm();
                 }
 
                 return this.sdk.report.exportResult(

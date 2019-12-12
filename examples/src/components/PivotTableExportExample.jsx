@@ -20,27 +20,27 @@ import {
     menuCategoryAttributeDFIdentifier,
 } from "../utils/fixtures";
 
+const measures = [
+    Model.measure(franchiseFeesIdentifier).format("#,##0"),
+    Model.measure(franchiseFeesAdRoyaltyIdentifier).format("#,##0"),
+    Model.measure(franchiseFeesInitialFranchiseFeeIdentifier).format("#,##0"),
+    Model.measure(franchiseFeesIdentifierOngoingRoyalty).format("#,##0"),
+];
+
+const attributes = [
+    Model.attribute(locationStateDisplayFormIdentifier),
+    Model.attribute(locationNameDisplayFormIdentifier),
+    Model.attribute(menuCategoryAttributeDFIdentifier).localIdentifier("menu"),
+];
+
+const columns = [Model.attribute(quarterDateIdentifier), Model.attribute(monthDateIdentifier)];
+
+const sortBy = [Model.attributeSortItem("menu", "asc")];
+
+const filters = [Model.absoluteDateFilter(dateDataSetUri, "2017-01-01", "2017-12-31")];
+
 export class PivotTableExportExample extends Component {
     render() {
-        const measures = [
-            Model.measure(franchiseFeesIdentifier).format("#,##0"),
-            Model.measure(franchiseFeesAdRoyaltyIdentifier).format("#,##0"),
-            Model.measure(franchiseFeesInitialFranchiseFeeIdentifier).format("#,##0"),
-            Model.measure(franchiseFeesIdentifierOngoingRoyalty).format("#,##0"),
-        ];
-
-        const attributes = [
-            Model.attribute(locationStateDisplayFormIdentifier),
-            Model.attribute(locationNameDisplayFormIdentifier),
-            Model.attribute(menuCategoryAttributeDFIdentifier).localIdentifier("menu"),
-        ];
-
-        const columns = [Model.attribute(quarterDateIdentifier), Model.attribute(monthDateIdentifier)];
-
-        const sortBy = [Model.attributeSortItem("menu", "asc")];
-
-        const filters = [Model.absoluteDateFilter(dateDataSetUri, "2017-01-01", "2017-12-31")];
-
         return (
             <ExampleWithExport>
                 {onExportReady => (

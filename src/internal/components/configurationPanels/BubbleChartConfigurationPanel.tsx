@@ -8,11 +8,12 @@ import * as classNames from "classnames";
 
 import ConfigurationPanelContent from "./ConfigurationPanelContent";
 import LabelSubsection from "../configurationControls/axis/LabelSubsection";
+import NameSubsection from "../configurationControls/axis/NameSubsection";
 import ConfigSection from "../configurationControls/ConfigSection";
 import DataLabelsControl from "../configurationControls/DataLabelsControl";
 import CheckboxControl from "../configurationControls/CheckboxControl";
 import MinMaxControl from "../configurationControls//MinMaxControl";
-import { hasTertiaryMeasures } from "../../utils/mdObjectHelper";
+import { countItemsOnAxes, hasTertiaryMeasures } from "../../utils/mdObjectHelper";
 import {
     SHOW_DELAY_DEFAULT,
     HIDE_DELAY_DEFAULT,
@@ -24,8 +25,13 @@ export default class BubbleChartConfigurationPanel extends ConfigurationPanelCon
     protected renderConfigurationPanel() {
         const { xAxisVisible, yAxisVisible, gridEnabled } = this.getControlProperties();
 
-        const { propertiesMeta, properties, pushData } = this.props;
+        const { featureFlags, propertiesMeta, properties, pushData, type, mdObject } = this.props;
+        const controls = properties && properties.controls;
         const controlsDisabled = this.isControlDisabled();
+        const { xaxis: itemsOnXAxis, yaxis: itemsOnYAxis } = countItemsOnAxes(type, controls, mdObject);
+        const xAxisNameSectionDisabled = controlsDisabled || itemsOnXAxis !== 1;
+        const yAxisNameSectionDisabled = controlsDisabled || itemsOnYAxis !== 1;
+        const isNameSubsectionVisible: boolean = featureFlags.enableAxisNameConfiguration as boolean;
 
         return (
             <BubbleHoverTrigger showDelay={SHOW_DELAY_DEFAULT} hideDelay={HIDE_DELAY_DEFAULT}>
@@ -42,6 +48,15 @@ export default class BubbleChartConfigurationPanel extends ConfigurationPanelCon
                         properties={properties}
                         pushData={pushData}
                     >
+                        {isNameSubsectionVisible && (
+                            <NameSubsection
+                                disabled={xAxisNameSectionDisabled}
+                                configPanelDisabled={controlsDisabled}
+                                axis={"xaxis"}
+                                properties={properties}
+                                pushData={pushData}
+                            />
+                        )}
                         <LabelSubsection
                             disabled={controlsDisabled}
                             configPanelDisabled={controlsDisabled}
@@ -62,6 +77,15 @@ export default class BubbleChartConfigurationPanel extends ConfigurationPanelCon
                         properties={properties}
                         pushData={pushData}
                     >
+                        {isNameSubsectionVisible && (
+                            <NameSubsection
+                                disabled={yAxisNameSectionDisabled}
+                                configPanelDisabled={controlsDisabled}
+                                axis={"yaxis"}
+                                properties={properties}
+                                pushData={pushData}
+                            />
+                        )}
                         <LabelSubsection
                             disabled={controlsDisabled}
                             configPanelDisabled={controlsDisabled}

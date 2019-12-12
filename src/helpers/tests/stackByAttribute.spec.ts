@@ -1,7 +1,7 @@
 // (C) 2007-2019 GoodData Corporation
 import { Execution, VisualizationObject } from "@gooddata/typings";
 import { getStackByAttribute } from "../stackByAttribute";
-import { IUnwrappedAttributeHeadersWithItems } from "../../components/visualizations/chart/chartOptionsBuilder";
+import { IUnwrappedAttributeHeaderWithItems } from "../../components/visualizations/chart/chartOptionsBuilder";
 import { IChartConfig } from "../../interfaces/Config";
 import { VisualizationTypes } from "../../constants/visualizationTypes";
 
@@ -151,7 +151,7 @@ describe("getStackByAttribute", () => {
             type: VisualizationTypes.TREEMAP,
         };
 
-        const stackByAttribute: IUnwrappedAttributeHeadersWithItems = getStackByAttribute(
+        const stackByAttribute: IUnwrappedAttributeHeaderWithItems = getStackByAttribute(
             config,
             testDimensions,
             testAttributeHeaderItems,
@@ -172,7 +172,7 @@ describe("getStackByAttribute", () => {
             type: VisualizationTypes.AREA,
         };
 
-        const stackByAttribute: IUnwrappedAttributeHeadersWithItems = getStackByAttribute(
+        const stackByAttribute: IUnwrappedAttributeHeaderWithItems = getStackByAttribute(
             config,
             testDimensions,
             testAttributeHeaderItems,

@@ -12,6 +12,9 @@ import { immutableSet } from "../../src/components/visualizations/utils/common";
 
 import "../../styles/scss/charts.scss";
 import { GERMAN_NUMBER_FORMAT } from "../data/numberFormat";
+import { VisualizationTypes } from "../../src";
+import { withAxisNamePositionConfig, withAxisNameVisibilityConfig } from "../hoc/withAxisName";
+import { withChartAlignmentConfigs } from "../hoc/withChartAlignmentConfigs";
 
 export interface IDynamicVisualizationState {
     chartType: string;
@@ -44,10 +47,17 @@ class DynamicVisualization extends React.Component<{}, IDynamicVisualizationStat
             "legend left": { enabled: true, position: "left" },
         };
 
-        this.chartTypes = ["column", "bar", "line", "pie", "area", "heatmap"];
+        this.chartTypes = [
+            VisualizationTypes.COLUMN,
+            VisualizationTypes.BAR,
+            VisualizationTypes.LINE,
+            VisualizationTypes.PIE,
+            VisualizationTypes.AREA,
+            VisualizationTypes.HEATMAP,
+        ];
 
         this.state = {
-            chartType: "column",
+            chartType: VisualizationTypes.COLUMN,
             dataSet: this.fixtures.barChartWith3MetricsAndViewByAttribute,
             legendOption: this.legendOptions["legend top"],
         };
@@ -137,7 +147,7 @@ storiesOf("Internal/Visualization", module)
                 <Visualization
                     {...fixtures.barChartWithoutAttributes}
                     config={{
-                        type: "bar",
+                        type: VisualizationTypes.BAR,
                     }}
                     onDataTooLarge={noop}
                 />,
@@ -150,7 +160,7 @@ storiesOf("Internal/Visualization", module)
                 <Visualization
                     {...fixtures.barChartWith3MetricsAndViewByAttribute}
                     config={{
-                        type: "column",
+                        type: VisualizationTypes.COLUMN,
                         legend: {
                             position: "top",
                         },
@@ -166,7 +176,7 @@ storiesOf("Internal/Visualization", module)
                 <Visualization
                     {...fixtures.barChartWith3MetricsAndViewByAttribute}
                     config={{
-                        type: "bar",
+                        type: VisualizationTypes.BAR,
                     }}
                     onDataTooLarge={noop}
                 />,
@@ -179,7 +189,7 @@ storiesOf("Internal/Visualization", module)
                 <Visualization
                     {...fixtures.barChartWithViewByAttribute}
                     config={{
-                        type: "bar",
+                        type: VisualizationTypes.BAR,
                     }}
                     onDataTooLarge={noop}
                 />,
@@ -192,7 +202,7 @@ storiesOf("Internal/Visualization", module)
                 <Visualization
                     {...fixtures.barChartWithStackByAndViewByAttributes}
                     config={{
-                        type: "bar",
+                        type: VisualizationTypes.BAR,
                     }}
                     onDataTooLarge={noop}
                 />,
@@ -205,7 +215,7 @@ storiesOf("Internal/Visualization", module)
                 <Visualization
                     {...fixtures.barChartWithPopMeasureAndViewByAttribute}
                     config={{
-                        type: "bar",
+                        type: VisualizationTypes.BAR,
                     }}
                     onDataTooLarge={noop}
                 />,
@@ -218,7 +228,7 @@ storiesOf("Internal/Visualization", module)
                 <Visualization
                     {...fixtures.barChartWithPreviousPeriodMeasure}
                     config={{
-                        type: "bar",
+                        type: VisualizationTypes.BAR,
                     }}
                     onDataTooLarge={noop}
                 />,
@@ -231,7 +241,7 @@ storiesOf("Internal/Visualization", module)
                 <Visualization
                     {...fixtures.pieChartWithMetricsOnly}
                     config={{
-                        type: "pie",
+                        type: VisualizationTypes.PIE,
                     }}
                     onDataTooLarge={noop}
                 />,
@@ -244,7 +254,7 @@ storiesOf("Internal/Visualization", module)
                 <Visualization
                     {...fixtures.areaChartWith3MetricsAndViewByAttribute}
                     config={{
-                        type: "area",
+                        type: VisualizationTypes.AREA,
                         legend: {
                             position: "right",
                         },
@@ -260,7 +270,7 @@ storiesOf("Internal/Visualization", module)
                 <Visualization
                     {...fixtures.areaChartWith3MetricsAndViewByAttribute}
                     config={{
-                        type: "area",
+                        type: VisualizationTypes.AREA,
                         stacking: false,
                         legend: {
                             position: "top",
@@ -278,7 +288,7 @@ storiesOf("Internal/Visualization", module)
                 <Visualization
                     {...fixtures.barChartWithSingleMeasureAndNoAttributes}
                     config={{
-                        type: "area",
+                        type: VisualizationTypes.AREA,
                         legend: {
                             position: "top",
                         },
@@ -295,7 +305,7 @@ storiesOf("Internal/Visualization", module)
                 <Visualization
                     {...fixtures.areaChartWithNegativeValues}
                     config={{
-                        type: "area",
+                        type: VisualizationTypes.AREA,
                         legend: {
                             position: "bottom",
                         },
@@ -312,7 +322,7 @@ storiesOf("Internal/Visualization", module)
                 <Visualization
                     {...fixtures.areaChartWith1MetricsAndStackByAttributeAndFilters}
                     config={{
-                        type: "area",
+                        type: VisualizationTypes.AREA,
                         legend: {
                             position: "bottom",
                         },
@@ -331,7 +341,7 @@ storiesOf("Internal/Visualization", module)
                 <Visualization
                     {...fixtures.barChartWith3MetricsAndViewByAttribute}
                     config={{
-                        type: "column",
+                        type: VisualizationTypes.COLUMN,
                         separators: GERMAN_NUMBER_FORMAT,
                         dataLabels: {
                             visible: true,
@@ -350,7 +360,7 @@ storiesOf("Internal/Visualization", module)
                 <Visualization
                     {...fixtures.barChartWith3MetricsAndViewByAttribute}
                     config={{
-                        type: "column",
+                        type: VisualizationTypes.COLUMN,
                         legend: {
                             position: "top",
                         },
@@ -369,7 +379,7 @@ storiesOf("Internal/Visualization", module)
                 <Visualization
                     {...fixtures.barChartWith3MetricsAndViewByAttribute}
                     config={{
-                        type: "column",
+                        type: VisualizationTypes.COLUMN,
                         legend: {
                             position: "top",
                         },
@@ -389,7 +399,7 @@ storiesOf("Internal/Visualization", module)
                 <Visualization
                     {...fixtures.comboWithTwoMeasuresAndViewByAttribute}
                     config={{
-                        type: "combo",
+                        type: VisualizationTypes.COMBO,
                         mdObject: fixtures.comboWithTwoMeasuresAndViewByAttributeMdObject,
                         secondary_yaxis: {
                             measures: ["wonMetric"],
@@ -406,7 +416,7 @@ storiesOf("Internal/Visualization", module)
                 <Visualization
                     {...fixtures.comboWithThreeMeasuresAndViewByAttribute}
                     config={{
-                        type: "combo2",
+                        type: VisualizationTypes.COMBO2,
                         mdObject: fixtures.comboWithThreeMeasuresAndViewByAttributeMdObject,
                         secondary_yaxis: {
                             measures: ["expectedMetric"],
@@ -419,4 +429,142 @@ storiesOf("Internal/Visualization", module)
                 1200,
             ),
         );
-    });
+    })
+    .add("visualization combo chart with secondary_yaxis point to primary measure", () => {
+        return screenshotWrap(
+            wrap(
+                <Visualization
+                    {...fixtures.comboWithThreeMeasuresAndViewByAttribute}
+                    config={{
+                        type: VisualizationTypes.COMBO2,
+                        mdObject: fixtures.comboWithThreeMeasuresAndViewByAttributeMdObject,
+                        secondary_yaxis: {
+                            measures: ["lostMetric"],
+                        },
+                    }}
+                    onDataTooLarge={noop}
+                />,
+                600,
+                800,
+            ),
+        );
+    })
+    .add(
+        "visualization combo chart with dualAxis is false and secondary_yaxis point to primary measure",
+        () => {
+            return screenshotWrap(
+                wrap(
+                    <Visualization
+                        {...fixtures.comboWithThreeMeasuresAndViewByAttribute}
+                        config={{
+                            type: VisualizationTypes.COMBO2,
+                            mdObject: fixtures.comboWithThreeMeasuresAndViewByAttributeMdObject,
+                            dualAxis: false,
+                            secondary_yaxis: {
+                                measures: ["wonMetric"],
+                            },
+                        }}
+                        onDataTooLarge={noop}
+                    />,
+                    600,
+                    800,
+                ),
+            );
+        },
+    )
+    .add("visualization combo chart with dualAxis is true and secondary_yaxis point to measure", () => {
+        return screenshotWrap(
+            wrap(
+                <Visualization
+                    {...fixtures.comboWithThreeMeasuresAndViewByAttribute}
+                    config={{
+                        type: VisualizationTypes.COMBO2,
+                        mdObject: fixtures.comboWithThreeMeasuresAndViewByAttributeMdObject,
+                        secondary_yaxis: {
+                            measures: ["wonMetric"],
+                        },
+                        dualAxis: true,
+                    }}
+                    onDataTooLarge={noop}
+                />,
+                600,
+                800,
+            ),
+        );
+    })
+    .add("visualization combo chart with dualAxis is true and do not set param secondary_yaxis", () => {
+        return screenshotWrap(
+            wrap(
+                <Visualization
+                    {...fixtures.comboWithThreeMeasuresAndViewByAttribute}
+                    config={{
+                        type: VisualizationTypes.COMBO2,
+                        mdObject: fixtures.comboWithThreeMeasuresAndViewByAttributeMdObject,
+                        dualAxis: true,
+                    }}
+                    onDataTooLarge={noop}
+                />,
+                600,
+                800,
+            ),
+        );
+    })
+
+    .add("with axis name position", () =>
+        screenshotWrap(
+            wrap(
+                withAxisNamePositionConfig(
+                    <Visualization
+                        {...fixtures.comboWithTwoMeasuresAndViewByAttribute}
+                        config={{
+                            type: VisualizationTypes.COMBO,
+                            mdObject: fixtures.comboWithTwoMeasuresAndViewByAttributeMdObject,
+                            secondary_yaxis: {
+                                measures: ["wonMetric"],
+                            },
+                        }}
+                        onDataTooLarge={noop}
+                    />,
+                ),
+                "100%",
+                "820px",
+            ),
+        ),
+    )
+    .add("with axis name visibility", () =>
+        screenshotWrap(
+            wrap(
+                withAxisNameVisibilityConfig(
+                    <Visualization
+                        {...fixtures.comboWithTwoMeasuresAndViewByAttribute}
+                        config={{
+                            type: VisualizationTypes.COMBO,
+                            mdObject: fixtures.comboWithTwoMeasuresAndViewByAttributeMdObject,
+                            secondary_yaxis: {
+                                measures: ["wonMetric"],
+                            },
+                        }}
+                        onDataTooLarge={noop}
+                    />,
+                ),
+                "100%",
+                "820px",
+            ),
+        ),
+    )
+    .add("with different chart alignments", () =>
+        screenshotWrap(
+            wrap(
+                withChartAlignmentConfigs(
+                    <Visualization
+                        {...fixtures.pieChartWithMetricsOnly}
+                        config={{
+                            type: VisualizationTypes.DONUT,
+                        }}
+                    />,
+                ),
+                "100%",
+                905,
+            ),
+        ),
+    );

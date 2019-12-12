@@ -25,6 +25,13 @@ import {
 
 const dateFormat = "YYYY-MM-DD";
 
+const totalSalesMeasure = Model.measure(totalSalesIdentifier)
+    .localIdentifier("totalSales")
+    .alias("Total Sales");
+const averageDailySalesMeasure = Model.measure(averageDailyTotalSales)
+    .localIdentifier("averageDailyTotalSales")
+    .alias("Average Sales");
+
 const EmployeeProfile = ({ gender, dob, cell, id, registered, location }) => {
     const menOrWomen = gender === "male" ? "men" : "women";
     return (
@@ -188,11 +195,6 @@ export class DrillWithExternalDataExample extends React.Component {
         return filters;
     };
 
-    getMeasure = (identifier, localIdentifier, alias) =>
-        Model.measure(identifier)
-            .localIdentifier(localIdentifier)
-            .alias(alias);
-
     getAttribute = (identifier, localIdentifier) => ({
         visualizationAttribute: {
             localIdentifier,
@@ -216,11 +218,6 @@ export class DrillWithExternalDataExample extends React.Component {
     render() {
         const { state, location } = this.state;
 
-        const averageDailySalesMeasure = this.getMeasure(
-            averageDailyTotalSales,
-            "averageDailyTotalSales",
-            "Average Sales",
-        );
         const stateAttribute = this.getAttribute(locationStateDisplayFormIdentifier, "locationState");
         const stateTable = (
             <div style={{ height: 200 }} className="s-state-table">
@@ -252,7 +249,6 @@ export class DrillWithExternalDataExample extends React.Component {
             </div>
         );
 
-        const totalSalesMeasure = this.getMeasure(totalSalesIdentifier, "totalSales", "Total Sales");
         const salesTableFilters = this.getFilters(state, location);
         const totalSalesChart = (
             <div style={{ height: 300 }} className="s-sales-chart">

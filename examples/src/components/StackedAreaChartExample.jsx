@@ -13,6 +13,15 @@ import {
     franchiseFeesIdentifierOngoingRoyalty,
 } from "../utils/fixtures";
 
+const measures = [
+    Model.measure(franchiseFeesIdentifier).format("#,##0"),
+    Model.measure(franchiseFeesAdRoyaltyIdentifier).format("#,##0"),
+    Model.measure(franchiseFeesInitialFranchiseFeeIdentifier).format("#,##0"),
+    Model.measure(franchiseFeesIdentifierOngoingRoyalty).format("#,##0"),
+];
+
+const viewBy = Model.attribute(monthDateIdentifier);
+
 export class StackedAreaChartExample extends Component {
     onLoadingChanged(...params) {
         // eslint-disable-next-line no-console
@@ -25,15 +34,6 @@ export class StackedAreaChartExample extends Component {
     }
 
     render() {
-        const measures = [
-            Model.measure(franchiseFeesIdentifier).format("#,##0"),
-            Model.measure(franchiseFeesAdRoyaltyIdentifier).format("#,##0"),
-            Model.measure(franchiseFeesInitialFranchiseFeeIdentifier).format("#,##0"),
-            Model.measure(franchiseFeesIdentifierOngoingRoyalty).format("#,##0"),
-        ];
-
-        const viewBy = Model.attribute(monthDateIdentifier);
-
         return (
             <div style={{ height: 300 }} className="s-area-chart">
                 <AreaChart

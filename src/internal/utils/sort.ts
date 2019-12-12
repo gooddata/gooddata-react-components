@@ -18,12 +18,8 @@ import {
 
 import { getFirstAttribute, getFirstValidMeasure } from "./bucketHelper";
 
-import { MEASUREGROUP } from "../constants/bucket";
 import { VisualizationTypes } from "../../constants/visualizationTypes";
 import * as SortsHelper from "../../helpers/sorts";
-
-const STACK_BY_DIMENSION = 0;
-const VIEW_BY_DIMENSION = 1;
 
 export function getMeasureSortItems(identifier: string, direction: AFM.SortDirection): AFM.SortItem[] {
     return [
@@ -42,77 +38,19 @@ export function getMeasureSortItems(identifier: string, direction: AFM.SortDirec
     ];
 }
 
-export function getAttributeSortItem(
-    identifier: string,
-    direction: AFM.SortDirection = SORT_DIR_ASC,
-    aggregation: boolean = false,
-): AFM.SortItem {
-    const attributeSortItemWithoutAggregation = {
-        attributeIdentifier: identifier,
-        direction,
-    };
-
-    const attributeSortItem: AFM.IAttributeSortItem = {
-        attributeSortItem: aggregation
-            ? {
-                  ...attributeSortItemWithoutAggregation,
-                  aggregation: "sum",
-              }
-            : attributeSortItemWithoutAggregation,
-    };
-
-    return attributeSortItem;
-}
-
-export function getFirstAttributeIdentifier(
-    resultSpec: AFM.IResultSpec,
-    dimensionIndex: number,
-): string | null {
-    const dimensionItems: AFM.Identifier[] = get(
-        resultSpec,
-        ["dimensions", dimensionIndex, "itemIdentifiers"],
-        [],
-    );
-    return dimensionItems.find(a => a !== MEASUREGROUP) || null;
-}
-
-function getFirstMeasureSort(afm: AFM.IAfm): AFM.SortItem[] {
-    const measure: AFM.IMeasure = get(afm, "measures.0");
-    if (measure) {
-        return getMeasureSortItems(measure.localIdentifier, SORT_DIR_DESC);
-    }
-
-    return [];
-}
-
 function getDefaultTableSort(afm: AFM.IAfm): AFM.SortItem[] {
     const attribute: AFM.IAttribute = get(afm, "attributes.0");
     if (!attribute) {
-        return getFirstMeasureSort(afm);
+        return SortsHelper.getFirstMeasureSort(afm);
     }
 
-    return [getAttributeSortItem(attribute.localIdentifier, SORT_DIR_ASC)];
+    return [SortsHelper.getAttributeSortItem(attribute.localIdentifier, SORT_DIR_ASC)];
 }
 
 export function getDefaultPivotTableSort(afm: AFM.IAfm): AFM.SortItem[] {
     const attribute: AFM.IAttribute = get(afm, "attributes.0");
     if (!attribute) {
         return [];
-    }
-
-    return [];
-}
-
-function getDefaultBarChartSort(afm: AFM.IAfm, resultSpec: AFM.IResultSpec): AFM.SortItem[] {
-    const viewByAttributeIdentifier = getFirstAttributeIdentifier(resultSpec, VIEW_BY_DIMENSION);
-    const stackByAttributeIdentifier = getFirstAttributeIdentifier(resultSpec, STACK_BY_DIMENSION);
-
-    if (viewByAttributeIdentifier && stackByAttributeIdentifier) {
-        return [getAttributeSortItem(viewByAttributeIdentifier, SORT_DIR_DESC, true)];
-    }
-
-    if (!stackByAttributeIdentifier) {
-        return getFirstMeasureSort(afm);
     }
 
     return [];
@@ -132,6 +70,8 @@ export function createSorts(
     afm: AFM.IAfm,
     resultSpec: AFM.IResultSpec,
     visualizationProperties: IVisualizationProperties,
+    canSortStackTotalValue: boolean = false,
+    enableSortingByTotalGroup: boolean = false,
 ): AFM.SortItem[] {
     const sortItems = get(visualizationProperties, "sortItems", []) as AFM.SortItem[];
     const sanitizedSortItems: AFM.SortItem[] = sanitizeSorts(afm, sortItems);
@@ -149,7 +89,12 @@ export function createSorts(
         case VisualizationTypes.LINE:
             return [];
         case VisualizationTypes.BAR:
-            return getDefaultBarChartSort(afm, resultSpec);
+            return SortsHelper.getDefaultBarChartSort(
+                afm,
+                resultSpec,
+                canSortStackTotalValue,
+                enableSortingByTotalGroup,
+            );
         case VisualizationTypes.TREEMAP:
             return SortsHelper.getDefaultTreemapSort(afm, resultSpec);
     }
@@ -248,7 +193,7 @@ export function setSortItems(referencePoint: IExtendedReferencePoint) {
         set(
             referencePoint,
             ["properties", "sortItems"],
-            [getAttributeSortItem(firstAttribute.localIdentifier, SORT_DIR_ASC)],
+            [SortsHelper.getAttributeSortItem(firstAttribute.localIdentifier, SORT_DIR_ASC)],
         );
     }
 

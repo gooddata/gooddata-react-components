@@ -1,7 +1,7 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import { Localization } from "@gooddata/typings";
 import IntlStore from "../helpers/IntlStore";
-import { OverTimeComparisonType, OverTimeComparisonTypes } from "..";
+import { OverTimeComparisonType, OverTimeComparisonTypes } from "../interfaces/OverTimeComparison";
 
 /**
  * Factory that builds formatted localized suffix string for derived measure based on the over time comparison type.

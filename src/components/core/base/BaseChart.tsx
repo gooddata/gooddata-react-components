@@ -78,6 +78,7 @@ export class StatelessBaseChart extends BaseVisualization<IBaseChartProps & ILoa
                                 onNegativeValues={this.props.onNegativeValues}
                                 drillableItems={this.props.drillableItems}
                                 onFiredDrillEvent={this.props.onFiredDrillEvent}
+                                onDrill={this.props.onDrill}
                                 onLegendReady={this.props.onLegendReady}
                                 numericSymbols={translationProps.numericSymbols}
                                 locale={locale}

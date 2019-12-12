@@ -1,7 +1,7 @@
 // (C) 2007-2019 GoodData Corporation
 import get = require("lodash/get");
 import { Execution } from "@gooddata/typings";
-import { IUnwrappedAttributeHeadersWithItems } from "../chartOptionsBuilder";
+import { IUnwrappedAttributeHeaderWithItems } from "../chartOptionsBuilder";
 
 /**
  * Transform
@@ -21,8 +21,8 @@ import { IUnwrappedAttributeHeadersWithItems } from "../chartOptionsBuilder";
  * @param viewByTwoAttributes
  */
 export function getCategoriesForTwoAttributes(
-    viewByAttribute: IUnwrappedAttributeHeadersWithItems,
-    viewByParentAttribute: IUnwrappedAttributeHeadersWithItems,
+    viewByAttribute: IUnwrappedAttributeHeaderWithItems,
+    viewByParentAttribute: IUnwrappedAttributeHeaderWithItems,
 ): Array<{
     name: string;
     categories: string[];

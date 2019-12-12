@@ -1,6 +1,6 @@
 // (C) 2007-2019 GoodData Corporation
 /* eslint-disable react/jsx-closing-tag-location */
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { ColumnChart, ErrorComponent, Model } from "@gooddata/react-components";
 import DatePicker from "react-datepicker";
 import moment from "moment";
@@ -17,15 +17,28 @@ import {
 
 const dateFormat = "YYYY-MM-DD";
 
-export class MonthPickerExample extends Component {
+const totalSales = Model.measure(totalSalesIdentifier)
+    .format("#,##0")
+    .alias("$ Total Sales");
+
+const locationResort = Model.attribute(monthOfYearDateIdentifier);
+
+// sync with backend timezone
+function withGTM0(time) {
+    return time.utcOffset("+00:00", true);
+}
+
+export class MonthPickerExample extends PureComponent {
     constructor(props) {
         super(props);
 
         this.state = {
-            from: moment("2016-01-01", dateFormat),
-            to: moment("2017-01-01", dateFormat),
+            from: withGTM0(moment("2016-01-01", dateFormat)),
+            to: withGTM0(moment("2017-01-01", dateFormat)),
             error: null,
         };
+
+        this.currentDate = withGTM0(moment().startOf("months"));
 
         this.onFromChange = this.onFromChange.bind(this);
         this.onToChange = this.onToChange.bind(this);
@@ -70,15 +83,6 @@ export class MonthPickerExample extends Component {
 
     render() {
         const { from, to, error } = this.state;
-
-        const currentDate = moment().startOf("months");
-
-        const totalSales = Model.measure(totalSalesIdentifier)
-            .format("#,##0")
-            .alias("$ Total Sales");
-
-        const locationResort = Model.attribute(monthOfYearDateIdentifier);
-
         const filters = [
             {
                 relativeDateFilter: {
@@ -86,8 +90,8 @@ export class MonthPickerExample extends Component {
                         identifier: dateDatasetIdentifier,
                     },
                     granularity: "GDC.time.month",
-                    from: Math.floor(from.diff(currentDate, "months", true)),
-                    to: Math.floor(to.diff(currentDate, "months", true)),
+                    from: Math.floor(from.diff(this.currentDate, "months", true)),
+                    to: Math.floor(to.diff(this.currentDate, "months", true)),
                 },
             },
         ];

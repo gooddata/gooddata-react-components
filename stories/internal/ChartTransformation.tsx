@@ -20,6 +20,10 @@ import CustomLegend from "../utils/CustomLegend";
 import "../../styles/scss/charts.scss";
 import { GERMAN_SEPARATORS } from "../data/numberFormat";
 import identity = require("lodash/identity");
+import { withAxisNamePositionConfig, withAxisNameVisibilityConfig } from "../hoc/withAxisName";
+import { withChartAlignmentConfigs } from "../hoc/withChartAlignmentConfigs";
+import { VisualizationTypes } from "../../src/constants/visualizationTypes";
+import { createHighChartResolver, ScreenshotReadyWrapper } from "../utils/ScreenshotReadyWrapper";
 
 function getChart({
     type = "column",
@@ -906,6 +910,7 @@ storiesOf("Internal/HighCharts/ChartTransformation", module)
                 <ChartTransformation
                     config={{
                         type: "combo",
+                        dualAxis: false,
                         mdObject: fixtures.comboWithTwoMeasuresAndViewByAttributeMdObject,
                     }}
                     {...dataSet}
@@ -1026,6 +1031,16 @@ storiesOf("Internal/HighCharts/ChartTransformation", module)
                 legendPosition: "right",
                 dataSet: fixtures.barChartWith60MetricsAndViewByAttribute,
             }),
+        ),
+    )
+    .add("Over height bottom legend", () =>
+        screenshotWrap(
+            <ScreenshotReadyWrapper resolver={createHighChartResolver(1)}>
+                {getChart({
+                    legendPosition: "bottom",
+                    dataSet: fixtures.barChartWith150MetricsAndViewByAttribute,
+                })}
+            </ScreenshotReadyWrapper>,
         ),
     )
     .add("Legend with mobile paging", () => (
@@ -1308,6 +1323,63 @@ storiesOf("Internal/HighCharts/ChartTransformation", module)
                     }}
                     {...fixtures.barChartWith4MetricsAndViewBy2Attribute}
                 />,
+            ),
+        );
+    })
+    .add("with axis name position", () => {
+        const dataSet: any = fixtures.comboWithTwoMeasuresAndViewByAttribute;
+        return screenshotWrap(
+            wrap(
+                withAxisNamePositionConfig(
+                    <ChartTransformation
+                        config={{
+                            type: "column",
+                            secondary_yaxis: {
+                                measures: ["wonMetric"],
+                            },
+                        }}
+                        {...dataSet}
+                    />,
+                ),
+                "100%",
+                "820px",
+            ),
+        );
+    })
+    .add("with axis name visibility", () => {
+        const dataSet: any = fixtures.comboWithTwoMeasuresAndViewByAttribute;
+        return screenshotWrap(
+            wrap(
+                withAxisNameVisibilityConfig(
+                    <ChartTransformation
+                        config={{
+                            type: "column",
+                            secondary_yaxis: {
+                                measures: ["wonMetric"],
+                            },
+                        }}
+                        {...dataSet}
+                    />,
+                ),
+                "100%",
+                "820px",
+            ),
+        );
+    })
+    .add("with different chart alignments", () => {
+        const dataSet: any = fixtures.pieChartWithMetricsOnly;
+        return screenshotWrap(
+            wrap(
+                withChartAlignmentConfigs(
+                    <ChartTransformation
+                        config={{
+                            type: VisualizationTypes.DONUT,
+                        }}
+                        {...dataSet}
+                    />,
+                ),
+                "100%",
+                905,
             ),
         );
     });

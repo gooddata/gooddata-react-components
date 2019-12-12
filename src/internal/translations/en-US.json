@@ -1,9 +1,4 @@
 {
-    "dashboard.bucket.measures_title.table": {
-        "value": "Measures",
-        "comment": "",
-        "limit": 0
-    },
     "dashboard.bucket.measures_title.column": {
         "value": "Measures",
         "comment": "",
@@ -114,6 +109,16 @@
         "comment": "",
         "limit": 0
     },
+    "dashboard.bucket.measures_title.xirr": {
+        "value": "Measure",
+        "comment": "",
+        "limit": 0
+    },
+    "dashboard.bucket.attribute_title.xirr": {
+        "value": "Date attribute",
+        "comment": "",
+        "limit": 0
+    },
     "dashboard.bucket.combo.subtitle.column": {
         "value": "as columns",
         "comment": "Display measures in column chart = 'as columns'.",
@@ -161,11 +166,6 @@
     },
     "dashboard.bucket.view_title.bubble": {
         "value": "View by",
-        "comment": "",
-        "limit": 0
-    },
-    "dashboard.bucket.attribute_title.table": {
-        "value": "Attributes",
         "comment": "",
         "limit": 0
     },
@@ -304,17 +304,17 @@
         "comment": "",
         "limit": 0
     },
-    "dashboard.bucket.measures_title.pivotTable": {
+    "dashboard.bucket.measures_title.table": {
         "value": "Measures",
         "comment": "",
         "limit": 0
     },
-    "dashboard.bucket.attribute_title.pivotTable": {
+    "dashboard.bucket.attribute_title.table": {
         "value": "Rows",
         "comment": "",
         "limit": 0
     },
-    "dashboard.bucket.columns_title.pivotTable": {
+    "dashboard.bucket.columns_title.table": {
         "value": "Columns",
         "comment": "",
         "limit": 0
@@ -327,6 +327,16 @@
     "dashboard.headline.error.missing_bucket_item.text": {
         "value": "Add a primary measure to your insight, or switch to table.\nOnce done, you'll be able to save it.",
         "comment": "",
+        "limit": 0
+    },
+    "dashboard.xirr.error.invalid_buckets.heading": {
+        "value": "Incomplete configuration",
+        "comment": "Informs the user that they have not provided all the necessary configuration items (one measure and one date attribute)",
+        "limit": 0
+    },
+    "dashboard.xirr.error.invalid_buckets.text": {
+        "value": "Make sure you have selected one measure and one date attribute",
+        "comment": "The user should be instructed to review that they have added one measure and one date attribute to the insight",
         "limit": 0
     },
     "properties.unsupported": {
@@ -406,6 +416,46 @@
     },
     "properties.axis.rotation": {
         "value": "Rotation",
+        "comment": "",
+        "limit": 0
+    },
+    "properties.axis.name": {
+        "value": "name",
+        "comment": "Name of the axis of a chart",
+        "limit": 0
+    },
+    "properties.axis.name.position": {
+        "value": "Position",
+        "comment": "Position of the axis of a chart",
+        "limit": 0
+    },
+    "properties.axis.name.position.left": {
+        "value": "left",
+        "comment": "",
+        "limit": 0
+    },
+    "properties.axis.name.position.center": {
+        "value": "center",
+        "comment": "Horizontal center (between left and right)",
+        "limit": 0
+    },
+    "properties.axis.name.position.right": {
+        "value": "right",
+        "comment": "",
+        "limit": 0
+    },
+    "properties.axis.name.position.top": {
+        "value": "top",
+        "comment": "",
+        "limit": 0
+    },
+    "properties.axis.name.position.middle": {
+        "value": "middle",
+        "comment": "Vertical center (between top and bottom)",
+        "limit": 0
+    },
+    "properties.axis.name.position.bottom": {
+        "value": "bottom",
         "comment": "",
         "limit": 0
     },

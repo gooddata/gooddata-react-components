@@ -1,8 +1,8 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import noop = require("lodash/noop");
 import { mount } from "enzyme";
-import HeadlineTransformation, { IHeadlineTransformationProps } from "../HeadlineTransformation";
+import HeadlineTransformation from "../HeadlineTransformation";
 import {
     SINGLE_URI_METRIC_EXECUTION_REQUEST,
     SINGLE_METRIC_EXECUTION_RESPONSE,
@@ -24,6 +24,7 @@ import {
     TWO_MEASURES_WITH_IDENTIFIER_EXECUTION_REQUEST,
     TWO_MEASURES_WITH_URI_EXECUTION_REQUEST,
 } from "./fixtures/two_measures";
+import { IHeadlineTransformationProps } from "../types";
 
 describe("HeadlineTransformation", () => {
     function createComponent(props: IHeadlineTransformationProps) {
@@ -40,6 +41,20 @@ describe("HeadlineTransformation", () => {
 
         const props = wrapper.find(Headline).props();
         expect(props.onAfterRender).toEqual(noop);
+    });
+
+    it("should pass disableDrillUnderline prop from config.disableDrillUnderline", () => {
+        const wrapper = createComponent({
+            executionRequest: SINGLE_URI_METRIC_EXECUTION_REQUEST,
+            executionResponse: SINGLE_METRIC_EXECUTION_RESPONSE,
+            executionResult: SINGLE_METRIC_EXECUTION_RESULT,
+            config: {
+                disableDrillUnderline: true,
+            },
+        });
+
+        const headlineComponent = wrapper.find(Headline);
+        expect(headlineComponent.prop("disableDrillUnderline")).toBeTruthy();
     });
 
     it("should pass all required props to Headline component and enable drilling identified by uri", () => {

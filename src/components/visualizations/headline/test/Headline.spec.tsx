@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import { mount } from "enzyme";
 import Headline, { IHeadlineVisualizationProps } from "../Headline";
@@ -81,6 +81,43 @@ describe("Headline", () => {
                 },
                 "elementTarget",
             );
+        });
+
+        it("should render headline item link with underline style when is drillable", () => {
+            const onFiredDrillEvent = jest.fn();
+            const wrapper = createComponent({
+                onFiredDrillEvent,
+                data: {
+                    primaryItem: {
+                        localIdentifier: "m1",
+                        title: "Some metric",
+                        value: "42",
+                        isDrillable: true,
+                    },
+                },
+            });
+
+            const linkComponent = wrapper.find(".s-headline-item-link");
+            expect(linkComponent.find(".headline-link-style-underline").exists()).toBeTruthy();
+        });
+
+        it("should not render headline item link with underline style when is drillable and disableDrillUnderline is true", () => {
+            const onFiredDrillEvent = jest.fn();
+            const wrapper = createComponent({
+                onFiredDrillEvent,
+                data: {
+                    primaryItem: {
+                        localIdentifier: "m1",
+                        title: "Some metric",
+                        value: "42",
+                        isDrillable: true,
+                    },
+                },
+                disableDrillUnderline: true,
+            });
+
+            const linkComponent = wrapper.find(".s-headline-item-link");
+            expect(linkComponent.find(".headline-link-style-underline").exists()).toBeFalsy();
         });
 
         it("should have primary value written out as link even when the drillable value is invalid", () => {
@@ -329,6 +366,69 @@ describe("Headline", () => {
                 },
                 "elementTarget",
             );
+        });
+
+        it("should render headline item link with underline style when is drillable", () => {
+            const onFiredDrillEvent = jest.fn();
+            const wrapper = createComponent({
+                onFiredDrillEvent,
+                data: {
+                    primaryItem: {
+                        localIdentifier: "m1",
+                        title: "Lost",
+                        value: "1234",
+                        format: "$#,##0.00",
+                    },
+                    secondaryItem: {
+                        localIdentifier: "m2",
+                        title: "Found",
+                        value: "4321",
+                        format: "$#,##0.00",
+                        isDrillable: true,
+                    },
+                    tertiaryItem: {
+                        localIdentifier: "tertiaryIdentifier",
+                        value: "11",
+                        format: null,
+                        title: "Versus",
+                    },
+                },
+            });
+
+            const linkComponent = wrapper.find(".s-headline-item-link");
+            expect(linkComponent.find(".headline-link-style-underline").exists()).toBeTruthy();
+        });
+
+        it("should not render headline item link with underline style when is drillable and disableDrillUnderline is true", () => {
+            const onFiredDrillEvent = jest.fn();
+            const wrapper = createComponent({
+                onFiredDrillEvent,
+                data: {
+                    primaryItem: {
+                        localIdentifier: "m1",
+                        title: "Lost",
+                        value: "1234",
+                        format: "$#,##0.00",
+                    },
+                    secondaryItem: {
+                        localIdentifier: "m2",
+                        title: "Found",
+                        value: "4321",
+                        format: "$#,##0.00",
+                        isDrillable: true,
+                    },
+                    tertiaryItem: {
+                        localIdentifier: "tertiaryIdentifier",
+                        value: "11",
+                        format: null,
+                        title: "Versus",
+                    },
+                },
+                disableDrillUnderline: true,
+            });
+
+            const linkComponent = wrapper.find(".s-headline-item-link");
+            expect(linkComponent.find(".headline-link-style-underline").exists()).toBeFalsy();
         });
 
         it("should have secondary value written out as link even when the drillable value is invalid", () => {

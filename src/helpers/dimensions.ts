@@ -255,6 +255,28 @@ export function getHeadlinesDimensions(): AFM.IDimension[] {
     return [{ itemIdentifiers: ["measureGroup"] }];
 }
 
+export function getXirrDimensions(
+    mdObject: VisualizationObject.IVisualizationObjectContent,
+): AFM.IDimension[] {
+    const attribute: VisualizationObject.IBucket = mdObject.buckets.find(
+        bucket => bucket.localIdentifier === ATTRIBUTE,
+    );
+
+    if (attribute && attribute.items.length) {
+        return [
+            {
+                itemIdentifiers: [MEASUREGROUP, ...attribute.items.map(getLocalIdentifierFromAttribute)],
+            },
+        ];
+    }
+
+    return [
+        {
+            itemIdentifiers: [MEASUREGROUP],
+        },
+    ];
+}
+
 function getScatterDimensions(mdObject: VisualizationObject.IVisualizationObjectContent): AFM.IDimension[] {
     const attribute: VisualizationObject.IBucket = mdObject.buckets.find(
         bucket => bucket.localIdentifier === ATTRIBUTE,
@@ -364,11 +386,8 @@ export function generateDimensions(
     type: VisType,
 ): AFM.IDimension[] {
     switch (type) {
-        case VisualizationTypes.PIVOT_TABLE: {
-            return getPivotTableDimensions(mdObject.buckets);
-        }
         case VisualizationTypes.TABLE: {
-            return getTableDimensions(mdObject.buckets);
+            return getPivotTableDimensions(mdObject.buckets);
         }
         case VisualizationTypes.PIE:
         case VisualizationTypes.DONUT:
@@ -404,6 +423,9 @@ export function generateDimensions(
         }
         case VisualizationTypes.BUBBLE: {
             return getBubbleDimensions(mdObject);
+        }
+        case VisualizationTypes.XIRR: {
+            return getXirrDimensions(mdObject);
         }
     }
     return [];

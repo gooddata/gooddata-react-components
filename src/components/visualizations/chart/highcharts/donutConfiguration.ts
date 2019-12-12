@@ -2,6 +2,7 @@
 import merge = require("lodash/merge");
 import get = require("lodash/get");
 import { getPieConfiguration } from "./pieConfiguration";
+import { alignChart } from "./helpers";
 
 export function getDonutConfiguration() {
     return merge({}, getPieConfiguration(), {
@@ -13,6 +14,8 @@ export function getDonutConfiguration() {
                             distance: -(get(this, "series.0.points.0.shapeArgs.r", 40) * 0.25),
                         },
                     });
+
+                    alignChart(this);
                 },
             },
         },

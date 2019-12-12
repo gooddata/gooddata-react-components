@@ -12,6 +12,27 @@ import {
     totalSalesIdentifier,
 } from "../utils/fixtures";
 
+const localIdentifiers = {
+    numberOfRestaurants: "numberOfRestaurants",
+    totalSales: "totalSales",
+    averageRestaurantSales: "averageRestaurantSales",
+};
+
+const measures = [
+    Model.measure(totalSalesIdentifier)
+        .localIdentifier(localIdentifiers.totalSales)
+        .format("#,##0"),
+    Model.measure(numberOfRestaurantsIdentifier)
+        .localIdentifier(localIdentifiers.numberOfRestaurants)
+        .format("#,##0"),
+    Model.arithmeticMeasure([localIdentifiers.totalSales, localIdentifiers.numberOfRestaurants], "ratio")
+        .localIdentifier(localIdentifiers.averageRestaurantSales)
+        .format("#,##0")
+        .title("$ Avg Restaurant Sales"),
+];
+
+const attributes = [Model.attribute(locationStateDisplayFormIdentifier).localIdentifier("month")];
+
 export class ArithmeticMeasureDrillingExample extends Component {
     constructor(props) {
         super(props);
@@ -45,30 +66,6 @@ export class ArithmeticMeasureDrillingExample extends Component {
 
     render() {
         const { drillEvent } = this.state;
-
-        const localIdentifiers = {
-            numberOfRestaurants: "numberOfRestaurants",
-            totalSales: "totalSales",
-            averageRestaurantSales: "averageRestaurantSales",
-        };
-
-        const measures = [
-            Model.measure(numberOfRestaurantsIdentifier)
-                .localIdentifier(localIdentifiers.numberOfRestaurants)
-                .format("#,##0"),
-            Model.measure(totalSalesIdentifier)
-                .localIdentifier(localIdentifiers.totalSales)
-                .format("#,##0"),
-            Model.arithmeticMeasure(
-                [localIdentifiers.totalSales, localIdentifiers.numberOfRestaurants],
-                "ratio",
-            )
-                .localIdentifier(localIdentifiers.averageRestaurantSales)
-                .format("#,##0")
-                .title("$ Avg Restaurant Sales"),
-        ];
-
-        const attributes = [Model.attribute(locationStateDisplayFormIdentifier).localIdentifier("month")];
 
         const drillNotificationComponent = () => {
             const averageSales = drillEvent.drillContext.row[drillEvent.drillContext.columnIndex];
