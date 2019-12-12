@@ -1,48 +1,46 @@
 // (C) 2019 GoodData Corporation
 import cloneDeep = require("lodash/cloneDeep");
 import set = require("lodash/set");
-
 import { ATTRIBUTE, DATE_DATASET_ATTRIBUTE, METRIC } from "../../constants/bucket";
 import {
     applyUiConfig,
-    getBucketItemsWithExcludeByType,
-    getFirstMasterWithDerived,
+    filterOutArithmeticMeasuresFromDerived,
     filterOutDerivedMeasures,
+    filterOutIncompatibleArithmeticMeasures,
+    findDerivedBucketItem,
     findDerivedBucketItems,
     findMasterBucketItem,
     findMasterBucketItems,
     generateBucketTitleId,
     getAllAttributeItemsWithPreference,
+    getAllMeasuresShowOnSecondaryAxis,
+    getAttributeItems,
+    getBucketItemsWithExcludeByType,
     getComparisonTypeFromFilters,
     getDateFilter,
+    getDerivedTypesFromArithmeticMeasure,
     getFilteredMeasuresForStackedCharts,
-    keepOnlyMasterAndDerivedMeasuresOfType,
-    removeAllDerivedMeasures,
-    sanitizeUnusedFilters,
-    removeUnusedFilters,
-    setBucketTitles,
-    getAttributeItems,
-    noRowsAndHasOneMeasure,
-    noColumnsAndHasOneMeasure,
-    findDerivedBucketItem,
-    hasDerivedBucketItems,
-    removeDuplicateBucketItems,
+    getFirstMasterWithDerived,
     getFirstValidMeasure,
     getItemsFromBuckets,
+    hasDerivedBucketItems,
+    isDateBucketItem,
+    keepOnlyMasterAndDerivedMeasuresOfType,
     limitNumberOfMeasuresInBuckets,
-    getDerivedTypesFromArithmeticMeasure,
-    filterOutIncompatibleArithmeticMeasures,
+    noColumnsAndHasOneMeasure,
+    noRowsAndHasOneMeasure,
     removeAllArithmeticMeasuresFromDerived,
-    filterOutArithmeticMeasuresFromDerived,
-    getAllMeasuresShowOnSecondaryAxis,
+    removeAllDerivedMeasures,
+    removeDuplicateBucketItems,
+    sanitizeFilters,
+    setBucketTitles,
 } from "../bucketHelper";
 import {
+    IBucket,
     IBucketItem,
-    IFiltersBucketItem,
-    IUiConfig,
     IExtendedReferencePoint,
     IFilters,
-    IBucket,
+    IUiConfig,
 } from "../../interfaces/Visualization";
 import { DEFAULT_BASE_CHART_UICONFIG } from "../../constants/uiConfig";
 import * as referencePointMocks from "../../mocks/referencePointMocks";
@@ -118,80 +116,71 @@ const incompleteArithmeticMeasure = {
     operator: "sum",
 };
 
-describe("sanitizeUnusedFilters", () => {
-    it("should remove filters having unused attribute in bucket within extended reference point", () => {
-        const referencePoint = referencePointMocks.twoAttributesWithFiltersReferencePoint;
+describe("sanitizeFilters", () => {
+    it("should keep just attribute filters that have corresponding attribute in buckets", () => {
         const extendedReferencePoint: IExtendedReferencePoint = {
-            buckets: referencePointMocks.oneAttributeTwoFiltersReferencePoint.buckets,
-            filters: referencePointMocks.oneAttributeTwoFiltersReferencePoint.filters,
+            ...referencePointMocks.oneAttributeTwoFiltersReferencePoint,
             uiConfig: DEFAULT_BASE_CHART_UICONFIG,
         };
 
-        const newExtendedReferencePoint = sanitizeUnusedFilters(extendedReferencePoint, referencePoint);
+        const newExtendedReferencePoint = sanitizeFilters(extendedReferencePoint);
 
         expect(newExtendedReferencePoint.filters.items).toHaveLength(1);
     });
-});
 
-describe("removeUnusedFilters", () => {
-    function getFilters(): IFiltersBucketItem[] {
-        return [
-            {
-                localIdentifier: "f1",
-                attribute: "attr.activity.activitytype",
-                type: "attribute",
-                filters: null,
-                aggregation: null,
-                showInPercent: false,
-                granularity: null,
-                sort: {
-                    direction: "asc",
-                },
-                autoCreated: true,
-            },
-            {
-                localIdentifier: "f2",
-                attribute: "attr.owner.department",
-                type: "attribute",
-                filters: null,
-                aggregation: null,
-                showInPercent: false,
-                granularity: null,
-                sort: {
-                    direction: "asc",
-                },
-                autoCreated: true,
-            },
-        ];
-    }
-
-    it("should not change filters when unused attributes are empty", () => {
-        const filters = getFilters();
-        expect(removeUnusedFilters(filters, [])).toEqual(filters);
-    });
-
-    it("should remove filter created with unused attribute", () => {
-        const filters = getFilters();
-        const unusedBucket: IBucketItem = {
-            localIdentifier: "v1",
-            attribute: "attr.owner.department",
-            type: "attribute",
+    it("should keep attribute filters that are not auto-created even if the corresponding attribute is not in buckets", () => {
+        const newReferencePoint = cloneDeep(referencePointMocks.oneAttributeTwoFiltersReferencePoint);
+        newReferencePoint.filters.items[1].autoCreated = false;
+        const extendedReferencePoint: IExtendedReferencePoint = {
+            ...newReferencePoint,
+            uiConfig: DEFAULT_BASE_CHART_UICONFIG,
         };
 
-        expect(removeUnusedFilters(filters, [unusedBucket])).toEqual([filters[0]]);
+        const newExtendedReferencePoint = sanitizeFilters(extendedReferencePoint);
+
+        expect(newExtendedReferencePoint.filters.items).toHaveLength(2);
     });
 
-    it("should ignore filters manually created/modified", () => {
-        const filters = getFilters();
-        filters[0].autoCreated = false;
-        filters[1].autoCreated = false;
-
-        const unusedBucket: IBucketItem = {
-            localIdentifier: "v1",
-            type: "attribute",
-            attribute: "attr.owner.department",
+    it("should keep just measure value filters based on measures that exist in extended reference point", () => {
+        const newReferencePoint = cloneDeep(referencePointMocks.measureValueFilterReferencePoint);
+        newReferencePoint.buckets[0].items.splice(1);
+        const extendedReferencePoint: IExtendedReferencePoint = {
+            ...newReferencePoint,
+            uiConfig: DEFAULT_BASE_CHART_UICONFIG,
         };
-        expect(removeUnusedFilters(filters, [unusedBucket])).toEqual(filters);
+
+        const newExtendedReferencePoint = sanitizeFilters(extendedReferencePoint);
+
+        expect(newExtendedReferencePoint.filters.items).toHaveLength(1);
+    });
+
+    it("should remove all measure value filters when there is no attribute or date in buckets", () => {
+        const newReferencePoint = cloneDeep(referencePointMocks.measureValueFilterReferencePoint);
+        newReferencePoint.buckets[1].items = [];
+        const extendedReferencePoint: IExtendedReferencePoint = {
+            ...newReferencePoint,
+            uiConfig: DEFAULT_BASE_CHART_UICONFIG,
+        };
+
+        const newExtendedReferencePoint = sanitizeFilters(extendedReferencePoint);
+
+        expect(newExtendedReferencePoint.filters.items).toHaveLength(0);
+    });
+
+    it("should handle reference point without filters", () => {
+        const newReferencePoint = cloneDeep(referencePointMocks.measureValueFilterReferencePoint);
+        delete newReferencePoint.filters;
+        const extendedReferencePoint: IExtendedReferencePoint = {
+            ...newReferencePoint,
+            uiConfig: DEFAULT_BASE_CHART_UICONFIG,
+        };
+
+        const newExtendedReferencePoint = sanitizeFilters(extendedReferencePoint);
+
+        expect(newExtendedReferencePoint.filters).toEqual({
+            localIdentifier: "filters",
+            items: [],
+        });
     });
 });
 
@@ -358,24 +347,54 @@ describe("getBucketItemsWithExcludeByType", () => {
     });
 });
 
+describe("isDateBucketItem", () => {
+    it("should not fail when passed null or undefined", () => {
+        expect(isDateBucketItem(null)).toBe(false);
+        expect(isDateBucketItem(undefined)).toBe(false);
+    });
+
+    it("should not fail when passed incomplete bucket item", () => {
+        const bucketItem: IBucketItem = {
+            localIdentifier: "",
+        };
+
+        expect(isDateBucketItem(bucketItem)).toBe(false);
+    });
+
+    it("should return true if the attribute prop matches date id", () => {
+        const bucketItem: IBucketItem = {
+            localIdentifier: "",
+            attribute: DATE_DATASET_ATTRIBUTE,
+        };
+        expect(isDateBucketItem(bucketItem)).toBe(true);
+    });
+
+    it("should return false if the attribute prop does not match date id", () => {
+        const bucketItem: IBucketItem = {
+            localIdentifier: "",
+            attribute: "something",
+        };
+        expect(isDateBucketItem(bucketItem)).toBe(false);
+    });
+});
+
 describe("getDateFilter", () => {
     it("should get date filter from filter bucket", () => {
-        const dateFilter = { attribute: DATE_DATASET_ATTRIBUTE };
         const filterBucket: IFilters = {
             localIdentifier: "filters",
             items: [
                 {
                     localIdentifier: "f1",
-                    filters: [{ attribute: "some" }],
+                    filters: [referencePointMocks.attributeFilter],
                 },
                 {
                     localIdentifier: "f1",
-                    filters: [dateFilter],
+                    filters: [referencePointMocks.dateFilter],
                 },
             ],
         };
 
-        expect(getDateFilter(filterBucket)).toBe(dateFilter);
+        expect(getDateFilter(filterBucket)).toBe(referencePointMocks.dateFilter);
     });
 
     it("should get comparison type NOTHING when date filter not present", () => {
@@ -384,7 +403,7 @@ describe("getDateFilter", () => {
             items: [
                 {
                     localIdentifier: "f1",
-                    filters: [{ attribute: "some" }],
+                    filters: [referencePointMocks.attributeFilter],
                 },
             ],
         };
@@ -410,11 +429,11 @@ describe("getUsedComparisonType", () => {
             items: [
                 {
                     localIdentifier: "f1",
-                    filters: [{ attribute: "some" }],
+                    filters: [referencePointMocks.attributeFilter],
                 },
                 {
                     localIdentifier: "f1",
-                    filters: [{ attribute: DATE_DATASET_ATTRIBUTE, overTimeComparisonType }],
+                    filters: [referencePointMocks.dateFilterSamePeriodPreviousYear],
                 },
             ],
         };
@@ -428,7 +447,7 @@ describe("getUsedComparisonType", () => {
             items: [
                 {
                     localIdentifier: "f1",
-                    filters: [{ attribute: "some" }],
+                    filters: [referencePointMocks.attributeFilter],
                 },
             ],
         };
@@ -451,11 +470,11 @@ describe("getUsedComparisonType", () => {
             items: [
                 {
                     localIdentifier: "f1",
-                    filters: [{ attribute: "some" }],
+                    filters: [referencePointMocks.attributeFilter],
                 },
                 {
                     localIdentifier: "f1",
-                    filters: [{ attribute: DATE_DATASET_ATTRIBUTE }],
+                    filters: [referencePointMocks.dateFilter],
                 },
             ],
         };

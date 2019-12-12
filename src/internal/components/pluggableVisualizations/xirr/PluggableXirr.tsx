@@ -14,7 +14,7 @@ import { hasGlobalDateFilter } from "../../../utils/bucketRules";
 import {
     removeAllArithmeticMeasuresFromDerived,
     removeAllDerivedMeasures,
-    sanitizeUnusedFilters,
+    sanitizeFilters,
 } from "../../../utils/bucketHelper";
 import { getXirrBuckets } from "./xirrBucketHelper";
 import { generateDimensions } from "../../../../helpers/dimensions";
@@ -47,7 +47,7 @@ export class PluggableXirr extends PluggableBaseHeadline {
             this.supportedPropertiesList,
         );
 
-        return sanitizeUnusedFilters(newReferencePoint, referencePoint);
+        return sanitizeFilters(newReferencePoint);
     };
 
     protected renderVisualization(

@@ -6,19 +6,20 @@ import {
     IValue,
     IMeasureValueComparisonFilter,
     IMeasureValueRangeFilter,
-    isRangeTypeOperator,
-    isComparisonTypeOperator,
+    isRangeOperator,
+    isComparisonOperator,
     MeasureValueFilterConditionOperator,
 } from "../../interfaces/MeasureValueFilter";
-import { getQualifier } from "./utils";
 
 const getComparisonFilter = (
-    identifier: string,
+    measureLocalIdentifier: string,
     operator: AFM.ComparisonConditionOperator,
     value: IValue,
 ): AFM.IMeasureValueFilter => ({
     measureValueFilter: {
-        measure: getQualifier(identifier),
+        measure: {
+            localIdentifier: measureLocalIdentifier,
+        },
         condition: {
             comparison: {
                 operator,
@@ -29,12 +30,14 @@ const getComparisonFilter = (
 });
 
 const getRangeFilter = (
-    identifier: string,
+    measureLocalIdentifier: string,
     operator: AFM.RangeConditionOperator,
     value: IValue,
 ): AFM.IMeasureValueFilter => ({
     measureValueFilter: {
-        measure: getQualifier(identifier),
+        measure: {
+            localIdentifier: measureLocalIdentifier,
+        },
         condition: {
             range: {
                 operator,
@@ -45,52 +48,60 @@ const getRangeFilter = (
     },
 });
 
-function getFilter(identifier: string, operator: string, value: IValue) {
-    if (isComparisonTypeOperator(operator)) {
-        return getComparisonFilter(identifier, operator, value);
-    } else if (isRangeTypeOperator(operator)) {
-        return getRangeFilter(identifier, operator, value);
+function getFilter(measureLocalIdentifier: string, operator: string, value: IValue) {
+    if (isComparisonOperator(operator)) {
+        return getComparisonFilter(measureLocalIdentifier, operator, value);
+    } else if (isRangeOperator(operator)) {
+        return getRangeFilter(measureLocalIdentifier, operator, value);
     }
-
     invariant(operator, `Operator ${operator} is not supported, filter could not be created`);
 }
 
-const isMeasureValueComparisonFilter = (obj: any): obj is IMeasureValueComparisonFilter =>
-    !isEmpty(obj) &&
-    (obj as IMeasureValueComparisonFilter).measureValueFilter.condition.comparison !== undefined;
+const isComparisonCondition = (
+    condition: AFM.MeasureValueFilterCondition,
+): condition is AFM.IComparisonCondition =>
+    !isEmpty(condition) && (condition as AFM.IComparisonCondition).comparison !== undefined;
 
-const isMeasureValueRangeFilter = (obj: any): obj is IMeasureValueRangeFilter =>
-    !isEmpty(obj) && (obj as IMeasureValueRangeFilter).measureValueFilter.condition.range !== undefined;
+const isRangeCondition = (condition: AFM.MeasureValueFilterCondition): condition is AFM.IRangeCondition =>
+    !isEmpty(condition) && (condition as AFM.IRangeCondition).range !== undefined;
 
-function measureValueFilterOperator(filter: AFM.IMeasureValueFilter): MeasureValueFilterConditionOperator {
+const isMeasureValueComparisonFilter = (
+    filter: AFM.IMeasureValueFilter,
+): filter is IMeasureValueComparisonFilter =>
+    AFM.isMeasureValueFilter(filter) &&
+    isComparisonCondition((filter as IMeasureValueComparisonFilter).measureValueFilter.condition);
+
+const isMeasureValueRangeFilter = (filter: AFM.IMeasureValueFilter): filter is IMeasureValueRangeFilter =>
+    AFM.isMeasureValueFilter(filter) &&
+    isRangeCondition((filter as IMeasureValueRangeFilter).measureValueFilter.condition);
+
+function getOperator(filter: AFM.IMeasureValueFilter): MeasureValueFilterConditionOperator {
     if (isMeasureValueComparisonFilter(filter)) {
         return filter.measureValueFilter.condition.comparison.operator;
     } else if (isMeasureValueRangeFilter(filter)) {
         return filter.measureValueFilter.condition.range.operator;
     }
-
     return null;
 }
 
-function measureValueFilterValue(filter: AFM.IMeasureValueFilter): IValue {
+function getValue(filter: AFM.IMeasureValueFilter): IValue {
     if (isMeasureValueComparisonFilter(filter)) {
         return { value: filter.measureValueFilter.condition.comparison.value };
     } else if (isMeasureValueRangeFilter(filter)) {
         const { from, to } = filter.measureValueFilter.condition.range;
         return { from, to };
     }
-
     return null;
 }
 
 export const measureValueFilter = {
-    isComparisonTypeOperator,
-    isRangeTypeOperator,
-    getComparisonFilter,
-    getRangeFilter,
-    getFilter,
+    isComparisonCondition,
+    isRangeCondition,
+    isComparisonOperator,
+    isRangeOperator,
     isMeasureValueComparisonFilter,
     isMeasureValueRangeFilter,
-    measureValueFilterOperator,
-    measureValueFilterValue,
+    getFilter,
+    getOperator,
+    getValue,
 };

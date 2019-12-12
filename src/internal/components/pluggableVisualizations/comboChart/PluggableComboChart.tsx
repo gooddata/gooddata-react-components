@@ -19,7 +19,7 @@ import {
 import { METRIC, BUCKETS } from "../../../constants/bucket";
 
 import {
-    sanitizeUnusedFilters,
+    sanitizeFilters,
     getBucketItemsByType,
     getAllAttributeItemsWithPreference,
     getBucketItemsWithExcludeByType,
@@ -118,7 +118,7 @@ export class PluggableComboChart extends PluggableBaseChart {
         newReferencePoint = applyUiConfig(newReferencePoint);
         newReferencePoint = removeSort(newReferencePoint);
 
-        return Promise.resolve(sanitizeUnusedFilters(newReferencePoint, referencePoint));
+        return Promise.resolve(sanitizeFilters(newReferencePoint));
     }
 
     public isStackMeasuresByDefault() {

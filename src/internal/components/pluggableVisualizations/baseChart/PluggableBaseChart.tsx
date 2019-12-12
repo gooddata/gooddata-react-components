@@ -41,12 +41,12 @@ import { configurePercent, configureOverTimeComparison } from "../../../utils/bu
 import { isStacked, canSortStackTotalValue } from "../../../utils/mdObjectHelper";
 
 import {
-    sanitizeUnusedFilters,
+    sanitizeFilters,
     getMeasureItems,
     getAllAttributeItemsWithPreference,
     getAttributeItemsWithoutStacks,
     getStackItems,
-    isDate,
+    isDateBucketItem,
     filterOutDerivedMeasures,
     getFilteredMeasuresForStackedCharts,
 } from "../../../utils/bucketHelper";
@@ -174,7 +174,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
         newReferencePoint = setBaseChartUiConfig(newReferencePoint, this.intl, this.type);
         newReferencePoint = removeSort(newReferencePoint);
 
-        return Promise.resolve(sanitizeUnusedFilters(newReferencePoint, clonedReferencePoint));
+        return Promise.resolve(sanitizeFilters(newReferencePoint));
     }
 
     public isOpenAsReportSupported() {
@@ -227,7 +227,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
         if (masterMeasures.length <= 1 && allAttributes.length > 1) {
             // first attribute is taken, find next available non-date attribute
             const attributesWithoutFirst = tail(allAttributes);
-            const nonDate = attributesWithoutFirst.filter(attribute => !isDate(attribute));
+            const nonDate = attributesWithoutFirst.filter(attribute => !isDateBucketItem(attribute));
             stacks = nonDate.slice(0, 1);
         }
 

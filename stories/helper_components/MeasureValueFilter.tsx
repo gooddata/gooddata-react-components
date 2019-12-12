@@ -2,6 +2,7 @@
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
+import noop = require("lodash/noop");
 import { AFM } from "@gooddata/typings";
 
 import { DropdownAfmWrapper } from "../../src/components/filters/MeasureValueFilter/DropdownAfmWrapper";
@@ -13,16 +14,16 @@ storiesOf("Helper components/Measure value filter", module).add("Measure value f
             return (
                 <React.Fragment>
                     <DropdownAfmWrapper
-                        measureTitle={"Measure"}
-                        measureIdentifier={"localIdentifier"}
+                        measureIdentifier="localIdentifier"
                         onApply={this.onApply}
+                        onCancel={noop}
                     />
                 </React.Fragment>
             );
         }
 
-        private onApply = (filter: AFM.IMeasureValueFilter, measureIdentifier: string) => {
-            action("apply")(filter, measureIdentifier);
+        private onApply = (filter: AFM.IMeasureValueFilter) => {
+            action("apply")(filter);
         };
     }
 

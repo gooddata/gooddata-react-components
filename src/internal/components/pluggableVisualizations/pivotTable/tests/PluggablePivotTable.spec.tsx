@@ -26,12 +26,12 @@ import {
     IBucketFilter,
     IBucketFilterElement,
 } from "../../../../interfaces/Visualization";
-import noop = require("lodash/noop");
-import cloneDeep = require("lodash/cloneDeep");
-import SpyInstance = jest.SpyInstance;
 import { IDrillableItem } from "../../../../../interfaces/DrillEvents";
 import { PivotTable } from "../../../../../components/core/PivotTable";
 import { DEFAULT_LOCALE } from "../../../../../constants/localization";
+import noop = require("lodash/noop");
+import cloneDeep = require("lodash/cloneDeep");
+import SpyInstance = jest.SpyInstance;
 
 const getMockReferencePoint = (
     measures: IBucketItem[] = [],
@@ -962,15 +962,10 @@ describe("addDefaultSort", () => {
             [measureSort],
             [
                 {
-                    allElements: [filterElement],
                     attribute: "irrelevant",
-                    interval: null,
                     isInverted: true,
-                    isModified: false,
-                    noData: false,
-                    overTimeComparisonType: null,
                     selectedElements: [filterElement],
-                    totalElementsCount: 1,
+                    totalElementsCount: 4,
                 },
             ],
             [accountRow, countryRow, productRow],
@@ -1002,15 +997,10 @@ describe("isSortItemVisible", () => {
             selectedElements: IBucketFilterElement[],
             isInverted: boolean,
         ): IBucketFilter => ({
-            allElements: selectedElements,
             attribute: "irrelevant",
-            interval: null,
             isInverted,
-            isModified: false,
-            noData: false,
-            overTimeComparisonType: null,
+            totalElementsCount: 5,
             selectedElements,
-            totalElementsCount: selectedElements.length,
         });
 
         const matchingUri = "/gdc/md/mockproject/obj/attr.movie_genre/elements?id=1";
@@ -1044,9 +1034,11 @@ describe("isSortItemVisible", () => {
         const measureValueFilter: IBucketFilter = {
             measureLocalIdentifier: "id",
             condition: {
-                operator: "BETWEEN",
-                from: 0,
-                to: 0,
+                range: {
+                    operator: "BETWEEN",
+                    from: 0,
+                    to: 0,
+                },
             },
         };
 
@@ -1094,9 +1086,9 @@ describe("isSortItemVisible", () => {
             const expected = false;
             expect(actual).toEqual(expected);
         });
-        it("should return false when filter is MVF", () => {
+        it("should return true when filter is MVF", () => {
             const actual = isSortItemVisible(sortItem, [measureValueFilter]);
-            expect(actual).toEqual(false);
+            expect(actual).toEqual(true);
         });
     });
 });
