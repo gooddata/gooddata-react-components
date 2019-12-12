@@ -834,5 +834,15 @@
         "value": "not between",
         "comment": "",
         "limit": 0
+    },
+    "mvf.operator.between.tooltip.bubble": {
+        "value": "Start and end values are included.",
+        "comment": "",
+        "limit": 0
+    },
+    "mvf.operator.notBetween.tooltip.bubble": {
+        "value": "Start and end values are not included.",
+        "comment": "",
+        "limit": 0
     }
 }
