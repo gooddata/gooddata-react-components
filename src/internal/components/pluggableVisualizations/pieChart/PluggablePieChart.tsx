@@ -28,7 +28,7 @@ import {
 } from "../../../constants/uiConfig";
 
 import {
-    sanitizeUnusedFilters,
+    sanitizeFilters,
     getMeasureItems,
     getAttributeItems,
     removeAllDerivedMeasures,
@@ -107,7 +107,7 @@ export class PluggablePieChart extends PluggableBaseChart {
         );
         newReferencePoint = removeSort(newReferencePoint);
 
-        return Promise.resolve(sanitizeUnusedFilters(newReferencePoint, clonedReferencePoint));
+        return Promise.resolve(sanitizeFilters(newReferencePoint));
     }
 
     protected renderConfigurationPanel() {

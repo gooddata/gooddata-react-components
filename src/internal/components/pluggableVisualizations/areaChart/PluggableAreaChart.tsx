@@ -26,11 +26,11 @@ import { DEFAULT_AREA_UICONFIG, MAX_STACKS_COUNT, MAX_VIEW_COUNT } from "../../.
 import { BUCKETS } from "../../../constants/bucket";
 
 import {
-    sanitizeUnusedFilters,
+    sanitizeFilters,
     getStackItems,
     getDateItems,
     getAllAttributeItemsWithPreference,
-    isDate,
+    isDateBucketItem,
     removeAllDerivedMeasures,
     removeAllArithmeticMeasuresFromDerived,
     getFilteredMeasuresForStackedCharts,
@@ -99,7 +99,7 @@ export class PluggableAreaChart extends PluggableBaseChart {
             this.supportedPropertiesList,
         );
         newReferencePoint = removeSort(newReferencePoint);
-        return Promise.resolve(sanitizeUnusedFilters(newReferencePoint, clonedReferencePoint));
+        return Promise.resolve(sanitizeFilters(newReferencePoint));
     }
 
     protected configureBuckets(extendedReferencePoint: IExtendedReferencePoint): void {
@@ -177,11 +177,11 @@ export class PluggableAreaChart extends PluggableBaseChart {
     }
 
     private getAllAttributesWithoutDate(buckets: IBucket[]): IBucketItem[] {
-        return this.getAllAttributes(buckets).filter(negate(isDate));
+        return this.getAllAttributes(buckets).filter(negate(isDateBucketItem));
     }
 
     private filterStackItems(bucketItems: IBucketItem[]): IBucketItem[] {
-        return bucketItems.filter(negate(isDate)).slice(0, MAX_STACKS_COUNT);
+        return bucketItems.filter(negate(isDateBucketItem)).slice(0, MAX_STACKS_COUNT);
     }
 
     private getBucketItems(referencePoint: IReferencePoint) {
@@ -193,7 +193,7 @@ export class PluggableAreaChart extends PluggableBaseChart {
         const isAllowMoreThanOneViewByAttribute = !stacks.length && measures.length <= 1;
         const numOfAttributes = isAllowMoreThanOneViewByAttribute ? MAX_VIEW_COUNT : 1;
         let views: IBucketItem[] = getAllCategoriesAttributeItems(buckets).slice(0, numOfAttributes);
-        const hasDateItemInViewByBucket = views.some(isDate);
+        const hasDateItemInViewByBucket = views.some(isDateBucketItem);
 
         if (dateItems.length && !hasDateItemInViewByBucket) {
             const firstDateItem = dateItems[0];

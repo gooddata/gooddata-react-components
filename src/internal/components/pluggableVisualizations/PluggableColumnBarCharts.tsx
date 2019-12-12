@@ -13,10 +13,10 @@ import {
 import {
     getFilteredMeasuresForStackedCharts,
     getStackItems,
-    isDate,
+    isDateBucketItem,
     getAllCategoriesAttributeItems,
     getDateItems,
-    isNotDate,
+    isNotDateBucketItem,
 } from "../../utils/bucketHelper";
 import { MAX_STACKS_COUNT, UICONFIG_AXIS, UICONFIG, MAX_CATEGORIES_COUNT } from "../../constants/uiConfig";
 import {
@@ -78,7 +78,7 @@ export class PluggableColumnBarCharts extends PluggableBaseChart {
         );
         const allAttributesWithoutStacks = getAllCategoriesAttributeItems(buckets);
         let views = allAttributesWithoutStacks.slice(0, categoriesCount);
-        const hasDateItemInViewByBucket = views.some(isDate);
+        const hasDateItemInViewByBucket = views.some(isDateBucketItem);
         let stackItemIndex = categoriesCount;
         let stacks = getStackItems(buckets);
 
@@ -91,7 +91,7 @@ export class PluggableColumnBarCharts extends PluggableBaseChart {
         if (!stacks.length && measures.length <= 1 && allAttributesWithoutStacks.length > stackItemIndex) {
             stacks = allAttributesWithoutStacks
                 .slice(stackItemIndex, allAttributesWithoutStacks.length)
-                .filter(isNotDate)
+                .filter(isNotDateBucketItem)
                 .slice(0, MAX_STACKS_COUNT);
         }
 

@@ -9,7 +9,7 @@ import { PluggableBaseChart } from "../baseChart/PluggableBaseChart";
 import { IReferencePoint, IExtendedReferencePoint, IVisConstruct } from "../../../interfaces/Visualization";
 
 import {
-    sanitizeUnusedFilters,
+    sanitizeFilters,
     getMeasures,
     getPreferredBucketItems,
     getAllAttributeItems,
@@ -101,7 +101,7 @@ export class PluggableScatterPlot extends PluggableBaseChart {
         );
         newReferencePoint = removeSort(newReferencePoint);
 
-        return Promise.resolve(sanitizeUnusedFilters(newReferencePoint, clonedReferencePoint));
+        return Promise.resolve(sanitizeFilters(newReferencePoint));
     }
 
     protected renderConfigurationPanel() {

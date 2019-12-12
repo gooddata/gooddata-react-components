@@ -14,7 +14,7 @@ import { DEFAULT_HEATMAP_UICONFIG } from "../../../constants/uiConfig";
 import { HEATMAP_SUPPORTED_PROPERTIES } from "../../../constants/supportedProperties";
 
 import {
-    sanitizeUnusedFilters,
+    sanitizeFilters,
     getMeasureItems,
     getAllAttributeItemsWithPreference,
     removeAllDerivedMeasures,
@@ -93,7 +93,7 @@ export class PluggableHeatmap extends PluggableBaseChart {
         );
         newReferencePoint = removeSort(newReferencePoint);
 
-        return Promise.resolve(sanitizeUnusedFilters(newReferencePoint, clonedReferencePoint));
+        return Promise.resolve(sanitizeFilters(newReferencePoint));
     }
 
     protected renderConfigurationPanel() {
