@@ -54,7 +54,10 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
                     <div className="gd-mvf-dropdown-section">
                         <OperatorDropdown onSelect={this.handleOperatorSelection} operator={operator} />
                     </div>
-                    <div className="gd-mvf-dropdown-section">{this.renderInputSection()}</div>
+
+                    {operator !== Operator.ALL && (
+                        <div className="gd-mvf-dropdown-section">{this.renderInputSection()}</div>
+                    )}
                 </div>
                 <div className="gd-mvf-dropdown-footer">
                     <Button

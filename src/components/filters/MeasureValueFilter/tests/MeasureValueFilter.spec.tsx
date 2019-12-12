@@ -69,6 +69,32 @@ describe("Measure value filter", () => {
         ).toEqual(true);
     });
 
+    describe("tooltip", () => {
+        const component = renderComponent();
+
+        const hasTooltipClass = (operator: string) =>
+            component
+                .openOperatorDropdown()
+                .getOperator(operator)
+                .find(".tooltip-bubble")
+                .exists();
+
+        it.each`
+            operator                             | showTooltip
+            ${Operator.BETWEEN}                  | ${true}
+            ${Operator.NOT_BETWEEN}              | ${true}
+            ${Operator.ALL}                      | ${false}
+            ${Operator.GREATER_THAN}             | ${false}
+            ${Operator.GREATER_THAN_OR_EQUAL_TO} | ${false}
+            ${Operator.LESS_THAN}                | ${false}
+            ${Operator.LESS_THAN_OR_EQUAL_TO}    | ${false}
+            ${Operator.EQUAL_TO}                 | ${false}
+            ${Operator.NOT_EQUAL_TO}             | ${false}
+        `("should return $showTooltip when operator is $operator", ({ operator, showTooltip }) => {
+            expect(hasTooltipClass(operator)).toEqual(showTooltip);
+        });
+    });
+
     describe("onApply callback", () => {
         it("should be called with comparison type measure value filter when comparison operator is selected and value is filled", () => {
             const onApply = jest.fn();

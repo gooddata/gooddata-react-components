@@ -1,21 +1,24 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
+import { InjectedIntlProps, injectIntl } from "react-intl";
 import Overlay from "@gooddata/goodstrap/lib/core/Overlay";
 import { Separator } from "@gooddata/goodstrap/lib/List/MenuList";
 
 import OperatorDropdownItem from "./OperatorDropdownItem";
 import * as Operator from "../../../constants/measureValueFilterOperators";
 
-export interface IOperatorDropdownBodyProps {
+export interface IOperatorDropdownBodyOwnProps {
     selectedOperator: string;
     onSelect: (operator: string) => void;
     onClose: () => void;
     alignTo: string;
 }
 
-export default class OperatorDropdownBody extends React.PureComponent<IOperatorDropdownBodyProps> {
+type IOperatorDropdownBodyProps = IOperatorDropdownBodyOwnProps & InjectedIntlProps;
+
+export class OperatorDropdownBody extends React.PureComponent<IOperatorDropdownBodyProps> {
     public render() {
-        const { onSelect, onClose, selectedOperator, alignTo } = this.props;
+        const { onSelect, onClose, selectedOperator, alignTo, intl } = this.props;
 
         return (
             <Overlay
@@ -58,11 +61,13 @@ export default class OperatorDropdownBody extends React.PureComponent<IOperatorD
                             operator={Operator.BETWEEN}
                             selectedOperator={selectedOperator}
                             onClick={onSelect}
+                            bubbleText={intl.formatMessage({ id: "mvf.operator.between.tooltip.bubble" })}
                         />
                         <OperatorDropdownItem
                             operator={Operator.NOT_BETWEEN}
                             selectedOperator={selectedOperator}
                             onClick={onSelect}
+                            bubbleText={intl.formatMessage({ id: "mvf.operator.notBetween.tooltip.bubble" })}
                         />
                         <Separator />
                         <OperatorDropdownItem
@@ -81,3 +86,5 @@ export default class OperatorDropdownBody extends React.PureComponent<IOperatorD
         );
     }
 }
+
+export default injectIntl(OperatorDropdownBody);

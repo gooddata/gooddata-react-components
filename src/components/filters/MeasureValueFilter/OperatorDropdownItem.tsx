@@ -5,12 +5,15 @@ import classNames from "classnames";
 import noop = require("lodash/noop");
 import capitalize = require("lodash/capitalize");
 import { string as stringUtils } from "@gooddata/js-utils";
+import BubbleHoverTrigger from "@gooddata/goodstrap/lib/Bubble/BubbleHoverTrigger";
+import Bubble from "@gooddata/goodstrap/lib/Bubble/Bubble";
 
 import { getOperatorTranslationKey, getOperatorIcon } from "../../../helpers/measureValueFilterOperator";
 
 export interface IOperatorDropdownItemOwnProps {
     selectedOperator: string;
     operator: string;
+    bubbleText?: string;
     onClick: (identifier: string) => void;
 }
 
@@ -19,10 +22,11 @@ export type IOperatorDropdownItemProps = IOperatorDropdownItemOwnProps & Injecte
 export class OperatorDropdownItem extends React.PureComponent<IOperatorDropdownItemProps> {
     public static defaultProps: any = {
         onClick: noop,
+        bubbleText: null,
     };
 
     public render() {
-        const { intl, operator, selectedOperator } = this.props;
+        const { intl, operator, selectedOperator, bubbleText } = this.props;
 
         const className = classNames(
             "gd-list-item",
@@ -39,6 +43,7 @@ export class OperatorDropdownItem extends React.PureComponent<IOperatorDropdownI
             <div className={className} onClick={this.handleOnClick}>
                 <div className={`icon-${getOperatorIcon(operator)}`} title={title} />
                 <span title={title}>{capitalize(title)}</span>
+                {bubbleText && this.renderBubble(bubbleText)}
             </div>
         );
     }
@@ -48,6 +53,19 @@ export class OperatorDropdownItem extends React.PureComponent<IOperatorDropdownI
         onClick(operator);
         e.preventDefault();
     };
+
+    private renderBubble(message: string) {
+        return (
+            <div className="tooltip-bubble">
+                <BubbleHoverTrigger tagName={"div"} showDelay={400} hideDelay={200}>
+                    <div className="inlineBubbleHelp" />
+                    <Bubble className="bubble-primary" alignPoints={[{ align: "tc bl" }]}>
+                        {message}
+                    </Bubble>
+                </BubbleHoverTrigger>
+            </div>
+        );
+    }
 }
 
 export default injectIntl(OperatorDropdownItem);
