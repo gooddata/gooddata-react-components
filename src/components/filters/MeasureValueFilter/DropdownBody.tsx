@@ -9,7 +9,7 @@ import OperatorDropdown from "./OperatorDropdown";
 import RangeInput from "./RangeInput";
 import ComparisonInput from "./ComparisonInput";
 import { IValue } from "../../../interfaces/MeasureValueFilter";
-import * as Operators from "../../../constants/measureValueFilterOperators";
+import * as Operator from "../../../constants/measureValueFilterOperators";
 
 export interface IInputProps {
     value?: IValue;
@@ -39,8 +39,8 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
         const { operator, value } = props;
 
         this.state = {
-            operator,
-            value,
+            operator: operator || Operator.ALL,
+            value: value || {},
         };
     }
 
@@ -54,7 +54,10 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
                     <div className="gd-mvf-dropdown-section">
                         <OperatorDropdown onSelect={this.handleOperatorSelection} operator={operator} />
                     </div>
-                    <div className="gd-mvf-dropdown-section">{this.renderInputSection()}</div>
+
+                    {operator !== Operator.ALL && (
+                        <div className="gd-mvf-dropdown-section">{this.renderInputSection()}</div>
+                    )}
                 </div>
                 <div className="gd-mvf-dropdown-footer">
                     <Button
@@ -74,19 +77,28 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
     }
 
     private renderInputSection = () => {
-        const { operator, value } = this.state;
+        const {
+            operator,
+            value: { value = null, from = null, to = null },
+        } = this.state;
 
-        if (Model.isComparisonTypeOperator(operator)) {
+        if (Model.isComparisonOperator(operator)) {
             return (
                 <ComparisonInput
                     value={value}
-                    onChange={this.handleValueChange}
+                    onValueChange={this.handleValueChange}
                     onEnterKeyPress={this.onApply}
                 />
             );
-        } else if (Model.isRangeTypeOperator(operator)) {
+        } else if (Model.isRangeOperator(operator)) {
             return (
-                <RangeInput value={value} onChange={this.handleValueChange} onEnterKeyPress={this.onApply} />
+                <RangeInput
+                    from={from}
+                    to={to}
+                    onFromChange={this.handleFromChange}
+                    onToChange={this.handleToChange}
+                    onEnterKeyPress={this.onApply}
+                />
             );
         }
 
@@ -99,10 +111,14 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
 
     private handleOperatorSelection = (operator: string) => this.setState({ operator });
 
-    private handleValueChange = (value: IValue) => this.setState({ value });
+    private handleValueChange = (value: number) => this.setState({ value: { ...this.state.value, value } });
+
+    private handleFromChange = (from: number) => this.setState({ value: { ...this.state.value, from } });
+
+    private handleToChange = (to: number) => this.setState({ value: { ...this.state.value, to } });
 
     private onApply = () => {
-        const operator = this.state.operator === Operators.ALL ? null : this.state.operator;
+        const operator = this.state.operator === Operator.ALL ? null : this.state.operator;
         this.props.onApply(operator, this.state.value);
     };
 }

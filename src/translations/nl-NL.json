@@ -153,5 +153,14 @@
     "filters.year.excludeCurrentPeriod": "Dit jaar uitsluiten",
     "filters.excludeCurrentPeriod.unavailable": "Niet beschikbaar voor het geselecteerde datumbereik",
     "filters.staticPeriod": "Statische periode",
-    "filters.staticPeriod.incorrectFormat": "Datum is niet in indeling {format}"
+    "filters.staticPeriod.incorrectFormat": "Datum is niet in indeling {format}",
+    "mvf.operator.all": "alle",
+    "mvf.operator.greaterThan": "groter dan",
+    "mvf.operator.greaterThanOrEqualTo": "groter dan of gelijk aan",
+    "mvf.operator.lessThan": "kleiner dan",
+    "mvf.operator.lessThanOrEqualTo": "kleiner dan of gelijk aan",
+    "mvf.operator.equalTo": "gelijk aan",
+    "mvf.operator.notEqualTo": "niet gelijk aan",
+    "mvf.operator.between": "tussen",
+    "mvf.operator.notBetween": "niet tussen"
 }

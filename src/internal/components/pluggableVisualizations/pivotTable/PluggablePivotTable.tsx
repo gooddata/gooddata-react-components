@@ -28,12 +28,14 @@ import {
     IBucketItem,
     IBucket,
     IBucketFilter,
+    isAttributeFilter,
+    IAttributeFilter,
 } from "../../../interfaces/Visualization";
 
 import { ATTRIBUTE, DATE, METRIC } from "../../../constants/bucket";
 
 import {
-    sanitizeUnusedFilters,
+    sanitizeFilters,
     getAllItemsByType,
     getTotalsFromBucket,
     getItemsFromBuckets,
@@ -173,21 +175,25 @@ function adaptMdObjectSortItemsToPivotTable(
 const isAttributeSortItemVisible = (_sortItem: AFM.IAttributeSortItem, _filters: IBucketFilter[]): boolean =>
     true;
 
-const isMeasureSortItemMatchedByFilter = (sortItem: AFM.IMeasureSortItem, filter: IBucketFilter): boolean =>
-    filter.selectedElements
-        ? filter.selectedElements.some(selectedElement =>
-              sortItem.measureSortItem.locators.some(
-                  locator =>
-                      !AFM.isMeasureLocatorItem(locator) &&
-                      locator.attributeLocatorItem.element === selectedElement.uri,
-              ),
-          )
-        : false;
+const isMeasureSortItemMatchedByFilter = (
+    sortItem: AFM.IMeasureSortItem,
+    filter: IAttributeFilter,
+): boolean =>
+    filter.selectedElements.some(selectedElement =>
+        sortItem.measureSortItem.locators.some(
+            locator =>
+                !AFM.isMeasureLocatorItem(locator) &&
+                locator.attributeLocatorItem.element === selectedElement.uri,
+        ),
+    );
 
 const isMeasureSortItemVisible = (sortItem: AFM.IMeasureSortItem, filters: IBucketFilter[]): boolean =>
     filters.reduce((isVisible, filter) => {
-        const shouldBeMatched = !filter.isInverted;
-        return isVisible && shouldBeMatched === isMeasureSortItemMatchedByFilter(sortItem, filter);
+        if (isAttributeFilter(filter)) {
+            const shouldBeMatched = !filter.isInverted;
+            return isVisible && shouldBeMatched === isMeasureSortItemMatchedByFilter(sortItem, filter);
+        }
+        return isVisible;
     }, true);
 
 export const isSortItemVisible = (sortItem: AFM.SortItem, filters: IBucketFilter[]): boolean =>
@@ -354,10 +360,7 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
                             this.supportedPropertiesList,
                         ),
                     );
-                    referencePointDraft.filters = sanitizeUnusedFilters(
-                        referencePointDraft,
-                        referencePoint,
-                    ).filters;
+                    referencePointDraft.filters = sanitizeFilters(referencePointDraft).filters;
                 },
             ),
         );

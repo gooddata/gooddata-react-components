@@ -1,21 +1,24 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
+import { InjectedIntlProps, injectIntl } from "react-intl";
 import Overlay from "@gooddata/goodstrap/lib/core/Overlay";
 import { Separator } from "@gooddata/goodstrap/lib/List/MenuList";
 
 import OperatorDropdownItem from "./OperatorDropdownItem";
-import * as Operators from "../../../constants/measureValueFilterOperators";
+import * as Operator from "../../../constants/measureValueFilterOperators";
 
-export interface IOperatorDropdownBodyProps {
+export interface IOperatorDropdownBodyOwnProps {
     selectedOperator: string;
     onSelect: (operator: string) => void;
     onClose: () => void;
     alignTo: string;
 }
 
-export default class OperatorDropdownBody extends React.PureComponent<IOperatorDropdownBodyProps> {
+type IOperatorDropdownBodyProps = IOperatorDropdownBodyOwnProps & InjectedIntlProps;
+
+export class OperatorDropdownBody extends React.PureComponent<IOperatorDropdownBodyProps> {
     public render() {
-        const { onSelect, onClose, selectedOperator, alignTo } = this.props;
+        const { onSelect, onClose, selectedOperator, alignTo, intl } = this.props;
 
         return (
             <Overlay
@@ -27,51 +30,53 @@ export default class OperatorDropdownBody extends React.PureComponent<IOperatorD
                 <div className="gd-dropdown overlay">
                     <div className="gd-mvf-operator-dropdown-body s-mvf-operator-dropdown-body">
                         <OperatorDropdownItem
-                            operator={Operators.ALL}
+                            operator={Operator.ALL}
                             selectedOperator={selectedOperator}
                             onClick={onSelect}
                         />
                         <Separator />
                         <OperatorDropdownItem
-                            operator={Operators.GREATER_THAN}
+                            operator={Operator.GREATER_THAN}
                             selectedOperator={selectedOperator}
                             onClick={onSelect}
                         />
                         <OperatorDropdownItem
-                            operator={Operators.GREATER_THAN_OR_EQUAL_TO}
-                            selectedOperator={selectedOperator}
-                            onClick={onSelect}
-                        />
-                        <Separator />
-                        <OperatorDropdownItem
-                            operator={Operators.LESS_THAN}
-                            selectedOperator={selectedOperator}
-                            onClick={onSelect}
-                        />
-                        <OperatorDropdownItem
-                            operator={Operators.LESS_THAN_OR_EQUAL_TO}
+                            operator={Operator.GREATER_THAN_OR_EQUAL_TO}
                             selectedOperator={selectedOperator}
                             onClick={onSelect}
                         />
                         <Separator />
                         <OperatorDropdownItem
-                            operator={Operators.BETWEEN}
+                            operator={Operator.LESS_THAN}
                             selectedOperator={selectedOperator}
                             onClick={onSelect}
                         />
                         <OperatorDropdownItem
-                            operator={Operators.NOT_BETWEEN}
+                            operator={Operator.LESS_THAN_OR_EQUAL_TO}
                             selectedOperator={selectedOperator}
                             onClick={onSelect}
                         />
                         <Separator />
                         <OperatorDropdownItem
-                            operator={Operators.EQUAL_TO}
+                            operator={Operator.BETWEEN}
+                            selectedOperator={selectedOperator}
+                            onClick={onSelect}
+                            bubbleText={intl.formatMessage({ id: "mvf.operator.between.tooltip.bubble" })}
+                        />
+                        <OperatorDropdownItem
+                            operator={Operator.NOT_BETWEEN}
+                            selectedOperator={selectedOperator}
+                            onClick={onSelect}
+                            bubbleText={intl.formatMessage({ id: "mvf.operator.notBetween.tooltip.bubble" })}
+                        />
+                        <Separator />
+                        <OperatorDropdownItem
+                            operator={Operator.EQUAL_TO}
                             selectedOperator={selectedOperator}
                             onClick={onSelect}
                         />
                         <OperatorDropdownItem
-                            operator={Operators.NOT_EQUAL_TO}
+                            operator={Operator.NOT_EQUAL_TO}
                             selectedOperator={selectedOperator}
                             onClick={onSelect}
                         />
@@ -81,3 +86,5 @@ export default class OperatorDropdownBody extends React.PureComponent<IOperatorD
         );
     }
 }
+
+export default injectIntl(OperatorDropdownBody);

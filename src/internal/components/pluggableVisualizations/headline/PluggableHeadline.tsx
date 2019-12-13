@@ -17,7 +17,7 @@ import {
     IBucket,
 } from "../../../interfaces/Visualization";
 import {
-    sanitizeUnusedFilters,
+    sanitizeFilters,
     removeAllDerivedMeasures,
     removeAllArithmeticMeasuresFromDerived,
     isDerivedBucketItem,
@@ -87,7 +87,7 @@ export class PluggableHeadline extends PluggableBaseHeadline {
         );
         newReferencePoint = removeSort(newReferencePoint);
 
-        return Promise.resolve(sanitizeUnusedFilters(newReferencePoint, referencePoint));
+        return Promise.resolve(sanitizeFilters(newReferencePoint));
     }
 
     protected renderVisualization(
