@@ -1,7 +1,7 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import * as classNames from "classnames";
-import { FormattedMessage, InjectedIntlProps, injectIntl } from "react-intl";
+import { FormattedMessage, WrappedComponentProps, injectIntl } from "react-intl";
 import noop = require("lodash/noop");
 
 import { ASC, DESC } from "../../../constants/sort";
@@ -15,9 +15,9 @@ export interface ITableSortBubbleContentProps {
 }
 
 export class TableSortBubbleContentClass extends React.Component<
-    ITableSortBubbleContentProps & InjectedIntlProps
+    ITableSortBubbleContentProps & WrappedComponentProps
 > {
-    public static defaultProps: Partial<ITableSortBubbleContentProps> = {
+    public static defaultProps: Partial<ITableSortBubbleContentProps & WrappedComponentProps> = {
         activeSortDir: null,
         onClose: noop,
         onSortChange: noop,
@@ -26,7 +26,7 @@ export class TableSortBubbleContentClass extends React.Component<
     private sortAsc: () => void;
     private sortDesc: () => void;
 
-    constructor(props: ITableSortBubbleContentProps & InjectedIntlProps) {
+    constructor(props: ITableSortBubbleContentProps & WrappedComponentProps) {
         super(props);
 
         this.sortAsc = this.handleSort.bind(this, ASC);

@@ -1,8 +1,9 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import * as PropTypes from "prop-types";
 import { IHeaderParams } from "ag-grid-community";
 import { AFM, Execution } from "@gooddata/typings";
+import { IntlShape } from "react-intl";
 
 import { getParsedFields } from "./agGridUtils";
 import { IMenu, IMenuAggregationClickConfig } from "../../../interfaces/PivotTable";
@@ -14,7 +15,7 @@ export interface IColumnHeaderProps extends IHeaderParams {
     getColumnTotals?: () => AFM.ITotalItem[];
     getExecutionResponse?: () => Execution.IExecutionResponse;
     onMenuAggregationClick?: (config: IMenuAggregationClickConfig) => void;
-    intl?: ReactIntl.InjectedIntl;
+    intl?: IntlShape;
 }
 
 export interface IColumnHeaderState {

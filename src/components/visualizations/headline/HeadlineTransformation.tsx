@@ -1,6 +1,6 @@
 // (C) 2007-2019 GoodData Corporation
 import * as React from "react";
-import { InjectedIntlProps, injectIntl } from "react-intl";
+import { WrappedComponentProps, injectIntl } from "react-intl";
 import noop = require("lodash/noop");
 import { convertDrillableItemsToPredicates } from "../../../helpers/headerPredicate";
 import { IDrillEventExtended, IDrillEvent } from "../../../interfaces/DrillEvents";
@@ -18,15 +18,15 @@ import { IHeadlineTransformationProps } from "./types";
  * React component that this components wraps. It also handles the propagation of the drillable items to the component
  * and drill events out of it.
  */
-class HeadlineTransformation extends React.Component<IHeadlineTransformationProps & InjectedIntlProps> {
-    public static defaultProps: Partial<IHeadlineTransformationProps> = {
+class HeadlineTransformation extends React.Component<IHeadlineTransformationProps & WrappedComponentProps> {
+    public static defaultProps: Partial<IHeadlineTransformationProps & WrappedComponentProps> = {
         drillableItems: [],
         onFiredDrillEvent: () => true,
         onDrill: noop,
         onAfterRender: noop,
     };
 
-    constructor(props: IHeadlineTransformationProps & InjectedIntlProps) {
+    constructor(props: IHeadlineTransformationProps & WrappedComponentProps) {
         super(props);
 
         this.handleFiredDrillEvent = this.handleFiredDrillEvent.bind(this);

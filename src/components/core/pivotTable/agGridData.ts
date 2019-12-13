@@ -13,7 +13,7 @@ import {
 } from "./agGridConst";
 import { IGridHeader, IGridRow, IGridTotalsRow } from "./agGridTypes";
 import invariant = require("invariant");
-import InjectedIntl = ReactIntl.InjectedIntl;
+import { IntlShape } from "react-intl";
 import zipObject = require("lodash/zipObject");
 
 /*
@@ -32,7 +32,7 @@ const getCell = (
     rowIndex: number,
     rowHeader: IGridHeader,
     rowHeaderIndex: number,
-    intl: InjectedIntl,
+    intl: IntlShape,
 ): {
     field: string;
     value: string;
@@ -78,7 +78,7 @@ export const getRow = (
     rowHeaders: IGridHeader[],
     rowHeaderData: Execution.IResultHeaderItem[][],
     subtotalStyles: string[],
-    intl: InjectedIntl,
+    intl: IntlShape,
 ): IGridRow => {
     const row: IGridRow = {
         headerItemMap: {},
@@ -119,7 +119,7 @@ export const getRowTotals = (
     headers: Execution.IHeader[],
     resultSpec: AFM.IResultSpec,
     measureIds: string[],
-    intl: InjectedIntl,
+    intl: IntlShape,
 ): IGridTotalsRow[] => {
     if (!totals) {
         return null;

@@ -3,7 +3,7 @@ import cloneDeep = require("lodash/cloneDeep");
 import get = require("lodash/get");
 import set = require("lodash/set");
 import forEach = require("lodash/forEach");
-import { InjectedIntl } from "react-intl";
+import { IntlShape } from "react-intl";
 
 import * as BucketNames from "../../../constants/bucketNames";
 import { IExtendedReferencePoint, IBucket, IUiConfig, IBucketUiConfig } from "../../interfaces/Visualization";
@@ -36,7 +36,7 @@ import { VisualizationTypes } from "../../../constants/visualizationTypes";
 
 function setBaseChartBucketWarningMessages(
     referencePoint: IExtendedReferencePoint,
-    intl?: InjectedIntl,
+    intl?: IntlShape,
 ): IUiConfig {
     const buckets: IBucket[] = get(referencePoint, BUCKETS, []);
     const updatedUiConfig: IUiConfig = cloneDeep(get(referencePoint, UICONFIG));
@@ -70,7 +70,7 @@ function setBaseChartBucketWarningMessages(
 
 export function setBaseChartUiConfig(
     referencePoint: IExtendedReferencePoint,
-    intl: InjectedIntl,
+    intl: IntlShape,
     visualizationType: string,
 ): IExtendedReferencePoint {
     const referencePointConfigured = cloneDeep(referencePoint);

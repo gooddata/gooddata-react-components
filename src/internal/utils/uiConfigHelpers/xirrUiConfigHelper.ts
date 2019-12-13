@@ -2,7 +2,7 @@
 import cloneDeep = require("lodash/cloneDeep");
 import get = require("lodash/get");
 import set = require("lodash/set");
-import { InjectedIntl } from "react-intl";
+import { IntlShape } from "react-intl";
 import { IReferencePoint, IUiConfig, IBucket, ICustomError } from "../../interfaces/Visualization";
 import { DEFAULT_XIRR_UICONFIG } from "../../constants/uiConfig";
 import { BUCKETS } from "../../constants/bucket";
@@ -15,7 +15,7 @@ export const getDefaultXirrUiConfig = (): IUiConfig => cloneDeep(DEFAULT_XIRR_UI
 
 export const getCustomError = (
     { buckets }: Readonly<IReferencePoint>,
-    formatMessage: InjectedIntl["formatMessage"],
+    formatMessage: IntlShape["formatMessage"],
 ): ICustomError | undefined => {
     const measuresCount = getItemsCount(buckets, BucketNames.MEASURES);
     const attributeCount = getItemsCount(buckets, BucketNames.ATTRIBUTE);
@@ -30,7 +30,7 @@ export const getCustomError = (
     return undefined;
 };
 
-export const getXirrUiConfig = (referencePoint: IReferencePoint, intl: InjectedIntl): IUiConfig => {
+export const getXirrUiConfig = (referencePoint: IReferencePoint, intl: IntlShape): IUiConfig => {
     const uiConfig = setBucketTitles(
         {
             ...referencePoint,

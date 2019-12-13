@@ -5,6 +5,9 @@
     "jsx": "react",
     "lib": [
       "es7",
+      "ES2017.Intl",
+      "ES2018.Intl",
+      "ESNext.Intl",
       "dom"
     ],
     "module": "commonjs",

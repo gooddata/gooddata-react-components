@@ -8,7 +8,7 @@ import omit = require("lodash/omit");
 import sortBy = require("lodash/sortBy");
 import get = require("lodash/get");
 import { AFM } from "@gooddata/typings";
-import { InjectedIntl } from "react-intl";
+import { IntlShape } from "react-intl";
 import {
     isMappingHeaderAttribute,
     isMappingHeaderMeasureItem,
@@ -70,14 +70,14 @@ export const getTotalsFromResultSpec = (resultSpec: AFM.IResultSpec): AFM.ITotal
         : [];
 };
 
-function getTotalsList(intl: InjectedIntl): ITotalTypeWithTitle[] {
+function getTotalsList(intl: IntlShape): ITotalTypeWithTitle[] {
     return AVAILABLE_TOTALS.map(type => ({
         type,
         title: intl.formatMessage({ id: `visualizations.totals.dropdown.title.${type}` }),
     }));
 }
 
-export function getTotalsDataSource(usedTotals: ITotalWithData[], intl: InjectedIntl): ITotalsDataSource {
+export function getTotalsDataSource(usedTotals: ITotalWithData[], intl: IntlShape): ITotalsDataSource {
     const usedTotalsTypes: AFM.TotalType[] = usedTotals.map((total: ITotalWithData) => total.type);
 
     const list: ITotalTypeWithTitle[] = getTotalsList(intl).map((total: ITotalTypeWithTitle) => ({

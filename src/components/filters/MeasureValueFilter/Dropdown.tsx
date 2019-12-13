@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
-import { injectIntl, InjectedIntlProps } from "react-intl";
+import { injectIntl, WrappedComponentProps } from "react-intl";
 import { IntlWrapper } from "../../core/base/IntlWrapper";
 import { IValue } from "../../../interfaces/MeasureValueFilter";
 import Overlay from "@gooddata/goodstrap/lib/core/Overlay";
@@ -16,14 +16,14 @@ export interface IDropdownOwnProps {
     anchorEl: EventTarget | string;
 }
 
-export type IDropdownProps = IDropdownOwnProps & InjectedIntlProps;
+export type IDropdownProps = IDropdownOwnProps & WrappedComponentProps;
 
 interface IDropdownState {
     displayDropdown: boolean;
 }
 
 class DropdownWrapped extends React.PureComponent<IDropdownProps, IDropdownState> {
-    public static defaultProps: Partial<IDropdownOwnProps> = {
+    public static defaultProps: Partial<IDropdownProps> = {
         value: {},
         operator: null,
     };

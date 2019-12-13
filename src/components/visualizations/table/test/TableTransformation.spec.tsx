@@ -1,7 +1,7 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import { mount } from "enzyme";
-import { InjectedIntlProps } from "react-intl";
+import { WrappedComponentProps } from "react-intl";
 import { IMappingHeader } from "../../../../interfaces/MappingHeader";
 
 import { withIntl } from "../../utils/intlUtils";
@@ -19,7 +19,7 @@ const WrappedTable = withIntl(TableTransformation);
 describe("TableTransformation", () => {
     function createComponent(
         customProps: Partial<ITableTransformationProps> = {},
-    ): React.ReactElement<ITableTransformationProps & InjectedIntlProps> {
+    ): React.ReactElement<ITableTransformationProps & WrappedComponentProps> {
         const defaultProps = {
             executionRequest: EXECUTION_REQUEST_2A_3M,
             executionResponse: EXECUTION_RESPONSE_2A_3M,

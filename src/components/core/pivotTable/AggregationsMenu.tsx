@@ -3,6 +3,7 @@ import { Header, Item, ItemsWrapper } from "@gooddata/goodstrap/lib/List/MenuLis
 import { AFM, Execution } from "@gooddata/typings";
 import * as classNames from "classnames";
 import * as React from "react";
+import { IntlShape } from "react-intl";
 
 import {
     getNthAttributeHeader,
@@ -24,7 +25,7 @@ export interface IColumnTotal {
 }
 
 export interface IAggregationsMenuProps {
-    intl: ReactIntl.InjectedIntl;
+    intl: IntlShape;
     isMenuOpened: boolean;
     isMenuButtonVisible: boolean;
     showSubmenu: boolean;

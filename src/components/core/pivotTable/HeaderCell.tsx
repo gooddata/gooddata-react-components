@@ -1,7 +1,8 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import * as classNames from "classnames";
 import { AFM, Execution } from "@gooddata/typings";
+import { IntlShape } from "react-intl";
 
 import { IMenu, IMenuAggregationClickConfig } from "../../../interfaces/PivotTable";
 import { IOnOpenedChangeParams } from "../../menu/MenuSharedTypes";
@@ -25,7 +26,7 @@ export interface IHeaderCellProps {
     getExecutionResponse?: () => Execution.IExecutionResponse;
     getColumnTotals?: () => AFM.ITotalItem[];
     colId?: string;
-    intl?: ReactIntl.InjectedIntl;
+    intl?: IntlShape;
 }
 
 export interface IHeaderCellState {

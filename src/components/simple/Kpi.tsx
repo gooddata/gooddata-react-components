@@ -1,11 +1,11 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
 import { SDK, DataLayer } from "@gooddata/gooddata-js";
 import { colors2Object, ISeparators, numberFormat } from "@gooddata/numberjs";
 import isNil = require("lodash/isNil");
 import noop = require("lodash/noop");
 import { AFM, Execution } from "@gooddata/typings";
-import { injectIntl, InjectedIntlProps } from "react-intl";
+import { injectIntl, WrappedComponentProps } from "react-intl";
 
 import { Execute, IExecuteChildrenProps, IExecuteProps } from "../../execution/Execute";
 import { LoadingComponent, ILoadingProps } from "./LoadingComponent";
@@ -91,8 +91,8 @@ export const KpiError = (props: IErrorProps) => {
     );
 };
 
-export class KpiWrapped extends React.PureComponent<IKpiProps & InjectedIntlProps> {
-    public static defaultProps: Partial<IKpiProps> = {
+export class KpiWrapped extends React.PureComponent<IKpiProps & WrappedComponentProps> {
+    public static defaultProps: Partial<IKpiProps & WrappedComponentProps> = {
         filters: [],
         onError: defaultErrorHandler,
         onLoadingChanged: noop,

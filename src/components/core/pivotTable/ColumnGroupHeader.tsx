@@ -1,8 +1,9 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2019 GoodData Corporation
 import * as React from "react";
+import { IHeaderGroupParams, ColGroupDef } from "ag-grid-community";
+import { IntlShape } from "react-intl";
 
 import { AFM, Execution } from "@gooddata/typings";
-import { IHeaderGroupParams, ColGroupDef } from "ag-grid-community";
 
 import HeaderCell, { ALIGN_LEFT } from "./HeaderCell";
 import { IMenu, IMenuAggregationClickConfig } from "../../../interfaces/PivotTable";
@@ -12,7 +13,7 @@ export interface IProps extends IHeaderGroupParams {
     getColumnTotals: () => AFM.ITotalItem[];
     getExecutionResponse: () => Execution.IExecutionResponse;
     onMenuAggregationClick: (config: IMenuAggregationClickConfig) => void;
-    intl: ReactIntl.InjectedIntl;
+    intl: IntlShape;
 }
 
 export interface IColumnGroupDef extends ColGroupDef {

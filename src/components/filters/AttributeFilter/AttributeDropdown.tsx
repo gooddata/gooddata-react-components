@@ -7,7 +7,7 @@ import Dropdown, { DropdownButton } from "@gooddata/goodstrap/lib/Dropdown/Dropd
 import LoadingMask from "@gooddata/goodstrap/lib/core/LoadingMask";
 import { string as stringUtils } from "@gooddata/js-utils";
 import DataSource from "@gooddata/goodstrap/lib/DataSource/DataSource";
-import { injectIntl, InjectedIntlProps, InjectedIntl } from "react-intl";
+import { injectIntl, WrappedComponentProps, IntlShape } from "react-intl";
 import { IValidElementsResponse, IElement } from "@gooddata/gooddata-js";
 import * as classNames from "classnames";
 import last = require("lodash/last");
@@ -29,7 +29,7 @@ const LIMIT = MAX_SELECTION_SIZE + 50;
 const INITIAL_OFFSET = 0;
 
 const getLoadingClass = () => <LoadingMask style={{ height: 306 }} />;
-const getDefaultListError = (_listError: any, { intl }: { intl: InjectedIntl }) => {
+const getDefaultListError = (_listError: any, { intl }: { intl: IntlShape }) => {
     const text = intl.formatMessage({ id: "gs.list.error" });
     return <div className="gd-message error">{text}</div>;
 };
@@ -125,7 +125,7 @@ export function loadAttributeElements(
 }
 
 export class AttributeDropdownWrapped extends React.PureComponent<
-    IAttributeDropdownProps & InjectedIntlProps,
+    IAttributeDropdownProps & WrappedComponentProps,
     IAttributeDropdownState
 > {
     public static propTypes = {
@@ -147,7 +147,7 @@ export class AttributeDropdownWrapped extends React.PureComponent<
         }).isRequired,
     };
 
-    public static defaultProps: Partial<IAttributeDropdownProps> = {
+    public static defaultProps: Partial<IAttributeDropdownProps & WrappedComponentProps> = {
         fullscreenOnMobile: false,
         title: null,
         projectId: null,
@@ -161,7 +161,7 @@ export class AttributeDropdownWrapped extends React.PureComponent<
     private dropdownRef: any;
     private MediaQuery: (...params: any[]) => any; // TODO: make the types more specific (FET-282);
 
-    constructor(props: IAttributeDropdownProps & InjectedIntlProps) {
+    constructor(props: IAttributeDropdownProps & WrappedComponentProps) {
         super(props);
 
         this.state = {

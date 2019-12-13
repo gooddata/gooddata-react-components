@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
-import { InjectedIntlProps, injectIntl } from "react-intl";
+import { WrappedComponentProps, injectIntl } from "react-intl";
 import Overlay from "@gooddata/goodstrap/lib/core/Overlay";
 import { Separator } from "@gooddata/goodstrap/lib/List/MenuList";
 
@@ -14,7 +14,7 @@ export interface IOperatorDropdownBodyOwnProps {
     alignTo: string;
 }
 
-type IOperatorDropdownBodyProps = IOperatorDropdownBodyOwnProps & InjectedIntlProps;
+type IOperatorDropdownBodyProps = IOperatorDropdownBodyOwnProps & WrappedComponentProps;
 
 export class OperatorDropdownBody extends React.PureComponent<IOperatorDropdownBodyProps> {
     public render() {

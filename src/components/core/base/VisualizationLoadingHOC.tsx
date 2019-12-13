@@ -23,7 +23,7 @@ import { ISubject } from "../../../helpers/async";
 import { convertErrors, checkEmptyResult, isApiResponseError } from "../../../helpers/errorHandlers";
 import { IHeaderPredicate } from "../../../interfaces/HeaderPredicate";
 import { IDataSourceProviderInjectedProps } from "../../afm/DataSourceProvider";
-import { injectIntl, InjectedIntl } from "react-intl";
+import { injectIntl, WrappedComponentProps } from "react-intl";
 import { IntlWrapper } from "../../core/base/IntlWrapper";
 
 import { LoadingComponent, ILoadingProps } from "../../simple/LoadingComponent";
@@ -56,11 +56,10 @@ export type IGetPage = (
     offset: number[],
 ) => Promise<Execution.IExecutionResponses | null>;
 
-export interface ILoadingInjectedProps {
+export interface ILoadingInjectedProps extends WrappedComponentProps {
     execution: Execution.IExecutionResponses;
     error?: string;
     isLoading: boolean;
-    intl: InjectedIntl;
     // if autoExecuteDataSource is false, this callback is passed to the inner component and handles loading
     getPage?: IGetPage;
 
@@ -119,6 +118,7 @@ export function visualizationLoadingHOC<
             };
 
             this.sdk = props.sdk ? props.sdk.clone() : createSdk();
+
             setTelemetryHeaders(this.sdk, "LoadingHOCWrapped", props);
 
             this.pagePromises = [];
@@ -428,7 +428,7 @@ export function visualizationLoadingHOC<
         }
     }
 
-    const IntlLoadingHOC = injectIntl(LoadingHOCWrapped);
+    const IntlLoadingHOC = injectIntl<"intl", T & ILoadingInjectedProps>(LoadingHOCWrapped);
 
     return class LoadingHOC extends React.Component<T & ILoadingInjectedProps, null> {
         public render() {

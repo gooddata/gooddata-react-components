@@ -1,6 +1,6 @@
 // (C) 2019 GoodData Corporation
 import * as React from "react";
-import { injectIntl, InjectedIntlProps } from "react-intl";
+import { injectIntl, WrappedComponentProps } from "react-intl";
 import set = require("lodash/set");
 import Dropdown, { DropdownButton, DropdownBody } from "@gooddata/goodstrap/lib/Dropdown/Dropdown";
 import DisabledBubbleMessage from "../DisabledBubbleMessage";
@@ -31,7 +31,7 @@ const alignPoints = ["bl tl", "tl bl", "br tr", "tr br"];
 
 export const DROPDOWN_ALIGMENTS = alignPoints.map(align => ({ align, offset: { x: 1, y: 0 } }));
 
-class DropdownControl extends React.PureComponent<IDropdownControlProps & InjectedIntlProps> {
+class DropdownControl extends React.PureComponent<IDropdownControlProps & WrappedComponentProps> {
     public static defaultProps = {
         value: "",
         items: [] as IDropdownItem[],
@@ -40,7 +40,7 @@ class DropdownControl extends React.PureComponent<IDropdownControlProps & Inject
         showDisabledMessage: false,
     };
 
-    constructor(props: IDropdownControlProps & InjectedIntlProps) {
+    constructor(props: IDropdownControlProps & WrappedComponentProps) {
         super(props);
         this.onSelect = this.onSelect.bind(this);
     }

@@ -5,7 +5,7 @@ import isEmpty = require("lodash/isEmpty");
 import isNumber = require("lodash/isNumber");
 import * as invariant from "invariant";
 import { AFM, Execution } from "@gooddata/typings";
-import { InjectedIntl } from "react-intl";
+import { IntlShape } from "react-intl";
 import { isSomeHeaderPredicateMatched } from "../../../../helpers/headerPredicate";
 import { IHeaderPredicate } from "../../../../interfaces/HeaderPredicate";
 import {
@@ -36,7 +36,7 @@ function createHeadlineDataItem(executionDataItem: IHeadlineExecutionData): IHea
     };
 }
 
-function createTertiaryItem(executionData: IHeadlineExecutionData[], intl: InjectedIntl): IHeadlineDataItem {
+function createTertiaryItem(executionData: IHeadlineExecutionData[], intl: IntlShape): IHeadlineDataItem {
     const secondaryHeaderItem = get(executionData, [1, "measureHeaderItem"]);
     if (!secondaryHeaderItem) {
         return null;
@@ -108,7 +108,7 @@ function getExecutionData(
 export function getHeadlineData(
     executionResponse: Execution.IExecutionResponse,
     executionResult: Execution.IExecutionResult,
-    intl: InjectedIntl,
+    intl: IntlShape,
 ): IHeadlineData {
     const executionData = getExecutionData(executionResponse, executionResult);
 

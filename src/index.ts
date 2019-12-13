@@ -1,4 +1,5 @@
 // (C) 2007-2019 GoodData Corporation
+import "./polyfills";
 import * as AfmComponents from "./components/afm/afmComponents";
 import * as VisEvents from "./interfaces/Events";
 import CatalogHelper from "./helpers/CatalogHelper";

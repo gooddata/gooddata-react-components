@@ -2,7 +2,7 @@
 import cloneDeep = require("lodash/cloneDeep");
 import get = require("lodash/get");
 import set = require("lodash/set");
-import { InjectedIntl } from "react-intl";
+import { IntlShape } from "react-intl";
 
 import * as BucketNames from "../../../constants/bucketNames";
 import { IExtendedReferencePoint, IBucket, IUiConfig, IBucketUiConfig } from "../../interfaces/Visualization";
@@ -39,7 +39,7 @@ function getWarningMessageIdForStackByBucket(categoriesCount: number) {
 function setAreaChartBucketWarningMessages(
     referencePoint: IExtendedReferencePoint,
     messageConfig: { [bucketName: string]: string },
-    intl?: InjectedIntl,
+    intl?: IntlShape,
 ): IUiConfig {
     const buckets: IBucket[] = get(referencePoint, BUCKETS, []);
     const updatedUiConfig: IUiConfig = get(referencePoint, UICONFIG);
@@ -64,7 +64,7 @@ function setAreaChartBucketWarningMessages(
 
 export function setAreaChartUiConfig(
     referencePoint: IExtendedReferencePoint,
-    intl: InjectedIntl,
+    intl: IntlShape,
     visualizationType: string,
 ): IExtendedReferencePoint {
     const referencePointConfigured = cloneDeep(referencePoint);

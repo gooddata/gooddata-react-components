@@ -1,10 +1,9 @@
 // (C) 2007-2019 GoodData Corporation
 import { AFM, Execution } from "@gooddata/typings";
 import { IDatasource, IGetRowsParams, GridApi } from "ag-grid-community";
+import { IntlShape } from "react-intl";
+
 import { getMappingHeaderName } from "../../../helpers/mappingHeader";
-
-import InjectedIntl = ReactIntl.InjectedIntl;
-
 import { getTreeLeaves, getSubtotalStyles } from "./agGridUtils";
 import { COLUMN_GROUPING_DELIMITER, ROW_ATTRIBUTE_COLUMN } from "./agGridConst";
 import {
@@ -37,7 +36,7 @@ export const getDataSourceRowsGetter = (
         resultSpec: AFM.IResultSpec,
     ) => void,
     getGridApi: () => GridApi,
-    intl: InjectedIntl,
+    intl: IntlShape,
     columnTotals: AFM.ITotalItem[],
     getGroupingProvider: () => IGroupingProvider,
 ): ((params: IGetRowsParams) => void) => {
@@ -117,7 +116,7 @@ export const getDataSourceRowsGetter = (
 export const executionToAGGridAdapter = (
     executionResponses: Execution.IExecutionResponses,
     resultSpec: AFM.IResultSpec = {},
-    intl: InjectedIntl,
+    intl: IntlShape,
     options: IGridAdapterOptions = {},
 ): IAgGridPage => {
     const { makeRowGroups = false, addLoadingRenderer = null, columnDefOptions } = options;
@@ -240,7 +239,7 @@ class GdToAgGridAdapter implements IDatasource {
             resultSpec: AFM.IResultSpec,
         ) => void,
         getGridApi: () => any,
-        intl: InjectedIntl,
+        intl: IntlShape,
         columnTotals: AFM.ITotalItem[],
         getGroupingProvider: () => IGroupingProvider,
         cancelPagePromises: () => void,
@@ -296,7 +295,7 @@ export const createAgGridDataSource = (
         resultSpec: AFM.IResultSpec,
     ) => void,
     getGridApi: () => any,
-    intl: InjectedIntl,
+    intl: IntlShape,
     columnTotals: AFM.ITotalItem[],
     getGroupingProvider: () => IGroupingProvider,
     cancelPagePromises: () => void,
