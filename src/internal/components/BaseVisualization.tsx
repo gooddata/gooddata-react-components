@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import * as uuid from "uuid";
 import isEqual = require("lodash/isEqual");
@@ -38,6 +38,7 @@ import { PluggableTreemap } from "./pluggableVisualizations/treeMap/PluggableTre
 import { PluggableFunnelChart } from "./pluggableVisualizations/funnelChart/PluggableFunnelChart";
 import { PluggableBubbleChart } from "./pluggableVisualizations/bubbleChart/PluggableBubbleChart";
 import { PluggableXirr } from "./pluggableVisualizations/xirr/PluggableXirr";
+import { PluggableGeoPushpinChart } from "./pluggableVisualizations/geoChart/PluggableGeoPushpinChart";
 
 // visualization catalogue - add your new visualization here
 const VisualizationsCatalog = {
@@ -57,6 +58,7 @@ const VisualizationsCatalog = {
     treemap: PluggableTreemap,
     funnel: PluggableFunnelChart,
     xirr: PluggableXirr,
+    pushpin: PluggableGeoPushpinChart,
 };
 
 export interface IBaseVisualizationProps extends IVisCallbacks {

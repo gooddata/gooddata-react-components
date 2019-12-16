@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import cloneDeep = require("lodash/cloneDeep");
 
 import { AFM } from "@gooddata/typings";
@@ -364,6 +364,23 @@ describe("createSorts", () => {
             sortItems: [SORTED_BY_M1],
         };
         expect(createSorts("table", emptyAfm, emptyResultSpec, visualizationProperties)).toEqual([]);
+    });
+
+    it("should sort by measure size if chart is geo Pushpin", () => {
+        const afm: AFM.IAfm = {
+            measures: [M1],
+            attributes: [A1, A2],
+        };
+        const resultSpec: AFM.IResultSpec = {
+            dimensions: [
+                { itemIdentifiers: ["measureGroup"] },
+                {
+                    itemIdentifiers: ["a1", "a2"],
+                },
+            ],
+        };
+        const expectedSort: AFM.SortItem[] = [SORTED_BY_M1];
+        expect(createSorts("pushpin", afm, resultSpec, emptyVisualizationProperties)).toEqual(expectedSort);
     });
 });
 

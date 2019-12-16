@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import {
     IReferencePoint,
     IBucketItem,
@@ -311,6 +311,62 @@ export const attributeItems: IBucketItem[] = [
         localIdentifier: "a3",
         type: "attribute",
         attribute: "attr.owner.region",
+    },
+];
+
+export const geoAttributeItems: IBucketItem[] = [
+    {
+        localIdentifier: "a1",
+        type: "attribute",
+        aggregation: null,
+        attribute: "attr.owner.country",
+    },
+    {
+        localIdentifier: "a2",
+        type: "attribute",
+        aggregation: null,
+        attribute: "attr.owner.city",
+    },
+];
+
+export const geoAttributeFilters: IFiltersBucketItem[] = [
+    {
+        localIdentifier: "a1",
+        type: "attribute",
+        aggregation: null,
+        attribute: "attr.owner.country",
+        filters: [
+            {
+                attribute: "attr.owner.country",
+                isInverted: false,
+                totalElementsCount: 10,
+                selectedElements: [
+                    {
+                        title: "string",
+                        uri: "string",
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        localIdentifier: "a2",
+        type: "attribute",
+        aggregation: null,
+        attribute: "attr.owner.city",
+        filters: [
+            {
+                attribute: "attr.owner.city",
+                totalElementsCount: 10,
+                isInverted: true,
+                selectedElements: [
+                    {
+                        title: "string",
+                        uri: "string",
+                    },
+                ],
+            },
+        ],
     },
 ];
 
@@ -1914,5 +1970,33 @@ export const measureValueFilterReferencePoint: IReferencePoint = {
                 ],
             },
         ],
+    },
+};
+
+export const simpleGeoPushpinReferencePoint: IReferencePoint = {
+    buckets: [
+        {
+            localIdentifier: "location",
+            items: geoAttributeItems.slice(0, 1),
+        },
+        {
+            localIdentifier: "size",
+            items: masterMeasureItems.slice(0, 1),
+        },
+        {
+            localIdentifier: "color",
+            items: masterMeasureItems.slice(1, 2),
+        },
+        {
+            localIdentifier: "segmentBy",
+            items: geoAttributeItems.slice(1, 2),
+        },
+    ],
+    filters: {
+        localIdentifier: "filters",
+        items: geoAttributeFilters.slice(0, 1),
+    },
+    properties: {
+        sortItems: [defaultSortItem],
     },
 };
