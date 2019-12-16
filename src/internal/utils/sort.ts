@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import get = require("lodash/get");
 import set = require("lodash/set");
 import includes = require("lodash/includes");
@@ -45,6 +45,15 @@ function getDefaultTableSort(afm: AFM.IAfm): AFM.SortItem[] {
     }
 
     return [SortsHelper.getAttributeSortItem(attribute.localIdentifier, SORT_DIR_ASC)];
+}
+
+function getDefaultGeoPushpinSort(afm: AFM.IAfm): AFM.SortItem[] {
+    const measure: AFM.IMeasure = get(afm, "measures.0");
+    if (measure) {
+        return getMeasureSortItems(measure.localIdentifier, SORT_DIR_DESC);
+    }
+
+    return [];
 }
 
 export function getDefaultPivotTableSort(afm: AFM.IAfm): AFM.SortItem[] {
@@ -97,6 +106,8 @@ export function createSorts(
             );
         case VisualizationTypes.TREEMAP:
             return SortsHelper.getDefaultTreemapSort(afm, resultSpec);
+        case VisualizationTypes.PUSHPIN:
+            return getDefaultGeoPushpinSort(afm);
     }
     return [];
 }
