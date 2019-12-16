@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import set = require("lodash/set");
 import get = require("lodash/get");
 import uniq = require("lodash/uniq");
@@ -243,6 +243,13 @@ function bucketSupportsSubtitle(visualizationType: string, bucketLocalIdentifier
     if (visualizationType === VisualizationTypes.COMBO) {
         return bucketLocalIdentifier !== BucketNames.VIEW;
     }
+
+    if (visualizationType === VisualizationTypes.PUSHPIN) {
+        return (
+            bucketLocalIdentifier !== BucketNames.LOCATION && bucketLocalIdentifier !== BucketNames.SEGMENT_BY
+        );
+    }
+
     return false;
 }
 
