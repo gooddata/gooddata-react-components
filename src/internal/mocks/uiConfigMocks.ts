@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import {
     MAX_METRICS_COUNT,
     DEFAULT_PIE_METRICS_COUNT,
@@ -1204,4 +1204,72 @@ export const fullySpecifiedXirrUiConfig: IUiConfig = {
     exportConfig: disabledExportConfig,
     openAsReport: disabledOpenAsReportConfig,
     supportedOverTimeComparisonTypes: [],
+};
+
+export const defaultGeoPushpinUiConfig: IUiConfig = {
+    buckets: {
+        location: {
+            accepts: ["attribute"],
+            allowsReordering: false,
+            allowsSwapping: true,
+            enabled: true,
+            icon: "",
+            isShowInPercentEnabled: false,
+            itemsLimit: 1,
+            title: "Location",
+        },
+        size: {
+            accepts: ["metric", "fact", "attribute"],
+            allowsDuplicateItems: true,
+            allowsReordering: false,
+            allowsSwapping: true,
+            enabled: true,
+            icon: "",
+            isShowInPercentEnabled: false,
+            isShowInPercentVisible: false,
+            itemsLimit: 1,
+            subtitle: "Size",
+            title: "Measure",
+            canAddItems: true,
+        },
+        color: {
+            accepts: ["metric", "fact", "attribute"],
+            allowsDuplicateItems: true,
+            allowsReordering: false,
+            allowsSwapping: true,
+            enabled: true,
+            icon: "",
+            isShowInPercentEnabled: false,
+            isShowInPercentVisible: false,
+            itemsLimit: 1,
+            subtitle: "Color",
+            title: "Measure",
+            canAddItems: true,
+        },
+        segmentBy: {
+            accepts: ["attribute"],
+            allowsReordering: false,
+            allowsSwapping: true,
+            enabled: true,
+            icon: "",
+            isShowInPercentEnabled: false,
+            itemsLimit: 1,
+            title: "Segment by",
+        },
+        filters: {
+            accepts: ["attribute", "date"],
+            allowsReordering: false,
+            enabled: true,
+            isShowInPercentEnabled: false,
+            itemsLimit: 20,
+        },
+    },
+    exportConfig: {
+        supported: true,
+    },
+    openAsReport: {
+        supported: false,
+    },
+    recommendations: {},
+    supportedOverTimeComparisonTypes: noSupportedOverTimeComparisonTypes,
 };
