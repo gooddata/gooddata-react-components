@@ -8,9 +8,9 @@ import "@gooddata/react-components/styles/css/main.css";
 import { projectId, franchisedSalesIdentifier, locationNameDisplayFormIdentifier } from "../utils/fixtures";
 
 const franchisedSalesMeasure = Model.measure(franchisedSalesIdentifier)
-    .format("#,##0")
     .localIdentifier("franchisedSales")
-    .title("Franchised Sales");
+    .title("Franchised Sales in %")
+    .ratio();
 const measures = [franchisedSalesMeasure];
 
 const attributes = [Model.attribute(locationNameDisplayFormIdentifier).localIdentifier("locationName")];
@@ -39,7 +39,7 @@ DropdownButton.propTypes = {
     onClick: PropTypes.func.isRequired,
 };
 
-export class MeasureValueFilterDropdownExample extends React.PureComponent {
+export class MeasureValueFilterDropdownRatioExample extends React.PureComponent {
     constructor(props) {
         super(props);
         this.ref = React.createRef();
@@ -80,6 +80,7 @@ export class MeasureValueFilterDropdownExample extends React.PureComponent {
                         measureIdentifier={franchisedSalesMeasure.measure.localIdentifier}
                         filter={filters[0] || null}
                         anchorEl={this.ref.current}
+                        warningMessage="The filter uses actual measure values, not percentage."
                     />
                 ) : null}
                 <hr className="separator" />
@@ -96,4 +97,4 @@ export class MeasureValueFilterDropdownExample extends React.PureComponent {
     }
 }
 
-export default MeasureValueFilterDropdownExample;
+export default MeasureValueFilterDropdownRatioExample;
