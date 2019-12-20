@@ -20,6 +20,7 @@ import { IntlWrapper } from "../core/base/IntlWrapper";
 import { BaseChart } from "../core/base/BaseChart";
 import { IAxisConfig, IChartConfig, IColorPaletteItem } from "../../interfaces/Config";
 import { PivotTable } from "../PivotTable";
+import { GeoChart } from "../GeoChart";
 import { Headline } from "../core/Headline";
 import { Xirr } from "../core/Xirr";
 import { IEvents, OnLegendReady } from "../../interfaces/Events";
@@ -80,6 +81,7 @@ export interface IVisualizationProps extends IEvents {
     getFeatureFlags?: (sdk: SDK, projectId: string) => Promise<IFeatureFlags>;
     BaseChartComponent?: any;
     PivotTableComponent?: any;
+    GeoChartComponent?: any;
     HeadlineComponent?: any;
     XirrComponent?: any;
     ErrorComponent?: React.ComponentType<IErrorProps>;
@@ -160,6 +162,7 @@ export class VisualizationWrapped extends React.Component<
         getFeatureFlags,
         BaseChartComponent: BaseChart,
         PivotTableComponent: PivotTable,
+        GeoChartComponent: GeoChart,
         HeadlineComponent: Headline,
         XirrComponent: Xirr,
         ErrorComponent,
@@ -294,6 +297,7 @@ export class VisualizationWrapped extends React.Component<
             locale,
             BaseChartComponent,
             PivotTableComponent,
+            GeoChartComponent,
             HeadlineComponent,
             XirrComponent,
             LoadingComponent,
@@ -345,6 +349,13 @@ export class VisualizationWrapped extends React.Component<
                 // we do not need to pass totals={totals} because BucketPivotTable deals with changes in totals itself
                 return <PivotTableComponent {...commonProps} {...pivotBucketProps} />;
             }
+            case VisualizationTypes.PUSHPIN:
+                // TODO: will be fixed in SD-759
+                const geoBucketProps = {
+                    // ...mdObject,
+                    // content: fillMissingTitles(mdObject.content, locale),
+                };
+                return <GeoChartComponent {...commonProps} {...geoBucketProps} />;
             case VisualizationTypes.HEADLINE:
                 return <HeadlineComponent {...commonProps} {...sourceProps} />;
             case VisualizationTypes.XIRR:

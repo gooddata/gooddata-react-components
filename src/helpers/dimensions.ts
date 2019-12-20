@@ -303,6 +303,19 @@ function getScatterDimensions(mdObject: VisualizationObject.IVisualizationObject
     ];
 }
 
+export function getGeoChartDimensions(buckets: VisualizationObject.IBucket[]): AFM.IDimension[] {
+    const afm: AFM.IAfm = convertBucketsToAFM(buckets);
+    const attributes = afm.attributes || [];
+    return [
+        {
+            itemIdentifiers: attributes.map(a => a.localIdentifier),
+        },
+        {
+            itemIdentifiers: [MEASUREGROUP],
+        },
+    ];
+}
+
 // Heatmap
 export function getHeatmapDimensionsFromMdObj(
     mdObject: VisualizationObject.IVisualizationObjectContent,
