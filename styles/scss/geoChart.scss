@@ -1,0 +1,15 @@
+// (C) 2007-2019 GoodData Corporation
+@import "~mapbox-gl/dist/mapbox-gl";
+
+.gd-geo-component {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+
+    .mapboxgl-map {
+        height: 100%;
+        width: 100%;
+    }
+}
