@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import isObject = require("lodash/isObject");
 import { SDK } from "@gooddata/gooddata-js";
 import isNil = require("lodash/isNil");
@@ -32,3 +32,12 @@ export function percentFormatter(value: number): string {
 export const unwrap = (wrappedObject: any) => {
     return wrappedObject[Object.keys(wrappedObject)[0]];
 };
+
+export function stringToFloat(text: string): number {
+    const parsedNumber = parseFloat(text);
+    if (isNaN(parsedNumber)) {
+        // tslint:disable-next-line no-console
+        console.warn(`SDK: utils - stringToFloat: ${text} is not a number`);
+    }
+    return parsedNumber;
+}
