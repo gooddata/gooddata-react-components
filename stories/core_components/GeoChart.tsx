@@ -3,9 +3,9 @@ import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { screenshotWrap } from "@gooddata/test-storybook";
 import { Execution, VisualizationObject } from "@gooddata/typings";
-import { GeoChart, IGeoChartInnerProps } from "../../src/components/core/GeoChart";
+import { GeoChartInner, IGeoChartInnerProps } from "../../src/components/core/GeoChart";
 import { createIntlMock } from "../../src/components/visualizations/utils/intlUtils";
-import { COLOR, LOCATION, SEGMENT_BY, SIZE, TOOLTIP_TEXT } from "../../src/constants/geoChart";
+import { COLOR, LOCATION, SEGMENT_BY, SIZE, TOOLTIP_TEXT } from "../../src/constants/bucketNames";
 import { IGeoConfig } from "../../src/interfaces/GeoChart";
 import { getExecutionResult } from "../data/geoChart";
 
@@ -120,7 +120,7 @@ function getPageWithExecution(execution: Execution.IExecutionResponses) {
 function renderChart(config: IGeoConfig, execution: Execution.IExecutionResponses): React.ReactElement {
     return screenshotWrap(
         <div style={wrapperStyle}>
-            <GeoChart
+            <GeoChartInner
                 config={{
                     ...DEFAULT_CONFIG,
                     ...config,
@@ -133,7 +133,7 @@ function renderChart(config: IGeoConfig, execution: Execution.IExecutionResponse
     );
 }
 
-storiesOf("Core components/GeoChart", module)
+storiesOf("Core components/GeoChartInner", module)
     .add("with location", () => {
         const execution = getExecution(true);
         const config: IGeoConfig = {

@@ -303,6 +303,18 @@ function getScatterDimensions(mdObject: VisualizationObject.IVisualizationObject
     ];
 }
 
+export function getGeoChartDimensions(buckets: VisualizationObject.IBucket[]): AFM.IDimension[] {
+    const { attributes = [] }: AFM.IAfm = convertBucketsToAFM(buckets);
+    return [
+        {
+            itemIdentifiers: [MEASUREGROUP],
+        },
+        {
+            itemIdentifiers: attributes.map((attr: AFM.IAttribute) => attr.localIdentifier),
+        },
+    ];
+}
+
 // Heatmap
 export function getHeatmapDimensionsFromMdObj(
     mdObject: VisualizationObject.IVisualizationObjectContent,
@@ -427,6 +439,9 @@ export function generateDimensions(
         }
         case VisualizationTypes.XIRR: {
             return getXirrDimensions(mdObject);
+        }
+        case VisualizationTypes.PUSHPIN: {
+            return getGeoChartDimensions(mdObject.buckets);
         }
     }
     return [];

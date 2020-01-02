@@ -1,0 +1,36 @@
+{
+    "execution": {
+        "afm": {
+            "measures": [
+                {
+                    "localIdentifier": "color",
+                    "definition": {
+                        "measure": {
+                            "item": {
+                                "uri": "/gdc/md/storybook/obj/21"
+                            }
+                        }
+                    }
+                }
+            ],
+            "attributes": [
+                {
+                    "displayForm": {
+                        "uri": "/gdc/md/storybook/obj/30.df"
+                    },
+                    "localIdentifier": "location"
+                }
+            ]
+        },
+        "resultSpec": {
+            "dimensions": [
+                {
+                    "itemIdentifiers": ["measureGroup"]
+                },
+                {
+                    "itemIdentifiers": ["location"]
+                }
+            ]
+        }
+    }
+}
