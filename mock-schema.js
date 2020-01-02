@@ -199,6 +199,41 @@ const barChartVisualizationObjects = [
     },
 ];
 
+const geoChartWithLocationSizeAfmExecutions = [
+    {
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_request.json"),
+        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_response.json"),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_result.json")
+    }
+];
+const geoChartWithLocationColorAfmExecutions = [
+    {
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_color_request.json"),
+        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_color_response.json"),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_color_result.json")
+    }
+];
+const geoChartWithLocationSizeColorAfmExecutions = [
+    {
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_request.json"),
+        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_response.json"),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_result.json")
+    }
+];
+const geoChartWithLocationSizeColorSegmentTooltipAfmExecutions = [
+    {
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_request.json"),
+        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_response.json"),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_result.json")
+    }
+];
+const geoChartWithLocationSizeColorSegmentTooltipFiltersAfmExecutions = [
+    {
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_filters_request.json"),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_filters_result.json")
+    }
+];
+
 const getBaseProjectSchema = (title, identifier) => {
     return {
         project: {
@@ -230,6 +265,14 @@ const getBaseProjectSchema = (title, identifier) => {
                 {
                     identifier: '9',
                     title: 'Saved null'
+                },
+                {
+                    identifier: '20',
+                    title: 'Size'
+                },
+                {
+                    identifier: '21',
+                    title: 'Color'
                 }
             ],
             attributes: [{
@@ -280,6 +323,21 @@ const getBaseProjectSchema = (title, identifier) => {
                         'rep19',
                         'rep20'
                     ]
+                },
+                {
+                    identifier: '30',
+                    title: 'City',
+                    elements: ['New York', 'Chicago', 'San Antonio', 'San Diego', 'Austin', 'Fort Worth', 'Charlotte']
+                },
+                {
+                    identifier: '23',
+                    title: 'Store Type',
+                    elements: ["Speciality", "Department", "Convenience", "Discount"]
+                },
+                {
+                    identifier: '24',
+                    title: 'Tooltip',
+                    elements:['City', 'State']
                 }
             ],
             dateDataSets: [{
@@ -2383,6 +2441,11 @@ const getBaseProjectSchema = (title, identifier) => {
             ...pivotTableSubtotalsAfmExecutions,
             ...pivotTableGrandtotalSubtotalAfmExecutions,
             ...xirrAfmExecutions,
+            ...geoChartWithLocationSizeAfmExecutions,
+            ...geoChartWithLocationColorAfmExecutions,
+            ...geoChartWithLocationSizeColorAfmExecutions,
+            ...geoChartWithLocationSizeColorSegmentTooltipAfmExecutions,
+            ...geoChartWithLocationSizeColorSegmentTooltipFiltersAfmExecutions
         ],
         visualizationClasses: [{
             title: 'Table',

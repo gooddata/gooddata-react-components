@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 export const MEASURES = "measures";
 export const SECONDARY_MEASURES = "secondary_measures";
 export const TERTIARY_MEASURES = "tertiary_measures";
@@ -10,3 +10,8 @@ export const TREND = "trend";
 export const SEGMENT = "segment";
 export const ROWS = "rows";
 export const COLUMNS = "columns";
+export const LOCATION = "location";
+export const SIZE = "size";
+export const COLOR = "color";
+export const SEGMENT_BY = "segmentBy";
+export const TOOLTIP_TEXT = "tooltipText";
