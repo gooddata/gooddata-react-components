@@ -199,6 +199,28 @@ const barChartVisualizationObjects = [
     },
 ];
 
+const geoChartWithLocationSizeAfmExceutions = [
+    {
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_request.json"),
+        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_response.json"),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_result.json")
+    }
+];
+const geoChartWithLocationSizeTooltipAfmExceutions = [
+    {
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_tooltip_request.json"),
+        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_tooltip_response.json"),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_tooltip_result.json")
+    }
+];
+const geoChartWithLocationSizeColorSegmentTooltipAfmExceutions = [
+    {
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_tooltip_request.json"),
+        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_tooltip_response.json"),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_tooltip_result.json")
+    }
+];
+
 const getBaseProjectSchema = (title, identifier) => {
     return {
         project: {
@@ -230,6 +252,14 @@ const getBaseProjectSchema = (title, identifier) => {
                 {
                     identifier: '9',
                     title: 'Saved null'
+                },
+                {
+                    identifier: '20',
+                    title: 'Size'
+                },
+                {
+                    identifier: '21',
+                    title: 'Color'
                 }
             ],
             attributes: [{
@@ -280,6 +310,21 @@ const getBaseProjectSchema = (title, identifier) => {
                         'rep19',
                         'rep20'
                     ]
+                },
+                {
+                    identifier: '30',
+                    title: 'City',
+                    elements: ['New York', 'Chicago', 'San Antonio', 'San Diego', 'Austin', 'Fort Worth', 'Charlotte']
+                },
+                {
+                    identifier: '23',
+                    title: 'Store Type',
+                    elements: ["Speciality", "Department", "Convenience", "Discount"]
+                },
+                {
+                    identifier: '24',
+                    title: 'Tooltip',
+                    elements:['City', 'State']
                 }
             ],
             dateDataSets: [{
@@ -2382,7 +2427,10 @@ const getBaseProjectSchema = (title, identifier) => {
             ...pivotTableAfmExecutions,
             ...pivotTableSubtotalsAfmExecutions,
             ...pivotTableGrandtotalSubtotalAfmExecutions,
-            ...xirrAfmExecutions
+            ...xirrAfmExecutions,
+            ...geoChartWithLocationSizeAfmExceutions,
+            ...geoChartWithLocationSizeTooltipAfmExceutions,
+            ...geoChartWithLocationSizeColorSegmentTooltipAfmExceutions
         ],
         visualizationClasses: [{
             title: 'Table',

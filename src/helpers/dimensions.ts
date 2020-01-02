@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import get = require("lodash/get");
 import { AFM, VisualizationObject } from "@gooddata/typings";
 import { VisualizationTypes, VisType } from "../constants/visualizationTypes";
@@ -303,6 +303,18 @@ function getScatterDimensions(mdObject: VisualizationObject.IVisualizationObject
     ];
 }
 
+export function getGeoChartDimensions(buckets: VisualizationObject.IBucket[]): AFM.IDimension[] {
+    const { attributes = [] }: AFM.IAfm = convertBucketsToAFM(buckets);
+    return [
+        {
+            itemIdentifiers: [MEASUREGROUP],
+        },
+        {
+            itemIdentifiers: attributes.map((attr: AFM.IAttribute) => attr.localIdentifier),
+        },
+    ];
+}
+
 // Heatmap
 export function getHeatmapDimensionsFromMdObj(
     mdObject: VisualizationObject.IVisualizationObjectContent,
@@ -426,6 +438,9 @@ export function generateDimensions(
         }
         case VisualizationTypes.XIRR: {
             return getXirrDimensions(mdObject);
+        }
+        case VisualizationTypes.GEO: {
+            return getGeoChartDimensions(mdObject.buckets);
         }
     }
     return [];

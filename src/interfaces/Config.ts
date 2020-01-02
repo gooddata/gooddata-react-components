@@ -1,13 +1,13 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { ISeparators } from "@gooddata/numberjs";
-import { VisualizationObject } from "@gooddata/typings";
+import { VisualizationObject, VisualizationInput } from "@gooddata/typings";
 import { IColorItem, IColor } from "@gooddata/gooddata-js";
 import Highcharts from "../components/visualizations/chart/highcharts/highchartsEntryPoint";
 import { PositionType } from "../components/visualizations/typings/legend";
 import { VisType } from "../constants/visualizationTypes";
-import { IDataLabelsConfig } from "../interfaces/Config";
 import { IHeaderPredicate } from "./HeaderPredicate";
 import { IMappingHeader } from "./MappingHeader";
+import { ICoordinates } from "./GeoChart";
 
 export { DEFAULT_COLOR_PALETTE } from "../components/visualizations/utils/color";
 
@@ -83,6 +83,9 @@ export interface IChartConfig extends IMeasuresStackConfig {
     secondaryChartType?: VisualizationObject.VisualizationType;
     forceDisableDrillOnAxes?: boolean;
     disableDrillUnderline?: boolean;
+    zoom?: number;
+    center?: ICoordinates;
+    tooltipText?: VisualizationInput.IAttribute;
 }
 
 export interface IStackLabels {
