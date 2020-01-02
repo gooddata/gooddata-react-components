@@ -1,7 +1,7 @@
 // (C) 2019-2020 GoodData Corporation
 import { VisualizationObject } from "@gooddata/typings";
 import { IGeoDataIndex } from "../interfaces/GeoChart";
-import { COLOR, LOCATION, SEGMENT_BY, SIZE, TOOLTIP_TEXT } from "../constants/geoChart";
+import { COLOR, LOCATION, SEGMENT_BY, SIZE, TOOLTIP_TEXT } from "../constants/bucketNames";
 
 /**
  * Build geo data index

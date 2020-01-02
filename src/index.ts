@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import "./polyfills";
 import * as AfmComponents from "./components/afm/afmComponents";
 import * as VisEvents from "./interfaces/Events";
@@ -10,6 +10,7 @@ import { Table as CoreTable } from "./components/core/Table";
 import { Headline as CoreHeadline } from "./components/core/Headline";
 import { ScatterPlot as CoreScatterPlot } from "./components/core/ScatterPlot";
 import { FunnelChart as CoreFunnelChart } from "./components/core/FunnelChart";
+import { GeoChart as CoreGeoChart } from "./components/core/GeoChart";
 import { PivotTable as CorePivotTable, IPivotTableProps } from "./components/core/PivotTable";
 import { ICommonVisualizationProps } from "./components/core/base/VisualizationLoadingHOC";
 import { ErrorComponent } from "./components/simple/ErrorComponent";
@@ -50,6 +51,7 @@ import { Xirr } from "./components/Xirr";
 import { ScatterPlot } from "./components/ScatterPlot";
 import { ComboChart } from "./components/ComboChart";
 import { FunnelChart } from "./components/FunnelChart";
+import { GeoPushpinChart } from "./components/GeoPushpinChart";
 import { Heatmap } from "./components/Heatmap";
 import { withJsxExport } from "./components/withJsxExport";
 import * as ChartConfiguration from "./interfaces/Config";
@@ -78,6 +80,7 @@ const CoreComponents: ICoreComponents = {
     PivotTable: CorePivotTable,
     ScatterPlot: CoreScatterPlot,
     FunnelChart: CoreFunnelChart,
+    GeoPushpinChart: CoreGeoChart,
 };
 
 export * from "./components/filters/DateFilter";
@@ -97,6 +100,7 @@ export {
     ScatterPlot,
     ComboChart,
     FunnelChart,
+    GeoPushpinChart,
     CoreComponents,
     ErrorCodes,
     ErrorStates,

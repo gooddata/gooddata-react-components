@@ -3,7 +3,7 @@ import * as React from "react";
 import { mount, ReactWrapper } from "enzyme";
 import { testUtils } from "@gooddata/js-utils";
 
-import { GeoChart, IGeoChartInnerProps } from "../GeoChart";
+import { GeoChartInner, IGeoChartInnerProps } from "../GeoChart";
 import { createIntlMock } from "../../visualizations/utils/intlUtils";
 
 const intl = createIntlMock();
@@ -17,7 +17,7 @@ describe("GeoChart", () => {
             },
             intl,
         };
-        return mount(<GeoChart {...defaultProps} {...customProps} />);
+        return mount(<GeoChartInner {...defaultProps} {...customProps} />);
     }
 
     it("should render GeoChartInner", async () => {

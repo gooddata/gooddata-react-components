@@ -1,11 +1,4 @@
 // (C) 2019-2020 GoodData Corporation
-
-export const SIZE = "size";
-export const COLOR = "color";
-export const LOCATION = "location";
-export const SEGMENT_BY = "segmentBy";
-export const TOOLTIP_TEXT = "tooltipText";
-
 export const DEFAULT_DATA_SOURCE_NAME = "gdcPushpinsData";
 
 export const DEFAULT_LATITUDE: number = 34;
