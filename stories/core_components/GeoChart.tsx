@@ -1,5 +1,6 @@
 // (C) 2007-2020 GoodData Corporation
 import * as React from "react";
+import { action } from "@storybook/addon-actions";
 import { storiesOf } from "@storybook/react";
 import { screenshotWrap } from "@gooddata/test-storybook";
 import { Execution, VisualizationObject } from "@gooddata/typings";
@@ -117,6 +118,10 @@ function getPageWithExecution(execution: Execution.IExecutionResponses) {
     return () => Promise.resolve(execution);
 }
 
+const dataLarge = () => {
+    action("Data too large");
+};
+
 function renderChart(config: IGeoConfig, execution: Execution.IExecutionResponses): React.ReactElement {
     return screenshotWrap(
         <div style={wrapperStyle}>
@@ -128,6 +133,7 @@ function renderChart(config: IGeoConfig, execution: Execution.IExecutionResponse
                 {...DEFAULT_PROPS}
                 execution={execution}
                 getPage={getPageWithExecution(execution)}
+                onDataTooLarge={dataLarge}
             />
         </div>,
     );
@@ -182,7 +188,7 @@ storiesOf("Core components/GeoChartInner", module)
         };
         return renderChart(config, execution);
     })
-    .add("with location, size, color and segment", () => {
+    .add("with location, size, color and segmentBy", () => {
         const execution = getExecution(true, true, true, true, true);
         const config: IGeoConfig = {
             mdObject: {

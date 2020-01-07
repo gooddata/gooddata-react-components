@@ -1,16 +1,20 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { Execution } from "@gooddata/typings";
 import * as fixtures from "../../../stories/test_data/fixtures";
 import {
     STACK_BY_DIMENSION_INDEX,
     VIEW_BY_DIMENSION_INDEX,
 } from "../../components/visualizations/chart/constants";
-import { EXECUTION_RESPONSE_1A_2M } from "../../components/visualizations/table/fixtures/1attribute2measures";
+import {
+    EXECUTION_RESPONSE_1A_2M,
+    EXECUTION_RESULT_1A_2M,
+} from "../../components/visualizations/table/fixtures/1attribute2measures";
 import {
     findAttributeInDimension,
     findInDimensionHeaders,
     findMeasureGroupInDimensions,
     findMeasureHeaderByLocalIdentifier,
+    getHeaderItemName,
     getNthAttributeHeader,
     getNthAttributeLocalIdentifier,
     getNthAttributeName,
@@ -212,5 +216,17 @@ describe("getNthDimensionHeaders", () => {
         const executionResponse = EXECUTION_RESPONSE_1A_2M;
 
         expect(getNthDimensionHeaders(executionResponse, 3)).toBe(null);
+    });
+});
+
+describe("getHeaderItemName", () => {
+    it("should return header name", () => {
+        const headerItems = EXECUTION_RESULT_1A_2M.headerItems as Execution.IResultHeaderItem[][][];
+        expect(getHeaderItemName(headerItems[0][0][0])).toBe("Wile E. Coyote");
+    });
+
+    it("should return empty header name", () => {
+        const headerItems = EXECUTION_RESULT_1A_2M.headerItems as Execution.IResultHeaderItem[][][];
+        expect(getHeaderItemName(headerItems[1][0][0])).toBe("");
     });
 });

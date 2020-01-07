@@ -1,7 +1,7 @@
 // (C) 2019-2020 GoodData Corporation
 import mapboxgl from "mapbox-gl";
 import { Execution } from "@gooddata/typings";
-import { createPushPinDataSource } from "../geoChartDataSource";
+import { createPushpinDataSource } from "../geoChartDataSource";
 import { IGeoDataIndex } from "../../../../interfaces/GeoChart";
 
 function getExecutionResult(): Execution.IExecutionResult {
@@ -65,7 +65,7 @@ function getExecutionResult(): Execution.IExecutionResult {
                     },
                     {
                         attributeHeaderItem: {
-                            name: "Hawaii",
+                            name: "Other county",
                             uri: "/gdc/md/a8pxyfcimmbcgczhy0o4w775oabma8im/obj/790/elements?id=2027",
                         },
                     },
@@ -95,10 +95,10 @@ function getExecutionResult(): Execution.IExecutionResult {
     };
 }
 
-describe("createPushPinDataSource", () => {
+describe("createPushpinDataSource", () => {
     it("should return default color and size", () => {
         const geoDataIndex: IGeoDataIndex = {};
-        const source: mapboxgl.GeoJSONSourceRaw = createPushPinDataSource(getExecutionResult(), geoDataIndex);
+        const source: mapboxgl.GeoJSONSourceRaw = createPushpinDataSource(getExecutionResult(), geoDataIndex);
 
         expect(source.data).toEqual({
             type: "FeatureCollection",
@@ -114,7 +114,7 @@ describe("createPushPinDataSource", () => {
             segmentBy: 1,
             tooltipText: 2,
         };
-        const source: mapboxgl.GeoJSONSourceRaw = createPushPinDataSource(getExecutionResult(), geoDataIndex);
+        const source: mapboxgl.GeoJSONSourceRaw = createPushpinDataSource(getExecutionResult(), geoDataIndex);
 
         expect(source.data).toEqual({
             type: "FeatureCollection",
@@ -127,6 +127,7 @@ describe("createPushPinDataSource", () => {
                     properties: {
                         City: "Discovery Harbour",
                         pushpinColorValue: 1005,
+                        pushpinSegmentByValue: "Hawaii",
                         pushpinSizeValue: 1005,
                     },
                     type: "Feature",
@@ -139,6 +140,7 @@ describe("createPushPinDataSource", () => {
                     properties: {
                         City: "Naalehu",
                         pushpinColorValue: 943,
+                        pushpinSegmentByValue: "Hawaii",
                         pushpinSizeValue: 943,
                     },
                     type: "Feature",
@@ -151,6 +153,7 @@ describe("createPushPinDataSource", () => {
                     properties: {
                         City: "Waiohinu",
                         pushpinColorValue: 179,
+                        pushpinSegmentByValue: "Other county",
                         pushpinSizeValue: 179,
                     },
                     type: "Feature",
@@ -195,23 +198,38 @@ describe("createPushPinDataSource", () => {
         const geoDataIndex: IGeoDataIndex = {
             location: 0,
         };
-        const source: mapboxgl.GeoJSONSourceRaw = createPushPinDataSource(noMeasureExecResult, geoDataIndex);
+        const source: mapboxgl.GeoJSONSourceRaw = createPushpinDataSource(noMeasureExecResult, geoDataIndex);
 
         expect(source.data).toEqual({
             features: [
                 {
                     geometry: { coordinates: [-155.6254, 19.0415], type: "Point" },
-                    properties: { City: "", pushpinColorValue: undefined, pushpinSizeValue: 8 },
+                    properties: {
+                        City: "",
+                        pushpinColorValue: undefined,
+                        pushpinSegmentByValue: "",
+                        pushpinSizeValue: 10,
+                    },
                     type: "Feature",
                 },
                 {
                     geometry: { coordinates: [-155.5751, 19.0698], type: "Point" },
-                    properties: { City: "", pushpinColorValue: undefined, pushpinSizeValue: 8 },
+                    properties: {
+                        City: "",
+                        pushpinColorValue: undefined,
+                        pushpinSegmentByValue: "",
+                        pushpinSizeValue: 10,
+                    },
                     type: "Feature",
                 },
                 {
                     geometry: { coordinates: [-155.6143, 19.0716], type: "Point" },
-                    properties: { City: "", pushpinColorValue: undefined, pushpinSizeValue: 8 },
+                    properties: {
+                        City: "",
+                        pushpinColorValue: undefined,
+                        pushpinSegmentByValue: "",
+                        pushpinSizeValue: 10,
+                    },
                     type: "Feature",
                 },
             ],
