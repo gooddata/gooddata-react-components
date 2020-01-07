@@ -15,6 +15,8 @@ import {
     findMeasureGroupInDimensions,
     findMeasureHeaderByLocalIdentifier,
     getHeaderItemName,
+    getAttributeHeadersInDimension,
+    getMeasureGroupHeaderItemsInDimension,
     getNthAttributeHeader,
     getNthAttributeLocalIdentifier,
     getNthAttributeName,
@@ -228,5 +230,63 @@ describe("getHeaderItemName", () => {
     it("should return empty header name", () => {
         const headerItems = EXECUTION_RESULT_1A_2M.headerItems as Execution.IResultHeaderItem[][][];
         expect(getHeaderItemName(headerItems[1][0][0])).toBe("");
+    });
+});
+
+describe("getHeadersInDimension", () => {
+    const executionResponse = require("../../../stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_response.json")
+        .executionResponse;
+
+    it("should return attribute headers", () => {
+        const { dimensions } = executionResponse;
+        const attributeHeaders = getAttributeHeadersInDimension(dimensions);
+        expect(attributeHeaders).toEqual([
+            {
+                formOf: { identifier: "30", name: "City", uri: "/gdc/md/storybook/obj/30" },
+                identifier: "30.df",
+                localIdentifier: "location",
+                name: "City",
+                uri: "/gdc/md/storybook/obj/30.df",
+            },
+            {
+                formOf: { identifier: "23", name: "Store Type", uri: "/gdc/md/storybook/obj/23" },
+                identifier: "23.df",
+                localIdentifier: "segmentBy",
+                name: "Store Type",
+                uri: "/gdc/md/storybook/obj/23.df",
+            },
+            {
+                formOf: { identifier: "24", name: "Tooltip", uri: "/gdc/md/storybook/obj/24" },
+                identifier: "24.df",
+                localIdentifier: "tooltip",
+                name: "Tooltip",
+                uri: "/gdc/md/storybook/obj/24.df",
+            },
+        ]);
+    });
+
+    it("should return measure group header", () => {
+        const { dimensions } = executionResponse;
+        const measureHeaderItems = getMeasureGroupHeaderItemsInDimension(dimensions);
+        expect(measureHeaderItems).toEqual([
+            {
+                measureHeaderItem: {
+                    format: "#,##0.00",
+                    identifier: "20",
+                    localIdentifier: "size",
+                    name: "Size",
+                    uri: "/gdc/md/storybook/obj/20",
+                },
+            },
+            {
+                measureHeaderItem: {
+                    format: "#,##0.00",
+                    identifier: "21",
+                    localIdentifier: "color",
+                    name: "Color",
+                    uri: "/gdc/md/storybook/obj/21",
+                },
+            },
+        ]);
     });
 });

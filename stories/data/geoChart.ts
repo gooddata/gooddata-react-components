@@ -54,56 +54,56 @@ const SIZE_DATA: Execution.DataValue[] = [
     "528",
 ];
 const COLOR_DATA: Execution.DataValue[] = [
-    "1005",
-    "943",
-    "179",
-    "4726",
-    "1719",
-    "2844",
-    "838",
-    "3060",
-    "709",
-    "772",
-    "3949",
-    "1766",
-    "1560",
-    "1938",
-    "3836",
-    "5302",
-    "3310",
-    "3500",
-    "2288",
-    "11564",
-    "1381",
-    "2627",
-    "8732",
-    "45703",
-    "11107",
-    "570",
-    "1121",
-    "1605",
-    "433",
-    "869",
-    "12064",
-    "596",
-    "2299",
-    "335",
-    "1782",
-    "1242",
-    "150",
-    "5602",
-    "2282",
-    "18",
-    "22220",
-    "7520",
-    "1047",
-    "253",
-    "116",
-    "957",
-    "8340",
-    "3294",
-    "6832",
     "528",
+    "6832",
+    "3294",
+    "8340",
+    "957",
+    "116",
+    "253",
+    "1047",
+    "7520",
+    "22220",
+    "18",
+    "2282",
+    "5602",
+    "150",
+    "1242",
+    "1782",
+    "335",
+    "2299",
+    "596",
+    "12064",
+    "869",
+    "433",
+    "1605",
+    "1121",
+    "570",
+    "11107",
+    "45703",
+    "8732",
+    "2627",
+    "1381",
+    "11564",
+    "2288",
+    "3500",
+    "3310",
+    "5302",
+    "3836",
+    "1938",
+    "1560",
+    "1766",
+    "3949",
+    "772",
+    "709",
+    "3060",
+    "838",
+    "2844",
+    "1719",
+    "4726",
+    "179",
+    "943",
+    "1005",
 ];
 
 const LOCATION_DATA: Execution.IResultAttributeHeaderItem[] = [
@@ -1070,5 +1070,89 @@ export function getExecutionResult(
             total: [2, 50],
         },
         headerItems,
+    };
+}
+
+const getAttributeHeader = (name: string, uri: string): Execution.IAttributeHeader => ({
+    attributeHeader: {
+        name,
+        localIdentifier: `a_${name}`,
+        uri,
+        identifier: `label.${name}`,
+        formOf: {
+            name,
+            uri: "any-uri",
+            identifier: `attr.${name}`,
+        },
+    },
+});
+
+const getMeasureHeaderItem = (name: string, localIdentifier: string): Execution.IMeasureHeaderItem => ({
+    measureHeaderItem: {
+        name,
+        format: "#,##0",
+        localIdentifier,
+        identifier: `measure.${name}`,
+    },
+});
+
+export function getExecutionResponse(
+    isWithLocation = false,
+    isWithSegmentBy = false,
+    isWithTooltipText = false,
+    isWithSize = false,
+    isWithColor = false,
+): Execution.IExecutionResponse {
+    const attributesHeaders: Execution.IAttributeHeader[] = [];
+    const measureHeaderItems: Execution.IMeasureHeaderItem[] = [];
+    const resultDimensions: Execution.IResultDimension[] = [];
+
+    if (isWithLocation) {
+        attributesHeaders.push(getAttributeHeader("State", "/gdc/md/projectId/obj/1"));
+    }
+
+    if (isWithSegmentBy) {
+        attributesHeaders.push(getAttributeHeader("Type", "/gdc/md/projectId/obj/2"));
+    }
+
+    if (isWithTooltipText) {
+        attributesHeaders.push(getAttributeHeader("State", "/gdc/md/projectId/obj/3"));
+    }
+
+    if (isWithSize) {
+        measureHeaderItems.push(getMeasureHeaderItem("Population", "m_size"));
+    }
+
+    if (isWithColor) {
+        measureHeaderItems.push(getMeasureHeaderItem("Area", "m_color"));
+    }
+
+    if (measureHeaderItems.length) {
+        resultDimensions.push({
+            headers: [
+                {
+                    measureGroupHeader: {
+                        items: measureHeaderItems,
+                    },
+                },
+            ],
+        });
+    }
+
+    if (attributesHeaders.length) {
+        resultDimensions.push({
+            headers: attributesHeaders,
+        });
+    } else {
+        resultDimensions.push({
+            headers: [],
+        });
+    }
+
+    return {
+        links: {
+            executionResult: "any_result",
+        },
+        dimensions: resultDimensions,
     };
 }

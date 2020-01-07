@@ -2,7 +2,7 @@
 import mapboxgl from "mapbox-gl";
 import { Execution } from "@gooddata/typings";
 import { createPushpinDataSource } from "../geoChartDataSource";
-import { IGeoDataIndex } from "../../../../interfaces/GeoChart";
+import { IGeoData } from "../../../../interfaces/GeoChart";
 
 function getExecutionResult(): Execution.IExecutionResult {
     return {
@@ -97,8 +97,8 @@ function getExecutionResult(): Execution.IExecutionResult {
 
 describe("createPushpinDataSource", () => {
     it("should return default color and size", () => {
-        const geoDataIndex: IGeoDataIndex = {};
-        const source: mapboxgl.GeoJSONSourceRaw = createPushpinDataSource(getExecutionResult(), geoDataIndex);
+        const geoData: IGeoData = {};
+        const source: mapboxgl.GeoJSONSourceRaw = createPushpinDataSource(getExecutionResult(), geoData);
 
         expect(source.data).toEqual({
             type: "FeatureCollection",
@@ -107,58 +107,79 @@ describe("createPushpinDataSource", () => {
     });
 
     it("should return color palette and size scale", () => {
-        const geoDataIndex: IGeoDataIndex = {
-            size: 0,
-            color: 1,
-            location: 0,
-            segmentBy: 1,
-            tooltipText: 2,
+        const geoData: IGeoData = {
+            size: {
+                index: 0,
+                name: "size",
+            },
+            color: {
+                index: 1,
+                name: "color",
+            },
+            location: {
+                index: 0,
+                name: "location",
+            },
+            segmentBy: {
+                index: 1,
+                name: "segmentBy",
+            },
+            tooltipText: {
+                index: 2,
+                name: "tooltipText",
+            },
         };
-        const source: mapboxgl.GeoJSONSourceRaw = createPushpinDataSource(getExecutionResult(), geoDataIndex);
+        const source: mapboxgl.GeoJSONSourceRaw = createPushpinDataSource(getExecutionResult(), geoData);
 
         expect(source.data).toEqual({
-            type: "FeatureCollection",
             features: [
                 {
-                    geometry: {
-                        coordinates: [-155.6254, 19.0415],
-                        type: "Point",
-                    },
+                    geometry: { coordinates: [-155.6254, 19.0415], type: "Point" },
                     properties: {
-                        City: "Discovery Harbour",
-                        pushpinColorValue: 1005,
-                        pushpinSegmentByValue: "Hawaii",
-                        pushpinSizeValue: 1005,
+                        color: {
+                            background: "rgb(20,178,226)",
+                            border: "rgb(20,178,226)",
+                            title: "color",
+                            value: 1005,
+                        },
+                        locationName: { title: "tooltipText", value: "Discovery Harbour" },
+                        segmentBy: { title: "segmentBy", value: "Hawaii" },
+                        size: { title: "size", value: 1005 },
                     },
                     type: "Feature",
                 },
                 {
-                    geometry: {
-                        coordinates: [-155.5751, 19.0698],
-                        type: "Point",
-                    },
+                    geometry: { coordinates: [-155.5751, 19.0698], type: "Point" },
                     properties: {
-                        City: "Naalehu",
-                        pushpinColorValue: 943,
-                        pushpinSegmentByValue: "Hawaii",
-                        pushpinSizeValue: 943,
+                        color: {
+                            background: "rgb(20,178,226)",
+                            border: "rgb(20,178,226)",
+                            title: "color",
+                            value: 943,
+                        },
+                        locationName: { title: "tooltipText", value: "Naalehu" },
+                        segmentBy: { title: "segmentBy", value: "Hawaii" },
+                        size: { title: "size", value: 943 },
                     },
                     type: "Feature",
                 },
                 {
-                    geometry: {
-                        coordinates: [-155.6143, 19.0716],
-                        type: "Point",
-                    },
+                    geometry: { coordinates: [-155.6143, 19.0716], type: "Point" },
                     properties: {
-                        City: "Waiohinu",
-                        pushpinColorValue: 179,
-                        pushpinSegmentByValue: "Other county",
-                        pushpinSizeValue: 179,
+                        color: {
+                            background: "rgb(212,244,236)",
+                            border: "rgb(0,193,141)",
+                            title: "color",
+                            value: 179,
+                        },
+                        locationName: { title: "tooltipText", value: "Waiohinu" },
+                        segmentBy: { title: "segmentBy", value: "Other county" },
+                        size: { title: "size", value: 179 },
                     },
                     type: "Feature",
                 },
             ],
+            type: "FeatureCollection",
         });
     });
 
@@ -195,40 +216,43 @@ describe("createPushpinDataSource", () => {
                 ],
             ],
         };
-        const geoDataIndex: IGeoDataIndex = {
-            location: 0,
+        const geoData: IGeoData = {
+            location: {
+                index: 0,
+                name: "location",
+            },
         };
-        const source: mapboxgl.GeoJSONSourceRaw = createPushpinDataSource(noMeasureExecResult, geoDataIndex);
+        const source: mapboxgl.GeoJSONSourceRaw = createPushpinDataSource(noMeasureExecResult, geoData);
 
         expect(source.data).toEqual({
             features: [
                 {
                     geometry: { coordinates: [-155.6254, 19.0415], type: "Point" },
                     properties: {
-                        City: "",
-                        pushpinColorValue: undefined,
-                        pushpinSegmentByValue: "",
-                        pushpinSizeValue: 10,
+                        color: { title: "", value: undefined },
+                        locationName: { title: "", value: "" },
+                        segmentBy: { title: "", value: "" },
+                        size: { title: "", value: 10 },
                     },
                     type: "Feature",
                 },
                 {
                     geometry: { coordinates: [-155.5751, 19.0698], type: "Point" },
                     properties: {
-                        City: "",
-                        pushpinColorValue: undefined,
-                        pushpinSegmentByValue: "",
-                        pushpinSizeValue: 10,
+                        color: { title: "", value: undefined },
+                        locationName: { title: "", value: "" },
+                        segmentBy: { title: "", value: "" },
+                        size: { title: "", value: 10 },
                     },
                     type: "Feature",
                 },
                 {
                     geometry: { coordinates: [-155.6143, 19.0716], type: "Point" },
                     properties: {
-                        City: "",
-                        pushpinColorValue: undefined,
-                        pushpinSegmentByValue: "",
-                        pushpinSizeValue: 10,
+                        color: { title: "", value: undefined },
+                        locationName: { title: "", value: "" },
+                        segmentBy: { title: "", value: "" },
+                        size: { title: "", value: 10 },
                     },
                     type: "Feature",
                 },
