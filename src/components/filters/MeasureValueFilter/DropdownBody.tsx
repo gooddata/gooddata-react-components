@@ -1,14 +1,13 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import { injectIntl, WrappedComponentProps } from "react-intl";
 import Button from "@gooddata/goodstrap/lib/Button/Button";
 
 import { IntlWrapper } from "../../core/base/IntlWrapper";
-import { measureValueFilter as Model } from "../../../helpers/model/measureValueFilters";
 import OperatorDropdown from "./OperatorDropdown";
 import RangeInput from "./RangeInput";
 import ComparisonInput from "./ComparisonInput";
-import { IValue } from "../../../interfaces/MeasureValueFilter";
+import { IValue, isComparisonOperator, isRangeOperator } from "../../../interfaces/MeasureValueFilter";
 import * as Operator from "../../../constants/measureValueFilterOperators";
 
 export interface IInputProps {
@@ -82,7 +81,7 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
             value: { value = null, from = null, to = null },
         } = this.state;
 
-        if (Model.isComparisonOperator(operator)) {
+        if (isComparisonOperator(operator)) {
             return (
                 <ComparisonInput
                     value={value}
@@ -90,7 +89,7 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
                     onEnterKeyPress={this.onApply}
                 />
             );
-        } else if (Model.isRangeOperator(operator)) {
+        } else if (isRangeOperator(operator)) {
             return (
                 <RangeInput
                     from={from}
@@ -117,10 +116,7 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
 
     private handleToChange = (to: number) => this.setState({ value: { ...this.state.value, to } });
 
-    private onApply = () => {
-        const operator = this.state.operator === Operator.ALL ? null : this.state.operator;
-        this.props.onApply(operator, this.state.value);
-    };
+    private onApply = () => this.props.onApply(this.state.operator, this.state.value);
 }
 
 export const DropdownBodyWithIntl = injectIntl(DropdownBodyWrapped);

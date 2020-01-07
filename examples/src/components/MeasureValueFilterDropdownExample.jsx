@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import React from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
@@ -23,6 +23,8 @@ const franchisedSalesMeasure = Model.measure(franchisedSalesIdentifier)
 const measures = [franchiseFeesMeasure, franchisedSalesMeasure];
 
 const attributes = [Model.attribute(locationNameDisplayFormIdentifier).localIdentifier("locationName")];
+
+const defaultFilter = Model.getDefaultFilter("franchisedSales");
 
 const DropdownButton = ({ isActive, measureTitle, onClick }) => {
     const className = classNames(
@@ -50,7 +52,7 @@ DropdownButton.propTypes = {
 
 export class MeasureValueFilterDropdownExample extends React.PureComponent {
     state = {
-        filters: [],
+        filters: [defaultFilter],
         displayDropdown: false,
     };
 
@@ -81,8 +83,7 @@ export class MeasureValueFilterDropdownExample extends React.PureComponent {
                     <MeasureValueFilterDropdown
                         onApply={this.onApply}
                         onCancel={this.onCancel}
-                        measureIdentifier={franchisedSalesMeasure.measure.localIdentifier}
-                        filter={filters[0] || null}
+                        filter={filters[0]}
                         anchorEl={this.toggleButtonRef}
                     />
                 ) : null}

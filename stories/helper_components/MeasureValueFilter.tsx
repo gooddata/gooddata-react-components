@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
@@ -11,13 +11,16 @@ import "../../styles/scss/main.scss";
 storiesOf("Helper components/Measure value filter", module).add("Measure value filter", () => {
     class MeasureValueFilterWithButton extends React.Component {
         public render() {
+            const filter = {
+                measureValueFilter: {
+                    measure: {
+                        localIdentifier: "localIdentifier",
+                    },
+                },
+            };
             return (
                 <React.Fragment>
-                    <DropdownAfmWrapper
-                        measureIdentifier="localIdentifier"
-                        onApply={this.onApply}
-                        onCancel={noop}
-                    />
+                    <DropdownAfmWrapper onApply={this.onApply} onCancel={noop} filter={filter} />
                 </React.Fragment>
             );
         }

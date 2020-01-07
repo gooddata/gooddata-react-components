@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import React, { Component } from "react";
 import { PivotTable, Model } from "@gooddata/react-components";
 
@@ -13,19 +13,20 @@ const measures = [
 ];
 
 const attributes = [Model.attribute(locationNameDisplayFormIdentifier).localIdentifier("locationName")];
-const greaterThanFilter = Model.measureValueFilter.getFilter("franchiseFees", "GREATER_THAN", {
+const greaterThanFilter = Model.measureValueFilter("franchiseFees", "GREATER_THAN", {
     value: 700000,
 });
-const betweenFilter = Model.measureValueFilter.getFilter("franchiseFees", "BETWEEN", {
+const betweenFilter = Model.measureValueFilter("franchiseFees", "BETWEEN", {
     from: 500000,
     to: 800000,
 });
+const defaultFilter = Model.getDefaultFilter("franchiseFees");
 
 export class FilterByValueExample extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            filters: [],
+            filters: [defaultFilter],
         };
     }
 

@@ -1,7 +1,8 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import { mount } from "enzyme";
 import noop = require("lodash/noop");
+import { AFM } from "@gooddata/typings";
 
 import MVFDropdownFragment from "./fragments/MeasureValueFilter";
 import { DropdownAfmWrapper, IDropdownProps } from "../DropdownAfmWrapper";
@@ -10,10 +11,17 @@ import { withIntl } from "../../../visualizations/utils/intlUtils";
 import { measureValueFilter } from "../../../../helpers/model/measureValueFilters";
 
 const renderComponent = (props?: Partial<IDropdownProps>) => {
+    const filter: AFM.IMeasureValueFilter = {
+        measureValueFilter: {
+            measure: {
+                localIdentifier: "myMeasure",
+            },
+        },
+    };
     const defaultProps: IDropdownProps = {
         onApply: noop,
         onCancel: noop,
-        measureIdentifier: "myMeasure",
+        filter,
     };
     const Wrapped = withIntl(DropdownAfmWrapper);
     return new MVFDropdownFragment(mount(<Wrapped {...defaultProps} {...props} />));
@@ -50,7 +58,7 @@ describe("Measure value filter", () => {
     });
 
     it("should have given operator preselected and values filled if filter is provided", () => {
-        const filter = measureValueFilter.getFilter("myMeasure", Operator.LESS_THAN, { value: 100 });
+        const filter = measureValueFilter("myMeasure", Operator.LESS_THAN, { value: 100 });
         const component = renderComponent({ filter });
 
         expect(component.getSelectedOperatorTitle()).toEqual("Less than");
@@ -58,7 +66,7 @@ describe("Measure value filter", () => {
     });
 
     it("should have selected operator highlighted in operator dropdown", () => {
-        const filter = measureValueFilter.getFilter("myMeasure", Operator.LESS_THAN, { value: 100 });
+        const filter = measureValueFilter("myMeasure", Operator.LESS_THAN, { value: 100 });
         const component = renderComponent({ filter });
 
         expect(
@@ -100,7 +108,7 @@ describe("Measure value filter", () => {
             const onApply = jest.fn();
             const component = renderComponent({ onApply });
 
-            const expectedFilter = measureValueFilter.getFilter("myMeasure", Operator.GREATER_THAN, {
+            const expectedFilter = measureValueFilter("myMeasure", Operator.GREATER_THAN, {
                 value: 100,
             });
 
@@ -117,7 +125,7 @@ describe("Measure value filter", () => {
             const onApply = jest.fn();
             const component = renderComponent({ onApply });
 
-            const expectedFilter = measureValueFilter.getFilter("myMeasure", Operator.BETWEEN, {
+            const expectedFilter = measureValueFilter("myMeasure", Operator.BETWEEN, {
                 from: 100,
                 to: 200,
             });
@@ -132,9 +140,11 @@ describe("Measure value filter", () => {
             expect(onApply).toBeCalledWith(expectedFilter);
         });
 
-        it("should be called with null value when All operator is applied", () => {
+        it("should be called with measureValueFilter without condition when All operator is applied", () => {
+            const result = { measureValueFilter: { measure: { localIdentifier: "myMeasure" } } };
+
             const onApply = jest.fn();
-            const filter = measureValueFilter.getFilter("myMeasure", Operator.LESS_THAN, { value: 100 });
+            const filter = measureValueFilter("myMeasure", Operator.LESS_THAN, { value: 100 });
             const component = renderComponent({ filter, onApply });
 
             component
@@ -142,7 +152,7 @@ describe("Measure value filter", () => {
                 .selectOperator(Operator.ALL)
                 .clickApply();
 
-            expect(onApply).toBeCalledWith(null);
+            expect(onApply).toBeCalledWith(result);
         });
 
         describe("empty values", () => {
@@ -150,7 +160,7 @@ describe("Measure value filter", () => {
                 const onApply = jest.fn();
                 const component = renderComponent({ onApply });
 
-                const expectedFilter = measureValueFilter.getFilter("myMeasure", Operator.GREATER_THAN, {
+                const expectedFilter = measureValueFilter("myMeasure", Operator.GREATER_THAN, {
                     value: 0,
                 });
 
@@ -166,7 +176,7 @@ describe("Measure value filter", () => {
                 const onApply = jest.fn();
                 const component = renderComponent({ onApply });
 
-                const expectedFilter = measureValueFilter.getFilter("myMeasure", Operator.BETWEEN, {
+                const expectedFilter = measureValueFilter("myMeasure", Operator.BETWEEN, {
                     from: 0,
                     to: 100,
                 });
@@ -184,7 +194,7 @@ describe("Measure value filter", () => {
                 const onApply = jest.fn();
                 const component = renderComponent({ onApply });
 
-                const expectedFilter = measureValueFilter.getFilter("myMeasure", Operator.BETWEEN, {
+                const expectedFilter = measureValueFilter("myMeasure", Operator.BETWEEN, {
                     from: 100,
                     to: 0,
                 });

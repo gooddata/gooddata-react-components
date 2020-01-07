@@ -1,8 +1,15 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import { AFM } from "@gooddata/typings";
 import { measureValueFilter } from "../measureValueFilters";
 import * as Operator from "../../../constants/measureValueFilterOperators";
 import { InvalidTypeGuardInputTestCases } from "./invalid_type_guard_mocks";
+import {
+    extractOperator,
+    extractValue,
+    isMeasureValueRangeFilter,
+    isMeasureValueComparisonFilter,
+} from "../../../components/filters/MeasureValueFilter/DropdownAfmWrapper";
+import { isComparisonOperator, isRangeOperator } from "../../../interfaces/MeasureValueFilter";
 
 const comparisonValue = {
     value: 200,
@@ -45,44 +52,12 @@ const afmRangeFilter: AFM.IMeasureValueFilter = {
 describe("measureValueFilters", () => {
     describe("getFilter", () => {
         it("should build comparison filter", () => {
-            const comparisonFilter = measureValueFilter.getFilter("m1", Operator.EQUAL_TO, comparisonValue);
+            const comparisonFilter = measureValueFilter("m1", Operator.EQUAL_TO, comparisonValue);
             expect(comparisonFilter).toStrictEqual(afmComparisonFilter);
         });
         it("should build range filter", () => {
-            const rangeFilter = measureValueFilter.getFilter("m2", Operator.BETWEEN, rangeValue);
+            const rangeFilter = measureValueFilter("m2", Operator.BETWEEN, rangeValue);
             expect(rangeFilter).toStrictEqual(afmRangeFilter);
-        });
-    });
-
-    describe("isComparisonCondition", () => {
-        const Scenarios: Array<[boolean, string, any]> = [
-            ...InvalidTypeGuardInputTestCases,
-            [
-                true,
-                "comparison measure value filter condition",
-                afmComparisonFilter.measureValueFilter.condition,
-            ],
-            [false, "range measure value filter condition", afmRangeFilter.measureValueFilter.condition],
-        ];
-
-        it.each(Scenarios)("should return %s when input is %s", (expectedResult, _desc, input) => {
-            expect(measureValueFilter.isComparisonCondition(input)).toBe(expectedResult);
-        });
-    });
-
-    describe("isRangeCondition", () => {
-        const Scenarios: Array<[boolean, string, any]> = [
-            ...InvalidTypeGuardInputTestCases,
-            [
-                false,
-                "comparison measure value filter condition",
-                afmComparisonFilter.measureValueFilter.condition,
-            ],
-            [true, "range measure value filter condition", afmRangeFilter.measureValueFilter.condition],
-        ];
-
-        it.each(Scenarios)("should return %s when input is %s", (expectedResult, _desc, input) => {
-            expect(measureValueFilter.isRangeCondition(input)).toBe(expectedResult);
         });
     });
 
@@ -94,7 +69,7 @@ describe("measureValueFilters", () => {
         ];
 
         it.each(Scenarios)("should return %s when input is %s", (expectedResult, _desc, input) => {
-            expect(measureValueFilter.isMeasureValueComparisonFilter(input)).toBe(expectedResult);
+            expect(isMeasureValueComparisonFilter(input)).toBe(expectedResult);
         });
     });
 
@@ -106,36 +81,36 @@ describe("measureValueFilters", () => {
         ];
 
         it.each(Scenarios)("should return %s when input is %s", (expectedResult, _desc, input) => {
-            expect(measureValueFilter.isMeasureValueRangeFilter(input)).toBe(expectedResult);
+            expect(isMeasureValueRangeFilter(input)).toBe(expectedResult);
         });
     });
 
     describe("getOperator", () => {
         it("should return operator of the comparison filter", () => {
-            const operator = measureValueFilter.getOperator(afmComparisonFilter);
+            const operator = extractOperator(afmComparisonFilter);
             expect(operator).toBe("EQUAL_TO");
         });
         it("should return operator of the range filter", () => {
-            const operator = measureValueFilter.getOperator(afmRangeFilter);
+            const operator = extractOperator(afmRangeFilter);
             expect(operator).toBe("BETWEEN");
         });
         it("should return null if doesn't receive filter object", () => {
-            const operator = measureValueFilter.getOperator(undefined);
+            const operator = extractOperator(undefined);
             expect(operator).toBe(null);
         });
     });
 
     describe("getValue", () => {
         it("should return object with value key from comparison filter", () => {
-            const value = measureValueFilter.getValue(afmComparisonFilter);
+            const value = extractValue(afmComparisonFilter);
             expect(value).toEqual({ value: 200 });
         });
         it("should return object with from and to keys from range filter", () => {
-            const value = measureValueFilter.getValue(afmRangeFilter);
+            const value = extractValue(afmRangeFilter);
             expect(value).toEqual({ from: 100, to: 300 });
         });
         it("should return null if doesn't receive filter object", () => {
-            const value = measureValueFilter.getValue(undefined);
+            const value = extractValue(undefined);
             expect(value).toBe(null);
         });
     });
@@ -155,7 +130,7 @@ describe("measureValueFilters", () => {
         ];
 
         it.each(Scenarios)("should return %s when input is %s", (expectedResult, _desc, input) => {
-            expect(measureValueFilter.isComparisonOperator(input)).toBe(expectedResult);
+            expect(isComparisonOperator(input)).toBe(expectedResult);
         });
     });
 
@@ -174,7 +149,7 @@ describe("measureValueFilters", () => {
         ];
 
         it.each(Scenarios)("should return %s when input is %s", (expectedResult, _desc, input) => {
-            expect(measureValueFilter.isRangeOperator(input)).toBe(expectedResult);
+            expect(isRangeOperator(input)).toBe(expectedResult);
         });
     });
 });
