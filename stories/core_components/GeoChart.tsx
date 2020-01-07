@@ -3,12 +3,18 @@ import * as React from "react";
 import { action } from "@storybook/addon-actions";
 import { storiesOf } from "@storybook/react";
 import { screenshotWrap } from "@gooddata/test-storybook";
-import { Execution, VisualizationObject } from "@gooddata/typings";
+import { Execution } from "@gooddata/typings";
 import { GeoChartInner, IGeoChartInnerProps } from "../../src/components/core/GeoChart";
 import { createIntlMock } from "../../src/components/visualizations/utils/intlUtils";
-import { COLOR, LOCATION, SEGMENT_BY, SIZE, TOOLTIP_TEXT } from "../../src/constants/bucketNames";
 import { IGeoConfig } from "../../src/interfaces/GeoChart";
-import { getExecutionResult } from "../data/geoChart";
+import { getExecutionResponse, getExecutionResult } from "../data/geoChart";
+import {
+    COLOR_ITEM,
+    LOCATION_ITEM,
+    SEGMENT_BY_ITEM,
+    SIZE_ITEM,
+    TOOLTIP_TEXT_ITEM,
+} from "../../src/helpers/tests/geoChart/data";
 
 const wrapperStyle: React.CSSProperties = { width: 900, height: 600, position: "relative" };
 const DEFAULT_PROPS: Partial<IGeoChartInnerProps> = {
@@ -21,80 +27,6 @@ const DEFAULT_CONFIG: Partial<IGeoConfig> = {
     zoom: 3.3,
 };
 
-const LOCATION_ITEM: VisualizationObject.IBucket = {
-    localIdentifier: LOCATION,
-    items: [
-        {
-            visualizationAttribute: {
-                localIdentifier: "a_location",
-                displayForm: {
-                    uri: "/gdc/md/projectId/obj/1",
-                },
-            },
-        },
-    ],
-};
-
-const SEGMENT_BY_ITEM: VisualizationObject.IBucket = {
-    localIdentifier: SEGMENT_BY,
-    items: [
-        {
-            visualizationAttribute: {
-                localIdentifier: "a_segmentBy",
-                displayForm: {
-                    uri: "/gdc/md/projectId/obj/2",
-                },
-            },
-        },
-    ],
-};
-
-const TOOLTIP_TEXT_ITEM: VisualizationObject.IBucket = {
-    localIdentifier: TOOLTIP_TEXT,
-    items: [
-        {
-            visualizationAttribute: {
-                localIdentifier: "a_tooltipText",
-                displayForm: {
-                    uri: "/gdc/md/projectId/obj/3",
-                },
-            },
-        },
-    ],
-};
-
-const SIZE_ITEM: VisualizationObject.IBucket = {
-    localIdentifier: SIZE,
-    items: [
-        {
-            measure: {
-                localIdentifier: "m_size",
-                definition: {
-                    measureDefinition: {
-                        item: { uri: "/gdc/md/projectId/obj/4" },
-                    },
-                },
-            },
-        },
-    ],
-};
-
-const COLOR_ITEM: VisualizationObject.IBucket = {
-    localIdentifier: COLOR,
-    items: [
-        {
-            measure: {
-                localIdentifier: "m_color",
-                definition: {
-                    measureDefinition: {
-                        item: { uri: "/gdc/md/projectId/obj/5" },
-                    },
-                },
-            },
-        },
-    ],
-};
-
 function getExecution(
     isWithLocation = false,
     isWithSegmentBy = false,
@@ -103,7 +35,13 @@ function getExecution(
     isWithColor = false,
 ): Execution.IExecutionResponses {
     return {
-        executionResponse: undefined,
+        executionResponse: getExecutionResponse(
+            isWithLocation,
+            isWithSegmentBy,
+            isWithTooltipText,
+            isWithSize,
+            isWithColor,
+        ),
         executionResult: getExecutionResult(
             isWithLocation,
             isWithSegmentBy,

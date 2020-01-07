@@ -1,6 +1,6 @@
-// (C) 2019-2020 GoodData Corporation
+// (C) 2020 GoodData Corporation
 import * as React from "react";
-import { mount, ReactWrapper } from "enzyme";
+import { shallow, ShallowWrapper } from "enzyme";
 import { testUtils } from "@gooddata/js-utils";
 
 import { GeoChartInner, IGeoChartInnerProps } from "../GeoChart";
@@ -9,7 +9,7 @@ import { createIntlMock } from "../../visualizations/utils/intlUtils";
 const intl = createIntlMock();
 
 describe("GeoChart", () => {
-    function renderComponent(customProps: Partial<IGeoChartInnerProps> = {}): ReactWrapper {
+    function renderComponent(customProps: Partial<IGeoChartInnerProps> = {}): ShallowWrapper {
         const defaultProps: Partial<IGeoChartInnerProps> = {
             execution: {
                 executionResponse: undefined,
@@ -17,7 +17,7 @@ describe("GeoChart", () => {
             },
             intl,
         };
-        return mount(<GeoChartInner {...defaultProps} {...customProps} />);
+        return shallow(<GeoChartInner {...defaultProps} {...customProps} />);
     }
 
     it("should render GeoChartInner", async () => {
