@@ -2,7 +2,7 @@
 import mapboxgl from "mapbox-gl";
 import { Execution } from "@gooddata/typings";
 import { createPushpinDataLayer } from "../geoChartDataLayers";
-import { IGeoDataIndex } from "../../../../interfaces/GeoChart";
+import { IGeoData } from "../../../../interfaces/GeoChart";
 
 function getExecutionResult(): Execution.IExecutionResult {
     return {
@@ -99,127 +99,103 @@ describe("createPushpinDataLayer", () => {
     const dataSourceName: string = "test_datasource";
 
     it("should return default border, color and size", () => {
-        const geoDataIndex: IGeoDataIndex = {};
-        const layer: mapboxgl.Layer = createPushpinDataLayer(
-            dataSourceName,
-            getExecutionResult(),
-            geoDataIndex,
-        );
-
-        expect(layer.paint["circle-color"]).toBe("rgb(20,178,226)");
-        expect(layer.paint["circle-radius"]).toBe(10);
-        expect(layer.paint["circle-stroke-color"]).toBe("rgb(20,178,226)");
-    });
-
-    it("should return boder, color palette and size scale", () => {
-        const geoDataIndex: IGeoDataIndex = {
-            size: 0,
-            color: 1,
-        };
-        const layer: mapboxgl.Layer = createPushpinDataLayer(
-            dataSourceName,
-            getExecutionResult(),
-            geoDataIndex,
-        );
+        const geoData: IGeoData = {};
+        const layer: mapboxgl.Layer = createPushpinDataLayer(dataSourceName, getExecutionResult(), geoData);
 
         expect(layer.paint["circle-color"]).toEqual([
-            "step",
-            ["get", "pushpinColorValue"],
-            "rgb(20,178,226)",
-            179,
-            "rgb(215,242,250)",
-            316.67,
-            "rgb(177,230,245)",
-            454.33,
-            "rgb(138,217,241)",
-            592,
-            "rgb(98,203,236)",
-            729.67,
-            "rgb(60,191,231)",
-            867.33,
+            "string",
+            ["get", "background", ["object", ["get", "color"]]],
             "rgb(20,178,226)",
         ]);
-        expect(layer.paint["circle-radius"]).toEqual({
-            property: "pushpinSizeValue",
-            stops: [[179, 10], [316.67, 28], [454.33, 46], [592, 64], [729.67, 82], [867.33, 100]],
-        });
-        expect(layer.paint["circle-stroke-color"]).toEqual("rgb(20,178,226)");
+        expect(layer.paint["circle-radius"]).toBe(10);
+        expect(layer.paint["circle-stroke-color"]).toEqual([
+            "string",
+            ["get", "border", ["object", ["get", "color"]]],
+            "rgb(20,178,226)",
+        ]);
+    });
+
+    it("should return border, color palette and size scale", () => {
+        const geoData: IGeoData = {
+            size: {
+                index: 0,
+                name: "size",
+            },
+            color: {
+                index: 1,
+                name: "color",
+            },
+        };
+        const layer: mapboxgl.Layer = createPushpinDataLayer(dataSourceName, getExecutionResult(), geoData);
+
+        expect(layer.paint["circle-color"]).toEqual([
+            "string",
+            ["get", "background", ["object", ["get", "color"]]],
+            "rgb(20,178,226)",
+        ]);
+        expect(layer.paint["circle-radius"]).toEqual([
+            "step",
+            ["get", "value", ["object", ["get", "size"]]],
+            10,
+            179,
+            10,
+            316.67,
+            28,
+            454.33,
+            46,
+            592,
+            64,
+            729.67,
+            82,
+            867.33,
+            100,
+        ]);
+        expect(layer.paint["circle-stroke-color"]).toEqual([
+            "string",
+            ["get", "border", ["object", ["get", "color"]]],
+            "rgb(20,178,226)",
+        ]);
     });
 
     it("should return border and color palette with segmentBy", () => {
-        const geoDataIndex: IGeoDataIndex = {
-            size: 0,
-            color: 1,
-            segmentBy: 1,
+        const geoData: IGeoData = {
+            size: {
+                index: 0,
+                name: "size",
+            },
+            color: {
+                index: 1,
+                name: "color",
+            },
+            segmentBy: {
+                index: 1,
+                name: "segmentBy",
+            },
         };
-        const layer: mapboxgl.Layer = createPushpinDataLayer(
-            dataSourceName,
-            getExecutionResult(),
-            geoDataIndex,
-        );
+        const layer: mapboxgl.Layer = createPushpinDataLayer(dataSourceName, getExecutionResult(), geoData);
 
         expect(layer.paint["circle-color"]).toEqual([
-            "match",
-            ["get", "pushpinSegmentByValue"],
-            "Hawaii",
-            [
-                "step",
-                ["get", "pushpinColorValue"],
-                "rgb(20,178,226)",
-                179,
-                "rgb(215,242,250)",
-                316.67,
-                "rgb(177,230,245)",
-                454.33,
-                "rgb(138,217,241)",
-                592,
-                "rgb(98,203,236)",
-                729.67,
-                "rgb(60,191,231)",
-                867.33,
-                "rgb(20,178,226)",
-            ],
-            "Another County",
-            [
-                "step",
-                ["get", "pushpinColorValue"],
-                "rgb(20,178,226)",
-                179,
-                "rgb(212,244,236)",
-                316.67,
-                "rgb(171,235,217)",
-                454.33,
-                "rgb(128,224,198)",
-                592,
-                "rgb(84,213,179)",
-                729.67,
-                "rgb(43,204,160)",
-                867.33,
-                "rgb(0,193,141)",
-            ],
+            "string",
+            ["get", "background", ["object", ["get", "color"]]],
             "rgb(20,178,226)",
         ]);
 
         expect(layer.paint["circle-stroke-color"]).toEqual([
-            "match",
-            ["get", "pushpinSegmentByValue"],
-            "Hawaii",
-            "rgb(20,178,226)",
-            "Another County",
-            "rgb(0,193,141)",
+            "string",
+            ["get", "border", ["object", ["get", "color"]]],
             "rgb(20,178,226)",
         ]);
     });
 
     it("should return filter", () => {
-        const geoDataIndex: IGeoDataIndex = {};
+        const geoData: IGeoData = {};
         const layer: mapboxgl.Layer = createPushpinDataLayer(
             dataSourceName,
             getExecutionResult(),
-            geoDataIndex,
+            geoData,
             "Hawaii",
         );
 
-        expect(layer.filter).toEqual(["==", "Hawaii", ["get", "pushpinSegmentByValue"]]);
+        expect(layer.filter).toEqual(["==", "Hawaii", ["get", "value", ["object", ["get", "segmentBy"]]]]);
     });
 });

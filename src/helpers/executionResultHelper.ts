@@ -142,3 +142,63 @@ export function getHeaderItemName(headerItem: Execution.IResultHeaderItem): stri
     }
     return "";
 }
+
+function isAttributeHeader(
+    header: Execution.IMeasureGroupHeader | Execution.IAttributeHeader,
+): header is Execution.IAttributeHeader {
+    return header.hasOwnProperty("attributeHeader");
+}
+
+function isMeasureGroupHeader(
+    header: Execution.IMeasureGroupHeader | Execution.IAttributeHeader,
+): header is Execution.IMeasureGroupHeader {
+    return header.hasOwnProperty("measureGroupHeader");
+}
+
+export function getAttributeHeadersInDimension(
+    dimensions: Execution.IResultDimension[],
+): Array<Execution.IAttributeHeader["attributeHeader"]> {
+    const attributeHeaders: Array<Execution.IAttributeHeader["attributeHeader"]> = [];
+
+    dimensions.forEach(
+        (dimension: Execution.IResultDimension): void => {
+            const { headers } = dimension;
+            headers.forEach(
+                (header: Execution.IMeasureGroupHeader | Execution.IAttributeHeader): void => {
+                    if (isAttributeHeader(header)) {
+                        attributeHeaders.push(header.attributeHeader);
+                    }
+                },
+            );
+        },
+    );
+
+    return attributeHeaders;
+}
+
+export function getMeasureGroupHeaderItemsInDimension(
+    dimensions: Execution.IResultDimension[],
+): Execution.IMeasureHeaderItem[] {
+    let measureHeaderItems: Execution.IMeasureHeaderItem[] = [];
+
+    dimensions.forEach(
+        (dimension: Execution.IResultDimension): void => {
+            const { headers } = dimension;
+            headers.forEach(
+                (header: Execution.IMeasureGroupHeader | Execution.IAttributeHeader): void => {
+                    if (isMeasureGroupHeader(header)) {
+                        measureHeaderItems = [...header.measureGroupHeader.items];
+                    }
+                },
+            );
+        },
+    );
+
+    return measureHeaderItems;
+}
+
+export function isTwoDimensionsData(
+    data: Execution.DataValue[][] | Execution.DataValue[],
+): data is Execution.DataValue[][] {
+    return Array.isArray(data[0]);
+}

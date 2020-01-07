@@ -7,7 +7,7 @@ function createComponent(customProps: Partial<IGeoChartRendererProps> = {}): Sha
     const chartProps = {
         ...customProps,
     };
-    return shallow(<GeoChartRenderer {...chartProps} />);
+    return shallow(<GeoChartRenderer {...chartProps} />, { disableLifecycleMethods: true });
 }
 
 describe("GeoChartRenderer", () => {

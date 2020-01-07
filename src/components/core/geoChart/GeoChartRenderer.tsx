@@ -8,15 +8,18 @@ import { createPushpinDataSource } from "./geoChartDataSource";
 import {
     DEFAULT_DATA_SOURCE_NAME,
     DEFAULT_LATITUDE,
+    DEFAULT_LAYER_NAME,
     DEFAULT_LONGITUDE,
     DEFAULT_MAPBOX_OPTIONS,
     DEFAULT_ZOOM,
     MAPBOX_ACCESS_TOKEN,
+    DEFAULT_TOOLTIP_OPTIONS,
 } from "../../../constants/geoChart";
-import { getGeoDataIndex } from "../../../helpers/geoChart";
 import { IGeoConfig } from "../../../interfaces/GeoChart";
 
 import "../../../../styles/scss/geoChart.scss";
+import { handlePushpinMouseEnter, handlePushpinMouseLeave } from "./geoChartTooltip";
+import { getGeoData } from "../../../helpers/geoChart";
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
@@ -31,10 +34,14 @@ export default class GeoChartRenderer extends React.PureComponent<IGeoChartRende
     };
 
     private chart: mapboxgl.Map;
+    private tooltip: mapboxgl.Popup;
     private chartRef: HTMLElement;
 
     public componentDidMount() {
+        this.createTooltip();
         this.createMap();
+        this.createMapControls();
+        this.handleMapEvent();
     }
 
     public componentDidUpdate() {
@@ -60,8 +67,6 @@ export default class GeoChartRenderer extends React.PureComponent<IGeoChartRende
             center,
             zoom,
         });
-        this.createMapControls();
-        this.handleMapEvent();
     };
 
     public render() {
@@ -78,27 +83,29 @@ export default class GeoChartRenderer extends React.PureComponent<IGeoChartRende
     };
 
     private handleMapEvent = () => {
-        const { chart } = this;
+        const { chart, tooltip } = this;
+
         chart.on("load", this.setupMap);
+        chart.on("mouseenter", DEFAULT_LAYER_NAME, handlePushpinMouseEnter(chart, tooltip));
+        chart.on("mouseleave", DEFAULT_LAYER_NAME, handlePushpinMouseLeave(chart, tooltip));
     };
 
     private setupMap = (): void => {
         const { chart } = this;
         const {
-            execution: { executionResult },
+            execution: { executionResult, executionResponse },
             config: { mdObject: { buckets = [] } = {}, selectedSegmentItem },
         } = this.props;
 
-        const geoDataIndex = getGeoDataIndex(buckets);
-        chart.addSource(DEFAULT_DATA_SOURCE_NAME, createPushpinDataSource(executionResult, geoDataIndex));
+        const geoData = getGeoData(buckets, executionResponse.dimensions);
+        chart.addSource(DEFAULT_DATA_SOURCE_NAME, createPushpinDataSource(executionResult, geoData));
         chart.addLayer(
-            createPushpinDataLayer(
-                DEFAULT_DATA_SOURCE_NAME,
-                executionResult,
-                geoDataIndex,
-                selectedSegmentItem,
-            ),
+            createPushpinDataLayer(DEFAULT_DATA_SOURCE_NAME, executionResult, geoData, selectedSegmentItem),
             "waterway-label", // pushpin will be rendered under state/county label
         );
+    };
+
+    private createTooltip = () => {
+        this.tooltip = new mapboxgl.Popup(DEFAULT_TOOLTIP_OPTIONS);
     };
 }
