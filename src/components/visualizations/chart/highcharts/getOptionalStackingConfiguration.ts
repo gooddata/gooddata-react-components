@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import partial = require("lodash/partial");
 import merge = require("lodash/merge");
 import includes = require("lodash/includes");
@@ -19,11 +19,11 @@ import { supportedStackingAttributesChartTypes } from "../chartOptionsBuilder";
 import { formatAsPercent, getLabelStyle, getLabelsVisibilityConfig } from "./dataLabelsHelpers";
 import {
     getPrimaryChartType,
-    isBarChart,
     isColumnChart,
     isComboChart,
     isLineChart,
     isPrimaryYAxis,
+    isInvertedChartType,
 } from "../../utils/common";
 import { IDrillConfig } from "../../../../interfaces/DrillEvents";
 import { canComboChartBeStackedInPercent } from "../chartOptions/comboChartOptions";
@@ -258,7 +258,7 @@ export function getParentAttributeConfiguration(chartOptions: IChartOptions, con
         fontWeight: "bold",
     });
 
-    if (isBarChart(type)) {
+    if (isInvertedChartType(type)) {
         // distance more 5px for two groups of attributes for bar chart
         set(parentAttributeOptions, "x", -5);
     }

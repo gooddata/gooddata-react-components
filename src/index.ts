@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import "./polyfills";
 import * as AfmComponents from "./components/afm/afmComponents";
 import * as VisEvents from "./interfaces/Events";
@@ -37,6 +37,7 @@ import { IDataSourceProviderInjectedProps } from "./components/afm/DataSourcePro
 
 import { BarChart } from "./components/BarChart";
 import { ColumnChart } from "./components/ColumnChart";
+import { BulletChart } from "./components/BulletChart";
 import { LineChart } from "./components/LineChart";
 import { AreaChart } from "./components/AreaChart";
 import { PieChart } from "./components/PieChart";
@@ -94,6 +95,7 @@ export {
     Model,
     ChartType,
     ColumnChart,
+    BulletChart,
     ScatterPlot,
     ComboChart,
     FunnelChart,

@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
@@ -570,6 +570,19 @@ storiesOf("URI components", module)
                     identifier="xirr-simple"
                     drillableItems={[{ uri: "/gdc/md/storybook/obj/5" }]}
                     onFiredDrillEvent={action("onFiredDrillEvent")}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
+    .add("Bullet chart", () =>
+        screenshotWrap(
+            <div style={{ width: 800, height: 400 }}>
+                <Visualization
+                    projectId="storybook"
+                    identifier="bullet-simple"
                     onError={onErrorHandler}
                     LoadingComponent={null}
                     ErrorComponent={null}

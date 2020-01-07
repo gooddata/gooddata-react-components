@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import AboutThisProject from "./AboutThisProject";
 import AttributeFilter from "./AttributeFilter";
 import Sorting from "./Sorting";
@@ -34,6 +34,7 @@ import MeasureValueFilterComponent from "./MeasureValueFilterComponent";
 import DateFilter from "./DateFilter";
 import OnDrillHandling from "./OnDrillHandling";
 import Xirr from "./Xirr";
+import BulletChart from "./BulletChart";
 
 export const advancedUseCasesRoutes = [
     {
@@ -257,6 +258,11 @@ export const hiddenPaths = [
         path: "/hidden/xirr",
         title: "XIRR visualization",
         Component: Xirr,
+    },
+    {
+        path: "/hidden/bullet-chart",
+        title: "BulletChart",
+        Component: BulletChart,
     },
 ];
 
