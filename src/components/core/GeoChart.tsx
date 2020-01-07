@@ -2,8 +2,6 @@
 import * as React from "react";
 import { WrappedComponentProps } from "react-intl";
 
-import { Execution } from "@gooddata/typings";
-
 import { ICommonChartProps } from "./base/BaseChart";
 import { BaseVisualization } from "./base/BaseVisualization";
 import {
@@ -11,23 +9,13 @@ import {
     ILoadingInjectedProps,
     visualizationLoadingHOC,
 } from "./base/VisualizationLoadingHOC";
-import { createPushPinDataLayer } from "./geoChart/geoChartDataLayers";
-import { createPushPinDataSource } from "./geoChart/geoChartDataSource";
 import GeoChartLegendRenderer, { IChartLegendProps } from "./geoChart/GeoChartLegendRenderer";
-import GeoChartRenderer, { IChartProps } from "./geoChart/GeoChartRenderer";
+import GeoChartRenderer, { IGeoChartRendererProps } from "./geoChart/GeoChartRenderer";
 
 import { IDataSourceProviderInjectedProps } from "../afm/DataSourceProvider";
-import { LoadingComponent } from "../simple/LoadingComponent";
-import { DEFAULT_DATA_SOURCE_NAME } from "../../constants/geoChart";
 import { IGeoConfig } from "../../interfaces/GeoChart";
-import { getGeoDataIndex } from "../../helpers/geoChart";
 
-export interface IChartHTMLElement extends HTMLDivElement {
-    getChart(): mapboxgl.Map;
-    getChartRef(): HTMLDivElement;
-}
-
-export function renderChart(props: IChartProps): React.ReactElement {
+export function renderChart(props: IGeoChartRendererProps): React.ReactElement {
     return <GeoChartRenderer {...props} />;
 }
 
@@ -37,9 +25,8 @@ export function renderLegend(props: IChartLegendProps): React.ReactElement {
 
 export interface ICoreGeoChartProps extends ICommonChartProps, IDataSourceProviderInjectedProps {
     config?: IGeoConfig;
-    execution: Execution.IExecutionResponses;
-    chartRenderer(props: IChartProps): React.ReactElement;
-    legendRenderer(props: IChartLegendProps): React.ReactElement;
+    chartRenderer?: (props: IGeoChartRendererProps) => React.ReactElement;
+    legendRenderer?: (props: IChartLegendProps) => React.ReactElement;
 }
 
 export type IGeoChartInnerProps = ICoreGeoChartProps &
@@ -57,24 +44,20 @@ export class GeoChartInner extends BaseVisualization<IGeoChartInnerProps, {}> {
         legendRenderer: renderLegend,
     };
 
-    private chartRef: IChartHTMLElement;
-
     public renderVisualization() {
         return (
             <div className="gd-geo-component s-gd-geo-component">
                 {this.renderChart()}
                 {this.renderLegend()}
-                {this.renderLoadingOverlay()}
             </div>
         );
     }
 
     private renderChart = (): React.ReactElement => {
-        const { config, chartRenderer } = this.props;
+        const { config, chartRenderer, execution } = this.props;
         const chartProps = {
             config,
-            mapLoaded: this.setupMap,
-            ref: this.setChartRef,
+            execution,
         };
         return chartRenderer(chartProps);
     };
@@ -85,42 +68,6 @@ export class GeoChartInner extends BaseVisualization<IGeoChartInnerProps, {}> {
             domProps: {},
         };
         return legendRenderer(legendProps);
-    };
-
-    private renderLoadingOverlay = (): React.ReactElement => {
-        if (this.props.isLoading) {
-            return <LoadingComponent />;
-        }
-        return null;
-    };
-
-    //
-    // getters / setters / manipulators
-    //
-
-    private setChartRef = (chartRef: IChartHTMLElement) => {
-        this.chartRef = chartRef;
-    };
-
-    //
-    // working with data
-    //
-
-    private setupMap = (): void => {
-        const {
-            execution: { executionResult },
-            config: { mdObject: { buckets = [] } = {} },
-        } = this.props;
-
-        if (!this.chartRef) {
-            return;
-        }
-
-        const chart = this.chartRef.getChart();
-        const geoDataIndex = getGeoDataIndex(buckets);
-
-        chart.addSource(DEFAULT_DATA_SOURCE_NAME, createPushPinDataSource(executionResult, geoDataIndex));
-        chart.addLayer(createPushPinDataLayer(DEFAULT_DATA_SOURCE_NAME, executionResult, geoDataIndex));
     };
 }
 
