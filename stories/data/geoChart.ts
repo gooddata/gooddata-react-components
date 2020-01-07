@@ -1056,10 +1056,11 @@ export function getExecutionResult(
         attrHeaderItems.push(TOOLTIP_TEXT_DATA);
     }
 
-    const headerItems: Execution.IResultHeaderItem[][][] = [
-        [metricHeaderItems.length ? metricHeaderItems : []],
-        [...attrHeaderItems],
-    ];
+    const headerItems: Execution.IResultHeaderItem[][][] = [[...attrHeaderItems]];
+
+    if (metricHeaderItems.length) {
+        headerItems.unshift([metricHeaderItems]);
+    }
 
     return {
         data,

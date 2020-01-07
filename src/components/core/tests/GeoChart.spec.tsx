@@ -26,4 +26,16 @@ describe("GeoChart", () => {
         wrapper.update();
         expect(wrapper.find(".s-gd-geo-component").length).toBe(1);
     });
+
+    it("should use custom Chart renderer", () => {
+        const chartRenderer = jest.fn().mockReturnValue(<div />);
+        renderComponent({ chartRenderer });
+        expect(chartRenderer).toHaveBeenCalledTimes(1);
+    });
+
+    it("should use custom Legend renderer", () => {
+        const legendRenderer = jest.fn().mockReturnValue(<div />);
+        renderComponent({ legendRenderer });
+        expect(legendRenderer).toHaveBeenCalledTimes(1);
+    });
 });

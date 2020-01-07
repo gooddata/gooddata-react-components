@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { Execution } from "@gooddata/typings";
 import * as invariant from "invariant";
 import { IUnwrappedAttributeHeaderWithItems } from "../components/visualizations/chart/chartOptionsBuilder";
@@ -134,4 +134,11 @@ export function getNthDimensionHeaders(
         return executionResponse.dimensions[headerIndex].headers;
     }
     return null;
+}
+
+export function getHeaderItemName(headerItem: Execution.IResultHeaderItem): string {
+    if (headerItem && Execution.isAttributeHeaderItem(headerItem)) {
+        return headerItem.attributeHeaderItem.name;
+    }
+    return "";
 }
