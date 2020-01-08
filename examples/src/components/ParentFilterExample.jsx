@@ -1,6 +1,6 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import React, { Component } from "react";
-import { AttributeElements, BarChart, Model } from "@gooddata/react-components";
+import { AttributeElements, BarChart, Model, ErrorComponent } from "@gooddata/react-components";
 import Select from "react-select";
 import "react-select/dist/react-select.css";
 import "@gooddata/react-components/styles/css/main.css";
@@ -94,7 +94,7 @@ export class ParentFilterExample extends Component {
             >
                 {({ validElements, isLoading, error }) => {
                     if (error) {
-                        return <div>{error}</div>;
+                        return <ErrorComponent message="There was an error getting your execution" />;
                     }
                     const selectOptions = validElements
                         ? validElements.items.map(item => ({
