@@ -15,7 +15,11 @@ import {
     ATTRIBUTE_TOOLTIP_GEOCHART,
 } from "../data/geoChartComponentProps";
 
-const wrapperStyle = { width: 800, height: 500 };
+const wrapperStyle: React.CSSProperties = { width: 900, height: 600, position: "relative" };
+const DEFAULT_CONFIG: Partial<IGeoConfig> = {
+    center: [-94.60376, 38.573936],
+    zoom: 3.3,
+};
 
 function renderGeoPushpinChart(props: any = {}): React.ReactElement {
     const { location, size, color, segmentBy, config, filters } = props;
@@ -27,9 +31,12 @@ function renderGeoPushpinChart(props: any = {}): React.ReactElement {
                 size={size}
                 color={color}
                 segmentBy={segmentBy}
-                config={config}
-                onError={onErrorHandler}
+                config={{
+                    ...DEFAULT_CONFIG,
+                    ...config,
+                }}
                 filters={filters}
+                onError={onErrorHandler}
                 LoadingComponent={null}
                 ErrorComponent={null}
             />
@@ -38,6 +45,7 @@ function renderGeoPushpinChart(props: any = {}): React.ReactElement {
 }
 
 storiesOf("Core components/GeoPushpinChart", module)
+    .add("with location", () => renderGeoPushpinChart({ location: ATTRIBUTE_LOCATION_GEOCHART }))
     .add("with location, size", () =>
         renderGeoPushpinChart({ location: ATTRIBUTE_LOCATION_GEOCHART, size: MEASURE_SIZE_GEOCHART }),
     )
