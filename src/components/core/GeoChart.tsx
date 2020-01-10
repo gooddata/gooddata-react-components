@@ -2,8 +2,6 @@
 import * as React from "react";
 import { WrappedComponentProps } from "react-intl";
 
-import { Execution } from "@gooddata/typings";
-
 import { ICommonChartProps } from "./base/BaseChart";
 import { BaseVisualization } from "./base/BaseVisualization";
 import {
@@ -37,9 +35,9 @@ export function renderLegend(props: IChartLegendProps): React.ReactElement {
 
 export interface ICoreGeoChartProps extends ICommonChartProps, IDataSourceProviderInjectedProps {
     config?: IGeoConfig;
-    execution: Execution.IExecutionResponses;
-    chartRenderer(props: IChartProps): React.ReactElement;
-    legendRenderer(props: IChartLegendProps): React.ReactElement;
+
+    chartRenderer?: (props: IChartProps) => React.ReactElement;
+    legendRenderer?: (props: IChartLegendProps) => React.ReactElement;
 }
 
 export type IGeoChartInnerProps = ICoreGeoChartProps &
