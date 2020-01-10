@@ -1,6 +1,6 @@
 // (C) 2019-2020 GoodData Corporation
 import { VisualizationObject } from "@gooddata/typings";
-import { COLOR, LOCATION, SEGMENT_BY, SIZE, TOOLTIP_TEXT } from "../../constants/geoChart";
+import { COLOR, LOCATION, SEGMENT_BY, SIZE, TOOLTIP_TEXT } from "../../constants/bucketNames";
 import { getGeoDataIndex } from "../geoChart";
 
 describe("geoChart", () => {

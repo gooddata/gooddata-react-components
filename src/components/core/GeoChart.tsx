@@ -6,7 +6,11 @@ import { Execution } from "@gooddata/typings";
 
 import { ICommonChartProps } from "./base/BaseChart";
 import { BaseVisualization } from "./base/BaseVisualization";
-import { commonDefaultProps, ILoadingInjectedProps } from "./base/VisualizationLoadingHOC";
+import {
+    commonDefaultProps,
+    ILoadingInjectedProps,
+    visualizationLoadingHOC,
+} from "./base/VisualizationLoadingHOC";
 import { createPushPinDataLayer } from "./geoChart/geoChartDataLayers";
 import { createPushPinDataSource } from "./geoChart/geoChartDataSource";
 import GeoChartLegendRenderer, { IChartLegendProps } from "./geoChart/GeoChartLegendRenderer";
@@ -31,14 +35,14 @@ export function renderLegend(props: IChartLegendProps): React.ReactElement {
     return <GeoChartLegendRenderer {...props} />;
 }
 
-export interface IGeoChartProps extends ICommonChartProps, IDataSourceProviderInjectedProps {
+export interface ICoreGeoChartProps extends ICommonChartProps, IDataSourceProviderInjectedProps {
     config?: IGeoConfig;
     execution: Execution.IExecutionResponses;
     chartRenderer(props: IChartProps): React.ReactElement;
     legendRenderer(props: IChartLegendProps): React.ReactElement;
 }
 
-export type IGeoChartInnerProps = IGeoChartProps &
+export type IGeoChartInnerProps = ICoreGeoChartProps &
     ILoadingInjectedProps &
     IDataSourceProviderInjectedProps &
     WrappedComponentProps;
@@ -120,4 +124,4 @@ export class GeoChartInner extends BaseVisualization<IGeoChartInnerProps, {}> {
     };
 }
 
-export const GeoChart = GeoChartInner;
+export const GeoChart = visualizationLoadingHOC(GeoChartInner, true);
