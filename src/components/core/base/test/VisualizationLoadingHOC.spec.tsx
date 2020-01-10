@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import * as PropTypes from "prop-types";
 import { mount } from "enzyme";
@@ -15,6 +15,7 @@ import {
     executionObjectWithTotalsDataSource,
     LoadingComponent,
     ErrorComponent,
+    apiExecutionResponseErrorDataSource,
 } from "../../../tests/mocks";
 
 import "jest";
@@ -308,6 +309,28 @@ describe("VisualizationLoadingHOC", () => {
             expect(pushData).toHaveBeenCalledWith(
                 expect.objectContaining({
                     result: oneMeasureResponse,
+                }),
+            );
+        });
+    });
+
+    it("should call pushData callback with drillable items if execution in error but sent them", () => {
+        const pushData = jest.fn();
+        createComponent({
+            pushData,
+            dataSource: apiExecutionResponseErrorDataSource,
+        });
+
+        return testUtils.delay().then(() => {
+            expect(pushData).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    supportedDrillableItems: [
+                        {
+                            localIdentifier: "id:a",
+                            title: "a",
+                            type: "measure",
+                        },
+                    ],
                 }),
             );
         });

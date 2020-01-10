@@ -1,5 +1,5 @@
-// (C) 2007-2018 GoodData Corporation
-import { ApiResponseError } from "@gooddata/gooddata-js";
+// (C) 2007-2020 GoodData Corporation
+import { ApiResponseError, ApiExecutionResponseError } from "@gooddata/gooddata-js";
 import { AFM, Execution } from "@gooddata/typings";
 import { MEASUREGROUP } from "../../constants/dimensions";
 
@@ -220,6 +220,30 @@ const tooLargeResponse: ApiResponseError = {
         formData: jest.fn(),
     },
     responseBody: "",
+};
+
+const enrichedErrorResponse: ApiExecutionResponseError = {
+    ...tooLargeResponse,
+    executionResponse: {
+        dimensions: [
+            {
+                headers: [
+                    {
+                        measureGroupHeader: {
+                            items: [
+                                {
+                                    measureHeaderItem: {
+                                        localIdentifier: "id:a",
+                                        name: "a",
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                ],
+            },
+        ],
+    },
 };
 
 const badRequestResponse: ApiResponseError = {
@@ -786,6 +810,7 @@ export {
     emptyResponseWithNullData,
     attributeOnlyResponse,
     tooLargeResponse,
+    enrichedErrorResponse,
     oneMeasureResponse,
     oneMeasureAfm,
     twoMeasuresAfm,

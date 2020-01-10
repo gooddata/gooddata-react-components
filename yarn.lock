@@ -1201,10 +1201,10 @@
     firstline "^2.0.2"
     line-replace "^1.0.2"
 
-"@gooddata/gooddata-js@^12.0.0":
-  version "12.0.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/gooddata-js/-/gooddata-js-12.0.0.tgz#b7e717688165500930ea3a35de7fc0dbb9122a77"
-  integrity sha512-A9dbIfqiFGHIcdZvToP0l0aWSQpgX1y6paydVhrNdbuetmi4C5cgfE8NLbQVFI+qkFAVdtPZlmsV+p5BJY0Jrg==
+"@gooddata/gooddata-js@^12.1.0":
+  version "12.1.0"
+  resolved "https://registry.yarnpkg.com/@gooddata/gooddata-js/-/gooddata-js-12.1.0.tgz#310984cb4a2c04041468d05adb384e02ef7a7f30"
+  integrity sha512-W7jqEU7GNovzvPVzAdkjVqHt7lQTNYI5AK5bexqjWOA+nBIivX0plOULE0/Mmrmv4CUF/VOhBIHGy584WknxDw==
   dependencies:
     "@gooddata/typings" "^2.19.0"
     es6-promise "^3.0.2"
@@ -1219,10 +1219,10 @@
     rxjs "^5.5.6"
     uuid "^3.2.1"
 
-"@gooddata/goodstrap@^66.0.0":
-  version "66.0.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-66.0.0.tgz#5dca5616b34036ea7491ac12ff8770b0eed45b8c"
-  integrity sha512-/iG3070N54MwxGy/QIuORkuUBSwEUcm68ELkV0bikwKrzcB3D/2CSRCGdZmmaftdGjWFKLzN55ER0T5gW77WXg==
+"@gooddata/goodstrap@^66.1.0":
+  version "66.1.0"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-66.1.0.tgz#5e62a671943581010577a887431358d6a0bcb9d7"
+  integrity sha512-Wg1wg7NNBacqLONpSMFiiNrZN7N/6THpKxmVdNjoyqa34myTF3VEhLfEtM4fpfRpKaXrGgqXC4oyOoWgAI2fTA==
   dependencies:
     "@gooddata/js-utils" "^3.5.0"
     babel-runtime "^6.26.0"
@@ -1258,10 +1258,10 @@
     js-cookie "^2.1.4"
     lodash "^4.17.15"
 
-"@gooddata/mock-js@2.3.1":
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/@gooddata/mock-js/-/mock-js-2.3.1.tgz#bc24a1b549df687b0753980a96f8dd8a28cf3e89"
-  integrity sha512-8y02ReJL/vCmqbcaQoRZ/VwOxJKIMG+Gmz1cPta3x0yHEiKiiBfyXu9x2YSmIkbMT1kDK9PpP7jiwLcQgYlR8Q==
+"@gooddata/mock-js@2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@gooddata/mock-js/-/mock-js-2.6.0.tgz#b6ef4a49535d30fdc3f7a2ef86d79a718f1c41bf"
+  integrity sha512-f6XFyt7vvUVBYqedhzxYXwkhWSY4uybpWMDhdcUT/t6rKPdit/fZ0gmt2SzrdWdFkI6hLnO0ORzmDxtn5UxzWA==
   dependencies:
     "@gooddata/typings" "^2.18.0"
     "@types/seedrandom" "2.4.27"

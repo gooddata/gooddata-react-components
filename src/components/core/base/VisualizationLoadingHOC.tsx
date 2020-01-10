@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import noop = require("lodash/noop");
 import get = require("lodash/get");
@@ -10,9 +10,11 @@ import {
     factory as createSdk,
     DataLayer,
     ApiResponseError,
+    ApiExecutionResponseError,
     IExportConfig,
     IExportResponse,
     SDK,
+    TypeGuards,
 } from "@gooddata/gooddata-js";
 import { AFM, Execution } from "@gooddata/typings";
 
@@ -216,9 +218,10 @@ export function visualizationLoadingHOC<
                     this.props.onExportReady(this.createExportFunction(result)); // Pivot tables
                     return result;
                 })
-                .catch((error: ApiResponseError | Error) => {
+                .catch((error: ApiResponseError | ApiExecutionResponseError | Error) => {
                     // only trigger errors on non-cancelled promises
                     if (error.message !== ErrorStates.CANCELLED) {
+                        this.pushDataForError(error);
                         this.onError(convertErrors(error));
                     }
                 });
@@ -326,6 +329,13 @@ export function visualizationLoadingHOC<
             );
         }
 
+        private pushDataForError(error: ApiResponseError | ApiExecutionResponseError | Error) {
+            if (TypeGuards.isApiExecutionResponseError(error)) {
+                const supportedDrillableItems = this.getSupportedDrillableItems(error.executionResponse);
+                this.props.pushData({ supportedDrillableItems });
+            }
+        }
+
         private pushDataForNoContentResponse(error: RuntimeError) {
             if (!isApiResponseError(error.cause) || error.getMessage() !== ErrorStates.NO_DATA) {
                 return;
@@ -380,7 +390,8 @@ export function visualizationLoadingHOC<
             const promise = dataSource
                 .getData(resultSpec)
                 .then(checkEmptyResult)
-                .catch((error: ApiResponseError) => {
+                .catch((error: ApiResponseError | ApiExecutionResponseError) => {
+                    this.pushDataForError(error);
                     throw convertErrors(error);
                 });
 
