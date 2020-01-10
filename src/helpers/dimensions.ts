@@ -304,15 +304,14 @@ function getScatterDimensions(mdObject: VisualizationObject.IVisualizationObject
 }
 
 export function getGeoChartDimensions(buckets: VisualizationObject.IBucket[]): AFM.IDimension[] {
-    const { attributes = [] }: AFM.IAfm = convertBucketsToAFM(buckets);
-    return [
-        {
-            itemIdentifiers: [MEASUREGROUP],
-        },
-        {
-            itemIdentifiers: attributes.map((attr: AFM.IAttribute) => attr.localIdentifier),
-        },
-    ];
+    const { attributes = [], measures = [] }: AFM.IAfm = convertBucketsToAFM(buckets);
+    const chartDimensions: AFM.IDimension[] = [];
+
+    if (measures.length > 0) {
+        chartDimensions.push({ itemIdentifiers: [MEASUREGROUP] });
+    }
+    chartDimensions.push({ itemIdentifiers: attributes.map((attr: AFM.IAttribute) => attr.localIdentifier) });
+    return chartDimensions;
 }
 
 // Heatmap

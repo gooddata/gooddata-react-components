@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { VisualizationObject, AFM } from "@gooddata/typings";
 import cloneDeep = require("lodash/cloneDeep");
 import update = require("lodash/update");
@@ -10,10 +10,15 @@ import {
     getPivotTableDimensions,
     generateStackedDimensions,
     getGeneralDimensionsFromAFM,
+    getGeoChartDimensions,
 } from "../dimensions";
 import { visualizationObjects } from "../../../__mocks__/fixtures";
 import { MEASURE_1, ATTRIBUTE_CITIES } from "../../../stories/data/afmComponentProps";
 import { MEASURES, ATTRIBUTE, COLUMNS } from "../../constants/bucketNames";
+import { MEASUREGROUP } from "../../constants/dimensions";
+import { IGeoPushpinChartProps } from "../../interfaces/GeoChart";
+import { attribute, measure } from "../../helpers/model";
+import { getBuckets } from "../../components/GeoPushpinChart";
 
 function getVisualization(name: string): VisualizationObject.IVisualizationObjectContent {
     const uri = `/gdc/md/myproject/obj/${name}`;
@@ -979,5 +984,39 @@ describe("getGeneralDimensionsFromAFM", () => {
         };
         const expectedDimensions = [{ itemIdentifiers: ["a1"] }];
         expect(getGeneralDimensionsFromAFM(afm)).toEqual(expectedDimensions);
+    });
+});
+
+describe("getGeoChartDimensions", () => {
+    it("should return dimensions without measureGroup", () => {
+        const pushpinProps: IGeoPushpinChartProps = {
+            location: attribute("location").localIdentifier("location"),
+            projectId: "test",
+        };
+        const buckets: VisualizationObject.IBucket[] = getBuckets(pushpinProps);
+        const expectedDimensions: AFM.IDimension[] = [
+            {
+                itemIdentifiers: ["location"],
+            },
+        ];
+        expect(getGeoChartDimensions(buckets)).toEqual(expectedDimensions);
+    });
+    it("should return dimensions with measureGroup Array and Attributes array have 2 items", () => {
+        const pushpinProps: IGeoPushpinChartProps = {
+            location: attribute("location").localIdentifier("location"),
+            size: measure("size").localIdentifier("size"),
+            segmentBy: attribute("segmentBy").localIdentifier("segmentBy"),
+            projectId: "test",
+        };
+        const buckets: VisualizationObject.IBucket[] = getBuckets(pushpinProps);
+        const expectedDimensions: AFM.IDimension[] = [
+            {
+                itemIdentifiers: [MEASUREGROUP],
+            },
+            {
+                itemIdentifiers: ["location", "segmentBy"],
+            },
+        ];
+        expect(getGeoChartDimensions(buckets)).toEqual(expectedDimensions);
     });
 });

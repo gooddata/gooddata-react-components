@@ -199,6 +199,13 @@ const barChartVisualizationObjects = [
     },
 ];
 
+const geoChartWithLocationAfmExecutions = [
+    {
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_request.json"),
+        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_response.json"),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_result.json")
+    }
+];
 const geoChartWithLocationSizeAfmExecutions = [
     {
         execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_request.json"),
@@ -2441,6 +2448,7 @@ const getBaseProjectSchema = (title, identifier) => {
             ...pivotTableSubtotalsAfmExecutions,
             ...pivotTableGrandtotalSubtotalAfmExecutions,
             ...xirrAfmExecutions,
+            ...geoChartWithLocationAfmExecutions,
             ...geoChartWithLocationSizeAfmExecutions,
             ...geoChartWithLocationColorAfmExecutions,
             ...geoChartWithLocationSizeColorAfmExecutions,

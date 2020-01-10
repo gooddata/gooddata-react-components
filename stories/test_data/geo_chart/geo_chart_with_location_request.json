@@ -1,0 +1,21 @@
+{
+    "execution": {
+        "afm": {
+            "attributes": [
+                {
+                    "displayForm": {
+                        "uri": "/gdc/md/storybook/obj/30.df"
+                    },
+                    "localIdentifier": "location"
+                }
+            ]
+        },
+        "resultSpec": {
+            "dimensions": [
+                {
+                    "itemIdentifiers": ["location"]
+                }
+            ]
+        }
+    }
+}
