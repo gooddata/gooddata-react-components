@@ -51,9 +51,9 @@ function transformPushPinDataSource(
         sizeData = data[size];
     }
 
-    const {
-        headerItems: [, attributeHeaderItems],
-    } = executionResult;
+    const attrHeaderItemIndex = hasColorMeasure || hasSizeMeasure ? 1 : 0;
+    const attributeHeaderItems = executionResult.headerItems[attrHeaderItemIndex];
+
     const locationData = location !== undefined ? attributeHeaderItems[location] : [];
     const locationNameData = tooltipText !== undefined ? attributeHeaderItems[tooltipText] : [];
 

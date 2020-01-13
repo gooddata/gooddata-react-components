@@ -158,4 +158,64 @@ describe("createPushPinDataSource", () => {
             ],
         });
     });
+
+    it("should return location without measure", () => {
+        const noMeasureExecResult: Execution.IExecutionResult = {
+            data: [],
+            paging: {
+                count: [2, 3],
+                offset: [0, 0],
+                total: [2, 3],
+            },
+            headerItems: [
+                [
+                    [
+                        {
+                            attributeHeaderItem: {
+                                name: "19.0415;-155.6254",
+                                uri: "/gdc/md/a8pxyfcimmbcgczhy0o4w775oabma8im/obj/694/elements?id=1808",
+                            },
+                        },
+                        {
+                            attributeHeaderItem: {
+                                name: "19.0698;-155.5751",
+                                uri: "/gdc/md/a8pxyfcimmbcgczhy0o4w775oabma8im/obj/694/elements?id=1903",
+                            },
+                        },
+                        {
+                            attributeHeaderItem: {
+                                name: "19.0716;-155.6143",
+                                uri: "/gdc/md/a8pxyfcimmbcgczhy0o4w775oabma8im/obj/694/elements?id=1870",
+                            },
+                        },
+                    ],
+                ],
+            ],
+        };
+        const geoDataIndex: IGeoDataIndex = {
+            location: 0,
+        };
+        const source: mapboxgl.GeoJSONSourceRaw = createPushPinDataSource(noMeasureExecResult, geoDataIndex);
+
+        expect(source.data).toEqual({
+            features: [
+                {
+                    geometry: { coordinates: [-155.6254, 19.0415], type: "Point" },
+                    properties: { City: "", pushpinColorValue: undefined, pushpinSizeValue: 8 },
+                    type: "Feature",
+                },
+                {
+                    geometry: { coordinates: [-155.5751, 19.0698], type: "Point" },
+                    properties: { City: "", pushpinColorValue: undefined, pushpinSizeValue: 8 },
+                    type: "Feature",
+                },
+                {
+                    geometry: { coordinates: [-155.6143, 19.0716], type: "Point" },
+                    properties: { City: "", pushpinColorValue: undefined, pushpinSizeValue: 8 },
+                    type: "Feature",
+                },
+            ],
+            type: "FeatureCollection",
+        });
+    });
 });
