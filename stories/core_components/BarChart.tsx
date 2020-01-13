@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { screenshotWrap } from "@gooddata/test-storybook";
@@ -31,6 +31,20 @@ import { withAxisNamePositionConfig, withAxisNameVisibilityConfig } from "../hoc
 const wrapperStyle = { width: 800, height: 400 };
 
 storiesOf("Core components/BarChart", module)
+    .add("one measure, one attribute", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BarChart
+                    projectId="storybook"
+                    measures={[MEASURE_1]}
+                    viewBy={ATTRIBUTE_1}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
     .add("two measures, one attribute", () =>
         screenshotWrap(
             <div style={wrapperStyle}>
@@ -45,6 +59,21 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
+    .add("one measure, two attributes", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BarChart
+                    projectId="storybook"
+                    measures={[MEASURE_1]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
+
     .add("stacked", () =>
         screenshotWrap(
             <div style={wrapperStyle}>
@@ -529,7 +558,7 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
-    .add("optional stacking chart with drillable child items", () =>
+    .add("drillable child items", () =>
         screenshotWrap(
             <div style={wrapperStyle}>
                 <BarChart
@@ -543,7 +572,7 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
-    .add("optional stacking chart with drillable parent items", () =>
+    .add("drillable parent items", () =>
         screenshotWrap(
             <div style={wrapperStyle}>
                 <BarChart
@@ -557,7 +586,7 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
-    .add("optional stacking chart with drillable child items and dual axis", () =>
+    .add("drillable child items and dual axis", () =>
         screenshotWrap(
             <div style={wrapperStyle}>
                 <BarChart
@@ -576,7 +605,7 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
-    .add("optional stacking chart with drillable parent items and dual axis", () =>
+    .add("drillable parent items and dual axis", () =>
         screenshotWrap(
             <div style={wrapperStyle}>
                 <BarChart
@@ -595,7 +624,7 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
-    .add("optional stacking chart with drillable parent and child items and dual axis", () =>
+    .add("drillable parent and child items and dual axis", () =>
         screenshotWrap(
             <div style={wrapperStyle}>
                 <BarChart
@@ -615,7 +644,7 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
-    .add("optional stacking chart with drillable items and dual axis", () =>
+    .add("drillable items and dual axis", () =>
         screenshotWrap(
             <div style={wrapperStyle}>
                 <BarChart
@@ -634,7 +663,7 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
-    .add("optional stacking chart with drillable items and stackBy", () =>
+    .add("drillable items and stackBy", () =>
         screenshotWrap(
             <div style={wrapperStyle}>
                 <BarChart
@@ -649,7 +678,7 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
-    .add("optional stacking chart with two bottom measures", () =>
+    .add("two bottom measures", () =>
         screenshotWrap(
             <div style={wrapperStyle}>
                 <BarChart
@@ -668,7 +697,7 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
-    .add("optional stacking chart with two top measures", () =>
+    .add("two top measures", () =>
         screenshotWrap(
             <div style={wrapperStyle}>
                 <BarChart
@@ -687,7 +716,7 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
-    .add("optional stacking chart with 60-degree rotation setting on X axis", () =>
+    .add("60-degree rotation setting on Y axis", () =>
         screenshotWrap(
             <div style={wrapperStyle}>
                 <BarChart
@@ -706,7 +735,26 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
-    .add("optional stacking chart with hide-axis setting on X axis", () =>
+    .add("hidden X axis", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BarChart
+                    projectId="storybook"
+                    measures={[MEASURE_1, MEASURE_2]}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    config={{
+                        xaxis: {
+                            visible: false,
+                        },
+                    }}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
+    .add("hidden Y axis", () =>
         screenshotWrap(
             <div style={wrapperStyle}>
                 <BarChart
@@ -725,7 +773,7 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
-    .add("optional stacking chart with stacking attribute", () =>
+    .add("stacking attribute", () =>
         screenshotWrap(
             <div style={wrapperStyle}>
                 <BarChart
@@ -740,7 +788,7 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
-    .add("optional stacking chart with 'Stack Measures'", () =>
+    .add("stacking measures", () =>
         screenshotWrap(
             <div style={wrapperStyle}>
                 <BarChart
@@ -757,7 +805,7 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
-    .add("optional stacking chart with 'Stack to 100%'", () =>
+    .add("stack measures to 100%", () =>
         screenshotWrap(
             <div style={wrapperStyle}>
                 <BarChart
@@ -774,7 +822,7 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
-    .add("optional stacking chart with 'Stack to 100%' on top axis", () =>
+    .add("stack to 100% on top axis", () =>
         screenshotWrap(
             <div style={wrapperStyle}>
                 <BarChart
@@ -794,7 +842,7 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
-    .add("optional stacking chart with dual axis", () =>
+    .add("dual axis", () =>
         screenshotWrap(
             <div style={wrapperStyle}>
                 <BarChart
@@ -813,7 +861,7 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
-    .add("optional stacking chart with dual axis and 'Stack Measures'", () =>
+    .add("dual axis and stacking measures", () =>
         screenshotWrap(
             <div style={wrapperStyle}>
                 <BarChart
@@ -833,7 +881,7 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
-    .add("optional stacking chart with dual axis and 'Stack to 100%'", () =>
+    .add("dual axis and stack to 100%", () =>
         screenshotWrap(
             <div style={wrapperStyle}>
                 <BarChart
@@ -853,7 +901,7 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
-    .add("optional stacking chart with dual axis and 'Stack to 100%' with min/max", () =>
+    .add("dual axis and stack to 100% with min/max", () =>
         screenshotWrap(
             <div style={wrapperStyle}>
                 <BarChart
@@ -879,7 +927,7 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
-    .add('optional stacking chart ignores "stackMeasures" setting with one measure', () =>
+    .add('ignore "stackMeasures" setting with one measure', () =>
         screenshotWrap(
             <div style={wrapperStyle}>
                 <BarChart
@@ -893,7 +941,7 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
-    .add('optional stacking chart ignores "stackMeasuresToPercent" setting with one measure', () =>
+    .add('ignore "stackMeasuresToPercent" setting with one measure', () =>
         screenshotWrap(
             <div style={wrapperStyle}>
                 <BarChart
@@ -924,7 +972,6 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
-    // case 3-g in BDD - UI SDK
     .add('optional stacking chart render "stackMeasuresToPercent" setting with measure on top axis', () =>
         screenshotWrap(
             <div style={wrapperStyle}>
@@ -942,7 +989,6 @@ storiesOf("Core components/BarChart", module)
             </div>,
         ),
     )
-
     .add("Data label must update vertical align in the middle when filtering one value", () =>
         screenshotWrap(
             <div style={wrapperStyle}>

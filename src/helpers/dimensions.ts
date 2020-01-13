@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import get = require("lodash/get");
 import { AFM, VisualizationObject } from "@gooddata/typings";
 import { VisualizationTypes, VisType } from "../constants/visualizationTypes";
@@ -409,7 +409,8 @@ export function generateDimensions(
         case VisualizationTypes.BAR:
         case VisualizationTypes.COMBO:
         case VisualizationTypes.COMBO2:
-        case VisualizationTypes.COLUMN: {
+        case VisualizationTypes.COLUMN:
+        case VisualizationTypes.BULLET: {
             return getBarDimensions(mdObject);
         }
         case VisualizationTypes.HEADLINE: {

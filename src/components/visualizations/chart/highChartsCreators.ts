@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import get = require("lodash/get");
 import merge = require("lodash/merge");
 import * as invariant from "invariant";
@@ -11,6 +11,7 @@ import { IChartConfig, IChartLimits, IChartOptions } from "../../../interfaces/C
 import { getLineConfiguration } from "./highcharts/lineConfiguration";
 import { getBarConfiguration } from "./highcharts/barConfiguration";
 import { getColumnConfiguration } from "./highcharts/columnConfiguration";
+import { getBulletConfiguration } from "./highcharts/bulletConfiguration";
 import { getCustomizedConfiguration } from "./highcharts/customConfiguration";
 import { getPieConfiguration } from "./highcharts/pieConfiguration";
 import { getDonutConfiguration } from "./highcharts/donutConfiguration";
@@ -28,6 +29,7 @@ const chartConfigurationMap = {
     [VisualizationTypes.LINE]: getLineConfiguration,
     [VisualizationTypes.BAR]: getBarConfiguration,
     [VisualizationTypes.COLUMN]: getColumnConfiguration,
+    [VisualizationTypes.BULLET]: getBulletConfiguration,
     [VisualizationTypes.PIE]: getPieConfiguration,
     [VisualizationTypes.AREA]: getAreaConfiguration,
     [VisualizationTypes.SCATTER]: getScatterConfiguration,

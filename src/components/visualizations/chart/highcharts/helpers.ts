@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import flatten = require("lodash/flatten");
 import get = require("lodash/get");
 import pick = require("lodash/pick");
@@ -15,7 +15,7 @@ import max = require("lodash/max");
 import isNil = require("lodash/isNil");
 
 import { VisualizationTypes, VisType } from "../../../../constants/visualizationTypes";
-import { isBarChart } from "../../utils/common";
+import { isInvertedChartType } from "../../utils/common";
 import { IChartConfig, ISeriesItem, ISeriesDataItem, ChartAlignTypes } from "../../../../interfaces/Config";
 import { BOTTOM, MIDDLE, TOP } from "../../../../constants/alignments";
 
@@ -72,14 +72,19 @@ export const isStacked = (chart: any) => {
 };
 
 export function getChartProperties(config: IChartConfig, type: VisType) {
-    const isBarType = isBarChart(type);
+    const isInvertedChart = isInvertedChartType(type);
+
     const chartProps: any = {
-        xAxisProps: isBarType ? { ...config.yaxis } : { ...config.xaxis },
-        yAxisProps: isBarType ? { ...config.xaxis } : { ...config.yaxis },
+        xAxisProps: isInvertedChart ? { ...config.yaxis } : { ...config.xaxis },
+        yAxisProps: isInvertedChart ? { ...config.xaxis } : { ...config.yaxis },
     };
 
-    const secondaryXAxisProps = isBarType ? { ...config.secondary_yaxis } : { ...config.secondary_xaxis };
-    const secondaryYAxisProps = isBarType ? { ...config.secondary_xaxis } : { ...config.secondary_yaxis };
+    const secondaryXAxisProps = isInvertedChart
+        ? { ...config.secondary_yaxis }
+        : { ...config.secondary_xaxis };
+    const secondaryYAxisProps = isInvertedChart
+        ? { ...config.secondary_xaxis }
+        : { ...config.secondary_yaxis };
 
     if (!isEmpty(secondaryXAxisProps)) {
         chartProps.secondary_xAxisProps = secondaryXAxisProps;

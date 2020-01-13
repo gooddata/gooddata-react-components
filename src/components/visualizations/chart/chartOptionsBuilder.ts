@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { colors2Object, numberFormat } from "@gooddata/numberjs";
 import { AFM, Execution, VisualizationObject } from "@gooddata/typings";
 import * as invariant from "invariant";
@@ -168,6 +168,7 @@ export const supportedTooltipFollowPointerChartTypes = [
 export const supportedStackingAttributesChartTypes = [
     VisualizationTypes.COLUMN,
     VisualizationTypes.BAR,
+    VisualizationTypes.BULLET,
     VisualizationTypes.AREA,
     VisualizationTypes.COMBO,
     VisualizationTypes.COMBO2,
