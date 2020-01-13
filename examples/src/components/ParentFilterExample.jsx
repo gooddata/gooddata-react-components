@@ -1,6 +1,6 @@
 // (C) 2007-2020 GoodData Corporation
 import React, { Component } from "react";
-import { AttributeElements, BarChart, Model, ErrorComponent } from "@gooddata/react-components";
+import { AttributeElements, BarChart, Model } from "@gooddata/react-components";
 import Select from "react-select";
 import "react-select/dist/react-select.css";
 import "@gooddata/react-components/styles/css/main.css";
@@ -94,8 +94,9 @@ export class ParentFilterExample extends Component {
             >
                 {({ validElements, isLoading, error }) => {
                     if (error) {
-                        return <ErrorComponent message="There was an error getting your execution" />;
+                        console.error("Loading attribute elements failed!", error);
                     }
+
                     const selectOptions = validElements
                         ? validElements.items.map(item => ({
                               label: item.element.title,
@@ -119,6 +120,15 @@ export class ParentFilterExample extends Component {
                                 placeholder={placeholder}
                                 value={filterValues}
                             />
+                            {error && (
+                                <span
+                                    style={{
+                                        color: "#e54d42",
+                                    }}
+                                >
+                                    Loading failed!
+                                </span>
+                            )}
                         </span>
                     );
                 }}
