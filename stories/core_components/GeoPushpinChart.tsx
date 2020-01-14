@@ -49,17 +49,17 @@ storiesOf("Core components/GeoPushpinChart", module)
     .add("with location, size", () =>
         renderGeoPushpinChart({ location: ATTRIBUTE_LOCATION_GEOCHART, size: MEASURE_SIZE_GEOCHART }),
     )
-    .add("with location, color", () =>
+    .add("with location and color", () =>
         renderGeoPushpinChart({ location: ATTRIBUTE_LOCATION_GEOCHART, color: MEASURE_COLOR_GEOCHART }),
     )
-    .add("with location, size, color", () =>
+    .add("with location, size and color", () =>
         renderGeoPushpinChart({
             location: ATTRIBUTE_LOCATION_GEOCHART,
             size: MEASURE_SIZE_GEOCHART,
             color: MEASURE_COLOR_GEOCHART,
         }),
     )
-    .add("with location, size, color, segmentBy, tooltipText", () => {
+    .add("with location, size, color, segmentBy and tooltipText", () => {
         const config: IGeoConfig = {
             tooltipText: ATTRIBUTE_TOOLTIP_GEOCHART,
         };
