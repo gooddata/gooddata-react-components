@@ -36,6 +36,7 @@ export type ChartType =
     | "bubble"
     | "heatmap"
     | "geo"
+    | "pushpin"
     | "combo"
     | "combo2"
     | "histogram"
