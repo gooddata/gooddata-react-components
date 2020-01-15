@@ -2,7 +2,7 @@
 import * as React from "react";
 
 import { AFM, VisualizationInput } from "@gooddata/typings";
-
+import { ISeparators } from "./separators";
 import { Dropdown } from "./Dropdown";
 import {
     getMeasureValueFilterCondition,
@@ -19,6 +19,7 @@ export interface IDropdownProps {
     warningMessage?: string;
     locale?: string;
     anchorEl?: EventTarget | string;
+    separators?: ISeparators;
 }
 
 function getOperator(condition: AFM.MeasureValueFilterCondition): string {
@@ -42,7 +43,7 @@ function getValue(condition: AFM.MeasureValueFilterCondition): IMeasureValueFilt
 
 export class DropdownAfmWrapper extends React.PureComponent<IDropdownProps> {
     public render() {
-        const { filter, onCancel, usePercentage, warningMessage, locale, anchorEl } = this.props;
+        const { filter, onCancel, usePercentage, warningMessage, locale, anchorEl, separators } = this.props;
         const condition = filter ? filter.measureValueFilter.condition : null;
 
         return (
@@ -55,6 +56,7 @@ export class DropdownAfmWrapper extends React.PureComponent<IDropdownProps> {
                 warningMessage={warningMessage}
                 locale={locale}
                 anchorEl={anchorEl}
+                separators={separators}
             />
         );
     }

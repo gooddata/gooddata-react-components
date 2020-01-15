@@ -3,6 +3,7 @@ import * as React from "react";
 import { injectIntl, WrappedComponentProps } from "react-intl";
 import Button from "@gooddata/goodstrap/lib/Button/Button";
 
+import { ISeparators } from "./separators";
 import { IntlWrapper } from "../../core/base/IntlWrapper";
 import OperatorDropdown from "./OperatorDropdown";
 import RangeInput from "./RangeInput";
@@ -23,6 +24,7 @@ export interface IDropdownBodyOwnProps {
     disableAutofocus?: boolean;
     onCancel?: () => void;
     onApply: (operator: string, value: IMeasureValueFilterValue) => void;
+    separators?: ISeparators;
 }
 
 export type IDropdownBodyProps = IDropdownBodyOwnProps & WrappedComponentProps;
@@ -84,7 +86,7 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
     }
 
     private renderInputSection = () => {
-        const { usePercentage, disableAutofocus } = this.props;
+        const { usePercentage, disableAutofocus, separators } = this.props;
         const {
             operator,
             value: { value = null, from = null, to = null },
@@ -98,6 +100,7 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
                     onValueChange={this.handleValueChange}
                     onEnterKeyPress={this.onApply}
                     disableAutofocus={disableAutofocus}
+                    separators={separators}
                 />
             );
         } else if (isRangeOperator(operator)) {
@@ -110,6 +113,7 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
                     onToChange={this.handleToChange}
                     onEnterKeyPress={this.onApply}
                     disableAutofocus={disableAutofocus}
+                    separators={separators}
                 />
             );
         }
@@ -117,8 +121,58 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
         return null;
     };
 
+    private isApplyButtonDisabledForComparison() {
+        const { value = null } = this.state.value;
+
+        if (value === null) {
+            return true;
+        }
+
+        if (this.props.value === null) {
+            return false;
+        }
+
+        if (this.state.operator !== this.props.operator) {
+            return false;
+        }
+
+        return value === this.props.value.value;
+    }
+
+    private isApplyButtonDisabledForRange() {
+        const { from = null, to = null } = this.state.value;
+
+        if (from === null || to === null) {
+            return true;
+        }
+
+        if (this.props.value === null) {
+            return false;
+        }
+
+        if (this.state.operator !== this.props.operator) {
+            return false;
+        }
+
+        return from === this.props.value.from && to === this.props.value.to;
+    }
+
+    private isApplyButtonDisabledForAll() {
+        return this.props.operator === Operator.ALL;
+    }
+
     private isApplyButtonDisabled = () => {
-        return false;
+        const { operator } = this.state;
+
+        if (isComparisonOperator(operator)) {
+            return this.isApplyButtonDisabledForComparison();
+        }
+
+        if (isRangeOperator(operator)) {
+            return this.isApplyButtonDisabledForRange();
+        }
+
+        return this.isApplyButtonDisabledForAll();
     };
 
     private handleOperatorSelection = (operator: string) => this.setState({ operator });

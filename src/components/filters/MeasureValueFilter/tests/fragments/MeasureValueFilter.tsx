@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import { ReactWrapper } from "enzyme";
 import { string as stringUtils } from "@gooddata/js-utils";
 
@@ -69,6 +69,13 @@ export default class MeasureValueFilterFragment {
     public setRangeTo = (value: string) => {
         this.getRangeToInput().simulate("change", { target: { value } });
         return this;
+    };
+
+    public isApplyButtonDisabled = () => {
+        return this.component
+            .find(CLASS_APPLY_BUTTON)
+            .at(0)
+            .prop("disabled");
     };
 
     public getSelectedOperatorTitle = () => this.getOperatorDropdownButton().text();
