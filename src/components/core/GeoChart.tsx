@@ -11,26 +11,28 @@ import {
     ILoadingInjectedProps,
     visualizationLoadingHOC,
 } from "./base/VisualizationLoadingHOC";
-import GeoChartLegendRenderer, { IChartLegendProps } from "./geoChart/GeoChartLegendRenderer";
+import GeoChartLegendRenderer, { IGeoChartLegendRendererProps } from "./geoChart/GeoChartLegendRenderer";
 import GeoChartRenderer, { IGeoChartRendererProps } from "./geoChart/GeoChartRenderer";
 
 import { IDataSourceProviderInjectedProps } from "../afm/DataSourceProvider";
 import { DEFAULT_DATA_POINTS_LIMIT } from "../../constants/geoChart";
 import { IGeoConfig, IGeoData } from "../../interfaces/GeoChart";
 import { getGeoData, isDataOfReasonableSize } from "../../helpers/geoChart";
+import { TOP } from "../visualizations/chart/legend/PositionTypes";
 
 export function renderChart(props: IGeoChartRendererProps): React.ReactElement {
     return <GeoChartRenderer {...props} />;
 }
 
-export function renderLegend(props: IChartLegendProps): React.ReactElement {
+export function renderLegend(props: IGeoChartLegendRendererProps): React.ReactElement {
     return <GeoChartLegendRenderer {...props} />;
 }
 
 export interface ICoreGeoChartProps extends ICommonChartProps, IDataSourceProviderInjectedProps {
+    legendPostion?: string;
     config?: IGeoConfig;
     chartRenderer?: (props: IGeoChartRendererProps) => React.ReactElement;
-    legendRenderer?: (props: IChartLegendProps) => React.ReactElement;
+    legendRenderer?: (props: IGeoChartLegendRendererProps) => React.ReactElement;
 }
 
 export type IGeoChartInnerProps = ICoreGeoChartProps &
@@ -46,6 +48,7 @@ export class GeoChartInner extends BaseVisualization<IGeoChartInnerProps, {}> {
         ...commonDefaultProps,
         chartRenderer: renderChart,
         legendRenderer: renderLegend,
+        legendPostion: TOP,
     };
 
     public componentDidUpdate(prevProps: IGeoChartInnerProps) {
@@ -61,8 +64,8 @@ export class GeoChartInner extends BaseVisualization<IGeoChartInnerProps, {}> {
     public renderVisualization() {
         return (
             <div className="gd-geo-component s-gd-geo-component">
-                {this.renderChart()}
                 {this.renderLegend()}
+                {this.renderChart()}
             </div>
         );
     }
@@ -77,9 +80,12 @@ export class GeoChartInner extends BaseVisualization<IGeoChartInnerProps, {}> {
     };
 
     private renderLegend = (): React.ReactElement => {
-        const { legendRenderer } = this.props;
+        const { config, execution, legendRenderer, locale, legendPostion: position } = this.props;
         const legendProps = {
-            domProps: {},
+            config,
+            execution,
+            locale,
+            position,
         };
         return legendRenderer(legendProps);
     };
