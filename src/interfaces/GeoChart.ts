@@ -31,6 +31,7 @@ export interface IGeoData {
 
 export interface IGeoConfig {
     center?: [number, number];
+    limit?: number;
     mdObject?: VisualizationObject.IVisualizationObjectContent;
     selectedSegmentItem?: string;
     tooltipText?: VisualizationInput.IAttribute;

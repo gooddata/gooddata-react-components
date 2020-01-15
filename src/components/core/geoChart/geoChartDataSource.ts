@@ -2,6 +2,7 @@
 import { Execution } from "@gooddata/typings";
 import { IGeoData, IPushpinColor } from "../../../interfaces/GeoChart";
 import { DEFAULT_PUSHPIN_SIZE_VALUE } from "../../../constants/geoChart";
+import { getGeoAttributeHeaderItems } from "../../../helpers/geoChart";
 import { getHeaderItemName, isTwoDimensionsData } from "../../../helpers/executionResultHelper";
 import { stringToFloat } from "../../../helpers/utils";
 import { getPushpinColors } from "./geoChartColor";
@@ -49,8 +50,7 @@ function transformPushpinDataSource(
         }
     }
 
-    const attrHeaderItemIndex = hasColorMeasure || hasSizeMeasure ? 1 : 0;
-    const attributeHeaderItems = executionResult.headerItems[attrHeaderItemIndex];
+    const attributeHeaderItems = getGeoAttributeHeaderItems(executionResult, geoData);
 
     const locationData = location !== undefined ? attributeHeaderItems[location.index] : [];
     const locationNameData = tooltipText !== undefined ? attributeHeaderItems[tooltipText.index] : [];
