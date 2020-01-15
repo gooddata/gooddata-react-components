@@ -1,6 +1,7 @@
 // (C) 2019-2020 GoodData Corporation
 import { DEFAULT_COLORS } from "../components/visualizations/utils/color";
 
+export const DEFAULT_DATA_POINTS_LIMIT = 2000;
 export const DEFAULT_DATA_SOURCE_NAME = "gdcPushpinsData";
 export const DEFAULT_LAYER_NAME = "gdcPushpins";
 

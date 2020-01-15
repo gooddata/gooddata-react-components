@@ -1,8 +1,9 @@
 // (C) 2020 GoodData Corporation
 import { VisualizationObject } from "@gooddata/typings";
-import { getGeoData } from "../../geoChart";
+import { getGeoData, isDataOfReasonableSize } from "../../geoChart";
+import { IGeoData } from "../../../interfaces/GeoChart";
 import { COLOR_ITEM, LOCATION_ITEM, SEGMENT_BY_ITEM, SIZE_ITEM, TOOLTIP_TEXT_ITEM } from "./data";
-import { getExecutionResponse } from "../../../../stories/data/geoChart";
+import { getExecutionResponse, getExecutionResult } from "../../../../stories/data/geoChart";
 
 describe("getGeoData", () => {
     it("should return geoData with full bucket", () => {
@@ -47,5 +48,16 @@ describe("getGeoData", () => {
             location: { index: 0, name: "State" },
             size: { index: 0, name: "Population" },
         });
+    });
+
+    describe("isDataOfReasonableSize", () => {
+        it.each([[51, true], [49, false]])(
+            "should return isDataOfReasonableSize is %s",
+            (limit: number, expectedResult: boolean) => {
+                const geoData: IGeoData = { location: { index: 0, name: "location" } };
+                const executionResult = getExecutionResult(true);
+                expect(isDataOfReasonableSize(executionResult, geoData, limit)).toEqual(expectedResult);
+            },
+        );
     });
 });
