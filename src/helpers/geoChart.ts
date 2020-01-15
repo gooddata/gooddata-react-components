@@ -78,3 +78,30 @@ export function getGeoData(
 
     return geoData;
 }
+
+export function getGeoAttributeHeaderItems(
+    executionResult: Execution.IExecutionResult,
+    geoData: IGeoData,
+): Execution.IResultHeaderItem[][] {
+    const { color, size } = geoData;
+
+    const hasColorMeasure = color !== undefined;
+    const hasSizeMeasure = size !== undefined;
+    const attrHeaderItemIndex = hasColorMeasure || hasSizeMeasure ? 1 : 0;
+    const attributeHeaderItems = executionResult.headerItems[attrHeaderItemIndex];
+
+    return attributeHeaderItems;
+}
+
+export function isDataOfReasonableSize(
+    executionResult: Execution.IExecutionResult,
+    geoData: IGeoData,
+    limit: number,
+): boolean {
+    const { location } = geoData;
+
+    const attributeHeaderItems = getGeoAttributeHeaderItems(executionResult, geoData);
+    const locationData = location !== undefined ? attributeHeaderItems[location.index] : [];
+
+    return locationData.length <= limit;
+}
