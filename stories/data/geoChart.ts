@@ -1,5 +1,15 @@
 // (C) 2019-2020 GoodData Corporation
-import { Execution } from "@gooddata/typings";
+import { Execution, VisualizationObject } from "@gooddata/typings";
+import { IGeoConfig } from "../../src/interfaces/GeoChart";
+import { measure, attribute } from "../../src/helpers/model";
+
+interface IGeoOptions {
+    isWithLocation?: boolean;
+    isWithSegmentBy?: boolean;
+    isWithTooltipText?: boolean;
+    isWithSize?: boolean;
+    isWithColor?: boolean;
+}
 
 const SIZE_DATA: Execution.DataValue[] = [
     "1005",
@@ -1155,4 +1165,53 @@ export function getExecutionResponse(
         },
         dimensions: resultDimensions,
     };
+}
+
+export function getGeoConfig(props: IGeoOptions): IGeoConfig {
+    const buckets: VisualizationObject.IBucket[] = [];
+    const { isWithLocation, isWithSegmentBy, isWithTooltipText, isWithSize, isWithColor } = props;
+    if (isWithLocation) {
+        buckets.push({
+            localIdentifier: "location",
+            items: [attribute("/gdc/md/projectId/obj/1").localIdentifier("location")],
+        });
+    }
+
+    if (isWithSegmentBy) {
+        buckets.push({
+            localIdentifier: "segmentBy",
+            items: [attribute("/gdc/md/projectId/obj/2").localIdentifier("segmentBy")],
+        });
+    }
+
+    if (isWithTooltipText) {
+        buckets.push({
+            localIdentifier: "toolTipText",
+            items: [attribute("/gdc/md/projectId/obj/3").localIdentifier("tooltipText")],
+        });
+    }
+
+    if (isWithSize) {
+        buckets.push({
+            localIdentifier: "size",
+            items: [measure("/gdc/md/projectId/obj/4").localIdentifier("m_size")],
+        });
+    }
+
+    if (isWithColor) {
+        buckets.push({
+            localIdentifier: "color",
+            items: [measure("/gdc/md/projectId/obj/5").localIdentifier("m_color")],
+        });
+    }
+    const mdObject: VisualizationObject.IVisualizationObjectContent = {
+        visualizationClass: {
+            uri: "local:pushpin",
+        },
+        buckets,
+    };
+    const config: IGeoConfig = {
+        mdObject,
+    };
+    return config;
 }

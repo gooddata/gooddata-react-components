@@ -1,6 +1,11 @@
 // (C) 2020 GoodData Corporation
 import { VisualizationObject } from "@gooddata/typings";
-import { getGeoData, isDataOfReasonableSize } from "../../geoChart";
+import {
+    getGeoData,
+    isDataOfReasonableSize,
+    calculateAverage,
+    getFormatFromExecutionResponse,
+} from "../../geoChart";
 import { IGeoData } from "../../../interfaces/GeoChart";
 import { COLOR_ITEM, LOCATION_ITEM, SEGMENT_BY_ITEM, SIZE_ITEM, TOOLTIP_TEXT_ITEM } from "./data";
 import { getExecutionResponse, getExecutionResult } from "../../../../stories/data/geoChart";
@@ -59,5 +64,19 @@ describe("getGeoData", () => {
                 expect(isDataOfReasonableSize(executionResult, geoData, limit)).toEqual(expectedResult);
             },
         );
+    });
+
+    describe("calculateAverage", () => {
+        it("should return expected value ", () => {
+            const values: number[] = [1, 2, 3, 4, 5, 6];
+            expect(calculateAverage(values)).toEqual(3.5);
+        });
+    });
+
+    describe("getFormatFromExecutionResponse", () => {
+        it("should return format of Size Measure ", () => {
+            const executionResponse = getExecutionResponse(true, false, false, true, false);
+            expect(getFormatFromExecutionResponse(0, executionResponse)).toEqual("#,##0");
+        });
     });
 });
