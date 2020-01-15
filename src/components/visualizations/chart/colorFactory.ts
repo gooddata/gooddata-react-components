@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { AFM, Execution } from "@gooddata/typings";
 import { TypeGuards, IColor, IColorItem, IGuidColorItem, RGBType } from "@gooddata/gooddata-js";
 import range = require("lodash/range");
@@ -14,8 +14,16 @@ import {
     getRgbStringFromRGB,
     getColorFromMapping,
     DEFAULT_HEATMAP_BLUE_COLOR,
+    DARK_GRAY,
 } from "../utils/color";
-import { isHeatmap, isOneOfTypes, isTreemap, isScatterPlot, isBubbleChart } from "../utils/common";
+import {
+    isHeatmap,
+    isOneOfTypes,
+    isTreemap,
+    isScatterPlot,
+    isBubbleChart,
+    isBulletChart,
+} from "../utils/common";
 import { VisualizationTypes } from "../../../constants/visualizationTypes";
 import { isDerivedMeasure, findParentMeasureIndex } from "./chartOptionsBuilder";
 import {
@@ -386,6 +394,7 @@ export class HeatmapColorStrategy extends ColorStrategy {
         const generatedColors = this.getCalculatedColors(colorItemsCount, channels, steps);
         return ["rgb(255,255,255)", ...generatedColors.reverse(), getRgbStringFromRGB(baseColor)];
     }
+
     private getCalculatedColors(count: number, channels: number[], steps: number[]): HighChartColorPalette {
         return range(1, count).map(
             (index: number) =>
@@ -582,6 +591,46 @@ export class ScatterPlotColorStrategy extends PointsChartColorStrategy {
     }
 }
 
+export class BulletChartColorStrategy extends PointsChartColorStrategy {
+    protected createColorAssignment(
+        colorPalette: IColorPalette,
+        colorMapping: IColorMapping[],
+        _viewByAttribute: any,
+        _stackByAttribute: any,
+        executionResponse: Execution.IExecutionResponse,
+        afm: AFM.IAfm,
+    ): ICreateColorAssignmentReturnValue {
+        const fullColorAssignment = this.singleMeasureColorMapping(
+            colorPalette,
+            colorMapping,
+            executionResponse,
+            afm,
+        );
+
+        return {
+            fullColorAssignment,
+        };
+    }
+
+    protected createPalette(colorPalette: IColorPalette, colorAssignment: IColorAssignment[]): string[] {
+        if (TypeGuards.isGuidColorItem(colorAssignment[0].color)) {
+            return this.getCustomBulletChartColorPalette(
+                getColorByGuid(colorPalette, colorAssignment[0].color.value as string, 0),
+            );
+        }
+
+        return this.getCustomBulletChartColorPalette(colorAssignment[0].color.value as IColor);
+    }
+
+    private getCustomBulletChartColorPalette(baseColor: IColor) {
+        return [
+            getRgbStringFromRGB(baseColor),
+            getRgbStringFromRGB(getLighterColorFromRGB(baseColor, -0.3)),
+            DARK_GRAY,
+        ];
+    }
+}
+
 export function isAttributeColorPalette(type: string, afm: AFM.IAfm, stackByAttribute: any) {
     const attributeChartSupported = isOneOfTypes(type, attributeChartSupportedTypes);
     return stackByAttribute || (attributeChartSupported && afm.attributes && afm.attributes.length > 0);
@@ -632,6 +681,17 @@ export class ColorFactory {
 
         if (isBubbleChart(type)) {
             return new BubbleChartColorStrategy(
+                colorPalette,
+                colorMapping,
+                viewByAttribute,
+                stackByAttribute,
+                executionResponse,
+                afm,
+            );
+        }
+
+        if (isBulletChart(type)) {
+            return new BulletChartColorStrategy(
                 colorPalette,
                 colorMapping,
                 viewByAttribute,

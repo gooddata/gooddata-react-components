@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
 import * as cx from "classnames";
@@ -52,7 +52,7 @@ export default class StaticLegend extends React.PureComponent<any, any> {
     }
 
     public render() {
-        const { series, chartType, onItemClick, position, containerHeight } = this.props;
+        const { series, chartType, interactive, onItemClick, position, containerHeight } = this.props;
         const { page } = this.state;
 
         const classNames = cx("viz-legend", "static", `position-${position}`);
@@ -62,7 +62,12 @@ export default class StaticLegend extends React.PureComponent<any, any> {
             return (
                 <div className={classNames}>
                     <div className="series">
-                        <LegendList chartType={chartType} series={series} onItemClick={onItemClick} />
+                        <LegendList
+                            chartType={chartType}
+                            series={series}
+                            interactive={interactive}
+                            onItemClick={onItemClick}
+                        />
                     </div>
                 </div>
             );
@@ -78,7 +83,12 @@ export default class StaticLegend extends React.PureComponent<any, any> {
         return (
             <div className={classNames}>
                 <div className="series" style={{ height: visibleItemsCount * ITEM_HEIGHT }}>
-                    <LegendList chartType={chartType} series={pagedSeries} onItemClick={onItemClick} />
+                    <LegendList
+                        chartType={chartType}
+                        series={pagedSeries}
+                        interactive={interactive}
+                        onItemClick={onItemClick}
+                    />
                 </div>
                 {hasPaging && this.renderPaging(visibleItemsCount)}
             </div>

@@ -50,12 +50,28 @@ storiesOf("Core components/BulletChart", module)
             </div>,
         ),
     )
-    .add("primary measure with two attributes", () =>
+    .add("primary and target measures, one attribute", () =>
         screenshotWrap(
             <div style={wrapperStyle}>
                 <BulletChart
                     projectId="storybook"
                     primaryMeasure={MEASURE_1}
+                    targetMeasure={MEASURE_2}
+                    viewBy={[ATTRIBUTE_1]}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
+    .add("primary and target measures with two attributes", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BulletChart
+                    projectId="storybook"
+                    primaryMeasure={MEASURE_1}
+                    targetMeasure={MEASURE_2}
                     viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
                     onError={onErrorHandler}
                     LoadingComponent={null}
@@ -83,6 +99,7 @@ storiesOf("Core components/BulletChart", module)
                 <BulletChart
                     projectId="storybook"
                     primaryMeasure={MEASURE_1}
+                    targetMeasure={MEASURE_2}
                     viewBy={[ATTRIBUTE_2]}
                     config={CUSTOM_COLOR_PALETTE_CONFIG}
                     onError={onErrorHandler}
@@ -98,6 +115,7 @@ storiesOf("Core components/BulletChart", module)
                 <BulletChart
                     projectId="storybook"
                     primaryMeasure={MEASURE_1}
+                    targetMeasure={MEASURE_2}
                     viewBy={[ATTRIBUTE_2]}
                     config={{ colors: CUSTOM_COLORS }}
                     onError={onErrorHandler}
@@ -113,6 +131,7 @@ storiesOf("Core components/BulletChart", module)
                 <BulletChart
                     projectId="storybook"
                     primaryMeasure={MEASURE_1}
+                    targetMeasure={MEASURE_2}
                     viewBy={[ATTRIBUTE_2]}
                     config={{
                         ...CUSTOM_COLOR_PALETTE_CONFIG,
@@ -131,6 +150,7 @@ storiesOf("Core components/BulletChart", module)
                 <BulletChart
                     projectId="storybook"
                     primaryMeasure={MEASURE_1}
+                    targetMeasure={MEASURE_2}
                     viewBy={[ATTRIBUTE_1]}
                     onError={onErrorHandler}
                     LoadingComponent={null}
@@ -146,6 +166,7 @@ storiesOf("Core components/BulletChart", module)
                 <BulletChart
                     projectId="storybook"
                     primaryMeasure={MEASURE_2}
+                    targetMeasure={MEASURE_1}
                     viewBy={[ATTRIBUTE_1]}
                     onError={onErrorHandler}
                     LoadingComponent={null}
@@ -161,6 +182,7 @@ storiesOf("Core components/BulletChart", module)
                 <BulletChart
                     projectId="storybook"
                     primaryMeasure={MEASURE_1}
+                    targetMeasure={MEASURE_2}
                     viewBy={[ATTRIBUTE_1]}
                     config={GERMAN_SEPARATORS}
                     onError={onErrorHandler}
@@ -176,6 +198,7 @@ storiesOf("Core components/BulletChart", module)
                 <BulletChart
                     projectId="storybook"
                     primaryMeasure={MEASURE_1}
+                    targetMeasure={MEASURE_2}
                     viewBy={[ATTRIBUTE_1]}
                     onError={onErrorHandler}
                     LoadingComponent={null}
@@ -196,6 +219,7 @@ storiesOf("Core components/BulletChart", module)
                 <BulletChart
                     projectId="storybook"
                     primaryMeasure={MEASURE_1}
+                    targetMeasure={MEASURE_2}
                     viewBy={[ATTRIBUTE_1]}
                     onError={onErrorHandler}
                     LoadingComponent={null}
@@ -228,6 +252,7 @@ storiesOf("Core components/BulletChart", module)
                 <BulletChart
                     projectId="storybook"
                     primaryMeasure={MEASURE_1}
+                    targetMeasure={MEASURE_2}
                     viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
                     config={{
                         yaxis: {
@@ -247,6 +272,7 @@ storiesOf("Core components/BulletChart", module)
                 <BulletChart
                     projectId="storybook"
                     primaryMeasure={MEASURE_1}
+                    targetMeasure={MEASURE_2}
                     viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
                     config={{
                         xaxis: {
@@ -266,6 +292,7 @@ storiesOf("Core components/BulletChart", module)
                 <BulletChart
                     projectId="storybook"
                     primaryMeasure={MEASURE_1}
+                    targetMeasure={MEASURE_2}
                     viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
                     config={{
                         yaxis: {

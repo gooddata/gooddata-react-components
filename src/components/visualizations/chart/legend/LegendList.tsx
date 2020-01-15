@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import LegendItem from "./LegendItem";
 import { LegendAxisIndicator } from "./LegendAxisIndicator";
@@ -8,6 +8,7 @@ export interface ILegendListProps {
     series: any;
     chartType: string;
     width?: number;
+    interactive?: boolean;
     onItemClick: (item: any) => void;
 }
 
@@ -15,7 +16,7 @@ export const LegendSeparator = () => <div className="legend-separator" />;
 
 export default class LegendList extends React.PureComponent<ILegendListProps> {
     public render() {
-        const { series, chartType, onItemClick, width } = this.props;
+        const { series, chartType, interactive, onItemClick, width } = this.props;
         return series.map((item: any, index: number) => {
             const { type, labelKey, data } = item;
             if (type === LEGEND_AXIS_INDICATOR) {
@@ -29,6 +30,7 @@ export default class LegendList extends React.PureComponent<ILegendListProps> {
                         key={index}
                         item={item}
                         width={width}
+                        interactive={interactive}
                         onItemClick={onItemClick}
                     />
                 );

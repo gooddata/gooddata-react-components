@@ -1,6 +1,6 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
-import { mount } from "enzyme";
+import { mount, ReactWrapper } from "enzyme";
 import LegendItem from "../LegendItem";
 
 describe("LegendItem", () => {
@@ -11,20 +11,71 @@ describe("LegendItem", () => {
     };
 
     function createComponent(props: any = {}) {
-        return mount(<LegendItem {...props} />);
-    }
-
-    it("should render item", () => {
-        const props = {
+        const defaultProps = {
             item,
             chartType: "bar",
             onItemClick: jest.fn(),
         };
-        const wrapper = createComponent(props);
-        expect(wrapper.find(".series-item").text()).toEqual("Foo");
+        return mount(<LegendItem {...defaultProps} {...props} />);
+    }
 
-        wrapper.find(".series-item").simulate("click");
-        expect(props.onItemClick).toHaveBeenCalled();
+    it("should render item", () => {
+        const wrapper = createComponent();
+        expect(wrapper.find(".series-item").text()).toEqual("Foo");
+    });
+
+    describe("onItemClick callback", () => {
+        it("should be called when `interactive` prop is not set, therefore it's truthy", () => {
+            const onItemClick = jest.fn();
+            const wrapper = createComponent({ onItemClick });
+
+            wrapper.find(".series-item").simulate("click");
+            expect(onItemClick).toHaveBeenCalled();
+        });
+
+        it("should be called when `interactive` prop is truthy", () => {
+            const onItemClick = jest.fn();
+            const wrapper = createComponent({ onItemClick, interactive: true });
+
+            wrapper.find(".series-item").simulate("click");
+            expect(onItemClick).toHaveBeenCalled();
+        });
+
+        it("should not be called when `interactive` prop is falsy", () => {
+            const onItemClick = jest.fn();
+            const wrapper = createComponent({ onItemClick, interactive: false });
+
+            wrapper.find(".series-item").simulate("click");
+            expect(onItemClick).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("cursor style", () => {
+        const assertCursorStyle = (wrapper: ReactWrapper, className: string, cursorStyle: string) => {
+            const style = wrapper.find(`.${className}`).get(0).props.style;
+            expect(style).toMatchObject({ cursor: cursorStyle });
+        };
+
+        it("should be `initial` when `interactive` prop is not set, therefore it's truthy", () => {
+            const wrapper = createComponent();
+            assertCursorStyle(wrapper, "series-item", "");
+            assertCursorStyle(wrapper, "series-icon", "");
+            assertCursorStyle(wrapper, "series-name", "");
+        });
+
+        it("should be `initial` when `interactive` prop is truthy", () => {
+            const wrapper = createComponent({ interactive: true });
+            assertCursorStyle(wrapper, "series-item", "");
+            assertCursorStyle(wrapper, "series-icon", "");
+            assertCursorStyle(wrapper, "series-name", "");
+        });
+
+        it("should be empty when `interactive` prop is falsy", () => {
+            const wrapper = createComponent({ interactive: false });
+            assertCursorStyle(wrapper, "series-item", "initial");
+            assertCursorStyle(wrapper, "series-icon", "initial");
+            assertCursorStyle(wrapper, "series-name", "initial");
+        });
     });
 
     it.each([
@@ -47,7 +98,7 @@ describe("LegendItem", () => {
             const component = createComponent(props);
             const seriesIconStyle = component.find(".series-icon").get(0).props.style;
 
-            expect(seriesIconStyle).toEqual({ backgroundColor: "red", borderRadius: expected });
+            expect(seriesIconStyle).toMatchObject({ borderRadius: expected });
         },
     );
 });

@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import * as cx from "classnames";
 
@@ -27,7 +27,7 @@ export default class FluidLegend extends React.PureComponent<any, any> {
     }
 
     public renderSeries(itemWidth: any, visibleItemsCount: any) {
-        const { series, chartType, onItemClick } = this.props;
+        const { series, chartType, onItemClick, interactive } = this.props;
 
         const limit = this.state.showAll ? series.length : visibleItemsCount;
         const pagedSeries = series.slice(0, limit);
@@ -37,6 +37,7 @@ export default class FluidLegend extends React.PureComponent<any, any> {
                 <LegendList
                     chartType={chartType}
                     series={pagedSeries}
+                    interactive={interactive}
                     onItemClick={onItemClick}
                     width={itemWidth}
                 />

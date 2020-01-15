@@ -9,9 +9,9 @@ import BulletChartExampleSRC from "!raw-loader!../components/BulletChartExample"
 
 export const BulletChart = () => (
     <div>
-        <h1>BulletChart</h1>
+        <h1>Bullet chart</h1>
 
-        <p>Primary measure viewed by two attributes with attribute filter</p>
+        <p>Primary and target measures viewed by two attributes with attribute filter</p>
 
         <ExampleWithSource for={BulletChartExample} source={BulletChartExampleSRC} />
     </div>

@@ -577,12 +577,12 @@ storiesOf("URI components", module)
             </div>,
         ),
     )
-    .add("Bullet chart", () =>
+    .add("Bullet chart with both primary and target measures, viewed by one attribute", () =>
         screenshotWrap(
             <div style={{ width: 800, height: 400 }}>
                 <Visualization
                     projectId="storybook"
-                    identifier="bullet-simple"
+                    identifier="bullet-chart-2M-1VB"
                     onError={onErrorHandler}
                     LoadingComponent={null}
                     ErrorComponent={null}

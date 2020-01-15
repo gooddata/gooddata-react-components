@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import noop = require("lodash/noop");
 import { mount } from "enzyme";
@@ -6,6 +6,7 @@ import { VisualizationTypes } from "../../../../../constants/visualizationTypes"
 import Legend from "../Legend";
 import HeatmapLegend from "../HeatmapLegend";
 import { withIntl } from "../../../utils/intlUtils";
+import LegendItem from "../LegendItem";
 
 describe("Legend", () => {
     const series = [
@@ -61,5 +62,27 @@ describe("Legend", () => {
     it("should render heat map legend when type is heatmap", () => {
         const wrapper = createComponent({ chartType: VisualizationTypes.HEATMAP });
         expect(wrapper.find(HeatmapLegend).length).toEqual(1);
+    });
+
+    describe("`onItemClick` callback", () => {
+        it("should be called by default", () => {
+            const onItemClick = jest.fn();
+            const wrapper = createComponent({ onItemClick });
+            wrapper
+                .find(LegendItem)
+                .first()
+                .simulate("click");
+            expect(onItemClick).toHaveBeenCalled();
+        });
+
+        it("should not be called when `interactive` prop is falsy", () => {
+            const onItemClick = jest.fn();
+            const wrapper = createComponent({ onItemClick, interactive: false });
+            wrapper
+                .find(LegendItem)
+                .first()
+                .simulate("click");
+            expect(onItemClick).not.toHaveBeenCalled();
+        });
     });
 });

@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import Measure, { Rect } from "react-measure";
 import * as cx from "classnames";
@@ -19,6 +19,7 @@ import { getComboChartSeries, transformToDualAxesSeries } from "./helpers";
 
 export interface ILegendProps {
     responsive?: boolean;
+    interactive?: boolean;
     legendItemsEnabled?: any[];
     height?: number;
     position: string;
@@ -38,6 +39,7 @@ export interface ILegendState {
 export default class Legend extends React.PureComponent<ILegendProps, ILegendState> {
     public static defaultProps = {
         responsive: false,
+        interactive: true,
         legendItemsEnabled: [] as any,
         height: 0,
         showFluidLegend: false,
@@ -51,7 +53,10 @@ export default class Legend extends React.PureComponent<ILegendProps, ILegendSta
     }
 
     public onItemClick(item: any) {
-        this.props.onItemClick(item);
+        const { interactive, onItemClick } = this.props;
+        if (interactive) {
+            onItemClick(item);
+        }
     }
 
     public getSeries() {
@@ -87,6 +92,7 @@ export default class Legend extends React.PureComponent<ILegendProps, ILegendSta
                             <FluidLegend
                                 series={this.getSeries()}
                                 chartType={chartType}
+                                interactive={this.props.interactive}
                                 onItemClick={this.onItemClick}
                                 containerWidth={usedWidth}
                             />
@@ -98,19 +104,9 @@ export default class Legend extends React.PureComponent<ILegendProps, ILegendSta
     }
 
     public renderStatic() {
-        const { chartType, position, height, format, locale, responsive } = this.props;
+        const { chartType, position, height, format, locale, responsive, interactive } = this.props;
 
         const classNames = cx("viz-static-legend-wrap", `position-${position}`);
-
-        const props = {
-            series: this.getSeries(),
-            chartType,
-            onItemClick: this.onItemClick,
-            position,
-            format,
-            locale,
-            responsive,
-        };
 
         return (
             <Measure client={true}>
@@ -127,7 +123,17 @@ export default class Legend extends React.PureComponent<ILegendProps, ILegendSta
 
                     return (
                         <div className={classNames} ref={measureRef}>
-                            <StaticLegend {...props} containerHeight={usedHeight} />
+                            <StaticLegend
+                                series={this.getSeries()}
+                                chartType={chartType}
+                                interactive={interactive}
+                                onItemClick={this.onItemClick}
+                                position={position}
+                                format={format}
+                                locale={locale}
+                                responsive={responsive}
+                                containerHeight={usedHeight}
+                            />
                         </div>
                     );
                 }}
@@ -136,12 +142,11 @@ export default class Legend extends React.PureComponent<ILegendProps, ILegendSta
     }
 
     public render() {
-        const { responsive } = this.props;
-        const { showFluidLegend } = this.props;
+        const { responsive, showFluidLegend, chartType } = this.props;
 
         const fluidLegend = responsive && showFluidLegend;
 
-        if (isHeatmap(this.props.chartType)) {
+        if (isHeatmap(chartType)) {
             return this.renderHeatmapLegend();
         }
 

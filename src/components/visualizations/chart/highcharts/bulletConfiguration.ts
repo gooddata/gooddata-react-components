@@ -14,12 +14,21 @@ const BULLET_TEMPLATE = {
                 enabled: false,
             },
         },
+        bullet: {
+            tooltip: {
+                followPointer: true,
+            },
+            targetOptions: {
+                borderWidth: 0,
+            },
+        },
         series: {
             states: {
                 hover: {
                     enabled: false,
                 },
             },
+            grouping: false,
         },
     },
     yAxis: [

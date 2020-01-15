@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { Rect } from "react-measure";
 import * as cx from "classnames";
@@ -15,7 +15,7 @@ import isNil = require("lodash/isNil");
 import Chart, { IChartProps } from "./Chart";
 import Legend, { ILegendProps } from "./legend/Legend";
 import { TOP, LEFT, BOTTOM, RIGHT } from "./legend/PositionTypes";
-import { isPieOrDonutChart, isOneOfTypes } from "../utils/common";
+import { isPieOrDonutChart, isBulletChart, isOneOfTypes } from "../utils/common";
 import { VisualizationTypes } from "../../../constants/visualizationTypes";
 import { OnLegendReady } from "../../../interfaces/Events";
 import { IChartConfig } from "../../../interfaces/Config";
@@ -246,15 +246,19 @@ export default class HighChartsRenderer extends React.PureComponent<
         }
 
         let { type } = chartOptions;
+
         if (isPieOrDonutChart(type)) {
             type = VisualizationTypes.PIE;
         }
+
+        const interactive = !isBulletChart(type);
 
         const legendProps = {
             position: legend.position,
             responsive: legend.responsive,
             chartType: type,
             series: items,
+            interactive,
             onItemClick: this.onLegendItemClick,
             legendItemsEnabled: this.state.legendItemsEnabled,
             height,

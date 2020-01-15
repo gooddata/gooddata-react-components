@@ -6,9 +6,9 @@ import { VisualizationInput, VisualizationObject } from "@gooddata/typings";
 import { Subtract } from "../typings/subtract";
 import { BulletChart as AfmBulletChart } from "./afm/BulletChart";
 import { ICommonChartProps } from "./core/base/BaseChart";
-import { convertBucketsToAFM } from "../helpers/conversion";
+import { convertBucketsToAFM, convertBucketsToMdObject } from "../helpers/conversion";
 import { getStackingResultSpec } from "../helpers/resultSpec";
-import { MEASURES, ATTRIBUTE } from "../constants/bucketNames";
+import { MEASURES, SECONDARY_MEASURES, ATTRIBUTE } from "../constants/bucketNames";
 import {
     getViewByTwoAttributes,
     sanitizeConfig,
@@ -17,6 +17,7 @@ import {
 
 export interface IBulletChartBucketProps {
     primaryMeasure: VisualizationInput.AttributeOrMeasure;
+    targetMeasure?: VisualizationInput.AttributeOrMeasure;
     viewBy?: VisualizationInput.IAttribute[];
     filters?: VisualizationInput.IFilter[];
     sortBy?: VisualizationInput.ISort[];
@@ -32,13 +33,16 @@ type IBulletChartNonBucketProps = Subtract<IBulletChartProps, IBulletChartBucket
  * [BulletChart](http://sdk.gooddata.com/gooddata-ui/docs/bullet_chart_component.html)
  */
 export function BulletChart(props: IBulletChartProps): JSX.Element {
-    const measures = [disableBucketItemComputeRatio(props.primaryMeasure)];
     const viewBy = getViewByTwoAttributes(props.viewBy); // could be one or two attributes
 
     const buckets: VisualizationObject.IBucket[] = [
         {
             localIdentifier: MEASURES,
-            items: measures,
+            items: props.primaryMeasure ? [disableBucketItemComputeRatio(props.primaryMeasure)] : [],
+        },
+        {
+            localIdentifier: SECONDARY_MEASURES,
+            items: props.targetMeasure ? [disableBucketItemComputeRatio(props.targetMeasure)] : [],
         },
         {
             localIdentifier: ATTRIBUTE,
@@ -48,9 +52,18 @@ export function BulletChart(props: IBulletChartProps): JSX.Element {
 
     const newProps: IBulletChartNonBucketProps = omit<IBulletChartProps, keyof IBulletChartBucketProps>(
         props,
-        ["primaryMeasure", "viewBy", "filters", "sortBy"],
+        ["primaryMeasure", "targetMeasure", "viewBy", "filters", "sortBy"],
     );
-    const sanitizedConfig = sanitizeConfig(measures, newProps.config);
+    const sanitizedConfig = sanitizeConfig(
+        [
+            disableBucketItemComputeRatio(props.primaryMeasure),
+            disableBucketItemComputeRatio(props.targetMeasure),
+        ],
+        {
+            ...newProps.config,
+            mdObject: convertBucketsToMdObject(buckets, props.filters, "local:bullet"),
+        },
+    );
 
     return (
         <AfmBulletChart
