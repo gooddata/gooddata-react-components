@@ -105,3 +105,20 @@ export function isDataOfReasonableSize(
 
     return locationData.length <= limit;
 }
+
+export function calculateAverage(values: number[] = []): number {
+    if (!values.length) {
+        return 0;
+    }
+    return values.reduce((a: number, b: number): number => a + b, 0) / values.length;
+}
+
+export function getFormatFromExecutionResponse(
+    indexMeasure: number,
+    result: Execution.IExecutionResponse,
+): string {
+    return get(
+        result,
+        `dimensions[0].headers[0].measureGroupHeader.items[${indexMeasure}].measureHeaderItem.format`,
+    );
+}
