@@ -1272,4 +1272,5 @@ export const defaultGeoPushpinUiConfig: IUiConfig = {
     },
     recommendations: {},
     supportedOverTimeComparisonTypes: noSupportedOverTimeComparisonTypes,
+    supportedLocationIcon: { supported: true },
 };
