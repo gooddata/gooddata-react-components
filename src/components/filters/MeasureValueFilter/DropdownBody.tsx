@@ -4,36 +4,32 @@ import { injectIntl, WrappedComponentProps } from "react-intl";
 import Button from "@gooddata/goodstrap/lib/Button/Button";
 
 import { IntlWrapper } from "../../core/base/IntlWrapper";
-import { measureValueFilter as Model } from "../../../helpers/model/measureValueFilters";
 import OperatorDropdown from "./OperatorDropdown";
 import RangeInput from "./RangeInput";
 import ComparisonInput from "./ComparisonInput";
-import { IValue, isComparisonOperator } from "../../../interfaces/MeasureValueFilter";
+import {
+    IMeasureValueFilterValue,
+    isComparisonOperator,
+    isRangeOperator,
+} from "../../../interfaces/MeasureValueFilter";
 import * as Operator from "../../../constants/measureValueFilterOperators";
-
-export interface IInputProps {
-    value?: IValue;
-    usePercentage?: boolean;
-    onChange: (value: IValue) => void;
-    onEnterKeyPress?: () => void;
-}
 
 export interface IDropdownBodyOwnProps {
     operator?: string;
-    value?: IValue;
+    value?: IMeasureValueFilterValue;
     usePercentage?: boolean;
     warningMessage?: string;
     locale?: string;
     disableAutofocus?: boolean;
     onCancel?: () => void;
-    onApply: (operator: string, value: IValue) => void;
+    onApply: (operator: string, value: IMeasureValueFilterValue) => void;
 }
 
 export type IDropdownBodyProps = IDropdownBodyOwnProps & WrappedComponentProps;
 
 interface IDropdownBodyState {
     operator: string;
-    value: IValue;
+    value: IMeasureValueFilterValue;
 }
 
 class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropdownBodyState> {
@@ -94,7 +90,7 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
             value: { value = null, from = null, to = null },
         } = this.state;
 
-        if (Model.isComparisonOperator(operator)) {
+        if (isComparisonOperator(operator)) {
             return (
                 <ComparisonInput
                     value={value}
@@ -104,7 +100,7 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
                     disableAutofocus={disableAutofocus}
                 />
             );
-        } else if (Model.isRangeOperator(operator)) {
+        } else if (isRangeOperator(operator)) {
             return (
                 <RangeInput
                     from={from}
@@ -139,21 +135,27 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
         this.setState({ value: { ...this.state.value, to } });
     };
 
-    private convertToRawValue = (value: IValue, operator: string): IValue => {
+    private convertToRawValue = (
+        value: IMeasureValueFilterValue,
+        operator: string,
+    ): IMeasureValueFilterValue => {
         if (!value) {
             return value;
         }
-        const rawValue: IValue = isComparisonOperator(operator)
+        const rawValue: IMeasureValueFilterValue = isComparisonOperator(operator)
             ? { value: value.value / 100 }
             : { from: value.from / 100, to: value.to / 100 };
         return rawValue;
     };
 
-    private convertToPercentageValue = (value: IValue, operator: string): IValue => {
+    private convertToPercentageValue = (
+        value: IMeasureValueFilterValue,
+        operator: string,
+    ): IMeasureValueFilterValue => {
         if (!value) {
             return value;
         }
-        const rawValue: IValue = isComparisonOperator(operator)
+        const rawValue: IMeasureValueFilterValue = isComparisonOperator(operator)
             ? { value: value.value * 100 }
             : { from: value.from * 100, to: value.to * 100 };
         return rawValue;

@@ -1,36 +1,26 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import React, { Component } from "react";
 import { PivotTable, Model } from "@gooddata/react-components";
 
 import "@gooddata/react-components/styles/css/main.css";
-import { projectId, franchiseFeesIdentifier, locationNameDisplayFormIdentifier } from "../utils/fixtures";
+import { projectId, franchisedSalesIdentifier, locationNameDisplayFormIdentifier } from "../utils/fixtures";
 
 const measures = [
-    Model.measure(franchiseFeesIdentifier)
-        .localIdentifier("franchiseFees")
-        .title("Franchise Fees")
+    Model.measure(franchisedSalesIdentifier)
+        .localIdentifier("franchiseSales")
+        .title("Franchise Sales")
         .format("#,##0"),
-    Model.measure(franchiseFeesIdentifier)
-        .localIdentifier("franchiseFeesComputeRatio")
-        .title("Franchise Fees shown in %")
+    Model.measure(franchisedSalesIdentifier)
+        .localIdentifier("franchiseSalesComputeRatio")
+        .title("Franchise Sales shown in %")
         .ratio(),
 ];
 
 const attributes = [Model.attribute(locationNameDisplayFormIdentifier).localIdentifier("locationName")];
 
-const greaterThanFilter = {
-    measureValueFilter: {
-        measure: {
-            localIdentifier: "franchiseFeesComputeRatio",
-        },
-        condition: {
-            comparison: {
-                operator: "GREATER_THAN",
-                value: 700000,
-            },
-        },
-    },
-};
+const greaterThanFilter = Model.measureValueFilter("franchiseSalesComputeRatio").condition("GREATER_THAN", {
+    value: 7000000,
+});
 
 export class MeasureValueFilterExample extends Component {
     constructor(props) {
@@ -60,9 +50,9 @@ export class MeasureValueFilterExample extends Component {
         return (
             <div>
                 <div>
-                    {this.renderPresetButton("All franchise fees", [], filters.length === 0)}
+                    {this.renderPresetButton("All franchise sales", [], filters.length === 0)}
                     {this.renderPresetButton(
-                        "Franchise fees greater than 700,000 (shown in %)",
+                        "Franchise sales greater than 7,000,000 (shown in %)",
                         [greaterThanFilter],
                         filters.length > 0,
                     )}

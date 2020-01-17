@@ -3,30 +3,29 @@ import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 import noop = require("lodash/noop");
-import { AFM } from "@gooddata/typings";
+import { VisualizationInput } from "@gooddata/typings";
 
 import { DropdownAfmWrapper } from "../../src/components/filters/MeasureValueFilter/DropdownAfmWrapper";
 import "../../styles/scss/main.scss";
 import { screenshotWrap } from "@gooddata/test-storybook";
 import { DropdownBody } from "../../src/components/filters/MeasureValueFilter/DropdownBody";
-import { IValue } from "../../src/interfaces/MeasureValueFilter";
+import { IMeasureValueFilterValue } from "../../src/interfaces/MeasureValueFilter";
 
 const wrapperStyle = { width: 400, height: 400, padding: "1em 1em" };
 
 export interface IDropdownProps {
-    filter?: AFM.IMeasureValueFilter;
+    filter?: VisualizationInput.IMeasureValueFilter;
     usePercentage?: boolean;
     warningMessage?: string;
 }
 
 const MeasureValueFilterWithButton = (props: IDropdownProps) => {
-    const onApply = (filter: AFM.IMeasureValueFilter) => {
+    const onApply = (filter: VisualizationInput.IMeasureValueFilter) => {
         action("apply")(filter);
     };
 
     return (
         <DropdownAfmWrapper
-            measureIdentifier="localIdentifier"
             onApply={onApply}
             onCancel={noop}
             filter={props.filter}
@@ -41,7 +40,7 @@ storiesOf("Helper components/Measure value filter", module)
         return <MeasureValueFilterWithButton />;
     })
     .add("Measure value filter for measure formatted in percent", () => {
-        const value: IValue = {
+        const value: IMeasureValueFilterValue = {
             from: 2,
             to: 5,
         };
@@ -59,7 +58,7 @@ storiesOf("Helper components/Measure value filter", module)
         );
     })
     .add("Measure value filter dropdown with warning message", () => {
-        const value: IValue = {
+        const value: IMeasureValueFilterValue = {
             value: 40000,
         };
 

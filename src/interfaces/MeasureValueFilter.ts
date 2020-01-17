@@ -1,16 +1,14 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
+import isEmpty = require("lodash/isEmpty");
+
 import { AFM } from "@gooddata/typings";
 import * as Operator from "../constants/measureValueFilterOperators";
 
-export interface IValue {
+export interface IMeasureValueFilterValue {
     value?: number;
     from?: number;
     to?: number;
 }
-
-export type MeasureValueFilterConditionOperator =
-    | AFM.ComparisonConditionOperator
-    | AFM.RangeConditionOperator;
 
 export const isComparisonOperator = (operator: string): operator is AFM.ComparisonConditionOperator =>
     operator === Operator.GREATER_THAN ||
@@ -23,16 +21,36 @@ export const isComparisonOperator = (operator: string): operator is AFM.Comparis
 export const isRangeOperator = (operator: string): operator is AFM.RangeConditionOperator =>
     operator === Operator.BETWEEN || operator === Operator.NOT_BETWEEN;
 
-export interface IMeasureValueComparisonFilter {
-    measureValueFilter: {
-        measure: AFM.Qualifier;
-        condition: AFM.IComparisonCondition;
-    };
-}
+export const isComparisonCondition = (
+    condition: AFM.MeasureValueFilterCondition,
+): condition is AFM.IComparisonCondition =>
+    !isEmpty(condition) && (condition as AFM.IComparisonCondition).comparison !== undefined;
 
-export interface IMeasureValueRangeFilter {
-    measureValueFilter: {
-        measure: AFM.Qualifier;
-        condition: AFM.IRangeCondition;
-    };
-}
+export const isRangeCondition = (
+    condition: AFM.MeasureValueFilterCondition,
+): condition is AFM.IRangeCondition =>
+    !isEmpty(condition) && (condition as AFM.IRangeCondition).range !== undefined;
+
+export const getMeasureValueFilterCondition = (
+    operator: string,
+    value: IMeasureValueFilterValue,
+): AFM.MeasureValueFilterCondition => {
+    if (isComparisonOperator(operator)) {
+        return {
+            comparison: {
+                operator,
+                value: value.value || 0,
+            },
+        };
+    } else if (isRangeOperator(operator)) {
+        return {
+            range: {
+                operator,
+                from: value.from || 0,
+                to: value.to || 0,
+            },
+        };
+    }
+
+    return null;
+};
