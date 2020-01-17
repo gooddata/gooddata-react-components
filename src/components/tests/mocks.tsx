@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 
 import { IDataSource } from "../../interfaces/DataSource";
@@ -15,6 +15,7 @@ import {
     oneAttributesOneMeasureResponse,
     oneAttributeOneMeasureExecutionObject,
     oneAttributeOneMeasureOneFilterExecutionObject,
+    enrichedErrorResponse,
 } from "../../execution/fixtures/ExecuteAfm.fixtures";
 
 export const initChartDataLoading = jest.fn(() =>
@@ -112,6 +113,13 @@ export const tooLargeDataSource: IDataSource = {
     getPage: () => Promise.reject(tooLargeResponse),
     getAfm: () => ({}),
     getFingerprint: () => JSON.stringify(tooLargeDataSource),
+};
+
+export const apiExecutionResponseErrorDataSource: IDataSource = {
+    getData: () => Promise.reject(enrichedErrorResponse),
+    getPage: () => Promise.reject(enrichedErrorResponse),
+    getAfm: () => ({}),
+    getFingerprint: () => JSON.stringify(apiExecutionResponseErrorDataSource),
 };
 
 export const delayedTooLargeDataSource: IDataSource = {

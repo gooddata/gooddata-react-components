@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import { AFM } from "@gooddata/typings";
 
@@ -11,13 +11,15 @@ export interface IDropdownProps {
     onApply: (filter: AFM.IMeasureValueFilter) => void;
     onCancel: () => void;
     measureIdentifier: string;
+    usePercentage?: boolean;
+    warningMessage?: string;
     locale?: string;
     anchorEl?: EventTarget | string;
 }
 
 export class DropdownAfmWrapper extends React.PureComponent<IDropdownProps> {
     public render() {
-        const { filter, onCancel, locale, anchorEl } = this.props;
+        const { filter, onCancel, usePercentage, warningMessage, locale, anchorEl } = this.props;
 
         return (
             <Dropdown
@@ -25,6 +27,8 @@ export class DropdownAfmWrapper extends React.PureComponent<IDropdownProps> {
                 onCancel={onCancel}
                 operator={(filter && Model.getOperator(filter)) || null}
                 value={(filter && Model.getValue(filter)) || null}
+                usePercentage={usePercentage}
+                warningMessage={warningMessage}
                 locale={locale}
                 anchorEl={anchorEl}
             />

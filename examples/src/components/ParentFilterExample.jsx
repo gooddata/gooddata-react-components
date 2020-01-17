@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import React, { Component } from "react";
 import { AttributeElements, BarChart, Model } from "@gooddata/react-components";
 import Select from "react-select";
@@ -94,8 +94,9 @@ export class ParentFilterExample extends Component {
             >
                 {({ validElements, isLoading, error }) => {
                     if (error) {
-                        return <div>{error}</div>;
+                        console.error("Loading attribute elements failed!", error);
                     }
+
                     const selectOptions = validElements
                         ? validElements.items.map(item => ({
                               label: item.element.title,
@@ -119,6 +120,15 @@ export class ParentFilterExample extends Component {
                                 placeholder={placeholder}
                                 value={filterValues}
                             />
+                            {error && (
+                                <span
+                                    style={{
+                                        color: "#e54d42",
+                                    }}
+                                >
+                                    Loading failed!
+                                </span>
+                            )}
                         </span>
                     );
                 }}

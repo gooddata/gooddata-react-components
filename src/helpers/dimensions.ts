@@ -420,7 +420,8 @@ export function generateDimensions(
         case VisualizationTypes.BAR:
         case VisualizationTypes.COMBO:
         case VisualizationTypes.COMBO2:
-        case VisualizationTypes.COLUMN: {
+        case VisualizationTypes.COLUMN:
+        case VisualizationTypes.BULLET: {
             return getBarDimensions(mdObject);
         }
         case VisualizationTypes.HEADLINE: {

@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import get = require("lodash/get");
 import { VisualizationObject } from "@gooddata/typings";
 import * as BucketNames from "../../constants/bucketNames";
@@ -94,6 +94,7 @@ export function countItemsOnAxes(
     controls: IVisualizationProperties,
     mdObject: VisualizationObject.IVisualizationObjectContent,
 ) {
+    // BB-1855 check if this needs to be updated to also cover bullet chart
     const isBarChartType = isBarChart(type);
 
     const { viewByItemCount, measureItemCount, secondaryMeasureItemCount } = countItemsInMdObject(mdObject);

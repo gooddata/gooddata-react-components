@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import isArray = require("lodash/isArray");
 import get = require("lodash/get");
 import set = require("lodash/set");
@@ -61,7 +61,7 @@ export function sanitizeConfig(
     return config;
 }
 
-function disableBucketItemComputeRatio<T extends VisualizationObject.BucketItem>(item: T): T {
+export function disableBucketItemComputeRatio<T extends VisualizationObject.BucketItem>(item: T): T {
     if (getComputeRatio(item)) {
         setComputeRatio(item, false);
     }

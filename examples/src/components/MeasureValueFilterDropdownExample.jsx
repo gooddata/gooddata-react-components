@@ -1,26 +1,17 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import React from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { PivotTable, Model, MeasureValueFilterDropdown } from "@gooddata/react-components";
 
 import "@gooddata/react-components/styles/css/main.css";
-import {
-    projectId,
-    franchiseFeesIdentifier,
-    franchisedSalesIdentifier,
-    locationNameDisplayFormIdentifier,
-} from "../utils/fixtures";
+import { projectId, franchisedSalesIdentifier, locationNameDisplayFormIdentifier } from "../utils/fixtures";
 
-const franchiseFeesMeasure = Model.measure(franchiseFeesIdentifier)
-    .format("#,##0")
-    .localIdentifier("franchiseFees")
-    .title("Franchise Fees");
 const franchisedSalesMeasure = Model.measure(franchisedSalesIdentifier)
     .format("#,##0")
     .localIdentifier("franchisedSales")
     .title("Franchised Sales");
-const measures = [franchiseFeesMeasure, franchisedSalesMeasure];
+const measures = [franchisedSalesMeasure];
 
 const attributes = [Model.attribute(locationNameDisplayFormIdentifier).localIdentifier("locationName")];
 
@@ -49,6 +40,11 @@ DropdownButton.propTypes = {
 };
 
 export class MeasureValueFilterDropdownExample extends React.PureComponent {
+    constructor(props) {
+        super(props);
+        this.ref = React.createRef();
+    }
+
     state = {
         filters: [],
         displayDropdown: false,
@@ -59,31 +55,31 @@ export class MeasureValueFilterDropdownExample extends React.PureComponent {
     };
 
     onCancel = () => {
-        this.toggleButtonRef = null;
         this.setState({ displayDropdown: false });
     };
 
-    toggleDropdown = e => {
-        this.toggleButtonRef = !this.state.displayDropdown ? e.currentTarget : null;
+    toggleDropdown = () => {
         this.setState(state => ({ ...state, displayDropdown: !state.displayDropdown }));
     };
 
     render() {
         const { filters, displayDropdown } = this.state;
         return (
-            <div>
-                <DropdownButton
-                    onClick={this.toggleDropdown}
-                    isActive={displayDropdown}
-                    measureTitle="Measure"
-                />
+            <React.Fragment>
+                <div ref={this.ref}>
+                    <DropdownButton
+                        onClick={this.toggleDropdown}
+                        isActive={displayDropdown}
+                        measureTitle="Measure"
+                    />
+                </div>
                 {displayDropdown ? (
                     <MeasureValueFilterDropdown
                         onApply={this.onApply}
                         onCancel={this.onCancel}
                         measureIdentifier={franchisedSalesMeasure.measure.localIdentifier}
                         filter={filters[0] || null}
-                        anchorEl={this.toggleButtonRef}
+                        anchorEl={this.ref.current}
                     />
                 ) : null}
                 <hr className="separator" />
@@ -95,7 +91,7 @@ export class MeasureValueFilterDropdownExample extends React.PureComponent {
                         filters={filters}
                     />
                 </div>
-            </div>
+            </React.Fragment>
         );
     }
 }

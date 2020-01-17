@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import { ReactWrapper } from "enzyme";
 import { string as stringUtils } from "@gooddata/js-utils";
 
@@ -72,4 +72,10 @@ export default class MeasureValueFilterFragment {
     };
 
     public getSelectedOperatorTitle = () => this.getOperatorDropdownButton().text();
+
+    public getInputSuffixes = () => this.component.find(".gd-input-suffix");
+
+    public getWarningMessage = () => this.component.find(".s-mvf-warning-message");
+
+    public getWarningMessageText = () => this.getWarningMessage().text();
 }

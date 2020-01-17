@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import noop = require("lodash/noop");
 import isString = require("lodash/isString");
 import set = require("lodash/set");
@@ -33,6 +33,7 @@ import { AXIS_LINE_COLOR, getLighterColor } from "../../utils/color";
 import {
     isBarChart,
     isColumnChart,
+    isBulletChart,
     isOneOfTypes,
     isAreaChart,
     isRotationInRange,
@@ -41,6 +42,7 @@ import {
     isScatterPlot,
     isBubbleChart,
     isComboChart,
+    isInvertedChartType,
 } from "../../utils/common";
 import { shouldFollowPointer } from "../../../visualizations/chart/highcharts/helpers";
 import {
@@ -68,7 +70,7 @@ const ALIGN_CENTER = "center";
 
 const TOOLTIP_ARROW_OFFSET = 23;
 const TOOLTIP_MAX_WIDTH = 320;
-const TOOLTIP_BAR_CHART_VERTICAL_OFFSET = 5;
+const TOOLTIP_INVERTED_CHART_VERTICAL_OFFSET = 5;
 const TOOLTIP_VERTICAL_OFFSET = 14;
 const BAR_COLUMN_TOOLTIP_TOP_OFFSET = 8;
 const BAR_COLUMN_TOOLTIP_LEFT_OFFSET = 5;
@@ -144,7 +146,8 @@ function hideOverlappedLabels(chartOptions: IChartOptions) {
     const rotation = Number(get(chartOptions, "xAxisProps.rotation", "0"));
 
     // Set only for bar chart and labels are rotated by 90
-    if (isBarChart(chartOptions.type) && isRotationInRange(rotation, 75, 105)) {
+    const isInvertedChart = isInvertedChartType(chartOptions.type);
+    if (isInvertedChart && isRotationInRange(rotation, 75, 105)) {
         const { xAxes = [], isViewByTwoAttributes } = chartOptions;
 
         return {
@@ -243,8 +246,8 @@ function getTooltipVerticalOffset(chartType: any, stacking: any, point: any) {
         return 0;
     }
 
-    if (isBarChart(chartType)) {
-        return TOOLTIP_BAR_CHART_VERTICAL_OFFSET;
+    if (isInvertedChartType(chartType)) {
+        return TOOLTIP_INVERTED_CHART_VERTICAL_OFFSET;
     }
 
     return TOOLTIP_VERTICAL_OFFSET;
@@ -278,14 +281,24 @@ export function getTooltipPositionInChartContainer(
 }
 
 function getHighchartTooltipTopOffset(chartType: string): number {
-    if (isBarChart(chartType) || isColumnChart(chartType) || isComboChart(chartType)) {
+    if (
+        isBarChart(chartType) ||
+        isColumnChart(chartType) ||
+        isBulletChart(chartType) ||
+        isComboChart(chartType)
+    ) {
         return BAR_COLUMN_TOOLTIP_TOP_OFFSET;
     }
     return HIGHCHARTS_TOOLTIP_TOP_LEFT_OFFSET;
 }
 
 function getHighchartTooltipLeftOffset(chartType: string): number {
-    if (isBarChart(chartType) || isColumnChart(chartType) || isComboChart(chartType)) {
+    if (
+        isBarChart(chartType) ||
+        isColumnChart(chartType) ||
+        isBulletChart(chartType) ||
+        isComboChart(chartType)
+    ) {
         return BAR_COLUMN_TOOLTIP_LEFT_OFFSET;
     }
     return HIGHCHARTS_TOOLTIP_TOP_LEFT_OFFSET;
@@ -804,6 +817,7 @@ function getHoverStyles({ type }: any, config: any) {
 
         case VisualizationTypes.BAR:
         case VisualizationTypes.COLUMN:
+        case VisualizationTypes.BULLET:
         case VisualizationTypes.FUNNEL:
             seriesMapFn = barSeriesMapFn;
             break;

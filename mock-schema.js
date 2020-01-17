@@ -71,6 +71,13 @@ const xirrAfmExecutions = [
         executionResult: require("./stories/test_data/xirr_simple_result.json"),
     }];
 
+const bulletAfmExecutions = [
+    {
+        execution: require("./stories/test_data/bullet_simple_request.json"),
+        executionResponse: require("./stories/test_data/bullet_simple_response.json"),
+        executionResult: require("./stories/test_data/bullet_simple_result.json"),
+    }];
+
 const barChartVisualizationObjects = [
     {
         title: 'Bar chart with 2M, 1VB and stackMeasures is true',
@@ -2448,6 +2455,7 @@ const getBaseProjectSchema = (title, identifier) => {
             ...pivotTableSubtotalsAfmExecutions,
             ...pivotTableGrandtotalSubtotalAfmExecutions,
             ...xirrAfmExecutions,
+            ...bulletAfmExecutions,
             ...geoChartWithLocationAfmExecutions,
             ...geoChartWithLocationSizeAfmExecutions,
             ...geoChartWithLocationColorAfmExecutions,
@@ -2479,6 +2487,9 @@ const getBaseProjectSchema = (title, identifier) => {
         }, {
             title: 'XIRR',
             url: 'local:xirr'
+        }, {
+            title: 'Bullet',
+            url: 'local:bullet'
         }],
         visualizationObjects: [{
                 identifier: '1001',
@@ -2832,6 +2843,29 @@ const getBaseProjectSchema = (title, identifier) => {
                     }]
                 }]
             },
+            {
+                title: 'Bullet chart simple example',
+                identifier: 'bullet-simple',
+                type: 'local:bullet',
+                filters: [],
+                buckets: [{
+                    localIdentifier: 'measures',
+                    items: [{
+                        localIdentifier: 'm_1',
+                        identifier: '5',
+                    }]
+                }, {
+                    localIdentifier: 'attribute',
+                    items: [{
+                        localIdentifier: 'a_1',
+                        displayForm: 'a1.df'
+                    }, {
+                        localIdentifier: 'a_2',
+                        displayForm: 'a2.df'
+                    }]
+                }]
+            },
+
             ...barChartVisualizationObjects
         ],
         featureFlags

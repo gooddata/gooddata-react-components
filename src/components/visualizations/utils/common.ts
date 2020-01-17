@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import setWith = require("lodash/setWith");
 import clone = require("lodash/clone");
 import get = require("lodash/get");
@@ -58,6 +58,7 @@ export function isRotationInRange(rotation: number, min: number, max: number) {
 export const isTable = isEqual(VisualizationTypes.TABLE);
 export const isColumnChart = isEqual(VisualizationTypes.COLUMN);
 export const isBarChart = isEqual(VisualizationTypes.BAR);
+export const isBulletChart = isEqual(VisualizationTypes.BULLET);
 export const isLineChart = isEqual(VisualizationTypes.LINE);
 export const isScatterPlot = isEqual(VisualizationTypes.SCATTER);
 export const isPieChart = isEqual(VisualizationTypes.PIE);
@@ -71,6 +72,8 @@ export const isComboChart = (type: string) =>
 export const isTreemap = isEqual(VisualizationTypes.TREEMAP);
 export const isFunnelChart = isEqual(VisualizationTypes.FUNNEL);
 export const isHeatmap = isEqual(VisualizationTypes.HEATMAP);
+export const isInvertedChartType = (type: string) => isBarChart(type) || isBulletChart(type);
+
 export const isChartSupported = (type: string) => includes(VisualizationTypes, type);
 export const isOneOfTypes = (type: string, types: string[]) => includes(types, type);
 export const isPrimaryYAxis = (yAxis: IAxis | IHighchartsAxisExtend) => !yAxis.opposite;

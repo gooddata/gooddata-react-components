@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { mount } from "enzyme";
 
@@ -26,6 +26,10 @@ jest.mock("highcharts/modules/heatmap", () => {
 });
 
 jest.mock("highcharts/modules/funnel", () => {
+    return (H: any) => H;
+});
+
+jest.mock("highcharts/modules/bullet", () => {
     return (H: any) => H;
 });
 

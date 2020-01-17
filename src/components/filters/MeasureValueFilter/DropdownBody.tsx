@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import { injectIntl, WrappedComponentProps } from "react-intl";
 import Button from "@gooddata/goodstrap/lib/Button/Button";
@@ -13,6 +13,7 @@ import * as Operator from "../../../constants/measureValueFilterOperators";
 
 export interface IInputProps {
     value?: IValue;
+    usePercentage?: boolean;
     onChange: (value: IValue) => void;
     onEnterKeyPress?: () => void;
 }
@@ -20,7 +21,10 @@ export interface IInputProps {
 export interface IDropdownBodyOwnProps {
     operator?: string;
     value?: IValue;
+    usePercentage?: boolean;
+    warningMessage?: string;
     locale?: string;
+    disableAutofocus?: boolean;
     onCancel?: () => void;
     onApply: (operator: string, value: IValue) => void;
 }
@@ -36,21 +40,28 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
     constructor(props: IDropdownBodyProps) {
         super(props);
 
-        const { operator, value } = props;
+        const { operator, value, usePercentage } = props;
 
         this.state = {
             operator: operator || Operator.ALL,
-            value: value || {},
+            value: (usePercentage ? this.convertToPercentageValue(value) : value) || {},
         };
     }
 
     public render() {
-        const { onCancel, intl } = this.props;
+        const { onCancel, warningMessage, intl } = this.props;
         const { operator } = this.state;
 
         return (
             <div className="gd-mvf-dropdown-body gd-dialog gd-dropdown overlay s-mvf-dropdown-body">
                 <div className="gd-mvf-dropdown-content">
+                    {warningMessage && (
+                        <div className="gd-mvf-dropdown-section">
+                            <div className="gd-mvf-warning-message s-mvf-warning-message">
+                                {warningMessage}
+                            </div>
+                        </div>
+                    )}
                     <div className="gd-mvf-dropdown-section">
                         <OperatorDropdown onSelect={this.handleOperatorSelection} operator={operator} />
                     </div>
@@ -77,6 +88,7 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
     }
 
     private renderInputSection = () => {
+        const { usePercentage, disableAutofocus } = this.props;
         const {
             operator,
             value: { value = null, from = null, to = null },
@@ -86,8 +98,10 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
             return (
                 <ComparisonInput
                     value={value}
+                    usePercentage={usePercentage}
                     onValueChange={this.handleValueChange}
                     onEnterKeyPress={this.onApply}
+                    disableAutofocus={disableAutofocus}
                 />
             );
         } else if (Model.isRangeOperator(operator)) {
@@ -95,9 +109,11 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
                 <RangeInput
                     from={from}
                     to={to}
+                    usePercentage={usePercentage}
                     onFromChange={this.handleFromChange}
                     onToChange={this.handleToChange}
                     onEnterKeyPress={this.onApply}
+                    disableAutofocus={disableAutofocus}
                 />
             );
         }
@@ -111,15 +127,45 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
 
     private handleOperatorSelection = (operator: string) => this.setState({ operator });
 
-    private handleValueChange = (value: number) => this.setState({ value: { ...this.state.value, value } });
+    private handleValueChange = (value: number) => {
+        this.setState({ value: { ...this.state.value, value } });
+    };
 
-    private handleFromChange = (from: number) => this.setState({ value: { ...this.state.value, from } });
+    private handleFromChange = (from: number) => {
+        this.setState({ value: { ...this.state.value, from } });
+    };
 
-    private handleToChange = (to: number) => this.setState({ value: { ...this.state.value, to } });
+    private handleToChange = (to: number) => {
+        this.setState({ value: { ...this.state.value, to } });
+    };
+
+    private convertToRawValue = (value: IValue): IValue => {
+        if (!value) {
+            return value;
+        }
+        const rawValue: IValue = value.value
+            ? { value: value.value / 100 }
+            : { from: value.from / 100, to: value.to / 100 };
+        return rawValue;
+    };
+
+    private convertToPercentageValue = (value: IValue): IValue => {
+        if (!value) {
+            return value;
+        }
+        const rawValue: IValue = value.value
+            ? { value: value.value * 100 }
+            : { from: value.from * 100, to: value.to * 100 };
+        return rawValue;
+    };
 
     private onApply = () => {
+        const { usePercentage } = this.props;
         const operator = this.state.operator === Operator.ALL ? null : this.state.operator;
-        this.props.onApply(operator, this.state.value);
+        this.props.onApply(
+            operator,
+            usePercentage ? this.convertToRawValue(this.state.value) : this.state.value,
+        );
     };
 }
 
