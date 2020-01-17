@@ -1,17 +1,17 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import { injectIntl, WrappedComponentProps } from "react-intl";
 import { IntlWrapper } from "../../core/base/IntlWrapper";
-import { IValue } from "../../../interfaces/MeasureValueFilter";
+import { IMeasureValueFilterValue } from "../../../interfaces/MeasureValueFilter";
 import Overlay from "@gooddata/goodstrap/lib/core/Overlay";
 import { DropdownBody } from "./DropdownBody";
 import * as Operator from "../../../constants/measureValueFilterOperators";
 
 export interface IDropdownOwnProps {
-    onApply: (operator: string, value?: IValue) => void;
+    onApply: (operator: string, value?: IMeasureValueFilterValue) => void;
     onCancel: () => void;
     operator?: string;
-    value?: IValue;
+    value?: IMeasureValueFilterValue;
     usePercentage?: boolean;
     warningMessage?: string;
     locale?: string;
@@ -57,7 +57,7 @@ class DropdownWrapped extends React.PureComponent<IDropdownProps, IDropdownState
         );
     }
 
-    private onApply = (operator: string, value?: IValue) => {
+    private onApply = (operator: string, value?: IMeasureValueFilterValue) => {
         this.props.onApply(operator, value);
     };
 }

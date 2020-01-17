@@ -7,19 +7,25 @@ import MVFDropdownFragment from "./fragments/MeasureValueFilter";
 import { DropdownAfmWrapper, IDropdownProps } from "../DropdownAfmWrapper";
 import * as Operator from "../../../../constants/measureValueFilterOperators";
 import { withIntl } from "../../../visualizations/utils/intlUtils";
-import { measureValueFilter } from "../../../../helpers/model/measureValueFilters";
+import * as Model from "../../../../helpers/model";
 
 const renderComponent = (props?: Partial<IDropdownProps>) => {
     const defaultProps: IDropdownProps = {
         onApply: noop,
         onCancel: noop,
-        measureIdentifier: "myMeasure",
+        filter: {
+            measureValueFilter: {
+                measure: {
+                    localIdentifier: "myMeasure",
+                },
+            },
+        },
     };
     const Wrapped = withIntl(DropdownAfmWrapper);
     return new MVFDropdownFragment(mount(<Wrapped {...defaultProps} {...props} />));
 };
 
-describe("Measure value filter", () => {
+describe("Measure value filter AFM wrapper", () => {
     it("should render single value input when comparison type operator is selected", () => {
         const component = renderComponent();
 
@@ -40,7 +46,7 @@ describe("Measure value filter", () => {
         expect(component.getComparisonValueInput().length).toEqual(0);
     });
 
-    it("should have All operator preselected and no inputs rendered if there is no filter provided", () => {
+    it("should have All operator preselected and no inputs rendered if there is no condition in the filter provided", () => {
         const component = renderComponent();
 
         expect(component.getSelectedOperatorTitle()).toEqual("All");
@@ -49,8 +55,9 @@ describe("Measure value filter", () => {
         expect(component.getComparisonValueInput().length).toEqual(0);
     });
 
-    it("should have given operator preselected and values filled if filter is provided", () => {
-        const filter = measureValueFilter.getFilter("myMeasure", Operator.LESS_THAN, { value: 100 });
+    it("should have given operator preselected and values filled if filter with condition is provided", () => {
+        const filter = Model.measureValueFilter("myMeasure").condition(Operator.LESS_THAN, { value: 100 });
+
         const component = renderComponent({ filter });
 
         expect(component.getSelectedOperatorTitle()).toEqual("Less than");
@@ -58,7 +65,8 @@ describe("Measure value filter", () => {
     });
 
     it("should have selected operator highlighted in operator dropdown", () => {
-        const filter = measureValueFilter.getFilter("myMeasure", Operator.LESS_THAN, { value: 100 });
+        const filter = Model.measureValueFilter("myMeasure").condition(Operator.LESS_THAN, { value: 100 });
+
         const component = renderComponent({ filter });
 
         expect(
@@ -93,6 +101,7 @@ describe("Measure value filter", () => {
 
     it("should render warning message if provided", () => {
         const warningMessage = "The filter uses actual measure values, not percentage.";
+
         const component = renderComponent({ warningMessage });
 
         expect(component.getWarningMessage().length).toEqual(1);
@@ -130,16 +139,15 @@ describe("Measure value filter", () => {
             const onApply = jest.fn();
             const component = renderComponent({ onApply });
 
-            const expectedFilter = measureValueFilter.getFilter("myMeasure", Operator.GREATER_THAN, {
-                value: 100,
-            });
-
             component
                 .openOperatorDropdown()
                 .selectOperator(Operator.GREATER_THAN)
                 .setComparisonValue("100")
                 .clickApply();
 
+            const expectedFilter = Model.measureValueFilter("myMeasure")
+                .condition(Operator.GREATER_THAN, { value: 100 })
+                .getAfmMeasureValueFilter();
             expect(onApply).toBeCalledWith(expectedFilter);
         });
 
@@ -147,11 +155,6 @@ describe("Measure value filter", () => {
             const onApply = jest.fn();
             const component = renderComponent({ onApply });
 
-            const expectedFilter = measureValueFilter.getFilter("myMeasure", Operator.BETWEEN, {
-                from: 100,
-                to: 200,
-            });
-
             component
                 .openOperatorDropdown()
                 .selectOperator(Operator.BETWEEN)
@@ -159,12 +162,17 @@ describe("Measure value filter", () => {
                 .setRangeTo("200")
                 .clickApply();
 
+            const expectedFilter = Model.measureValueFilter("myMeasure")
+                .condition(Operator.BETWEEN, { from: 100, to: 200 })
+                .getAfmMeasureValueFilter();
             expect(onApply).toBeCalledWith(expectedFilter);
         });
 
-        it("should be called with null value when All operator is applied", () => {
+        it("should be called with filter without condition when All operator is applied", () => {
             const onApply = jest.fn();
-            const filter = measureValueFilter.getFilter("myMeasure", Operator.LESS_THAN, { value: 100 });
+            const filter = Model.measureValueFilter("myMeasure").condition(Operator.LESS_THAN, {
+                value: 100,
+            });
             const component = renderComponent({ filter, onApply });
 
             component
@@ -172,16 +180,13 @@ describe("Measure value filter", () => {
                 .selectOperator(Operator.ALL)
                 .clickApply();
 
-            expect(onApply).toBeCalledWith(null);
+            const expectedFilter = Model.measureValueFilter("myMeasure").getAfmMeasureValueFilter();
+            expect(onApply).toBeCalledWith(expectedFilter);
         });
 
         it("should be called with raw value when the measure is displayed as percentage with a comparison type measure value filter", () => {
             const onApply = jest.fn();
             const component = renderComponent({ onApply, usePercentage: true });
-
-            const expectedFilter = measureValueFilter.getFilter("myMeasure", Operator.GREATER_THAN, {
-                value: 1,
-            });
 
             component
                 .openOperatorDropdown()
@@ -189,17 +194,15 @@ describe("Measure value filter", () => {
                 .setComparisonValue("100")
                 .clickApply();
 
+            const expectedFilter = Model.measureValueFilter("myMeasure")
+                .condition(Operator.GREATER_THAN, { value: 1 })
+                .getAfmMeasureValueFilter();
             expect(onApply).toBeCalledWith(expectedFilter);
         });
 
         it("should be called with raw value when the measure is displayed as percentage with a range type measure value filter", () => {
             const onApply = jest.fn();
             const component = renderComponent({ onApply, usePercentage: true });
-
-            const expectedFilter = measureValueFilter.getFilter("myMeasure", Operator.BETWEEN, {
-                from: 1,
-                to: 2,
-            });
 
             component
                 .openOperatorDropdown()
@@ -208,12 +211,17 @@ describe("Measure value filter", () => {
                 .setRangeTo("200")
                 .clickApply();
 
+            const expectedFilter = Model.measureValueFilter("myMeasure")
+                .condition(Operator.BETWEEN, { from: 1, to: 2 })
+                .getAfmMeasureValueFilter();
             expect(onApply).toBeCalledWith(expectedFilter);
         });
 
-        it("should be called with null value when All operator is applied when the measure is displayed as percentage", () => {
+        it("should be called with filter without condition when All operator is applied when the measure is displayed as percentage", () => {
             const onApply = jest.fn();
-            const filter = measureValueFilter.getFilter("myMeasure", Operator.LESS_THAN, { value: 100 });
+            const filter = Model.measureValueFilter("myMeasure").condition(Operator.LESS_THAN, {
+                value: 100,
+            });
             const component = renderComponent({ filter, onApply, usePercentage: true });
 
             component
@@ -221,7 +229,8 @@ describe("Measure value filter", () => {
                 .selectOperator(Operator.ALL)
                 .clickApply();
 
-            expect(onApply).toBeCalledWith(null);
+            const expectedFilter = Model.measureValueFilter("myMeasure").getAfmMeasureValueFilter();
+            expect(onApply).toBeCalledWith(expectedFilter);
         });
 
         describe("empty values", () => {
@@ -229,15 +238,14 @@ describe("Measure value filter", () => {
                 const onApply = jest.fn();
                 const component = renderComponent({ onApply });
 
-                const expectedFilter = measureValueFilter.getFilter("myMeasure", Operator.GREATER_THAN, {
-                    value: 0,
-                });
-
                 component
                     .openOperatorDropdown()
                     .selectOperator(Operator.GREATER_THAN)
                     .clickApply();
 
+                const expectedFilter = Model.measureValueFilter("myMeasure")
+                    .condition(Operator.GREATER_THAN, { value: 0 })
+                    .getAfmMeasureValueFilter();
                 expect(onApply).toBeCalledWith(expectedFilter);
             });
 
@@ -245,17 +253,15 @@ describe("Measure value filter", () => {
                 const onApply = jest.fn();
                 const component = renderComponent({ onApply });
 
-                const expectedFilter = measureValueFilter.getFilter("myMeasure", Operator.BETWEEN, {
-                    from: 0,
-                    to: 100,
-                });
-
                 component
                     .openOperatorDropdown()
                     .selectOperator(Operator.BETWEEN)
                     .setRangeTo("100")
                     .clickApply();
 
+                const expectedFilter = Model.measureValueFilter("myMeasure")
+                    .condition(Operator.BETWEEN, { from: 0, to: 100 })
+                    .getAfmMeasureValueFilter();
                 expect(onApply).toBeCalledWith(expectedFilter);
             });
 
@@ -263,19 +269,54 @@ describe("Measure value filter", () => {
                 const onApply = jest.fn();
                 const component = renderComponent({ onApply });
 
-                const expectedFilter = measureValueFilter.getFilter("myMeasure", Operator.BETWEEN, {
-                    from: 100,
-                    to: 0,
-                });
-
                 component
                     .openOperatorDropdown()
                     .selectOperator(Operator.BETWEEN)
                     .setRangeFrom("100")
                     .clickApply();
 
+                const expectedFilter = Model.measureValueFilter("myMeasure")
+                    .condition(Operator.BETWEEN, {
+                        from: 100,
+                        to: 0,
+                    })
+                    .getAfmMeasureValueFilter();
+                expect(onApply).toBeCalledWith(expect.objectContaining(expectedFilter));
+            });
+
+            it("should be called with empty condition when ALL was selected", () => {
+                const onApply = jest.fn();
+                const component = renderComponent({ onApply });
+
+                component
+                    .openOperatorDropdown()
+                    .selectOperator(Operator.ALL)
+                    .clickApply();
+
+                const expectedFilter = {
+                    measureValueFilter: {
+                        measure: {
+                            localIdentifier: "myMeasure",
+                        },
+                    },
+                };
                 expect(onApply).toBeCalledWith(expectedFilter);
             });
+        });
+    });
+
+    describe("onCancel feedback", () => {
+        it("should be called when cancelled", () => {
+            const onCancel = jest.fn();
+            const component = renderComponent({ onCancel });
+
+            component
+                .openOperatorDropdown()
+                .selectOperator(Operator.BETWEEN)
+                .setRangeFrom("100")
+                .clickCancel();
+
+            expect(onCancel).toBeCalled();
         });
     });
 });
