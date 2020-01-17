@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 
 import { AFM } from "@gooddata/typings";
 import * as fixtures from "../../../../../stories/test_data/fixtures";
@@ -82,13 +82,45 @@ describe("assignSorting", () => {
 
 describe("getSortItemByColId", () => {
     it("should return an attributeSortItem", () => {
-        expect(getSortItemByColId(pivotTableWithColumnAndRowAttributes, "a_2211", "asc")).toEqual({
+        expect(getSortItemByColId(pivotTableWithColumnAndRowAttributes, "a_2211", "asc", [])).toEqual({
             attributeSortItem: { attributeIdentifier: "state", direction: "asc" },
+        });
+    });
+    it("should return an attributeSortItem with aggregation", () => {
+        const originalSorts: AFM.IAttributeSortItem[] = [
+            {
+                attributeSortItem: {
+                    attributeIdentifier: "state",
+                    direction: "desc",
+                    aggregation: "sum",
+                },
+            },
+        ];
+        expect(
+            getSortItemByColId(pivotTableWithColumnAndRowAttributes, "a_2211", "desc", originalSorts),
+        ).toEqual({
+            attributeSortItem: { attributeIdentifier: "state", direction: "desc", aggregation: "sum" },
+        });
+    });
+    it("should return an attributeSortItem with aggregation with different direction", () => {
+        const originalSorts: AFM.IAttributeSortItem[] = [
+            {
+                attributeSortItem: {
+                    attributeIdentifier: "state",
+                    direction: "asc",
+                    aggregation: "sum",
+                },
+            },
+        ];
+        expect(
+            getSortItemByColId(pivotTableWithColumnAndRowAttributes, "a_2211", "desc", originalSorts),
+        ).toEqual({
+            attributeSortItem: { attributeIdentifier: "state", direction: "desc", aggregation: "sum" },
         });
     });
     it("should return a measureSortItem", () => {
         expect(
-            getSortItemByColId(pivotTableWithColumnAndRowAttributes, "a_2009_1-a_2071_1-m_0", "asc"),
+            getSortItemByColId(pivotTableWithColumnAndRowAttributes, "a_2009_1-a_2071_1-m_0", "asc", []),
         ).toEqual({
             measureSortItem: {
                 direction: "asc",
@@ -129,6 +161,62 @@ describe("getSortsFromModel", () => {
                 attributeSortItem: {
                     attributeIdentifier: "state",
                     direction: "asc",
+                },
+            },
+        ]);
+    });
+    it("should return sortItems for row attribute sort with aggregation", () => {
+        const sortModel: any[] = [
+            {
+                colId: "a_2211",
+                sort: "desc",
+            },
+        ];
+
+        const originalSorts: AFM.IAttributeSortItem[] = [
+            {
+                attributeSortItem: {
+                    attributeIdentifier: "state",
+                    direction: "desc",
+                    aggregation: "sum",
+                },
+            },
+        ];
+
+        expect(getSortsFromModel(sortModel, pivotTableWithColumnAndRowAttributes, originalSorts)).toEqual([
+            {
+                attributeSortItem: {
+                    attributeIdentifier: "state",
+                    direction: "desc",
+                    aggregation: "sum",
+                },
+            },
+        ]);
+    });
+    it("should return sortItems for row attribute sort with aggregation with different direction", () => {
+        const sortModel: any[] = [
+            {
+                colId: "a_2211",
+                sort: "desc",
+            },
+        ];
+
+        const originalSorts: AFM.IAttributeSortItem[] = [
+            {
+                attributeSortItem: {
+                    attributeIdentifier: "state",
+                    direction: "asc",
+                    aggregation: "sum",
+                },
+            },
+        ];
+
+        expect(getSortsFromModel(sortModel, pivotTableWithColumnAndRowAttributes, originalSorts)).toEqual([
+            {
+                attributeSortItem: {
+                    attributeIdentifier: "state",
+                    direction: "desc",
+                    aggregation: "sum",
                 },
             },
         ]);
