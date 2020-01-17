@@ -580,5 +580,6 @@ export const GEO_PUSHPIN_CHART_UICONFIG: IUiConfig = {
         },
         ...defaultFilters,
     },
+    supportedLocationIcon: { supported: true },
     ...defaultRootUiConfigProperties,
 };
