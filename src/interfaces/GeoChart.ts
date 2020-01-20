@@ -2,12 +2,31 @@
 import { VisualizationInput, VisualizationObject } from "@gooddata/typings";
 import { ICommonChartProps } from "../components/core/base/BaseChart";
 
-export interface IGeoDataIndex {
-    color?: number;
-    location?: number;
-    segmentBy?: number;
-    size?: number;
-    tooltipText?: number;
+export interface IGeoTooltipItem {
+    title: string;
+    value: string;
+}
+
+export interface IObjectMapping {
+    [property: string]: string | number | object | null;
+}
+
+export interface IPushpinColor {
+    border: string;
+    background: string;
+}
+
+export interface IGeoDataItem {
+    name: string;
+    index: number;
+}
+
+export interface IGeoData {
+    color?: IGeoDataItem;
+    location?: IGeoDataItem;
+    segmentBy?: IGeoDataItem;
+    size?: IGeoDataItem;
+    tooltipText?: IGeoDataItem;
 }
 
 export interface IGeoConfig {

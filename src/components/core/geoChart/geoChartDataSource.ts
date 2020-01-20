@@ -1,14 +1,10 @@
 // (C) 2019-2020 GoodData Corporation
 import { Execution } from "@gooddata/typings";
-import {
-    DEFAULT_PUSHPIN_COLOR_VALUE_KEY,
-    DEFAULT_PUSHPIN_SEGMENT_BY_VALUE_KEY,
-    DEFAULT_PUSHPIN_SIZE_VALUE,
-    DEFAULT_PUSHPIN_SIZE_VALUE_KEY,
-} from "../../../constants/geoChart";
-import { getHeaderItemName } from "../../../helpers/executionResultHelper";
+import { IGeoData, IPushpinColor } from "../../../interfaces/GeoChart";
+import { DEFAULT_PUSHPIN_SIZE_VALUE } from "../../../constants/geoChart";
+import { getHeaderItemName, isTwoDimensionsData } from "../../../helpers/executionResultHelper";
 import { stringToFloat } from "../../../helpers/utils";
-import { IGeoDataIndex } from "../../../interfaces/GeoChart";
+import { getPushpinColors } from "./geoChartColor";
 
 type IGeoDataSourceFeature = GeoJSON.Feature<GeoJSON.Geometry, GeoJSON.GeoJsonProperties>;
 export type IGeoDataSourceFeatures = IGeoDataSourceFeature[];
@@ -29,29 +25,40 @@ function getLocation(locationValue: Execution.IResultHeaderItem): [number, numbe
 
 function transformPushpinDataSource(
     executionResult: Execution.IExecutionResult,
-    geoDataIndex: IGeoDataIndex,
+    geoData: IGeoData,
 ): IGeoDataSourceFeatures {
-    const { color, location, segmentBy, size, tooltipText } = geoDataIndex;
-    const data = executionResult.data as Execution.DataValue[][];
+    const { color, location, segmentBy, size, tooltipText } = geoData;
 
-    const hasColorMeasure = color !== undefined;
+    const locationNameTitle = tooltipText ? tooltipText.name : "";
+    const colorTitle = color ? color.name : "";
+    const sizeTitle = size ? size.name : "";
+    const segmentByTitle = segmentBy ? segmentBy.name : "";
+
     let colorData: Execution.DataValue[] = [];
-    if (hasColorMeasure) {
-        colorData = data[color];
-    }
-
-    const hasSizeMeasure = size !== undefined;
     let sizeData: Execution.DataValue[] = [];
-    if (hasSizeMeasure) {
-        sizeData = data[size];
+    const hasColorMeasure = color !== undefined;
+    const hasSizeMeasure = size !== undefined;
+
+    const { data } = executionResult;
+    if (isTwoDimensionsData(data)) {
+        if (hasColorMeasure) {
+            colorData = data[color.index];
+        }
+        if (hasSizeMeasure) {
+            sizeData = data[size.index];
+        }
     }
 
     const attrHeaderItemIndex = hasColorMeasure || hasSizeMeasure ? 1 : 0;
     const attributeHeaderItems = executionResult.headerItems[attrHeaderItemIndex];
 
-    const locationData = location !== undefined ? attributeHeaderItems[location] : [];
-    const locationNameData = tooltipText !== undefined ? attributeHeaderItems[tooltipText] : [];
-    const segmentByData = segmentBy !== undefined ? attributeHeaderItems[segmentBy] : [];
+    const locationData = location !== undefined ? attributeHeaderItems[location.index] : [];
+    const locationNameData = tooltipText !== undefined ? attributeHeaderItems[tooltipText.index] : [];
+    const segmentByData = segmentBy !== undefined ? attributeHeaderItems[segmentBy.index] : [];
+
+    const sizesInNumber = sizeData.map(stringToFloat);
+    const colorsInNumber = colorData.map(stringToFloat);
+    const pushpinColors: IPushpinColor[] = getPushpinColors(colorsInNumber, segmentByData);
 
     const features = locationData.reduce(
         (
@@ -60,29 +67,46 @@ function transformPushpinDataSource(
             index: number,
         ): IGeoDataSourceFeatures => {
             const coordinates = getLocation(locationItem);
-            if (coordinates) {
-                const colorValue = hasColorMeasure ? stringToFloat(colorData[index] as string) : undefined;
-                const sizeValue = hasSizeMeasure
-                    ? stringToFloat(sizeData[index] as string)
-                    : DEFAULT_PUSHPIN_SIZE_VALUE;
-                return [
-                    ...result,
-                    {
-                        type: "Feature",
-                        geometry: {
-                            type: "Point",
-                            coordinates,
+            if (!coordinates) {
+                return result;
+            }
+
+            const colorValue = hasColorMeasure ? colorsInNumber[index] : undefined;
+            const sizeValue = hasSizeMeasure ? sizesInNumber[index] : DEFAULT_PUSHPIN_SIZE_VALUE;
+
+            const locationNameValue = getHeaderItemName(locationNameData[index]);
+            const segmentByValue = getHeaderItemName(segmentByData[index]);
+            const pushpinColor = pushpinColors[index] || pushpinColors[0] || {};
+
+            return [
+                ...result,
+                {
+                    type: "Feature",
+                    geometry: {
+                        type: "Point",
+                        coordinates,
+                    },
+                    properties: {
+                        locationName: {
+                            title: locationNameTitle,
+                            value: locationNameValue,
                         },
-                        properties: {
-                            City: getHeaderItemName(locationNameData[index]),
-                            [DEFAULT_PUSHPIN_COLOR_VALUE_KEY]: colorValue,
-                            [DEFAULT_PUSHPIN_SEGMENT_BY_VALUE_KEY]: getHeaderItemName(segmentByData[index]),
-                            [DEFAULT_PUSHPIN_SIZE_VALUE_KEY]: sizeValue,
+                        color: {
+                            ...pushpinColor,
+                            title: colorTitle,
+                            value: colorValue,
+                        },
+                        size: {
+                            title: sizeTitle,
+                            value: sizeValue,
+                        },
+                        segmentBy: {
+                            title: segmentByTitle,
+                            value: segmentByValue,
                         },
                     },
-                ];
-            }
-            return result;
+                },
+            ];
         },
         [],
     );
@@ -92,13 +116,13 @@ function transformPushpinDataSource(
 
 export const createPushpinDataSource = (
     executionResult: Execution.IExecutionResult,
-    geoDataIndex: IGeoDataIndex,
+    geoData: IGeoData,
 ): mapboxgl.GeoJSONSourceRaw => {
     return {
         type: "geojson",
         data: {
             type: "FeatureCollection",
-            features: transformPushpinDataSource(executionResult, geoDataIndex),
+            features: transformPushpinDataSource(executionResult, geoData),
         },
     };
 };
