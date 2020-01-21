@@ -8,6 +8,7 @@ The REST API versions in the table are just for your information as the values a
 
 |GoodData.UI Version | REST API version
 |:---:|:---:
+|\>= 7.3.0|5
 |\>= 7.2.0|4
 |\>= 6.1.0|3
 |<= 6.0.0|2
