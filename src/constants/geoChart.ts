@@ -1,6 +1,24 @@
 // (C) 2019-2020 GoodData Corporation
 import { DEFAULT_COLORS } from "../components/visualizations/utils/color";
 
+export const DEFAULT_CLUSTER_FILTER = ["has", "point_count"];
+export const DEFAULT_CLUSTER_LABELS_CONFIG = {
+    id: "gdcClusterLabels",
+    type: "symbol" as "symbol",
+    layout: {
+        "text-allow-overlap": true,
+        "text-field": "{point_count_abbreviated}",
+        "text-size": 14,
+    },
+    paint: {
+        "text-color": "#fff",
+    },
+};
+export const DEFAULT_CLUSTER_LAYER_NAME = "gdcClusters";
+export const DEFAULT_CLUSTER_MAX_ZOOM = 14; // Max zoom to cluster points on
+export const DEFAULT_CLUSTER_POINTS_SIZE = 30;
+export const DEFAULT_CLUSTER_RADIUS = 50; // inside this Radius, points will be clustered (defaults to 50)
+
 export const DEFAULT_DATA_POINTS_LIMIT = 2000;
 export const DEFAULT_DATA_SOURCE_NAME = "gdcPushpinsData";
 export const DEFAULT_LAYER_NAME = "gdcPushpins";
