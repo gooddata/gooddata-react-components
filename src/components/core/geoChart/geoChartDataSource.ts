@@ -1,7 +1,11 @@
 // (C) 2019-2020 GoodData Corporation
 import { Execution } from "@gooddata/typings";
 import { IGeoData, IPushpinColor } from "../../../interfaces/GeoChart";
-import { DEFAULT_PUSHPIN_SIZE_VALUE } from "../../../constants/geoChart";
+import {
+    DEFAULT_CLUSTER_RADIUS,
+    DEFAULT_CLUSTER_MAX_ZOOM,
+    DEFAULT_PUSHPIN_SIZE_VALUE,
+} from "../../../constants/geoChart";
 import { getGeoAttributeHeaderItems } from "../../../helpers/geoChart";
 import { getHeaderItemName, isTwoDimensionsData } from "../../../helpers/executionResultHelper";
 import { stringToFloat } from "../../../helpers/utils";
@@ -118,11 +122,20 @@ export const createPushpinDataSource = (
     executionResult: Execution.IExecutionResult,
     geoData: IGeoData,
 ): mapboxgl.GeoJSONSourceRaw => {
-    return {
+    const source: mapboxgl.GeoJSONSourceRaw = {
         type: "geojson",
         data: {
             type: "FeatureCollection",
             features: transformPushpinDataSource(executionResult, geoData),
         },
     };
+    if (!geoData.size) {
+        return {
+            ...source,
+            cluster: true,
+            clusterMaxZoom: DEFAULT_CLUSTER_MAX_ZOOM,
+            clusterRadius: DEFAULT_CLUSTER_RADIUS,
+        };
+    }
+    return source;
 };

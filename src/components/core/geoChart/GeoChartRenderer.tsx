@@ -4,9 +4,12 @@ import get = require("lodash/get");
 import isEqual = require("lodash/isEqual");
 import mapboxgl = require("mapbox-gl");
 import { Execution } from "@gooddata/typings";
-import { createPushpinDataLayer } from "./geoChartDataLayers";
+
+import { createClusterLayers, createPushpinDataLayer } from "./geoChartDataLayers";
 import { createPushpinDataSource } from "./geoChartDataSource";
 import {
+    DEFAULT_CLUSTER_LABELS_CONFIG,
+    DEFAULT_CLUSTER_LAYER_NAME,
     DEFAULT_DATA_SOURCE_NAME,
     DEFAULT_LATITUDE,
     DEFAULT_LAYER_NAME,
@@ -16,7 +19,7 @@ import {
     MAPBOX_ACCESS_TOKEN,
     DEFAULT_TOOLTIP_OPTIONS,
 } from "../../../constants/geoChart";
-import { IGeoConfig } from "../../../interfaces/GeoChart";
+import { IGeoConfig, IGeoData } from "../../../interfaces/GeoChart";
 
 import "../../../../styles/scss/geoChart.scss";
 import { handlePushpinMouseEnter, handlePushpinMouseLeave } from "./geoChartTooltip";
@@ -37,6 +40,7 @@ export default class GeoChartRenderer extends React.PureComponent<IGeoChartRende
     private chart: mapboxgl.Map;
     private tooltip: mapboxgl.Popup;
     private chartRef: HTMLElement;
+    private geoData: IGeoData = {};
 
     public componentDidUpdate(prevProps: IGeoChartRendererProps) {
         if (!isEqual(this.props.execution, prevProps.execution)) {
@@ -112,12 +116,26 @@ export default class GeoChartRenderer extends React.PureComponent<IGeoChartRende
             this.chart.removeLayer("settlement-label");
         }
 
-        const geoData = getGeoData(buckets, executionResponse.dimensions);
-        chart.addSource(DEFAULT_DATA_SOURCE_NAME, createPushpinDataSource(executionResult, geoData));
-        chart.addLayer(
-            createPushpinDataLayer(DEFAULT_DATA_SOURCE_NAME, executionResult, geoData, selectedSegmentItem),
-            "state-label", // pushpin will be rendered under state/county label
-        );
+        this.geoData = getGeoData(buckets, executionResponse.dimensions);
+
+        chart.addSource(DEFAULT_DATA_SOURCE_NAME, createPushpinDataSource(executionResult, this.geoData));
+
+        if (this.geoData.size) {
+            chart.addLayer(
+                createPushpinDataLayer(
+                    DEFAULT_DATA_SOURCE_NAME,
+                    executionResult,
+                    this.geoData,
+                    selectedSegmentItem,
+                ),
+                "state-label", // pushpin will be rendered under state/county label
+            );
+        } else {
+            const clusterLayers: mapboxgl.Layer[] = createClusterLayers(DEFAULT_DATA_SOURCE_NAME);
+            clusterLayers.forEach(
+                (clusterLayer: mapboxgl.Layer) => chart.addLayer(clusterLayer, "state-label"), // cluster points will be rendered under state/county label
+            );
+        }
     };
 
     private createTooltip = () => {
@@ -125,7 +143,11 @@ export default class GeoChartRenderer extends React.PureComponent<IGeoChartRende
     };
 
     private cleanupMap = (): void => {
-        this.chart.removeLayer(DEFAULT_DATA_SOURCE_NAME);
+        this.chart.removeLayer(DEFAULT_LAYER_NAME);
+        if (!this.geoData.size) {
+            this.chart.removeLayer(DEFAULT_CLUSTER_LAYER_NAME);
+            this.chart.removeLayer(DEFAULT_CLUSTER_LABELS_CONFIG.id);
+        }
         this.chart.removeSource(DEFAULT_DATA_SOURCE_NAME);
     };
 
