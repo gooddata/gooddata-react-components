@@ -1,11 +1,13 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import { injectIntl, WrappedComponentProps } from "react-intl";
+import Overlay from "@gooddata/goodstrap/lib/core/Overlay";
+
 import { IntlWrapper } from "../../core/base/IntlWrapper";
 import { IValue } from "../../../interfaces/MeasureValueFilter";
-import Overlay from "@gooddata/goodstrap/lib/core/Overlay";
 import { DropdownBody } from "./DropdownBody";
 import * as Operator from "../../../constants/measureValueFilterOperators";
+import { DROPDOWN_ALIGMENTS } from "../../../internal/components/configurationControls/DropdownControl";
 
 export interface IDropdownOwnProps {
     onApply: (operator: string, value?: IValue) => void;
@@ -38,7 +40,7 @@ class DropdownWrapped extends React.PureComponent<IDropdownProps, IDropdownState
         return (
             <Overlay
                 alignTo={anchorEl}
-                alignPoints={[{ align: "bl tl" }]}
+                alignPoints={DROPDOWN_ALIGMENTS}
                 closeOnOutsideClick={true}
                 closeOnParentScroll={true}
                 closeOnMouseDrag={true}
