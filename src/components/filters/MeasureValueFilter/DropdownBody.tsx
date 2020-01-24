@@ -8,7 +8,7 @@ import { measureValueFilter as Model } from "../../../helpers/model/measureValue
 import OperatorDropdown from "./OperatorDropdown";
 import RangeInput from "./RangeInput";
 import ComparisonInput from "./ComparisonInput";
-import { IValue } from "../../../interfaces/MeasureValueFilter";
+import { IValue, isComparisonOperator } from "../../../interfaces/MeasureValueFilter";
 import * as Operator from "../../../constants/measureValueFilterOperators";
 
 export interface IInputProps {
@@ -44,7 +44,7 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
 
         this.state = {
             operator: operator || Operator.ALL,
-            value: (usePercentage ? this.convertToPercentageValue(value) : value) || {},
+            value: (usePercentage ? this.convertToPercentageValue(value, operator) : value) || {},
         };
     }
 
@@ -139,21 +139,21 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
         this.setState({ value: { ...this.state.value, to } });
     };
 
-    private convertToRawValue = (value: IValue): IValue => {
+    private convertToRawValue = (value: IValue, operator: string): IValue => {
         if (!value) {
             return value;
         }
-        const rawValue: IValue = value.value
+        const rawValue: IValue = isComparisonOperator(operator)
             ? { value: value.value / 100 }
             : { from: value.from / 100, to: value.to / 100 };
         return rawValue;
     };
 
-    private convertToPercentageValue = (value: IValue): IValue => {
+    private convertToPercentageValue = (value: IValue, operator: string): IValue => {
         if (!value) {
             return value;
         }
-        const rawValue: IValue = value.value
+        const rawValue: IValue = isComparisonOperator(operator)
             ? { value: value.value * 100 }
             : { from: value.from * 100, to: value.to * 100 };
         return rawValue;
@@ -164,7 +164,7 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
         const operator = this.state.operator === Operator.ALL ? null : this.state.operator;
         this.props.onApply(
             operator,
-            usePercentage ? this.convertToRawValue(this.state.value) : this.state.value,
+            usePercentage ? this.convertToRawValue(this.state.value, this.state.operator) : this.state.value,
         );
     };
 }
