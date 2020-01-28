@@ -1,6 +1,6 @@
 {
   "name": "@gooddata/react-components",
-  "version": "7.3.0-beta.23",
+  "version": "7.3.0-beta.28",
   "description": "GoodData.UI - A powerful JavaScript library for building analytical applications",
   "main": "dist/index.js",
   "repository": "git@github.com:gooddata/gooddata-react-components.git",
@@ -113,7 +113,7 @@
   },
   "dependencies": {
     "@formatjs/intl-pluralrules": "^1.3.6",
-    "@gooddata/gooddata-js": "^12.1.0",
+    "@gooddata/gooddata-js": "^12.2.0",
     "@gooddata/goodstrap": "^66.1.0",
     "@gooddata/js-utils": "^3.5.0",
     "@gooddata/numberjs": "^3.2.4",
