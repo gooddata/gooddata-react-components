@@ -4,16 +4,17 @@ import { injectIntl, WrappedComponentProps } from "react-intl";
 import Overlay from "@gooddata/goodstrap/lib/core/Overlay";
 
 import { IntlWrapper } from "../../core/base/IntlWrapper";
-import { IValue } from "../../../interfaces/MeasureValueFilter";
+import { IMeasureValueFilterValue } from "../../../interfaces/MeasureValueFilter";
+
 import { DropdownBody } from "./DropdownBody";
 import * as Operator from "../../../constants/measureValueFilterOperators";
 import { DROPDOWN_ALIGMENTS } from "../../../internal/components/configurationControls/DropdownControl";
 
 export interface IDropdownOwnProps {
-    onApply: (operator: string, value?: IValue) => void;
+    onApply: (operator: string, value?: IMeasureValueFilterValue) => void;
     onCancel: () => void;
     operator?: string;
-    value?: IValue;
+    value?: IMeasureValueFilterValue;
     usePercentage?: boolean;
     warningMessage?: string;
     locale?: string;
@@ -59,7 +60,7 @@ class DropdownWrapped extends React.PureComponent<IDropdownProps, IDropdownState
         );
     }
 
-    private onApply = (operator: string, value?: IValue) => {
+    private onApply = (operator: string, value?: IMeasureValueFilterValue) => {
         this.props.onApply(operator, value);
     };
 }

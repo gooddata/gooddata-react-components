@@ -15,6 +15,8 @@ const measures = [franchisedSalesMeasure];
 
 const attributes = [Model.attribute(locationNameDisplayFormIdentifier).localIdentifier("locationName")];
 
+const defaultMeasureValueFilter = Model.measureValueFilter("franchisedSales");
+
 const DropdownButton = ({ isActive, measureTitle, onClick }) => {
     const className = classNames(
         "gd-mvf-dropdown-button",
@@ -46,8 +48,8 @@ export class MeasureValueFilterDropdownExample extends React.PureComponent {
     }
 
     state = {
-        filters: [],
         displayDropdown: false,
+        filters: [defaultMeasureValueFilter],
     };
 
     onApply = filter => {
@@ -77,8 +79,7 @@ export class MeasureValueFilterDropdownExample extends React.PureComponent {
                     <MeasureValueFilterDropdown
                         onApply={this.onApply}
                         onCancel={this.onCancel}
-                        measureIdentifier={franchisedSalesMeasure.measure.localIdentifier}
-                        filter={filters[0] || null}
+                        filter={filters[0]}
                         anchorEl={this.ref.current}
                     />
                 ) : null}
