@@ -162,5 +162,7 @@
     "mvf.operator.equalTo": "igual a",
     "mvf.operator.notEqualTo": "no igual a",
     "mvf.operator.between": "entre",
-    "mvf.operator.notBetween": "no entre"
+    "mvf.operator.notBetween": "no entre",
+    "mvf.operator.between.tooltip.bubble": "Se incluyen los valores de inicio y fin.",
+    "mvf.operator.notBetween.tooltip.bubble": "No se incluyen los valores de inicio y fin."
 }

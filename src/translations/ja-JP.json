@@ -162,5 +162,7 @@
     "mvf.operator.equalTo": "等しい",
     "mvf.operator.notEqualTo": "等しくない",
     "mvf.operator.between": "の間",
-    "mvf.operator.notBetween": "の間ではない"
+    "mvf.operator.notBetween": "の間ではない",
+    "mvf.operator.between.tooltip.bubble": "開始値及び終了値が含まれます。",
+    "mvf.operator.notBetween.tooltip.bubble": "開始値及び終了値は含まれません。"
 }
