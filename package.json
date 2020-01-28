@@ -24,7 +24,7 @@
     "@gooddata/eslint-config": "^1.0.0",
     "@gooddata/frontend-npm-scripts": "1.1.0",
     "@gooddata/mock-js": "2.6.0",
-    "@gooddata/test-storybook": "3.1.1-alpha-naibinh-master-2020-01-27T16-55-41-281Z",
+    "@gooddata/test-storybook": "3.1.1-alpha-naibinh-master-2020-01-28T01-58-32-220Z",
     "@gooddata/tslint-config": "1.0.0",
     "@storybook/addon-actions": "5.0.11",
     "@storybook/addon-options": "5.0.11",
