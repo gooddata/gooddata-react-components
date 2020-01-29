@@ -2,6 +2,7 @@
 import * as React from "react";
 import get = require("lodash/get");
 import isEqual = require("lodash/isEqual");
+import noop = require("lodash/noop");
 import mapboxgl = require("mapbox-gl");
 import { Execution } from "@gooddata/typings";
 
@@ -30,11 +31,13 @@ mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 export interface IGeoChartRendererProps {
     config: IGeoConfig;
     execution: Execution.IExecutionResponses;
+    afterRender(): void;
 }
 
 export default class GeoChartRenderer extends React.PureComponent<IGeoChartRendererProps> {
     public static defaultProps: Partial<IGeoChartRendererProps> = {
         config: {},
+        afterRender: noop,
     };
 
     private chart: mapboxgl.Map;
@@ -136,6 +139,19 @@ export default class GeoChartRenderer extends React.PureComponent<IGeoChartRende
                 (clusterLayer: mapboxgl.Layer) => chart.addLayer(clusterLayer, "state-label"), // cluster points will be rendered under state/county label
             );
         }
+        // keep listening to the data event until the style is loaded
+        chart.on("data", this.handleLayerLoaded);
+    };
+
+    private handleLayerLoaded = () => {
+        const { chart } = this;
+        if (!chart.isStyleLoaded()) {
+            return;
+        }
+
+        chart.off("data", this.handleLayerLoaded);
+
+        this.props.afterRender();
     };
 
     private createTooltip = () => {
