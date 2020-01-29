@@ -1,10 +1,15 @@
+const merge = require('lodash/merge');
+
+const canvasConfiguration = require('./test-storybook-canvas.config');
+
 const configuration = {
     sections: {
         _defaults: {
             'readySelector': '.screenshot-target, .screenshot-wrapper .highcharts-container, ' +
                 '.screenshot-wrapper .s-headline-value, .screenshot-wrapper .viz-table-wrap, ' +
                 '.screenshot-wrapper .gdc-kpi, .screenshot-wrapper .gdc-kpi-error, ' +
-                '.screenshot-wrapper .s-error, .screenshot-wrapper .s-pivot-table .s-loading-done'
+                '.screenshot-wrapper .s-error, .screenshot-wrapper .s-pivot-table .s-loading-done, ' +
+                '.screenshot-wrapper .s-gd-geo-chart-renderer .mapboxgl-canvas'
         },
         'Core components/AreaChart': {
             'data labels config': {
@@ -130,4 +135,4 @@ const configuration = {
     }
 };
 
-module.exports = configuration;
+module.exports = merge({}, configuration, canvasConfiguration);
