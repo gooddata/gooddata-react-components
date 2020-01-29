@@ -21,9 +21,11 @@ const DEFAULT_CONFIG: Partial<IGeoConfig> = {
     zoom: 3.3,
 };
 
+const afterRender = () => console.log("GDC_GEO_CANVAS_READY"); // tslint:disable-line:no-console
+
 function renderGeoPushpinChart(props: any = {}): React.ReactElement {
     const { location, size, color, segmentBy, config, filters } = props;
-    return screenshotWrap(
+    return (
         <div style={wrapperStyle}>
             <GeoPushpinChart
                 projectId="storybook"
@@ -37,39 +39,50 @@ function renderGeoPushpinChart(props: any = {}): React.ReactElement {
                 }}
                 filters={filters}
                 onError={onErrorHandler}
+                afterRender={afterRender}
                 LoadingComponent={null}
                 ErrorComponent={null}
             />
-        </div>,
+        </div>
     );
 }
 
 storiesOf("Core components/GeoPushpinChart", module)
-    .add("with location", () => renderGeoPushpinChart({ location: ATTRIBUTE_LOCATION_GEOCHART }))
-    .add("with location, size", () =>
-        renderGeoPushpinChart({ location: ATTRIBUTE_LOCATION_GEOCHART, size: MEASURE_SIZE_GEOCHART }),
+    .add("with location", () =>
+        screenshotWrap(renderGeoPushpinChart({ location: ATTRIBUTE_LOCATION_GEOCHART })),
+    )
+    .add("with location and size", () =>
+        screenshotWrap(
+            renderGeoPushpinChart({ location: ATTRIBUTE_LOCATION_GEOCHART, size: MEASURE_SIZE_GEOCHART }),
+        ),
     )
     .add("with location and color", () =>
-        renderGeoPushpinChart({ location: ATTRIBUTE_LOCATION_GEOCHART, color: MEASURE_COLOR_GEOCHART }),
+        screenshotWrap(
+            renderGeoPushpinChart({ location: ATTRIBUTE_LOCATION_GEOCHART, color: MEASURE_COLOR_GEOCHART }),
+        ),
     )
     .add("with location, size and color", () =>
-        renderGeoPushpinChart({
-            location: ATTRIBUTE_LOCATION_GEOCHART,
-            size: MEASURE_SIZE_GEOCHART,
-            color: MEASURE_COLOR_GEOCHART,
-        }),
+        screenshotWrap(
+            renderGeoPushpinChart({
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                size: MEASURE_SIZE_GEOCHART,
+                color: MEASURE_COLOR_GEOCHART,
+            }),
+        ),
     )
     .add("with location, size, color, segmentBy and tooltipText", () => {
         const config: IGeoConfig = {
             tooltipText: ATTRIBUTE_TOOLTIP_GEOCHART,
         };
-        return renderGeoPushpinChart({
-            location: ATTRIBUTE_LOCATION_GEOCHART,
-            size: MEASURE_SIZE_GEOCHART,
-            color: MEASURE_COLOR_GEOCHART,
-            segmentBy: ATTRIBUTE_SEGMENT_GEOCHART,
-            config,
-        });
+        return screenshotWrap(
+            renderGeoPushpinChart({
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                size: MEASURE_SIZE_GEOCHART,
+                color: MEASURE_COLOR_GEOCHART,
+                segmentBy: ATTRIBUTE_SEGMENT_GEOCHART,
+                config,
+            }),
+        );
     })
     .add("with location, size, color, segmentBy, tooltipText and location filter", () => {
         const config: IGeoConfig = {
@@ -88,12 +101,14 @@ storiesOf("Core components/GeoPushpinChart", module)
                 ],
             },
         };
-        return renderGeoPushpinChart({
-            location: ATTRIBUTE_LOCATION_GEOCHART,
-            size: MEASURE_SIZE_GEOCHART,
-            color: MEASURE_COLOR_GEOCHART,
-            segmentBy: ATTRIBUTE_SEGMENT_GEOCHART,
-            config,
-            filters: [locationFilter],
-        });
+        return screenshotWrap(
+            renderGeoPushpinChart({
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                size: MEASURE_SIZE_GEOCHART,
+                color: MEASURE_COLOR_GEOCHART,
+                segmentBy: ATTRIBUTE_SEGMENT_GEOCHART,
+                config,
+                filters: [locationFilter],
+            }),
+        );
     });

@@ -71,10 +71,11 @@ export class GeoChartInner extends BaseVisualization<IGeoChartInnerProps, {}> {
     }
 
     private renderChart = (): React.ReactElement => {
-        const { config, chartRenderer, execution } = this.props;
+        const { config, chartRenderer, execution, afterRender } = this.props;
         const chartProps = {
             config,
             execution,
+            afterRender,
         };
         return chartRenderer(chartProps);
     };
