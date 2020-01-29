@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import set = require("lodash/set");
 import get = require("lodash/get");
 import uniq = require("lodash/uniq");
@@ -63,7 +63,7 @@ export function sanitizeFilters(newReferencePoint: IExtendedReferencePoint): IEx
             return attributeBucketItems.some(
                 (attributeBucketItem: IBucketItem) => attributeBucketItem.attribute === filter.attribute,
             );
-        } else if (isMeasureValueFilter) {
+        } else if (isMeasureValueFilter(filter)) {
             if (attributeBucketItems.length === 0) {
                 return false;
             }
