@@ -3,6 +3,7 @@ import * as React from "react";
 import { injectIntl, WrappedComponentProps } from "react-intl";
 import Overlay from "@gooddata/goodstrap/lib/core/Overlay";
 
+import { ISeparators } from "./separators";
 import { IntlWrapper } from "../../core/base/IntlWrapper";
 import { IMeasureValueFilterValue } from "../../../interfaces/MeasureValueFilter";
 
@@ -19,6 +20,7 @@ export interface IDropdownOwnProps {
     warningMessage?: string;
     locale?: string;
     anchorEl: EventTarget | string;
+    separators?: ISeparators;
 }
 
 export type IDropdownProps = IDropdownOwnProps & WrappedComponentProps;
@@ -34,7 +36,16 @@ class DropdownWrapped extends React.PureComponent<IDropdownProps, IDropdownState
     };
 
     public render() {
-        const { operator, value, usePercentage, warningMessage, locale, onCancel, anchorEl } = this.props;
+        const {
+            operator,
+            value,
+            usePercentage,
+            warningMessage,
+            locale,
+            onCancel,
+            anchorEl,
+            separators,
+        } = this.props;
 
         const selectedOperator = operator !== null ? operator : Operator.ALL;
 
@@ -55,6 +66,7 @@ class DropdownWrapped extends React.PureComponent<IDropdownProps, IDropdownState
                     locale={locale}
                     onCancel={onCancel}
                     onApply={this.onApply}
+                    separators={separators}
                 />
             </Overlay>
         );
