@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { AFM, Execution } from "@gooddata/typings";
 import { IDatasource, IGetRowsParams, GridApi } from "ag-grid-community";
 import { IntlShape } from "react-intl";
@@ -56,7 +56,7 @@ export const getDataSourceRowsGetter = (
         if (sortModel.length > 0 && execution) {
             resultSpecUpdated = {
                 ...resultSpecUpdated,
-                sorts: getSortsFromModel(sortModel, execution),
+                sorts: getSortsFromModel(sortModel, execution, resultSpec.sorts || []),
             };
         }
         if (columnTotals && columnTotals.length > 0) {

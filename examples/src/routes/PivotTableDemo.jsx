@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import React from "react";
 
 import ExampleWithSource from "../components/utils/ExampleWithSource";
@@ -12,6 +12,8 @@ import PivotTableRowGroupingExample from "../components/PivotTableRowGroupingExa
 import PivotTableRowGroupingExampleSRC from "!raw-loader!../components/PivotTableRowGroupingExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import PivotTableSubtotalsExample from "../components/PivotTableSubtotalsExample";
 import PivotTableSubtotalsExampleSRC from "!raw-loader!../components/PivotTableSubtotalsExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
+import PivotTableSortingAggregationExample from "../components/PivotTableSortingAggregationExample";
+import PivotTableSortingAggregationExampleSRC from "!raw-loader!../components/PivotTableSortingAggregationExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 
 export const PivotTableDemo = () => (
     <div>
@@ -44,6 +46,14 @@ export const PivotTableDemo = () => (
         <ExampleWithSource
             for={() => <PivotTableSubtotalsExample />}
             source={PivotTableSubtotalsExampleSRC}
+        />
+
+        <h2 id="measures-row-attributes-and-column-attributes-and-sort-aggregation">
+            Example of sort with aggregation
+        </h2>
+        <ExampleWithSource
+            for={() => <PivotTableSortingAggregationExample />}
+            source={PivotTableSortingAggregationExampleSRC}
         />
     </div>
 );
