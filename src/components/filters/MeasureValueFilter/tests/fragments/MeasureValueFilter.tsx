@@ -78,6 +78,9 @@ export default class MeasureValueFilterFragment {
             .prop("disabled");
     };
 
+    public pressEnterInComparisonInput = () =>
+        this.getComparisonValueInput().simulate("keydown", { keyCode: 13 });
+
     public getSelectedOperatorTitle = () => this.getOperatorDropdownButton().text();
 
     public getInputSuffixes = () => this.component.find(".gd-input-suffix");
