@@ -399,6 +399,28 @@ describe("Measure value filter AFM wrapper", () => {
         });
     });
 
+    describe("press enter", () => {
+        it("should be able to press enter to apply when apply button is enabled", () => {
+            const filter = Model.measureValueFilter("myMeasure").condition(Operator.LESS_THAN, { value: 10 });
+            const onApply = jest.fn();
+            const component = renderComponent({ filter, onApply });
+
+            component.setComparisonValue("20").pressEnterInComparisonInput();
+
+            expect(onApply).toHaveBeenCalledTimes(1);
+        });
+
+        it("should not be able to press enter to apply when apply button is disabled", () => {
+            const filter = Model.measureValueFilter("myMeasure").condition(Operator.LESS_THAN, { value: 10 });
+            const onApply = jest.fn();
+            const component = renderComponent({ filter, onApply });
+
+            component.pressEnterInComparisonInput();
+
+            expect(onApply).toHaveBeenCalledTimes(0);
+        });
+    });
+
     describe("onCancel feedback", () => {
         it("should be called when cancelled", () => {
             const onCancel = jest.fn();
