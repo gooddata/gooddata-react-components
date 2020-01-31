@@ -1219,10 +1219,10 @@
     rxjs "^5.5.6"
     uuid "^3.2.1"
 
-"@gooddata/goodstrap@^66.3.1":
-  version "66.3.1"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-66.3.1.tgz#5c240415901889d773accef7410d98f6ee5c6208"
-  integrity sha512-wjEFBVhYYFHfNUdiQ0X22ZdmDfQB7/EeHe61PXROs/h1kRumLX45vSDwxI3F7wbW0acc+kvK6NI4yocPt+8vhw==
+"@gooddata/goodstrap@^66.4.0":
+  version "66.4.0"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-66.4.0.tgz#d92d3cfdb345f2f60a683c6826eb3bd295490d07"
+  integrity sha512-H49ILnzG+pcVVhMSrJBktkl0AqJ7HeUtKGrkvvkugAcdgCDcivzxhexrOEGg2QDF0R5nkepp1wbvwzOJknHz2Q==
   dependencies:
     "@gooddata/js-utils" "^3.5.0"
     babel-runtime "^6.26.0"
