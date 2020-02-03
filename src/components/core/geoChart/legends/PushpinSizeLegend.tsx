@@ -7,10 +7,11 @@ export interface IPushpinSizeLegendProps {
     format: string;
     numericSymbols: string[];
     sizes: number[];
+    measureName: string;
 }
 
 export default function PushpinSizeLegend(props: IPushpinSizeLegendProps): JSX.Element {
-    const { sizes, format, numericSymbols = [] } = props;
+    const { sizes, format, numericSymbols = [], measureName } = props;
     const minValue: number = Math.min(...sizes);
     const maxValue: number = Math.max(...sizes);
     if (minValue === maxValue) {
@@ -20,17 +21,26 @@ export default function PushpinSizeLegend(props: IPushpinSizeLegendProps): JSX.E
     const diff: number = maxValue - minValue;
     return (
         <div className="pushpin-size-legend s-pushpin-size-legend">
+            <div className="metric-name">{measureName}:</div>
             <div className="pushpin-size-legend-circle-list">
-                <div className="pushpin-size-legend-circle circle-max-value">
-                    <div className="pushpin-size-legend-circle circle-average-value">
-                        <div className="pushpin-size-legend-circle circle-min-value" />
-                    </div>
+                <div className="pushpin-size-legend-circle circle-min-value">
+                    <span className="circle-min-icon" />
+                    <span className="circle-value">
+                        {formatLegendLabel(minValue, format, diff, numericSymbols)}
+                    </span>
                 </div>
-            </div>
-            <div className="labels">
-                <span>{formatLegendLabel(maxValue, format, diff, numericSymbols)}</span>
-                <span>{formatLegendLabel(averageValue, format, diff, numericSymbols)}</span>
-                <span>{formatLegendLabel(minValue, format, diff, numericSymbols)}</span>
+                <div className="pushpin-size-legend-circle">
+                    <span className="circle-average-icon" />
+                    <span className="circle-value">
+                        {formatLegendLabel(averageValue, format, diff, numericSymbols)}
+                    </span>
+                </div>
+                <div className="pushpin-size-legend-circle circle-max-value">
+                    <span className="circle-max-icon" />
+                    <span className="circle-value">
+                        {formatLegendLabel(maxValue, format, diff, numericSymbols)}
+                    </span>
+                </div>
             </div>
         </div>
     );

@@ -12,14 +12,37 @@ function createComponent(customProps: IPushpinSizeLegendProps): ShallowWrapper {
 
 describe("PushpinSizeLegend", () => {
     it("should render component with max, average and min value", () => {
-        const sizes: number[] = [10, 6, 20];
+        const sizes: number[] = [10, 6, 4, 5, 20, 20, 4];
         const props = {
             sizes,
             format: "#,##0.00",
             numericSymbols: ["k", "M", "G", "T", "P", "E"],
+            measureName: "population",
         };
         const wrapper = createComponent(props);
         expect(wrapper.hasClass("s-pushpin-size-legend")).toBe(true);
+        expect(wrapper.find(".metric-name").text()).toContain("population");
+        expect(
+            wrapper
+                .find(".pushpin-size-legend-circle")
+                .at(0)
+                .find(".circle-value")
+                .text(),
+        ).toEqual("4");
+        expect(
+            wrapper
+                .find(".pushpin-size-legend-circle")
+                .at(1)
+                .find(".circle-value")
+                .text(),
+        ).toEqual("10");
+        expect(
+            wrapper
+                .find(".pushpin-size-legend-circle")
+                .at(2)
+                .find(".circle-value")
+                .text(),
+        ).toEqual("20");
     });
     it("should not render component when min value is equal to max value", () => {
         const sizes: number[] = [1000, 1000, 1000];
@@ -27,6 +50,7 @@ describe("PushpinSizeLegend", () => {
             sizes,
             format: "#,##0.00",
             numericSymbols: ["k", "M", "G", "T", "P", "E"],
+            measureName: "population",
         };
         const wrapper = createComponent(props);
         expect(wrapper.hasClass("s-pushpin-size-legend")).toBe(false);

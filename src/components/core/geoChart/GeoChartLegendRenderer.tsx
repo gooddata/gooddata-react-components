@@ -2,34 +2,34 @@
 import * as React from "react";
 import cx from "classnames";
 import PushpinSizeLegend from "./legends/PushpinSizeLegend";
-import { IGeoConfig } from "../../../interfaces/GeoChart";
+import { IGeoConfig, IGeoData, IPushpinCategoryLegendItem } from "../../../interfaces/GeoChart";
 import { TOP } from "../../visualizations/chart/legend/PositionTypes";
 import { IColorLegendItem } from "../../visualizations/typings/legend";
 import { ColorLegend } from "../../visualizations/chart/legend/ColorLegend";
+import PushpinCategoryLegend from "../geoChart/legends/PushpinCategoryLegend";
+
 import { useNumbericSymbols } from "../base/hook/TranslationsHook";
 
 export interface IGeoChartLegendRendererProps {
     config: IGeoConfig;
+    geoData: IGeoData;
     sizeData?: number[];
     sizeFormat?: string;
     colorData?: IColorLegendItem[];
     colorFormat?: string;
-    isColorLegendVisible?: boolean;
     position?: string;
+    segmentData?: IPushpinCategoryLegendItem[];
+    onItemClick?(item: IPushpinCategoryLegendItem): void;
 }
+
 export default function GeoChartLegendRenderer(props: IGeoChartLegendRendererProps): JSX.Element {
     const numericSymbols = useNumbericSymbols();
-    const {
-        position = TOP,
-        sizeData,
-        sizeFormat,
-        colorData,
-        colorFormat,
-        isColorLegendVisible = false,
-    } = props;
+    const { position = TOP, sizeData, colorData, segmentData, colorFormat } = props;
 
     const hasSizeData = Boolean(sizeData);
-    const isLegendVisible = isColorLegendVisible || hasSizeData;
+    const hasSegmentData = Boolean(segmentData);
+    const isColorLegendVisible = Boolean(colorData && !hasSegmentData);
+    const isLegendVisible = isColorLegendVisible || hasSizeData || hasSegmentData;
 
     if (!isLegendVisible) {
         return null;
@@ -40,13 +40,28 @@ export default function GeoChartLegendRenderer(props: IGeoChartLegendRendererPro
     return (
         <div className={classes}>
             {isColorLegendVisible && renderColorLegend(colorData, colorFormat, numericSymbols)}
-            {sizeData && renderPushpinSizeLegend(sizeData, sizeFormat, numericSymbols)}
+            {hasSegmentData && renderPushpinCategoryLegend(props)}
+            {hasSizeData && renderPushpinSizeLegend(props, numericSymbols)}
         </div>
     );
 }
 
-function renderPushpinSizeLegend(sizeData: number[], format: string, numericSymbols: string[]): JSX.Element {
-    return <PushpinSizeLegend numericSymbols={numericSymbols} format={format} sizes={sizeData} />;
+function renderPushpinSizeLegend(props: IGeoChartLegendRendererProps, numericSymbols: string[]): JSX.Element {
+    const {
+        sizeFormat,
+        sizeData,
+        geoData: {
+            size: { name },
+        },
+    } = props;
+    return (
+        <PushpinSizeLegend
+            numericSymbols={numericSymbols}
+            format={sizeFormat}
+            sizes={sizeData}
+            measureName={name}
+        />
+    );
 }
 
 function renderColorLegend(
@@ -55,4 +70,9 @@ function renderColorLegend(
     numericSymbols: string[],
 ): JSX.Element {
     return <ColorLegend data={colorData} format={format} numericSymbols={numericSymbols} position={TOP} />;
+}
+
+function renderPushpinCategoryLegend(props: IGeoChartLegendRendererProps): JSX.Element {
+    const { position = TOP, segmentData, onItemClick } = props;
+    return <PushpinCategoryLegend position={position} segmentData={segmentData} onItemClick={onItemClick} />;
 }

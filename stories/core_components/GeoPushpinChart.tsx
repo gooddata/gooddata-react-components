@@ -39,8 +39,6 @@ function renderGeoPushpinChart(props: IGeoPushpinChartProps): React.ReactElement
                 config={config}
                 onError={onErrorHandler}
                 afterRender={afterRender}
-                LoadingComponent={null}
-                ErrorComponent={null}
             />
         </div>
     );
@@ -74,6 +72,17 @@ storiesOf("Core components/GeoPushpinChart", module)
                 projectId: "storybook",
                 location: ATTRIBUTE_LOCATION_GEOCHART,
                 size: MEASURE_SIZE_GEOCHART,
+                config: DEFAULT_CONFIG,
+            }),
+        ),
+    )
+    .add("with location, size and segmentBy", () =>
+        screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                size: MEASURE_SIZE_GEOCHART,
+                segmentBy: ATTRIBUTE_SEGMENT_GEOCHART,
                 config: DEFAULT_CONFIG,
             }),
         ),

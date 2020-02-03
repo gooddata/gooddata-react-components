@@ -11,6 +11,7 @@ import {
     createClusterPoints,
     createPushpinDataLayer,
     createUnclusterPoints,
+    createPushpinFilter,
 } from "./geoChartDataLayers";
 import { createPushpinDataSource } from "./geoChartDataSource";
 import {
@@ -37,7 +38,7 @@ export interface IGeoChartRendererProps {
     afterRender(): void;
 }
 
-export default class GeoChartRenderer extends React.PureComponent<IGeoChartRendererProps> {
+export default class GeoChartRenderer extends React.Component<IGeoChartRendererProps> {
     public static defaultProps: Partial<IGeoChartRendererProps> = {
         config: {
             mapboxToken: "",
@@ -56,18 +57,30 @@ export default class GeoChartRenderer extends React.PureComponent<IGeoChartRende
     }
 
     public componentDidUpdate(prevProps: IGeoChartRendererProps) {
-        if (!isEqual(this.props.execution, prevProps.execution)) {
-            if (prevProps.execution) {
+        if (!this.props.execution) {
+            return;
+        }
+        const {
+            execution: { executionResponse },
+            config: { selectedSegmentItems },
+        } = this.props;
+        const {
+            execution: { executionResponse: prevExecutionResponse = {} } = {},
+            config: { selectedSegmentItems: prevSelectedSegmentItems = [] } = {},
+        } = prevProps || {};
+
+        if (!isEqual(executionResponse, prevExecutionResponse)) {
+            if (prevExecutionResponse) {
                 this.cleanupMap();
                 this.setupMap();
             } else {
                 this.removeMap();
                 this.createMap();
             }
+        } else if (!isEqual(selectedSegmentItems, prevSelectedSegmentItems)) {
+            this.setFilterMap();
         }
-        return false;
     }
-
     public componentDidMount() {
         this.createTooltip();
         this.createMap();
@@ -108,10 +121,16 @@ export default class GeoChartRenderer extends React.PureComponent<IGeoChartRende
             "top-left",
         );
     };
-
+    private setFilterMap = (): void => {
+        const {
+            config: { selectedSegmentItems },
+        } = this.props;
+        if (this.chart.getLayer(DEFAULT_LAYER_NAME)) {
+            this.chart.setFilter(DEFAULT_LAYER_NAME, createPushpinFilter(selectedSegmentItems));
+        }
+    };
     private handleMapEvent = () => {
         const { chart, tooltip } = this;
-
         chart.on("load", this.setupMap);
         chart.on("mouseenter", DEFAULT_LAYER_NAME, handlePushpinMouseEnter(chart, tooltip));
         chart.on("mouseleave", DEFAULT_LAYER_NAME, handlePushpinMouseLeave(chart, tooltip));
@@ -121,7 +140,7 @@ export default class GeoChartRenderer extends React.PureComponent<IGeoChartRende
         const { chart } = this;
         const {
             execution: { executionResult },
-            config: { selectedSegmentItem },
+            config: { selectedSegmentItems },
             geoData,
         } = this.props;
 
@@ -138,7 +157,7 @@ export default class GeoChartRenderer extends React.PureComponent<IGeoChartRende
                     DEFAULT_DATA_SOURCE_NAME,
                     executionResult,
                     geoData,
-                    selectedSegmentItem,
+                    selectedSegmentItems,
                 ),
                 "state-label", // pushpin will be rendered under state/county label
             );
@@ -183,7 +202,6 @@ export default class GeoChartRenderer extends React.PureComponent<IGeoChartRende
                 this.chart.removeLayer(DEFAULT_CLUSTER_LABELS_CONFIG.id);
             }
         }
-
         if (this.chart.getSource(DEFAULT_DATA_SOURCE_NAME)) {
             this.chart.removeSource(DEFAULT_DATA_SOURCE_NAME);
         }

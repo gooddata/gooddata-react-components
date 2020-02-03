@@ -33,7 +33,7 @@ export interface IGeoConfig {
     center?: [number, number];
     limit?: number;
     mdObject?: VisualizationObject.IVisualizationObjectContent;
-    selectedSegmentItem?: string;
+    selectedSegmentItems?: string[];
     tooltipText?: VisualizationInput.IAttribute;
     zoom?: number; // in the 0-22 zoom range
     mapboxToken: string;
@@ -51,4 +51,15 @@ export interface IGeoPushpinChartProps extends ICommonChartProps {
 
     filters?: VisualizationInput.IFilter[];
     sortBy?: VisualizationInput.ISort[];
+}
+
+export interface IPushpinCategoryLegendItem {
+    name: string;
+    color?: string;
+    legendIndex: number;
+    isVisible?: boolean;
+}
+
+export interface IValidationResult {
+    isDataTooLarge: boolean;
 }
