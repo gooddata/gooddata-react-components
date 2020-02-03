@@ -2,6 +2,10 @@
 import mapboxgl from "mapbox-gl";
 import { Execution } from "@gooddata/typings";
 import {
+    DEFAULT_CLUSTER_FILTER,
+    DEFAULT_CLUSTER_LABELS_CONFIG,
+    DEFAULT_CLUSTER_LAYER_NAME,
+    DEFAULT_CLUSTER_POINTS_SIZE,
     DEFAULT_LAYER_NAME,
     DEFAULT_PUSHPIN_COLOR_VALUE,
     DEFAULT_PUSHPIN_OPTIONS,
@@ -92,4 +96,48 @@ export function createPushpinDataLayer(
         layer.filter = createPushpinFilter(selectedSegmentItem);
     }
     return layer;
+}
+
+function createClusterPoints(dataSourceName: string): mapboxgl.Layer {
+    return {
+        id: DEFAULT_CLUSTER_LAYER_NAME,
+        type: PUSHPIN_STYLE_CIRCLE,
+        source: dataSourceName,
+        filter: DEFAULT_CLUSTER_FILTER,
+        paint: {
+            [PUSHPIN_STYLE_CIRCLE_COLOR]: DEFAULT_PUSHPIN_COLOR_VALUE,
+            [PUSHPIN_STYLE_CIRCLE_SIZE]: DEFAULT_CLUSTER_POINTS_SIZE,
+        },
+    };
+}
+
+function createClusterLabels(dataSourceName: string): mapboxgl.Layer {
+    return {
+        ...DEFAULT_CLUSTER_LABELS_CONFIG,
+        source: dataSourceName,
+        filter: DEFAULT_CLUSTER_FILTER,
+    };
+}
+
+function createUnclusterPoints(dataSourceName: string): mapboxgl.Layer {
+    return {
+        id: DEFAULT_LAYER_NAME,
+        type: PUSHPIN_STYLE_CIRCLE,
+        source: dataSourceName,
+        filter: ["!", DEFAULT_CLUSTER_FILTER],
+        paint: {
+            ...DEFAULT_PUSHPIN_OPTIONS,
+            [PUSHPIN_STYLE_CIRCLE_COLOR]: createPushpinColorOptions(),
+            [PUSHPIN_STYLE_CIRCLE_STROKE_COLOR]: createPushpinBorderOptions(),
+            [PUSHPIN_STYLE_CIRCLE_SIZE]: DEFAULT_PUSHPIN_SIZE_VALUE,
+        },
+    };
+}
+
+export function createClusterLayers(dataSourceName: string): mapboxgl.Layer[] {
+    return [
+        createClusterPoints(dataSourceName),
+        createClusterLabels(dataSourceName),
+        createUnclusterPoints(dataSourceName),
+    ];
 }
