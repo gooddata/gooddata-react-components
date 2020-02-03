@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { Rect } from "react-measure";
 import * as cx from "classnames";
@@ -246,6 +246,7 @@ export default class HighChartsRenderer extends React.PureComponent<
         }
 
         let { type } = chartOptions;
+
         if (isPieOrDonutChart(type)) {
             type = VisualizationTypes.PIE;
         }

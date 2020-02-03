@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import noop = require("lodash/noop");
 
@@ -49,10 +49,15 @@ export class StatelessBaseChart extends BaseVisualization<IBaseChartProps & ILoa
 
     public renderVisualization(): JSX.Element {
         const { afterRender, height, locale, config, type, execution, onDataTooLarge, pushData } = this.props;
+        const { colors, colorPalette } = config;
 
-        const colorPalette = getValidColorPalette(config);
+        const validColorPalette = getValidColorPalette(colors, colorPalette);
 
-        const fullConfig = { ...config, type, colorPalette };
+        const fullConfig = {
+            ...config,
+            type,
+            colorPalette: validColorPalette,
+        };
 
         return (
             <IntlWrapper locale={locale}>

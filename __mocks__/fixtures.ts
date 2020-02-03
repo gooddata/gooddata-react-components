@@ -1,7 +1,22 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { VisualizationObject, VisualizationClass, AFM } from "@gooddata/typings";
 import IVisualizationClassWrapped = VisualizationClass.IVisualizationClassWrapped;
 import IVisualization = VisualizationObject.IVisualization;
+
+export const createMeasure = (id: number, title: string = ""): VisualizationObject.IMeasure => ({
+    measure: {
+        localIdentifier: `m${id}`,
+        title,
+        definition: {
+            measureDefinition: {
+                item: {
+                    uri: `/gdc/md/project/obj/${id}`,
+                },
+                filters: [],
+            },
+        },
+    },
+});
 
 export const dummyMeasureGroup = {
     items: [

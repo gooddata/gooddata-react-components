@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { IHeaderPredicate } from "../../../../interfaces/HeaderPredicate";
 import {
     getLighterColor,
@@ -58,37 +58,32 @@ describe("getColorPaletteFromColors", () => {
 
 describe("getValidColorPalette", () => {
     it("should return default color palette when colors and colorPalette are not defined", () => {
-        const config = {};
         const expectedResult = DEFAULT_COLOR_PALETTE;
-        const result = getValidColorPalette(config);
+        const result = getValidColorPalette();
 
         expect(result).toEqual(expectedResult);
     });
 
     it("should return colors when color palette is not defined", () => {
-        const config = {
-            colors: ["rgb(1,24,8}", "rgb(90,10,11"],
-        };
+        const colors = ["rgb(1,24,8}", "rgb(90,10,11"];
         const expectedResult = [
             { guid: "0", fill: { r: 1, g: 24, b: 8 } },
             { guid: "1", fill: { r: 90, g: 10, b: 11 } },
         ];
-        const result = getValidColorPalette(config);
+        const result = getValidColorPalette(colors);
 
         expect(result).toEqual(expectedResult);
     });
 
     it("should return color palette when both are defined", () => {
-        const config = {
-            colors: ["rgb(1,24,8}", "rgb(90,10,11"],
-            colorPalette: [
-                { guid: "0", fill: { r: 1, g: 1, b: 2 } },
-                { guid: "1", fill: { r: 9, g: 1, b: 1 } },
-            ],
-        };
-        const result = getValidColorPalette(config);
+        const colors = ["rgb(1,24,8}", "rgb(90,10,11"];
+        const colorPalette = [
+            { guid: "0", fill: { r: 1, g: 1, b: 2 } },
+            { guid: "1", fill: { r: 9, g: 1, b: 1 } },
+        ];
+        const result = getValidColorPalette(colors, colorPalette);
 
-        expect(result).toEqual(config.colorPalette);
+        expect(result).toEqual(colorPalette);
     });
 });
 
