@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { shallow, mount } from "enzyme";
 
@@ -24,7 +24,7 @@ describe("HeaderCell renderer", () => {
             expect(component.find(".s-sorted-asc")).toHaveLength(1);
         });
 
-        it("should call onSortChaged when clicked on label", () => {
+        it("should call onSortChanged when clicked on label", () => {
             const onSortClick = jest.fn();
             const component = mount(
                 <HeaderCell
@@ -40,7 +40,7 @@ describe("HeaderCell renderer", () => {
             expect(onSortClick).toHaveBeenCalledWith("asc");
         });
 
-        it("should call onSortChaged with next sort direction", () => {
+        it("should call onSortChanged with next sort direction", () => {
             const onSortClick = jest.fn();
             const component = mount(
                 <HeaderCell

@@ -1,9 +1,10 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { action } from "@storybook/addon-actions";
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { screenshotWrap } from "@gooddata/test-storybook";
 import { ItemsWrapper, Header, Separator, Item } from "@gooddata/goodstrap/lib/List/MenuList";
+import { AFM } from "@gooddata/typings";
 import noop = require("lodash/noop");
 
 import AggregationsMenu from "../../src/components/core/pivotTable/AggregationsMenu";
@@ -456,21 +457,53 @@ storiesOf("Helper components/Menu", module)
         const onAggregationSelect = (menuAggregationClickConfig: IMenuAggregationClickConfig) => {
             action("onAggregationSelect")(menuAggregationClickConfig);
         };
+        const getEmptyAfmFilters = (): AFM.ExtendedFilter[] => [];
+        const getAfmFiltersWithMeasureValueFilters = (): AFM.ExtendedFilter[] => [
+            {
+                measureValueFilter: {
+                    measure: {
+                        localIdentifier: "m1",
+                    },
+                    condition: {
+                        comparison: {
+                            operator: "GREATER_THAN",
+                            value: 10,
+                        },
+                    },
+                },
+            },
+        ];
 
         return screenshotWrap(
             <div className="screenshot-target" style={{ minHeight: 500 }}>
-                <AggregationsMenu
-                    intl={intlMock}
-                    isMenuOpened={true}
-                    isMenuButtonVisible={true}
-                    showSubmenu={true}
-                    colId={"a_6_1-m_0"}
-                    getExecutionResponse={getExecutionResponse}
-                    getTotals={getTotals}
-                    onAggregationSelect={onAggregationSelect}
-                    onMenuOpenedChange={noop}
-                />
-
+                <div style={{ float: "left" }}>
+                    <AggregationsMenu
+                        intl={intlMock}
+                        isMenuOpened={true}
+                        isMenuButtonVisible={true}
+                        showSubmenu={true}
+                        colId={"a_6_1-m_0"}
+                        getExecutionResponse={getExecutionResponse}
+                        getTotals={getTotals}
+                        onAggregationSelect={onAggregationSelect}
+                        onMenuOpenedChange={noop}
+                        getAfmFilters={getEmptyAfmFilters}
+                    />
+                </div>
+                <div style={{ margin: "0 0 0 300px" }}>
+                    <AggregationsMenu
+                        intl={intlMock}
+                        isMenuOpened={true}
+                        isMenuButtonVisible={true}
+                        showSubmenu={true}
+                        colId={"a_6_1-m_0"}
+                        getExecutionResponse={getExecutionResponse}
+                        getTotals={getTotals}
+                        onAggregationSelect={onAggregationSelect}
+                        onMenuOpenedChange={noop}
+                        getAfmFilters={getAfmFiltersWithMeasureValueFilters}
+                    />
+                </div>
                 <div className="gd-aggregation-menu-item" style={{ margin: "230px auto 0 0", width: 0 }}>
                     <AggregationsSubMenu
                         intl={intlMock}

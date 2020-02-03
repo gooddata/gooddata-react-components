@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { Selector } from "testcafe";
 import { config } from "./utils/config";
 import { checkCellValue, loginUsingLoginForm, waitForPivotTableStopLoading } from "./utils/helpers";
@@ -355,4 +355,14 @@ test("should show subtotal rows in particular order no matter the added subtotal
     await checkCellValue(t, PIVOT_TABLE_MEASURES_COLUMN_AND_ROW_ATTRIBUTES, "Max", ".s-cell-5-1");
     await checkCellValue(t, PIVOT_TABLE_MEASURES_COLUMN_AND_ROW_ATTRIBUTES, "Avg", ".s-cell-6-1");
     await checkCellValue(t, PIVOT_TABLE_MEASURES_COLUMN_AND_ROW_ATTRIBUTES, "Median", ".s-cell-7-1");
+});
+
+test("should not be able to configure native total when measure value filters are configured", async t => {
+    await t.click(Selector(".s-filter-preset-measureFranchiseFees"));
+
+    const measureCell = getMeasureCell(0);
+
+    await clickOnMenuAggregationItem(t, measureCell, ".s-menu-aggregation-nat");
+
+    await t.expect(getPivotTableFooterCell(0, 0).exists).eql(false);
 });

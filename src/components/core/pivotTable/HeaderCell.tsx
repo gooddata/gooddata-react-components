@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import * as classNames from "classnames";
 import { AFM, Execution } from "@gooddata/typings";
@@ -25,6 +25,7 @@ export interface IHeaderCellProps {
     menu?: IMenu;
     getExecutionResponse?: () => Execution.IExecutionResponse;
     getColumnTotals?: () => AFM.ITotalItem[];
+    getAfmFilters: () => AFM.CompatibilityFilter[];
     colId?: string;
     intl?: IntlShape;
 }
@@ -90,7 +91,7 @@ export default class HeaderCell extends React.Component<IHeaderCellProps, IHeade
     }
 
     private renderMenu() {
-        const { intl, colId, menu, getExecutionResponse, getColumnTotals } = this.props;
+        const { intl, colId, menu, getExecutionResponse, getColumnTotals, getAfmFilters } = this.props;
         const { isMenuOpen, isMenuButtonVisible } = this.state;
 
         if (!menu || !menu.aggregations) {
@@ -108,6 +109,7 @@ export default class HeaderCell extends React.Component<IHeaderCellProps, IHeade
                 getTotals={getColumnTotals}
                 onMenuOpenedChange={this.handleMenuOpenedChange}
                 onAggregationSelect={this.menuItemClick}
+                getAfmFilters={getAfmFilters}
             />
         );
     }

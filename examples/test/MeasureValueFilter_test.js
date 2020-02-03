@@ -1,8 +1,9 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 // TODO BB-1694 - Uncomment this test
 // import { Selector } from "testcafe";
 // import { loginUsingLoginForm, waitForPivotTableStopLoading, checkCellValue, checkRenderChart } from "./utils/helpers";
 // import config from "./utils/config";
+// import { loginUsingLoginForm } from "./utils/helpers";
 
 // const CELL_0_0 = ".s-cell-0-0";
 // const CELL_1_0 = ".s-cell-1-0";
@@ -126,4 +127,17 @@
 //     await checkCellValue(t, pivotTableSelector, "756,423", CELL_0_1);
 //     await checkCellValue(t, pivotTableSelector, "1,406,548", CELL_1_1);
 //     await checkCellValue(t, pivotTableSelector, "701,653", CELL_2_1);
+// });
+
+// TODO BB-1694 It is possible that the following test will not pass when BB-1964 will be implemented because
+// webapp part of BB-1961 was not deployed to the platform yet. In this case, please create a new JIRA
+// ticket for it and move it to the Sprint when the platform will be ready.
+
+// fixture("Measure Value Filter Errors")
+//     .page(config.url)
+//
+// test("should render error when pivot is configured both with native total and measure value filter", async t => {
+//     await loginUsingLoginForm(`${config.url}/hidden/measure-value-filter-with-native-total`)
+//     await waitForPivotTableStopLoading(t, ".s-pivot-table");
+//     await t.expect(Selector(".s-error").exists).eql(true);
 // });

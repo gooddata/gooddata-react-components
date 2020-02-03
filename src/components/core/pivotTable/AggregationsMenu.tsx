@@ -1,9 +1,12 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import { Header, Item, ItemsWrapper } from "@gooddata/goodstrap/lib/List/MenuList";
 import { AFM, Execution } from "@gooddata/typings";
 import * as classNames from "classnames";
 import * as React from "react";
 import { IntlShape } from "react-intl";
+import BubbleHoverTrigger from "@gooddata/goodstrap/lib/Bubble/BubbleHoverTrigger";
+import Bubble from "@gooddata/goodstrap/lib/Bubble/Bubble";
+import noop = require("lodash/noop");
 
 import {
     getNthAttributeHeader,
@@ -18,6 +21,9 @@ import { AVAILABLE_TOTALS } from "../../visualizations/table/totals/utils";
 import AggregationsSubMenu from "./AggregationsSubMenu";
 import menuHelper from "./aggregationsMenuHelper";
 import { FIELD_TYPE_ATTRIBUTE } from "./agGridConst";
+import { SHOW_DELAY_DEFAULT, HIDE_DELAY_DEFAULT } from "../../../internal/constants/bubble";
+
+const NATIVE_TOTAL = "nat";
 
 export interface IColumnTotal {
     type: AFM.TotalType;
@@ -32,6 +38,7 @@ export interface IAggregationsMenuProps {
     colId: string;
     getExecutionResponse: () => Execution.IExecutionResponse;
     getTotals: () => AFM.ITotalItem[];
+    getAfmFilters: () => AFM.CompatibilityFilter[];
     onAggregationSelect: (clickConfig: IMenuAggregationClickConfig) => void;
     onMenuOpenedChange: ({ opened, source }: IOnOpenedChangeParams) => void;
 }
@@ -131,16 +138,34 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
         totalType: AFM.TotalType,
         onClick: () => void,
         isSelected: boolean,
-        hasSubMenu = false,
+        hasSubMenu: boolean,
+        isEnabled: boolean,
     ) {
-        return (
-            <Item checked={isSelected} subMenu={hasSubMenu}>
-                <div onClick={onClick} className="gd-aggregation-menu-item-inner s-menu-aggregation-inner">
-                    {this.props.intl.formatMessage({
+        const { intl } = this.props;
+        const onClickHandler = isEnabled ? onClick : noop;
+        const itemElement = (
+            <Item checked={isSelected} subMenu={hasSubMenu} disabled={!isEnabled}>
+                <div
+                    onClick={onClickHandler}
+                    className="gd-aggregation-menu-item-inner s-menu-aggregation-inner"
+                >
+                    {intl.formatMessage({
                         id: `visualizations.totals.dropdown.title.${totalType}`,
                     })}
                 </div>
             </Item>
+        );
+        return isEnabled ? (
+            itemElement
+        ) : (
+            <BubbleHoverTrigger showDelay={SHOW_DELAY_DEFAULT} hideDelay={HIDE_DELAY_DEFAULT}>
+                {itemElement}
+                <Bubble className="bubble-primary" alignPoints={[{ align: "bc tc" }]}>
+                    {intl.formatMessage({
+                        id: "visualizations.totals.dropdown.title.nat.disabled.tooltip",
+                    })}
+                </Bubble>
+            </BubbleHoverTrigger>
         );
     }
 
@@ -157,8 +182,9 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
         measureLocalIdentifiers: string[],
         rowAttributeHeaders: Execution.IAttributeHeader[],
     ) {
-        const { intl, onAggregationSelect, showSubmenu } = this.props;
+        const { intl, onAggregationSelect, showSubmenu, getAfmFilters } = this.props;
         const firstAttributeIdentifier = getNthAttributeLocalIdentifier(rowAttributeHeaders, 0);
+        const afmFilters = getAfmFilters();
 
         return AVAILABLE_TOTALS.map((totalType: AFM.TotalType) => {
             const isSelected = menuHelper.isTotalEnabledForAttribute(
@@ -175,8 +201,15 @@ export default class AggregationsMenu extends React.Component<IAggregationsMenuP
                     attributeIdentifier: attributeHeader.localIdentifier,
                 });
             const itemClassNames = this.getItemClassNames(totalType);
-            const renderSubmenu = showSubmenu && rowAttributeHeaders.length > 0;
-            const toggler = this.renderMenuItemContent(totalType, onClick, isSelected, renderSubmenu);
+            const isEnabled = totalType !== NATIVE_TOTAL || !afmFilters.find(AFM.isMeasureValueFilter);
+            const renderSubmenu = isEnabled && showSubmenu && rowAttributeHeaders.length > 0;
+            const toggler = this.renderMenuItemContent(
+                totalType,
+                onClick,
+                isSelected,
+                renderSubmenu,
+                isEnabled,
+            );
 
             return (
                 <div className={itemClassNames} key={totalType}>

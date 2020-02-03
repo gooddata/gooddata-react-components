@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import { AFM } from "@gooddata/typings";
 import { mount } from "enzyme";
 import * as React from "react";
@@ -14,6 +14,7 @@ describe("AggregationsMenu", () => {
     const attributeColumnId = "a_6_2-m_0";
     const getExecutionResponse = () => EXECUTION_RESPONSE_2A_3M;
     const getTotals = () => [] as AFM.ITotalItem[];
+    const getAfmFilters = () => [] as AFM.CompatibilityFilter[];
     const onMenuOpenedChange = jest.fn();
     const onAggregationSelect = jest.fn();
 
@@ -27,6 +28,7 @@ describe("AggregationsMenu", () => {
                 colId={attributeColumnId}
                 getExecutionResponse={getExecutionResponse}
                 getTotals={getTotals}
+                getAfmFilters={getAfmFilters}
                 onMenuOpenedChange={onMenuOpenedChange}
                 onAggregationSelect={onAggregationSelect}
                 {...customProps}
@@ -109,5 +111,46 @@ describe("AggregationsMenu", () => {
         });
 
         expect(wrapper.find(AggregationsSubMenu).length).toBe(0);
+    });
+
+    it("should not disable any item when there is no measure value filter set", () => {
+        const wrapper = render({
+            showSubmenu: true,
+            getAfmFilters: () => [
+                {
+                    positiveAttributeFilter: {
+                        displayForm: {
+                            identifier: "some-identifier",
+                        },
+                        in: ["e1", "e2"],
+                    },
+                },
+            ],
+        });
+        expect(wrapper.find(".is-disabled").length).toBe(0);
+        expect(wrapper.find(AggregationsSubMenu).length).toBe(6);
+    });
+
+    it("should disable native totals when there is at least one measure value filter set", () => {
+        const wrapper = render({
+            showSubmenu: true,
+            getAfmFilters: () => [
+                {
+                    measureValueFilter: {
+                        measure: {
+                            localIdentifier: "m1",
+                        },
+                        condition: {
+                            comparison: {
+                                operator: "GREATER_THAN",
+                                value: 10,
+                            },
+                        },
+                    },
+                },
+            ],
+        });
+        expect(wrapper.find(".is-disabled").length).toBe(1);
+        expect(wrapper.find(AggregationsSubMenu).length).toBe(5);
     });
 });

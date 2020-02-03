@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import * as PropTypes from "prop-types";
 import { IHeaderParams } from "ag-grid-community";
@@ -15,6 +15,7 @@ export interface IColumnHeaderProps extends IHeaderParams {
     getColumnTotals?: () => AFM.ITotalItem[];
     getExecutionResponse?: () => Execution.IExecutionResponse;
     onMenuAggregationClick?: (config: IMenuAggregationClickConfig) => void;
+    getAfmFilters: () => AFM.CompatibilityFilter[];
     intl?: IntlShape;
 }
 
@@ -72,7 +73,18 @@ class ColumnHeader extends React.Component<IColumnHeaderProps, IColumnHeaderStat
     };
 
     public render() {
-        const { displayName, enableSorting, menu, column } = this.props;
+        const {
+            displayName,
+            enableSorting,
+            menu,
+            column,
+            getAfmFilters,
+            onMenuAggregationClick,
+            getColumnTotals,
+            getExecutionResponse,
+            intl,
+        } = this.props;
+        const { sorting } = this.state;
         const textAlign = this.getFieldType() === FIELD_TYPE_ATTRIBUTE ? ALIGN_LEFT : ALIGN_RIGHT;
         const isColumnAttribute = column.getColDef().type === COLUMN_ATTRIBUTE_COLUMN;
 
@@ -82,15 +94,16 @@ class ColumnHeader extends React.Component<IColumnHeaderProps, IColumnHeaderStat
                 textAlign={textAlign}
                 displayText={displayName}
                 enableSorting={!isColumnAttribute && enableSorting}
-                sortDirection={this.state.sorting}
+                sortDirection={sorting}
                 defaultSortDirection={this.getDefaultSortDirection()}
                 onSortClick={this.onSortRequested}
-                onMenuAggregationClick={this.props.onMenuAggregationClick}
+                onMenuAggregationClick={onMenuAggregationClick}
                 menu={menu}
                 colId={column.getColDef().field}
-                getColumnTotals={this.props.getColumnTotals}
-                getExecutionResponse={this.props.getExecutionResponse}
-                intl={this.props.intl}
+                getColumnTotals={getColumnTotals}
+                getExecutionResponse={getExecutionResponse}
+                intl={intl}
+                getAfmFilters={getAfmFilters}
             />
         );
     }
