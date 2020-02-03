@@ -106,7 +106,7 @@
     "filters.interval.weeks.mixed": "从 {from} {from, plural, one {周} other {周}} 之前至 {to} {to, plural, one {周} other {周}} 之后",
     "filters.interval.months.past": "从 {from} 至 {to} {to, plural, one {月} other {月}} 之前",
     "filters.interval.months.future": "从 {from} 至 {to} {to, plural, one {月} other {月}} 之后",
-    "filters.interval.months.mixed": "从 {from} {from, plural, one {月} other {月}} 之前至 {to} {to, plural, one {月} other {月}} 之后",
+    "filters.interval.months.mixed": "从 {from} {from, plural, one {个月} other {个月}} 之前至 {to} {to, plural, one {个月} other {个月}} 之后",
     "filters.interval.quarters.past": "从 {from} 至 {to} {to, plural, one {季度} other {季度}} 之前",
     "filters.interval.quarters.future": "从 {from} 至 {to} {to, plural, one {季度} other {季度}} 之后",
     "filters.interval.quarters.mixed": "从 {from} {from, plural, one {季度} other {季度}} 之前至 {to} {to, plural, one {季度} other {季度}} 之后",
