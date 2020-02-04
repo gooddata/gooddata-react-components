@@ -67,6 +67,20 @@ yarn examples
 ```
 Then open https://localhost:8999 and login using Live Examples account (you can [create one here](https://gooddata-examples.herokuapp.com/registration)).
 
+### Run storybook locally for Geo chart 
+Geo chart uses Mapbox to render map which requires a mapbox access token.
+- Register an account and create Mapbox token as [guide](https://docs.mapbox.com/help/how-mapbox-works/access-tokens/)
+- Run storybook with token stored in `.env` for more secure
+```bash
+echo "STORYBOOK_MAPBOX_ACCESS_TOKEN=token" > .env # only need to run once
+yarn storybook
+```
+- Or run storybook with token env param exposed to cli (not suggested)
+```bash
+STORYBOOK_MAPBOX_ACCESS_TOKEN=token yarn storybook
+```
+- Apply either above way to `yarn build-storybook` or `yarn test-storybook`
+
 ### Source code formatting
 The source code in the repository is formatted by [Prettier](https://prettier.io/). 
 The format of the code is validated by our Continuous Integration server and is one of the requirements of successful merge.

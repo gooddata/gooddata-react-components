@@ -50,6 +50,9 @@ export class GeoChartInner extends BaseVisualization<IGeoChartInnerProps, {}> {
         chartRenderer: renderChart,
         legendRenderer: renderLegend,
         legendPostion: TOP,
+        config: {
+            mapboxAccessToken: "",
+        },
     };
 
     public componentDidUpdate(prevProps: IGeoChartInnerProps) {

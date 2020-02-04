@@ -17,7 +17,6 @@ import {
     DEFAULT_LONGITUDE,
     DEFAULT_MAPBOX_OPTIONS,
     DEFAULT_ZOOM,
-    MAPBOX_ACCESS_TOKEN,
     DEFAULT_TOOLTIP_OPTIONS,
 } from "../../../constants/geoChart";
 import { IGeoConfig, IGeoData } from "../../../interfaces/GeoChart";
@@ -25,8 +24,6 @@ import { IGeoConfig, IGeoData } from "../../../interfaces/GeoChart";
 import "../../../../styles/scss/geoChart.scss";
 import { handlePushpinMouseEnter, handlePushpinMouseLeave } from "./geoChartTooltip";
 import { getGeoData } from "../../../helpers/geoChart";
-
-mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
 export interface IGeoChartRendererProps {
     config: IGeoConfig;
@@ -36,7 +33,9 @@ export interface IGeoChartRendererProps {
 
 export default class GeoChartRenderer extends React.PureComponent<IGeoChartRendererProps> {
     public static defaultProps: Partial<IGeoChartRendererProps> = {
-        config: {},
+        config: {
+            mapboxAccessToken: "",
+        },
         afterRender: noop,
     };
 
@@ -44,6 +43,12 @@ export default class GeoChartRenderer extends React.PureComponent<IGeoChartRende
     private tooltip: mapboxgl.Popup;
     private chartRef: HTMLElement;
     private geoData: IGeoData = {};
+
+    public constructor(props: IGeoChartRendererProps) {
+        super(props);
+
+        mapboxgl.accessToken = props.config.mapboxAccessToken;
+    }
 
     public componentDidUpdate(prevProps: IGeoChartRendererProps) {
         if (!isEqual(this.props.execution, prevProps.execution)) {
@@ -139,6 +144,7 @@ export default class GeoChartRenderer extends React.PureComponent<IGeoChartRende
                 (clusterLayer: mapboxgl.Layer) => chart.addLayer(clusterLayer, "state-label"), // cluster points will be rendered under state/county label
             );
         }
+
         // keep listening to the data event until the style is loaded
         chart.on("data", this.handleLayerLoaded);
     };

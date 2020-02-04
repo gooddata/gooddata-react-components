@@ -36,6 +36,7 @@ describe("GeoChart", () => {
         const defaultProps: Partial<IGeoChartInnerProps> = {
             config: {
                 mdObject,
+                mapboxAccessToken: "",
             },
             execution: {
                 executionResponse: getExecutionResponse(true),
@@ -70,6 +71,7 @@ describe("GeoChart", () => {
         renderComponent({
             config: {
                 limit: 20,
+                mapboxAccessToken: "",
                 mdObject,
             },
             onDataTooLarge,

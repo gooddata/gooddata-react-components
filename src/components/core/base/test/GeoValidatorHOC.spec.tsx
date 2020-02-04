@@ -21,7 +21,9 @@ describe("GeoValidatorHOC", () => {
 
     const createComponent = (customProps: Partial<ITestInnerComponentProps> = {}): ReactWrapper => {
         const props: ITestInnerComponentProps = {
-            config: {},
+            config: {
+                mapboxAccessToken: "",
+            },
             ...customProps,
         };
         const WrappedComponent = geoValidatorHOC(TestInnerComponent);
@@ -32,6 +34,7 @@ describe("GeoValidatorHOC", () => {
         const buckets: VisualizationObject.IBucket[] = [SIZE_ITEM];
         const wrapper = createComponent({
             config: {
+                mapboxAccessToken: "",
                 mdObject: {
                     buckets,
                     visualizationClass,
@@ -46,6 +49,7 @@ describe("GeoValidatorHOC", () => {
         const buckets: VisualizationObject.IBucket[] = [LOCATION_ITEM, SIZE_ITEM];
         const wrapper = createComponent({
             config: {
+                mapboxAccessToken: "",
                 mdObject: {
                     buckets,
                     visualizationClass,
