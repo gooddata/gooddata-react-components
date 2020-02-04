@@ -3,6 +3,7 @@ import { VisualizationObject } from "@gooddata/typings";
 import {
     getGeoData,
     isDataOfReasonableSize,
+    isLocationMissing,
     calculateAverage,
     getFormatFromExecutionResponse,
 } from "../../geoChart";
@@ -64,6 +65,24 @@ describe("getGeoData", () => {
                 expect(isDataOfReasonableSize(executionResult, geoData, limit)).toEqual(expectedResult);
             },
         );
+    });
+
+    describe("isLocationMissing", () => {
+        it("should return false if location is in buckets", () => {
+            const buckets: VisualizationObject.IBucket[] = [
+                LOCATION_ITEM,
+                SEGMENT_BY_ITEM,
+                TOOLTIP_TEXT_ITEM,
+                SIZE_ITEM,
+                COLOR_ITEM,
+            ];
+            expect(isLocationMissing(buckets)).toBe(false);
+        });
+
+        it("should return true if location is not in buckets", () => {
+            const buckets: VisualizationObject.IBucket[] = [SIZE_ITEM];
+            expect(isLocationMissing(buckets)).toBe(true);
+        });
     });
 
     describe("calculateAverage", () => {
