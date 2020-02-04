@@ -15,6 +15,9 @@ import {
 } from "../../../interfaces/MeasureValueFilter";
 import * as Operator from "../../../constants/measureValueFilterOperators";
 
+// The platform supports 6 decimal places
+const MAX_DECIMAL_PLACES = 6;
+
 export interface IDropdownBodyOwnProps {
     operator?: string;
     value?: IMeasureValueFilterValue;
@@ -189,28 +192,30 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
         this.setState({ value: { ...this.state.value, to } });
     };
 
+    private round = (n: number): number => parseFloat(n.toFixed(MAX_DECIMAL_PLACES));
+
     private convertToRawValue = (
         value: IMeasureValueFilterValue,
         operator: string,
     ): IMeasureValueFilterValue => {
-        if (!value) {
+        if (!value || operator === Operator.ALL) {
             return value;
         }
         return isComparisonOperator(operator)
-            ? { value: value.value / 100 }
-            : { from: value.from / 100, to: value.to / 100 };
+            ? { value: this.round(value.value / 100) }
+            : { from: this.round(value.from / 100), to: this.round(value.to / 100) };
     };
 
     private convertToPercentageValue = (
         value: IMeasureValueFilterValue,
         operator: string,
     ): IMeasureValueFilterValue => {
-        if (!value) {
+        if (!value || operator === Operator.ALL) {
             return value;
         }
         return isComparisonOperator(operator)
-            ? { value: value.value * 100 }
-            : { from: value.from * 100, to: value.to * 100 };
+            ? { value: this.round(value.value * 100) }
+            : { from: this.round(value.from * 100), to: this.round(value.to * 100) };
     };
 
     private onApply = () => {

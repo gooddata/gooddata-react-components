@@ -227,6 +227,61 @@ describe("Measure value filter AFM wrapper", () => {
             expect(onApply).toBeCalledWith(expectedFilter);
         });
 
+        it("should compensate for JavaScript division result precision problem for comparison filter", () => {
+            const onApply = jest.fn();
+            const component = renderComponent({ onApply, usePercentage: true });
+
+            component
+                .openOperatorDropdown()
+                .selectOperator(Operator.GREATER_THAN)
+                .setComparisonValue("42.1")
+                .clickApply();
+
+            const expectedFilter = Model.measureValueFilter("myMeasure")
+                .condition(Operator.GREATER_THAN, { value: 0.421 })
+                .getAfmMeasureValueFilter();
+            expect(onApply).toBeCalledWith(expectedFilter);
+        });
+
+        it("should compensate for JavaScript division result precision problem for range filter", () => {
+            const onApply = jest.fn();
+            const component = renderComponent({ onApply, usePercentage: true });
+
+            component
+                .openOperatorDropdown()
+                .selectOperator(Operator.BETWEEN)
+                .setRangeFrom("42.1")
+                .setRangeTo("1151.545")
+                .clickApply();
+
+            const expectedFilter = Model.measureValueFilter("myMeasure")
+                .condition(Operator.BETWEEN, { from: 0.421, to: 11.51545 })
+                .getAfmMeasureValueFilter();
+            expect(onApply).toBeCalledWith(expectedFilter);
+        });
+
+        it("should compensate for JavaScript multiplication result precision problem for comparison filter", () => {
+            const filter = Model.measureValueFilter("myMeasure").condition(Operator.LESS_THAN, {
+                value: 46.001,
+            });
+
+            const component = renderComponent({ filter, usePercentage: true });
+
+            expect(component.getComparisonValueInput().props().value).toEqual("4,600.1");
+        });
+
+        it("should compensate for JavaScript multiplication result precision problem for range filter", () => {
+            const filter = Model.measureValueFilter("myMeasure").condition(Operator.NOT_BETWEEN, {
+                from: 1.11,
+                to: 4.44,
+            });
+
+            const component = renderComponent({ filter, usePercentage: true });
+
+            expect(component.getRangeFromInput().props().value).toEqual("111");
+            expect(component.getRangeToInput().props().value).toEqual("444");
+        });
+
         describe("apply button", () => {
             it("should disable apply button when opened with all operator", () => {
                 const filter = Model.measureValueFilter("myMeasure");
