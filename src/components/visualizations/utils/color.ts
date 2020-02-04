@@ -1,16 +1,17 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { AFM, Execution } from "@gooddata/typings";
 import { IColor, IColorItem } from "@gooddata/gooddata-js";
 import isEmpty = require("lodash/isEmpty");
 import isEqual = require("lodash/isEqual");
 import { getMappingHeaderLocalIdentifier } from "../../../helpers/mappingHeader";
-import { IChartConfig, IColorPalette, IColorPaletteItem, IColorMapping } from "../../../interfaces/Config";
+import { IColorPalette, IColorPaletteItem, IColorMapping } from "../../../interfaces/Config";
 import { IHeaderPredicate, IHeaderPredicateContext } from "../../../interfaces/HeaderPredicate";
 import { IMappingHeader, isMappingHeaderAttributeItem } from "../../../interfaces/MappingHeader";
 
 export const WHITE = "rgb(255, 255, 255)";
 export const BLACK = "rgb(0, 0, 0)";
 export const GRAY = "rgb(201, 213, 223)";
+export const DARK_GRAY = "rgb(148, 161, 173)";
 export const AXIS_LINE_COLOR = "#d5d5d5";
 export const TRANSPARENT = "transparent";
 
@@ -210,12 +211,12 @@ export function getRgbString(color: IColorPaletteItem): string {
     return `rgb(${color.fill.r},${color.fill.g},${color.fill.b})`;
 }
 
-export function getValidColorPalette(config: IChartConfig) {
-    return isEmpty(config.colorPalette)
-        ? isEmpty(config.colors)
+export function getValidColorPalette(colors?: string[], colorPalette?: IColorPalette) {
+    return isEmpty(colorPalette)
+        ? isEmpty(colors)
             ? DEFAULT_COLOR_PALETTE
-            : getColorPaletteFromColors(config.colors)
-        : config.colorPalette;
+            : getColorPaletteFromColors(colors)
+        : colorPalette;
 }
 
 export function isCustomPalette(palette: IColorPalette) {

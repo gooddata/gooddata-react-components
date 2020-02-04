@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { colors2Object, INumberObject, ISeparators, numberFormat } from "@gooddata/numberjs";
 import isNil = require("lodash/isNil");
 import { customEscape } from "./chartOptionsBuilder";
@@ -21,9 +21,11 @@ export function getFormattedValueForTooltip(
     separators?: ISeparators,
     percentageValue?: number,
 ): string {
+    const { target, y, format } = point;
     const isNotStackToPercent =
         stackMeasuresToPercent === false || isNil(percentageValue) || isDualChartWithRightAxis;
+
     return isNotStackToPercent
-        ? formatValueForTooltip(point.y, point.format, separators)
+        ? formatValueForTooltip(target ? target : y, format, separators)
         : percentFormatter(percentageValue);
 }

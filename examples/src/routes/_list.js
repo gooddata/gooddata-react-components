@@ -261,7 +261,7 @@ export const hiddenPaths = [
     },
     {
         path: "/hidden/bullet-chart",
-        title: "BulletChart",
+        title: "Bullet chart",
         Component: BulletChart,
     },
 ];

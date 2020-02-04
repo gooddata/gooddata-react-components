@@ -56,6 +56,7 @@ import {
     isAreaChart,
     isBarChart,
     isBubbleChart,
+    isBulletChart,
     isChartSupported,
     isComboChart,
     isHeatmap,
@@ -71,6 +72,7 @@ import {
     getComboChartSeries,
     getComboChartStackingConfig,
 } from "./chartOptions/comboChartOptions";
+import { getBulletChartSeries } from "./chartOptions/bulletChartOptions";
 
 import { ColorFactory, IColorStrategy } from "./colorFactory";
 import {
@@ -697,6 +699,8 @@ export function getSeries(
             stackByAttribute,
             colorStrategy,
         );
+    } else if (isBulletChart(type)) {
+        return getBulletChartSeries(executionResultData, measureGroup, colorStrategy, mdObject.buckets);
     }
 
     return executionResultData.map((seriesItem: string[], seriesIndex: number) => {
@@ -811,6 +815,7 @@ export function buildTooltipFactory(
             // Pie charts with measure only have to use point.name instead of series.name to get the measure name
             textData[0][0] = customEscape(point.name);
         }
+
         return renderTooltipHTML(textData, maxTooltipContentWidth);
     };
 }

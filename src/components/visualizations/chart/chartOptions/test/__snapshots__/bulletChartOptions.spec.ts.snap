@@ -1,0 +1,260 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getBulletChartSeries should return expected bullet chart series 1`] = `
+Array [
+  Object {
+    "color": "rgb(255,0,0)",
+    "data": Array [
+      Object {
+        "format": "#,##0.00",
+        "marker": Object {
+          "enabled": true,
+        },
+        "name": "Primary measure",
+        "y": 100,
+      },
+    ],
+    "legendIndex": 0,
+    "name": "Primary measure",
+    "pointPadding": 0.1,
+    "zIndex": 1,
+  },
+]
+`;
+
+exports[`getBulletChartSeries should return expected bullet chart series 2`] = `
+Array [
+  Object {
+    "color": "rgb(0,0,179)",
+    "data": Array [
+      Object {
+        "format": "#,##0.00",
+        "marker": Object {
+          "enabled": true,
+        },
+        "name": "Target measure",
+        "target": 100,
+        "y": 0,
+      },
+    ],
+    "legendIndex": 0,
+    "name": "Target measure",
+    "pointPadding": 0,
+    "targetOptions": Object {
+      "width": "100%",
+    },
+    "type": "bullet",
+    "zIndex": 2,
+  },
+]
+`;
+
+exports[`getBulletChartSeries should return expected bullet chart series 3`] = `
+Array [
+  Object {
+    "color": "rgb(148, 161, 173)",
+    "data": Array [
+      Object {
+        "format": "#,##0.00",
+        "marker": Object {
+          "enabled": true,
+        },
+        "name": "Comparative measure",
+        "y": 100,
+      },
+    ],
+    "legendIndex": 0,
+    "name": "Comparative measure",
+    "pointPadding": 0,
+    "zIndex": 0,
+  },
+]
+`;
+
+exports[`getBulletChartSeries should return expected bullet chart series 4`] = `
+Array [
+  Object {
+    "color": "rgb(0,0,255)",
+    "data": Array [
+      Object {
+        "format": "#,##0.00",
+        "marker": Object {
+          "enabled": true,
+        },
+        "name": "Primary measure",
+        "y": 100,
+      },
+    ],
+    "legendIndex": 0,
+    "name": "Primary measure",
+    "pointPadding": 0.1,
+    "zIndex": 1,
+  },
+  Object {
+    "color": "rgb(0,0,179)",
+    "data": Array [
+      Object {
+        "format": "#,##0.00",
+        "marker": Object {
+          "enabled": true,
+        },
+        "name": "Target measure",
+        "target": 200,
+        "y": 0,
+      },
+    ],
+    "legendIndex": 1,
+    "name": "Target measure",
+    "pointPadding": 0,
+    "targetOptions": Object {
+      "width": "100%",
+    },
+    "type": "bullet",
+    "zIndex": 2,
+  },
+]
+`;
+
+exports[`getBulletChartSeries should return expected bullet chart series 5`] = `
+Array [
+  Object {
+    "color": "rgb(255,0,0)",
+    "data": Array [
+      Object {
+        "format": "#,##0.00",
+        "marker": Object {
+          "enabled": true,
+        },
+        "name": "Primary measure",
+        "y": 100,
+      },
+    ],
+    "legendIndex": 0,
+    "name": "Primary measure",
+    "pointPadding": 0.2,
+    "zIndex": 1,
+  },
+  Object {
+    "color": "rgb(148, 161, 173)",
+    "data": Array [
+      Object {
+        "format": "#,##0.00",
+        "marker": Object {
+          "enabled": true,
+        },
+        "name": "Comparative measure",
+        "y": 200,
+      },
+    ],
+    "legendIndex": 1,
+    "name": "Comparative measure",
+    "pointPadding": 0,
+    "zIndex": 0,
+  },
+]
+`;
+
+exports[`getBulletChartSeries should return expected bullet chart series 6`] = `
+Array [
+  Object {
+    "color": "rgb(0,0,179)",
+    "data": Array [
+      Object {
+        "format": "#,##0.00",
+        "marker": Object {
+          "enabled": true,
+        },
+        "name": "Target measure",
+        "target": 100,
+        "y": 0,
+      },
+    ],
+    "legendIndex": 0,
+    "name": "Target measure",
+    "pointPadding": 0,
+    "targetOptions": Object {
+      "width": "100%",
+    },
+    "type": "bullet",
+    "zIndex": 2,
+  },
+  Object {
+    "color": "rgb(148, 161, 173)",
+    "data": Array [
+      Object {
+        "format": "#,##0.00",
+        "marker": Object {
+          "enabled": true,
+        },
+        "name": "Comparative measure",
+        "y": 200,
+      },
+    ],
+    "legendIndex": 1,
+    "name": "Comparative measure",
+    "pointPadding": 0,
+    "zIndex": 0,
+  },
+]
+`;
+
+exports[`getBulletChartSeries should return expected bullet chart series 7`] = `
+Array [
+  Object {
+    "color": "rgb(255,0,0)",
+    "data": Array [
+      Object {
+        "format": "#,##0.00",
+        "marker": Object {
+          "enabled": true,
+        },
+        "name": "Primary measure",
+        "y": 100,
+      },
+    ],
+    "legendIndex": 0,
+    "name": "Primary measure",
+    "pointPadding": 0.2,
+    "zIndex": 1,
+  },
+  Object {
+    "color": "rgb(179,0,0)",
+    "data": Array [
+      Object {
+        "format": "#,##0.00",
+        "marker": Object {
+          "enabled": true,
+        },
+        "name": "Target measure",
+        "target": 200,
+        "y": 0,
+      },
+    ],
+    "legendIndex": 1,
+    "name": "Target measure",
+    "pointPadding": 0,
+    "targetOptions": Object {
+      "width": "100%",
+    },
+    "type": "bullet",
+    "zIndex": 2,
+  },
+  Object {
+    "color": "rgb(148, 161, 173)",
+    "data": Array [
+      Object {
+        "format": "#,##0.00",
+        "marker": Object {
+          "enabled": true,
+        },
+        "name": "Comparative measure",
+        "y": 300,
+      },
+    ],
+    "legendIndex": 2,
+    "name": "Comparative measure",
+    "pointPadding": 0,
+    "zIndex": 0,
+  },
+]
+`;

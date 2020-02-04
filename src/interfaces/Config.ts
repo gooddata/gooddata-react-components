@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { ISeparators } from "@gooddata/numberjs";
 import { VisualizationObject } from "@gooddata/typings";
 import { IColorItem, IColor } from "@gooddata/gooddata-js";
@@ -249,6 +249,7 @@ export interface ISeriesItemConfig {
     name?: string;
     yAxis?: number;
     xAxis?: number;
+    type?: string;
 }
 
 export interface IClientRect {
