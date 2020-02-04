@@ -5,10 +5,13 @@ pull-request:
   - yarn validate-ci
   - JEST_SUITE_NAME="GoodData React Components Unit Tests" JEST_JUNIT_OUTPUT="./ci/results/test-results.xml" jest --config=jest.ci.js
 dist:
+  - export STORYBOOK_MAPBOX_ACCESS_TOKEN="$MAPBOX_TOKEN"
   - yarn build-storybook
 rpm-build:
+  - export STORYBOOK_MAPBOX_ACCESS_TOKEN="$MAPBOX_TOKEN"
   - yarn build-storybook
 test-storybook:
+  - export STORYBOOK_MAPBOX_ACCESS_TOKEN="$MAPBOX_TOKEN"
   - yarn test-storybook
 
 # Mandatory env params:
