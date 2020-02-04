@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { Execution, VisualizationObject } from "@gooddata/typings";
 import { ApiResponseError } from "@gooddata/gooddata-js";
 import { IntlShape } from "react-intl";
@@ -35,6 +35,10 @@ export function generateErrorMap(intl: IntlShape): IErrorMap {
             icon: "icon-cloud-rain",
             message: intl.formatMessage({ id: "visualization.ErrorMessageDataTooLarge" }),
             description: intl.formatMessage({ id: "visualization.ErrorDescriptionDataTooLarge" }),
+        },
+        [ErrorStates.GEO_LOCATION_MISSING]: {
+            message: intl.formatMessage({ id: "geo.ErrorMessageLocationMissing" }),
+            description: intl.formatMessage({ id: "geo.ErrorDescriptionLocationMissing" }),
         },
         [ErrorStates.NOT_FOUND]: {
             message: intl.formatMessage({ id: "visualization.ErrorMessageNotFound" }),

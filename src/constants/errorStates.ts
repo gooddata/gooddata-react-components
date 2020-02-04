@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 export enum ErrorCodes {
     APP_NO_DATA = 1001,
     EMPTY_AFM = 1002,
@@ -13,6 +13,11 @@ export const ErrorStates = {
      * This error means that server could not understand the request due to invalid syntax.
      */
     BAD_REQUEST: "BAD_REQUEST",
+
+    /**
+     * This error means that location bucket is missing
+     */
+    GEO_LOCATION_MISSING: "GEO_LOCATION_MISSING",
 
     /**
      * This error means that you are not authorized.
