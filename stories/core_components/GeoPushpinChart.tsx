@@ -4,7 +4,7 @@ import { storiesOf } from "@storybook/react";
 import { VisualizationInput } from "@gooddata/typings";
 import { screenshotWrap } from "@gooddata/test-storybook";
 
-import { IGeoConfig } from "../../src/interfaces/GeoChart";
+import { IGeoConfig, IGeoPushpinChartProps } from "../../src/interfaces/GeoChart";
 import { GeoPushpinChart } from "../../src";
 import { onErrorHandler } from "../mocks";
 import {
@@ -16,28 +16,27 @@ import {
 } from "../data/geoChartComponentProps";
 
 const wrapperStyle: React.CSSProperties = { width: 900, height: 600, position: "relative" };
-const DEFAULT_CONFIG: Partial<IGeoConfig> = {
+
+const DEFAULT_CONFIG: IGeoConfig = {
     center: [-94.60376, 38.573936],
     zoom: 3.3,
+    mapboxAccessToken: process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN,
 };
 
 const afterRender = () => console.log("GDC_GEO_CANVAS_READY"); // tslint:disable-line:no-console
 
-function renderGeoPushpinChart(props: any = {}): React.ReactElement {
-    const { location, size, color, segmentBy, config, filters } = props;
+function renderGeoPushpinChart(props: IGeoPushpinChartProps): React.ReactElement {
+    const { projectId, location, size, color, segmentBy, config, filters } = props;
     return (
         <div style={wrapperStyle}>
             <GeoPushpinChart
-                projectId="storybook"
+                projectId={projectId}
                 location={location}
                 size={size}
                 color={color}
                 segmentBy={segmentBy}
-                config={{
-                    ...DEFAULT_CONFIG,
-                    ...config,
-                }}
                 filters={filters}
+                config={config}
                 onError={onErrorHandler}
                 afterRender={afterRender}
                 LoadingComponent={null}
@@ -49,33 +48,53 @@ function renderGeoPushpinChart(props: any = {}): React.ReactElement {
 
 storiesOf("Core components/GeoPushpinChart", module)
     .add("with location", () =>
-        screenshotWrap(renderGeoPushpinChart({ location: ATTRIBUTE_LOCATION_GEOCHART })),
+        screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                config: DEFAULT_CONFIG,
+            }),
+        ),
     )
     .add("with location and size", () =>
         screenshotWrap(
-            renderGeoPushpinChart({ location: ATTRIBUTE_LOCATION_GEOCHART, size: MEASURE_SIZE_GEOCHART }),
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                size: MEASURE_SIZE_GEOCHART,
+                config: DEFAULT_CONFIG,
+            }),
         ),
     )
     .add("with location and color", () =>
         screenshotWrap(
-            renderGeoPushpinChart({ location: ATTRIBUTE_LOCATION_GEOCHART, color: MEASURE_COLOR_GEOCHART }),
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                color: MEASURE_COLOR_GEOCHART,
+                config: DEFAULT_CONFIG,
+            }),
         ),
     )
     .add("with location, size and color", () =>
         screenshotWrap(
             renderGeoPushpinChart({
+                projectId: "storybook",
                 location: ATTRIBUTE_LOCATION_GEOCHART,
                 size: MEASURE_SIZE_GEOCHART,
                 color: MEASURE_COLOR_GEOCHART,
+                config: DEFAULT_CONFIG,
             }),
         ),
     )
     .add("with location, size, color, segmentBy and tooltipText", () => {
         const config: IGeoConfig = {
+            ...DEFAULT_CONFIG,
             tooltipText: ATTRIBUTE_TOOLTIP_GEOCHART,
         };
         return screenshotWrap(
             renderGeoPushpinChart({
+                projectId: "storybook",
                 location: ATTRIBUTE_LOCATION_GEOCHART,
                 size: MEASURE_SIZE_GEOCHART,
                 color: MEASURE_COLOR_GEOCHART,
@@ -86,6 +105,7 @@ storiesOf("Core components/GeoPushpinChart", module)
     })
     .add("with location, size, color, segmentBy, tooltipText and location filter", () => {
         const config: IGeoConfig = {
+            ...DEFAULT_CONFIG,
             tooltipText: ATTRIBUTE_TOOLTIP_GEOCHART,
         };
         const locationFilter: VisualizationInput.IPositiveAttributeFilter = {
@@ -103,12 +123,13 @@ storiesOf("Core components/GeoPushpinChart", module)
         };
         return screenshotWrap(
             renderGeoPushpinChart({
+                projectId: "storybook",
                 location: ATTRIBUTE_LOCATION_GEOCHART,
                 size: MEASURE_SIZE_GEOCHART,
                 color: MEASURE_COLOR_GEOCHART,
                 segmentBy: ATTRIBUTE_SEGMENT_GEOCHART,
-                config,
                 filters: [locationFilter],
+                config,
             }),
         );
     });

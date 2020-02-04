@@ -38,9 +38,6 @@ export const DEFAULT_PUSHPIN_OPTIONS = {
 export const DEFAULT_PUSHPIN_SIZE_SCALE = [10, 28, 46, 64, 82, 100];
 export const DEFAULT_PUSHPIN_SIZE_VALUE = 10;
 
-export const MAPBOX_ACCESS_TOKEN =
-    "pk.eyJ1IjoiaW1udXR6IiwiYSI6ImNrMHAxY2UxZzBnc2EzZG11YmVhd2dubG0ifQ.bUTN7ceAHq6kVooe3MKgqg";
-
 const DEFAULT_MAPBOX_STYLE = "mapbox://styles/mapbox/light-v10";
 export const DEFAULT_MAPBOX_OPTIONS = {
     // hide mapbox's information on map

@@ -36,6 +36,7 @@ export interface IGeoConfig {
     selectedSegmentItem?: string;
     tooltipText?: VisualizationInput.IAttribute;
     zoom?: number;
+    mapboxAccessToken: string;
 }
 
 export interface IGeoPushpinChartBucketProps {
