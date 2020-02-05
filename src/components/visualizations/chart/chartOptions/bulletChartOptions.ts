@@ -2,27 +2,35 @@
 import { Execution, VisualizationObject } from "@gooddata/typings";
 
 import { parseValue } from "../../utils/common";
-import { IPointData, ISeriesItem } from "../../../../interfaces/Config";
+import { IPointData } from "../../../../interfaces/Config";
 import { unwrap } from "../../../../helpers/utils";
 import { IColorStrategy } from "../colorFactory";
-import { SECONDARY_MEASURES, TERTIARY_MEASURES } from "../../../../constants/bucketNames";
-import { filterOutEmptyBuckets } from "../../../../helpers/mdObjBucketHelper";
+import { MEASURES, SECONDARY_MEASURES, TERTIARY_MEASURES } from "../../../../constants/bucketNames";
 import { MAX_POINT_WIDTH } from "../highcharts/commonConfiguration";
 
-export type IBucketLocalIdentifier = VisualizationObject.IBucket["localIdentifier"];
+export const SUPPORTED_MEASURE_BUCKETS: ReadonlyArray<VisualizationObject.Identifier> = [
+    MEASURES,
+    SECONDARY_MEASURES,
+    TERTIARY_MEASURES,
+];
 
-const isComparativeMeasurePresent = (bucketLocalIdentifiers: IBucketLocalIdentifier[]) =>
+const PRIMARY_VS_COMPARATIVE_MEASURE_HEIGHT_RATIO = 0.75;
+
+const isComparativeMeasurePresent = (bucketLocalIdentifiers: VisualizationObject.Identifier[]) =>
     bucketLocalIdentifiers.includes(TERTIARY_MEASURES);
+
+const isTargetMeasurePresent = (bucketLocalIdentifiers: VisualizationObject.Identifier[]) =>
+    bucketLocalIdentifiers.includes(SECONDARY_MEASURES);
 
 const getValue = (
     value: string,
     seriesIndex: number,
-    bucketsLocalIdentifiers: IBucketLocalIdentifier[],
+    measureBucketsLocalIdentifiers: VisualizationObject.Identifier[],
 ): {
     y: number;
     target?: number;
 } =>
-    isTargetSeries(seriesIndex, bucketsLocalIdentifiers)
+    isTargetSeries(seriesIndex, measureBucketsLocalIdentifiers)
         ? {
               target: parseValue(value),
               y: 0,
@@ -35,10 +43,10 @@ const getSeriesItemData = (
     seriesItem: string[],
     measureGroup: Execution.IMeasureGroupHeader["measureGroupHeader"],
     seriesIndex: number,
-    bucketsLocalIdentifiers: IBucketLocalIdentifier[],
-): IPointData[] =>
+    measureBucketsLocalIdentifiers: VisualizationObject.Identifier[],
+) =>
     seriesItem.map((pointValue: string) => ({
-        ...getValue(pointValue, seriesIndex, bucketsLocalIdentifiers),
+        ...getValue(pointValue, seriesIndex, measureBucketsLocalIdentifiers),
         format: unwrap(measureGroup.items[seriesIndex]).format,
         marker: {
             enabled: pointValue !== null,
@@ -46,28 +54,22 @@ const getSeriesItemData = (
         name: unwrap(measureGroup.items[seriesIndex]).name,
     }));
 
-const getPrimarySeriesMaxPointWidth = (comparativeMeasurePresent: boolean) => {
-    if (comparativeMeasurePresent) {
-        return (MAX_POINT_WIDTH / 4) * 3;
+const getPrimarySeriesMaxPointWidth = (onlyPrimaryMeasure: boolean) => {
+    if (!onlyPrimaryMeasure) {
+        return MAX_POINT_WIDTH * PRIMARY_VS_COMPARATIVE_MEASURE_HEIGHT_RATIO;
     }
     return MAX_POINT_WIDTH;
 };
 
-const getPrimarySeries = (
-    seriesItemConfig: IPointData,
-    colorStrategy: IColorStrategy,
-    comparativeMeasurePresent: boolean,
-) => ({
+const getPrimarySeries = (seriesItemConfig: IPointData, onlyPrimaryMeasure: boolean) => ({
     ...seriesItemConfig,
-    color: colorStrategy.getColorByIndex(0),
-    pointPadding: comparativeMeasurePresent ? 0.2 : 0.1,
-    maxPointWidth: getPrimarySeriesMaxPointWidth(comparativeMeasurePresent),
+    pointPadding: onlyPrimaryMeasure ? 0.1 : 0.2,
+    maxPointWidth: getPrimarySeriesMaxPointWidth(onlyPrimaryMeasure),
     zIndex: 1,
 });
 
-const getTargetSeries = (seriesItemConfig: IPointData, colorStrategy: IColorStrategy) => ({
+const getTargetSeries = (seriesItemConfig: IPointData) => ({
     ...seriesItemConfig,
-    color: colorStrategy.getColorByIndex(1),
     type: "bullet",
     pointPadding: 0,
     targetOptions: {
@@ -76,64 +78,65 @@ const getTargetSeries = (seriesItemConfig: IPointData, colorStrategy: IColorStra
     zIndex: 2,
 });
 
-const getComparativeSeries = (seriesItemConfig: IPointData, colorStrategy: IColorStrategy) => ({
+const getComparativeSeries = (seriesItemConfig: IPointData) => ({
     ...seriesItemConfig,
     pointPadding: 0,
-    color: colorStrategy.getColorByIndex(2),
     zIndex: 0,
 });
 
-const isTargetSeries = (seriesIndex: number, bucketsLocalIdentifiers: IBucketLocalIdentifier[]) =>
-    seriesIndex === bucketsLocalIdentifiers.indexOf(SECONDARY_MEASURES);
+export const isPrimarySeries = (
+    seriesIndex: number,
+    bucketsLocalIdentifiers: VisualizationObject.Identifier[],
+) => seriesIndex === bucketsLocalIdentifiers.indexOf(MEASURES);
 
-const isComparativeSeries = (seriesIndex: number, bucketsLocalIdentifiers: IBucketLocalIdentifier[]) =>
-    seriesIndex === bucketsLocalIdentifiers.indexOf(TERTIARY_MEASURES);
+export const isTargetSeries = (
+    seriesIndex: number,
+    bucketsLocalIdentifiers: VisualizationObject.Identifier[],
+) => seriesIndex === bucketsLocalIdentifiers.indexOf(SECONDARY_MEASURES);
+
+export const isComparativeSeries = (
+    seriesIndex: number,
+    bucketsLocalIdentifiers: VisualizationObject.Identifier[],
+) => seriesIndex === bucketsLocalIdentifiers.indexOf(TERTIARY_MEASURES);
 
 const getSeries = (
     seriesIndex: number,
     seriesItemConfig: IPointData,
-    bucketsLocalIdentifiers: IBucketLocalIdentifier[],
-    colorStrategy: IColorStrategy,
+    measureBucketsLocalIdentifiers: VisualizationObject.Identifier[],
 ) => {
-    if (isTargetSeries(seriesIndex, bucketsLocalIdentifiers)) {
-        return getTargetSeries(seriesItemConfig, colorStrategy);
-    } else if (isComparativeSeries(seriesIndex, bucketsLocalIdentifiers)) {
-        return getComparativeSeries(seriesItemConfig, colorStrategy);
+    if (isTargetSeries(seriesIndex, measureBucketsLocalIdentifiers)) {
+        return getTargetSeries(seriesItemConfig);
+    } else if (isComparativeSeries(seriesIndex, measureBucketsLocalIdentifiers)) {
+        return getComparativeSeries(seriesItemConfig);
     }
 
-    const comparativeMeasurePresent = isComparativeMeasurePresent(bucketsLocalIdentifiers);
-    return getPrimarySeries(seriesItemConfig, colorStrategy, comparativeMeasurePresent);
+    const onlyPrimaryMeasure =
+        !isComparativeMeasurePresent(measureBucketsLocalIdentifiers) &&
+        !isTargetMeasurePresent(measureBucketsLocalIdentifiers);
+    return getPrimarySeries(seriesItemConfig, onlyPrimaryMeasure);
 };
 
 export function getBulletChartSeries(
     executionResultData: Execution.DataValue[][],
     measureGroup: Execution.IMeasureGroupHeader["measureGroupHeader"],
     colorStrategy: IColorStrategy,
-    buckets: VisualizationObject.IBucket[],
-): ISeriesItem[] {
-    const notEmptyMeasureBucketsLocalIdentifiers = filterOutEmptyBuckets(buckets).map(
-        bucket => bucket.localIdentifier,
-    );
-
+    occupiedMeasureBucketsLocalIdentifiers: VisualizationObject.Identifier[],
+) {
     return executionResultData.map((seriesItem: string[], seriesIndex: number) => {
         const seriesItemData = getSeriesItemData(
             seriesItem,
             measureGroup,
             seriesIndex,
-            notEmptyMeasureBucketsLocalIdentifiers,
+            occupiedMeasureBucketsLocalIdentifiers,
         );
 
         const seriesItemConfig: IPointData = {
             legendIndex: seriesIndex,
             data: seriesItemData,
             name: measureGroup.items[seriesIndex].measureHeaderItem.name,
+            color: colorStrategy.getColorByIndex(seriesIndex),
         };
 
-        return getSeries(
-            seriesIndex,
-            seriesItemConfig,
-            notEmptyMeasureBucketsLocalIdentifiers,
-            colorStrategy,
-        );
+        return getSeries(seriesIndex, seriesItemConfig, occupiedMeasureBucketsLocalIdentifiers);
     });
 }

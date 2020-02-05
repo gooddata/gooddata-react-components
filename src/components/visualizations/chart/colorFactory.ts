@@ -1,5 +1,5 @@
 // (C) 2007-2020 GoodData Corporation
-import { AFM, Execution } from "@gooddata/typings";
+import { AFM, Execution, VisualizationObject } from "@gooddata/typings";
 
 import { DEFAULT_COLOR_PALETTE } from "../utils/color";
 import {
@@ -54,6 +54,7 @@ export class ColorFactory {
         executionResponse: Execution.IExecutionResponse,
         afm: AFM.IAfm,
         type: string,
+        occupiedMeasureBucketsLocalIdentifiers?: VisualizationObject.Identifier[],
     ): IColorStrategy {
         if (isHeatmap(type)) {
             return new HeatmapColorStrategy(
@@ -107,6 +108,7 @@ export class ColorFactory {
                 stackByAttribute,
                 executionResponse,
                 afm,
+                occupiedMeasureBucketsLocalIdentifiers,
             );
         }
 

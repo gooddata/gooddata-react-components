@@ -87,9 +87,9 @@ Array [
       },
     ],
     "legendIndex": 0,
-    "maxPointWidth": 100,
+    "maxPointWidth": 75,
     "name": "Primary measure",
-    "pointPadding": 0.1,
+    "pointPadding": 0.2,
     "zIndex": 1,
   },
   Object {

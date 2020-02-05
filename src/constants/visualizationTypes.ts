@@ -53,7 +53,7 @@ export type XirrType = "xirr";
 export type TableType = "table";
 export type VisType = ChartType | GeoPushpinType | HeadlineType | TableType | XirrType;
 
-export type ChartElementType = "slice" | "bar" | "point" | "label" | "cell"; // 'cell' for heatmap
+export type ChartElementType = "slice" | "bar" | "point" | "label" | "cell" | "target"; // 'cell' for heatmap
 export type HeadlineElementType = "primaryValue" | "secondaryValue";
 export type TableElementType = "cell";
 export type VisElementType = ChartElementType | HeadlineElementType | TableElementType;

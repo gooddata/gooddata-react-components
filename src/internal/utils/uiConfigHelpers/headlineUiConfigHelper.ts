@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import cloneDeep = require("lodash/cloneDeep");
 import get = require("lodash/get");
 import set = require("lodash/set");
@@ -49,8 +49,8 @@ export function getHeadlineUiConfig(referencePoint: IReferencePoint, intl: IntlS
 
     if (primaryMeasuresCount === 0 && secondaryMeasuresCount !== 0) {
         uiConfig.customError = {
-            heading: getTranslation("dashboard.headline.error.missing_bucket_item.heading", intl),
-            text: getTranslation("dashboard.headline.error.missing_bucket_item.text", intl),
+            heading: getTranslation("dashboard.error.missing_primary_bucket_item.heading", intl),
+            text: getTranslation("dashboard.error.missing_primary_bucket_item.text", intl),
         };
     }
 

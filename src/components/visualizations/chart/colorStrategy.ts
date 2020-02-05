@@ -18,6 +18,7 @@ abstract class ColorStrategy implements IColorStrategy {
         stackByAttribute: any,
         executionResponse: Execution.IExecutionResponse,
         afm: AFM.IAfm,
+        occupiedMeasureBucketsLocalIdentifiers?: string[],
     ) {
         const { fullColorAssignment, outputColorAssignment } = this.createColorAssignment(
             colorPalette,
@@ -26,6 +27,7 @@ abstract class ColorStrategy implements IColorStrategy {
             stackByAttribute,
             executionResponse,
             afm,
+            occupiedMeasureBucketsLocalIdentifiers,
         );
         this.fullColorAssignment = fullColorAssignment;
         this.outputColorAssignment = outputColorAssignment ? outputColorAssignment : fullColorAssignment;
@@ -71,6 +73,7 @@ abstract class ColorStrategy implements IColorStrategy {
         stackByAttribute: any,
         executionResponse: Execution.IExecutionResponse,
         afm: AFM.IAfm,
+        occupiedMeasureBucketsLocalIdentifiers?: string[],
     ): ICreateColorAssignmentReturnValue;
 }
 

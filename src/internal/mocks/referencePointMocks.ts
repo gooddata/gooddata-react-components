@@ -1421,6 +1421,31 @@ export const twoMeasureBucketsReferencePoint: IReferencePoint = {
     },
 };
 
+export const threeMeasuresBucketsReferencePoint: IReferencePoint = {
+    buckets: [
+        {
+            localIdentifier: "measures",
+            items: masterMeasureItems.slice(0, 1),
+        },
+        {
+            localIdentifier: "secondary_measures",
+            items: masterMeasureItems.slice(1, 2),
+        },
+        {
+            localIdentifier: "tertiary_measures",
+            items: masterMeasureItems.slice(2, 3),
+        },
+        {
+            localIdentifier: "view",
+            items: attributeItems.slice(0, 1),
+        },
+    ],
+    filters: {
+        localIdentifier: "filters",
+        items: [],
+    },
+};
+
 export const multipleMetricsOneStackByReferencePoint: IReferencePoint = {
     buckets: [
         {

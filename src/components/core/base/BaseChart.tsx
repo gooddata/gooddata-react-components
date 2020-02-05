@@ -48,15 +48,30 @@ export class StatelessBaseChart extends BaseVisualization<IBaseChartProps & ILoa
     public static propTypes = ChartPropTypes;
 
     public renderVisualization(): JSX.Element {
-        const { afterRender, height, locale, config, type, execution, onDataTooLarge, pushData } = this.props;
+        const {
+            afterRender,
+            height,
+            locale,
+            config,
+            type,
+            execution,
+            onDataTooLarge,
+            pushData,
+            visualizationComponent: VisualizationComponent,
+            dataSource,
+            resultSpec,
+            drillableItems,
+            onLegendReady,
+            onDrill,
+            onFiredDrillEvent,
+            onNegativeValues,
+        } = this.props;
         const { colors, colorPalette } = config;
-
-        const validColorPalette = getValidColorPalette(colors, colorPalette);
 
         const fullConfig = {
             ...config,
             type,
-            colorPalette: validColorPalette,
+            colorPalette: getValidColorPalette(colors, colorPalette),
         };
 
         return (
@@ -69,10 +84,10 @@ export class StatelessBaseChart extends BaseVisualization<IBaseChartProps & ILoa
                         );
 
                         return (
-                            <this.props.visualizationComponent
+                            <VisualizationComponent
                                 executionRequest={{
-                                    afm: this.props.dataSource.getAfm(),
-                                    resultSpec: this.props.resultSpec,
+                                    afm: dataSource.getAfm(),
+                                    resultSpec,
                                 }}
                                 executionResponse={execution.executionResponse}
                                 executionResult={fixedExecutionResult}
@@ -80,11 +95,11 @@ export class StatelessBaseChart extends BaseVisualization<IBaseChartProps & ILoa
                                 config={fullConfig}
                                 afterRender={afterRender}
                                 onDataTooLarge={onDataTooLarge}
-                                onNegativeValues={this.props.onNegativeValues}
-                                drillableItems={this.props.drillableItems}
-                                onFiredDrillEvent={this.props.onFiredDrillEvent}
-                                onDrill={this.props.onDrill}
-                                onLegendReady={this.props.onLegendReady}
+                                onNegativeValues={onNegativeValues}
+                                drillableItems={drillableItems}
+                                onFiredDrillEvent={onFiredDrillEvent}
+                                onDrill={onDrill}
+                                onLegendReady={onLegendReady}
                                 numericSymbols={translationProps.numericSymbols}
                                 locale={locale}
                                 pushData={pushData}

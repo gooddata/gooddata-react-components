@@ -1,6 +1,5 @@
 // (C) 2019-2020 GoodData Corporation
 import * as React from "react";
-import get = require("lodash/get");
 import { FormattedMessage } from "react-intl";
 import Bubble from "@gooddata/goodstrap/lib/Bubble/Bubble";
 import BubbleHoverTrigger from "@gooddata/goodstrap/lib/Bubble/BubbleHoverTrigger";
@@ -10,10 +9,9 @@ import ConfigurationPanelContent from "./ConfigurationPanelContent";
 import LabelSubsection from "../configurationControls/axis/LabelSubsection";
 import NameSubsection from "../configurationControls/axis/NameSubsection";
 import ConfigSection from "../configurationControls/ConfigSection";
-import DataLabelsControl from "../configurationControls/DataLabelsControl";
 import CheckboxControl from "../configurationControls/CheckboxControl";
 import MinMaxControl from "../configurationControls//MinMaxControl";
-import { countItemsOnAxes, hasTertiaryMeasures } from "../../utils/mdObjectHelper";
+import { countItemsOnAxes } from "../../utils/mdObjectHelper";
 import {
     SHOW_DELAY_DEFAULT,
     HIDE_DELAY_DEFAULT,
@@ -21,15 +19,16 @@ import {
     BUBBLE_ARROW_OFFSET_Y,
 } from "../../constants/bubble";
 
-export default class BubbleChartConfigurationPanel extends ConfigurationPanelContent {
+export default class BulletChartConfigurationPanel extends ConfigurationPanelContent {
     protected renderConfigurationPanel() {
         const { featureFlags, propertiesMeta, properties, pushData, type, mdObject } = this.props;
 
-        const controls = properties && properties.controls;
+        const controls = (properties && properties.controls) || {};
 
-        const xAxisVisible = get(controls, "xaxis.visible", true);
-        const yAxisVisible = get(controls, "yaxis.visible", true);
-        const gridEnabled = get(controls, "grid.enabled", true);
+        const { xaxis, yaxis, grid } = controls;
+        const xAxisVisible = xaxis && typeof xaxis.visible !== "undefined" ? xaxis.visible : true;
+        const yAxisVisible = yaxis && typeof yaxis.visible !== "undefined" ? yaxis.visible : true;
+        const gridEnabled = grid && typeof grid.enabled !== "undefined" ? grid.enabled : true;
 
         const controlsDisabled = this.isControlDisabled();
         const { xaxis: itemsOnXAxis, yaxis: itemsOnYAxis } = countItemsOnAxes(type, controls, mdObject);
@@ -97,7 +96,6 @@ export default class BubbleChartConfigurationPanel extends ConfigurationPanelCon
                             properties={properties}
                             pushData={pushData}
                         />
-                        {this.renderMinMax("yaxis")}
                     </ConfigSection>
                     {this.renderLegendSection()}
                     <ConfigSection
@@ -107,13 +105,6 @@ export default class BubbleChartConfigurationPanel extends ConfigurationPanelCon
                         properties={properties}
                         pushData={pushData}
                     >
-                        <DataLabelsControl
-                            pushData={pushData}
-                            properties={properties}
-                            isDisabled={this.areDataLabelsDisabled()}
-                            defaultValue={false}
-                            showDisabledMessage={this.isDataLabelsWarningShown()}
-                        />
                         <CheckboxControl
                             valuePath="grid.enabled"
                             labelText="properties.canvas.gridline"
@@ -146,16 +137,6 @@ export default class BubbleChartConfigurationPanel extends ConfigurationPanelCon
                 propertiesMeta={propertiesMeta}
             />
         );
-    }
-
-    private areDataLabelsDisabled() {
-        const isDisabled = super.isControlDisabled();
-        return isDisabled || !hasTertiaryMeasures(this.props.mdObject);
-    }
-
-    private isDataLabelsWarningShown() {
-        const isDisabled = super.isControlDisabled();
-        return !isDisabled && !hasTertiaryMeasures(this.props.mdObject);
     }
 
     private getBubbleClassNames() {
