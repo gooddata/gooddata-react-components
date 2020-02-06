@@ -6,6 +6,7 @@ import isEqual = require("lodash/isEqual");
 
 import { ICommonChartProps } from "./base/BaseChart";
 import { BaseVisualization } from "./base/BaseVisualization";
+import { geoValidatorHOC } from "./base/GeoValidatorHOC";
 import {
     commonDefaultProps,
     ILoadingInjectedProps,
@@ -111,4 +112,4 @@ export class GeoChartInner extends BaseVisualization<IGeoChartInnerProps, {}> {
     };
 }
 
-export const GeoChart = visualizationLoadingHOC(GeoChartInner, true);
+export const GeoChart = geoValidatorHOC(visualizationLoadingHOC(GeoChartInner, true));

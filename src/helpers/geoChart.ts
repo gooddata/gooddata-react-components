@@ -106,6 +106,13 @@ export function isDataOfReasonableSize(
     return locationData.length <= limit;
 }
 
+export function isLocationMissing(buckets: VisualizationObject.IBucket[]): boolean {
+    const locationBucket: VisualizationObject.IBucket = buckets.find(
+        (bucket: VisualizationObject.IBucket) => bucket.localIdentifier === LOCATION,
+    );
+    return !locationBucket || !locationBucket.items.length;
+}
+
 export function calculateAverage(values: number[] = []): number {
     if (!values.length) {
         return 0;

@@ -189,6 +189,16 @@
         "comment": "",
         "limit": 0
     },
+    "geo.ErrorMessageLocationMissing": {
+        "value": "No location in your insight",
+        "comment": "Geo chart (map) requires location attribute to render pushpins. Without location attribute, geo chart won't work.",
+        "limit": 0
+    },
+    "geo.ErrorDescriptionLocationMissing": {
+        "value": "Add a geo attribute to your insight, or switch to other visualization. Once done, you'll be able to save it.",
+        "comment": "",
+        "limit": 0
+    },
     "gs.filter.loading": {
         "value": "Loading filter…",
         "comment": "Use '…' as one character, not 3 dots ('...').",

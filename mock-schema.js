@@ -2448,7 +2448,6 @@ const getBaseProjectSchema = (title, identifier) => {
             ...pivotTableSubtotalsAfmExecutions,
             ...pivotTableGrandtotalSubtotalAfmExecutions,
             ...xirrAfmExecutions,
-            ...bulletAfmExecutions,
             ...geoChartWithLocationAfmExecutions,
             ...geoChartWithLocationSizeAfmExecutions,
             ...geoChartWithLocationColorAfmExecutions,
