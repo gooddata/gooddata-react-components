@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { ISeparators } from "@gooddata/numberjs";
 import { formatValueForTooltip, getFormattedValueForTooltip } from "../tooltip";
 
@@ -50,6 +50,7 @@ describe("tooltip", () => {
                 expect(formattedValue).toEqual(" 1");
             },
         );
+
         it.each([
             ["0%", false, true, 0],
             ["45.25%", false, true, 45.2490089197225],
@@ -69,6 +70,20 @@ describe("tooltip", () => {
                     testSeparators,
                     percentageValue,
                 );
+                expect(formattedValue).toEqual(expectedValue);
+            },
+        );
+
+        it.each([["123.00", 123, null], ["321.00", null, 321], ["321.00", 123, 321]])(
+            "should return %s when value is %s and target is %s",
+            (expectedValue: string, value: number, targetValue: number) => {
+                const targetPointData = {
+                    ...testPointData,
+                    format: testFormat,
+                    y: value,
+                    target: targetValue,
+                };
+                const formattedValue = getFormattedValueForTooltip(false, false, targetPointData);
                 expect(formattedValue).toEqual(expectedValue);
             },
         );

@@ -7,11 +7,15 @@ import "@gooddata/react-components/styles/css/main.css";
 import {
     projectId,
     monthDateIdentifier,
+    franchiseFeesAdRoyaltyIdentifier,
     franchiseFeesIdentifier,
+    franchiseFeesIdentifierOngoingRoyalty,
     locationResortIdentifier,
 } from "../utils/fixtures";
 
-const primaryMeasure = Model.measure(franchiseFeesIdentifier).format("#,##0");
+const primaryMeasure = Model.measure(franchiseFeesAdRoyaltyIdentifier).format("#,##0");
+const targetMeasure = Model.measure(franchiseFeesIdentifier).format("#,##0");
+const comparativeMeasure = Model.measure(franchiseFeesIdentifierOngoingRoyalty).format("#,##0");
 const viewBy = [Model.attribute(locationResortIdentifier), Model.attribute(monthDateIdentifier)];
 const filters = [
     Model.positiveAttributeFilter(locationResortIdentifier, ["Irving", "Montgomery"], true),
@@ -25,6 +29,8 @@ export class BulletChartExample extends Component {
                 <BulletChart
                     projectId={projectId}
                     primaryMeasure={primaryMeasure}
+                    targetMeasure={targetMeasure}
+                    comparativeMeasure={comparativeMeasure}
                     viewBy={viewBy}
                     filters={filters}
                 />

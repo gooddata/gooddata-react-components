@@ -3,37 +3,38 @@ import * as React from "react";
 import { injectIntl, WrappedComponentProps } from "react-intl";
 import Button from "@gooddata/goodstrap/lib/Button/Button";
 
+import { ISeparators } from "./separators";
 import { IntlWrapper } from "../../core/base/IntlWrapper";
-import { measureValueFilter as Model } from "../../../helpers/model/measureValueFilters";
 import OperatorDropdown from "./OperatorDropdown";
 import RangeInput from "./RangeInput";
 import ComparisonInput from "./ComparisonInput";
-import { IValue, isComparisonOperator } from "../../../interfaces/MeasureValueFilter";
+import {
+    IMeasureValueFilterValue,
+    isComparisonOperator,
+    isRangeOperator,
+} from "../../../interfaces/MeasureValueFilter";
 import * as Operator from "../../../constants/measureValueFilterOperators";
 
-export interface IInputProps {
-    value?: IValue;
-    usePercentage?: boolean;
-    onChange: (value: IValue) => void;
-    onEnterKeyPress?: () => void;
-}
+// The platform supports 6 decimal places
+const MAX_DECIMAL_PLACES = 6;
 
 export interface IDropdownBodyOwnProps {
     operator?: string;
-    value?: IValue;
+    value?: IMeasureValueFilterValue;
     usePercentage?: boolean;
     warningMessage?: string;
     locale?: string;
     disableAutofocus?: boolean;
     onCancel?: () => void;
-    onApply: (operator: string, value: IValue) => void;
+    onApply: (operator: string, value: IMeasureValueFilterValue) => void;
+    separators?: ISeparators;
 }
 
 export type IDropdownBodyProps = IDropdownBodyOwnProps & WrappedComponentProps;
 
 interface IDropdownBodyState {
     operator: string;
-    value: IValue;
+    value: IMeasureValueFilterValue;
 }
 
 class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropdownBodyState> {
@@ -88,13 +89,13 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
     }
 
     private renderInputSection = () => {
-        const { usePercentage, disableAutofocus } = this.props;
+        const { usePercentage, disableAutofocus, separators } = this.props;
         const {
             operator,
             value: { value = null, from = null, to = null },
         } = this.state;
 
-        if (Model.isComparisonOperator(operator)) {
+        if (isComparisonOperator(operator)) {
             return (
                 <ComparisonInput
                     value={value}
@@ -102,9 +103,10 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
                     onValueChange={this.handleValueChange}
                     onEnterKeyPress={this.onApply}
                     disableAutofocus={disableAutofocus}
+                    separators={separators}
                 />
             );
-        } else if (Model.isRangeOperator(operator)) {
+        } else if (isRangeOperator(operator)) {
             return (
                 <RangeInput
                     from={from}
@@ -114,6 +116,7 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
                     onToChange={this.handleToChange}
                     onEnterKeyPress={this.onApply}
                     disableAutofocus={disableAutofocus}
+                    separators={separators}
                 />
             );
         }
@@ -121,8 +124,58 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
         return null;
     };
 
+    private isApplyButtonDisabledForComparison() {
+        const { value = null } = this.state.value;
+
+        if (value === null) {
+            return true;
+        }
+
+        if (this.props.value === null) {
+            return false;
+        }
+
+        if (this.state.operator !== this.props.operator) {
+            return false;
+        }
+
+        return value === this.props.value.value;
+    }
+
+    private isApplyButtonDisabledForRange() {
+        const { from = null, to = null } = this.state.value;
+
+        if (from === null || to === null) {
+            return true;
+        }
+
+        if (this.props.value === null) {
+            return false;
+        }
+
+        if (this.state.operator !== this.props.operator) {
+            return false;
+        }
+
+        return from === this.props.value.from && to === this.props.value.to;
+    }
+
+    private isApplyButtonDisabledForAll() {
+        return this.props.operator === Operator.ALL;
+    }
+
     private isApplyButtonDisabled = () => {
-        return false;
+        const { operator } = this.state;
+
+        if (isComparisonOperator(operator)) {
+            return this.isApplyButtonDisabledForComparison();
+        }
+
+        if (isRangeOperator(operator)) {
+            return this.isApplyButtonDisabledForRange();
+        }
+
+        return this.isApplyButtonDisabledForAll();
     };
 
     private handleOperatorSelection = (operator: string) => this.setState({ operator });
@@ -139,33 +192,46 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
         this.setState({ value: { ...this.state.value, to } });
     };
 
-    private convertToRawValue = (value: IValue, operator: string): IValue => {
-        if (!value) {
+    private round = (n: number): number => parseFloat(n.toFixed(MAX_DECIMAL_PLACES));
+
+    private convertToRawValue = (
+        value: IMeasureValueFilterValue,
+        operator: string,
+    ): IMeasureValueFilterValue => {
+        if (!value || operator === Operator.ALL) {
             return value;
         }
-        const rawValue: IValue = isComparisonOperator(operator)
-            ? { value: value.value / 100 }
-            : { from: value.from / 100, to: value.to / 100 };
-        return rawValue;
+        return isComparisonOperator(operator)
+            ? { value: this.round(value.value / 100) }
+            : { from: this.round(value.from / 100), to: this.round(value.to / 100) };
     };
 
-    private convertToPercentageValue = (value: IValue, operator: string): IValue => {
-        if (!value) {
+    private convertToPercentageValue = (
+        value: IMeasureValueFilterValue,
+        operator: string,
+    ): IMeasureValueFilterValue => {
+        if (!value || operator === Operator.ALL) {
             return value;
         }
-        const rawValue: IValue = isComparisonOperator(operator)
-            ? { value: value.value * 100 }
-            : { from: value.from * 100, to: value.to * 100 };
-        return rawValue;
+        return isComparisonOperator(operator)
+            ? { value: this.round(value.value * 100) }
+            : { from: this.round(value.from * 100), to: this.round(value.to * 100) };
     };
 
     private onApply = () => {
+        if (this.isApplyButtonDisabled()) {
+            return;
+        }
+
         const { usePercentage } = this.props;
+
         const operator = this.state.operator === Operator.ALL ? null : this.state.operator;
-        this.props.onApply(
-            operator,
-            usePercentage ? this.convertToRawValue(this.state.value, this.state.operator) : this.state.value,
-        );
+
+        const value = usePercentage
+            ? this.convertToRawValue(this.state.value, this.state.operator)
+            : this.state.value;
+
+        this.props.onApply(operator, value);
     };
 }
 

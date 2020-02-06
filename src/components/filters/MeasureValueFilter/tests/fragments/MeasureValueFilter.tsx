@@ -71,6 +71,16 @@ export default class MeasureValueFilterFragment {
         return this;
     };
 
+    public isApplyButtonDisabled = () => {
+        return this.component
+            .find(CLASS_APPLY_BUTTON)
+            .at(0)
+            .prop("disabled");
+    };
+
+    public pressEnterInComparisonInput = () =>
+        this.getComparisonValueInput().simulate("keydown", { keyCode: 13 });
+
     public getSelectedOperatorTitle = () => this.getOperatorDropdownButton().text();
 
     public getInputSuffixes = () => this.component.find(".gd-input-suffix");

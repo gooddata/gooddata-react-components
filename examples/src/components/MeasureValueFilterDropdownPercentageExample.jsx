@@ -15,6 +15,8 @@ const measures = [franchisedSalesMeasure];
 
 const attributes = [Model.attribute(locationNameDisplayFormIdentifier).localIdentifier("locationName")];
 
+const defaultMeasureValueFilter = Model.measureValueFilter("franchisedSales");
+
 const DropdownButton = ({ isActive, measureTitle, onClick }) => {
     const className = classNames(
         "gd-mvf-dropdown-button",
@@ -46,7 +48,7 @@ export class MeasureValueFilterPercentageDropdownExample extends React.PureCompo
     }
 
     state = {
-        filters: [],
+        filters: [defaultMeasureValueFilter],
         displayDropdown: false,
     };
 
@@ -77,7 +79,6 @@ export class MeasureValueFilterPercentageDropdownExample extends React.PureCompo
                     <MeasureValueFilterDropdown
                         onApply={this.onApply}
                         onCancel={this.onCancel}
-                        measureIdentifier={franchisedSalesMeasure.measure.localIdentifier}
                         filter={filters[0] || null}
                         anchorEl={this.ref.current}
                         usePercentage

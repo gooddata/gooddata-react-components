@@ -63,7 +63,7 @@ export function sanitizeFilters(newReferencePoint: IExtendedReferencePoint): IEx
             return attributeBucketItems.some(
                 (attributeBucketItem: IBucketItem) => attributeBucketItem.attribute === filter.attribute,
             );
-        } else if (isMeasureValueFilter) {
+        } else if (isMeasureValueFilter(filter)) {
             if (attributeBucketItems.length === 0) {
                 return false;
             }

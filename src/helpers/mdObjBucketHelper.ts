@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import get = require("lodash/get");
 import isEmpty = require("lodash/isEmpty");
 import { VisualizationObject } from "@gooddata/typings";
@@ -27,3 +27,7 @@ export function getSecondaryMeasuresLocalIdentifiers(buckets: VisualizationObjec
         get(item, "measure.localIdentifier"),
     );
 }
+
+export const filterOutEmptyBuckets = (
+    buckets: VisualizationObject.IBucket[],
+): VisualizationObject.IBucket[] => buckets.filter(bucket => !isBucketEmpty(buckets, bucket.localIdentifier));

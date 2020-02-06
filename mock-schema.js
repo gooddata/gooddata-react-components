@@ -71,13 +71,6 @@ const xirrAfmExecutions = [
         executionResult: require("./stories/test_data/xirr_simple_result.json"),
     }];
 
-const bulletAfmExecutions = [
-    {
-        execution: require("./stories/test_data/bullet_simple_request.json"),
-        executionResponse: require("./stories/test_data/bullet_simple_response.json"),
-        executionResult: require("./stories/test_data/bullet_simple_result.json"),
-    }];
-
 const barChartVisualizationObjects = [
     {
         title: 'Bar chart with 2M, 1VB and stackMeasures is true',
@@ -2582,7 +2575,7 @@ const getBaseProjectSchema = (title, identifier) => {
                         localIdentifier: '1',
                         identifier: '1',
                         alias: 'Amount'
-                    }]
+                    }],
                 }]
             },
             {
@@ -2844,24 +2837,33 @@ const getBaseProjectSchema = (title, identifier) => {
                 }]
             },
             {
-                title: 'Bullet chart simple example',
-                identifier: 'bullet-simple',
+                title: 'Bullet chart with two measures and view by attribute example',
+                identifier: 'bullet-chart-2M-1VB',
                 type: 'local:bullet',
                 filters: [],
                 buckets: [{
                     localIdentifier: 'measures',
                     items: [{
-                        localIdentifier: 'm_1',
-                        identifier: '5',
+                        localIdentifier: 'm1',
+                        identifier: '1',
                     }]
                 }, {
-                    localIdentifier: 'attribute',
+                    localIdentifier: 'secondary_measures',
                     items: [{
-                        localIdentifier: 'a_1',
-                        displayForm: 'a1.df'
-                    }, {
-                        localIdentifier: 'a_2',
-                        displayForm: 'a2.df'
+                        localIdentifier: 'm2',
+                        identifier: '2'
+                    }]
+                }, {
+                    localIdentifier: 'tertiary_measures',
+                    items: [{
+                        localIdentifier: 'm3',
+                        identifier: '3'
+                    }]
+                }, {
+                    localIdentifier: 'view',
+                    items: [{
+                        localIdentifier: 'a1',
+                        displayForm: '4.df'
                     }]
                 }]
             },
