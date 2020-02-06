@@ -199,6 +199,45 @@ const barChartVisualizationObjects = [
     },
 ];
 
+const geoChartVisualizationObjects = [
+    {
+        title: 'GeoPushpinChart chart with Location, Size, Color, Segment and Tooltip',
+        identifier: 'pushpin-chart-location-size-color-segment-tooltip',
+        type: 'local:pushpin',
+        buckets: [{
+            localIdentifier: 'size',
+            items: [{
+                localIdentifier: 'size',
+                identifier: '20',
+            }]
+        }, {
+            localIdentifier: 'color',
+            items: [{
+                localIdentifier: 'color',
+                identifier: '21',
+            }]
+        },{
+            localIdentifier: 'location',
+            items: [{
+                localIdentifier: 'location',
+                displayForm: '30.df',
+            }]
+        },{
+            localIdentifier: 'segment',
+            items: [{
+                localIdentifier: 'segment',
+                displayForm: '23.df',
+            }]
+        },{
+            localIdentifier: 'tooltipText',
+            items: [{
+                localIdentifier: 'tooltip',
+                displayForm: '24.df',
+            }]
+        }],
+    },
+];
+
 const geoChartWithLocationAfmExecutions = [
     {
         execution: require("./stories/test_data/geo_chart/geo_chart_with_location_request.json"),
@@ -2465,6 +2504,9 @@ const getBaseProjectSchema = (title, identifier) => {
             title: 'Bar',
             url: 'local:bar'
         }, {
+            title: 'Pushpin',
+            url: 'local:pushpin'
+        }, {
             title: 'Line',
             url: 'local:line'
         }, {
@@ -2867,7 +2909,8 @@ const getBaseProjectSchema = (title, identifier) => {
                 }]
             },
 
-            ...barChartVisualizationObjects
+            ...barChartVisualizationObjects,
+            ...geoChartVisualizationObjects,
         ],
         featureFlags
     }

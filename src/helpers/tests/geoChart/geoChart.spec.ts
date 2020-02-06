@@ -3,11 +3,14 @@ import { VisualizationObject } from "@gooddata/typings";
 import {
     getGeoData,
     isDataOfReasonableSize,
+    isChartConfig,
+    isGeoConfig,
     isLocationMissing,
     calculateAverage,
     getFormatFromExecutionResponse,
 } from "../../geoChart";
-import { IGeoData } from "../../../interfaces/GeoChart";
+import { IChartConfig } from "../../../interfaces/Config";
+import { IGeoConfig, IGeoData } from "../../../interfaces/GeoChart";
 import { COLOR_ITEM, LOCATION_ITEM, SEGMENT_BY_ITEM, SIZE_ITEM, TOOLTIP_TEXT_ITEM } from "./fixtures";
 import { getExecutionResponse, getExecutionResult } from "../../../../stories/data/geoChart";
 
@@ -97,5 +100,23 @@ describe("getGeoData", () => {
             const executionResponse = getExecutionResponse(true, false, false, true, false);
             expect(getFormatFromExecutionResponse(0, executionResponse)).toEqual("#,##0");
         });
+    });
+
+    describe("isChartConfig", () => {
+        it.each([[false, { mapboxAccessToken: "abc" }], [true, {}]])(
+            "should return isChartConfig %s",
+            (expectedValue: boolean, config: IChartConfig | IGeoConfig) => {
+                expect(isChartConfig(config)).toEqual(expectedValue);
+            },
+        );
+    });
+
+    describe("isGeoConfig", () => {
+        it.each([[false, {}], [true, { mapboxAccessToken: "abc" }]])(
+            "should return isGeoConfig %s",
+            (expectedValue: boolean, config: IChartConfig | IGeoConfig) => {
+                expect(isGeoConfig(config)).toEqual(expectedValue);
+            },
+        );
     });
 });

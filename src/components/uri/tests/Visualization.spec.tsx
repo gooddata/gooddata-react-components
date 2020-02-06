@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { mount } from "enzyme";
 import cloneDeep = require("lodash/cloneDeep");
@@ -8,6 +8,7 @@ import { SDK, ApiResponseError } from "@gooddata/gooddata-js";
 import {
     Table,
     BaseChart,
+    GeoPushpinChart,
     LoadingComponent,
     ErrorComponent,
     HeadlineTransformation,
@@ -33,11 +34,13 @@ import { clearSdkCache } from "../../../helpers/sdkCache";
 
 const projectId = "myproject";
 const BARCHART_URI = `/gdc/md/${projectId}/obj/76383`;
+const PUSHPIN_URI = `/gdc/md/${projectId}/obj/76384`;
 const CHART_URI = `/gdc/md/${projectId}/obj/1`;
 const TABLE_URI = `/gdc/md/${projectId}/obj/2`;
 const TREEMAP_URI = `/gdc/md/${projectId}/obj/3`;
 const XIRR_URI = `/gdc/md/${projectId}/obj/4`;
 const CHART_IDENTIFIER = "chart";
+const PUSHPIN_IDENTIFIER = "pushpin";
 const TABLE_IDENTIFIER = "table";
 const XIRR_IDENTIFIER = "xirr";
 
@@ -107,6 +110,10 @@ function uriResolver(_sdk: SDK, _projectId: string, uri: string, identifier: str
         return getResponse(CHART_URI, SLOW);
     }
 
+    if (identifier === PUSHPIN_IDENTIFIER || uri === PUSHPIN_URI) {
+        return getResponse(PUSHPIN_URI, FAST);
+    }
+
     if (uri === BARCHART_URI) {
         return getResponse(BARCHART_URI, FAST);
     }
@@ -168,6 +175,25 @@ describe("VisualizationWrapped", () => {
             wrapper.update();
             expect(wrapper.find(BaseChart).length).toBe(1);
         });
+    });
+
+    it("should render GeoPushpinChart", async () => {
+        const props = {
+            sdk,
+            projectId,
+            fetchVisObject,
+            fetchVisualizationClass,
+            uriResolver,
+            intl,
+            GeoPushpinChartComponent: GeoPushpinChart,
+            identifier: PUSHPIN_IDENTIFIER,
+        };
+
+        const wrapper = mount(<Visualization {...props as any} />);
+        await testUtils.delay(SLOW + 1);
+        wrapper.update();
+
+        expect(wrapper.find(GeoPushpinChart).length).toBe(1);
     });
 
     it("should render PivotTable", () => {
