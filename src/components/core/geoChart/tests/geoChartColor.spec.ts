@@ -1,7 +1,12 @@
 // (C) 2020 GoodData Corporation
 import { Execution } from "@gooddata/typings";
 import { IPushpinColor } from "../../../../interfaces/GeoChart";
-import { getColorIndexInPalette, getColorPaletteMapping, getPushpinColors } from "../geoChartColor";
+import {
+    getColorIndexInPalette,
+    getColorPaletteMapping,
+    getPushpinColors,
+    generateLegendColorData,
+} from "../geoChartColor";
 
 describe("getPushpinColors", () => {
     function createSegmentItems(count: number): Execution.IResultAttributeHeaderItem[] {
@@ -203,5 +208,75 @@ describe("getColorIndexInPalette", () => {
 
     it("should return with negative color values", () => {
         expect(getColorIndexInPalette(-20, -100, -10)).toBe(5);
+    });
+});
+
+describe("generateLegendColorData", () => {
+    it("should return empty array if have no color series is empty", () => {
+        const colorData = generateLegendColorData([]);
+        expect(colorData).toEqual([]);
+    });
+
+    it("should generate one color item if all color series have same values", () => {
+        const colorSeries = [1, 1, 1, 1, 1, 1, 1];
+        const colorData = generateLegendColorData(colorSeries);
+        expect(colorData).toEqual([
+            {
+                color: "rgb(20,178,226)",
+                range: {
+                    from: 1,
+                    to: 1,
+                },
+            },
+        ]);
+    });
+
+    it("should generate full color items", () => {
+        const colorSeries = [0, 1, 2, 3, 4, 5, 6];
+        const colorData = generateLegendColorData(colorSeries);
+        expect(colorData).toEqual([
+            {
+                color: "rgb(215,242,250)",
+                range: {
+                    from: 0,
+                    to: 1,
+                },
+            },
+            {
+                color: "rgb(176,229,245)",
+                range: {
+                    from: 1,
+                    to: 2,
+                },
+            },
+            {
+                color: "rgb(137,216,240)",
+                range: {
+                    from: 2,
+                    to: 3,
+                },
+            },
+            {
+                color: "rgb(98,203,235)",
+                range: {
+                    from: 3,
+                    to: 4,
+                },
+            },
+            {
+                color: "rgb(59,190,230)",
+                range: {
+                    from: 4,
+                    to: 5,
+                },
+            },
+            {
+                color: "rgb(20,178,226)",
+                range: {
+                    from: 5,
+                    to: 6,
+                },
+            },
+        ]);
     });
 });

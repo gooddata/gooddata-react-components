@@ -13,7 +13,7 @@
         width: 100%;
     }
     .geo-legend {
-        margin: 5px 10px;
+        padding-bottom: 5px;
         float: right;
         display: flex;
         .pushpin-size-legend {
@@ -60,6 +60,10 @@
                 color: $gd-color-link;
                 margin-top: -2px;
             }
+        }
+
+        &.has-size-legend .color-legend {
+            padding-top: 22px;
         }
     }
 }

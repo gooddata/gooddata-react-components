@@ -11,7 +11,7 @@ interface IGeoOptions {
     isWithColor?: boolean;
 }
 
-const SIZE_DATA: Execution.DataValue[] = [
+export const SIZE_DATA: Execution.DataValue[] = [
     "1005",
     "943",
     "179",

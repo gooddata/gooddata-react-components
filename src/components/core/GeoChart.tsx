@@ -18,8 +18,9 @@ import GeoChartRenderer, { IGeoChartRendererProps } from "./geoChart/GeoChartRen
 import { IDataSourceProviderInjectedProps } from "../afm/DataSourceProvider";
 import { DEFAULT_DATA_POINTS_LIMIT } from "../../constants/geoChart";
 import { IGeoConfig, IGeoData } from "../../interfaces/GeoChart";
-import { getGeoData, isDataOfReasonableSize } from "../../helpers/geoChart";
+import { getGeoData, isDataOfReasonableSize, getFormatFromExecutionResponse } from "../../helpers/geoChart";
 import { TOP } from "../visualizations/chart/legend/PositionTypes";
+import { calculateLegendData } from "./geoChart/geoChartDataSource";
 
 export function renderChart(props: IGeoChartRendererProps): React.ReactElement {
     return <GeoChartRenderer {...props} />;
@@ -30,7 +31,7 @@ export function renderLegend(props: IGeoChartLegendRendererProps): React.ReactEl
 }
 
 export interface ICoreGeoChartProps extends ICommonChartProps, IDataSourceProviderInjectedProps {
-    legendPostion?: string;
+    legendPosition?: string;
     config?: IGeoConfig;
     chartRenderer?: (props: IGeoChartRendererProps) => React.ReactElement;
     legendRenderer?: (props: IGeoChartLegendRendererProps) => React.ReactElement;
@@ -49,7 +50,7 @@ export class GeoChartInner extends BaseVisualization<IGeoChartInnerProps, {}> {
         ...commonDefaultProps,
         chartRenderer: renderChart,
         legendRenderer: renderLegend,
-        legendPostion: TOP,
+        legendPosition: TOP,
         config: {
             mapboxToken: "",
         },
@@ -66,31 +67,57 @@ export class GeoChartInner extends BaseVisualization<IGeoChartInnerProps, {}> {
     }
 
     public renderVisualization() {
+        const {
+            config,
+            execution: {
+                executionResponse: { dimensions },
+            },
+        } = this.props;
+        const { mdObject: { buckets = [] } = {} } = config;
+        const geoData: IGeoData = getGeoData(buckets, dimensions);
         return (
             <div className="gd-geo-component s-gd-geo-component">
-                {this.renderLegend()}
-                {this.renderChart()}
+                {this.renderLegend(geoData)}
+                {this.renderChart(geoData)}
             </div>
         );
     }
 
-    private renderChart = (): React.ReactElement => {
+    private renderChart = (geoData: IGeoData): React.ReactElement => {
         const { config, chartRenderer, execution, afterRender } = this.props;
         const chartProps = {
             config,
             execution,
             afterRender,
+            geoData,
         };
         return chartRenderer(chartProps);
     };
 
-    private renderLegend = (): React.ReactElement => {
-        const { config, execution, legendRenderer, locale, legendPostion: position } = this.props;
+    private renderLegend = (geoData: IGeoData): React.ReactElement => {
+        const {
+            config,
+            execution: { executionResult, executionResponse },
+            legendRenderer,
+            legendPosition: position,
+        } = this.props;
+        const { size, color, segment } = geoData;
+        const sizeFormat = size ? getFormatFromExecutionResponse(size.index, executionResponse) : undefined;
+
+        const { colorData, sizeData } = calculateLegendData(executionResult, geoData);
+        const colorFormat = color
+            ? getFormatFromExecutionResponse(color.index, executionResponse)
+            : undefined;
+        const isColorLegendVisible = Boolean(colorData && !segment);
+
         const legendProps = {
             config,
-            execution,
-            locale,
             position,
+            sizeData,
+            sizeFormat,
+            colorData,
+            colorFormat,
+            isColorLegendVisible,
         };
         return legendRenderer(legendProps);
     };

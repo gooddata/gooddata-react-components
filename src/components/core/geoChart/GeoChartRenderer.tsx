@@ -23,11 +23,11 @@ import { IGeoConfig, IGeoData } from "../../../interfaces/GeoChart";
 
 import "../../../../styles/scss/geoChart.scss";
 import { handlePushpinMouseEnter, handlePushpinMouseLeave } from "./geoChartTooltip";
-import { getGeoData } from "../../../helpers/geoChart";
 
 export interface IGeoChartRendererProps {
     config: IGeoConfig;
     execution: Execution.IExecutionResponses;
+    geoData: IGeoData;
     afterRender(): void;
 }
 
@@ -42,7 +42,6 @@ export default class GeoChartRenderer extends React.PureComponent<IGeoChartRende
     private chart: mapboxgl.Map;
     private tooltip: mapboxgl.Popup;
     private chartRef: HTMLElement;
-    private geoData: IGeoData = {};
 
     public constructor(props: IGeoChartRendererProps) {
         super(props);
@@ -115,8 +114,9 @@ export default class GeoChartRenderer extends React.PureComponent<IGeoChartRende
     private setupMap = (): void => {
         const { chart } = this;
         const {
-            execution: { executionResult, executionResponse },
-            config: { mdObject: { buckets = [] } = {}, selectedSegmentItem },
+            execution: { executionResult },
+            config: { selectedSegmentItem },
+            geoData,
         } = this.props;
 
         // hide city, town, village and hamlet labels
@@ -124,16 +124,14 @@ export default class GeoChartRenderer extends React.PureComponent<IGeoChartRende
             this.chart.removeLayer("settlement-label");
         }
 
-        this.geoData = getGeoData(buckets, executionResponse.dimensions);
+        chart.addSource(DEFAULT_DATA_SOURCE_NAME, createPushpinDataSource(executionResult, geoData));
 
-        chart.addSource(DEFAULT_DATA_SOURCE_NAME, createPushpinDataSource(executionResult, this.geoData));
-
-        if (this.geoData.size) {
+        if (geoData.size) {
             chart.addLayer(
                 createPushpinDataLayer(
                     DEFAULT_DATA_SOURCE_NAME,
                     executionResult,
-                    this.geoData,
+                    geoData,
                     selectedSegmentItem,
                 ),
                 "state-label", // pushpin will be rendered under state/county label
@@ -168,8 +166,9 @@ export default class GeoChartRenderer extends React.PureComponent<IGeoChartRende
         if (this.chart.getLayer(DEFAULT_LAYER_NAME)) {
             this.chart.removeLayer(DEFAULT_LAYER_NAME);
         }
+        const { geoData } = this.props;
 
-        if (!this.geoData.size) {
+        if (!geoData.size) {
             if (this.chart.getLayer(DEFAULT_CLUSTER_LAYER_NAME)) {
                 this.chart.removeLayer(DEFAULT_CLUSTER_LAYER_NAME);
             }

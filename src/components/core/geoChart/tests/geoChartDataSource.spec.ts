@@ -1,9 +1,10 @@
 // (C) 2019-2020 GoodData Corporation
 import mapboxgl from "mapbox-gl";
 import { Execution } from "@gooddata/typings";
-import { createPushpinDataSource } from "../geoChartDataSource";
+import { createPushpinDataSource, calculateLegendData } from "../geoChartDataSource";
 import { IGeoData } from "../../../../interfaces/GeoChart";
-import { getExecutionResult } from "../../../../../stories/data/geoChart";
+import { getExecutionResult, SIZE_DATA } from "../../../../../stories/data/geoChart";
+import { stringToFloat } from "../../../../helpers/utils";
 
 describe("createPushpinDataSource", () => {
     it("should return empty data source", () => {
@@ -169,5 +170,114 @@ describe("createPushpinDataSource", () => {
         expect(source.cluster).toBe(true);
         expect(source.clusterMaxZoom).toBe(14);
         expect(source.clusterRadius).toBe(50);
+    });
+
+    describe("calculate legend data", () => {
+        const colorData = [
+            {
+                range: {
+                    from: 18,
+                    to: 7632.166666666667,
+                },
+                color: "rgb(215,242,250)",
+            },
+            {
+                range: {
+                    from: 7632.166666666667,
+                    to: 15246.333333333334,
+                },
+                color: "rgb(176,229,245)",
+            },
+            {
+                range: {
+                    from: 15246.333333333334,
+                    to: 22860.5,
+                },
+                color: "rgb(137,216,240)",
+            },
+            {
+                range: {
+                    from: 22860.5,
+                    to: 30474.666666666668,
+                },
+                color: "rgb(98,203,235)",
+            },
+            {
+                range: {
+                    from: 30474.666666666668,
+                    to: 38088.833333333336,
+                },
+                color: "rgb(59,190,230)",
+            },
+            {
+                range: {
+                    from: 38088.833333333336,
+                    to: 45703,
+                },
+                color: "rgb(20,178,226)",
+            },
+        ];
+
+        it("should calculate legend data with size and color", () => {
+            const executionResult = getExecutionResult(true, false, false, true, true);
+            const geoData: IGeoData = {
+                size: {
+                    index: 0,
+                    name: "size",
+                },
+                color: {
+                    index: 1,
+                    name: "color",
+                },
+                location: {
+                    index: 0,
+                    name: "location",
+                },
+            };
+
+            const expectedLegendData = {
+                colorData,
+                sizeData: SIZE_DATA.map(stringToFloat),
+            };
+            expect(calculateLegendData(executionResult, geoData)).toEqual(expectedLegendData);
+        });
+
+        it("should calculate legend data with size", () => {
+            const executionResult = getExecutionResult(true, false, false, true, true);
+            const geoData: IGeoData = {
+                size: {
+                    index: 0,
+                    name: "size",
+                },
+                location: {
+                    index: 0,
+                    name: "location",
+                },
+            };
+
+            const expectedLegendData = {
+                sizeData: SIZE_DATA.map(stringToFloat),
+            };
+            expect(calculateLegendData(executionResult, geoData)).toEqual(expectedLegendData);
+        });
+
+        it("should calculate legend data with color", () => {
+            const executionResult = getExecutionResult(true, false, false, true, true);
+            const geoData: IGeoData = {
+                color: {
+                    index: 1,
+                    name: "color",
+                },
+                location: {
+                    index: 0,
+                    name: "location",
+                },
+            };
+
+            const expectedLegendData = {
+                colorData,
+            };
+            expect(calculateLegendData(executionResult, geoData)).toEqual(expectedLegendData);
+        });
     });
 });

@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import range = require("lodash/range");
 import get = require("lodash/get");
 import head = require("lodash/head");
@@ -6,7 +6,7 @@ import last = require("lodash/last");
 import isEmpty = require("lodash/isEmpty");
 import inRange = require("lodash/inRange");
 
-import { IHeatmapLegendItem } from "../../typings/legend";
+import { IColorLegendItem } from "../../typings/legend";
 import { LEFT, RIGHT, TOP, BOTTOM } from "./PositionTypes";
 import { formatLegendLabel, isAreaChart, isOneOfTypes, isTreemap } from "../../utils/common";
 import { supportedDualAxesChartTypes } from "../chartOptionsBuilder";
@@ -22,12 +22,23 @@ export const SKIPPED_LABEL_TEXT = "...";
 export const UTF_NON_BREAKING_SPACE = "\u00A0";
 const STATIC_PAGING_HEIGHT = 44;
 
-export interface IHeatmapLegendBox {
+export interface IColorLegendBox {
     class: string;
     key: string;
-    style: {
+    style?: {
         backgroundColor: string;
         border: string;
+    };
+}
+
+interface IColorLabelConfigItem {
+    type: string;
+    labelIndex?: number;
+    style?: {
+        width?: number;
+        height?: number;
+        lineHeight?: string;
+        textAlign?: string;
     };
 }
 
@@ -38,8 +49,8 @@ export interface IHeatmapLegendLabel {
     style: object;
 }
 
-export interface IHeatmapLegendConfig {
-    boxes: IHeatmapLegendBox[];
+export interface IColorLegendConfig {
+    boxes: IColorLegendBox[];
     classes: string[];
     labels: IHeatmapLegendLabel[];
     position: string;
@@ -72,7 +83,7 @@ function getSkippedLabelBlock(index: number) {
 
 const verticalHeatmapMiddleLabelStyle = { height: 30, textAlign: ALEFT, lineHeight: "30px" };
 
-export const verticalHeatmapConfig = [
+export const verticalHeatmapConfig: IColorLabelConfigItem[] = [
     { type: "label", labelIndex: 0, style: { height: 15, textAlign: ALEFT, lineHeight: "11px" } },
     { type: "label", labelIndex: 1, style: verticalHeatmapMiddleLabelStyle },
     { type: "label", labelIndex: 2, style: verticalHeatmapMiddleLabelStyle },
@@ -85,7 +96,7 @@ export const verticalHeatmapConfig = [
 
 const defaultHeatmapLegendLabelStyle = { width: 40, textAlign: ACENTER };
 
-export const heatmapLegendConfigMatrix = [
+export const heatmapLegendConfigMatrix: IColorLabelConfigItem[][] = [
     [
         { type: "label", labelIndex: 0, style: { width: 175, textAlign: ALEFT } },
         { type: "label", labelIndex: 7, style: { width: 175, textAlign: ARIGHT } },
@@ -145,9 +156,67 @@ export const heatmapLegendConfigMatrix = [
     ],
 ];
 
+export const colorLegendConfigMatrix: IColorLabelConfigItem[][] = [
+    [
+        { type: "label", labelIndex: 0, style: { width: 175, textAlign: ALEFT } },
+        { type: "label", labelIndex: 6, style: { width: 175, textAlign: ARIGHT } },
+    ],
+    [
+        { type: "label", labelIndex: 0, style: { width: 145, textAlign: ALEFT } },
+        { type: "dots" },
+        { type: "space", style: { width: 40 } },
+        { type: "dots" },
+        { type: "label", labelIndex: 6, style: { width: 145, textAlign: ARIGHT } },
+    ],
+    [
+        { type: "label", labelIndex: 0, style: { width: 95, textAlign: ALEFT } },
+        { type: "dots" },
+        { type: "space", style: { width: 40 } },
+        { type: "dots" },
+        { type: "space", style: { width: 40 } },
+        { type: "dots" },
+        { type: "space", style: { width: 40 } },
+        { type: "dots" },
+        { type: "label", labelIndex: 6, style: { width: 95, textAlign: ARIGHT } },
+    ],
+    [
+        { type: "label", labelIndex: 0, style: { width: 55, textAlign: ALEFT } },
+        { type: "label", labelIndex: 2, style: { width: 90, textAlign: ACENTER } },
+        { type: "dots" },
+        { type: "space", style: { width: 40 } },
+        { type: "dots" },
+        { type: "label", labelIndex: 4, style: { width: 90, textAlign: ACENTER } },
+        { type: "label", labelIndex: 6, style: { width: 55, textAlign: ARIGHT } },
+    ],
+    [
+        { type: "label", labelIndex: 0, style: { width: 45, textAlign: ALEFT } },
+        { type: "dots" },
+        { type: "label", labelIndex: 2, style: { width: 90, textAlign: ACENTER } },
+        { type: "dots" },
+        { type: "space", style: { width: 40 } },
+        { type: "dots" },
+        { type: "label", labelIndex: 4, style: { width: 90, textAlign: ACENTER } },
+        { type: "dots" },
+        { type: "label", labelIndex: 6, style: { width: 45, textAlign: ARIGHT } },
+    ],
+    [
+        { type: "label", labelIndex: 0, style: { width: 30, textAlign: ALEFT } },
+        { type: "label", labelIndex: 1, style: defaultHeatmapLegendLabelStyle },
+        { type: "space", style: { width: 10 } },
+        { type: "label", labelIndex: 2, style: defaultHeatmapLegendLabelStyle },
+        { type: "space", style: { width: 10 } },
+        { type: "label", labelIndex: 3, style: defaultHeatmapLegendLabelStyle },
+        { type: "space", style: { width: 10 } },
+        { type: "label", labelIndex: 4, style: defaultHeatmapLegendLabelStyle },
+        { type: "space", style: { width: 10 } },
+        { type: "label", labelIndex: 5, style: defaultHeatmapLegendLabelStyle },
+        { type: "label", labelIndex: 6, style: { width: 30, textAlign: ARIGHT } },
+    ],
+];
+
 const defaultHeatmapSmallLegendStyle = { width: 40, textAlign: ACENTER };
 
-export const heatmapSmallLegendConfigMatrix = [
+export const heatmapSmallLegendConfigMatrix: IColorLabelConfigItem[][] = [
     [
         { type: "label", labelIndex: 0, style: { width: 138, textAlign: ALEFT } },
         { type: "label", labelIndex: 7, style: { width: 138, textAlign: ARIGHT } },
@@ -202,7 +271,7 @@ export const heatmapSmallLegendConfigMatrix = [
     ],
 ];
 
-export function buildHeatmapLabelsConfig(labels: string[], config: any) {
+export function buildColorLabelsConfig(labels: string[], config: any) {
     return config.map((element: any, index: number) => {
         switch (element.type) {
             case "label":
@@ -224,37 +293,52 @@ export function buildHeatmapLabelsConfig(labels: string[], config: any) {
 const LABEL_LENGHT_THRESHOLDS = [5, 8, 10, 15, 18];
 const SMALL_LABEL_LENGHT_THRESHOLDS = [4, 7, 9, 13, 15];
 
-function getHeatmapLegendLabelsConfiguration(legendLabels: string[], isSmall: boolean, isVertical: boolean) {
+function getColorLegendLabelsConfiguration(legendLabels: string[], isSmall: boolean, isVertical: boolean) {
+    const numberOfLabels = legendLabels.length;
     const firstLabelLength = head(legendLabels).length;
     const lastLabelLength = last(legendLabels).length;
     const maxLabelLength = firstLabelLength > lastLabelLength ? firstLabelLength : lastLabelLength;
     const labelLengths = isSmall ? SMALL_LABEL_LENGHT_THRESHOLDS : LABEL_LENGHT_THRESHOLDS;
 
-    let shorteningLevel: number;
-    let shorteningConfig;
+    const shorteningConfig = isVertical
+        ? verticalHeatmapConfig
+        : getHorizontalShorteningLabelConfig(labelLengths, maxLabelLength, isSmall, numberOfLabels);
 
-    if (isVertical) {
-        shorteningConfig = verticalHeatmapConfig;
-    } else {
-        if (inRange(maxLabelLength, 0, labelLengths[0])) {
-            shorteningLevel = 5;
-        } else if (inRange(maxLabelLength, labelLengths[0], labelLengths[1])) {
-            shorteningLevel = 4;
-        } else if (inRange(maxLabelLength, labelLengths[1], labelLengths[2])) {
-            shorteningLevel = 3;
-        } else if (inRange(maxLabelLength, labelLengths[2], labelLengths[3])) {
-            shorteningLevel = 2;
-        } else if (inRange(maxLabelLength, labelLengths[3], labelLengths[4])) {
-            shorteningLevel = 1;
-        } else if (maxLabelLength > labelLengths[4]) {
-            shorteningLevel = 0;
-        }
-        shorteningConfig = isSmall
-            ? heatmapSmallLegendConfigMatrix[shorteningLevel]
-            : heatmapLegendConfigMatrix[shorteningLevel];
+    return buildColorLabelsConfig(legendLabels, shorteningConfig);
+}
+
+function getHorizontalShorteningLabelConfig(
+    labelLengths: number[],
+    maxLabelLength: number,
+    isSmall: boolean,
+    numberOfLabels: number,
+): IColorLabelConfigItem[] {
+    const shorteningLevel = getColorLabelShorteningLevel(labelLengths, maxLabelLength);
+    if (isSmall) {
+        return heatmapSmallLegendConfigMatrix[shorteningLevel];
     }
+    if (numberOfLabels === 8) {
+        return heatmapLegendConfigMatrix[shorteningLevel];
+    }
+    return colorLegendConfigMatrix[shorteningLevel];
+}
 
-    return buildHeatmapLabelsConfig(legendLabels, shorteningConfig);
+function getColorLabelShorteningLevel(labelLengths: number[], maxLabelLength: number): number {
+    let shorteningLevel: number;
+    if (inRange(maxLabelLength, 0, labelLengths[0])) {
+        shorteningLevel = 5;
+    } else if (inRange(maxLabelLength, labelLengths[0], labelLengths[1])) {
+        shorteningLevel = 4;
+    } else if (inRange(maxLabelLength, labelLengths[1], labelLengths[2])) {
+        shorteningLevel = 3;
+    } else if (inRange(maxLabelLength, labelLengths[2], labelLengths[3])) {
+        shorteningLevel = 2;
+    } else if (inRange(maxLabelLength, labelLengths[3], labelLengths[4])) {
+        shorteningLevel = 1;
+    } else {
+        shorteningLevel = 0;
+    }
+    return shorteningLevel;
 }
 
 export function calculateFluidLegend(seriesCount: number, containerWidth: number) {
@@ -311,13 +395,17 @@ export function calculateStaticLegend(seriesCount: number, containerHeight: numb
     };
 }
 
-function getHeatmapLegendLabels(series: IHeatmapLegendItem[], format: string, numericSymbols: string[]) {
+function getColorLegendLabels(
+    series: IColorLegendItem[],
+    format: string,
+    numericSymbols: string[],
+): string[] {
     const min = get(head(series), "range.from", 0);
     const max = get(last(series), "range.to", 0);
     const diff = max - min;
 
     return range(series.length + 1).map(index => {
-        let value;
+        let value: number;
 
         if (index === 0) {
             value = get(series, "0.range.from", 0);
@@ -333,13 +421,13 @@ function getHeatmapLegendLabels(series: IHeatmapLegendItem[], format: string, nu
 
 const MIDDLE_LEGEND_BOX_INDEX = 3;
 
-function getHeatmapBoxes(series: IHeatmapLegendItem[]): IHeatmapLegendBox[] {
-    const getBoxStyle = (item: IHeatmapLegendItem) => ({
+function getColorBoxes(series: IColorLegendItem[]): IColorLegendBox[] {
+    const getBoxStyle = (item: IColorLegendItem) => ({
         backgroundColor: item.color,
         border: item.color === "rgb(255,255,255)" ? "1px solid #ccc" : "none",
     });
 
-    return series.map((item: IHeatmapLegendItem, index: number) => {
+    return series.map((item: IColorLegendItem, index: number) => {
         const style = getBoxStyle(item);
         const middle = index === MIDDLE_LEGEND_BOX_INDEX ? "middle" : null;
 
@@ -351,14 +439,14 @@ function getHeatmapBoxes(series: IHeatmapLegendItem[]): IHeatmapLegendBox[] {
     });
 }
 
-export function getHeatmapLegendConfiguration(
-    series: IHeatmapLegendItem[],
+export function getColorLegendConfiguration(
+    series: IColorLegendItem[],
     format: string,
     numericSymbols: string[],
     isSmall: boolean,
     position: string,
-): IHeatmapLegendConfig {
-    const legendLabels = getHeatmapLegendLabels(series, format, numericSymbols);
+): IColorLegendConfig {
+    const legendLabels = getColorLegendLabels(series, format, numericSymbols);
     const small = isSmall ? "small" : null;
 
     let finalPosition;
@@ -370,11 +458,11 @@ export function getHeatmapLegendConfiguration(
         finalPosition = position || RIGHT;
     }
 
-    const classes = ["viz-legend", "heatmap-legend", `position-${finalPosition}`, small];
+    const classes = ["viz-legend", "color-legend", `position-${finalPosition}`, small];
 
     const isVertical = finalPosition === LEFT || finalPosition === RIGHT;
-    const finalLabels = getHeatmapLegendLabelsConfiguration(legendLabels, isSmall, isVertical);
-    const boxes = getHeatmapBoxes(series);
+    const finalLabels = getColorLegendLabelsConfiguration(legendLabels, isSmall, isVertical);
+    const boxes = getColorBoxes(series);
 
     return {
         classes,
