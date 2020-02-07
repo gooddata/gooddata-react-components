@@ -72,6 +72,8 @@ const TOOLTIP_ARROW_OFFSET = 23;
 const TOOLTIP_MAX_WIDTH = 320;
 const TOOLTIP_INVERTED_CHART_VERTICAL_OFFSET = 5;
 const TOOLTIP_VERTICAL_OFFSET = 14;
+export const TOOLTIP_PADDING = 24; // padding of tooltip container - defined by CSS
+export const TOOLTIP_VIEWPORT_MARGIN_TOP = 20;
 const BAR_COLUMN_TOOLTIP_TOP_OFFSET = 8;
 const BAR_COLUMN_TOOLTIP_LEFT_OFFSET = 5;
 const HIGHCHARTS_TOOLTIP_TOP_LEFT_OFFSET = 16;
@@ -323,9 +325,15 @@ export function getTooltipPositionInViewPort(
     const leftOffset = pageXOffset + containerLeft - getHighchartTooltipLeftOffset(chartType);
     const topOffset = pageYOffset + containerTop - getHighchartTooltipTopOffset(chartType);
 
+    const posX = isTooltipShownInFullScreen() ? leftOffset : leftOffset + x;
+    const posY = topOffset + y;
+
+    const minPosY = TOOLTIP_VIEWPORT_MARGIN_TOP - TOOLTIP_PADDING + pageYOffset;
+    const posYLimited = posY < minPosY ? minPosY : posY;
+
     return {
-        x: isTooltipShownInFullScreen() ? leftOffset : leftOffset + x,
-        y: topOffset + y,
+        x: posX,
+        y: posYLimited,
     };
 }
 
