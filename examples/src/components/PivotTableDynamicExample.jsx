@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import React, { Component } from "react";
 import { PivotTable, Table, HeaderPredicateFactory, Model } from "@gooddata/react-components";
 
@@ -16,6 +16,7 @@ import {
     locationStateAttributeCaliforniaUri,
     monthDateIdentifierJanuary,
     dateDatasetIdentifier,
+    franchisedSalesIdentifier,
 } from "../utils/fixtures";
 import { createColumnTotal } from "../utils/helpers";
 import { ElementWithParam } from "./utils/ElementWithParam";
@@ -214,7 +215,7 @@ const filterPresets = {
         filterItem: Model.relativeDateFilter(dateDatasetIdentifier, "GDC.time.year", -1, -1),
     },
     noData: {
-        label: "No Data",
+        label: "No data",
         key: "noData",
         filterItem: Model.relativeDateFilter(dateDatasetIdentifier, "GDC.time.year", 1, 1),
     },
@@ -223,12 +224,23 @@ const filterPresets = {
         key: "franchiseFeesCalifornia",
         filterItem: null,
     },
+    measureFranchiseFees: {
+        label: "Measure value filter (Franchised Sales > $100.000)",
+        key: "measureFranchiseFees",
+        filterItem: Model.measureValueFilter(franchisedSalesIdentifier).condition("GREATER_THAN", {
+            value: 100000,
+        }),
+    },
 };
 
 const franchiseFeesCalifornia = Model.measure(franchiseFeesIdentifier)
     .localIdentifier("franchiseFeesCalifornia")
     .alias("FranchiseFees (California)")
     .filters(filterPresets.attributeCalifornia.filterItem);
+
+const franchiseSales = Model.measure(franchisedSalesIdentifier)
+    .localIdentifier(franchisedSalesIdentifier)
+    .alias("Franchised Sales");
 
 const sortingPresets = {
     noSort: {
@@ -507,14 +519,23 @@ export class PivotTableDrillingExample extends Component {
         const { bucketProps } = bucketPresets[bucketPresetKey];
         const { sortBy } = sortingPresets[sortingPresetKey];
 
-        // Exchange FranchiseFees for franchiseFeesCalifornia if filterPresetKeys.franchiseFeesCalifornia === true
-        const bucketPropsWithFilters =
-            filterPresetKeys.franchiseFeesCalifornia && bucketProps.measures.length > 0
-                ? {
-                      ...bucketProps,
-                      measures: [franchiseFeesCalifornia, ...bucketProps.measures.slice(1)],
-                  }
-                : bucketProps;
+        let bucketPropsWithFilters;
+
+        if (filterPresetKeys.franchiseFeesCalifornia && bucketProps.measures.length > 0) {
+            bucketPropsWithFilters = {
+                ...bucketProps,
+                measures: [franchiseFeesCalifornia, ...bucketProps.measures.slice(1)],
+            };
+        } else if (filterPresetKeys.measureFranchiseFees && bucketProps.measures.length > 0) {
+            bucketPropsWithFilters = {
+                ...bucketProps,
+                // use measure compatible with measure value filters
+                measures: [franchiseSales, ...bucketProps.measures.slice(1)],
+            };
+        } else {
+            bucketPropsWithFilters = bucketProps;
+        }
+
         const tableBucketProps = {
             ...bucketPropsWithFilters,
         };
@@ -581,7 +602,7 @@ export class PivotTableDrillingExample extends Component {
                         return (
                             <ElementWithParam
                                 key={key}
-                                className={`preset-option gd-button gd-button-secondary s-drilling-preset-${key} ${
+                                className={`preset-option gd-button gd-button-secondary s-filter-preset-${key} ${
                                     filterPresetKeys[key] ? " is-active" : ""
                                 }`}
                                 onClick={this.onFilterPresetChange}

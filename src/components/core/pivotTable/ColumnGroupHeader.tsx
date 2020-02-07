@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { IHeaderGroupParams, ColGroupDef } from "ag-grid-community";
 import { IntlShape } from "react-intl";
@@ -13,6 +13,7 @@ export interface IProps extends IHeaderGroupParams {
     getColumnTotals: () => AFM.ITotalItem[];
     getExecutionResponse: () => Execution.IExecutionResponse;
     onMenuAggregationClick: (config: IMenuAggregationClickConfig) => void;
+    getAfmFilters: () => AFM.CompatibilityFilter[];
     intl: IntlShape;
 }
 
@@ -22,7 +23,7 @@ export interface IColumnGroupDef extends ColGroupDef {
 
 export default class ColumnGroupHeader extends React.Component<IProps> {
     public render() {
-        const { menu, intl } = this.props;
+        const { menu, intl, getAfmFilters } = this.props;
         const columnGroupDef = this.props.columnGroup.getColGroupDef() as IColumnGroupDef;
         const parent = this.props.columnGroup.getParent();
 
@@ -42,6 +43,7 @@ export default class ColumnGroupHeader extends React.Component<IProps> {
                 getColumnTotals={this.props.getColumnTotals}
                 getExecutionResponse={this.props.getExecutionResponse}
                 intl={intl}
+                getAfmFilters={getAfmFilters}
             />
         );
     }

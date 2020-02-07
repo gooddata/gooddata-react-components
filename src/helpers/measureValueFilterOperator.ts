@@ -1,20 +1,20 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as Operator from "../constants/measureValueFilterOperators";
 
-export const getOperatorTranslationKey = (operator: string) => {
-    const translationKeysDictionary = {
-        [Operator.ALL]: "all",
-        [Operator.GREATER_THAN]: "greaterThan",
-        [Operator.GREATER_THAN_OR_EQUAL_TO]: "greaterThanOrEqualTo",
-        [Operator.LESS_THAN]: "lessThan",
-        [Operator.LESS_THAN_OR_EQUAL_TO]: "lessThanOrEqualTo",
-        [Operator.EQUAL_TO]: "equalTo",
-        [Operator.NOT_EQUAL_TO]: "notEqualTo",
-        [Operator.BETWEEN]: "between",
-        [Operator.NOT_BETWEEN]: "notBetween",
-    };
+const translationKeysDictionary = {
+    [Operator.ALL]: "mvf.operator.all",
+    [Operator.GREATER_THAN]: "mvf.operator.greaterThan",
+    [Operator.GREATER_THAN_OR_EQUAL_TO]: "mvf.operator.greaterThanOrEqualTo",
+    [Operator.LESS_THAN]: "mvf.operator.lessThan",
+    [Operator.LESS_THAN_OR_EQUAL_TO]: "mvf.operator.lessThanOrEqualTo",
+    [Operator.EQUAL_TO]: "mvf.operator.equalTo",
+    [Operator.NOT_EQUAL_TO]: "mvf.operator.notEqualTo",
+    [Operator.BETWEEN]: "mvf.operator.between",
+    [Operator.NOT_BETWEEN]: "mvf.operator.notBetween",
+};
 
-    return `mvf.operator.${translationKeysDictionary[operator]}`;
+export const getOperatorTranslationKey = (operator: string) => {
+    return translationKeysDictionary[operator];
 };
 
 export const getOperatorIcon = (operator: string) => {

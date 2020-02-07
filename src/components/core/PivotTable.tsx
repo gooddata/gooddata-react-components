@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { AFM, Execution, VisualizationObject } from "@gooddata/typings";
 import {
     BodyScrollEvent,
@@ -329,6 +329,10 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
     private getExecutionResponse = () => {
         return this.state.execution ? this.state.execution.executionResponse : null;
+    };
+
+    private getAfmFilters = () => {
+        return this.props.dataSource.getAfm().filters || [];
     };
 
     private getColumnTotals = () => {
@@ -693,6 +697,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             onMenuAggregationClick: this.onMenuAggregationClick,
             getExecutionResponse: this.getExecutionResponse,
             getColumnTotals: this.getColumnTotals,
+            getAfmFilters: this.getAfmFilters,
             intl: this.props.intl,
         };
 

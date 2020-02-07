@@ -59,6 +59,11 @@
         "comment": "Total of type 'Rollup' where 'Total' is hint and synonym. Showed in menu before adding to table.",
         "limit": 0
     },
+    "visualizations.totals.dropdown.title.nat.disabled.tooltip": {
+        "value": "Rollup (Total) aggregation is not available when filtering the insight by measure value. To use Rollup (Total), remove all measure value filters from the filter bar.",
+        "comment": "The tooltip that is shown in pivot's table totals menu when rollup (native) total is disabled because measure value filters are configured for the pivot.",
+        "limit": 0
+    },
     "visualizations.totals.dropdown.title.med": {
         "value": "Median",
         "comment": "Total of type 'Median'. Showed in menu before adding to table.",

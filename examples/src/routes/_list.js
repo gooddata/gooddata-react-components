@@ -35,6 +35,7 @@ import DateFilter from "./DateFilter";
 import OnDrillHandling from "./OnDrillHandling";
 import Xirr from "./Xirr";
 import BulletChart from "./BulletChart";
+import NativeTotalAndMeasureValueFilterTest from "../components/NativeTotalAndMeasureValueFilterTest";
 
 export const advancedUseCasesRoutes = [
     {
@@ -248,6 +249,11 @@ export const hiddenPaths = [
         path: "/hidden/measure-value-filter-component",
         title: "Measure Value Filter Component",
         Component: MeasureValueFilterComponent,
+    },
+    {
+        path: "/hidden/measure-value-filter-with-native-total",
+        title: "Measure value filter with native total",
+        Component: NativeTotalAndMeasureValueFilterTest,
     },
     {
         path: "/hidden/on-drill-drilling",
