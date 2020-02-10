@@ -7,6 +7,7 @@ import { unwrap } from "../../../../helpers/utils";
 import { IColorStrategy } from "../colorFactory";
 import { SECONDARY_MEASURES, TERTIARY_MEASURES } from "../../../../constants/bucketNames";
 import { filterOutEmptyBuckets } from "../../../../helpers/mdObjBucketHelper";
+import { MAX_POINT_WIDTH } from "../highcharts/commonConfiguration";
 
 export type IBucketLocalIdentifier = VisualizationObject.IBucket["localIdentifier"];
 
@@ -45,6 +46,13 @@ const getSeriesItemData = (
         name: unwrap(measureGroup.items[seriesIndex]).name,
     }));
 
+const getPrimarySeriesMaxPointWidth = (comparativeMeasurePresent: boolean) => {
+    if (comparativeMeasurePresent) {
+        return (MAX_POINT_WIDTH / 4) * 3;
+    }
+    return MAX_POINT_WIDTH;
+};
+
 const getPrimarySeries = (
     seriesItemConfig: IPointData,
     colorStrategy: IColorStrategy,
@@ -53,6 +61,7 @@ const getPrimarySeries = (
     ...seriesItemConfig,
     color: colorStrategy.getColorByIndex(0),
     pointPadding: comparativeMeasurePresent ? 0.2 : 0.1,
+    maxPointWidth: getPrimarySeriesMaxPointWidth(comparativeMeasurePresent),
     zIndex: 1,
 });
 

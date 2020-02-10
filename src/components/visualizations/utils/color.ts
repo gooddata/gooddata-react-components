@@ -11,7 +11,6 @@ import { IMappingHeader, isMappingHeaderAttributeItem } from "../../../interface
 export const WHITE = "rgb(255, 255, 255)";
 export const BLACK = "rgb(0, 0, 0)";
 export const GRAY = "rgb(201, 213, 223)";
-export const DARK_GRAY = "rgb(148, 161, 173)";
 export const AXIS_LINE_COLOR = "#d5d5d5";
 export const TRANSPARENT = "transparent";
 
@@ -138,6 +137,12 @@ export const DEFAULT_HEATMAP_BLUE_COLOR: IColor = {
     r: 0,
     g: 110,
     b: 145,
+};
+
+export const DEFAULT_BULLET_GRAY_COLOR: IColor = {
+    r: 217,
+    g: 220,
+    b: 226,
 };
 
 function lighter(color: number, percent: number) {

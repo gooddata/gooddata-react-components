@@ -923,7 +923,7 @@ describe("ColorFactory", () => {
         it("should create palette from default palette", () => {
             const colorStrategy = getBulletColorStrategy();
 
-            const expectedColors = ["rgb(20,178,226)", "rgb(14,125,158)", "rgb(148, 161, 173)"];
+            const expectedColors = ["rgb(20,178,226)", "rgb(14,125,158)", "rgb(217,220,226)"];
             range(3).map(itemIndex => {
                 expect(colorStrategy.getColorByIndex(itemIndex)).toEqual(expectedColors[itemIndex]);
             });
@@ -932,7 +932,7 @@ describe("ColorFactory", () => {
         it("should create palette from custom palette", () => {
             const colorStrategy = getBulletColorStrategy(CUSTOM_COLOR_PALETTE);
 
-            const expectedColors = ["rgb(195,49,73)", "rgb(137,34,51)", "rgb(148, 161, 173)"];
+            const expectedColors = ["rgb(195,49,73)", "rgb(137,34,51)", "rgb(217,220,226)"];
             range(3).map(itemIndex => {
                 expect(colorStrategy.getColorByIndex(itemIndex)).toEqual(expectedColors[itemIndex]);
             });

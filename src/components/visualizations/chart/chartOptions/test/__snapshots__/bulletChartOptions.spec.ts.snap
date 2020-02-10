@@ -15,6 +15,7 @@ Array [
       },
     ],
     "legendIndex": 0,
+    "maxPointWidth": 100,
     "name": "Primary measure",
     "pointPadding": 0.1,
     "zIndex": 1,
@@ -52,7 +53,7 @@ Array [
 exports[`getBulletChartSeries should return expected bullet chart series 3`] = `
 Array [
   Object {
-    "color": "rgb(148, 161, 173)",
+    "color": "rgb(217,220,226)",
     "data": Array [
       Object {
         "format": "#,##0.00",
@@ -86,6 +87,7 @@ Array [
       },
     ],
     "legendIndex": 0,
+    "maxPointWidth": 100,
     "name": "Primary measure",
     "pointPadding": 0.1,
     "zIndex": 1,
@@ -130,12 +132,13 @@ Array [
       },
     ],
     "legendIndex": 0,
+    "maxPointWidth": 75,
     "name": "Primary measure",
     "pointPadding": 0.2,
     "zIndex": 1,
   },
   Object {
-    "color": "rgb(148, 161, 173)",
+    "color": "rgb(217,220,226)",
     "data": Array [
       Object {
         "format": "#,##0.00",
@@ -179,7 +182,7 @@ Array [
     "zIndex": 2,
   },
   Object {
-    "color": "rgb(148, 161, 173)",
+    "color": "rgb(217,220,226)",
     "data": Array [
       Object {
         "format": "#,##0.00",
@@ -213,6 +216,7 @@ Array [
       },
     ],
     "legendIndex": 0,
+    "maxPointWidth": 75,
     "name": "Primary measure",
     "pointPadding": 0.2,
     "zIndex": 1,
@@ -240,7 +244,7 @@ Array [
     "zIndex": 2,
   },
   Object {
-    "color": "rgb(148, 161, 173)",
+    "color": "rgb(217,220,226)",
     "data": Array [
       Object {
         "format": "#,##0.00",

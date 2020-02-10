@@ -14,7 +14,7 @@ import {
     getRgbStringFromRGB,
     getColorFromMapping,
     DEFAULT_HEATMAP_BLUE_COLOR,
-    DARK_GRAY,
+    DEFAULT_BULLET_GRAY_COLOR,
 } from "../utils/color";
 import {
     isHeatmap,
@@ -627,7 +627,7 @@ export class BulletChartColorStrategy extends PointsChartColorStrategy {
         return [
             getRgbStringFromRGB(baseColor),
             getRgbStringFromRGB(getLighterColorFromRGB(baseColor, -0.3)),
-            DARK_GRAY,
+            getRgbStringFromRGB(DEFAULT_BULLET_GRAY_COLOR),
         ];
     }
 }
