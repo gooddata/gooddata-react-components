@@ -1,6 +1,12 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 @import "./table.scss";
 @import "./charts.scss";
 @import "./headline.scss";
 @import "./attributeFilter.scss";
 @import "./measureValueFilter.scss";
+
+/* hide IE10+ eraser */
+
+::-ms-clear {
+    display: none;
+}
