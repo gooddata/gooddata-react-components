@@ -7,7 +7,7 @@ import {
     DEFAULT_CLUSTER_MAX_ZOOM,
     DEFAULT_PUSHPIN_SIZE_VALUE,
 } from "../../../constants/geoChart";
-import { getGeoAttributeHeaderItems } from "../../../helpers/geoChart";
+import { getGeoAttributeHeaderItems, isClusteringAllowed } from "../../../helpers/geoChart";
 import { getHeaderItemName, isTwoDimensionsData } from "../../../helpers/executionResultHelper";
 import { stringToFloat } from "../../../helpers/utils";
 import { getPushpinColors, generateLegendColorData } from "./geoChartColor";
@@ -117,7 +117,7 @@ export const createPushpinDataSource = (
             features: transformPushpinDataSource(executionResult, geoData),
         },
     };
-    if (!geoData.size) {
+    if (isClusteringAllowed(geoData)) {
         return {
             ...source,
             cluster: true,
