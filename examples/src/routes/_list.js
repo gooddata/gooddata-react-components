@@ -106,6 +106,19 @@ export const drillingUseCasesRoutes = [
     },
 ];
 
+export const measureValueFilterRoutes = [
+    {
+        path: "/measure-value-filter/filter-by-measure-value",
+        title: "Filter by Measure Value",
+        Component: MeasureValueFilter,
+    },
+    {
+        path: "/measure-value-filter/component",
+        title: "Measure Value Filter Component",
+        Component: MeasureValueFilterComponent,
+    },
+];
+
 export const nextRoutes = [
     {
         path: "/next/combo-chart",
@@ -133,6 +146,11 @@ const NextRoutes = props =>
     WithSubRoutes({
         ...props,
         subRoutes: nextRoutes,
+    });
+const MeasureValueFilterRoutes = props =>
+    WithSubRoutes({
+        ...props,
+        subRoutes: measureValueFilterRoutes,
     });
 
 export const sideNavigationRoutes = [
@@ -173,6 +191,13 @@ export const sideNavigationRoutes = [
         path: "/date-filter-component",
         title: "Date Filter Component",
         Component: DateFilter,
+    },
+    {
+        path: "/measure-value-filter",
+        pathMatch: "full",
+        redirectTo: measureValueFilterRoutes[0].path,
+        title: "Measure Value Filter",
+        Component: MeasureValueFilterRoutes,
     },
     {
         path: "/arithmetic-measures",
@@ -238,18 +263,6 @@ export const hiddenPaths = [
         title: "Bucket Executor Example",
         Component: BucketExecutor,
     },
-    // TODO BB-1694 - Add Measure Value Filter example to the menu
-    {
-        path: "/hidden/measure-value-filter",
-        title: "Measure Value Filter",
-        Component: MeasureValueFilter,
-    },
-    // TODO BB-1694 - Add Measure Value Filter example to the menu
-    {
-        path: "/hidden/measure-value-filter-component",
-        title: "Measure Value Filter Component",
-        Component: MeasureValueFilterComponent,
-    },
     {
         path: "/hidden/measure-value-filter-with-native-total",
         title: "Measure value filter with native total",
@@ -306,6 +319,7 @@ export const routes = [
     ...visualizationUseCasesRoutes,
     ...advancedUseCasesRoutes,
     ...drillingUseCasesRoutes,
+    ...measureValueFilterRoutes,
     ...nextRoutes,
     ...hiddenPaths,
     ...backendInfoRoutes,
@@ -322,6 +336,7 @@ export default {
     visualizationUseCasesRoutes,
     advancedUseCasesRoutes,
     drillingUseCasesRoutes,
+    measureValueFilterRoutes,
     sideNavigationRoutes,
     routes,
     navigation,
