@@ -11,8 +11,8 @@ function createComponent(customProps: IPushpinSizeLegendProps): ShallowWrapper {
 }
 
 describe("PushpinSizeLegend", () => {
-    it("should render component", () => {
-        const sizes: number[] = [10000, 3666.66, 1000];
+    it("should render component with max, average and min value", () => {
+        const sizes: number[] = [10, 6, 20];
         const props = {
             sizes,
             format: "#,##0.00",
@@ -20,5 +20,15 @@ describe("PushpinSizeLegend", () => {
         };
         const wrapper = createComponent(props);
         expect(wrapper.hasClass("s-pushpin-size-legend")).toBe(true);
+    });
+    it("should not render component when min value is equal to max value", () => {
+        const sizes: number[] = [1000, 1000, 1000];
+        const props = {
+            sizes,
+            format: "#,##0.00",
+            numericSymbols: ["k", "M", "G", "T", "P", "E"],
+        };
+        const wrapper = createComponent(props);
+        expect(wrapper.hasClass("s-pushpin-size-legend")).toBe(false);
     });
 });

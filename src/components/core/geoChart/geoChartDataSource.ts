@@ -32,12 +32,12 @@ function transformPushpinDataSource(
     executionResult: Execution.IExecutionResult,
     geoData: IGeoData,
 ): IGeoDataSourceFeatures {
-    const { color, location, segmentBy, size, tooltipText } = geoData;
+    const { color, location, segment, size, tooltipText } = geoData;
 
     const locationNameTitle = tooltipText ? tooltipText.name : "";
     const colorTitle = color ? color.name : "";
     const sizeTitle = size ? size.name : "";
-    const segmentByTitle = segmentBy ? segmentBy.name : "";
+    const segmentTitle = segment ? segment.name : "";
 
     let colorData: Execution.DataValue[] = [];
     let sizeData: Execution.DataValue[] = [];
@@ -58,11 +58,11 @@ function transformPushpinDataSource(
 
     const locationData = location !== undefined ? attributeHeaderItems[location.index] : [];
     const locationNameData = tooltipText !== undefined ? attributeHeaderItems[tooltipText.index] : [];
-    const segmentByData = segmentBy !== undefined ? attributeHeaderItems[segmentBy.index] : [];
+    const segmentData = segment !== undefined ? attributeHeaderItems[segment.index] : [];
 
     const sizesInNumber = sizeData.map(stringToFloat);
     const colorsInNumber = colorData.map(stringToFloat);
-    const pushpinColors: IPushpinColor[] = getPushpinColors(colorsInNumber, segmentByData);
+    const pushpinColors: IPushpinColor[] = getPushpinColors(colorsInNumber, segmentData);
 
     const features = locationData.reduce(
         (
@@ -79,7 +79,7 @@ function transformPushpinDataSource(
             const sizeValue = hasSizeMeasure ? sizesInNumber[index] : DEFAULT_PUSHPIN_SIZE_VALUE;
 
             const locationNameValue = getHeaderItemName(locationNameData[index]);
-            const segmentByValue = getHeaderItemName(segmentByData[index]);
+            const segmentValue = getHeaderItemName(segmentData[index]);
             const pushpinColor = pushpinColors[index] || pushpinColors[0] || {};
 
             return [
@@ -104,9 +104,9 @@ function transformPushpinDataSource(
                             title: sizeTitle,
                             value: sizeValue,
                         },
-                        segmentBy: {
-                            title: segmentByTitle,
-                            value: segmentByValue,
+                        segment: {
+                            title: segmentTitle,
+                            value: segmentValue,
                         },
                     },
                 },

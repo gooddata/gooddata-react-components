@@ -5,7 +5,7 @@ import { measure, attribute } from "../../src/helpers/model";
 
 interface IGeoOptions {
     isWithLocation?: boolean;
-    isWithSegmentBy?: boolean;
+    isWithSegment?: boolean;
     isWithTooltipText?: boolean;
     isWithSize?: boolean;
     isWithColor?: boolean;
@@ -1025,7 +1025,7 @@ const TOOLTIP_TEXT_DATA: Execution.IResultAttributeHeaderItem[] = [
 
 export function getExecutionResult(
     isWithLocation = false,
-    isWithSegmentBy = false,
+    isWithSegment = false,
     isWithTooltipText = false,
     isWithSize = false,
     isWithColor = false,
@@ -1058,7 +1058,7 @@ export function getExecutionResult(
         attrHeaderItems.push(LOCATION_DATA);
     }
 
-    if (isWithSegmentBy) {
+    if (isWithSegment) {
         attrHeaderItems.push(SEGMENT_BY_DATA);
     }
 
@@ -1108,7 +1108,7 @@ const getMeasureHeaderItem = (name: string, localIdentifier: string): Execution.
 
 export function getExecutionResponse(
     isWithLocation = false,
-    isWithSegmentBy = false,
+    isWithSegment = false,
     isWithTooltipText = false,
     isWithSize = false,
     isWithColor = false,
@@ -1121,7 +1121,7 @@ export function getExecutionResponse(
         attributesHeaders.push(getAttributeHeader("State", "/gdc/md/projectId/obj/1"));
     }
 
-    if (isWithSegmentBy) {
+    if (isWithSegment) {
         attributesHeaders.push(getAttributeHeader("Type", "/gdc/md/projectId/obj/2"));
     }
 
@@ -1169,7 +1169,7 @@ export function getExecutionResponse(
 
 export function getGeoConfig(props: IGeoOptions): IGeoConfig {
     const buckets: VisualizationObject.IBucket[] = [];
-    const { isWithLocation, isWithSegmentBy, isWithTooltipText, isWithSize, isWithColor } = props;
+    const { isWithLocation, isWithSegment, isWithTooltipText, isWithSize, isWithColor } = props;
     if (isWithLocation) {
         buckets.push({
             localIdentifier: "location",
@@ -1177,10 +1177,10 @@ export function getGeoConfig(props: IGeoOptions): IGeoConfig {
         });
     }
 
-    if (isWithSegmentBy) {
+    if (isWithSegment) {
         buckets.push({
-            localIdentifier: "segmentBy",
-            items: [attribute("/gdc/md/projectId/obj/2").localIdentifier("segmentBy")],
+            localIdentifier: "segment",
+            items: [attribute("/gdc/md/projectId/obj/2").localIdentifier("segment")],
         });
     }
 

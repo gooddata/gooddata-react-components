@@ -13,7 +13,7 @@ import { isLocationMissing } from "../../../helpers/geoChart";
 type IGeoValidatorProps = IGeoChartInnerProps;
 
 export function geoValidatorHOC<T>(InnerComponent: React.ComponentClass<T>): React.ComponentClass<T> {
-    class LoadingHOCWrapped extends React.Component<T & IGeoValidatorProps> {
+    class ValidatorHOCWrapped extends React.Component<T & IGeoValidatorProps> {
         private errorMap: IErrorMap;
 
         constructor(props: T & IGeoValidatorProps) {
@@ -42,13 +42,13 @@ export function geoValidatorHOC<T>(InnerComponent: React.ComponentClass<T>): Rea
         }
     }
 
-    const IntlLoadingHOC = injectIntl<"intl", T & IGeoValidatorProps>(LoadingHOCWrapped);
+    const IntlValidatorHOC = injectIntl<"intl", T & IGeoValidatorProps>(ValidatorHOCWrapped);
 
-    return class LoadingHOC extends React.Component<T & IGeoValidatorProps, null> {
+    return class ValidatorHOC extends React.Component<T & IGeoValidatorProps, null> {
         public render() {
             return (
                 <IntlWrapper locale={this.props.locale}>
-                    <IntlLoadingHOC {...this.props} />
+                    <IntlValidatorHOC {...this.props} />
                 </IntlWrapper>
             );
         }

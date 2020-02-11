@@ -18,7 +18,7 @@ import {
 } from "../../../constants/geoChart";
 import { IGeoData } from "../../../interfaces/GeoChart";
 import { stringToFloat } from "../../../helpers/utils";
-import { SEGMENT_BY, SIZE } from "../../../constants/bucketNames";
+import { SEGMENT, SIZE } from "../../../constants/bucketNames";
 import { isTwoDimensionsData } from "../../../helpers/executionResultHelper";
 
 function getExpressionByBucketName(name: string): mapboxgl.Expression {
@@ -64,7 +64,7 @@ function createPushpinSizeOptions(
 }
 
 function createPushpinFilter(selectedSegmentItem: string): mapboxgl.Expression {
-    return ["==", selectedSegmentItem, getExpressionByBucketName(SEGMENT_BY)];
+    return ["==", selectedSegmentItem, getExpressionByBucketName(SEGMENT)];
 }
 
 function createPushpinColorOptions(): mapboxgl.Expression {
@@ -98,7 +98,11 @@ export function createPushpinDataLayer(
     return layer;
 }
 
-function createClusterPoints(dataSourceName: string): mapboxgl.Layer {
+/**
+ * Create layer for clustered points/pins which have 'properties.point_count' indicates number of same points is clustered together
+ * @param dataSourceName
+ */
+export function createClusterPoints(dataSourceName: string): mapboxgl.Layer {
     return {
         id: DEFAULT_CLUSTER_LAYER_NAME,
         type: PUSHPIN_STYLE_CIRCLE,
@@ -111,7 +115,11 @@ function createClusterPoints(dataSourceName: string): mapboxgl.Layer {
     };
 }
 
-function createClusterLabels(dataSourceName: string): mapboxgl.Layer {
+/**
+ * Create layer for cluster labels which indicate number of points/pins is clustered
+ * @param dataSourceName
+ */
+export function createClusterLabels(dataSourceName: string): mapboxgl.Layer {
     return {
         ...DEFAULT_CLUSTER_LABELS_CONFIG,
         source: dataSourceName,
@@ -119,7 +127,11 @@ function createClusterLabels(dataSourceName: string): mapboxgl.Layer {
     };
 }
 
-function createUnclusterPoints(dataSourceName: string): mapboxgl.Layer {
+/**
+ * Create layer for un-clustered points which are not close to others
+ * @param dataSourceName
+ */
+export function createUnclusterPoints(dataSourceName: string): mapboxgl.Layer {
     return {
         id: DEFAULT_LAYER_NAME,
         type: PUSHPIN_STYLE_CIRCLE,

@@ -48,12 +48,7 @@ function getDefaultTableSort(afm: AFM.IAfm): AFM.SortItem[] {
 }
 
 function getDefaultGeoPushpinSort(afm: AFM.IAfm): AFM.SortItem[] {
-    const measure: AFM.IMeasure = get(afm, "measures.0");
-    if (measure) {
-        return getMeasureSortItems(measure.localIdentifier, SORT_DIR_DESC);
-    }
-
-    return [];
+    return SortsHelper.getFirstMeasureSort(afm);
 }
 
 export function getDefaultPivotTableSort(afm: AFM.IAfm): AFM.SortItem[] {

@@ -16,19 +16,33 @@ function createComponent(customProps: IGeoChartLegendRendererProps) {
 }
 
 describe("GeoChartLegendRenderer", () => {
-    const execution: Execution.IExecutionResponses = {
-        executionResponse: getExecutionResponse(true, false, false, true),
-        executionResult: getExecutionResult(true, false, false, true),
-    };
-    const props: IGeoChartLegendRendererProps = {
-        execution,
-        config: getGeoConfig({ isWithLocation: true, isWithSize: true }),
-        locale: "en-US",
-    };
     it("should render component with PushpinSizeLegend", () => {
+        const execution: Execution.IExecutionResponses = {
+            executionResponse: getExecutionResponse(true, false, false, true),
+            executionResult: getExecutionResult(true, false, false, true),
+        };
+        const props: IGeoChartLegendRendererProps = {
+            execution,
+            config: getGeoConfig({ isWithLocation: true, isWithSize: true }),
+            locale: "en-US",
+        };
         const wrapper = createComponent(props);
         const legend = wrapper.find(PushpinSizeLegend);
         expect(wrapper.find(".s-geo-legend")).toHaveLength(1);
         expect(legend.length).toEqual(1);
+    });
+
+    it("should not render component ", () => {
+        const execution: Execution.IExecutionResponses = {
+            executionResponse: getExecutionResponse(true),
+            executionResult: getExecutionResult(true),
+        };
+        const props: IGeoChartLegendRendererProps = {
+            execution,
+            config: getGeoConfig({ isWithLocation: true }),
+            locale: "en-US",
+        };
+        const wrapper = createComponent(props);
+        expect(wrapper.find(".s-geo-legend")).toHaveLength(0);
     });
 });

@@ -143,58 +143,58 @@ export function getHeaderItemName(headerItem: Execution.IResultHeaderItem): stri
     return "";
 }
 
-function isAttributeHeader(
-    header: Execution.IMeasureGroupHeader | Execution.IAttributeHeader,
-): header is Execution.IAttributeHeader {
-    return header.hasOwnProperty("attributeHeader");
-}
-
-function isMeasureGroupHeader(
-    header: Execution.IMeasureGroupHeader | Execution.IAttributeHeader,
-): header is Execution.IMeasureGroupHeader {
-    return header.hasOwnProperty("measureGroupHeader");
-}
-
 export function getAttributeHeadersInDimension(
     dimensions: Execution.IResultDimension[],
 ): Array<Execution.IAttributeHeader["attributeHeader"]> {
-    const attributeHeaders: Array<Execution.IAttributeHeader["attributeHeader"]> = [];
-
-    dimensions.forEach(
-        (dimension: Execution.IResultDimension): void => {
+    return dimensions.reduce(
+        (
+            result: Array<Execution.IAttributeHeader["attributeHeader"]>,
+            dimension: Execution.IResultDimension,
+        ): Array<Execution.IAttributeHeader["attributeHeader"]> => {
             const { headers } = dimension;
-            headers.forEach(
-                (header: Execution.IMeasureGroupHeader | Execution.IAttributeHeader): void => {
-                    if (isAttributeHeader(header)) {
-                        attributeHeaders.push(header.attributeHeader);
+            const filteredAttributeHeaders = headers.reduce(
+                (
+                    result: Array<Execution.IAttributeHeader["attributeHeader"]>,
+                    header: Execution.IMeasureGroupHeader | Execution.IAttributeHeader,
+                ): Array<Execution.IAttributeHeader["attributeHeader"]> => {
+                    if (Execution.isAttributeHeader(header)) {
+                        result.push(header.attributeHeader);
                     }
+                    return result;
                 },
+                [],
             );
+            return [...result, ...filteredAttributeHeaders];
         },
+        [],
     );
-
-    return attributeHeaders;
 }
 
 export function getMeasureGroupHeaderItemsInDimension(
     dimensions: Execution.IResultDimension[],
 ): Execution.IMeasureHeaderItem[] {
-    let measureHeaderItems: Execution.IMeasureHeaderItem[] = [];
-
-    dimensions.forEach(
-        (dimension: Execution.IResultDimension): void => {
+    return dimensions.reduce(
+        (
+            result: Execution.IMeasureHeaderItem[],
+            dimension: Execution.IResultDimension,
+        ): Execution.IMeasureHeaderItem[] => {
             const { headers } = dimension;
-            headers.forEach(
-                (header: Execution.IMeasureGroupHeader | Execution.IAttributeHeader): void => {
-                    if (isMeasureGroupHeader(header)) {
-                        measureHeaderItems = [...header.measureGroupHeader.items];
+            const filteredMeasureHeaders = headers.reduce(
+                (
+                    result: Execution.IMeasureHeaderItem[],
+                    header: Execution.IMeasureGroupHeader | Execution.IAttributeHeader,
+                ): Execution.IMeasureHeaderItem[] => {
+                    if (Execution.isMeasureGroupHeader(header)) {
+                        return [...result, ...header.measureGroupHeader.items];
                     }
+                    return result;
                 },
+                [],
             );
+            return [...result, ...filteredMeasureHeaders];
         },
+        [],
     );
-
-    return measureHeaderItems;
 }
 
 export function isTwoDimensionsData(

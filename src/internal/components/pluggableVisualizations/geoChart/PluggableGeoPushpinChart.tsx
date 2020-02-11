@@ -1,11 +1,12 @@
 // (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import { render } from "react-dom";
-import { VisualizationObject, AFM } from "@gooddata/typings";
 
 import cloneDeep = require("lodash/cloneDeep");
 import get = require("lodash/get");
 import set = require("lodash/set");
+
+import { VisualizationObject, AFM } from "@gooddata/typings";
 
 import * as BucketNames from "../../../../constants/bucketNames";
 import {
@@ -63,7 +64,7 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
         const measuresColor = this.getMeasureColorBucketItem(buckets);
         const segments = getPreferredBucketItems(
             buckets,
-            [BucketNames.STACK, BucketNames.SEGMENT_BY],
+            [BucketNames.STACK, BucketNames.SEGMENT],
             [ATTRIBUTE],
         );
 
@@ -81,7 +82,7 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
                 items: measuresColor,
             },
             {
-                localIdentifier: BucketNames.SEGMENT_BY,
+                localIdentifier: BucketNames.SEGMENT,
                 items: segments,
             },
         ]);

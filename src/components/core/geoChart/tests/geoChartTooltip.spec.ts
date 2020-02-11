@@ -17,7 +17,7 @@ describe("geoChartTooltip", () => {
                     title: "Area",
                     value: 222,
                 },
-                segmentBy: {
+                segment: {
                     title: "Age",
                     value: "20-30",
                 },
@@ -44,6 +44,34 @@ describe("geoChartTooltip", () => {
                 <span class="gd-viz-tooltip-title">Age</span>
                 <div class="gd-viz-tooltip-value-wraper" >
                     <span class="gd-viz-tooltip-value">20-30</span>
+                </div>
+            </div></div>
+            </div>`);
+        });
+
+        it("should return escaped tooltip html", () => {
+            const geoProperties: GeoJSON.GeoJsonProperties = {
+                locationName: {
+                    title: "<button>State</button>",
+                    value: "<span>Florida</span>",
+                },
+                size: {
+                    title: '<script>alert("Population")</script>',
+                    value: 111,
+                },
+            };
+            const tooltipHtml = getTooltipHtml(geoProperties, "rgb(0,0,0)");
+            expect(tooltipHtml).toBe(`<div class="gd-viz-tooltip">
+                <span class="stroke gd-viz-tooltip-stroke" style="border-top-color: rgb(0,0,0)"></span>
+                <div class="content gd-viz-tooltip-content"><div class="gd-viz-tooltip-item">
+                <span class="gd-viz-tooltip-title">&lt;button&gt;State&lt;/button&gt;</span>
+                <div class="gd-viz-tooltip-value-wraper" >
+                    <span class="gd-viz-tooltip-value">&lt;span&gt;Florida&lt;/span&gt;</span>
+                </div>
+            </div><div class="gd-viz-tooltip-item">
+                <span class="gd-viz-tooltip-title">&lt;script&gt;alert(&quot;Population&quot;)&lt;/script&gt;</span>
+                <div class="gd-viz-tooltip-value-wraper" >
+                    <span class="gd-viz-tooltip-value">111</span>
                 </div>
             </div></div>
             </div>`);

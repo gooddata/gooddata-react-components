@@ -2,11 +2,39 @@
 import get = require("lodash/get");
 import { VisualizationObject, Execution } from "@gooddata/typings";
 import { IGeoData, IObjectMapping } from "../interfaces/GeoChart";
-import { COLOR, LOCATION, SEGMENT_BY, SIZE, TOOLTIP_TEXT } from "../constants/bucketNames";
+import { COLOR, LOCATION, SEGMENT, SIZE, TOOLTIP_TEXT } from "../constants/bucketNames";
 import {
     getAttributeHeadersInDimension,
     getMeasureGroupHeaderItemsInDimension,
 } from "./executionResultHelper";
+import { isDisplayFormUri } from "../internal/utils/mdObjectHelper";
+
+interface IBucketItemInfo {
+    uri: VisualizationObject.IObjUriQualifier["uri"];
+    localIdentifier: VisualizationObject.IObjUriQualifier["uri"];
+}
+
+function getBucketItemInfo(bucketItem: VisualizationObject.BucketItem): IBucketItemInfo {
+    if (!bucketItem) {
+        return null;
+    }
+
+    // attribute item
+    if (VisualizationObject.isVisualizationAttribute(bucketItem)) {
+        const { displayForm, localIdentifier } = bucketItem.visualizationAttribute;
+        const uri = isDisplayFormUri(displayForm) && displayForm.uri;
+        return {
+            uri,
+            localIdentifier,
+        };
+    }
+
+    // measure item
+    const { definition, localIdentifier } = bucketItem.measure;
+    const item = VisualizationObject.isMeasureDefinition(definition) && definition.measureDefinition.item;
+    const uri = isDisplayFormUri(item) && item.uri;
+    return { uri, localIdentifier };
+}
 
 export function getGeoData(
     buckets: VisualizationObject.IBucket[],
@@ -22,21 +50,14 @@ export function getGeoData(
     const bucketItemInfos = buckets.reduce(
         (result: IObjectMapping, bucket: VisualizationObject.IBucket): IObjectMapping => ({
             ...result,
-            [bucket.localIdentifier]: {
-                uri:
-                    get(bucket, "items.0.visualizationAttribute.displayForm.uri") ||
-                    get(bucket, "items.0.measure.definition.measureDefinition.item.uri"),
-                localIdentifier:
-                    get(bucket, "items.0.visualizationAttribute.localIdentifier") ||
-                    get(bucket, "items.0.measure.localIdentifier"),
-            },
+            [bucket.localIdentifier]: getBucketItemInfo(bucket.items[0]),
         }),
         {},
     );
 
     const geoData: IGeoData = {};
 
-    [LOCATION, SEGMENT_BY, TOOLTIP_TEXT].forEach(
+    [LOCATION, SEGMENT, TOOLTIP_TEXT].forEach(
         (bucketName: string): void => {
             const bucketItemInfo = bucketItemInfos[bucketName];
             if (!bucketItemInfo) {

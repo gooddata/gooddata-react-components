@@ -5,15 +5,14 @@ import noop = require("lodash/noop");
 import get = require("lodash/get");
 import { VisualizationObject } from "@gooddata/typings";
 
-import { Subtract } from "../typings/subtract";
 import { GeoChart as CoreGeoChart } from "./core/GeoChart";
 import { dataSourceProvider } from "./afm/DataSourceProvider";
 import { convertBucketsToAFM, convertBucketsToMdObject } from "../helpers/conversion";
 import { getGeoChartDimensions } from "../helpers/dimensions";
 import { getResultSpec } from "../helpers/resultSpec";
-import { IGeoPushpinChartBucketProps, IGeoPushpinChartProps } from "./../interfaces/GeoChart";
+import { IGeoPushpinChartProps } from "./../interfaces/GeoChart";
 
-import { COLOR, LOCATION, SEGMENT_BY, SIZE, TOOLTIP_TEXT } from "../constants/bucketNames";
+import { COLOR, LOCATION, SEGMENT, SIZE, TOOLTIP_TEXT } from "../constants/bucketNames";
 
 export const getBuckets = (props: IGeoPushpinChartProps): VisualizationObject.IBucket[] => {
     const { color, location, segmentBy, size, config } = props;
@@ -31,7 +30,7 @@ export const getBuckets = (props: IGeoPushpinChartProps): VisualizationObject.IB
             items: location ? [location] : [],
         },
         {
-            localIdentifier: SEGMENT_BY,
+            localIdentifier: SEGMENT,
             items: segmentBy ? [segmentBy] : [],
         },
     ];
@@ -39,7 +38,7 @@ export const getBuckets = (props: IGeoPushpinChartProps): VisualizationObject.IB
     if (tooltipText) {
         buckets.push({
             localIdentifier: TOOLTIP_TEXT,
-            items: [tooltipText] || [],
+            items: [tooltipText],
         });
     }
     return buckets;
@@ -47,8 +46,6 @@ export const getBuckets = (props: IGeoPushpinChartProps): VisualizationObject.IB
 
 // noop is never called because resultSpec is always provided
 const DataSourceProvider = dataSourceProvider(CoreGeoChart, noop as any, "GeoPushpinChart");
-
-type IGeoPushpinNonBucketProps = Subtract<IGeoPushpinChartProps, IGeoPushpinChartBucketProps>;
 
 export function GeoPushpinChart(props: IGeoPushpinChartProps): JSX.Element {
     const { sortBy, filters, exportTitle } = props;
@@ -59,10 +56,7 @@ export function GeoPushpinChart(props: IGeoPushpinChartProps): JSX.Element {
 
     const resultSpec = getResultSpec(buckets, sortBy, getGeoChartDimensions);
 
-    const newProps: IGeoPushpinNonBucketProps = omit<
-        IGeoPushpinChartProps,
-        keyof IGeoPushpinChartBucketProps
-    >({ ...props }, [COLOR, LOCATION, SEGMENT_BY, SIZE, "filters", "sortBy"]);
+    const newProps = omit({ ...props }, [LOCATION, COLOR, SIZE, "segmentBy", "filters", "sortBy"]);
     newProps.config = {
         ...newProps.config,
         mdObject: convertBucketsToMdObject(buckets, props.filters, "local:pushpin"),
