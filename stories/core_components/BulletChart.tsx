@@ -37,6 +37,49 @@ storiesOf("Core components/BulletChart", module)
             </div>,
         ),
     )
+    .add("primary and target measures", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BulletChart
+                    projectId="storybook"
+                    primaryMeasure={MEASURE_1}
+                    targetMeasure={MEASURE_2}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
+    .add("primary, target and comparative measures", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BulletChart
+                    projectId="storybook"
+                    primaryMeasure={MEASURE_1}
+                    targetMeasure={MEASURE_2}
+                    comparativeMeasure={MEASURE_3}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
+    .add("primary and comparative measures", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BulletChart
+                    projectId="storybook"
+                    primaryMeasure={MEASURE_1}
+                    comparativeMeasure={MEASURE_3}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
     .add("primary measure, one attribute", () =>
         screenshotWrap(
             <div style={wrapperStyle}>

@@ -15,6 +15,7 @@ const BULLET_TEMPLATE = {
             },
         },
         bullet: {
+            maxPointWidth: MAX_POINT_WIDTH,
             tooltip: {
                 followPointer: true,
             },
