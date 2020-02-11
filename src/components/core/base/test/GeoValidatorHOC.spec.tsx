@@ -4,7 +4,7 @@ import { VisualizationObject } from "@gooddata/typings";
 import { mount, ReactWrapper } from "enzyme";
 import { geoValidatorHOC } from "../GeoValidatorHOC";
 import { ErrorComponent } from "../../../simple/ErrorComponent";
-import { LOCATION_ITEM, SIZE_ITEM } from "../../../../helpers/tests/geoChart/data";
+import { LOCATION_ITEM, SIZE_ITEM } from "../../../../helpers/tests/geoChart/fixtures";
 import { IGeoConfig } from "../../../../interfaces/GeoChart";
 
 interface ITestInnerComponentProps {

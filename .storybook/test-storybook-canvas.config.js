@@ -4,13 +4,6 @@ const DEFAULT_SCENARIO_CONFIG = {
 
 const configuration = {
     sections: {
-        'Core components/GeoChartInner': {
-            'with location': DEFAULT_SCENARIO_CONFIG,
-            'with location and size': DEFAULT_SCENARIO_CONFIG,
-            'with location and color': DEFAULT_SCENARIO_CONFIG,
-            'with location, size and color': DEFAULT_SCENARIO_CONFIG,
-            'with location, size, color and segmentBy': DEFAULT_SCENARIO_CONFIG,
-        },
         'Core components/GeoPushpinChart': {
             'with location': DEFAULT_SCENARIO_CONFIG,
             'with location and size': DEFAULT_SCENARIO_CONFIG,

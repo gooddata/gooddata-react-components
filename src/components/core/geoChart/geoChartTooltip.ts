@@ -1,6 +1,7 @@
 // (C) 2020 GoodData Corporation
 import get = require("lodash/get");
 import isEmpty = require("lodash/isEmpty");
+import escape = require("lodash/escape");
 import mapboxgl from "mapbox-gl";
 import { DEFAULT_PUSHPIN_COLOR_VALUE } from "../../../constants/geoChart";
 import { IGeoTooltipItem } from "../../../interfaces/GeoChart";
@@ -18,19 +19,19 @@ export function shouldShowTooltip(geoProperties: GeoJSON.GeoJsonProperties): boo
         return false;
     }
 
-    const { locationName, color, size, segmentBy } = geoProperties;
+    const { locationName, color, size, segment } = geoProperties;
     return (
         isTooltipItemValid(locationName) ||
         isTooltipItemValid(size) ||
         isTooltipItemValid(color) ||
-        isTooltipItemValid(segmentBy)
+        isTooltipItemValid(segment)
     );
 }
 
 export function getTooltipHtml(geoProperties: GeoJSON.GeoJsonProperties, tooltipStroke: string): string {
-    const { locationName, size, color, segmentBy } = geoProperties;
+    const { locationName, size, color, segment } = geoProperties;
 
-    const tooltipItems: string = [locationName, size, color, segmentBy].map(getTooltipItemHtml).join("");
+    const tooltipItems: string = [locationName, size, color, segment].map(getTooltipItemHtml).join("");
 
     return `<div class="gd-viz-tooltip">
                 <span class="stroke gd-viz-tooltip-stroke" style="border-top-color: ${tooltipStroke}"></span>
@@ -45,20 +46,28 @@ function getTooltipItemHtml(item: IGeoTooltipItem): string {
 
     const { title, value } = item;
     return `<div class="gd-viz-tooltip-item">
-                <span class="gd-viz-tooltip-title">${title}</span>
+                <span class="gd-viz-tooltip-title">${escape(title)}</span>
                 <div class="gd-viz-tooltip-value-wraper" >
-                    <span class="gd-viz-tooltip-value">${value}</span>
+                    <span class="gd-viz-tooltip-value">${escape(value)}</span>
                 </div>
             </div>`;
 }
 
+function parseGeoPropertyItem(item: string): GeoJSON.GeoJsonProperties {
+    try {
+        return JSON.parse(item);
+    } catch (e) {
+        return {};
+    }
+}
+
 function parseGeoProperties(properties: GeoJSON.GeoJsonProperties): GeoJSON.GeoJsonProperties {
-    const { locationName = "{}", color = "{}", size = "{}", segmentBy = "{}" } = properties;
+    const { locationName = "{}", color = "{}", size = "{}", segment = "{}" } = properties;
     return {
-        locationName: JSON.parse(locationName),
-        size: JSON.parse(size),
-        color: JSON.parse(color),
-        segmentBy: JSON.parse(segmentBy),
+        locationName: parseGeoPropertyItem(locationName),
+        size: parseGeoPropertyItem(size),
+        color: parseGeoPropertyItem(color),
+        segment: parseGeoPropertyItem(segment),
     };
 }
 

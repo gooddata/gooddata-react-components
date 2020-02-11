@@ -48,7 +48,7 @@ describe("getPushpinColors", () => {
         ]);
     });
 
-    it("should return pushpin RGB colors with null value with segmentBy", () => {
+    it("should return pushpin RGB colors with null value with segment", () => {
         const segmentItems: Execution.IResultAttributeHeaderItem[] = createSegmentItems(5);
         const colors: number[] = [10, null, 30, 40, 50];
         const expectedColors: IPushpinColor[] = [
@@ -61,7 +61,7 @@ describe("getPushpinColors", () => {
         expect(getPushpinColors(colors, segmentItems)).toEqual(expectedColors);
     });
 
-    it("should return pushpin RGB colors with null value without segmentBy", () => {
+    it("should return pushpin RGB colors with null value without segment", () => {
         const colors: number[] = [10, null, 30, 40, 50];
         const expectedColors: IPushpinColor[] = [
             { background: "rgb(215,242,250)", border: "rgb(20,178,226)" },
@@ -73,7 +73,7 @@ describe("getPushpinColors", () => {
         expect(getPushpinColors(colors, undefined)).toEqual(expectedColors);
     });
 
-    it("should return pushpin RGB colors with null value with some null segmentBy items", () => {
+    it("should return pushpin RGB colors with null value with some null segment items", () => {
         const colors: number[] = [10, null, 30, 40, null, null];
         const segmentItems: Execution.IResultAttributeHeaderItem[] = [
             ...createSegmentItems(2),

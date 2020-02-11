@@ -165,12 +165,22 @@ export default class GeoChartRenderer extends React.PureComponent<IGeoChartRende
     };
 
     private cleanupMap = (): void => {
-        this.chart.removeLayer(DEFAULT_LAYER_NAME);
-        if (!this.geoData.size) {
-            this.chart.removeLayer(DEFAULT_CLUSTER_LAYER_NAME);
-            this.chart.removeLayer(DEFAULT_CLUSTER_LABELS_CONFIG.id);
+        if (this.chart.getLayer(DEFAULT_LAYER_NAME)) {
+            this.chart.removeLayer(DEFAULT_LAYER_NAME);
         }
-        this.chart.removeSource(DEFAULT_DATA_SOURCE_NAME);
+
+        if (!this.geoData.size) {
+            if (this.chart.getLayer(DEFAULT_CLUSTER_LAYER_NAME)) {
+                this.chart.removeLayer(DEFAULT_CLUSTER_LAYER_NAME);
+            }
+            if (this.chart.getLayer(DEFAULT_CLUSTER_LABELS_CONFIG.id)) {
+                this.chart.removeLayer(DEFAULT_CLUSTER_LABELS_CONFIG.id);
+            }
+        }
+
+        if (this.chart.getSource(DEFAULT_DATA_SOURCE_NAME)) {
+            this.chart.removeSource(DEFAULT_DATA_SOURCE_NAME);
+        }
     };
 
     private removeMap = (): void => {

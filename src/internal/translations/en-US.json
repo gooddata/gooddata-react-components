@@ -274,7 +274,7 @@
         "comment": "",
         "limit": 0
     },
-    "dashboard.bucket.segmentBy_title.pushpin": {
+    "dashboard.bucket.segment_title.pushpin": {
         "value": "Segment by",
         "comment": "",
         "limit": 0

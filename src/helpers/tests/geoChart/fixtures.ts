@@ -1,6 +1,6 @@
 // (C) 2020 GoodData Corporation
 import { VisualizationObject } from "@gooddata/typings";
-import { COLOR, LOCATION, SEGMENT_BY, SIZE, TOOLTIP_TEXT } from "../../../constants/bucketNames";
+import { COLOR, LOCATION, SEGMENT, SIZE, TOOLTIP_TEXT } from "../../../constants/bucketNames";
 
 export const LOCATION_ITEM: VisualizationObject.IBucket = {
     localIdentifier: LOCATION,
@@ -17,7 +17,7 @@ export const LOCATION_ITEM: VisualizationObject.IBucket = {
 };
 
 export const SEGMENT_BY_ITEM: VisualizationObject.IBucket = {
-    localIdentifier: SEGMENT_BY,
+    localIdentifier: SEGMENT,
     items: [
         {
             visualizationAttribute: {

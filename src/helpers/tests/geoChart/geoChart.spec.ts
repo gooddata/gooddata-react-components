@@ -8,7 +8,7 @@ import {
     getFormatFromExecutionResponse,
 } from "../../geoChart";
 import { IGeoData } from "../../../interfaces/GeoChart";
-import { COLOR_ITEM, LOCATION_ITEM, SEGMENT_BY_ITEM, SIZE_ITEM, TOOLTIP_TEXT_ITEM } from "./data";
+import { COLOR_ITEM, LOCATION_ITEM, SEGMENT_BY_ITEM, SIZE_ITEM, TOOLTIP_TEXT_ITEM } from "./fixtures";
 import { getExecutionResponse, getExecutionResult } from "../../../../stories/data/geoChart";
 
 describe("getGeoData", () => {
@@ -26,7 +26,7 @@ describe("getGeoData", () => {
         expect(getGeoData(buckets, executionResponse.dimensions)).toEqual({
             color: { index: 1, name: "Area" },
             location: { index: 0, name: "State" },
-            segmentBy: { index: 1, name: "Type" },
+            segment: { index: 1, name: "Type" },
             size: { index: 0, name: "Population" },
             tooltipText: { index: 2, name: "State" },
         });

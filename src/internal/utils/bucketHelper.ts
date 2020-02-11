@@ -246,7 +246,7 @@ function bucketSupportsSubtitle(visualizationType: string, bucketLocalIdentifier
 
     if (visualizationType === VisualizationTypes.PUSHPIN) {
         return (
-            bucketLocalIdentifier !== BucketNames.LOCATION && bucketLocalIdentifier !== BucketNames.SEGMENT_BY
+            bucketLocalIdentifier !== BucketNames.LOCATION && bucketLocalIdentifier !== BucketNames.SEGMENT
         );
     }
 

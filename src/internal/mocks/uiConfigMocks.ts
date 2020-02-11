@@ -1246,7 +1246,7 @@ export const defaultGeoPushpinUiConfig: IUiConfig = {
             title: "Measure",
             canAddItems: true,
         },
-        segmentBy: {
+        segment: {
             accepts: ["attribute"],
             allowsReordering: false,
             allowsSwapping: true,

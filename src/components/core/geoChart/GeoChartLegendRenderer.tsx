@@ -1,6 +1,6 @@
 // (C) 2020 GoodData Corporation
 import * as React from "react";
-import without = require("lodash/without");
+import isFinite = require("lodash/isFinite");
 import { Execution } from "@gooddata/typings";
 import { stringToFloat } from "../../../helpers/utils";
 import { IntlWrapper } from "../../core/base/IntlWrapper";
@@ -48,7 +48,7 @@ export default function GeoChartLegendRenderer(props: IGeoChartLegendRendererPro
 }
 
 function renderPushpinSizeLegend(sizeValues: number[], format: string, locale: string): JSX.Element {
-    const values: number[] = without(sizeValues, null, undefined, NaN);
+    const values: number[] = sizeValues.filter(isFinite);
     return (
         <IntlWrapper locale={locale}>
             <IntlTranslationsProvider>

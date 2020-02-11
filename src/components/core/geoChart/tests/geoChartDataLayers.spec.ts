@@ -1,6 +1,11 @@
 // (C) 2019-2020 GoodData Corporation
 import mapboxgl from "mapbox-gl";
-import { createClusterLayers, createPushpinDataLayer } from "../geoChartDataLayers";
+import {
+    createPushpinDataLayer,
+    createClusterLabels,
+    createClusterPoints,
+    createUnclusterPoints,
+} from "../geoChartDataLayers";
 import { IGeoData } from "../../../../interfaces/GeoChart";
 import { getExecutionResult } from "../../../../../stories/data/geoChart";
 
@@ -47,9 +52,9 @@ describe("createPushpinDataLayer", () => {
                 index: 0,
                 name: "location",
             },
-            segmentBy: {
+            segment: {
                 index: 1,
-                name: "segmentBy",
+                name: "segment",
             },
             tooltipText: {
                 index: 2,
@@ -91,7 +96,7 @@ describe("createPushpinDataLayer", () => {
         ]);
     });
 
-    it("should return border and color palette with segmentBy", () => {
+    it("should return border and color palette with segment", () => {
         const geoData: IGeoData = {
             size: {
                 index: 0,
@@ -105,9 +110,9 @@ describe("createPushpinDataLayer", () => {
                 index: 0,
                 name: "location",
             },
-            segmentBy: {
+            segment: {
                 index: 1,
-                name: "segmentBy",
+                name: "segment",
             },
         };
         const layer: mapboxgl.Layer = createPushpinDataLayer(
@@ -143,9 +148,9 @@ describe("createPushpinDataLayer", () => {
                 index: 0,
                 name: "location",
             },
-            segmentBy: {
+            segment: {
                 index: 1,
-                name: "segmentBy",
+                name: "segment",
             },
         };
         const layer: mapboxgl.Layer = createPushpinDataLayer(
@@ -155,21 +160,22 @@ describe("createPushpinDataLayer", () => {
             "Hawaii",
         );
 
-        expect(layer.filter).toEqual(["==", "Hawaii", ["get", "value", ["object", ["get", "segmentBy"]]]]);
+        expect(layer.filter).toEqual(["==", "Hawaii", ["get", "value", ["object", ["get", "segment"]]]]);
     });
 
     describe("createClusterLayers", () => {
-        it("should return cluster layers", () => {
-            const layers: mapboxgl.Layer[] = createClusterLayers(dataSourceName);
-
-            expect(layers[0]).toEqual({
+        it("should create cluster point layer", () => {
+            expect(createClusterPoints("test_datasource")).toEqual({
                 filter: ["has", "point_count"],
                 id: "gdcClusters",
                 paint: { "circle-color": "rgb(20,178,226)", "circle-radius": 30 },
                 source: "test_datasource",
                 type: "circle",
             });
-            expect(layers[1]).toEqual({
+        });
+
+        it("should create clustered label layer", () => {
+            expect(createClusterLabels("test_datasource")).toEqual({
                 filter: ["has", "point_count"],
                 id: "gdcClusterLabels",
                 layout: {
@@ -183,7 +189,10 @@ describe("createPushpinDataLayer", () => {
                 source: "test_datasource",
                 type: "symbol",
             });
-            expect(layers[2]).toEqual({
+        });
+
+        it("should create unclustered points layer", () => {
+            expect(createUnclusterPoints("test_datasource")).toEqual({
                 filter: ["!", ["has", "point_count"]],
                 id: "gdcPushpins",
                 paint: {

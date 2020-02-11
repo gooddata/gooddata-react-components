@@ -5,12 +5,6 @@ import { createPushpinDataSource } from "../geoChartDataSource";
 import { IGeoData } from "../../../../interfaces/GeoChart";
 import { getExecutionResult } from "../../../../../stories/data/geoChart";
 
-function isFeatureCollection(
-    data: GeoJSON.Feature<GeoJSON.Geometry> | GeoJSON.FeatureCollection<GeoJSON.Geometry> | string,
-): data is GeoJSON.FeatureCollection<GeoJSON.Geometry> {
-    return data.hasOwnProperty("features");
-}
-
 describe("createPushpinDataSource", () => {
     it("should return empty data source", () => {
         const geoData: IGeoData = {};
@@ -42,36 +36,34 @@ describe("createPushpinDataSource", () => {
             geoData,
         );
 
-        const { data } = source;
-        if (isFeatureCollection(data)) {
-            expect(data.features[0]).toEqual({
-                geometry: {
-                    coordinates: [-89.5, 44.5],
-                    type: "Point",
+        const data = source.data as GeoJSON.FeatureCollection<GeoJSON.Geometry>;
+        expect(data.features[0]).toEqual({
+            geometry: {
+                coordinates: [-89.5, 44.5],
+                type: "Point",
+            },
+            properties: {
+                color: {
+                    background: "rgb(176,229,245)",
+                    border: "rgb(20,178,226)",
+                    title: "color",
+                    value: 528,
                 },
-                properties: {
-                    color: {
-                        background: "rgb(176,229,245)",
-                        border: "rgb(20,178,226)",
-                        title: "color",
-                        value: 528,
-                    },
-                    locationName: {
-                        title: "",
-                        value: "",
-                    },
-                    segmentBy: {
-                        title: "",
-                        value: "",
-                    },
-                    size: {
-                        title: "size",
-                        value: 1005,
-                    },
+                locationName: {
+                    title: "",
+                    value: "",
                 },
-                type: "Feature",
-            });
-        }
+                segment: {
+                    title: "",
+                    value: "",
+                },
+                size: {
+                    title: "size",
+                    value: 1005,
+                },
+            },
+            type: "Feature",
+        });
 
         expect(source.type).toEqual("geojson");
     });
@@ -124,7 +116,7 @@ describe("createPushpinDataSource", () => {
                     properties: {
                         color: { title: "", value: undefined },
                         locationName: { title: "", value: "" },
-                        segmentBy: { title: "", value: "" },
+                        segment: { title: "", value: "" },
                         size: { title: "", value: 10 },
                     },
                     type: "Feature",
@@ -134,7 +126,7 @@ describe("createPushpinDataSource", () => {
                     properties: {
                         color: { title: "", value: undefined },
                         locationName: { title: "", value: "" },
-                        segmentBy: { title: "", value: "" },
+                        segment: { title: "", value: "" },
                         size: { title: "", value: 10 },
                     },
                     type: "Feature",
@@ -144,7 +136,7 @@ describe("createPushpinDataSource", () => {
                     properties: {
                         color: { title: "", value: undefined },
                         locationName: { title: "", value: "" },
-                        segmentBy: { title: "", value: "" },
+                        segment: { title: "", value: "" },
                         size: { title: "", value: 10 },
                     },
                     type: "Feature",

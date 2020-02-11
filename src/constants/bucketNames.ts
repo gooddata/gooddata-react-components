@@ -13,5 +13,4 @@ export const COLUMNS = "columns";
 export const LOCATION = "location";
 export const SIZE = "size";
 export const COLOR = "color";
-export const SEGMENT_BY = "segmentBy";
 export const TOOLTIP_TEXT = "tooltipText";

@@ -1988,7 +1988,7 @@ export const simpleGeoPushpinReferencePoint: IReferencePoint = {
             items: masterMeasureItems.slice(1, 2),
         },
         {
-            localIdentifier: "segmentBy",
+            localIdentifier: "segment",
             items: geoAttributeItems.slice(1, 2),
         },
     ],

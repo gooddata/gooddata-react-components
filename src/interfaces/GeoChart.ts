@@ -24,7 +24,7 @@ export interface IGeoDataItem {
 export interface IGeoData {
     color?: IGeoDataItem;
     location?: IGeoDataItem;
-    segmentBy?: IGeoDataItem;
+    segment?: IGeoDataItem;
     size?: IGeoDataItem;
     tooltipText?: IGeoDataItem;
 }
@@ -39,17 +39,16 @@ export interface IGeoConfig {
     mapboxAccessToken: string;
 }
 
-export interface IGeoPushpinChartBucketProps {
+export interface IGeoPushpinChartProps extends ICommonChartProps {
+    config?: IGeoConfig;
+    projectId: string;
+    exportTitle?: string;
+
     location: VisualizationInput.IAttribute;
     size?: VisualizationInput.AttributeOrMeasure;
     color?: VisualizationInput.AttributeOrMeasure;
     segmentBy?: VisualizationInput.IAttribute;
+
     filters?: VisualizationInput.IFilter[];
     sortBy?: VisualizationInput.ISort[];
-}
-
-export interface IGeoPushpinChartProps extends ICommonChartProps, IGeoPushpinChartBucketProps {
-    config?: IGeoConfig;
-    projectId: string;
-    exportTitle?: string;
 }
