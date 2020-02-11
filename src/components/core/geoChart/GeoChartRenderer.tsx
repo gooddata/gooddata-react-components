@@ -6,7 +6,12 @@ import noop = require("lodash/noop");
 import mapboxgl = require("mapbox-gl");
 import { Execution } from "@gooddata/typings";
 
-import { createClusterLayers, createPushpinDataLayer } from "./geoChartDataLayers";
+import {
+    createClusterLabels,
+    createClusterPoints,
+    createPushpinDataLayer,
+    createUnclusterPoints,
+} from "./geoChartDataLayers";
 import { createPushpinDataSource } from "./geoChartDataSource";
 import {
     DEFAULT_CLUSTER_LABELS_CONFIG,
@@ -139,10 +144,9 @@ export default class GeoChartRenderer extends React.PureComponent<IGeoChartRende
                 "state-label", // pushpin will be rendered under state/county label
             );
         } else {
-            const clusterLayers: mapboxgl.Layer[] = createClusterLayers(DEFAULT_DATA_SOURCE_NAME);
-            clusterLayers.forEach(
-                (clusterLayer: mapboxgl.Layer) => chart.addLayer(clusterLayer, "state-label"), // cluster points will be rendered under state/county label
-            );
+            chart.addLayer(createUnclusterPoints(DEFAULT_DATA_SOURCE_NAME), "state-label");
+            chart.addLayer(createClusterPoints(DEFAULT_DATA_SOURCE_NAME));
+            chart.addLayer(createClusterLabels(DEFAULT_DATA_SOURCE_NAME));
         }
 
         // keep listening to the data event until the style is loaded

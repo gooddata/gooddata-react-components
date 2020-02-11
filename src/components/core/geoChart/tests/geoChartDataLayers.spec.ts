@@ -163,12 +163,26 @@ describe("createPushpinDataLayer", () => {
         expect(layer.filter).toEqual(["==", "Hawaii", ["get", "value", ["object", ["get", "segment"]]]]);
     });
 
-    describe("createClusterLayers", () => {
+    describe("Cluster Layers", () => {
         it("should create cluster point layer", () => {
             expect(createClusterPoints("test_datasource")).toEqual({
                 filter: ["has", "point_count"],
                 id: "gdcClusters",
-                paint: { "circle-color": "rgb(20,178,226)", "circle-radius": 30 },
+                paint: {
+                    "circle-color": ["step", ["get", "point_count"], "#00D398", 9, "#F38700", 99, "#E84C3C"],
+                    "circle-radius": ["step", ["get", "point_count"], 30, 99, 50],
+                    "circle-stroke-color": [
+                        "step",
+                        ["get", "point_count"],
+                        "#00D398",
+                        9,
+                        "#F38700",
+                        99,
+                        "#E84C3C",
+                    ],
+                    "circle-stroke-opacity": 0.2,
+                    "circle-stroke-width": 8,
+                },
                 source: "test_datasource",
                 type: "circle",
             });
@@ -196,17 +210,9 @@ describe("createPushpinDataLayer", () => {
                 filter: ["!", ["has", "point_count"]],
                 id: "gdcPushpins",
                 paint: {
-                    "circle-color": [
-                        "string",
-                        ["get", "background", ["object", ["get", "color"]]],
-                        "rgb(20,178,226)",
-                    ],
+                    "circle-color": "rgb(20,178,226)",
                     "circle-radius": 10,
-                    "circle-stroke-color": [
-                        "string",
-                        ["get", "border", ["object", ["get", "color"]]],
-                        "rgb(20,178,226)",
-                    ],
+                    "circle-stroke-color": "rgb(20,178,226)",
                     "circle-stroke-width": 1,
                 },
                 source: "test_datasource",
