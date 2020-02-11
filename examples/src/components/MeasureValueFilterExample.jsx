@@ -32,7 +32,7 @@ export class FilterByValueExample extends Component {
     renderPresetButton(label, appliedFilters, isActive) {
         return (
             <button
-                className={`gd-button gd-button-secondary ${isActive ? "is-active" : ""}`}
+                className={`gd-button gd-button-secondary ${isActive ? "is-active" : ""} s-filter-button`}
                 onClick={() =>
                     this.setState({
                         filters: appliedFilters,
