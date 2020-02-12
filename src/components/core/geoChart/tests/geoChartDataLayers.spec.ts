@@ -74,7 +74,7 @@ describe("createPushpinDataLayer", () => {
         ]);
         expect(layer.paint["circle-radius"]).toEqual([
             "step",
-            ["get", "value", ["object", ["get", "size"]]],
+            ["get", "pushpinRadius"],
             10,
             18,
             10,

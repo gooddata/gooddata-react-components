@@ -91,6 +91,7 @@ function transformPushpinDataSource(
                         coordinates,
                     },
                     properties: {
+                        pushpinRadius: sizeValue,
                         locationName: {
                             title: locationNameTitle,
                             value: locationNameValue,
