@@ -924,6 +924,14 @@
     "@babel/helper-plugin-utils" "^7.0.0"
     "@babel/plugin-transform-typescript" "^7.1.0"
 
+"@babel/runtime-corejs2@^7.0.0":
+  version "7.8.4"
+  resolved "https://registry.yarnpkg.com/@babel/runtime-corejs2/-/runtime-corejs2-7.8.4.tgz#e4ed23a8be40fa26b97fb649deaba8144c987593"
+  integrity sha512-7jU2FgNqNHX6yTuU/Dr/vH5/O8eVL9U85MG5aDw1LzGfCvvhXC1shdXfVzCQDsoY967yrAKeLujRv7l8BU+dZA==
+  dependencies:
+    core-js "^2.6.5"
+    regenerator-runtime "^0.13.2"
+
 "@babel/runtime@7.3.1":
   version "7.3.1"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.3.1.tgz#574b03e8e8a9898eaf4a872a92ea20b7846f6f2a"
@@ -1219,13 +1227,13 @@
     rxjs "^5.5.6"
     uuid "^3.2.1"
 
-"@gooddata/goodstrap@^66.5.0":
-  version "66.5.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-66.5.0.tgz#861434a0d689d5317248a27d568cbc4ea485858d"
-  integrity sha512-0/rNEGuFGEWt9Ud2PmtlmwcGHqYA6BqZG9PjQHkw8KVf+gLixWeK3hyBBwQRli87lLaPsGwqjhoOfH81v+izbA==
+"@gooddata/goodstrap@^67.0.0":
+  version "67.0.0"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-67.0.0.tgz#5630897163fe802c923ed7af8a8cef783cb0a441"
+  integrity sha512-c+8azYwVUVvmXKKdh/SwQI0cuBpfLP00k1g8gpH4Ux9QS5mJQwMmzJwTRFtHcAtoHU7ki4lrMgoaGmLICM49AQ==
   dependencies:
+    "@babel/runtime-corejs2" "^7.0.0"
     "@gooddata/js-utils" "^3.5.0"
-    babel-runtime "^6.26.0"
     classnames "^2.2.6"
     custom-event "^1.0.1"
     element-closest-polyfill "^1.0.0"
