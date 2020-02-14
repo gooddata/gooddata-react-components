@@ -171,7 +171,7 @@ describe("MdObjectHelper", () => {
     describe("mdObjectToGeoPushpinBucketProps", () => {
         it("should convert MDO to Geo pushpin chart's bucket props", () => {
             const config: IGeoConfig = {
-                mapboxAccessToken: "",
+                mapboxToken: "",
             };
 
             const filtersFromProps: AFM.ExtendedFilter[] = [
@@ -221,7 +221,7 @@ describe("MdObjectHelper", () => {
             };
 
             const expectedConfig: IGeoConfig = {
-                mapboxAccessToken: "",
+                mapboxToken: "",
                 tooltipText: {
                     visualizationAttribute: {
                         displayForm: {

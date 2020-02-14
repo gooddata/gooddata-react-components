@@ -22,7 +22,7 @@ describe("Geo Pushpin Chart", () => {
     ).localIdentifier("segmentBy");
 
     const chartConfig: IGeoConfig = {
-        mapboxAccessToken: "",
+        mapboxToken: "",
         tooltipText: Model.attribute("attribute_tooltip").localIdentifier("tooltipText"),
     };
     function renderShallowComponent(customProps: Partial<IGeoPushpinChartProps>) {

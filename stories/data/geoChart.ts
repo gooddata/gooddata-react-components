@@ -1212,7 +1212,7 @@ export function getGeoConfig(props: IGeoOptions): IGeoConfig {
     };
     const config: IGeoConfig = {
         mdObject,
-        mapboxAccessToken: "",
+        mapboxToken: "",
     };
     return config;
 }

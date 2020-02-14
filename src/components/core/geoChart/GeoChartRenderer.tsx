@@ -34,7 +34,7 @@ export interface IGeoChartRendererProps {
 export default class GeoChartRenderer extends React.PureComponent<IGeoChartRendererProps> {
     public static defaultProps: Partial<IGeoChartRendererProps> = {
         config: {
-            mapboxAccessToken: "",
+            mapboxToken: "",
         },
         afterRender: noop,
     };
@@ -47,7 +47,7 @@ export default class GeoChartRenderer extends React.PureComponent<IGeoChartRende
     public constructor(props: IGeoChartRendererProps) {
         super(props);
 
-        mapboxgl.accessToken = props.config.mapboxAccessToken;
+        mapboxgl.accessToken = props.config.mapboxToken;
     }
 
     public componentDidUpdate(prevProps: IGeoChartRendererProps) {

@@ -103,7 +103,7 @@ describe("getGeoData", () => {
     });
 
     describe("isChartConfig", () => {
-        it.each([[false, { mapboxAccessToken: "abc" }], [true, {}]])(
+        it.each([[false, { mapboxToken: "abc" }], [true, {}]])(
             "should return isChartConfig %s",
             (expectedValue: boolean, config: IChartConfig | IGeoConfig) => {
                 expect(isChartConfig(config)).toEqual(expectedValue);
@@ -112,7 +112,7 @@ describe("getGeoData", () => {
     });
 
     describe("isGeoConfig", () => {
-        it.each([[false, {}], [true, { mapboxAccessToken: "abc" }]])(
+        it.each([[false, {}], [true, { mapboxToken: "abc" }]])(
             "should return isGeoConfig %s",
             (expectedValue: boolean, config: IChartConfig | IGeoConfig) => {
                 expect(isGeoConfig(config)).toEqual(expectedValue);
