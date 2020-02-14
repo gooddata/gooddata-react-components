@@ -126,3 +126,9 @@ export function countItemsOnAxes(
         secondary_yaxis: secondaryMeasureCountInConfig,
     };
 }
+
+export function isDisplayFormUri(
+    displayForm: VisualizationObject.IObjUriQualifier | VisualizationObject.IObjIdentifierQualifier,
+): displayForm is VisualizationObject.IObjUriQualifier {
+    return displayForm.hasOwnProperty("uri");
+}

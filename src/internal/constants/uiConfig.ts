@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import { IUiConfig } from "../interfaces/Visualization";
 
 import { METRIC, FACT, ATTRIBUTE, DATE } from "./bucket";
@@ -16,6 +16,8 @@ export const MAX_VIEW_COUNT = 2;
 export const DEFAULT_HEADLINE_METRICS_COUNT = 1;
 export const DEFAULT_XIRR_METRICS_COUNT = 1;
 export const DEFAULT_XIRR_ATTRIBUTES_COUNT = 1;
+export const DEFAULT_GEO_ATTRIBUTES_COUNT = 1;
+export const DEFAULT_PUSHPIN_METRICS_COUNT = 1;
 
 export const UICONFIG = "uiConfig";
 export const RECOMMENDATIONS = "recommendations";
@@ -539,4 +541,38 @@ export const DEFAULT_XIRR_UICONFIG: IUiConfig = {
     },
     ...defaultRootUiConfigProperties,
     ...disabledExportConfig,
+};
+
+const geoMeasuresBase = {
+    ...measuresBase,
+    allowsReordering: false,
+    itemsLimit: DEFAULT_PUSHPIN_METRICS_COUNT,
+    isShowInPercentVisible: false,
+    canAddItems: true,
+};
+
+const geoAttributesBase = {
+    ...viewBase,
+    accepts: [ATTRIBUTE],
+    itemsLimit: DEFAULT_GEO_ATTRIBUTES_COUNT,
+};
+
+export const GEO_PUSHPIN_CHART_UICONFIG: IUiConfig = {
+    buckets: {
+        location: {
+            ...geoAttributesBase,
+        },
+        size: {
+            ...geoMeasuresBase,
+        },
+        color: {
+            ...geoMeasuresBase,
+        },
+        segment: {
+            ...geoAttributesBase,
+        },
+        ...defaultFilters,
+    },
+    supportedLocationIcon: { supported: true },
+    ...defaultRootUiConfigProperties,
 };
