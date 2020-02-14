@@ -1,7 +1,8 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { VisualizationObject, AFM, VisualizationInput } from "@gooddata/typings";
 import MdObjectHelper, { areAllMeasuresOnSingleAxis, getMeasuresFromMdObject } from "../MdObjectHelper";
-import { visualizationObjects, pivotTableMDO } from "../../../__mocks__/fixtures";
+import { IGeoConfig } from "../../interfaces/GeoChart";
+import { visualizationObjects, geoPushpinMDO, pivotTableMDO } from "../../../__mocks__/fixtures";
 
 describe("MdObjectHelper", () => {
     describe("getTotals", () => {
@@ -164,6 +165,137 @@ describe("MdObjectHelper", () => {
                 operator: "change",
                 masterMeasureLocalIdentifiers: ["m1", "m2"],
             });
+        });
+    });
+
+    describe("mdObjectToGeoPushpinBucketProps", () => {
+        it("should convert MDO to Geo pushpin chart's bucket props", () => {
+            const config: IGeoConfig = {
+                mapboxAccessToken: "",
+            };
+
+            const filtersFromProps: AFM.ExtendedFilter[] = [
+                {
+                    relativeDateFilter: {
+                        to: 0,
+                        from: -3,
+                        granularity: "GDC.time.quarter",
+                        dataSet: {
+                            uri: "/gdc/md/myproject/obj/921",
+                        },
+                    },
+                },
+                {
+                    measureValueFilter: {
+                        measure: {
+                            localIdentifier: "m2",
+                        },
+                        condition: {
+                            comparison: {
+                                operator: "GREATER_THAN",
+                                value: 420,
+                            },
+                        },
+                    },
+                },
+            ];
+
+            const bucketProps = MdObjectHelper.mdObjectToGeoPushpinBucketProps(
+                config,
+                geoPushpinMDO.visualizationObject,
+                filtersFromProps,
+            );
+
+            const expectedColor: VisualizationInput.IMeasure = {
+                measure: {
+                    definition: {
+                        measureDefinition: {
+                            item: {
+                                uri: "/gdc/md/myproject/obj/8173",
+                            },
+                        },
+                    },
+                    localIdentifier: "color",
+                    title: "Amount Avg",
+                },
+            };
+
+            const expectedConfig: IGeoConfig = {
+                mapboxAccessToken: "",
+                tooltipText: {
+                    visualizationAttribute: {
+                        displayForm: {
+                            uri: "/gdc/md/myproject/obj/853",
+                        },
+                        localIdentifier: "tooltip",
+                    },
+                },
+            };
+
+            const expectedSize: VisualizationInput.IMeasure = {
+                measure: {
+                    definition: {
+                        measureDefinition: {
+                            item: {
+                                uri: "/gdc/md/myproject/obj/8172",
+                            },
+                        },
+                    },
+                    localIdentifier: "size",
+                    title: "Amount",
+                },
+            };
+
+            const expectedLocation: VisualizationInput.IAttribute = {
+                visualizationAttribute: {
+                    displayForm: {
+                        uri: "/gdc/md/myproject/obj/851",
+                    },
+                    localIdentifier: "location",
+                },
+            };
+
+            const expectedSegmentBy: VisualizationInput.IAttribute = {
+                visualizationAttribute: {
+                    displayForm: {
+                        uri: "/gdc/md/myproject/obj/852",
+                    },
+                    localIdentifier: "segment",
+                },
+            };
+
+            const expectedFilters: VisualizationInput.IFilter[] = [
+                {
+                    relativeDateFilter: {
+                        dataSet: {
+                            uri: "/gdc/md/myproject/obj/921",
+                        },
+                        from: -3,
+                        granularity: "GDC.time.quarter",
+                        to: 0,
+                    },
+                },
+                {
+                    measureValueFilter: {
+                        measure: {
+                            localIdentifier: "m2",
+                        },
+                        condition: {
+                            comparison: {
+                                operator: "GREATER_THAN",
+                                value: 420,
+                            },
+                        },
+                    },
+                },
+            ];
+
+            expect(bucketProps.color).toEqual(expectedColor);
+            expect(bucketProps.config).toEqual(expectedConfig);
+            expect(bucketProps.filters).toEqual(expectedFilters);
+            expect(bucketProps.location).toEqual(expectedLocation);
+            expect(bucketProps.segmentBy).toEqual(expectedSegmentBy);
+            expect(bucketProps.size).toEqual(expectedSize);
         });
     });
 

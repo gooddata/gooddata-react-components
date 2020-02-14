@@ -1,7 +1,8 @@
 // (C) 2019-2020 GoodData Corporation
 import get = require("lodash/get");
 import { VisualizationObject, Execution } from "@gooddata/typings";
-import { IGeoData, IObjectMapping } from "../interfaces/GeoChart";
+import { IChartConfig } from "../interfaces/Config";
+import { IGeoConfig, IGeoData, IObjectMapping } from "../interfaces/GeoChart";
 import { COLOR, LOCATION, SEGMENT, SIZE, TOOLTIP_TEXT } from "../constants/bucketNames";
 import {
     getAttributeHeadersInDimension,
@@ -149,4 +150,12 @@ export function getFormatFromExecutionResponse(
         result,
         `dimensions[0].headers[0].measureGroupHeader.items[${indexMeasure}].measureHeaderItem.format`,
     );
+}
+
+export function isGeoConfig(config: IChartConfig | IGeoConfig): config is IGeoConfig {
+    return (config as IGeoConfig).mapboxAccessToken !== undefined;
+}
+
+export function isChartConfig(config: IChartConfig | IGeoConfig): config is IChartConfig {
+    return !isGeoConfig(config);
 }

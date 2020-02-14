@@ -68,6 +68,100 @@ export const measures: VisualizationObject.IMeasure[] = [
     },
 ];
 
+export const geoPushpinMDO: IVisualization = {
+    visualizationObject: {
+        content: {
+            visualizationClass: {
+                uri: "/gdc/md/myproject/obj/pushpin",
+            },
+            buckets: [
+                {
+                    localIdentifier: "size",
+                    items: [
+                        {
+                            measure: {
+                                localIdentifier: "size",
+                                title: "Amount",
+                                definition: {
+                                    measureDefinition: {
+                                        item: {
+                                            uri: "/gdc/md/myproject/obj/8172",
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    ],
+                },
+                {
+                    localIdentifier: "color",
+                    items: [
+                        {
+                            measure: {
+                                localIdentifier: "color",
+                                title: "Amount Avg",
+                                definition: {
+                                    measureDefinition: {
+                                        item: {
+                                            uri: "/gdc/md/myproject/obj/8173",
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    ],
+                },
+                {
+                    localIdentifier: "location",
+                    items: [
+                        {
+                            visualizationAttribute: {
+                                localIdentifier: "location",
+                                displayForm: { uri: "/gdc/md/myproject/obj/851" },
+                            },
+                        },
+                    ],
+                },
+                {
+                    localIdentifier: "segment",
+                    items: [
+                        {
+                            visualizationAttribute: {
+                                localIdentifier: "segment",
+                                displayForm: { uri: "/gdc/md/myproject/obj/852" },
+                            },
+                        },
+                    ],
+                },
+                {
+                    localIdentifier: "tooltipText",
+                    items: [
+                        {
+                            visualizationAttribute: {
+                                localIdentifier: "tooltip",
+                                displayForm: { uri: "/gdc/md/myproject/obj/853" },
+                            },
+                        },
+                    ],
+                },
+            ],
+        },
+        meta: {
+            isProduction: true,
+            summary: "",
+            created: new Date("2015-05-23T09:24:41Z"),
+            identifier: "geo",
+            author: "/gdc/account/profile/johndoe",
+            uri: "/gdc/md/myproject/obj/76384",
+            deprecated: false,
+            title: "Measure over time",
+            tags: "",
+            contributor: "/gdc/account/profile/johndoe",
+            category: "visualizationObject",
+        },
+    },
+};
+
 export const pivotTableMDO: IVisualization = {
     visualizationObject: {
         content: {
@@ -1424,6 +1518,7 @@ export const visualizationObjects: IVisualization[] = [
             },
         },
     },
+    geoPushpinMDO,
 ];
 
 export const visualizationClasses: IVisualizationClassWrapped[] = [
@@ -1452,6 +1547,20 @@ export const visualizationClasses: IVisualizationClassWrapped[] = [
             meta: {
                 title: "Column chart",
                 uri: "/gdc/md/myproject/obj/column",
+            },
+        },
+    },
+    {
+        visualizationClass: {
+            content: {
+                url: "local:pushpin",
+                icon: "",
+                iconSelected: "",
+                checksum: "",
+            },
+            meta: {
+                title: "Geo chart",
+                uri: "/gdc/md/myproject/obj/pushpin",
             },
         },
     },
