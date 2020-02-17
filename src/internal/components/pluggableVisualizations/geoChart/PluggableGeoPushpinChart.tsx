@@ -128,6 +128,7 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
             dimensions: { height },
             custom: { drillableItems },
             locale,
+            config,
         } = options;
         const {
             afterRender,
@@ -143,12 +144,12 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
 
         const resultSpec = this.getResultSpec(options, visualizationProperties, mdObject);
 
-        const fullConfig = this.buildGeoChartConfig(options, mdObject);
+        const fullConfig = this.buildVisualizationConfig(mdObject, config, null);
 
         const geoPushpinProps = {
             projectId,
             drillableItems,
-            config: fullConfig,
+            config: fullConfig as IGeoConfig,
             height: resultingHeight,
             intl,
             locale,
@@ -166,21 +167,6 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
         };
 
         render(<GeoChart {...geoPushpinProps} />, document.querySelector(geoPushpinElement));
-    }
-
-    private buildGeoChartConfig(
-        options: IVisProps,
-        mdObject: VisualizationObject.IVisualizationObjectContent,
-    ): IGeoConfig {
-        const { config } = options;
-        const fullConfig = this.buildVisualizationConfig(mdObject, config, null);
-
-        // TODO: Remove hard-coded token here once WA-11019 is resolved in both BE and FE
-        return {
-            ...fullConfig,
-            mapboxAccessToken:
-                "pk.eyJ1IjoicGhhbXV5dnUiLCJhIjoiY2s1NmQ0czJvMDF3NTNsb2R2b2djM3V1eiJ9.X0DnlbX8wBZowC2Xjp8OOg",
-        };
     }
 
     private getResultSpec(

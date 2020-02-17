@@ -153,7 +153,7 @@ export function getFormatFromExecutionResponse(
 }
 
 export function isGeoConfig(config: IChartConfig | IGeoConfig): config is IGeoConfig {
-    return (config as IGeoConfig).mapboxAccessToken !== undefined;
+    return (config as IGeoConfig).mapboxToken !== undefined;
 }
 
 export function isChartConfig(config: IChartConfig | IGeoConfig): config is IChartConfig {

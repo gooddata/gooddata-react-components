@@ -51,7 +51,7 @@ export class GeoChartInner extends BaseVisualization<IGeoChartInnerProps, {}> {
         legendRenderer: renderLegend,
         legendPostion: TOP,
         config: {
-            mapboxAccessToken: "",
+            mapboxToken: "",
         },
     };
 

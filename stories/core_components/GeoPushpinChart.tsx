@@ -20,7 +20,7 @@ const wrapperStyle: React.CSSProperties = { width: 900, height: 600, position: "
 const DEFAULT_CONFIG: IGeoConfig = {
     center: [-94.60376, 38.573936],
     zoom: 3.3,
-    mapboxAccessToken: process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN,
+    mapboxToken: process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN,
 };
 
 const afterRender = () => console.log("GDC_GEO_CANVAS_READY"); // tslint:disable-line:no-console
