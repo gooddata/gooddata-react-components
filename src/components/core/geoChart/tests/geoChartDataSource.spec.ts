@@ -43,6 +43,7 @@ describe("createPushpinDataSource", () => {
                 type: "Point",
             },
             properties: {
+                pushpinRadius: 1005,
                 color: {
                     background: "rgb(176,229,245)",
                     border: "rgb(20,178,226)",
@@ -114,6 +115,7 @@ describe("createPushpinDataSource", () => {
                 {
                     geometry: { coordinates: [-155.6254, 19.0415], type: "Point" },
                     properties: {
+                        pushpinRadius: 10,
                         color: { title: "", value: undefined },
                         locationName: { title: "", value: "" },
                         segment: { title: "", value: "" },
@@ -124,6 +126,7 @@ describe("createPushpinDataSource", () => {
                 {
                     geometry: { coordinates: [-155.5751, 19.0698], type: "Point" },
                     properties: {
+                        pushpinRadius: 10,
                         color: { title: "", value: undefined },
                         locationName: { title: "", value: "" },
                         segment: { title: "", value: "" },
@@ -134,6 +137,7 @@ describe("createPushpinDataSource", () => {
                 {
                     geometry: { coordinates: [-155.6143, 19.0716], type: "Point" },
                     properties: {
+                        pushpinRadius: 10,
                         color: { title: "", value: undefined },
                         locationName: { title: "", value: "" },
                         segment: { title: "", value: "" },

@@ -18,7 +18,7 @@ import {
 } from "../../../constants/geoChart";
 import { IGeoData } from "../../../interfaces/GeoChart";
 import { stringToFloat } from "../../../helpers/utils";
-import { SEGMENT, SIZE } from "../../../constants/bucketNames";
+import { SEGMENT } from "../../../constants/bucketNames";
 import { isTwoDimensionsData } from "../../../helpers/executionResultHelper";
 
 function getExpressionByBucketName(name: string): mapboxgl.Expression {
@@ -46,11 +46,10 @@ function createPushpinSizeOptions(
     const sizesCount = DEFAULT_PUSHPIN_SIZE_SCALE.length;
     const sizeStep = (sizeMax - sizeMin) / sizesCount;
 
-    const sizeOptions: mapboxgl.Expression = [
-        "step",
-        getExpressionByBucketName(SIZE),
-        DEFAULT_PUSHPIN_SIZE_VALUE,
-    ];
+    // The mouseenter event uses queryRenderedFeatures to determine when the mouse is touching a feature
+    // And queryRenderedFeatures is not supporting nested object in expression
+    // https://github.com/mapbox/mapbox-gl-js/issues/7194
+    const sizeOptions: mapboxgl.Expression = ["step", ["get", "pushpinRadius"], DEFAULT_PUSHPIN_SIZE_VALUE];
     for (let index = 0; index < sizesCount; index++) {
         let stepValue = sizeMin + sizeStep * index;
         stepValue = parseFloat(stepValue.toFixed(2));
