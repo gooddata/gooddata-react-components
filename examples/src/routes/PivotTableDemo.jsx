@@ -14,6 +14,8 @@ import PivotTableSubtotalsExample from "../components/PivotTableSubtotalsExample
 import PivotTableSubtotalsExampleSRC from "!raw-loader!../components/PivotTableSubtotalsExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import PivotTableSortingAggregationExample from "../components/PivotTableSortingAggregationExample";
 import PivotTableSortingAggregationExampleSRC from "!raw-loader!../components/PivotTableSortingAggregationExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
+import PivotTableSizingExample from "../components/PivotTableSizingExample";
+import PivotTableSizingExampleSRC from "!raw-loader!../components/PivotTableSizingExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 
 export const PivotTableDemo = () => (
     <div>
@@ -26,35 +28,36 @@ export const PivotTableDemo = () => (
 
         <hr className="separator" />
 
-        <h2 id="measures-row-attributes-and-column-attributes">Example of Pivot Table with Totals</h2>
+        <h2 id="table-with-totals">Example of Pivot Table with Totals</h2>
         <ExampleWithSource for={() => <PivotTableTotalsExample />} source={PivotTableTotalsExampleSRC} />
 
         <hr className="separator" />
 
-        <h2 id="measures-row-attributes-and-column-attributes">Example of Drill Event</h2>
+        <h2 id="table-with-drill-events">Example of Drill Event</h2>
         <ExampleWithSource for={() => <PivotTableDrillExample />} source={PivotTableDrillExampleSRC} />
 
         <hr className="separator" />
 
-        <h2 id="measures-row-attributes-and-column-attributes">Example of rows grouping</h2>
+        <h2 id="table-with-row-grouping">Example of rows grouping</h2>
         <ExampleWithSource
             for={() => <PivotTableRowGroupingExample />}
             source={PivotTableRowGroupingExampleSRC}
         />
 
-        <h2 id="measures-row-attributes-and-column-attributes">Example of subtotals</h2>
+        <h2 id="table-with-subtotals">Example of subtotals</h2>
         <ExampleWithSource
             for={() => <PivotTableSubtotalsExample />}
             source={PivotTableSubtotalsExampleSRC}
         />
 
-        <h2 id="measures-row-attributes-and-column-attributes-and-sort-aggregation">
-            Example of sort with aggregation
-        </h2>
+        <h2 id="table-with-sort-aggregation">Example of sort with aggregation</h2>
         <ExampleWithSource
             for={() => <PivotTableSortingAggregationExample />}
             source={PivotTableSortingAggregationExampleSRC}
         />
+
+        <h2 id="table-with-column-sizing">Example of table column sizing</h2>
+        <ExampleWithSource for={() => <PivotTableSizingExample />} source={PivotTableSizingExampleSRC} />
     </div>
 );
 

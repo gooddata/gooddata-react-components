@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { ISeparators } from "@gooddata/numberjs";
 import { AFM } from "@gooddata/typings";
 
@@ -7,7 +7,13 @@ export interface IMenu {
     aggregationsSubMenu?: boolean;
 }
 
+export type DefaultColumnWidth = "viewport" | "unset"; // | "auto"  | number; can be added later see ONE-4276
+export interface IColumnSizing {
+    defaultWidth: DefaultColumnWidth;
+}
+
 export interface IPivotTableConfig {
+    columnSizing?: IColumnSizing;
     separators?: ISeparators;
     menu?: IMenu;
     maxHeight?: number;

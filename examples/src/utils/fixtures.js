@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 
 const demoProject = {
     "https://secure.gooddata.com": "k26dtejorcqlqf11crn6imbeevp2q4kg",
@@ -73,6 +73,7 @@ export const locationStateAttributeUri = `/gdc/md/${demoProjectId}/obj/2210`;
 export const locationStateAttributeCaliforniaUri = `/gdc/md/${demoProjectId}/obj/2210/elements?id=6340116`;
 export const locationStateDisplayFormIdentifier = "label.restaurantlocation.locationstate";
 export const menuCategoryAttributeDFIdentifier = "label.menuitem.menucategory";
+export const menuItemNameUri = `/gdc/md/${demoProjectId}/obj/2185`;
 export const menuItemNameAttributeDFIdentifier = "label.menuitem.menuitemname";
 export const yearDateDataSetAttributeIdentifier = "date.year";
 export const monthDateDataSetAttributeIdentifier = "date.month";

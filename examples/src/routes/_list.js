@@ -36,6 +36,7 @@ import OnDrillHandling from "./OnDrillHandling";
 import Xirr from "./Xirr";
 import BulletChart from "./BulletChart";
 import NativeTotalAndMeasureValueFilterTest from "../components/NativeTotalAndMeasureValueFilterTest";
+import { PivotTableSizing } from "./PivotTableSizing";
 
 export const advancedUseCasesRoutes = [
     {
@@ -282,6 +283,11 @@ export const hiddenPaths = [
         path: "/hidden/bullet-chart",
         title: "Bullet chart",
         Component: BulletChart,
+    },
+    {
+        path: "/hidden/pivot-table-sizing",
+        title: "Pivot Table Sizing",
+        Component: PivotTableSizing,
     },
 ];
 
