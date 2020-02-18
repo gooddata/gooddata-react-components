@@ -17,6 +17,18 @@ The REST API versions in the table are just for your information as the values a
 
 - We ask developers to consider using the Headline component instead of the KPI component. The KPI component may be eventually marked as deprecated in one of the next major versions.
 
+## 7.3.0
+
+### Added
+
+- Measure value filter
+
+### Fixed
+
+- Attribute sort aggregation is now preserved in pivot tables.
+- Microsoft Internet Explorer and Microsoft Edge no longer show two "X" icons in the search input field.
+- Invalid autoprefixer directives were fixed in the main stylesheet.
+
 ## 7.2.0
 
 ### Added
