@@ -66,6 +66,7 @@ const getPrimarySeries = (seriesItemConfig: IPointData, onlyPrimaryMeasure: bool
     pointPadding: onlyPrimaryMeasure ? 0.1 : 0.2,
     maxPointWidth: getPrimarySeriesMaxPointWidth(onlyPrimaryMeasure),
     zIndex: 1,
+    bulletChartMeasureType: "primary",
 });
 
 const getTargetSeries = (seriesItemConfig: IPointData) => ({
@@ -76,12 +77,14 @@ const getTargetSeries = (seriesItemConfig: IPointData) => ({
         width: "100%",
     },
     zIndex: 2,
+    bulletChartMeasureType: "target",
 });
 
 const getComparativeSeries = (seriesItemConfig: IPointData) => ({
     ...seriesItemConfig,
     pointPadding: 0,
     zIndex: 0,
+    bulletChartMeasureType: "comparative",
 });
 
 export const isPrimarySeries = (

@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import cloneDeep = require("lodash/cloneDeep");
 import { AFM } from "@gooddata/typings";
 import Highcharts from "../../chart/highcharts/highchartsEntryPoint";
@@ -234,6 +234,101 @@ describe("Drilldown Eventing", () => {
         expect(target.dispatchEvent).toHaveBeenCalled();
 
         expect(target.dispatchEvent.mock.calls[0][0].detail.drillContext.value).toBe("678");
+    });
+
+    describe("bullet chart", () => {
+        it("should fire correct data for target measure drilling", () => {
+            const drillConfig = { afm, onFiredDrillEvent: () => true };
+            const target: any = { dispatchEvent: jest.fn() };
+
+            const targetPoint: any = {
+                x: 1,
+                y: 2,
+                target: 100,
+                series: {
+                    type: "bullet",
+                    userOptions: {
+                        bulletChartMeasureType: "target",
+                    },
+                },
+                drillIntersection: [],
+            };
+            const targetPointClickEventData: any = { point: targetPoint };
+
+            chartClick(
+                drillConfig,
+                targetPointClickEventData as Highcharts.DrilldownEventObject,
+                target as EventTarget,
+                VisualizationTypes.BULLET,
+            );
+
+            jest.runAllTimers();
+
+            expect(target.dispatchEvent.mock.calls[0][0].detail.drillContext.element).toBe("target");
+            expect(target.dispatchEvent.mock.calls[0][0].detail.drillContext.y).toBe(100);
+        });
+
+        it("should fire correct data for primary measure drilling", () => {
+            const drillConfig = { afm, onFiredDrillEvent: () => true };
+            const target: any = { dispatchEvent: jest.fn() };
+
+            const primaryPoint: any = {
+                x: 1,
+                y: 2,
+                target: 100,
+                series: {
+                    type: "bar",
+                    userOptions: {
+                        bulletChartMeasureType: "primary",
+                    },
+                },
+                drillIntersection: [],
+            };
+            const primaryPointClickEventData: any = { point: primaryPoint };
+
+            chartClick(
+                drillConfig,
+                primaryPointClickEventData,
+                target as EventTarget,
+                VisualizationTypes.BULLET,
+            );
+
+            jest.runAllTimers();
+
+            expect(target.dispatchEvent.mock.calls[0][0].detail.drillContext.element).toBe("primary");
+            expect(target.dispatchEvent.mock.calls[0][0].detail.drillContext.y).toBe(2);
+        });
+
+        it("should fire correct data for comparative measure drilling", () => {
+            const drillConfig = { afm, onFiredDrillEvent: () => true };
+            const target: any = { dispatchEvent: jest.fn() };
+
+            const comparativePoint: any = {
+                x: 1,
+                y: 2,
+                target: 100,
+                series: {
+                    type: "bar",
+                    userOptions: {
+                        bulletChartMeasureType: "comparative",
+                    },
+                },
+                drillIntersection: [],
+            };
+            const comparativePointClickEventData: any = { point: comparativePoint };
+
+            chartClick(
+                drillConfig,
+                comparativePointClickEventData,
+                target as EventTarget,
+                VisualizationTypes.BULLET,
+            );
+
+            jest.runAllTimers();
+
+            expect(target.dispatchEvent.mock.calls[0][0].detail.drillContext.element).toBe("comparative");
+            expect(target.dispatchEvent.mock.calls[0][0].detail.drillContext.y).toBe(2);
+        });
     });
 
     it("should remove duplicated values for heatmap", () => {

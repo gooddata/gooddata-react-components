@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 export const barOnDrillExtendedParams = `{
     "executionContext": {
         "measures": [
@@ -183,5 +183,221 @@ export const visualizationOnDrillExtendedParams = `{
         ],
         "x": 0,
         "y": 2707183.77
+    }
+}`;
+
+export const bulletPrimaryMeasureOnDrillExtendedParams = `{
+    "executionContext": {
+        "measures": [
+            {
+                "localIdentifier": "m_127",
+                "definition": {
+                    "measure": {
+                        "item": {
+                            "identifier": "aabHeqImaK0d"
+                        }
+                    }
+                },
+                "format": "#,##0"
+            },
+            {
+                "localIdentifier": "m_128",
+                "definition": {
+                    "measure": {
+                        "item": {
+                            "identifier": "aaEGaXAEgB7U"
+                        }
+                    }
+                },
+                "format": "#,##0"
+            },
+            {
+                "localIdentifier": "m_129",
+                "definition": {
+                    "measure": {
+                        "item": {
+                            "identifier": "aaWGcgnsfxIg"
+                        }
+                    }
+                },
+                "format": "#,##0"
+            }
+        ],
+        "attributes": [
+            {
+                "displayForm": {
+                    "identifier": "label.restaurantlocation.locationresort"
+                },
+                "localIdentifier": "va_88"
+            }
+        ]
+    },
+    "drillContext": {
+        "type": "bullet",
+        "element": "primary",
+        "intersection": [
+            {
+                "id": "m_127",
+                "title": "$ Franchise Fees (Ad Royalty)",
+                "header": {
+                    "uri": "/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/6694",
+                    "identifier": "aabHeqImaK0d"
+                }
+            },
+            {
+                "id": "6340132",
+                "title": "Irving",
+                "header": {
+                    "uri": "/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/2207",
+                    "identifier": "label.restaurantlocation.locationresort"
+                }
+            }
+        ],
+        "x": 2,
+        "y": 219666.15125
+    }
+}`;
+
+export const bulletComparativeMeasureOnDrillExtendedParams = `{
+    "executionContext": {
+        "measures": [
+            {
+                "localIdentifier": "m_127",
+                "definition": {
+                    "measure": {
+                        "item": {
+                            "identifier": "aabHeqImaK0d"
+                        }
+                    }
+                },
+                "format": "#,##0"
+            },
+            {
+                "localIdentifier": "m_128",
+                "definition": {
+                    "measure": {
+                        "item": {
+                            "identifier": "aaEGaXAEgB7U"
+                        }
+                    }
+                },
+                "format": "#,##0"
+            },
+            {
+                "localIdentifier": "m_129",
+                "definition": {
+                    "measure": {
+                        "item": {
+                            "identifier": "aaWGcgnsfxIg"
+                        }
+                    }
+                },
+                "format": "#,##0"
+            }
+        ],
+        "attributes": [
+            {
+                "displayForm": {
+                    "identifier": "label.restaurantlocation.locationresort"
+                },
+                "localIdentifier": "va_88"
+            }
+        ]
+    },
+    "drillContext": {
+        "type": "bullet",
+        "element": "comparative",
+        "intersection": [
+            {
+                "id": "m_129",
+                "title": "$ Franchise Fees (Ongoing Royalty)",
+                "header": {
+                    "uri": "/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/6693",
+                    "identifier": "aaWGcgnsfxIg"
+                }
+            },
+            {
+                "id": "6340132",
+                "title": "Irving",
+                "header": {
+                    "uri": "/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/2207",
+                    "identifier": "label.restaurantlocation.locationresort"
+                }
+            }
+        ],
+        "x": 2,
+        "y": 313808.7875
+    }
+}`;
+
+export const bulletTargetMeasureOnDrillExtendedParams = `{
+    "executionContext": {
+        "measures": [
+            {
+                "localIdentifier": "m_127",
+                "definition": {
+                    "measure": {
+                        "item": {
+                            "identifier": "aabHeqImaK0d"
+                        }
+                    }
+                },
+                "format": "#,##0"
+            },
+            {
+                "localIdentifier": "m_128",
+                "definition": {
+                    "measure": {
+                        "item": {
+                            "identifier": "aaEGaXAEgB7U"
+                        }
+                    }
+                },
+                "format": "#,##0"
+            },
+            {
+                "localIdentifier": "m_129",
+                "definition": {
+                    "measure": {
+                        "item": {
+                            "identifier": "aaWGcgnsfxIg"
+                        }
+                    }
+                },
+                "format": "#,##0"
+            }
+        ],
+        "attributes": [
+            {
+                "displayForm": {
+                    "identifier": "label.restaurantlocation.locationresort"
+                },
+                "localIdentifier": "va_88"
+            }
+        ]
+    },
+    "drillContext": {
+        "type": "bullet",
+        "element": "target",
+        "intersection": [
+            {
+                "id": "m_128",
+                "title": "$ Franchise Fees",
+                "header": {
+                    "uri": "/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/6685",
+                    "identifier": "aaEGaXAEgB7U"
+                }
+            },
+            {
+                "id": "6340132",
+                "title": "Irving",
+                "header": {
+                    "uri": "/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/2207",
+                    "identifier": "label.restaurantlocation.locationresort"
+                }
+            }
+        ],
+        "x": 2,
+        "y": 573474.93875
     }
 }`;
