@@ -23,10 +23,11 @@ import {
     IGeoData,
     IPushpinCategoryLegendItem,
     IValidationResult,
+    IGeoLngLatObj,
 } from "../../interfaces/GeoChart";
 import { DEFAULT_COLORS } from "../visualizations/utils/color";
 import { isDataOfReasonableSize } from "../../helpers/geoChart/common";
-import { getGeoData } from "../../helpers/geoChart/data";
+import { getGeoData, getGeoBucketsFromMdObject } from "../../helpers/geoChart/data";
 import { TOP, BOTTOM } from "../visualizations/chart/legend/PositionTypes";
 
 export function renderChart(props: IGeoChartRendererProps): React.ReactElement {
@@ -42,6 +43,8 @@ export interface ICoreGeoChartProps extends ICommonChartProps, IDataSourceProvid
     config?: IGeoConfig;
     chartRenderer?: (props: IGeoChartRendererProps) => React.ReactElement;
     legendRenderer?: (props: IGeoChartLegendRendererProps) => React.ReactElement;
+    onCenterPositionChanged?: (center: IGeoLngLatObj) => void;
+    onZoomChanged?: (zoom: number) => void;
 }
 
 export type IGeoChartInnerProps = ICoreGeoChartProps &
@@ -85,11 +88,11 @@ export class GeoChartInner extends BaseVisualization<IGeoChartInnerProps, IGeoCh
         }
 
         const {
-            config: { mdObject: { buckets = [] } = {} },
+            config: { mdObject },
             execution,
             onDataTooLarge,
         } = this.props;
-
+        const buckets = getGeoBucketsFromMdObject(mdObject);
         const geoData: IGeoData = getGeoData(buckets, execution);
 
         const { isDataTooLarge } = this.validateData(geoData);
@@ -223,7 +226,7 @@ export class GeoChartInner extends BaseVisualization<IGeoChartInnerProps, IGeoCh
 
     private getChartProps(): IGeoChartRendererProps {
         const { geoChartOptions } = this;
-        const { config, execution, afterRender } = this.props;
+        const { config, execution, afterRender, onCenterPositionChanged, onZoomChanged } = this.props;
 
         if (!geoChartOptions) {
             return {
@@ -231,13 +234,22 @@ export class GeoChartInner extends BaseVisualization<IGeoChartInnerProps, IGeoCh
                 execution,
                 afterRender,
                 geoData: {},
+                onCenterPositionChanged,
+                onZoomChanged,
             };
         }
 
         const { geoData } = geoChartOptions;
         const segmentIndex: number = get(geoChartOptions, "geoData.segment.index");
 
-        const chartProps: IGeoChartRendererProps = { config, execution, afterRender, geoData };
+        const chartProps: IGeoChartRendererProps = {
+            config,
+            execution,
+            afterRender,
+            geoData,
+            onCenterPositionChanged,
+            onZoomChanged,
+        };
 
         if (segmentIndex) {
             const selectedSegmentItems: string[] = this.state.enabledLegendItems.reduce(

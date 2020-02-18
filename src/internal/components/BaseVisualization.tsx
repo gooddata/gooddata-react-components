@@ -197,6 +197,15 @@ export class BaseVisualization extends React.PureComponent<IBaseVisualizationPro
         const visConstructor = this.props.visualizationsCatalog[type];
 
         if (visConstructor) {
+            const {
+                afterRender,
+                onLoadingChanged,
+                onError,
+                onExportReady,
+                pushData,
+                onDrill,
+                onFiredDrillEvent,
+            } = props;
             this.visualization = new visConstructor({
                 projectId,
                 locale,
@@ -204,13 +213,13 @@ export class BaseVisualization extends React.PureComponent<IBaseVisualizationPro
                 element: `.${this.getVisualizationClassName()}`,
                 configPanelElement: `.${this.getConfigPanelClassName()}`,
                 callbacks: {
-                    afterRender: props.afterRender,
-                    onLoadingChanged: props.onLoadingChanged,
-                    onError: props.onError,
-                    onExportReady: props.onExportReady,
-                    pushData: props.pushData,
-                    onDrill: props.onDrill,
-                    onFiredDrillEvent: props.onFiredDrillEvent,
+                    afterRender,
+                    onLoadingChanged,
+                    onError,
+                    onExportReady,
+                    pushData,
+                    onDrill,
+                    onFiredDrillEvent,
                 },
                 featureFlags,
                 visualizationProperties,

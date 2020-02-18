@@ -7,6 +7,7 @@ import { VIEW, STACK, SEGMENT, TREND, ATTRIBUTE, COLUMNS, MEASURES } from "../co
 import { convertBucketsToAFM } from "../helpers/conversion";
 import { VIEW_BY_ATTRIBUTES_LIMIT } from "../components/visualizations/chart/constants";
 import { findBucketByLocalIdentifier } from "./mdObjBucketHelper";
+import { getGeoBucketsFromMdObject } from "./geoChart/data";
 
 export function getDimensionTotals(bucket: VisualizationObject.IBucket): AFM.ITotalItem[] {
     const bucketTotals: VisualizationObject.IVisualizationTotal[] = get<
@@ -440,7 +441,8 @@ export function generateDimensions(
             return getXirrDimensions(mdObject);
         }
         case VisualizationTypes.PUSHPIN: {
-            return getGeoChartDimensions(mdObject.buckets);
+            const buckets = getGeoBucketsFromMdObject(mdObject);
+            return getGeoChartDimensions(buckets);
         }
     }
     return [];
