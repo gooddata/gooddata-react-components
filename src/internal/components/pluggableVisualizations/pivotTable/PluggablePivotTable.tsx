@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import cloneDeep = require("lodash/cloneDeep");
 import get = require("lodash/get");
 import merge = require("lodash/merge");
@@ -6,7 +6,7 @@ import flatMap = require("lodash/flatMap");
 import isNil = require("lodash/isNil");
 import includes = require("lodash/includes");
 import * as React from "react";
-import Measure from "react-measure";
+import ReactMeasure from "react-measure";
 import { render } from "react-dom";
 import { IntlShape } from "react-intl";
 import { AFM, VisualizationObject } from "@gooddata/typings";
@@ -49,10 +49,11 @@ import { AbstractPluggableVisualization } from "../AbstractPluggableVisualizatio
 import { getReferencePointWithSupportedProperties } from "../../../utils/propertiesHelper";
 import { VisualizationEnvironment } from "../../../../components/uri/Visualization";
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
-import { PivotTable } from "../../../../components/core/PivotTable";
+import { IPivotTableProps, PivotTable } from "../../../../components/core/PivotTable";
 import { generateDimensions } from "../../../../helpers/dimensions";
 import { DEFAULT_LOCALE } from "../../../../constants/localization";
 import { DASHBOARDS_ENVIRONMENT } from "../../../constants/properties";
+import { IPivotTableConfig } from "../../../../interfaces/PivotTable";
 
 export const getColumnAttributes = (buckets: IBucket[]): IBucketItem[] => {
     return getItemsFromBuckets(
@@ -366,6 +367,16 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
         );
     }
 
+    public getExtendedPivotTableProps(
+        pivotTableProps: IPivotTableProps,
+        config: IPivotTableConfig,
+    ): IPivotTableProps {
+        return {
+            ...pivotTableProps,
+            config,
+        };
+    }
+
     protected renderVisualization(
         options: IVisProps,
         visualizationProperties: IVisualizationProperties,
@@ -443,13 +454,21 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
             if (this.environment === DASHBOARDS_ENVIRONMENT) {
                 if (isNil(height)) {
                     render(
-                        <Measure client={true}>
+                        <ReactMeasure client={true}>
                             {({ measureRef, contentRect }: any) => {
-                                const usedHeight = Math.floor(contentRect.client.height || 0);
+                                const clientHeight = contentRect.client.height;
+                                const usedHeight = Math.floor(clientHeight || 0);
                                 const pivotWrapperStyle: React.CSSProperties = {
                                     height: "100%",
                                     textAlign: "left",
                                 };
+                                const extendedPivotTableProps = this.getExtendedPivotTableProps(
+                                    pivotTableProps,
+                                    {
+                                        ...configUpdated,
+                                        maxHeight: clientHeight,
+                                    },
+                                );
 
                                 return (
                                     <div
@@ -457,21 +476,35 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
                                         style={pivotWrapperStyle}
                                         className="gd-table-dashboard-wrapper"
                                     >
-                                        <PivotTable {...pivotTableProps} height={usedHeight} />
+                                        <PivotTable {...extendedPivotTableProps} height={usedHeight} />
                                     </div>
                                 );
                             }}
-                        </Measure>,
+                        </ReactMeasure>,
                         document.querySelector(this.element),
                     );
 
                     return;
                 }
-
                 render(
-                    <div style={{ height: 328, textAlign: "left" }} className="gd-table-dashboard-wrapper">
-                        <PivotTable {...pivotTableProps} />
-                    </div>,
+                    <ReactMeasure client={true}>
+                        {({ measureRef, contentRect }: any) => {
+                            const extendedPivotTableProps = this.getExtendedPivotTableProps(pivotTableProps, {
+                                ...configUpdated,
+                                maxHeight: contentRect.client.height,
+                            });
+
+                            return (
+                                <div
+                                    ref={measureRef}
+                                    style={{ height: 328, textAlign: "left" }}
+                                    className="gd-table-dashboard-wrapper"
+                                >
+                                    <PivotTable {...extendedPivotTableProps} />
+                                </div>
+                            );
+                        }}
+                    </ReactMeasure>,
                     document.querySelector(this.element),
                 );
             } else {

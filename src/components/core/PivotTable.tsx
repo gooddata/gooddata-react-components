@@ -248,6 +248,10 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         if (this.isAgGridRerenderNeeded(this.props, prevProps)) {
             this.forceRerender();
         }
+
+        if (this.props.config.maxHeight && this.state.execution) {
+            this.updateDesiredHeight(this.state.execution.executionResult);
+        }
     }
 
     public renderVisualization() {
@@ -963,6 +967,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
     private updateDesiredHeight(executionResult: Execution.IExecutionResult): void {
         const { maxHeight } = this.props.config;
+
         if (!maxHeight) {
             return;
         }
@@ -980,4 +985,4 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     }
 }
 
-export const PivotTable = visualizationLoadingHOC(PivotTableInner, false);
+export const PivotTable = visualizationLoadingHOC<IPivotTableProps>(PivotTableInner, false);
