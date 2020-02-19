@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import React from "react";
 
 import ExampleWithSource from "../components/utils/ExampleWithSource";
@@ -21,13 +21,13 @@ export const MeasureValueFilter = () => (
         </p>
         <hr className="separator" />
         <h2>Comparison and range filters</h2>
-        <p>Example of filtering of visualization by either one or two measure values.</p>
+        <p>This is the example of filtering the visualization by either one or two measure values:</p>
         <div className="s-measure-value-filter-example-1">
             <ExampleWithSource for={MeasureValueFilterExample} source={MeasureValueFilterExampleSRC} />
         </div>
-        <h2>Filter by measure value shown in %</h2>
+        <h2>Filter by a measure value shown in %</h2>
         <p>
-            When visualization is filtered by a measure that is shown in %, the filter value is in{" "}
+            When the visualization is filtered by a measure that is shown in %, the filter value is in{" "}
             <b>the original measure scale</b> and not in the percentage scale that is displayed in the
             visualization.
         </p>
@@ -37,9 +37,9 @@ export const MeasureValueFilter = () => (
                 source={MeasureValueFilterShownInPercentageExampleSRC}
             />
         </div>
-        <h2>Filter by measure value stacked to 100%</h2>
+        <h2>Filter by a measure value stacked to 100%</h2>
         <p>
-            When visualization is filtered by a measure that is stacked to 100%, the filter value is in{" "}
+            When the visualization is filtered by a measure that is stacked to 100%, the filter value is in{" "}
             <b>the original measure scale</b> and not in the percentage scale that is displayed in the
             visualization.
         </p>
@@ -49,13 +49,13 @@ export const MeasureValueFilter = () => (
                 source={MeasureValueFilterStackedToHundredPercentExampleSRC}
             />
         </div>
-        <h2>Filter by measure value formatted in %</h2>
+        <h2>Filter a by measure value formatted in %</h2>
         <p>
             When the visualization is filtered by a measure that is formatted in %, the filter value is in{" "}
-            <b>the form of a ratio</b> (for instance 0.5 which is 50%) and not in the percentage scale. This
-            applies to measures that have percentage format set by measure <em>format</em> property,
-            calculated measures with percentage format set in metadata catalog, and arithmetic measures with{" "}
-            <em>change</em> operator.
+            <b>the form of a ratio</b> (for instance, 0.5, which is 50%) and not in the percentage scale. This
+            applies to measures that have the percentage format set by the <em>format</em> measure property,
+            calculated measures with the percentage format set in metadata catalog, and arithmetic measures
+            with the <em>change</em> operator.
         </p>
         <div className="s-measure-value-filter-example-4">
             <ExampleWithSource
