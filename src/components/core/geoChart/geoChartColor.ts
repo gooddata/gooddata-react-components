@@ -1,5 +1,6 @@
 // (C) 2020 GoodData Corporation
 import uniq = require("lodash/uniq");
+import range = require("lodash/range");
 import isNumber = require("lodash/isNumber");
 import isFinite = require("lodash/isFinite");
 import { Execution } from "@gooddata/typings";
@@ -7,6 +8,8 @@ import { DEFAULT_COLORS, getColorPalette } from "../../visualizations/utils/colo
 import { DEFAULT_PUSHPIN_COLOR_SCALE, DEFAULT_PUSHPIN_COLOR_VALUE } from "../../../constants/geoChart";
 import { getHeaderItemName } from "../../../helpers/executionResultHelper";
 import { IObjectMapping, IPushpinColor } from "../../../interfaces/GeoChart";
+import { IColorLegendItem } from "../../visualizations/typings/legend";
+import isEmpty = require("lodash/isEmpty");
 
 const DEFAULT_SEGMENT_ITEM = "default_segment_item";
 const EMPTY_SEGMENT_ITEM = "empty_segment_item";
@@ -108,6 +111,44 @@ export function getPushpinColors(
             return {
                 border: palette[DEFAULT_COLOR_INDEX_IN_PALETTE],
                 background: palette[colorIndex],
+            };
+        },
+    );
+}
+
+export function generateLegendColorData(colorSeries: number[]): IColorLegendItem[] {
+    if (isEmpty(colorSeries)) {
+        return [];
+    }
+    const colorPalette = getColorPalette(DEFAULT_PUSHPIN_COLOR_VALUE);
+    const min = Math.min(...colorSeries);
+    const max = Math.max(...colorSeries);
+    const offset = (max - min) / DEFAULT_PUSHPIN_COLOR_SCALE;
+
+    if (min === max) {
+        return [
+            {
+                range: {
+                    from: min,
+                    to: max,
+                },
+                color: DEFAULT_PUSHPIN_COLOR_VALUE,
+            },
+        ];
+    }
+
+    return range(0, DEFAULT_PUSHPIN_COLOR_SCALE).map(
+        (index: number): IColorLegendItem => {
+            const from = min + offset * index;
+            const isLastItem = index === DEFAULT_PUSHPIN_COLOR_SCALE - 1;
+            const to = isLastItem ? max : from + offset;
+            const range = {
+                from,
+                to,
+            };
+            return {
+                range,
+                color: colorPalette[index],
             };
         },
     );

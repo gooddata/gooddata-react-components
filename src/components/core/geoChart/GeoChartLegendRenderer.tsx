@@ -1,61 +1,58 @@
 // (C) 2020 GoodData Corporation
 import * as React from "react";
-import isFinite = require("lodash/isFinite");
-import { Execution } from "@gooddata/typings";
-import { stringToFloat } from "../../../helpers/utils";
-import { IntlWrapper } from "../../core/base/IntlWrapper";
-import { IntlTranslationsProvider, ITranslationsComponentProps } from "../../core/base/TranslationsProvider";
+import cx from "classnames";
 import PushpinSizeLegend from "./legends/PushpinSizeLegend";
-import { getGeoData, getFormatFromExecutionResponse } from "../../../helpers/geoChart";
-import { IGeoConfig, IGeoData } from "../../../interfaces/GeoChart";
+import { IGeoConfig } from "../../../interfaces/GeoChart";
 import { TOP } from "../../visualizations/chart/legend/PositionTypes";
-import { isTwoDimensionsData } from "../../../helpers/executionResultHelper";
+import { IColorLegendItem } from "../../visualizations/typings/legend";
+import { ColorLegend } from "../../visualizations/chart/legend/ColorLegend";
+import { useNumbericSymbols } from "../base/hook/TranslationsHook";
 
 export interface IGeoChartLegendRendererProps {
     config: IGeoConfig;
-    execution: Execution.IExecutionResponses;
-    locale: string;
+    sizeData?: number[];
+    sizeFormat?: string;
+    colorData?: IColorLegendItem[];
+    colorFormat?: string;
+    isColorLegendVisible?: boolean;
     position?: string;
 }
 export default function GeoChartLegendRenderer(props: IGeoChartLegendRendererProps): JSX.Element {
-    if (!props.execution) {
-        return null;
-    }
+    const numericSymbols = useNumbericSymbols();
     const {
-        execution: { executionResult, executionResponse },
-        config: { mdObject: { buckets = [] } = {} },
-        locale,
         position = TOP,
+        sizeData,
+        sizeFormat,
+        colorData,
+        colorFormat,
+        isColorLegendVisible = false,
     } = props;
-    const geoData: IGeoData = getGeoData(buckets, executionResponse.dimensions);
-    const { data } = executionResult;
-    const { size } = geoData;
-    const classes = `geo-legend s-geo-legend position-${position}`;
 
-    if (!size || !isTwoDimensionsData(data)) {
+    const hasSizeData = Boolean(sizeData);
+    const isLegendVisible = isColorLegendVisible || hasSizeData;
+
+    if (!isLegendVisible) {
         return null;
     }
+
+    const classes = cx("geo-legend s-geo-legend", `position-${position}`, { "has-size-legend": hasSizeData });
+
     return (
         <div className={classes}>
-            {size &&
-                renderPushpinSizeLegend(
-                    data[size.index].map(stringToFloat),
-                    getFormatFromExecutionResponse(size.index, executionResponse),
-                    locale,
-                )}
+            {isColorLegendVisible && renderColorLegend(colorData, colorFormat, numericSymbols)}
+            {sizeData && renderPushpinSizeLegend(sizeData, sizeFormat, numericSymbols)}
         </div>
     );
 }
 
-function renderPushpinSizeLegend(sizeValues: number[], format: string, locale: string): JSX.Element {
-    const values: number[] = sizeValues.filter(isFinite);
-    return (
-        <IntlWrapper locale={locale}>
-            <IntlTranslationsProvider>
-                {(props: ITranslationsComponentProps) => (
-                    <PushpinSizeLegend numericSymbols={props.numericSymbols} format={format} sizes={values} />
-                )}
-            </IntlTranslationsProvider>
-        </IntlWrapper>
-    );
+function renderPushpinSizeLegend(sizeData: number[], format: string, numericSymbols: string[]): JSX.Element {
+    return <PushpinSizeLegend numericSymbols={numericSymbols} format={format} sizes={sizeData} />;
+}
+
+function renderColorLegend(
+    colorData: IColorLegendItem[],
+    format: string,
+    numericSymbols: string[],
+): JSX.Element {
+    return <ColorLegend data={colorData} format={format} numericSymbols={numericSymbols} position={TOP} />;
 }

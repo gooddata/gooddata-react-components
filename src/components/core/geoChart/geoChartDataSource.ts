@@ -1,6 +1,7 @@
 // (C) 2019-2020 GoodData Corporation
+import isFinite = require("lodash/isFinite");
 import { Execution } from "@gooddata/typings";
-import { IGeoData, IPushpinColor } from "../../../interfaces/GeoChart";
+import { IGeoData, IPushpinColor, IGeoDataItem } from "../../../interfaces/GeoChart";
 import {
     DEFAULT_CLUSTER_RADIUS,
     DEFAULT_CLUSTER_MAX_ZOOM,
@@ -9,7 +10,8 @@ import {
 import { getGeoAttributeHeaderItems } from "../../../helpers/geoChart";
 import { getHeaderItemName, isTwoDimensionsData } from "../../../helpers/executionResultHelper";
 import { stringToFloat } from "../../../helpers/utils";
-import { getPushpinColors } from "./geoChartColor";
+import { getPushpinColors, generateLegendColorData } from "./geoChartColor";
+import { IGeoChartLegendData } from "../../visualizations/typings/legend";
 
 type IGeoDataSourceFeature = GeoJSON.Feature<GeoJSON.Geometry, GeoJSON.GeoJsonProperties>;
 export type IGeoDataSourceFeatures = IGeoDataSourceFeature[];
@@ -39,30 +41,15 @@ function transformPushpinDataSource(
     const sizeTitle = size ? size.name : "";
     const segmentTitle = segment ? segment.name : "";
 
-    let colorData: Execution.DataValue[] = [];
-    let sizeData: Execution.DataValue[] = [];
-    const hasColorMeasure = color !== undefined;
-    const hasSizeMeasure = size !== undefined;
-
-    const { data } = executionResult;
-    if (isTwoDimensionsData(data)) {
-        if (hasColorMeasure) {
-            colorData = data[color.index];
-        }
-        if (hasSizeMeasure) {
-            sizeData = data[size.index];
-        }
-    }
-
     const attributeHeaderItems = getGeoAttributeHeaderItems(executionResult, geoData);
-
     const locationData = location !== undefined ? attributeHeaderItems[location.index] : [];
     const locationNameData = tooltipText !== undefined ? attributeHeaderItems[tooltipText.index] : [];
     const segmentData = segment !== undefined ? attributeHeaderItems[segment.index] : [];
 
-    const sizesInNumber = sizeData.map(stringToFloat);
-    const colorsInNumber = colorData.map(stringToFloat);
-    const pushpinColors: IPushpinColor[] = getPushpinColors(colorsInNumber, segmentData);
+    const [sizeSeries, colorSeries] = getSizeColorSeries(executionResult, geoData);
+    const pushpinColors: IPushpinColor[] = getPushpinColors(colorSeries, segmentData);
+    const hasColorMeasure = color !== undefined;
+    const hasSizeMeasure = size !== undefined;
 
     const features = locationData.reduce(
         (
@@ -75,8 +62,8 @@ function transformPushpinDataSource(
                 return result;
             }
 
-            const colorValue = hasColorMeasure ? colorsInNumber[index] : undefined;
-            const sizeValue = hasSizeMeasure ? sizesInNumber[index] : DEFAULT_PUSHPIN_SIZE_VALUE;
+            const sizeValue = hasSizeMeasure ? sizeSeries[index] : DEFAULT_PUSHPIN_SIZE_VALUE;
+            const colorValue = hasColorMeasure ? colorSeries[index] : undefined;
 
             const locationNameValue = getHeaderItemName(locationNameData[index]);
             const segmentValue = getHeaderItemName(segmentData[index]);
@@ -139,4 +126,36 @@ export const createPushpinDataSource = (
         };
     }
     return source;
+};
+
+export const calculateLegendData = (
+    executionResult: Execution.IExecutionResult,
+    geoData: IGeoData,
+): IGeoChartLegendData => {
+    const { data } = executionResult;
+    if (isTwoDimensionsData(data)) {
+        const [sizeSeries, colorSeries] = getSizeColorSeries(executionResult, geoData).map(
+            (series: number[]) => series.filter(isFinite),
+        );
+        const colorData = colorSeries.length > 0 ? generateLegendColorData(colorSeries) : undefined;
+        const sizeData = sizeSeries.length > 0 ? sizeSeries : undefined;
+
+        return {
+            colorData,
+            sizeData,
+        };
+    }
+
+    return {};
+};
+
+const getSizeColorSeries = (executionResult: Execution.IExecutionResult, geoData: IGeoData): number[][] => {
+    const { size, color } = geoData;
+    const { data } = executionResult;
+    if (isTwoDimensionsData(data)) {
+        return [size, color]
+            .map((item: IGeoDataItem): Execution.DataValue[] => (item ? data[item.index] : []))
+            .map((series: Execution.DataValue[]) => series.map(stringToFloat));
+    }
+    return [[], []];
 };
