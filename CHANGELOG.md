@@ -2,7 +2,7 @@
 
 ## Supported REST API versions
 
-This table shows which version of GoodData.UI introduced support for a particular API version.
+This   table shows which version of GoodData.UI introduced support for a particular API version.
 
 The REST API versions in the table are just for your information as the values are set internally and cannot be overridden.
 
