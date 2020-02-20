@@ -5,6 +5,7 @@ import {
     isDataOfReasonableSize,
     isChartConfig,
     isGeoConfig,
+    isClusteringAllowed,
     isLocationMissing,
     calculateAverage,
     getFormatFromExecutionResponse,
@@ -89,7 +90,7 @@ describe("getGeoData", () => {
     });
 
     describe("calculateAverage", () => {
-        it("should return expected value ", () => {
+        it("should return expected value", () => {
             const values: number[] = [1, 2, 3, 4, 5, 6];
             expect(calculateAverage(values)).toEqual(3.5);
         });
@@ -100,6 +101,47 @@ describe("getGeoData", () => {
             const executionResponse = getExecutionResponse(true, false, false, true, false);
             expect(getFormatFromExecutionResponse(0, executionResponse)).toEqual("#,##0");
         });
+    });
+
+    describe("isClusteringAllowed", () => {
+        it.each([
+            [
+                false,
+                "size measure",
+                {
+                    location: { index: 0, name: "location" },
+                    size: { index: 0, name: "size" },
+                },
+            ],
+            [
+                false,
+                "color measure",
+                {
+                    location: { index: 0, name: "location" },
+                    color: { index: 1, name: "color" },
+                },
+            ],
+            [
+                false,
+                "segment attribute",
+                {
+                    location: { index: 0, name: "location" },
+                    segment: { index: 1, name: "segment" },
+                },
+            ],
+            [
+                true,
+                "no others",
+                {
+                    location: { index: 0, name: "location" },
+                },
+            ],
+        ])(
+            "should return %s when %s is in bucket",
+            (expectedValue: boolean, _description: string, geoData: IGeoData) => {
+                expect(isClusteringAllowed(geoData)).toEqual(expectedValue);
+            },
+        );
     });
 
     describe("isChartConfig", () => {

@@ -151,7 +151,7 @@ describe("createPushpinDataSource", () => {
         });
     });
 
-    it("should return data source with clusters", () => {
+    it("should not return data source with clusters", () => {
         const geoData: IGeoData = {
             color: {
                 index: 0,
@@ -166,6 +166,18 @@ describe("createPushpinDataSource", () => {
             getExecutionResult(true, false, false, false, true),
             geoData,
         );
+
+        expect(source.cluster).toBe(undefined);
+    });
+
+    it("should return data source with clusters", () => {
+        const geoData: IGeoData = {
+            location: {
+                index: 0,
+                name: "location",
+            },
+        };
+        const source: mapboxgl.GeoJSONSourceRaw = createPushpinDataSource(getExecutionResult(true), geoData);
 
         expect(source.cluster).toBe(true);
         expect(source.clusterMaxZoom).toBe(14);

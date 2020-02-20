@@ -56,6 +56,18 @@ storiesOf("Core components/GeoPushpinChart", module)
             }),
         ),
     )
+    .add("with location and show unclustered pins", () =>
+        screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                config: {
+                    ...DEFAULT_CONFIG,
+                    zoom: 6,
+                },
+            }),
+        ),
+    )
     .add("with location and size", () =>
         screenshotWrap(
             renderGeoPushpinChart({

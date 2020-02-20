@@ -1,4 +1,5 @@
 // (C) 2019-2020 GoodData Corporation
+import mapboxgl from "mapbox-gl";
 import { DEFAULT_COLORS } from "../components/visualizations/utils/color";
 
 export const DEFAULT_CLUSTER_FILTER = ["has", "point_count"];
@@ -8,6 +9,9 @@ export const DEFAULT_CLUSTER_LABELS_CONFIG = {
     layout: {
         "text-allow-overlap": true,
         "text-field": "{point_count_abbreviated}",
+        // TODO: Use Full name of the font
+        // this will be fixed in SD-793
+        // "text-font": ["Avenir Heavy"],
         "text-size": 14,
     },
     paint: {
@@ -16,7 +20,21 @@ export const DEFAULT_CLUSTER_LABELS_CONFIG = {
 };
 export const DEFAULT_CLUSTER_LAYER_NAME = "gdcClusters";
 export const DEFAULT_CLUSTER_MAX_ZOOM = 14; // Max zoom to cluster points on
-export const DEFAULT_CLUSTER_POINTS_SIZE = 30;
+export const DEFAULT_CLUSTER_POINT_BORDERS: mapboxgl.CirclePaint = {
+    "circle-stroke-color": ["step", ["get", "point_count"], "#00D398", 9, "#F38700", 99, "#E84C3C"],
+    "circle-stroke-opacity": 0.2,
+    "circle-stroke-width": 8,
+};
+export const DEFAULT_CLUSTER_POINT_COLORS: mapboxgl.Expression = [
+    "step",
+    ["get", "point_count"],
+    "#00D398",
+    9,
+    "#F38700",
+    99,
+    "#E84C3C",
+];
+export const DEFAULT_CLUSTER_POINT_SIZES: mapboxgl.Expression = ["step", ["get", "point_count"], 30, 99, 50];
 export const DEFAULT_CLUSTER_RADIUS = 50; // inside this Radius, points will be clustered (defaults to 50)
 
 export const DEFAULT_DATA_POINTS_LIMIT = 2000;

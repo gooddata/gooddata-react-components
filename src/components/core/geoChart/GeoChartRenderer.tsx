@@ -6,7 +6,12 @@ import noop = require("lodash/noop");
 import mapboxgl = require("mapbox-gl");
 import { Execution } from "@gooddata/typings";
 
-import { createClusterLayers, createPushpinDataLayer } from "./geoChartDataLayers";
+import {
+    createClusterLabels,
+    createClusterPoints,
+    createPushpinDataLayer,
+    createUnclusterPoints,
+} from "./geoChartDataLayers";
 import { createPushpinDataSource } from "./geoChartDataSource";
 import {
     DEFAULT_CLUSTER_LABELS_CONFIG,
@@ -23,6 +28,7 @@ import { IGeoConfig, IGeoData } from "../../../interfaces/GeoChart";
 
 import "../../../../styles/scss/geoChart.scss";
 import { handlePushpinMouseEnter, handlePushpinMouseLeave } from "./geoChartTooltip";
+import { isClusteringAllowed } from "../../../helpers/geoChart";
 
 export interface IGeoChartRendererProps {
     config: IGeoConfig;
@@ -126,7 +132,7 @@ export default class GeoChartRenderer extends React.PureComponent<IGeoChartRende
 
         chart.addSource(DEFAULT_DATA_SOURCE_NAME, createPushpinDataSource(executionResult, geoData));
 
-        if (geoData.size) {
+        if (!isClusteringAllowed(geoData)) {
             chart.addLayer(
                 createPushpinDataLayer(
                     DEFAULT_DATA_SOURCE_NAME,
@@ -137,10 +143,10 @@ export default class GeoChartRenderer extends React.PureComponent<IGeoChartRende
                 "state-label", // pushpin will be rendered under state/county label
             );
         } else {
-            const clusterLayers: mapboxgl.Layer[] = createClusterLayers(DEFAULT_DATA_SOURCE_NAME);
-            clusterLayers.forEach(
-                (clusterLayer: mapboxgl.Layer) => chart.addLayer(clusterLayer, "state-label"), // cluster points will be rendered under state/county label
-            );
+            chart.addLayer(createClusterPoints(DEFAULT_DATA_SOURCE_NAME));
+            chart.addLayer(createClusterLabels(DEFAULT_DATA_SOURCE_NAME));
+            // un-clustered points will be rendered under state/county label
+            chart.addLayer(createUnclusterPoints(DEFAULT_DATA_SOURCE_NAME), "state-label");
         }
 
         // keep listening to the data event until the style is loaded
@@ -163,12 +169,13 @@ export default class GeoChartRenderer extends React.PureComponent<IGeoChartRende
     };
 
     private cleanupMap = (): void => {
+        const { geoData } = this.props;
+
         if (this.chart.getLayer(DEFAULT_LAYER_NAME)) {
             this.chart.removeLayer(DEFAULT_LAYER_NAME);
         }
-        const { geoData } = this.props;
 
-        if (!geoData.size) {
+        if (isClusteringAllowed(geoData)) {
             if (this.chart.getLayer(DEFAULT_CLUSTER_LAYER_NAME)) {
                 this.chart.removeLayer(DEFAULT_CLUSTER_LAYER_NAME);
             }

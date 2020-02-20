@@ -35,7 +35,7 @@ export interface IGeoConfig {
     mdObject?: VisualizationObject.IVisualizationObjectContent;
     selectedSegmentItem?: string;
     tooltipText?: VisualizationInput.IAttribute;
-    zoom?: number;
+    zoom?: number; // in the 0-22 zoom range
     mapboxToken: string;
 }
 
