@@ -74,6 +74,14 @@ export const enabledExportConfig = {
     exportConfig: { supported: true },
 };
 
+export const disabledNoMetricConfig = {
+    noMetricAccepted: { supported: false },
+};
+
+export const enabledNoMetricConfig = {
+    noMetricAccepted: { supported: true },
+};
+
 export const disabledOpenAsReportConfig = {
     openAsReport: { supported: false },
 };
@@ -85,6 +93,7 @@ export const enabledOpenAsReportConfig = {
 export const defaultRootUiConfigProperties: Partial<IUiConfig> = {
     recommendations: {},
     supportedOverTimeComparisonTypes: [],
+    ...disabledNoMetricConfig,
     ...disabledOpenAsReportConfig,
     ...enabledExportConfig,
 };
@@ -383,6 +392,7 @@ export const DEFAULT_PIVOT_TABLE_UICONFIG: IUiConfig = {
     },
     ...defaultRootUiConfigProperties,
     ...disabledOpenAsReportConfig,
+    ...enabledNoMetricConfig,
     supportedOverTimeComparisonTypes: [
         OverTimeComparisonTypes.SAME_PERIOD_PREVIOUS_YEAR,
         OverTimeComparisonTypes.PREVIOUS_PERIOD,
@@ -403,6 +413,7 @@ export const DEFAULT_TABLE_UICONFIG: IUiConfig = {
         ...defaultFilters,
     },
     ...defaultRootUiConfigProperties,
+    ...enabledNoMetricConfig,
     ...enabledOpenAsReportConfig,
     supportedOverTimeComparisonTypes: [
         OverTimeComparisonTypes.SAME_PERIOD_PREVIOUS_YEAR,
@@ -576,6 +587,7 @@ export const GEO_PUSHPIN_CHART_UICONFIG: IUiConfig = {
     },
     supportedLocationIcon: { supported: true },
     ...defaultRootUiConfigProperties,
+    ...enabledNoMetricConfig,
 };
 
 export const DEFAULT_BULLET_CHART_CONFIG: IUiConfig = {
