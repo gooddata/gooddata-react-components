@@ -1,12 +1,16 @@
 // (C) 2007-2020 GoodData Corporation
-import { AFM, Execution } from "@gooddata/typings";
-import { IColor, IColorItem } from "@gooddata/gooddata-js";
 import isEmpty = require("lodash/isEmpty");
 import isEqual = require("lodash/isEqual");
-import { getMappingHeaderLocalIdentifier } from "../../../helpers/mappingHeader";
+import isString = require("lodash/isString");
+import range = require("lodash/range");
+
+import { AFM, Execution } from "@gooddata/typings";
+import { IColor, IColorItem } from "@gooddata/gooddata-js";
+
 import { IColorPalette, IColorPaletteItem, IColorMapping } from "../../../interfaces/Config";
 import { IHeaderPredicate, IHeaderPredicateContext } from "../../../interfaces/HeaderPredicate";
 import { IMappingHeader, isMappingHeaderAttributeItem } from "../../../interfaces/MappingHeader";
+import { getMappingHeaderLocalIdentifier } from "../../../helpers/mappingHeader";
 
 export const WHITE = "rgb(255, 255, 255)";
 export const BLACK = "rgb(0, 0, 0)";
@@ -261,6 +265,40 @@ export function getColorMappingPredicate(idOrUri: string): IHeaderPredicate {
         const headerLocalIdentifier = getMappingHeaderLocalIdentifier(header);
         return headerLocalIdentifier ? headerLocalIdentifier === idOrUri : false;
     };
+}
+
+function getCalculatedChannel(channel: number, index: number, step: number): number {
+    return Math.trunc(channel + index * step);
+}
+
+function getCalculatedColors(count: number, channels: number[], steps: number[]): string[] {
+    return range(1, count).map(
+        (index: number) =>
+            `rgb(${getCalculatedChannel(channels[0], index, steps[0])},` +
+            `${getCalculatedChannel(channels[1], index, steps[1])},` +
+            `${getCalculatedChannel(channels[2], index, steps[2])})`,
+    );
+}
+
+function getRGBColorCode(color: string | IColor): IColor {
+    if (isString(color)) {
+        const { R: r, G: g, B: b } = parseRGBColorCode(color);
+        return {
+            r,
+            g,
+            b,
+        };
+    }
+    return color;
+}
+
+export function getColorPalette(baseColor: string | IColor): string[] {
+    const colorItemsCount = 6;
+    const { r, g, b } = getRGBColorCode(baseColor);
+    const channels = [r, g, b];
+    const steps = channels.map(channel => (255 - channel) / colorItemsCount);
+    const generatedColors = getCalculatedColors(colorItemsCount, channels, steps);
+    return [...generatedColors.reverse(), formatColor(r, g, b)];
 }
 
 // For re-exporting in index.ts

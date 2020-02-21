@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { VisualizationObject, AFM, Execution } from "@gooddata/typings";
 import { IColumnTotal } from "../../src/components/core/pivotTable/AggregationsMenu";
 import {

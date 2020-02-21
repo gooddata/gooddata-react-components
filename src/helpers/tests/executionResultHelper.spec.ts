@@ -1,16 +1,22 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { Execution } from "@gooddata/typings";
 import * as fixtures from "../../../stories/test_data/fixtures";
 import {
     STACK_BY_DIMENSION_INDEX,
     VIEW_BY_DIMENSION_INDEX,
 } from "../../components/visualizations/chart/constants";
-import { EXECUTION_RESPONSE_1A_2M } from "../../components/visualizations/table/fixtures/1attribute2measures";
+import {
+    EXECUTION_RESPONSE_1A_2M,
+    EXECUTION_RESULT_1A_2M,
+} from "../../components/visualizations/table/fixtures/1attribute2measures";
 import {
     findAttributeInDimension,
     findInDimensionHeaders,
     findMeasureGroupInDimensions,
     findMeasureHeaderByLocalIdentifier,
+    getHeaderItemName,
+    getAttributeHeadersInDimension,
+    getMeasureGroupHeaderItemsInDimension,
     getNthAttributeHeader,
     getNthAttributeLocalIdentifier,
     getNthAttributeName,
@@ -212,5 +218,75 @@ describe("getNthDimensionHeaders", () => {
         const executionResponse = EXECUTION_RESPONSE_1A_2M;
 
         expect(getNthDimensionHeaders(executionResponse, 3)).toBe(null);
+    });
+});
+
+describe("getHeaderItemName", () => {
+    it("should return header name", () => {
+        const headerItems = EXECUTION_RESULT_1A_2M.headerItems as Execution.IResultHeaderItem[][][];
+        expect(getHeaderItemName(headerItems[0][0][0])).toBe("Wile E. Coyote");
+    });
+
+    it("should return empty header name", () => {
+        const headerItems = EXECUTION_RESULT_1A_2M.headerItems as Execution.IResultHeaderItem[][][];
+        expect(getHeaderItemName(headerItems[1][0][0])).toBe("");
+    });
+});
+
+describe("getHeadersInDimension", () => {
+    const executionResponse = require("../../../stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_response.json")
+        .executionResponse;
+
+    it("should return attribute headers", () => {
+        const { dimensions } = executionResponse;
+        const attributeHeaders = getAttributeHeadersInDimension(dimensions);
+        expect(attributeHeaders).toEqual([
+            {
+                formOf: { identifier: "30", name: "City", uri: "/gdc/md/storybook/obj/30" },
+                identifier: "30.df",
+                localIdentifier: "location",
+                name: "City",
+                uri: "/gdc/md/storybook/obj/30.df",
+            },
+            {
+                formOf: { identifier: "23", name: "Store Type", uri: "/gdc/md/storybook/obj/23" },
+                identifier: "23.df",
+                localIdentifier: "segmentBy",
+                name: "Store Type",
+                uri: "/gdc/md/storybook/obj/23.df",
+            },
+            {
+                formOf: { identifier: "24", name: "Tooltip", uri: "/gdc/md/storybook/obj/24" },
+                identifier: "24.df",
+                localIdentifier: "tooltip",
+                name: "Tooltip",
+                uri: "/gdc/md/storybook/obj/24.df",
+            },
+        ]);
+    });
+
+    it("should return measure group header", () => {
+        const { dimensions } = executionResponse;
+        const measureHeaderItems = getMeasureGroupHeaderItemsInDimension(dimensions);
+        expect(measureHeaderItems).toEqual([
+            {
+                measureHeaderItem: {
+                    format: "#,##0.00",
+                    identifier: "20",
+                    localIdentifier: "size",
+                    name: "Size",
+                    uri: "/gdc/md/storybook/obj/20",
+                },
+            },
+            {
+                measureHeaderItem: {
+                    format: "#,##0.00",
+                    identifier: "21",
+                    localIdentifier: "color",
+                    name: "Color",
+                    uri: "/gdc/md/storybook/obj/21",
+                },
+            },
+        ]);
     });
 });

@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { IConvertedAFM } from "@gooddata/gooddata-js/lib/DataLayer/converters/toAfmResultSpec";
 import * as React from "react";
 import {
@@ -19,7 +19,9 @@ import { IHeaderPredicate } from "../../interfaces/HeaderPredicate";
 import { IntlWrapper } from "../core/base/IntlWrapper";
 import { BaseChart } from "../core/base/BaseChart";
 import { IAxisConfig, IChartConfig, IColorPaletteItem } from "../../interfaces/Config";
+import { IGeoConfig } from "../../interfaces/GeoChart";
 import { PivotTable } from "../PivotTable";
+import { GeoPushpinChart } from "../GeoPushpinChart";
 import { Headline } from "../core/Headline";
 import { Xirr } from "../core/Xirr";
 import { IEvents, OnLegendReady } from "../../interfaces/Events";
@@ -27,9 +29,11 @@ import { VisualizationPropType, Requireable } from "../../proptypes/Visualizatio
 import { VisualizationTypes, VisType } from "../../constants/visualizationTypes";
 import { IDataSource } from "../../interfaces/DataSource";
 import { ISubject } from "../../helpers/async";
+import { isChartConfig, isGeoConfig } from "../../helpers/geoChart";
 import { getVisualizationTypeFromVisualizationClass } from "../../helpers/visualizationType";
 import MdObjectHelper, {
     areAllMeasuresOnSingleAxis,
+    mdObjectToGeoPushpinBucketProps,
     mdObjectToPivotBucketProps,
 } from "../../helpers/MdObjectHelper";
 import { fillMissingTitles } from "../../helpers/measureTitleHelper";
@@ -65,7 +69,7 @@ export interface IVisualizationProps extends IEvents {
     uri?: string;
     identifier?: string;
     locale?: Localization.ILocale;
-    config?: IChartConfig;
+    config?: IChartConfig | IGeoConfig;
     filters?: AFM.ExtendedFilter[];
     drillableItems?: Array<IDrillableItem | IHeaderPredicate>;
     uriResolver?: (sdk: SDK, projectId: string, uri?: string, identifier?: string) => Promise<string>;
@@ -80,6 +84,7 @@ export interface IVisualizationProps extends IEvents {
     getFeatureFlags?: (sdk: SDK, projectId: string) => Promise<IFeatureFlags>;
     BaseChartComponent?: any;
     PivotTableComponent?: any;
+    GeoPushpinChartComponent?: any;
     HeadlineComponent?: any;
     XirrComponent?: any;
     ErrorComponent?: React.ComponentType<IErrorProps>;
@@ -91,6 +96,8 @@ export interface IVisualizationProps extends IEvents {
      * testing and validation.
      */
     experimentalVisExecution?: boolean;
+    // this is used internaly for Geo chart's storybook
+    afterRender?: () => void;
 }
 
 export interface IVisualizationState {
@@ -160,6 +167,7 @@ export class VisualizationWrapped extends React.Component<
         getFeatureFlags,
         BaseChartComponent: BaseChart,
         PivotTableComponent: PivotTable,
+        GeoPushpinChartComponent: GeoPushpinChart,
         HeadlineComponent: Headline,
         XirrComponent: Xirr,
         ErrorComponent,
@@ -284,6 +292,7 @@ export class VisualizationWrapped extends React.Component<
     public render() {
         const { dataSource, sdk } = this;
         const {
+            afterRender,
             projectId,
             drillableItems,
             onFiredDrillEvent,
@@ -294,6 +303,7 @@ export class VisualizationWrapped extends React.Component<
             locale,
             BaseChartComponent,
             PivotTableComponent,
+            GeoPushpinChartComponent,
             HeadlineComponent,
             XirrComponent,
             LoadingComponent,
@@ -345,6 +355,19 @@ export class VisualizationWrapped extends React.Component<
                 // we do not need to pass totals={totals} because BucketPivotTable deals with changes in totals itself
                 return <PivotTableComponent {...commonProps} {...pivotBucketProps} />;
             }
+            case VisualizationTypes.PUSHPIN:
+                const geoBucketProps = mdObjectToGeoPushpinBucketProps(
+                    isGeoConfig(config) && config,
+                    mdObject,
+                    filtersFromProps,
+                );
+                return (
+                    <GeoPushpinChartComponent
+                        {...commonProps}
+                        {...geoBucketProps}
+                        afterRender={afterRender}
+                    />
+                );
             case VisualizationTypes.HEADLINE:
                 return <HeadlineComponent {...commonProps} {...sourceProps} />;
             case VisualizationTypes.XIRR:
@@ -471,11 +494,11 @@ export class VisualizationWrapped extends React.Component<
     }
 
     private hasExternalColorPalette() {
-        return this.props.config && this.props.config.colorPalette;
+        return this.props.config && isChartConfig(this.props.config) && this.props.config.colorPalette;
     }
 
     private hasColorsProp() {
-        return this.props.config && this.props.config.colors;
+        return this.props.config && isChartConfig(this.props.config) && this.props.config.colors;
     }
 
     private getColorPaletteFromProject() {
@@ -490,7 +513,9 @@ export class VisualizationWrapped extends React.Component<
                 return;
             } else if (this.hasColorsProp()) {
                 this.setStateWithCheck({
-                    colorPalette: getColorPaletteFromColors(this.props.config.colors),
+                    colorPalette: getColorPaletteFromColors(
+                        isChartConfig(this.props.config) && this.props.config.colors,
+                    ),
                 });
             } else {
                 const colorPalette = await this.getColorPaletteFromProject();

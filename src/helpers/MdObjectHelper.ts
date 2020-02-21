@@ -1,14 +1,25 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import get = require("lodash/get");
 import { VisualizationObject, AFM, VisualizationInput } from "@gooddata/typings";
 import { DataLayer } from "@gooddata/gooddata-js";
 import { IMeasureTitleProps, IArithmeticMeasureTitleProps } from "../interfaces/MeasureTitle";
-import { ATTRIBUTE, MEASURES, COLUMNS } from "../constants/bucketNames";
+import {
+    ATTRIBUTE,
+    MEASURES,
+    COLUMNS,
+    COLOR,
+    LOCATION,
+    SEGMENT,
+    SIZE,
+    TOOLTIP_TEXT,
+} from "../constants/bucketNames";
 import IMeasure = VisualizationObject.IMeasure;
 import IArithmeticMeasureDefinition = VisualizationObject.IArithmeticMeasureDefinition;
 import { IPivotTableBucketProps } from "../components/PivotTable";
 import { mergeFiltersToAfm } from "./afmHelper";
+import { findBucketByLocalIdentifier } from "./mdObjBucketHelper";
 import { IAxisConfig } from "../interfaces/Config";
+import { IGeoConfig, IGeoPushpinChartProps } from "../interfaces/GeoChart";
 
 function getTotals(
     mdObject: VisualizationObject.IVisualizationObject,
@@ -55,6 +66,64 @@ function buildArithmeticMeasureTitleProps(
         masterMeasureLocalIdentifiers: measureIdentifiers,
     };
 }
+
+export const mdObjectToGeoPushpinBucketProps = (
+    config: IGeoConfig,
+    mdObject: VisualizationObject.IVisualizationObject,
+    filtersFromProps: AFM.ExtendedFilter[],
+): Partial<IGeoPushpinChartProps> => {
+    const hasVisualizationObjectContent = mdObject && mdObject.content;
+    if (!hasVisualizationObjectContent) {
+        return {};
+    }
+
+    const { content } = mdObject;
+    const { buckets: contentBuckets } = content;
+
+    const colorBucket = findBucketByLocalIdentifier(contentBuckets, COLOR);
+    const locationBucket = findBucketByLocalIdentifier(contentBuckets, LOCATION);
+    const segmentByBucket = findBucketByLocalIdentifier(contentBuckets, SEGMENT);
+    const sizeBucket = findBucketByLocalIdentifier(contentBuckets, SIZE);
+    const tooltipTextBucket = findBucketByLocalIdentifier(contentBuckets, TOOLTIP_TEXT);
+
+    const color: VisualizationInput.AttributeOrMeasure = colorBucket && colorBucket.items[0];
+    const location: VisualizationInput.IAttribute =
+        locationBucket && (locationBucket.items[0] as VisualizationObject.IVisualizationAttribute);
+    const segmentBy: VisualizationInput.IAttribute =
+        segmentByBucket && (segmentByBucket.items[0] as VisualizationObject.IVisualizationAttribute);
+    const size: VisualizationInput.AttributeOrMeasure = sizeBucket && sizeBucket.items[0];
+    const tooltipText: VisualizationInput.IAttribute =
+        tooltipTextBucket && (tooltipTextBucket.items[0] as VisualizationObject.IVisualizationAttribute);
+
+    // we'll use the default internal sorting value which
+    // allow us to show the smaller pushpins on top of bigger pushpins
+    const sortBy: VisualizationInput.ISort[] = [];
+
+    const afmWithoutMergedFilters = DataLayer.toAfmResultSpec(content).afm;
+    afmWithoutMergedFilters.filters = afmWithoutMergedFilters.filters || [];
+
+    const afm = mergeFiltersToAfm(afmWithoutMergedFilters, filtersFromProps);
+
+    // Filter out expression filters which are not supported in bucket interface
+    const filters: VisualizationInput.IFilter[] = (afm.filters || []).filter(
+        afmFilter => !AFM.isExpressionFilter(afmFilter),
+    ) as VisualizationObject.VisualizationObjectExtendedFilter[];
+
+    const configWithTooltipText: IGeoConfig = {
+        ...config,
+        tooltipText,
+    };
+
+    return {
+        color,
+        config: configWithTooltipText,
+        location,
+        segmentBy,
+        size,
+        filters,
+        sortBy,
+    };
+};
 
 export const mdObjectToPivotBucketProps = (
     mdObject: VisualizationObject.IVisualizationObject,
@@ -122,5 +191,6 @@ export default {
     getVisualizationClassUri,
     buildMeasureTitleProps,
     buildArithmeticMeasureTitleProps,
+    mdObjectToGeoPushpinBucketProps,
     mdObjectToPivotBucketProps,
 };

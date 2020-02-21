@@ -1,20 +1,20 @@
 // (C) 2007-2020 GoodData Corporation
 import { AFM, Execution } from "@gooddata/typings";
 import { TypeGuards, IColor, IColorItem, IGuidColorItem, RGBType } from "@gooddata/gooddata-js";
-import range = require("lodash/range");
 import uniqBy = require("lodash/uniqBy");
 import isEqual = require("lodash/isEqual");
 
 import {
     DEFAULT_COLOR_PALETTE,
+    DEFAULT_HEATMAP_BLUE_COLOR,
+    DEFAULT_BULLET_GRAY_COLOR,
     HEATMAP_BLUE_COLOR_PALETTE,
-    getLighterColorFromRGB,
     isCustomPalette,
+    getLighterColorFromRGB,
     getColorByGuid,
     getRgbStringFromRGB,
     getColorFromMapping,
-    DEFAULT_HEATMAP_BLUE_COLOR,
-    DEFAULT_BULLET_GRAY_COLOR,
+    getColorPalette,
 } from "../utils/color";
 import {
     isHeatmap,
@@ -387,25 +387,7 @@ export class HeatmapColorStrategy extends ColorStrategy {
     }
 
     private getCustomHeatmapColorPalette(baseColor: IColor): HighChartColorPalette {
-        const { r, g, b } = baseColor;
-        const colorItemsCount = 6;
-        const channels = [r, g, b];
-        const steps = channels.map(channel => (255 - channel) / colorItemsCount);
-        const generatedColors = this.getCalculatedColors(colorItemsCount, channels, steps);
-        return ["rgb(255,255,255)", ...generatedColors.reverse(), getRgbStringFromRGB(baseColor)];
-    }
-
-    private getCalculatedColors(count: number, channels: number[], steps: number[]): HighChartColorPalette {
-        return range(1, count).map(
-            (index: number) =>
-                `rgb(${this.getCalculatedChannel(channels[0], index, steps[0])},` +
-                `${this.getCalculatedChannel(channels[1], index, steps[1])},` +
-                `${this.getCalculatedChannel(channels[2], index, steps[2])})`,
-        );
-    }
-
-    private getCalculatedChannel(channel: number, index: number, step: number): number {
-        return Math.trunc(channel + index * step);
+        return ["rgb(255,255,255)", ...getColorPalette(baseColor)];
     }
 
     private getDefaultColorAssignment(

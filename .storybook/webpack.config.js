@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const Dotenv = require('dotenv-webpack');
 
 const commitHash = require('child_process')
   .execSync('git rev-parse --short HEAD')
@@ -51,6 +52,7 @@ module.exports = {
     plugins: [
         new webpack.DefinePlugin({
           __COMMIT_HASH__: JSON.stringify(commitHash),
-        })
+        }),
+        new Dotenv()
     ]
 };
