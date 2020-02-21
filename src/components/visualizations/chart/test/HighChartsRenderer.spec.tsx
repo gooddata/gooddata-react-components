@@ -179,66 +179,6 @@ describe("HighChartsRenderer", () => {
         expect(chartRef).toBe(mockRef);
     });
 
-    it("should force chart reflow and set container styles when height is set", () => {
-        const chartMock: any = {
-            container: {
-                style: {},
-            },
-            reflow: jest.fn(),
-        };
-        const mockRef = {
-            getChart: () => chartMock,
-        };
-        const mockHeight = 123;
-
-        const chartRenderer = (props: any) => {
-            props.ref(mockRef);
-            return <div />;
-        };
-
-        jest.useFakeTimers();
-        mount(
-            createComponent({
-                chartRenderer,
-                height: mockHeight,
-            }),
-        );
-        jest.runAllTimers();
-
-        expect(chartMock.reflow).toHaveBeenCalledTimes(1);
-        expect(chartMock.container.style.height).toBe(String(mockHeight));
-        expect(chartMock.container.style.position).toBe("relative");
-    });
-
-    it("should force chart reflow and set container styles when height is not set", () => {
-        const chartMock: any = {
-            container: {
-                style: {},
-            },
-            reflow: jest.fn(),
-        };
-        const mockRef = {
-            getChart: () => chartMock,
-        };
-
-        const chartRenderer = (props: any) => {
-            props.ref(mockRef);
-            return <div />;
-        };
-
-        jest.useFakeTimers();
-        mount(
-            createComponent({
-                chartRenderer,
-            }),
-        );
-        jest.runAllTimers();
-
-        expect(chartMock.reflow).toHaveBeenCalledTimes(1);
-        expect(chartMock.container.style.height).toBe("100%");
-        expect(chartMock.container.style.position).toBe("absolute");
-    });
-
     it("should not throw if chartRef has not been set", () => {
         const chartRenderer = jest.fn().mockReturnValue(<div />);
 
