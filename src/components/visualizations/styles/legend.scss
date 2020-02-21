@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 $responsive-legend: "only screen and (max-width: 767px)";
 
 @media #{$responsive-legend} {
@@ -197,7 +197,7 @@ $responsive-legend: "only screen and (max-width: 767px)";
         }
     }
 
-    &.heatmap-legend {
+    &.color-legend {
         font-family: $gd-font-primary;
 
         .labels {
