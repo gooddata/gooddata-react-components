@@ -118,6 +118,7 @@
     "@gooddata/goodstrap": "^67.0.0",
     "@gooddata/js-utils": "^3.5.0",
     "@gooddata/numberjs": "^3.2.4",
+    "@gooddata/sdk-ui-charts": "8.0.0-alpha-tulean-master-2020-02-21T14-29-19-652Z",
     "@gooddata/typings": "^2.19.0",
     "@types/mapbox-gl": "^1.6.1",
     "ag-grid-community": "20.0.0",
