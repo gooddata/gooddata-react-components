@@ -27,9 +27,8 @@ const getMenu = cell => {
 };
 
 const clickOnMenuAggregationItem = async (t, cell, aggregationItemClass, attribute) => {
-    const menu = getMenu(cell);
-
     await t.hover(cell);
+    const menu = getMenu(cell);
     await t.click(menu);
 
     const sumTotal = Selector(aggregationItemClass).find(".s-menu-aggregation-inner");
@@ -66,6 +65,7 @@ fixture("Pivot Table Menu")
     .beforeEach(async t => {
         await loginUsingLoginForm(`${config.url}/hidden/pivot-table-dynamic`)(t);
 
+        await waitForPivotTableStopLoading(t);
         await t.click(Selector(".s-total-preset-aggregationsWithSubTotals"));
 
         await disableDrilling(t);
