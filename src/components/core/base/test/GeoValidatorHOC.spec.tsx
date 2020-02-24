@@ -98,4 +98,40 @@ describe("GeoValidatorHOC", () => {
         expect(wrapper.find(ErrorComponent).exists()).toEqual(true);
         expect(onError).toBeCalledTimes(2);
     });
+
+    it("should component be updated to new prop when filters changed", () => {
+        const buckets: VisualizationObject.IBucket[] = [LOCATION_ITEM, SIZE_ITEM];
+        const filters: VisualizationObject.VisualizationObjectExtendedFilter[] = [
+            {
+                positiveAttributeFilter: {
+                    displayForm: {
+                        identifier: "some-identifier",
+                    },
+                    in: ["e1", "e2"],
+                },
+            },
+        ];
+        const config: IGeoConfig = {
+            mapboxToken: "",
+            mdObject: {
+                buckets,
+                filters: [],
+                visualizationClass,
+            },
+        };
+        const configWithFilters: IGeoConfig = {
+            mapboxToken: "",
+            mdObject: {
+                buckets,
+                filters,
+                visualizationClass,
+            },
+        };
+
+        const wrapper = createComponent({ config });
+        expect(wrapper.find(TestInnerComponent).prop("config").mdObject.filters).toEqual([]);
+
+        wrapper.setProps({ config: configWithFilters });
+        expect(wrapper.find(TestInnerComponent).prop("config").mdObject.filters).toEqual(filters);
+    });
 });

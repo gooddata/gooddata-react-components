@@ -49,7 +49,7 @@ describe("getPushpinColors", () => {
 
     it("should return one RGB color when all colors having same values", () => {
         expect(getPushpinColors([10, 10], undefined)).toEqual([
-            { background: "rgb(20,178,226)", border: "rgb(20,178,226)" },
+            { background: "rgb(20,178,226)", border: "rgb(233,237,241)" },
         ]);
     });
 

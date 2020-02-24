@@ -6,6 +6,7 @@ import isFinite = require("lodash/isFinite");
 import { Execution } from "@gooddata/typings";
 import { DEFAULT_COLORS, getColorPalette } from "../../visualizations/utils/color";
 import {
+    DEFAULT_PUSHPIN_BORDER_COLOR_VALUE,
     DEFAULT_PUSHPIN_COLOR_SCALE,
     DEFAULT_PUSHPIN_COLOR_VALUE,
     EMPTY_SEGMENT_ITEM,
@@ -95,7 +96,7 @@ export function getPushpinColors(
             (name: string): IPushpinColor => {
                 const palette = colorPaletteMapping[name];
                 return {
-                    border: palette[DEFAULT_COLOR_INDEX_IN_PALETTE],
+                    border: DEFAULT_PUSHPIN_BORDER_COLOR_VALUE,
                     background: palette[DEFAULT_COLOR_INDEX_IN_PALETTE],
                 };
             },
@@ -109,7 +110,7 @@ export function getPushpinColors(
     if (min === max && !segmentItems.length) {
         return [
             {
-                border: DEFAULT_PUSHPIN_COLOR_VALUE,
+                border: DEFAULT_PUSHPIN_BORDER_COLOR_VALUE,
                 background: DEFAULT_PUSHPIN_COLOR_VALUE,
             },
         ];
