@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import * as ReactDom from "react-dom";
 import { AFM } from "@gooddata/typings";
@@ -304,6 +304,27 @@ describe("PluggablePivotTable", () => {
 
             createElementSpy.mockRestore();
             renderSpy.mockRestore();
+        });
+
+        it("should have correct props", () => {
+            const pivotTable = createComponent();
+            const options = getDefaultOptions();
+            const defaultConfig = {
+                menu: {
+                    aggregations: true,
+                    aggregationsSubMenu: true,
+                },
+            };
+            const extendedConfig = {
+                ...defaultConfig,
+                maxHeight: 200,
+            };
+            const props = pivotTable.getExtendedPivotTableProps(options, extendedConfig);
+
+            expect(props.dataSource).toEqual(testMocks.dummyDataSource);
+            expect(props.resultSpec).toEqual(options.resultSpec);
+            expect(props.locale).toEqual(options.locale);
+            expect(props.config).toEqual(extendedConfig);
         });
 
         it("should render PivotTable passing down all the necessary properties", () => {
