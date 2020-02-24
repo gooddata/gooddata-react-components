@@ -39,6 +39,7 @@ import { PluggableFunnelChart } from "./pluggableVisualizations/funnelChart/Plug
 import { PluggableBubbleChart } from "./pluggableVisualizations/bubbleChart/PluggableBubbleChart";
 import { PluggableXirr } from "./pluggableVisualizations/xirr/PluggableXirr";
 import { PluggableGeoPushpinChart } from "./pluggableVisualizations/geoChart/PluggableGeoPushpinChart";
+import { PluggableBulletChart } from "./pluggableVisualizations/bulletChart/PluggableBulletChart";
 
 // visualization catalogue - add your new visualization here
 const VisualizationsCatalog = {
@@ -59,6 +60,7 @@ const VisualizationsCatalog = {
     funnel: PluggableFunnelChart,
     xirr: PluggableXirr,
     pushpin: PluggableGeoPushpinChart,
+    bullet: PluggableBulletChart,
 };
 
 export interface IBaseVisualizationProps extends IVisCallbacks {

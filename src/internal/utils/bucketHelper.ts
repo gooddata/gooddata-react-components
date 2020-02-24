@@ -13,10 +13,10 @@ import flatMap = require("lodash/flatMap");
 import compact = require("lodash/compact");
 import without = require("lodash/without");
 import { IntlShape } from "react-intl";
-import { VisualizationTypes } from "../../constants/visualizationTypes";
+import { VisType, VisualizationTypes } from "../../constants/visualizationTypes";
 import * as BucketNames from "../../constants/bucketNames";
 import { OverTimeComparisonType, OverTimeComparisonTypes } from "../../interfaces/OverTimeComparison";
-import { VisualizationObject } from "@gooddata/typings";
+import { Execution, VisualizationObject } from "@gooddata/typings";
 
 import {
     IFiltersBucketItem,
@@ -43,6 +43,8 @@ import {
 } from "../constants/bucket";
 import { UICONFIG } from "../constants/uiConfig";
 import { getTranslation } from "./translations";
+import { filterOutEmptyBuckets } from "../../helpers/mdObjBucketHelper";
+import { SUPPORTED_MEASURE_BUCKETS } from "../../components/visualizations/chart/chartOptions/bulletChartOptions";
 
 export function sanitizeFilters(newReferencePoint: IExtendedReferencePoint): IExtendedReferencePoint {
     const attributeBucketItems = getAllAttributeItems(newReferencePoint.buckets);
@@ -250,6 +252,10 @@ function bucketSupportsSubtitle(visualizationType: string, bucketLocalIdentifier
         );
     }
 
+    if (visualizationType === VisualizationTypes.BULLET) {
+        return bucketLocalIdentifier !== BucketNames.VIEW;
+    }
+
     return false;
 }
 
@@ -331,7 +337,11 @@ export function getBucketItemsByType(
     return itemsOfType;
 }
 
-export function getPreferredBucketItems(buckets: IBucket[], preference: string[], type: string[]): any {
+export function getPreferredBucketItems(
+    buckets: IBucket[],
+    preference: string[],
+    type: string[],
+): IBucketItem[] {
     const bucket = getPreferredBucket(buckets, preference, type);
     return get(bucket, "items", []);
 }
@@ -799,3 +809,24 @@ export function getAllMeasuresShowOnSecondaryAxis(buckets: IBucket[]): IBucketIt
 export function getItemsLocalIdentifiers(items: IBucketItem[]): string[] {
     return items.map((item: IBucketItem) => get(item, "localIdentifier", ""));
 }
+
+const getAvailableMeasureBucketsLocalIdentifiers = (type: VisType) =>
+    (type === VisualizationTypes.BULLET && SUPPORTED_MEASURE_BUCKETS) || [];
+
+export const getOccupiedMeasureBucketsLocalIdentifiers = (
+    type: VisType,
+    mdObject: VisualizationObject.IVisualizationObjectContent,
+    executionResultData: Execution.DataValue[][],
+): VisualizationObject.Identifier[] => {
+    const availableMeasureBucketsLocalIdentifiers = getAvailableMeasureBucketsLocalIdentifiers(type);
+    const buckets: VisualizationObject.IBucket[] = get(mdObject, "buckets", []);
+    const notEmptyMeasureBucketsLocalIdentifiers = filterOutEmptyBuckets(buckets)
+        .map(bucket => bucket.localIdentifier)
+        .filter(
+            (bucketLocalIdentifier: string) =>
+                availableMeasureBucketsLocalIdentifiers.indexOf(bucketLocalIdentifier) >= 0,
+        );
+    return !isEmpty(notEmptyMeasureBucketsLocalIdentifiers)
+        ? notEmptyMeasureBucketsLocalIdentifiers
+        : availableMeasureBucketsLocalIdentifiers.slice(0, executionResultData.length);
+};

@@ -99,6 +99,7 @@ import { getCategoriesForTwoAttributes } from "./chartOptions/extendedStackingCh
 import { setMeasuresToSecondaryAxis } from "../../../helpers/dualAxis";
 import { isCssMultiLineTruncationSupported } from "../../../helpers/domUtils";
 import omit = require("lodash/omit");
+import { getOccupiedMeasureBucketsLocalIdentifiers } from "../../../internal/utils/bucketHelper";
 
 const TOOLTIP_PADDING = 10;
 
@@ -678,6 +679,7 @@ export function getSeries(
     type: string,
     mdObject: VisualizationObject.IVisualizationObjectContent,
     colorStrategy: IColorStrategy,
+    occupiedMeasureBucketsLocalIdentifiers?: VisualizationObject.Identifier[],
 ): any {
     if (isHeatmap(type)) {
         return getHeatmapSeries(executionResultData, measureGroup);
@@ -700,7 +702,12 @@ export function getSeries(
             colorStrategy,
         );
     } else if (isBulletChart(type)) {
-        return getBulletChartSeries(executionResultData, measureGroup, colorStrategy, mdObject.buckets);
+        return getBulletChartSeries(
+            executionResultData,
+            measureGroup,
+            colorStrategy,
+            occupiedMeasureBucketsLocalIdentifiers,
+        );
     }
 
     return executionResultData.map((seriesItem: string[], seriesIndex: number) => {
@@ -1679,6 +1686,12 @@ export function getChartOptions(
         );
     }
 
+    const occupiedMeasureBucketsLocalIdentifiers = getOccupiedMeasureBucketsLocalIdentifiers(
+        type,
+        mdObject,
+        executionResultData,
+    );
+
     const colorStrategy = ColorFactory.getColorStrategy(
         config.colorPalette,
         config.colorMapping,
@@ -1687,6 +1700,7 @@ export function getChartOptions(
         executionResponse,
         afm,
         type,
+        occupiedMeasureBucketsLocalIdentifiers,
     );
 
     const gridEnabled = get(config, "grid.enabled", true);
@@ -1703,6 +1717,7 @@ export function getChartOptions(
         type,
         mdObject,
         colorStrategy,
+        occupiedMeasureBucketsLocalIdentifiers,
     );
 
     const drillableSeries = getDrillableSeries(

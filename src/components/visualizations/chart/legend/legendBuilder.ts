@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import pick = require("lodash/pick");
 import set = require("lodash/set");
 import get = require("lodash/get");
@@ -123,6 +123,7 @@ export default function getLegend(legendConfig: any = {}, chartOptions: any): IL
         VisualizationTypes.AREA,
         VisualizationTypes.PIE,
         VisualizationTypes.DONUT,
+        VisualizationTypes.BULLET,
     ];
 
     if (legendConfig.position === "auto" || !legendConfig.position) {

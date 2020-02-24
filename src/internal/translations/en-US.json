@@ -229,6 +229,11 @@
         "comment": "",
         "limit": 0
     },
+    "dashboard.bucket.view_title.bullet": {
+        "value": "View by",
+        "comment": "",
+        "limit": 0
+    },
     "dashboard.bucket.view_title.heatmap": {
         "value": "Rows",
         "comment": "",
@@ -349,12 +354,12 @@
         "comment": "",
         "limit": 0
     },
-    "dashboard.headline.error.missing_bucket_item.heading": {
+    "dashboard.error.missing_primary_bucket_item.heading": {
         "value": "No primary measure in your insight",
         "comment": "",
         "limit": 0
     },
-    "dashboard.headline.error.missing_bucket_item.text": {
+    "dashboard.error.missing_primary_bucket_item.text": {
         "value": "Add a primary measure to your insight, or switch to table.\nOnce done, you'll be able to save it.",
         "comment": "",
         "limit": 0
@@ -642,6 +647,36 @@
     "export_unsupported.colors": {
         "value": "The insight is not compatible with custom colors. To open the insight as a report, click Reset Colors in Configuration —> Colors.",
         "comment": "",
+        "limit": 0
+    },
+    "dashboard.bucket.measures_title.bullet": {
+        "value": "Measure",
+        "comment": "",
+        "limit": 0
+    },
+    "dashboard.bucket.secondary_measures_title.bullet": {
+        "value": "Measure",
+        "comment": "",
+        "limit": 0
+    },
+    "dashboard.bucket.tertiary_measures_title.bullet": {
+        "value": "Measure",
+        "comment": "",
+        "limit": 0
+    },
+    "dashboard.bucket.measures_subtitle.bullet": {
+        "value": "Primary",
+        "comment": "Primary measure of a bullet chart.",
+        "limit": 0
+    },
+    "dashboard.bucket.secondary_measures_subtitle.bullet": {
+        "value": "Target",
+        "comment": "Target of a bullet chart.",
+        "limit": 0
+    },
+    "dashboard.bucket.tertiary_measures_subtitle.bullet": {
+        "value": "Comparative",
+        "comment": "Comparative measures of a bullet chart",
         "limit": 0
     }
 }

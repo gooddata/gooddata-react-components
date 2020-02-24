@@ -4,6 +4,7 @@ import { IUiConfig } from "../interfaces/Visualization";
 import { METRIC, FACT, ATTRIBUTE, DATE } from "./bucket";
 import { OverTimeComparisonTypes } from "../../interfaces/OverTimeComparison";
 import { VisualizationTypes } from "../../constants/visualizationTypes";
+import { MEASURES, SECONDARY_MEASURES, TERTIARY_MEASURES, VIEW } from "../../constants/bucketNames";
 
 export const MAX_METRICS_COUNT = 20;
 export const DEFAULT_PIE_METRICS_COUNT = 1;
@@ -574,5 +575,43 @@ export const GEO_PUSHPIN_CHART_UICONFIG: IUiConfig = {
         ...defaultFilters,
     },
     supportedLocationIcon: { supported: true },
+    ...defaultRootUiConfigProperties,
+};
+
+export const DEFAULT_BULLET_CHART_CONFIG: IUiConfig = {
+    buckets: {
+        [MEASURES]: {
+            ...measuresBase,
+            isShowOnSecondaryAxisVisible: false,
+            isShowInPercentVisible: false,
+            allowsReordering: false,
+            canAddItems: true,
+            itemsLimit: 1,
+        },
+        [SECONDARY_MEASURES]: {
+            ...measuresBase,
+            isShowOnSecondaryAxisVisible: false,
+            isShowInPercentVisible: false,
+            allowsReordering: false,
+            canAddItems: true,
+            itemsLimit: 1,
+        },
+        [TERTIARY_MEASURES]: {
+            ...measuresBase,
+            isShowOnSecondaryAxisVisible: false,
+            isShowInPercentVisible: false,
+            allowsReordering: false,
+            canAddItems: true,
+            itemsLimit: 1,
+        },
+        [VIEW]: {
+            ...viewBase,
+            allowsReordering: true,
+            allowsSwapping: true,
+            canAddItems: true,
+            itemsLimit: 2,
+        },
+        ...defaultFilters,
+    },
     ...defaultRootUiConfigProperties,
 };

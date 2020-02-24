@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import { VisualizationObject } from "@gooddata/typings";
 
 const withSorts: VisualizationObject.IVisualizationObjectContent = {
@@ -174,6 +174,32 @@ export const measureItemM1: VisualizationObject.BucketItem = {
     },
 };
 
+export const measureItemM2: VisualizationObject.BucketItem = {
+    measure: {
+        localIdentifier: "m2",
+        definition: {
+            measureDefinition: {
+                item: {
+                    uri: "/gdc/md/project/obj/m2",
+                },
+            },
+        },
+    },
+};
+
+export const measureItemM3: VisualizationObject.BucketItem = {
+    measure: {
+        localIdentifier: "m3",
+        definition: {
+            measureDefinition: {
+                item: {
+                    uri: "/gdc/md/project/obj/m3",
+                },
+            },
+        },
+    },
+};
+
 export const attributeItemA1: VisualizationObject.BucketItem = {
     visualizationAttribute: {
         localIdentifier: "a1",
@@ -200,6 +226,94 @@ export const oneMeasureNoView: VisualizationObject.IVisualizationObjectContent =
         {
             localIdentifier: "measures",
             items: [measureItemM1],
+        },
+        {
+            localIdentifier: "view",
+            items: [],
+        },
+    ],
+};
+
+export const measuresAndSecondaryMeasuresNoView: VisualizationObject.IVisualizationObjectContent = {
+    visualizationClass: {
+        uri: "",
+    },
+    buckets: [
+        {
+            localIdentifier: "measures",
+            items: [measureItemM1],
+        },
+        {
+            localIdentifier: "secondary_measures",
+            items: [measureItemM2],
+        },
+        {
+            localIdentifier: "view",
+            items: [],
+        },
+    ],
+};
+
+export const measuresAndTertiaryMeasuresNoView: VisualizationObject.IVisualizationObjectContent = {
+    visualizationClass: {
+        uri: "",
+    },
+    buckets: [
+        {
+            localIdentifier: "measures",
+            items: [measureItemM1],
+        },
+        {
+            localIdentifier: "tertiary_measures",
+            items: [measureItemM3],
+        },
+        {
+            localIdentifier: "view",
+            items: [],
+        },
+    ],
+};
+
+export const measuresAndSecondaryMeasuresAndTertiaryMeasuresNoView: VisualizationObject.IVisualizationObjectContent = {
+    visualizationClass: {
+        uri: "",
+    },
+    buckets: [
+        {
+            localIdentifier: "measures",
+            items: [measureItemM1],
+        },
+        {
+            localIdentifier: "secondary_measures",
+            items: [measureItemM2],
+        },
+        {
+            localIdentifier: "tertiary_measures",
+            items: [measureItemM3],
+        },
+        {
+            localIdentifier: "view",
+            items: [],
+        },
+    ],
+};
+
+export const measuresAndNoSecondaryMeasuresAndTertiaryMeasuresNoView: VisualizationObject.IVisualizationObjectContent = {
+    visualizationClass: {
+        uri: "",
+    },
+    buckets: [
+        {
+            localIdentifier: "measures",
+            items: [measureItemM1],
+        },
+        {
+            localIdentifier: "secondary_measures",
+            items: [],
+        },
+        {
+            localIdentifier: "tertiary_measures",
+            items: [measureItemM3],
         },
         {
             localIdentifier: "view",
@@ -261,6 +375,10 @@ export const visualizationObjectMock = {
     withTotals,
     withoutTotals,
     oneMeasureNoView,
+    measuresAndSecondaryMeasuresNoView,
+    measuresAndTertiaryMeasuresNoView,
+    measuresAndSecondaryMeasuresAndTertiaryMeasuresNoView,
+    measuresAndNoSecondaryMeasuresAndTertiaryMeasuresNoView,
     noMeasureNoView,
     oneMeasureOneView,
     oneMeasureOneStack,

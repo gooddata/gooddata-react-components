@@ -474,7 +474,6 @@ export function generateStackedDimensions(buckets: VisualizationObject.IBucket[]
     ];
 }
 
-// for LineChart, AreaChart, BarChart, ColumnChart
 export function generateDefaultDimensions(afm: AFM.IAfm): AFM.IDimension[] {
     return [
         {
