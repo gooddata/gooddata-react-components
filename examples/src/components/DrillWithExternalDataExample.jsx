@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 /* eslint-disable react/jsx-closing-tag-location */
 import * as React from "react";
 import fetch from "isomorphic-fetch";
@@ -157,30 +157,42 @@ export class DrillWithExternalDataExample extends React.Component {
                     }`,
                 )
                     .then(res => res.json())
-                    .then(
-                        ({ results }) => {
-                            this.setState({
-                                employee3rdPartyData: {
-                                    isLoading: false,
-                                    error: null,
-                                    data: {
-                                        ...results[0],
-                                        id: employee.id,
-                                        gender,
+                    .then(({ results }) => {
+                        this.setState({
+                            employee3rdPartyData: {
+                                isLoading: false,
+                                error: null,
+                                data: {
+                                    ...results[0],
+                                    id: employee.id,
+                                    gender,
+                                },
+                            },
+                        });
+                    })
+                    .catch(() => {
+                        this.setState({
+                            employee3rdPartyData: {
+                                isLoading: false,
+                                error: null,
+                                data: {
+                                    dob: {
+                                        date: new Date(),
                                     },
+                                    registered: {
+                                        date: new Date(),
+                                    },
+                                    cell: "123456",
+                                    location: {
+                                        city: "Sample City",
+                                        state: "Sample State (load failed)",
+                                    },
+                                    id: employee.id,
+                                    gender,
                                 },
-                            });
-                        },
-                        error => {
-                            this.setState({
-                                employee3rdPartyData: {
-                                    error,
-                                    isLoading: false,
-                                    data: null,
-                                },
-                            });
-                        },
-                    );
+                            },
+                        });
+                    });
             });
     };
 
