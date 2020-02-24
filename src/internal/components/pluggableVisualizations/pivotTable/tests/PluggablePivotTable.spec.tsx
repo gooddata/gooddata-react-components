@@ -4,31 +4,32 @@ import * as ReactDom from "react-dom";
 import { AFM } from "@gooddata/typings";
 
 import {
-    PluggablePivotTable,
-    getColumnAttributes,
-    getRowAttributes,
     adaptReferencePointSortItemsToPivotTable,
     addDefaultSort,
+    getColumnAttributes,
+    getRowAttributes,
     isSortItemVisible,
+    PluggablePivotTable,
 } from "../PluggablePivotTable";
 import * as testMocks from "../../../../mocks/testMocks";
 import * as referencePointMocks from "../../../../mocks/referencePointMocks";
 import * as uiConfigMocks from "../../../../mocks/uiConfigMocks";
 import {
-    IVisConstruct,
     IBucket,
-    ILocale,
-    IVisProps,
-    IFilters,
-    IExtendedReferencePoint,
-    IBucketItem,
-    IFiltersBucketItem,
     IBucketFilter,
     IBucketFilterElement,
+    IBucketItem,
+    IExtendedReferencePoint,
+    IFilters,
+    IFiltersBucketItem,
+    ILocale,
+    IVisConstruct,
+    IVisProps,
 } from "../../../../interfaces/Visualization";
 import { IDrillableItem } from "../../../../../interfaces/DrillEvents";
 import { PivotTable } from "../../../../../components/core/PivotTable";
 import { DEFAULT_LOCALE } from "../../../../../constants/localization";
+import { IPivotTableConfig } from "../../../../../interfaces/PivotTable";
 import noop = require("lodash/noop");
 import cloneDeep = require("lodash/cloneDeep");
 import SpyInstance = jest.SpyInstance;
@@ -321,6 +322,31 @@ describe("PluggablePivotTable", () => {
             const extendedConfig = {
                 ...defaultConfig,
                 maxHeight: 200,
+            };
+            const props = pivotTable.getExtendedPivotTableProps(options, extendedConfig);
+
+            expect(props.dataSource).toEqual(testMocks.dummyDataSource);
+            expect(props.resultSpec).toEqual(options.resultSpec);
+            expect(props.locale).toEqual(options.locale);
+            expect(props.config).toEqual(extendedConfig);
+        });
+
+        it("should handle column sizing when feature flag is active", () => {
+            const pivotTable = createComponent({
+                ...defaultProps,
+                featureFlags: { enableTableColumnsAutoResizing: true },
+            });
+            const options = getDefaultOptions();
+            const defaultConfig = {
+                menu: {
+                    aggregations: true,
+                    aggregationsSubMenu: true,
+                },
+            };
+            const extendedConfig: IPivotTableConfig = {
+                ...defaultConfig,
+                maxHeight: 200,
+                columnSizing: { defaultWidth: "viewport" },
             };
             const props = pivotTable.getExtendedPivotTableProps(options, extendedConfig);
 

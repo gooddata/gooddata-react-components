@@ -254,6 +254,32 @@ describe("VisualizationWrapped", () => {
         });
     });
 
+    it("should render PivotTable with table column resizing if ff set to true", () => {
+        const getFeatureFlags = async () => {
+            return { enableTableColumnsAutoResizing: true };
+        };
+
+        const props = {
+            sdk,
+            getFeatureFlags,
+            projectId,
+            fetchVisObject,
+            fetchVisualizationClass,
+            uriResolver,
+            intl,
+            identifier: TABLE_IDENTIFIER,
+        };
+
+        const wrapper = mount(<VisualizationWrapped {...props as any} />);
+
+        return testUtils.delay(SLOW).then(() => {
+            wrapper.update();
+            expect(wrapper.find(PivotTable).prop("config").columnSizing).toEqual({
+                defaultWidth: "viewport",
+            });
+        });
+    });
+
     it("should render xirr", () => {
         const props = {
             sdk,

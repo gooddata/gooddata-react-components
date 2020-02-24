@@ -11,35 +11,36 @@ import { render } from "react-dom";
 import { IntlShape } from "react-intl";
 import { AFM, VisualizationObject } from "@gooddata/typings";
 import produce from "immer";
-import { configurePercent, configureOverTimeComparison } from "../../../utils/bucketConfig";
+import { configureOverTimeComparison, configurePercent } from "../../../utils/bucketConfig";
 import UnsupportedConfigurationPanel from "../../configurationPanels/UnsupportedConfigurationPanel";
 import { unmountComponentsAtNodes } from "../../../utils/domHelper";
 
 import * as VisEvents from "../../../../interfaces/Events";
 import * as BucketNames from "../../../../constants/bucketNames";
 import {
-    IReferencePoint,
+    IAttributeFilter,
+    IBucket,
+    IBucketFilter,
+    IBucketItem,
     IExtendedReferencePoint,
+    IFeatureFlags,
+    ILocale,
+    IReferencePoint,
+    isAttributeFilter,
     IVisCallbacks,
     IVisConstruct,
     IVisProps,
-    ILocale,
     IVisualizationProperties,
-    IBucketItem,
-    IBucket,
-    IBucketFilter,
-    isAttributeFilter,
-    IAttributeFilter,
 } from "../../../interfaces/Visualization";
 
 import { ATTRIBUTE, DATE, METRIC } from "../../../constants/bucket";
 
 import {
-    sanitizeFilters,
     getAllItemsByType,
-    getTotalsFromBucket,
     getItemsFromBuckets,
+    getTotalsFromBucket,
     removeDuplicateBucketItems,
+    sanitizeFilters,
 } from "../../../utils/bucketHelper";
 
 import { setPivotTableUiConfig } from "../../../utils/uiConfigHelpers/pivotTableUiConfigHelper";
@@ -53,7 +54,7 @@ import { IPivotTableProps, PivotTable } from "../../../../components/core/PivotT
 import { generateDimensions } from "../../../../helpers/dimensions";
 import { DEFAULT_LOCALE } from "../../../../constants/localization";
 import { DASHBOARDS_ENVIRONMENT } from "../../../constants/properties";
-import { IPivotTableConfig } from "../../../../interfaces/PivotTable";
+import { IColumnSizing, IMenu, IPivotTableConfig } from "../../../../interfaces/PivotTable";
 
 export const getColumnAttributes = (buckets: IBucket[]): IBucketItem[] => {
     return getItemsFromBuckets(
@@ -263,6 +264,7 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
     private visualizationProperties: IVisualizationProperties;
     private locale: ILocale;
     private environment: VisualizationEnvironment;
+    private featureFlags: IFeatureFlags;
 
     constructor(props: IVisConstruct) {
         super();
@@ -270,10 +272,11 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
         this.element = props.element;
         this.configPanelElement = props.configPanelElement;
         this.callbacks = props.callbacks;
-        this.locale = props.locale ? props.locale : DEFAULT_LOCALE;
+        this.locale = props.locale || DEFAULT_LOCALE;
         this.intl = createInternalIntl(this.locale);
         this.onExportReady = props.callbacks.onExportReady && this.onExportReady.bind(this);
         this.environment = props.environment;
+        this.featureFlags = props.featureFlags || {};
     }
 
     public unmount() {
@@ -416,27 +419,14 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
             );
             const totals: VisualizationObject.IVisualizationTotal[] = (rowsBucket && rowsBucket.totals) || [];
 
-            let configUpdated = config;
-            if (this.environment !== DASHBOARDS_ENVIRONMENT) {
-                // Menu aggregations turned off in KD
-                configUpdated = merge(
-                    {
-                        menu: {
-                            aggregations: true,
-                            aggregationsSubMenu: true,
-                        },
-                    },
-                    configUpdated,
-                );
-            }
-
+            const updatedConfig = this.enrichConfigWithAutosize(this.enrichConfigWithMenu(config));
             const pivotTableProps = {
                 projectId: this.projectId,
                 drillableItems,
                 onDrill,
                 onFiredDrillEvent,
                 totals,
-                config: configUpdated,
+                config: updatedConfig,
                 height,
                 locale,
                 dataSource,
@@ -465,7 +455,7 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
                                 const extendedPivotTableProps = this.getExtendedPivotTableProps(
                                     pivotTableProps,
                                     {
-                                        ...configUpdated,
+                                        ...updatedConfig,
                                         maxHeight: clientHeight,
                                     },
                                 );
@@ -490,7 +480,7 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
                     <ReactMeasure client={true}>
                         {({ measureRef, contentRect }: any) => {
                             const extendedPivotTableProps = this.getExtendedPivotTableProps(pivotTableProps, {
-                                ...configUpdated,
+                                ...updatedConfig,
                                 maxHeight: contentRect.client.height,
                             });
 
@@ -549,5 +539,27 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
 
     protected getDimensions(mdObject: VisualizationObject.IVisualizationObjectContent): AFM.IDimension[] {
         return generateDimensions(mdObject, VisualizationTypes.TABLE);
+    }
+
+    private enrichConfigWithMenu(config: IPivotTableConfig): IPivotTableConfig {
+        if (this.environment === DASHBOARDS_ENVIRONMENT) {
+            // Menu aggregations turned off in KD
+            return config;
+        }
+
+        const menu: IMenu = {
+            aggregations: true,
+            aggregationsSubMenu: true,
+        };
+        return merge({ menu }, config);
+    }
+
+    private enrichConfigWithAutosize(config: IPivotTableConfig): IPivotTableConfig {
+        if (!this.featureFlags.enableTableColumnsAutoResizing) {
+            return config;
+        }
+
+        const columnSizing: IColumnSizing = { defaultWidth: "viewport" };
+        return merge(config, { columnSizing });
     }
 }

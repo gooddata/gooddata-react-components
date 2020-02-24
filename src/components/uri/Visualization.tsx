@@ -46,7 +46,11 @@ import { convertErrors, generateErrorMap, IErrorMap } from "../../helpers/errorH
 import { isBarChart, isTreemap } from "../visualizations/utils/common";
 import { getColorMappingPredicate, getColorPaletteFromColors } from "../visualizations/utils/color";
 import { getCachedOrLoad } from "../../helpers/sdkCache";
-import { getFeatureFlags, setConfigFromFeatureFlags } from "../../helpers/featureFlags";
+import {
+    getFeatureFlags,
+    setConfigFromFeatureFlags,
+    getTableConfigFromFeatureFlags,
+} from "../../helpers/featureFlags";
 import { mergeFiltersToAfm } from "../../helpers/afmHelper";
 import { _experimentalDataSourceFactory } from "./experimentalDataSource";
 import IVisualizationObjectContent = VisualizationObject.IVisualizationObjectContent;
@@ -352,8 +356,18 @@ export class VisualizationWrapped extends React.Component<
                     processedVisualizationObject,
                     filtersFromProps,
                 );
+
+                const pivotTableColumnProps = {
+                    config: {
+                        ...config,
+                        ...getTableConfigFromFeatureFlags(this.state.featureFlags),
+                    },
+                };
+
                 // we do not need to pass totals={totals} because BucketPivotTable deals with changes in totals itself
-                return <PivotTableComponent {...commonProps} {...pivotBucketProps} />;
+                return (
+                    <PivotTableComponent {...commonProps} {...pivotBucketProps} {...pivotTableColumnProps} />
+                );
             }
             case VisualizationTypes.PUSHPIN:
                 const geoBucketProps = mdObjectToGeoPushpinBucketProps(

@@ -135,10 +135,10 @@ storiesOf("Core components/GeoPushpinChart", module)
                     uri: "/gdc/md/storybook/obj/30.df",
                 },
                 in: [
-                    "/gdc/md/projectId/obj/694/elements?id=1808",
-                    "/gdc/md/projectId/obj/694/elements?id=1903",
-                    "/gdc/md/projectId/obj/694/elements?id=1870",
-                    "/gdc/md/projectId/obj/694/elements?id=1895",
+                    "/gdc/md/storybook/obj/694/elements?id=1808",
+                    "/gdc/md/storybook/obj/694/elements?id=1903",
+                    "/gdc/md/storybook/obj/694/elements?id=1870",
+                    "/gdc/md/storybook/obj/694/elements?id=1895",
                 ],
             },
         };

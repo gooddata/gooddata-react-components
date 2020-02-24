@@ -5,70 +5,70 @@ const featureFlags = {
     enableSortingByTotalGroup: true,
 };
 
-const barChartAfmExecutions = [
+const barChartAfmExecutions = (projectId) => [
     {
         _description: 'Bar chart with 2M, 1VB and stackMeasures is true',
-        execution: require('./stories/test_data/bar_chart_with_2M_1VB_stackMeasures_request.json'),
-        executionResponse: require('./stories/test_data/bar_chart_with_2M_1VB_stackMeasures_response.json'),
-        executionResult: require('./stories/test_data/bar_chart_with_2M_1VB_stackMeasures_result.json')
+        execution: require('./stories/test_data/bar_chart_with_2M_1VB_stackMeasures_request.js')(projectId),
+        executionResponse: require('./stories/test_data/bar_chart_with_2M_1VB_stackMeasures_response.js')(projectId),
+        executionResult: require('./stories/test_data/bar_chart_with_2M_1VB_stackMeasures_result.js')(projectId)
     },
     {
         _description: 'Bar chart with 2M, 2VB and stackMeasures is true',
-        execution: require('./stories/test_data/bar_chart_with_2M_2VB_stackMeasures_request.json'),
-        executionResponse: require('./stories/test_data/bar_chart_with_2M_2VB_stackMeasures_response.json'),
-        executionResult: require('./stories/test_data/bar_chart_with_2M_2VB_stackMeasures_result.json')
+        execution: require('./stories/test_data/bar_chart_with_2M_2VB_stackMeasures_request.js')(projectId),
+        executionResponse: require('./stories/test_data/bar_chart_with_2M_2VB_stackMeasures_response.js')(projectId),
+        executionResult: require('./stories/test_data/bar_chart_with_2M_2VB_stackMeasures_result.js')(projectId)
     },
     {
         _description: 'Bar chart with 1M, 2VB and 1 SB',
-        execution: require('./stories/test_data/bar_chart_with_1M_2VB_1SB_request.json'),
-        executionResponse: require('./stories/test_data/bar_chart_with_1M_2VB_1SB_response.json'),
-        executionResult: require('./stories/test_data/bar_chart_with_1M_2VB_1SB_result.json')
+        execution: require('./stories/test_data/bar_chart_with_1M_2VB_1SB_request.js')(projectId),
+        executionResponse: require('./stories/test_data/bar_chart_with_1M_2VB_1SB_response.js')(projectId),
+        executionResult: require('./stories/test_data/bar_chart_with_1M_2VB_1SB_result.js')(projectId)
     },
     {
         _description: 'Bar chart with 2M and 2VB',
-        execution: require('./stories/test_data/bar_chart_with_2M_2VB_request.json'),
-        executionResponse: require('./stories/test_data/bar_chart_with_2M_2VB_response.json'),
-        executionResult: require('./stories/test_data/bar_chart_with_2M_2VB_result.json')
+        execution: require('./stories/test_data/bar_chart_with_2M_2VB_request.js')(projectId),
+        executionResponse: require('./stories/test_data/bar_chart_with_2M_2VB_response.js')(projectId),
+        executionResult: require('./stories/test_data/bar_chart_with_2M_2VB_result.js')(projectId)
     },
 ];
 
-const heatmapAfmExecutions = [{
-        execution: require('./stories/test_data/heat_map_with_58_rows_mock_request.json'),
-        executionResult: require('./stories/test_data/heat_map_with_58_rows_mock_result.json')
+const heatmapAfmExecutions = projectId => [{
+        execution: require('./stories/test_data/heat_map_with_58_rows_mock_request.js')(projectId),
+        executionResult: require('./stories/test_data/heat_map_with_58_rows_mock_result.js')(projectId)
     }, {
-        execution: require('./stories/test_data/heat_map_with_60_rows_mock_request.json'),
-        executionResult: require('./stories/test_data/heat_map_with_60_rows_mock_result.json')
+        execution: require('./stories/test_data/heat_map_with_60_rows_mock_request.js')(projectId),
+        executionResult: require('./stories/test_data/heat_map_with_60_rows_mock_result.js')(projectId)
     }, {
-        execution: require('./stories/test_data/heat_map_with_empty_cells_request.json'),
-        executionResult: require('./stories/test_data/heat_map_with_empty_cells_result.json')
+        execution: require('./stories/test_data/heat_map_with_empty_cells_request.js')(projectId),
+        executionResult: require('./stories/test_data/heat_map_with_empty_cells_result.js')(projectId)
     }];
 
-const pivotTableAfmExecutions = [
+const pivotTableAfmExecutions = projectId => [
     {
-        execution: require("./stories/test_data/pivot_table_with_subtotals_request.json"),
-        executionResponse: require("./stories/test_data/pivot_table_with_subtotals_response.json"),
-        executionResult: require("./stories/test_data/pivot_table_with_subtotals_result.json"),
+        execution: require("./stories/test_data/pivot_table_with_subtotals_request.js")(projectId),
+        executionResponse: require("./stories/test_data/pivot_table_with_subtotals_response.js")(projectId),
+        executionResult: require("./stories/test_data/pivot_table_with_subtotals_result.js")(projectId),
     }];
 
-const pivotTableSubtotalsAfmExecutions = [
+const pivotTableSubtotalsAfmExecutions = projectId => [
     {
-        execution: require("./stories/test_data/pivot_table_with_subtotals_2_measures_request.json"),
-        executionResponse: require("./stories/test_data/pivot_table_with_subtotals_2_measures_response.json"),
-        executionResult: require("./stories/test_data/pivot_table_with_subtotals_2_measures_result.json"),
+        execution: require("./stories/test_data/pivot_table_with_subtotals_2_measures_request.js")(projectId),
+        executionResponse: require("./stories/test_data/pivot_table_with_subtotals_2_measures_response.js")(projectId),
+        executionResult: require("./stories/test_data/pivot_table_with_subtotals_2_measures_result.js")(projectId),
     }];
 
-const pivotTableGrandtotalSubtotalAfmExecutions = [
+const pivotTableGrandtotalSubtotalAfmExecutions = projectId => [
     {
-        execution: require("./stories/test_data/pivot_table_with_grandtotal_subtotal_2_measures_request.json"),
-        executionResponse: require("./stories/test_data/pivot_table_with_grandtotal_subtotal_2_measures_response.json"),
-        executionResult: require("./stories/test_data/pivot_table_with_grandtotal_subtotal_2_measures_result.json"),
+        execution: require("./stories/test_data/pivot_table_with_grandtotal_subtotal_2_measures_request.js")(projectId),
+        executionResponse: require("./stories/test_data/pivot_table_with_grandtotal_subtotal_2_measures_response.js")(projectId),
+        executionResult: require("./stories/test_data/pivot_table_with_grandtotal_subtotal_2_measures_result.js")(projectId),
     }];
 
-const xirrAfmExecutions = [
+const xirrAfmExecutions = projectId => [
     {
-        execution: require("./stories/test_data/xirr_simple_request.json"),
-        executionResponse: require("./stories/test_data/xirr_simple_response.json"),
-        executionResult: require("./stories/test_data/xirr_simple_result.json"),
+        execution: require("./stories/test_data/xirr_simple_request.js")(projectId),
+        executionResponse: require("./stories/test_data/xirr_simple_response.js")(projectId),
+        executionResult: require("./stories/test_data/xirr_simple_result.js")(projectId),
     }];
 
 const barChartVisualizationObjects = [
@@ -238,47 +238,47 @@ const geoChartVisualizationObjects = [
     },
 ];
 
-const geoChartAfmExecutions = [
-    {   
+const geoChartAfmExecutions = projectId => [
+    {
         _description: "GeoPushpin with location",
-        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_request.json"),
-        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_response.json"),
-        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_result.json")
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_request.js")(projectId),
+        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_response.js")(projectId),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_result.js")(projectId)
     },
     {
         _description: "GeoPushpin with location and size",
-        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_request.json"),
-        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_response.json"),
-        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_result.json")
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_request.js")(projectId),
+        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_response.js")(projectId),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_result.js")(projectId)
     },
     {
         _description: "GeoPushpin with location and color",
-        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_color_request.json"),
-        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_color_response.json"),
-        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_color_result.json")
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_color_request.js")(projectId),
+        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_color_response.js")(projectId),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_color_result.js")(projectId)
     },
     {
         _description: "GeoPushpin with location, size and segment",
-        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_segment_request.json"),
-        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_segment_response.json"),
-        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_segment_result.json")
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_segment_request.js")(projectId),
+        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_segment_response.js")(projectId),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_segment_result.js")(projectId)
     },
     {
         _description: "GeoPushpin with location, size an color",
-        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_request.json"),
-        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_response.json"),
-        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_result.json")
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_request.js")(projectId),
+        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_response.js")(projectId),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_result.js")(projectId)
     },
     {
         _description: "GeoPushpin with location, size, color, segment and tooltip",
-        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_request.json"),
-        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_response.json"),
-        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_result.json")
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_request.js")(projectId),
+        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_response.js")(projectId),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_result.js")(projectId)
     },
     {
         _description: "GeoPushpin with location, size, color, segment and tooltip with Location filter",
-        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_filters_request.json"),
-        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_filters_result.json")
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_filters_request.js")(projectId),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_filters_result.js")(projectId)
     }
 ];
 
@@ -2483,13 +2483,13 @@ const getBaseProjectSchema = (title, identifier) => {
                     }
                 }
             },
-            ...barChartAfmExecutions,
-            ...heatmapAfmExecutions,
-            ...pivotTableAfmExecutions,
-            ...pivotTableSubtotalsAfmExecutions,
-            ...pivotTableGrandtotalSubtotalAfmExecutions,
-            ...xirrAfmExecutions,
-            ...geoChartAfmExecutions,
+            ...barChartAfmExecutions(identifier),
+            ...heatmapAfmExecutions(identifier),
+            ...pivotTableAfmExecutions(identifier),
+            ...pivotTableSubtotalsAfmExecutions(identifier),
+            ...pivotTableGrandtotalSubtotalAfmExecutions(identifier),
+            ...xirrAfmExecutions(identifier),
+            ...geoChartAfmExecutions(identifier),
         ],
         visualizationClasses: [{
             title: 'Table',
@@ -2942,5 +2942,10 @@ module.exports = [
                 }
             ]
         },
+    },
+    { ...getBaseProjectSchema('Storybook with table resizing', 'resizingstorybook'),
+        featureFlags: {
+            enableTableColumnsAutoResizing: true
+        }
     },
 ];

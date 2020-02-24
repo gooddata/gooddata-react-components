@@ -139,6 +139,11 @@ const configuration = {
             'Over height bottom legend': {
                 readySelector: '.screenshot-ready-wrapper-done'
             }
+        },
+        'URI components': {
+            'table with feature flag resizing': {
+                readySelector: '.screenshot-ready-wrapper-done'
+            }
         }
     }
 };

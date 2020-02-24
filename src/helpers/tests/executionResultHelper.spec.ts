@@ -234,8 +234,9 @@ describe("getHeaderItemName", () => {
 });
 
 describe("getHeadersInDimension", () => {
-    const executionResponse = require("../../../stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_response.json")
-        .executionResponse;
+    const executionResponse = require("../../../stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_response.js")(
+        "storybook",
+    ).executionResponse;
 
     it("should return attribute headers", () => {
         const { dimensions } = executionResponse;
