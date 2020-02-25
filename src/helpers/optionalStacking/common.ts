@@ -1,11 +1,11 @@
 // (C) 2007-2020 GoodData Corporation
 import isArray = require("lodash/isArray");
 import get = require("lodash/get");
-import set = require("lodash/set");
 import { AFM, VisualizationObject } from "@gooddata/typings";
 import { VIEW_BY_ATTRIBUTES_LIMIT } from "../../components/visualizations/chart/constants";
 import { IChartConfig } from "../../interfaces/Config";
 import IVisualizationAttribute = VisualizationObject.IVisualizationAttribute;
+import { disableBucketItemComputeRatio, getComputeRatio } from "../utils";
 
 export function getViewByTwoAttributes(
     viewBy: IVisualizationAttribute | IVisualizationAttribute[],
@@ -59,21 +59,6 @@ export function sanitizeConfig(
     }
 
     return config;
-}
-
-export function disableBucketItemComputeRatio<T extends VisualizationObject.BucketItem>(item: T): T {
-    if (getComputeRatio(item)) {
-        setComputeRatio(item, false);
-    }
-    return item;
-}
-
-export function getComputeRatio(bucketItem: VisualizationObject.BucketItem): boolean {
-    return get(bucketItem, ["measure", "definition", "measureDefinition", "computeRatio"], false);
-}
-
-function setComputeRatio(bucketItem: VisualizationObject.BucketItem, value: boolean) {
-    set(bucketItem, ["measure", "definition", "measureDefinition", "computeRatio"], value);
 }
 
 /**

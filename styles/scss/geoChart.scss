@@ -8,10 +8,23 @@
     right: 0;
     left: 0;
     bottom: 0;
-
+    display: flex;
     .mapboxgl-map {
         height: 100%;
         width: 100%;
+    }
+    &.flex-direction-column {
+        flex-direction: column;
+        .geo-legend {
+            flex: 1 0 auto;
+        }
+        .mapbox-container {
+            flex: 1 1 auto;
+            overflow: visible;
+        }
+    }
+    &.flex-direction-row {
+        flex-direction: row;
     }
     .geo-legend {
         display: flex;
@@ -24,19 +37,27 @@
         }
         .viz-static-legend-wrap {
             margin-right: 20px;
-            flex: 60%;
+            flex: 1 auto;
             align-items: flex-end;
+            display: flex;
+            flex-flow: row wrap;
+            align-items: center;
             justify-content: flex-end;
         }
         .pushpin-size-legend {
             display: flex;
             margin-left: 10px;
             font-family: $gd-font-primary;
+            flex: 0 auto;
             .metric-name {
                 font-size: 14px;
                 line-height: 30px;
                 color: $gd-color-link;
                 margin-right: 6px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 250px;
             }
             .pushpin-size-legend-circle-list {
                 .pushpin-size-legend-circle {

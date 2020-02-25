@@ -11,6 +11,7 @@ import { convertBucketsToAFM, convertBucketsToMdObject } from "../helpers/conver
 import { getGeoChartDimensions } from "../helpers/dimensions";
 import { getResultSpec } from "../helpers/resultSpec";
 import { IGeoPushpinChartProps } from "./../interfaces/GeoChart";
+import { disableBucketItemComputeRatio } from "../helpers/utils";
 
 import { COLOR, LOCATION, SEGMENT, SIZE, TOOLTIP_TEXT } from "../constants/bucketNames";
 
@@ -19,11 +20,11 @@ export const getBuckets = (props: IGeoPushpinChartProps): VisualizationObject.IB
     const buckets: VisualizationObject.IBucket[] = [
         {
             localIdentifier: SIZE,
-            items: size ? [size] : [],
+            items: size ? [disableBucketItemComputeRatio(size)] : [],
         },
         {
             localIdentifier: COLOR,
-            items: color ? [color] : [],
+            items: color ? [disableBucketItemComputeRatio(color)] : [],
         },
         {
             localIdentifier: LOCATION,

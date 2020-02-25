@@ -9,7 +9,7 @@ module.exports = projectId => {
                         definition: {
                             measure: {
                                 item: {
-                                    uri: "/gdc/md/" + projectId + "/obj/20",
+                                    uri: `/gdc/md/${projectId}/obj/20`,
                                 },
                             },
                         },
@@ -19,7 +19,7 @@ module.exports = projectId => {
                         definition: {
                             measure: {
                                 item: {
-                                    uri: "/gdc/md/" + projectId + "/obj/21",
+                                    uri: `/gdc/md/${projectId}/obj/21`,
                                 },
                             },
                         },
@@ -28,19 +28,19 @@ module.exports = projectId => {
                 attributes: [
                     {
                         displayForm: {
-                            uri: "/gdc/md/" + projectId + "/obj/30.df",
+                            uri: `/gdc/md/${projectId}/obj/30.df`,
                         },
                         localIdentifier: "location",
                     },
                     {
                         displayForm: {
-                            uri: "/gdc/md/" + projectId + "/obj/23.df",
+                            uri: `/gdc/md/${projectId}/obj/23.df`,
                         },
                         localIdentifier: "segmentBy",
                     },
                     {
                         displayForm: {
-                            uri: "/gdc/md/" + projectId + "/obj/24.df",
+                            uri: `/gdc/md/${projectId}/obj/24.df`,
                         },
                         localIdentifier: "tooltip",
                     },
@@ -49,14 +49,15 @@ module.exports = projectId => {
                     {
                         positiveAttributeFilter: {
                             displayForm: {
-                                uri: "/gdc/md/" + projectId + "/obj/30.df",
+                                uri: `/gdc/md/${projectId}/obj/30.df`,
                             },
                             in: {
                                 uris: [
-                                    "/gdc/md/" + projectId + "/obj/694/elements?id=1808",
-                                    "/gdc/md/" + projectId + "/obj/694/elements?id=1903",
-                                    "/gdc/md/" + projectId + "/obj/694/elements?id=1870",
-                                    "/gdc/md/" + projectId + "/obj/694/elements?id=1895",
+                                    `/gdc/md/${projectId}/obj/694/elements?id=1808`,
+                                    `/gdc/md/${projectId}/obj/694/elements?id=1903`,
+                                    `/gdc/md/${projectId}/obj/694/elements?id=1870`,
+                                    `/gdc/md/${projectId}/obj/694/elements?id=1895`,
+                                    `/gdc/md/${projectId}/obj/694/elements?id=1844`,
                                 ],
                             },
                         },

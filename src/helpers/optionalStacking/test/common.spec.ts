@@ -1,11 +1,7 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { VisualizationObject } from "@gooddata/typings";
-import {
-    getComputeRatio,
-    getSanitizedStackingConfigFromAfm,
-    sanitizeConfig,
-    sanitizeComputeRatioOnMeasures,
-} from "../common";
+import { getSanitizedStackingConfigFromAfm, sanitizeConfig, sanitizeComputeRatioOnMeasures } from "../common";
+import { getComputeRatio } from "../../utils";
 import { measure } from "../../../helpers/model";
 import { IChartConfig } from "../../../interfaces/Config";
 import * as fixtures from "../../../../stories/test_data/fixtures";

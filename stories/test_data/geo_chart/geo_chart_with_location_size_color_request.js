@@ -9,7 +9,7 @@ module.exports = projectId => {
                         definition: {
                             measure: {
                                 item: {
-                                    uri: "/gdc/md/" + projectId + "/obj/20",
+                                    uri: `/gdc/md/${projectId}/obj/20`,
                                 },
                             },
                         },
@@ -19,7 +19,7 @@ module.exports = projectId => {
                         definition: {
                             measure: {
                                 item: {
-                                    uri: "/gdc/md/" + projectId + "/obj/21",
+                                    uri: `/gdc/md/${projectId}/obj/21`,
                                 },
                             },
                         },
@@ -28,7 +28,7 @@ module.exports = projectId => {
                 attributes: [
                     {
                         displayForm: {
-                            uri: "/gdc/md/" + projectId + "/obj/30.df",
+                            uri: `/gdc/md/${projectId}/obj/30.df`,
                         },
                         localIdentifier: "location",
                     },

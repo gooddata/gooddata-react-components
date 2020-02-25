@@ -52,6 +52,23 @@ describe("GeoChart", () => {
         await testUtils.delay();
         wrapper.update();
         expect(wrapper.find(".s-gd-geo-component").length).toBe(1);
+        expect(wrapper.hasClass("flex-direction-column")).toBe(true);
+    });
+
+    it("should render GeoChartInner has flex-direction-row class", async () => {
+        const props: Partial<IGeoChartInnerProps> = {
+            legendPosition: "right",
+        };
+        const wrapper = renderComponent(props);
+        expect(wrapper.hasClass("flex-direction-row")).toBe(true);
+    });
+
+    it("should render GeoChartInner has flex-direction-column class", async () => {
+        const props: Partial<IGeoChartInnerProps> = {
+            legendPosition: "bottom",
+        };
+        const wrapper = renderComponent(props);
+        expect(wrapper.hasClass("flex-direction-column")).toBe(true);
     });
 
     it("should use custom Chart renderer", () => {

@@ -242,31 +242,26 @@ const geoChartAfmExecutions = (projectId) => [
     {
         _description: "GeoPushpin with location",
         execution: require("./stories/test_data/geo_chart/geo_chart_with_location_request.js")(projectId),
-        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_response.js")(projectId),
         executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_result.js")(projectId)
     },
     {
         _description: "GeoPushpin with location and size",
         execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_request.js")(projectId),
-        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_response.js")(projectId),
         executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_result.js")(projectId)
     },
     {
         _description: "GeoPushpin with location and color",
         execution: require("./stories/test_data/geo_chart/geo_chart_with_location_color_request.js")(projectId),
-        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_color_response.js")(projectId),
         executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_color_result.js")(projectId)
     },
     {
         _description: "GeoPushpin with location, size and segment",
         execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_segment_request.js")(projectId),
-        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_segment_response.js")(projectId),
         executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_segment_result.js")(projectId)
     },
     {
         _description: "GeoPushpin with location, size and color",
         execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_request.js")(projectId),
-        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_response.js")(projectId),
         executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_result.js")(projectId)
     },
     {
@@ -277,7 +272,6 @@ const geoChartAfmExecutions = (projectId) => [
     {
         _description: "GeoPushpin with location, size, color, segment and tooltip",
         execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_request.js")(projectId),
-        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_response.js")(projectId),
         executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_result.js")(projectId)
     },
     {
