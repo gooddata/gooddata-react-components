@@ -110,6 +110,9 @@ const getMockReferencePoint = (
         exportConfig: {
             supported: true,
         },
+        noMetricAccepted: {
+            supported: true,
+        },
         openAsReport: {
             supported: false,
         },

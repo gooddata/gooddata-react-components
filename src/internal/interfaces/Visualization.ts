@@ -217,6 +217,10 @@ export interface IExportUiConfig {
     supported?: boolean;
 }
 
+export interface INoMetricUiConfig {
+    supported?: boolean;
+}
+
 export interface IOpenAsReportUiConfig {
     supported?: boolean;
     warningMessage?: string;
@@ -243,6 +247,7 @@ export interface IUiConfig {
     buckets: IBucketsUiConfig;
     recommendations?: IRecommendations;
     exportConfig?: IExportUiConfig;
+    noMetricAccepted?: INoMetricUiConfig;
     openAsReport?: IOpenAsReportUiConfig;
     customError?: ICustomError;
     supportedOverTimeComparisonTypes?: OverTimeComparisonType[];
