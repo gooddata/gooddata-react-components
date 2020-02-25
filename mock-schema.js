@@ -238,43 +238,45 @@ const geoChartVisualizationObjects = [
     },
 ];
 
-const geoChartWithLocationAfmExecutions = [
-    {
+const geoChartAfmExecutions = [
+    {   
+        _description: "GeoPushpin with location",
         execution: require("./stories/test_data/geo_chart/geo_chart_with_location_request.json"),
         executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_response.json"),
         executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_result.json")
-    }
-];
-const geoChartWithLocationSizeAfmExecutions = [
+    },
     {
+        _description: "GeoPushpin with location and size",
         execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_request.json"),
         executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_response.json"),
         executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_result.json")
-    }
-];
-const geoChartWithLocationColorAfmExecutions = [
+    },
     {
+        _description: "GeoPushpin with location and color",
         execution: require("./stories/test_data/geo_chart/geo_chart_with_location_color_request.json"),
         executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_color_response.json"),
         executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_color_result.json")
-    }
-];
-const geoChartWithLocationSizeColorAfmExecutions = [
+    },
     {
+        _description: "GeoPushpin with location, size and segment",
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_segment_request.json"),
+        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_segment_response.json"),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_segment_result.json")
+    },
+    {
+        _description: "GeoPushpin with location, size an color",
         execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_request.json"),
         executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_response.json"),
         executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_result.json")
-    }
-];
-const geoChartWithLocationSizeColorSegmentTooltipAfmExecutions = [
+    },
     {
+        _description: "GeoPushpin with location, size, color, segment and tooltip",
         execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_request.json"),
         executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_response.json"),
         executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_result.json")
-    }
-];
-const geoChartWithLocationSizeColorSegmentTooltipFiltersAfmExecutions = [
+    },
     {
+        _description: "GeoPushpin with location, size, color, segment and tooltip with Location filter",
         execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_filters_request.json"),
         executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_filters_result.json")
     }
@@ -2487,12 +2489,7 @@ const getBaseProjectSchema = (title, identifier) => {
             ...pivotTableSubtotalsAfmExecutions,
             ...pivotTableGrandtotalSubtotalAfmExecutions,
             ...xirrAfmExecutions,
-            ...geoChartWithLocationAfmExecutions,
-            ...geoChartWithLocationSizeAfmExecutions,
-            ...geoChartWithLocationColorAfmExecutions,
-            ...geoChartWithLocationSizeColorAfmExecutions,
-            ...geoChartWithLocationSizeColorSegmentTooltipAfmExecutions,
-            ...geoChartWithLocationSizeColorSegmentTooltipFiltersAfmExecutions
+            ...geoChartAfmExecutions,
         ],
         visualizationClasses: [{
             title: 'Table',

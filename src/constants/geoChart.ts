@@ -73,3 +73,5 @@ export const PUSHPIN_STYLE_CIRCLE = "circle";
 export const PUSHPIN_STYLE_CIRCLE_COLOR = "circle-color";
 export const PUSHPIN_STYLE_CIRCLE_SIZE = "circle-radius";
 export const PUSHPIN_STYLE_CIRCLE_STROKE_COLOR = "circle-stroke-color";
+export const EMPTY_SEGMENT_VALUE = "empty-segment-filter";
+export const EMPTY_SEGMENT_ITEM = "empty-segment-item";

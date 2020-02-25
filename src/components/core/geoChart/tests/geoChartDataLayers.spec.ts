@@ -153,14 +153,21 @@ describe("createPushpinDataLayer", () => {
                 name: "segment",
             },
         };
+        const selectedSegmentItems = ["Hawaii", "HCM"];
         const layer: mapboxgl.Layer = createPushpinDataLayer(
             dataSourceName,
             getExecutionResult(true, true, false, true, true),
             geoData,
-            "Hawaii",
+            selectedSegmentItems,
         );
 
-        expect(layer.filter).toEqual(["==", "Hawaii", ["get", "value", ["object", ["get", "segment"]]]]);
+        expect(layer.filter).toEqual([
+            "match",
+            ["get", "value", ["object", ["get", "segment"]]],
+            ["Hawaii", "HCM"],
+            true,
+            false,
+        ]);
     });
 
     describe("Cluster Layers", () => {

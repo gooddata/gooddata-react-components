@@ -199,12 +199,16 @@ describe("getColorPaletteMapping", () => {
 });
 
 describe("getColorIndexInPalette", () => {
-    it.each([[0, 100], [1, 120], [2, 220], [2, 300], [3, 312], [5, 700], [5, 800], [0, null]])(
+    it.each([[0, 100], [1, 120], [2, 220], [2, 300], [3, 312], [5, 700], [5, 800], [0, null], [5, 700]])(
         "should return %s",
         (expected: number, value: number) => {
             expect(getColorIndexInPalette(value, 100, 700)).toBe(expected);
         },
     );
+
+    it("should return 0 with Min value equal Max value ", () => {
+        expect(getColorIndexInPalette(30, 100, 100)).toBe(0);
+    });
 
     it("should return with negative color values", () => {
         expect(getColorIndexInPalette(-20, -100, -10)).toBe(5);

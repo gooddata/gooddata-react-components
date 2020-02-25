@@ -17,6 +17,7 @@ import {
     PUSHPIN_STYLE_CIRCLE_COLOR,
     PUSHPIN_STYLE_CIRCLE_SIZE,
     PUSHPIN_STYLE_CIRCLE_STROKE_COLOR,
+    EMPTY_SEGMENT_VALUE,
 } from "../../../constants/geoChart";
 import { IGeoData } from "../../../interfaces/GeoChart";
 import { stringToFloat } from "../../../helpers/utils";
@@ -64,8 +65,14 @@ function createPushpinSizeOptions(
     return sizeOptions;
 }
 
-function createPushpinFilter(selectedSegmentItem: string): mapboxgl.Expression {
-    return ["==", selectedSegmentItem, getExpressionByBucketName(SEGMENT)];
+export function createPushpinFilter(selectedSegmentItems: string[]): mapboxgl.Expression {
+    return [
+        "match",
+        getExpressionByBucketName(SEGMENT),
+        selectedSegmentItems.length ? selectedSegmentItems : [EMPTY_SEGMENT_VALUE],
+        true,
+        false,
+    ]; // true/false are the output values, from the https://docs.mapbox.com/mapbox-gl-js/style-spec/expressions/#match
 }
 
 function createPushpinColorOptions(): mapboxgl.Expression {
@@ -80,7 +87,7 @@ export function createPushpinDataLayer(
     dataSourceName: string,
     executionResult: Execution.IExecutionResult,
     geoData: IGeoData,
-    selectedSegmentItem?: string,
+    selectedSegmentItems?: string[],
 ): mapboxgl.Layer {
     const layer: mapboxgl.Layer = {
         id: DEFAULT_LAYER_NAME,
@@ -93,8 +100,8 @@ export function createPushpinDataLayer(
             [PUSHPIN_STYLE_CIRCLE_SIZE]: createPushpinSizeOptions(executionResult, geoData),
         },
     };
-    if (selectedSegmentItem !== undefined) {
-        layer.filter = createPushpinFilter(selectedSegmentItem);
+    if (selectedSegmentItems !== undefined) {
+        layer.filter = createPushpinFilter(selectedSegmentItems);
     }
     return layer;
 }
@@ -128,10 +135,10 @@ export function createClusterLabels(dataSourceName: string): mapboxgl.Layer {
         filter: DEFAULT_CLUSTER_FILTER,
     };
 }
-
 /**
  * Create layer for un-clustered points which are not close to others
  * @param dataSourceName
+ * @param selectedSegmentItems
  */
 export function createUnclusterPoints(dataSourceName: string): mapboxgl.Layer {
     return {

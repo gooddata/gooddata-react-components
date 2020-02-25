@@ -5,18 +5,21 @@ import isNumber = require("lodash/isNumber");
 import isFinite = require("lodash/isFinite");
 import { Execution } from "@gooddata/typings";
 import { DEFAULT_COLORS, getColorPalette } from "../../visualizations/utils/color";
-import { DEFAULT_PUSHPIN_COLOR_SCALE, DEFAULT_PUSHPIN_COLOR_VALUE } from "../../../constants/geoChart";
+import {
+    DEFAULT_PUSHPIN_COLOR_SCALE,
+    DEFAULT_PUSHPIN_COLOR_VALUE,
+    EMPTY_SEGMENT_ITEM,
+} from "../../../constants/geoChart";
 import { getHeaderItemName } from "../../../helpers/executionResultHelper";
 import { IObjectMapping, IPushpinColor } from "../../../interfaces/GeoChart";
 import { IColorLegendItem } from "../../visualizations/typings/legend";
 import isEmpty = require("lodash/isEmpty");
 
 const DEFAULT_SEGMENT_ITEM = "default_segment_item";
-const EMPTY_SEGMENT_ITEM = "empty_segment_item";
 const DEFAULT_COLOR_INDEX_IN_PALETTE = DEFAULT_PUSHPIN_COLOR_SCALE - 1;
 
 export function getColorIndexInPalette(value: number, min: number, max: number): number {
-    if (!isNumber(value) || value === min) {
+    if (!isNumber(value) || min === max || value === min) {
         return 0;
     }
 
@@ -76,23 +79,9 @@ export function getPushpinColors(
     colorValues: number[],
     segmentItems: Execution.IResultHeaderItem[] = [],
 ): IPushpinColor[] {
-    if (!colorValues.length) {
+    if (!colorValues.length && !segmentItems.length) {
         return [];
     }
-
-    const colorsWithoutNull = colorValues.filter(isFinite);
-
-    const min = Math.min(...colorsWithoutNull);
-    const max = Math.max(...colorsWithoutNull);
-    if (min === max) {
-        return [
-            {
-                border: DEFAULT_PUSHPIN_COLOR_VALUE,
-                background: DEFAULT_PUSHPIN_COLOR_VALUE,
-            },
-        ];
-    }
-
     const segmentItemNames: string[] = segmentItems.map(
         (item: Execution.IResultHeaderItem): string => {
             const name: string = getHeaderItemName(item);
@@ -101,6 +90,30 @@ export function getPushpinColors(
     );
     const uniqSegmentItems: string[] = uniq(segmentItemNames);
     const colorPaletteMapping = getColorPaletteMapping(uniqSegmentItems);
+    if (!colorValues.length) {
+        return segmentItemNames.map(
+            (name: string): IPushpinColor => {
+                const palette = colorPaletteMapping[name];
+                return {
+                    border: palette[DEFAULT_COLOR_INDEX_IN_PALETTE],
+                    background: palette[DEFAULT_COLOR_INDEX_IN_PALETTE],
+                };
+            },
+        );
+    }
+
+    const colorsWithoutNull = colorValues.filter(isFinite);
+
+    const min = Math.min(...colorsWithoutNull);
+    const max = Math.max(...colorsWithoutNull);
+    if (min === max && !segmentItems.length) {
+        return [
+            {
+                border: DEFAULT_PUSHPIN_COLOR_VALUE,
+                background: DEFAULT_PUSHPIN_COLOR_VALUE,
+            },
+        ];
+    }
 
     return colorValues.map(
         (color: number, index: number): IPushpinColor => {
