@@ -1145,6 +1145,20 @@ function getAxesConfiguration(chartOptions: IChartOptions) {
     };
 }
 
+function getTargetCursorConfigurationForBulletChart(chartOptions: IChartOptions) {
+    const { type, data } = chartOptions;
+
+    if (!isBulletChart(type)) {
+        return {};
+    }
+
+    const isTargetDrillable = data.series.some(
+        (series: ISeriesItem) => series.type === "bullet" && series.isDrillable,
+    );
+
+    return isTargetDrillable ? { plotOptions: { bullet: { cursor: "pointer" } } } : {};
+}
+
 export function getCustomizedConfiguration(
     chartOptions: IChartOptions,
     chartConfig?: IChartConfig,
@@ -1168,6 +1182,7 @@ export function getCustomizedConfiguration(
         getAxisNameConfiguration,
         getChartAlignmentConfiguration,
         getAxisLabelConfigurationForDualBarChart,
+        getTargetCursorConfigurationForBulletChart,
     ];
 
     const commonData = configurators.reduce((config: any, configurator: any) => {
