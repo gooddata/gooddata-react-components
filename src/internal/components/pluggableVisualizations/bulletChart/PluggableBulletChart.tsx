@@ -76,8 +76,8 @@ export class PluggableBulletChart extends PluggableBaseChart {
         newReferencePoint[BUCKETS] = [
             {
                 localIdentifier: BucketNames.MEASURES,
-                items: getMeasuresBucketItems(allMeasures, secondaryMeasuresBucketItems, [
-                    ...primaryMeasuresBucketItems,
+                items: getMeasuresBucketItems(allMeasures, primaryMeasuresBucketItems, [
+                    ...secondaryMeasuresBucketItems,
                     ...tertiaryMeasuresBucketItems,
                 ]),
             },
