@@ -67,7 +67,13 @@ export const getColumnAttributes = (buckets: IBucket[]): IBucketItem[] => {
 export const getRowAttributes = (buckets: IBucket[]): IBucketItem[] => {
     return getItemsFromBuckets(
         buckets,
-        [BucketNames.ATTRIBUTE, BucketNames.ATTRIBUTES, BucketNames.VIEW, BucketNames.TREND],
+        [
+            BucketNames.ATTRIBUTE,
+            BucketNames.ATTRIBUTES,
+            BucketNames.VIEW,
+            BucketNames.TREND,
+            BucketNames.LOCATION,
+        ],
         [ATTRIBUTE, DATE],
     );
 };

@@ -320,6 +320,7 @@ export const geoAttributeItems: IBucketItem[] = [
         type: "attribute",
         aggregation: null,
         attribute: "attr.owner.country",
+        locationDisplayFormUri: "/geo/attribute/displayform/uri/1",
     },
     {
         localIdentifier: "a2",
@@ -1109,6 +1110,27 @@ export const oneMetricAndCategoryAndStackReferencePoint: IReferencePoint = {
         {
             localIdentifier: "view",
             items: attributeItems.slice(0, 1),
+        },
+        {
+            localIdentifier: "stack",
+            items: attributeItems.slice(1, 2),
+        },
+    ],
+    filters: {
+        localIdentifier: "filters",
+        items: [],
+    },
+};
+
+export const oneMetricAndGeoCategoryAndStackReferencePoint: IReferencePoint = {
+    buckets: [
+        {
+            localIdentifier: "measures",
+            items: masterMeasureItems.slice(0, 1),
+        },
+        {
+            localIdentifier: "view",
+            items: geoAttributeItems.slice(0, 1),
         },
         {
             localIdentifier: "stack",
@@ -2015,6 +2037,34 @@ export const simpleGeoPushpinReferencePoint: IReferencePoint = {
         {
             localIdentifier: "segment",
             items: geoAttributeItems.slice(1, 2),
+        },
+    ],
+    filters: {
+        localIdentifier: "filters",
+        items: geoAttributeFilters.slice(0, 1),
+    },
+    properties: {
+        sortItems: [defaultSortItem],
+    },
+};
+
+export const twoMeasuresWithShowInPercentOnSecondaryAxisReferencePoint: IReferencePoint = {
+    buckets: [
+        {
+            localIdentifier: "measures",
+            items: masterMeasuresWithPercentage.slice(2, 3),
+        },
+        {
+            localIdentifier: "secondary_measures",
+            items: masterMeasuresWithPercentage.slice(3, 4),
+        },
+        {
+            localIdentifier: "view",
+            items: [],
+        },
+        {
+            localIdentifier: "segment",
+            items: [],
         },
     ],
     filters: {

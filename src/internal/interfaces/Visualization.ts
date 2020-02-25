@@ -160,6 +160,7 @@ export interface IBucketItem {
     attribute?: string;
     filters?: IBucketFilter[];
     granularity?: string;
+    locationDisplayFormUri?: string;
     showInPercent?: boolean;
     showOnSecondaryAxis?: boolean;
     sort?: ISort;

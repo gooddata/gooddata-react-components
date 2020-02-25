@@ -463,7 +463,11 @@ export function getStackItems(buckets: IBucket[], itemTypes: string[] = [ATTRIBU
 }
 
 export function getAttributeItems(buckets: IBucket[]): IBucketItem[] {
-    return getAllAttributeItemsWithPreference(buckets, [BucketNames.VIEW, BucketNames.TREND]);
+    return getAllAttributeItemsWithPreference(buckets, [
+        BucketNames.LOCATION,
+        BucketNames.VIEW,
+        BucketNames.TREND,
+    ]);
 }
 
 export function getAttributeItemsWithoutStacks(buckets: IBucket[]): IBucketItem[] {
@@ -800,6 +804,10 @@ export function setMeasuresShowOnSecondaryAxis(items: IBucketItem[], value: bool
         ...item,
         [SHOW_ON_SECONDARY_AXIS]: value,
     }));
+}
+
+export function removeShowOnSecondaryAxis(items: IBucketItem[]): IBucketItem[] {
+    return setMeasuresShowOnSecondaryAxis(items, null);
 }
 
 export function getAllMeasuresShowOnSecondaryAxis(buckets: IBucket[]): IBucketItem[] {

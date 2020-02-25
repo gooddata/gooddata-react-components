@@ -2,9 +2,10 @@
 import { IntlShape } from "react-intl";
 import cloneDeep = require("lodash/cloneDeep");
 import set = require("lodash/set");
+import get = require("lodash/get");
 
 import { IExtendedReferencePoint } from "../../interfaces/Visualization";
-import { UICONFIG } from "../../constants/uiConfig";
+import { UICONFIG, OPEN_AS_REPORT, SUPPORTED } from "../../constants/uiConfig";
 import { BUCKETS } from "../../constants/bucket";
 import { setBucketTitles } from "../bucketHelper";
 
@@ -33,6 +34,17 @@ export function setGeoPushpinUiConfig(
         [UICONFIG, BUCKETS, BucketNames.SEGMENT, "icon"],
         geoPushPinBucketSegmentIcon,
     );
+    // overide base config
+    set(referencePointConfigured, [UICONFIG, OPEN_AS_REPORT, SUPPORTED], false);
+
+    // only apply related bucket uiConfig
+    set(referencePointConfigured, [UICONFIG, BUCKETS], {
+        [BucketNames.LOCATION]: get(referencePointConfigured, [UICONFIG, BUCKETS, BucketNames.LOCATION]),
+        [BucketNames.SIZE]: get(referencePointConfigured, [UICONFIG, BUCKETS, BucketNames.SIZE]),
+        [BucketNames.COLOR]: get(referencePointConfigured, [UICONFIG, BUCKETS, BucketNames.COLOR]),
+        [BucketNames.SEGMENT]: get(referencePointConfigured, [UICONFIG, BUCKETS, BucketNames.SEGMENT]),
+        [BucketNames.FILTERS]: get(referencePointConfigured, [UICONFIG, BUCKETS, BucketNames.FILTERS]),
+    });
 
     return referencePointConfigured;
 }
