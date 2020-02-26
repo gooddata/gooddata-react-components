@@ -1,5 +1,6 @@
 // (C) 2019-2020 GoodData Corporation
 import mapboxgl from "mapbox-gl";
+import { Execution } from "@gooddata/typings";
 import {
     createPushpinDataLayer,
     createClusterLabels,
@@ -24,6 +25,84 @@ describe("createPushpinDataLayer", () => {
             getExecutionResult(true),
             geoData,
         );
+
+        expect(layer.paint["circle-color"]).toEqual([
+            "string",
+            ["get", "background", ["object", ["get", "color"]]],
+            "rgb(20,178,226)",
+        ]);
+        expect(layer.paint["circle-radius"]).toBe(4);
+        expect(layer.paint["circle-stroke-color"]).toEqual([
+            "string",
+            ["get", "border", ["object", ["get", "color"]]],
+            "rgb(233,237,241)",
+        ]);
+    });
+
+    it("should return default border, color and size when Color, Size contains same values", () => {
+        const geoData: IGeoData = {
+            size: {
+                index: 0,
+                name: "size",
+            },
+            color: {
+                index: 1,
+                name: "color",
+            },
+            location: {
+                index: 0,
+                name: "location",
+            },
+        };
+        const excutionResult: Execution.IExecutionResult = {
+            data: [Array(3).fill(1), Array(3).fill(10)],
+            headerItems: [
+                [
+                    [
+                        {
+                            measureHeaderItem: {
+                                name: "Size",
+                                order: 0,
+                            },
+                        },
+                        {
+                            measureHeaderItem: {
+                                name: "Color",
+                                order: 1,
+                            },
+                        },
+                    ],
+                ],
+                [
+                    [
+                        {
+                            attributeHeaderItem: {
+                                name: "44.500000;-89.500000",
+                                uri: "/gdc/md/projectId/obj/694/elements?id=1808",
+                            },
+                        },
+                        {
+                            attributeHeaderItem: {
+                                name: "44.500000;-89.500000",
+                                uri: "/gdc/md/projectId/obj/694/elements?id=1809",
+                            },
+                        },
+                        {
+                            attributeHeaderItem: {
+                                name: "44.500000;-89.500000",
+                                uri: "/gdc/md/projectId/obj/694/elements?id=1810",
+                            },
+                        },
+                    ],
+                ],
+            ],
+            paging: {
+                count: [2, 3],
+                offset: [0, 0],
+                total: [2, 3],
+            },
+        };
+        const layer: mapboxgl.Layer = createPushpinDataLayer(dataSourceName, excutionResult, geoData);
 
         expect(layer.paint["circle-color"]).toEqual([
             "string",

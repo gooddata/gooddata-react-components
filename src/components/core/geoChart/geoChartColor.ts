@@ -140,15 +140,7 @@ export function generateLegendColorData(colorSeries: number[]): IColorLegendItem
     const offset = (max - min) / DEFAULT_PUSHPIN_COLOR_SCALE;
 
     if (min === max) {
-        return [
-            {
-                range: {
-                    from: min,
-                    to: max,
-                },
-                color: DEFAULT_PUSHPIN_COLOR_VALUE,
-            },
-        ];
+        return [];
     }
 
     return range(0, DEFAULT_PUSHPIN_COLOR_SCALE).map(

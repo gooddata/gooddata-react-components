@@ -26,9 +26,9 @@ export default function GeoChartLegendRenderer(props: IGeoChartLegendRendererPro
     const numericSymbols = useNumbericSymbols();
     const { position = TOP, sizeData, colorData, segmentData, colorFormat } = props;
 
-    const hasSizeData = Boolean(sizeData);
-    const hasSegmentData = Boolean(segmentData);
-    const isColorLegendVisible = Boolean(colorData && !hasSegmentData);
+    const hasSizeData = Boolean(sizeData && sizeData.length);
+    const hasSegmentData = Boolean(segmentData && segmentData.length);
+    const isColorLegendVisible = Boolean(colorData && colorData.length && !hasSegmentData);
     const isLegendVisible = isColorLegendVisible || hasSizeData || hasSegmentData;
 
     if (!isLegendVisible) {

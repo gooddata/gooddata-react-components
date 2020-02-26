@@ -221,18 +221,10 @@ describe("generateLegendColorData", () => {
         expect(colorData).toEqual([]);
     });
 
-    it("should generate one color item if all color series have same values", () => {
+    it("should return empty array if all color series have same values", () => {
         const colorSeries = [1, 1, 1, 1, 1, 1, 1];
         const colorData = generateLegendColorData(colorSeries);
-        expect(colorData).toEqual([
-            {
-                color: "rgb(20,178,226)",
-                range: {
-                    from: 1,
-                    to: 1,
-                },
-            },
-        ]);
+        expect(colorData).toEqual([]);
     });
 
     it("should generate full color items", () => {

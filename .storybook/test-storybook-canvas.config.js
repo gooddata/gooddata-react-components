@@ -11,6 +11,7 @@ const configuration = {
             'with location, size and segmentBy': DEFAULT_SCENARIO_CONFIG,
             'with location and color': DEFAULT_SCENARIO_CONFIG,
             'with location, size and color': DEFAULT_SCENARIO_CONFIG,
+            'with location and size, color contains same values': DEFAULT_SCENARIO_CONFIG,
             'with location, size, color, segmentBy and tooltipText': DEFAULT_SCENARIO_CONFIG,
             'with location, size, color, segmentBy, tooltipText and location filter': DEFAULT_SCENARIO_CONFIG,
         },

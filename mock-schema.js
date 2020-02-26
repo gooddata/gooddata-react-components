@@ -238,7 +238,7 @@ const geoChartVisualizationObjects = [
     },
 ];
 
-const geoChartAfmExecutions = projectId => [
+const geoChartAfmExecutions = (projectId) => [
     {
         _description: "GeoPushpin with location",
         execution: require("./stories/test_data/geo_chart/geo_chart_with_location_request.js")(projectId),
@@ -264,10 +264,15 @@ const geoChartAfmExecutions = projectId => [
         executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_segment_result.js")(projectId)
     },
     {
-        _description: "GeoPushpin with location, size an color",
+        _description: "GeoPushpin with location, size and color",
         execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_request.js")(projectId),
         executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_response.js")(projectId),
         executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_result.js")(projectId)
+    },
+    {
+        _description: "GeoPushpin with location and size, color contains same values",
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_same_values_request.js")(projectId),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_same_values_result.js")(projectId)
     },
     {
         _description: "GeoPushpin with location, size, color, segment and tooltip",
