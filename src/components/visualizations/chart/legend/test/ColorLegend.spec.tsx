@@ -9,6 +9,13 @@ describe("ColorLegend", () => {
         return mount(<ColorLegend {...props} />);
     }
 
+    it("should not render color legend with empty data", () => {
+        const wrapper = renderLegend({ data: [], numericSymbols: ["k", "M", "G"], position: "top" });
+
+        expect(wrapper.find(ColorBoxes).length).toEqual(0);
+        expect(wrapper.find(ColorLabels).length).toEqual(0);
+    });
+
     it("should render color legend", () => {
         const data = range(0, 6).map(itemId => ({
             color: "color" + itemId,

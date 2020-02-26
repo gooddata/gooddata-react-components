@@ -1,10 +1,12 @@
 // (C) 2020 GoodData Corporation
+import { ISeparators } from "@gooddata/numberjs";
 import { VisualizationInput, VisualizationObject } from "@gooddata/typings";
 import { ICommonChartProps } from "../components/core/base/BaseChart";
 
 export interface IGeoTooltipItem {
     title: string;
-    value: string;
+    value: string | number;
+    format?: string;
 }
 
 export interface IObjectMapping {
@@ -21,12 +23,21 @@ export interface IGeoDataItem {
     index: number;
 }
 
+export interface IGeoAttributeItem extends IGeoDataItem {
+    data: string[];
+}
+
+export interface IGeoMeasureItem extends IGeoDataItem {
+    format: string;
+    data: number[];
+}
+
 export interface IGeoData {
-    color?: IGeoDataItem;
-    location?: IGeoDataItem;
-    segment?: IGeoDataItem;
-    size?: IGeoDataItem;
-    tooltipText?: IGeoDataItem;
+    location?: IGeoAttributeItem;
+    size?: IGeoMeasureItem;
+    color?: IGeoMeasureItem;
+    segment?: IGeoAttributeItem;
+    tooltipText?: IGeoAttributeItem;
 }
 
 export interface IGeoConfig {
@@ -37,6 +48,7 @@ export interface IGeoConfig {
     tooltipText?: VisualizationInput.IAttribute;
     zoom?: number; // in the 0-22 zoom range
     mapboxToken: string;
+    separators?: ISeparators;
 }
 
 export interface IGeoPushpinChartProps extends ICommonChartProps {

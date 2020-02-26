@@ -29,7 +29,7 @@ import { VisualizationPropType, Requireable } from "../../proptypes/Visualizatio
 import { VisualizationTypes, VisType } from "../../constants/visualizationTypes";
 import { IDataSource } from "../../interfaces/DataSource";
 import { ISubject } from "../../helpers/async";
-import { isChartConfig, isGeoConfig } from "../../helpers/geoChart";
+import { isChartConfig, isGeoConfig } from "../../helpers/geoChart/common";
 import { getVisualizationTypeFromVisualizationClass } from "../../helpers/visualizationType";
 import MdObjectHelper, {
     areAllMeasuresOnSingleAxis,

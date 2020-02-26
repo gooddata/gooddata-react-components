@@ -1,17 +1,35 @@
 // (C) 2020 GoodData Corporation
 import get = require("lodash/get");
 import isEmpty = require("lodash/isEmpty");
+import isFinite = require("lodash/isFinite");
 import escape = require("lodash/escape");
 import mapboxgl from "mapbox-gl";
-import { DEFAULT_PUSHPIN_COLOR_VALUE } from "../../../constants/geoChart";
+import { ISeparators, numberFormat } from "@gooddata/numberjs";
+import { DEFAULT_PUSHPIN_COLOR_VALUE, NULL_TOOLTIP_VALUE } from "../../../constants/geoChart";
 import { IGeoTooltipItem } from "../../../interfaces/GeoChart";
 
 function isTooltipItemValid(item: IGeoTooltipItem): boolean {
     if (!item) {
         return false;
     }
-    const { title, value } = item;
-    return Boolean(title) && Boolean(value);
+    const { title } = item;
+    return Boolean(title);
+}
+
+function formatMeasure(item: IGeoTooltipItem, separators?: ISeparators): IGeoTooltipItem {
+    const { title, value, format } = item;
+    return {
+        title,
+        value: isFinite(value) ? numberFormat(value, format, null, separators) : NULL_TOOLTIP_VALUE,
+    };
+}
+
+function formatAttribute(item: IGeoTooltipItem): IGeoTooltipItem {
+    const { value } = item;
+    return {
+        ...item,
+        value: Boolean(value) ? value : NULL_TOOLTIP_VALUE,
+    };
 }
 
 export function shouldShowTooltip(geoProperties: GeoJSON.GeoJsonProperties): boolean {
@@ -28,10 +46,21 @@ export function shouldShowTooltip(geoProperties: GeoJSON.GeoJsonProperties): boo
     );
 }
 
-export function getTooltipHtml(geoProperties: GeoJSON.GeoJsonProperties, tooltipStroke: string): string {
-    const { locationName, size, color, segment } = geoProperties;
+export function getTooltipHtml(
+    geoProperties: GeoJSON.GeoJsonProperties,
+    tooltipStroke: string,
+    separators?: ISeparators,
+): string {
+    const { locationName = {}, size = {}, color = {}, segment = {} } = geoProperties;
 
-    const tooltipItems: string = [locationName, size, color, segment].map(getTooltipItemHtml).join("");
+    const tooltipItems: string = [
+        formatAttribute(locationName),
+        formatMeasure(size, separators),
+        formatMeasure(color, separators),
+        formatAttribute(segment),
+    ]
+        .map(getTooltipItemHtml)
+        .join("");
 
     return `<div class="gd-viz-tooltip">
                 <span class="stroke gd-viz-tooltip-stroke" style="border-top-color: ${tooltipStroke}"></span>
@@ -45,10 +74,12 @@ function getTooltipItemHtml(item: IGeoTooltipItem): string {
     }
 
     const { title, value } = item;
+    const escapedValue = isFinite(value) ? value : escape(String(value));
+
     return `<div class="gd-viz-tooltip-item">
                 <span class="gd-viz-tooltip-title">${escape(title)}</span>
                 <div class="gd-viz-tooltip-value-wraper" >
-                    <span class="gd-viz-tooltip-value">${escape(value)}</span>
+                    <span class="gd-viz-tooltip-value">${escapedValue}</span>
                 </div>
             </div>`;
 }
@@ -71,9 +102,11 @@ function parseGeoProperties(properties: GeoJSON.GeoJsonProperties): GeoJSON.GeoJ
     };
 }
 
-export const handlePushpinMouseEnter = (chart: mapboxgl.Map, tooltip: mapboxgl.Popup) => (
-    e: mapboxgl.EventData,
-): void => {
+export const handlePushpinMouseEnter = (
+    chart: mapboxgl.Map,
+    tooltip: mapboxgl.Popup,
+    separators: ISeparators,
+) => (e: mapboxgl.EventData): void => {
     const [feature] = e.features;
     const { properties } = feature;
     const parsedProps = parseGeoProperties(properties);
@@ -86,7 +119,7 @@ export const handlePushpinMouseEnter = (chart: mapboxgl.Map, tooltip: mapboxgl.P
 
     const coordinates = feature.geometry.coordinates.slice();
     const tooltipStroke = get(parsedProps, "color.background", DEFAULT_PUSHPIN_COLOR_VALUE);
-    const tooltipHtml = getTooltipHtml(parsedProps, tooltipStroke);
+    const tooltipHtml = getTooltipHtml(parsedProps, tooltipStroke, separators);
 
     tooltip
         .setLngLat(coordinates)

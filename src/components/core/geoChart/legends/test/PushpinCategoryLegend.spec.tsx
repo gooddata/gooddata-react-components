@@ -29,7 +29,7 @@ describe("PushpinCategoryLegend", () => {
             },
         ];
         const props: IPushpinCategoryLegendProps = {
-            segmentData,
+            categoryItems: segmentData,
             position: "top",
             onItemClick: mockOnItemClick,
         };

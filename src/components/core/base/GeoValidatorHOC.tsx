@@ -9,7 +9,7 @@ import { ErrorComponent as DefaultErrorComponent } from "../../simple/ErrorCompo
 import { ErrorStates } from "../../../constants/errorStates";
 import { RuntimeError } from "../../../errors/RuntimeError";
 import { generateErrorMap, IErrorMap } from "../../../helpers/errorHandlers";
-import { isLocationMissing } from "../../../helpers/geoChart";
+import { isLocationMissing } from "../../../helpers/geoChart/common";
 
 type IGeoValidatorProps = IGeoChartInnerProps;
 

@@ -1,6 +1,5 @@
 // (C) 2019-2020 GoodData Corporation
 import mapboxgl from "mapbox-gl";
-import { Execution } from "@gooddata/typings";
 import {
     DEFAULT_CLUSTER_FILTER,
     DEFAULT_CLUSTER_LABELS_CONFIG,
@@ -21,32 +20,22 @@ import {
     EMPTY_SEGMENT_VALUE,
 } from "../../../constants/geoChart";
 import { IGeoData } from "../../../interfaces/GeoChart";
-import { stringToFloat } from "../../../helpers/utils";
 import { SEGMENT } from "../../../constants/bucketNames";
-import { isTwoDimensionsData } from "../../../helpers/executionResultHelper";
+import { getMinMax } from "../../../helpers/utils";
 
 function getExpressionByBucketName(name: string): mapboxgl.Expression {
     return ["get", "value", ["object", ["get", name]]];
 }
 
-function createPushpinSizeOptions(
-    executionResult: Execution.IExecutionResult,
-    geoData: IGeoData,
-): mapboxgl.Expression | number {
-    let sizeData: number[] = [];
-    const hasSize = geoData.size !== undefined;
-    const { data } = executionResult;
-    if (hasSize && isTwoDimensionsData(data)) {
-        sizeData = (data[geoData.size.index] || []).map(stringToFloat);
-    }
+function createPushpinSizeOptions(geoData: IGeoData): mapboxgl.Expression | number {
+    const { size } = geoData;
+    const hasSize = size !== undefined;
 
-    if (sizeData.length === 0) {
+    if (!hasSize || size.data.length === 0) {
         return DEFAULT_PUSHPIN_SIZE_VALUE;
     }
 
-    const sizeMax: number = Math.max(...sizeData);
-    const sizeMin: number = Math.min(...sizeData);
-
+    const { min: sizeMin, max: sizeMax } = getMinMax(size.data);
     if (sizeMax === sizeMin) {
         return DEFAULT_PUSHPIN_SIZE_VALUE;
     }
@@ -90,7 +79,6 @@ function createPushpinBorderOptions(): mapboxgl.Expression {
 
 export function createPushpinDataLayer(
     dataSourceName: string,
-    executionResult: Execution.IExecutionResult,
     geoData: IGeoData,
     selectedSegmentItems?: string[],
 ): mapboxgl.Layer {
@@ -102,7 +90,7 @@ export function createPushpinDataLayer(
             ...DEFAULT_PUSHPIN_OPTIONS,
             [PUSHPIN_STYLE_CIRCLE_COLOR]: createPushpinColorOptions(),
             [PUSHPIN_STYLE_CIRCLE_STROKE_COLOR]: createPushpinBorderOptions(),
-            [PUSHPIN_STYLE_CIRCLE_SIZE]: createPushpinSizeOptions(executionResult, geoData),
+            [PUSHPIN_STYLE_CIRCLE_SIZE]: createPushpinSizeOptions(geoData),
         },
     };
     if (selectedSegmentItems !== undefined) {
