@@ -12,10 +12,16 @@ import {
 } from "../utils/fixtures";
 import { ExampleWithOnDrill } from "./utils/ExampleWithOnDrill";
 
-const primaryMeasure = Model.measure(franchiseFeesAdRoyaltyIdentifier).format("#,##0");
-const targetMeasure = Model.measure(franchiseFeesIdentifier).format("#,##0");
-const comparativeMeasure = Model.measure(franchiseFeesIdentifierOngoingRoyalty).format("#,##0");
-const viewBy = [Model.attribute(locationResortIdentifier)];
+const primaryMeasure = Model.measure(franchiseFeesAdRoyaltyIdentifier)
+    .format("#,##0")
+    .localIdentifier("m1");
+const targetMeasure = Model.measure(franchiseFeesIdentifier)
+    .format("#,##0")
+    .localIdentifier("m2");
+const comparativeMeasure = Model.measure(franchiseFeesIdentifierOngoingRoyalty)
+    .format("#,##0")
+    .localIdentifier("m3");
+const viewBy = [Model.attribute(locationResortIdentifier).localIdentifier("a1")];
 const drillableItems = [
     HeaderPredicateFactory.identifierMatch(franchiseFeesAdRoyaltyIdentifier),
     HeaderPredicateFactory.identifierMatch(franchiseFeesIdentifierOngoingRoyalty),

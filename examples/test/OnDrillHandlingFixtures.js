@@ -190,7 +190,7 @@ export const bulletPrimaryMeasureOnDrillExtendedParams = `{
     "executionContext": {
         "measures": [
             {
-                "localIdentifier": "m_127",
+                "localIdentifier": "m1",
                 "definition": {
                     "measure": {
                         "item": {
@@ -201,7 +201,7 @@ export const bulletPrimaryMeasureOnDrillExtendedParams = `{
                 "format": "#,##0"
             },
             {
-                "localIdentifier": "m_128",
+                "localIdentifier": "m2",
                 "definition": {
                     "measure": {
                         "item": {
@@ -212,7 +212,7 @@ export const bulletPrimaryMeasureOnDrillExtendedParams = `{
                 "format": "#,##0"
             },
             {
-                "localIdentifier": "m_129",
+                "localIdentifier": "m3",
                 "definition": {
                     "measure": {
                         "item": {
@@ -228,7 +228,7 @@ export const bulletPrimaryMeasureOnDrillExtendedParams = `{
                 "displayForm": {
                     "identifier": "label.restaurantlocation.locationresort"
                 },
-                "localIdentifier": "va_88"
+                "localIdentifier": "a1"
             }
         ]
     },
@@ -237,7 +237,7 @@ export const bulletPrimaryMeasureOnDrillExtendedParams = `{
         "element": "primary",
         "intersection": [
             {
-                "id": "m_127",
+                "id": "m1",
                 "title": "$ Franchise Fees (Ad Royalty)",
                 "header": {
                     "uri": "/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/6694",
@@ -258,83 +258,11 @@ export const bulletPrimaryMeasureOnDrillExtendedParams = `{
     }
 }`;
 
-export const bulletComparativeMeasureOnDrillExtendedParams = `{
-    "executionContext": {
-        "measures": [
-            {
-                "localIdentifier": "m_127",
-                "definition": {
-                    "measure": {
-                        "item": {
-                            "identifier": "aabHeqImaK0d"
-                        }
-                    }
-                },
-                "format": "#,##0"
-            },
-            {
-                "localIdentifier": "m_128",
-                "definition": {
-                    "measure": {
-                        "item": {
-                            "identifier": "aaEGaXAEgB7U"
-                        }
-                    }
-                },
-                "format": "#,##0"
-            },
-            {
-                "localIdentifier": "m_129",
-                "definition": {
-                    "measure": {
-                        "item": {
-                            "identifier": "aaWGcgnsfxIg"
-                        }
-                    }
-                },
-                "format": "#,##0"
-            }
-        ],
-        "attributes": [
-            {
-                "displayForm": {
-                    "identifier": "label.restaurantlocation.locationresort"
-                },
-                "localIdentifier": "va_88"
-            }
-        ]
-    },
-    "drillContext": {
-        "type": "bullet",
-        "element": "comparative",
-        "intersection": [
-            {
-                "id": "m_129",
-                "title": "$ Franchise Fees (Ongoing Royalty)",
-                "header": {
-                    "uri": "/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/6693",
-                    "identifier": "aaWGcgnsfxIg"
-                }
-            },
-            {
-                "id": "6340132",
-                "title": "Irving",
-                "header": {
-                    "uri": "/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/2207",
-                    "identifier": "label.restaurantlocation.locationresort"
-                }
-            }
-        ],
-        "x": 2,
-        "y": 313808.7875
-    }
-}`;
-
 export const bulletTargetMeasureOnDrillExtendedParams = `{
     "executionContext": {
         "measures": [
             {
-                "localIdentifier": "m_127",
+                "localIdentifier": "m1",
                 "definition": {
                     "measure": {
                         "item": {
@@ -345,7 +273,7 @@ export const bulletTargetMeasureOnDrillExtendedParams = `{
                 "format": "#,##0"
             },
             {
-                "localIdentifier": "m_128",
+                "localIdentifier": "m2",
                 "definition": {
                     "measure": {
                         "item": {
@@ -356,7 +284,7 @@ export const bulletTargetMeasureOnDrillExtendedParams = `{
                 "format": "#,##0"
             },
             {
-                "localIdentifier": "m_129",
+                "localIdentifier": "m3",
                 "definition": {
                     "measure": {
                         "item": {
@@ -372,7 +300,7 @@ export const bulletTargetMeasureOnDrillExtendedParams = `{
                 "displayForm": {
                     "identifier": "label.restaurantlocation.locationresort"
                 },
-                "localIdentifier": "va_88"
+                "localIdentifier": "a1"
             }
         ]
     },
@@ -381,7 +309,7 @@ export const bulletTargetMeasureOnDrillExtendedParams = `{
         "element": "target",
         "intersection": [
             {
-                "id": "m_128",
+                "id": "m2",
                 "title": "$ Franchise Fees",
                 "header": {
                     "uri": "/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/6685",
@@ -399,5 +327,77 @@ export const bulletTargetMeasureOnDrillExtendedParams = `{
         ],
         "x": 2,
         "y": 573474.93875
+    }
+}`;
+
+export const bulletComparativeMeasureOnDrillExtendedParams = `{
+    "executionContext": {
+        "measures": [
+            {
+                "localIdentifier": "m1",
+                "definition": {
+                    "measure": {
+                        "item": {
+                            "identifier": "aabHeqImaK0d"
+                        }
+                    }
+                },
+                "format": "#,##0"
+            },
+            {
+                "localIdentifier": "m2",
+                "definition": {
+                    "measure": {
+                        "item": {
+                            "identifier": "aaEGaXAEgB7U"
+                        }
+                    }
+                },
+                "format": "#,##0"
+            },
+            {
+                "localIdentifier": "m3",
+                "definition": {
+                    "measure": {
+                        "item": {
+                            "identifier": "aaWGcgnsfxIg"
+                        }
+                    }
+                },
+                "format": "#,##0"
+            }
+        ],
+        "attributes": [
+            {
+                "displayForm": {
+                    "identifier": "label.restaurantlocation.locationresort"
+                },
+                "localIdentifier": "a1"
+            }
+        ]
+    },
+    "drillContext": {
+        "type": "bullet",
+        "element": "comparative",
+        "intersection": [
+            {
+                "id": "m3",
+                "title": "$ Franchise Fees (Ongoing Royalty)",
+                "header": {
+                    "uri": "/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/6693",
+                    "identifier": "aaWGcgnsfxIg"
+                }
+            },
+            {
+                "id": "6340132",
+                "title": "Irving",
+                "header": {
+                    "uri": "/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/2207",
+                    "identifier": "label.restaurantlocation.locationresort"
+                }
+            }
+        ],
+        "x": 2,
+        "y": 313808.7875
     }
 }`;
