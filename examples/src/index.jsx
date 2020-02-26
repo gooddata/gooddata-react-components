@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 /* eslint-disable react/jsx-closing-tag-location */
 import React from "react";
 import ReactDOM from "react-dom";
@@ -37,6 +37,8 @@ export class App extends React.Component {
             errorMessage: null,
         };
         this.logout = this.logout.bind(this);
+
+        console.log("App - MAPBOX_TOKEN - DefinePlugin", MAPBOX_TOKEN);
     }
 
     componentDidMount() {

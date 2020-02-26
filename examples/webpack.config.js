@@ -82,6 +82,7 @@ module.exports = async (env, argv) => {
         new webpack.DefinePlugin({
             BACKEND_URL: JSON.stringify(backendUrl),
             BASEPATH: JSON.stringify(basePath),
+            MAPBOX_TOKEN: JSON.stringify(process.env.MAPBOX_TOKEN),
         }),
         new SimplestProgressPlugin(),
     ];
