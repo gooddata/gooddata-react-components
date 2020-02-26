@@ -54,8 +54,8 @@ test("OnDrill on Bullet chart should work", async t => {
     await checkRenderChart(".s-bullet-chart", t);
     await t.click(bulletPrimaryMeasureSelector);
     await checkDrill(t, bulletPrimaryMeasureOnDrillExtendedParams, ".s-bullet-chart-on-drill .s-output");
-    await t.click(bulletComparativeMeasureSelector, { offsetY: 1 });
-    await checkDrill(t, bulletComparativeMeasureOnDrillExtendedParams, ".s-bullet-chart-on-drill .s-output");
     await t.click(bulletTargetMeasureSelector);
     await checkDrill(t, bulletTargetMeasureOnDrillExtendedParams, ".s-bullet-chart-on-drill .s-output");
+    await t.click(bulletComparativeMeasureSelector, { offsetY: 1 });
+    await checkDrill(t, bulletComparativeMeasureOnDrillExtendedParams, ".s-bullet-chart-on-drill .s-output");
 });
