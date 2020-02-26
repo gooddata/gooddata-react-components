@@ -60,40 +60,53 @@ export class PluggableBulletChart extends PluggableBaseChart {
 
         const buckets = limitNumberOfMeasuresInBuckets(clonedReferencePoint.buckets, 3);
 
-        const primaryMeasuresBucketItems = getPreferredBucketItems(buckets, [BucketNames.MEASURES], [METRIC]);
-        const secondaryMeasuresBucketItems = getPreferredBucketItems(
+        const originalPrimaryMeasuresBucketItems = getPreferredBucketItems(
+            buckets,
+            [BucketNames.MEASURES],
+            [METRIC],
+        );
+        const originalSecondaryMeasuresBucketItems = getPreferredBucketItems(
             buckets,
             [BucketNames.SECONDARY_MEASURES],
             [METRIC],
         );
-        const tertiaryMeasuresBucketItems = getPreferredBucketItems(
+        const originalTertiaryMeasuresBucketItems = getPreferredBucketItems(
             buckets,
             [BucketNames.TERTIARY_MEASURES],
             [METRIC],
         );
         const allMeasures = getMeasures(buckets);
 
+        const primaryMeasuresBucketItems = getMeasuresBucketItems(
+            allMeasures,
+            originalPrimaryMeasuresBucketItems,
+            [...originalSecondaryMeasuresBucketItems, ...originalTertiaryMeasuresBucketItems],
+        );
+
+        const secondaryMeasuresBucketItems = getMeasuresBucketItems(
+            allMeasures,
+            originalSecondaryMeasuresBucketItems,
+            [...primaryMeasuresBucketItems, ...originalTertiaryMeasuresBucketItems],
+        );
+
+        const tertiaryMeasuresBucketItems = getMeasuresBucketItems(
+            allMeasures,
+            originalTertiaryMeasuresBucketItems,
+            [...primaryMeasuresBucketItems, ...secondaryMeasuresBucketItems],
+        );
+
         newReferencePoint[BUCKETS] = [
             {
                 localIdentifier: BucketNames.MEASURES,
-                items: getMeasuresBucketItems(allMeasures, primaryMeasuresBucketItems, [
-                    ...secondaryMeasuresBucketItems,
-                    ...tertiaryMeasuresBucketItems,
-                ]),
+                items: primaryMeasuresBucketItems,
             },
             {
                 localIdentifier: BucketNames.SECONDARY_MEASURES,
-                items: getMeasuresBucketItems(allMeasures, secondaryMeasuresBucketItems, [
-                    ...primaryMeasuresBucketItems,
-                    ...tertiaryMeasuresBucketItems,
-                ]),
+                items: secondaryMeasuresBucketItems,
             },
             {
                 localIdentifier: BucketNames.TERTIARY_MEASURES,
-                items: getMeasuresBucketItems(allMeasures, tertiaryMeasuresBucketItems, [
-                    ...primaryMeasuresBucketItems,
-                    ...secondaryMeasuresBucketItems,
-                ]),
+                items: tertiaryMeasuresBucketItems,
             },
             {
                 localIdentifier: BucketNames.VIEW,
