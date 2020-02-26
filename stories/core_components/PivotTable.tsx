@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
@@ -8,10 +8,14 @@ import { Model, PivotTable } from "../../src";
 import { onErrorHandler } from "../mocks";
 import { GERMAN_SEPARATORS } from "../data/numberFormat";
 import {
+    ARITHMETIC_MEASURE_SIMPLE_OPERANDS,
+    ARITHMETIC_MEASURE_USING_ARITHMETIC,
     ATTRIBUTE_1,
     ATTRIBUTE_1_WITH_ALIAS,
     ATTRIBUTE_2,
     ATTRIBUTE_3,
+    ATTRIBUTE_COUNTRY,
+    GRAND_TOTALS_WITH_SUBTOTALS,
     MEASURE_1,
     MEASURE_1_WITH_ALIAS,
     MEASURE_2,
@@ -19,12 +23,9 @@ import {
     MEASURE_WITH_NULLS,
     TOTAL_M1_A1,
     TOTAL_M2_A1,
-    ARITHMETIC_MEASURE_SIMPLE_OPERANDS,
-    ARITHMETIC_MEASURE_USING_ARITHMETIC,
-    ATTRIBUTE_COUNTRY,
-    GRAND_TOTALS_WITH_SUBTOTALS,
 } from "../data/componentProps";
 import { VisualizationInput } from "@gooddata/typings";
+import { ScreenshotReadyWrapper, visualizationNotLoadingResolver } from "../utils/ScreenshotReadyWrapper";
 
 function logTotalsChange(data: any) {
     if (data.properties && data.properties.totals) {
@@ -508,5 +509,63 @@ storiesOf("Core components/PivotTable", module)
                     ErrorComponent={null}
                 />
             </div>,
+        );
+    })
+    .add("auto resize columns in the viewport - simple table", () =>
+        screenshotWrap(
+            <ScreenshotReadyWrapper resolver={visualizationNotLoadingResolver()}>
+                <div style={wrapperStyle} className="s-table">
+                    <PivotTable
+                        projectId="storybook"
+                        measures={[MEASURE_1, MEASURE_2]}
+                        rows={[ATTRIBUTE_1]}
+                        config={{ columnSizing: { defaultWidth: "viewport" } }}
+                        onError={onErrorHandler}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                    />
+                </div>
+            </ScreenshotReadyWrapper>,
+        ),
+    )
+    .add("auto resize columns in the viewport - with grand total and subtotal", () => {
+        const measures = [
+            Model.measure("/gdc/md/aiugpog6irti75nk93qc1wd1t2wl3xfs/obj/1144").localIdentifier("m1"),
+            Model.measure("/gdc/md/aiugpog6irti75nk93qc1wd1t2wl3xfs/obj/1145").localIdentifier("m2"),
+        ];
+
+        const attributes = [
+            Model.attribute("/gdc/md/aiugpog6irti75nk93qc1wd1t2wl3xfs/obj/1024").localIdentifier("a1"),
+            Model.attribute("/gdc/md/aiugpog6irti75nk93qc1wd1t2wl3xfs/obj/1027").localIdentifier("a2"),
+        ];
+
+        const totals: VisualizationInput.ITotal[] = [
+            {
+                measureIdentifier: "m1",
+                type: "sum",
+                attributeIdentifier: "a1",
+            },
+            {
+                measureIdentifier: "m2",
+                type: "sum",
+                attributeIdentifier: "a2",
+            },
+        ];
+
+        return screenshotWrap(
+            <ScreenshotReadyWrapper resolver={visualizationNotLoadingResolver()}>
+                <div style={{ ...wrapperStyle, height: 228 }} className="s-table">
+                    <PivotTable
+                        projectId="storybook"
+                        measures={measures}
+                        rows={attributes}
+                        totals={totals}
+                        config={{ columnSizing: { defaultWidth: "viewport" } }}
+                        onError={onErrorHandler}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                    />
+                </div>
+            </ScreenshotReadyWrapper>,
         );
     });

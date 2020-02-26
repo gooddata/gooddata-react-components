@@ -1,11 +1,15 @@
 // (C) 2007-2020 GoodData Corporation
 import { AFM, Execution, VisualizationObject } from "@gooddata/typings";
 import {
+    AgGridEvent,
     BodyScrollEvent,
+    Column,
+    ColumnApi,
     ColumnResizedEvent,
     GridApi,
     GridReadyEvent,
     IDatasource,
+    ModelUpdatedEvent,
     SortChangedEvent,
 } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
@@ -41,7 +45,12 @@ import {
     isDrillEventContextTableExtended,
 } from "../../interfaces/DrillEvents";
 import { IHeaderPredicate } from "../../interfaces/HeaderPredicate";
-import { IMappingHeader, isMappingHeaderAttribute } from "../../interfaces/MappingHeader";
+import {
+    IMappingHeader,
+    isMappingHeaderAttribute,
+    isMappingHeaderAttributeItem,
+    isMappingHeaderMeasureItem,
+} from "../../interfaces/MappingHeader";
 import { IMenuAggregationClickConfig, IPivotTableConfig } from "../../interfaces/PivotTable";
 import { IDataSourceProviderInjectedProps } from "../afm/DataSourceProvider";
 import { LoadingComponent } from "../simple/LoadingComponent";
@@ -64,11 +73,11 @@ import {
     COLUMN_ATTRIBUTE_COLUMN,
     MEASURE_COLUMN,
     ROW_ATTRIBUTE_COLUMN,
-    ROW_TOTAL,
     ROW_SUBTOTAL,
+    ROW_TOTAL,
 } from "./pivotTable/agGridConst";
 import { createAgGridDataSource } from "./pivotTable/agGridDataSource";
-import { getDrillRowData, convertDrillIntersectionToLegacy } from "./pivotTable/agGridDrilling";
+import { convertDrillIntersectionToLegacy, getDrillRowData } from "./pivotTable/agGridDrilling";
 import { getSortsFromModel, isSortedByFirstAttibute } from "./pivotTable/agGridSorting";
 import {
     ICustomGridOptions,
@@ -97,13 +106,14 @@ import {
     updateStickyRowContentClasses,
     updateStickyRowPosition,
 } from "./pivotTable/stickyRowHandler";
+
+import { getDrillIntersection } from "../visualizations/utils/drilldownEventing";
 import cloneDeep = require("lodash/cloneDeep");
 import get = require("lodash/get");
 import isEqual = require("lodash/isEqual");
 import noop = require("lodash/noop");
 import sumBy = require("lodash/sumBy");
-
-import { getDrillIntersection } from "../visualizations/utils/drilldownEventing";
+import difference = require("lodash/difference");
 
 export interface IPivotTableProps extends ICommonChartProps, IDataSourceProviderInjectedProps {
     totals?: VisualizationObject.IVisualizationTotal[];
@@ -124,6 +134,11 @@ export interface IPivotTableState {
     agGridRerenderNumber: number;
     desiredHeight: number | undefined;
     sortedByFirstAttribute: boolean;
+    resized: boolean;
+}
+
+export interface IColumnWidths {
+    [colId: string]: number;
 }
 
 export type IPivotTableInnerProps = IPivotTableProps &
@@ -131,12 +146,18 @@ export type IPivotTableInnerProps = IPivotTableProps &
     IDataSourceProviderInjectedProps &
     WrappedComponentProps;
 
+export enum ColumnEventSourceType {
+    AUTOSIZE_COLUMNS = "autosizeColumns",
+}
+
 const DEFAULT_ROW_HEIGHT = 28;
+const DEFAULT_AUTOSIZE_PADDING = 10;
 const AG_NUMERIC_CELL_CLASSNAME = "ag-numeric-cell";
 const AG_NUMERIC_HEADER_CLASSNAME = "ag-numeric-header";
 
 export const WATCHING_TABLE_RENDERED_INTERVAL = 500;
 export const WATCHING_TABLE_RENDERED_MAX_TIME = 15000;
+const AGGRID_RENDER_NEW_COLUMNS_TIMEOUT = 100;
 
 /**
  * Pivot Table react component
@@ -162,8 +183,10 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         left: 0,
     };
 
+    private columnWidths: IColumnWidths = {};
     private watchingIntervalId: number | null;
     private watchingTimeoutId: number | null;
+    private resizing: boolean = false;
 
     constructor(props: IPivotTableInnerProps) {
         super(props);
@@ -178,6 +201,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             desiredHeight: props.config.maxHeight,
 
             sortedByFirstAttribute: true,
+            resized: false,
         };
 
         this.agGridDataSource = null;
@@ -195,6 +219,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             this.containerRef.addEventListener("mousedown", this.preventHeaderResizerEvents);
         }
     }
+
     public componentWillUnmount() {
         if (this.containerRef) {
             this.containerRef.removeEventListener("mousedown", this.preventHeaderResizerEvents);
@@ -243,6 +268,15 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             if (agGridDataSourceUpdateNeeded) {
                 this.updateAGGridDataSource();
             }
+
+            const dataSourceChanged =
+                this.props.dataSource.getFingerprint() !== prevProps.dataSource.getFingerprint();
+            if (dataSourceChanged || totalsPropsChanged || totalsStateChanged) {
+                this.columnWidths = {};
+                this.setState({
+                    resized: false,
+                });
+            }
         });
 
         if (this.isAgGridRerenderNeeded(this.props, prevProps)) {
@@ -267,6 +301,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
                     right: 0,
                     top: 0,
                     bottom: 0,
+                    background: "white",
                 }}
             >
                 <LoadingComponent />
@@ -286,7 +321,6 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
                     style={style}
                     ref={this.setContainerRef}
                 >
-                    {tableLoadingOverlay}
                     <AgGridReact
                         {...gridOptions}
                         // To force Ag grid rerender because AFAIK there is no way
@@ -296,6 +330,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
                             this.state.agGridRerenderNumber,
                         )}
                     />
+                    {tableLoadingOverlay}
                 </div>
             </div>
         );
@@ -306,7 +341,9 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     //
 
     private isTableHidden() {
-        return this.state.columnDefs.length === 0;
+        return (
+            this.state.columnDefs.length === 0 || (this.isColumnAutoresizeEnabled() && !this.state.resized)
+        );
     }
 
     private forceRerender() {
@@ -385,6 +422,51 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         this.createAGGridDataSource();
         this.setGridDataSource();
     }
+
+    private getColumnIds = (columns: Column[]): string[] =>
+        columns.map((column: Column) => column.getColId());
+
+    private getColumnWidths = (columns: Column[]): IColumnWidths => {
+        return columns.reduce((acc, col) => {
+            return {
+                ...acc,
+                [this.getColumnIdentifier(col.getDefinition() as IGridHeader)]: col.getActualWidth(),
+            };
+        }, {});
+    };
+
+    private autoresizeVisibleColumns = (columnApi: ColumnApi, previouslyResizedColumnIds: string[]) => {
+        const displayedVirtualColumns = columnApi.getAllDisplayedVirtualColumns();
+        const autoWidthColumnIds: string[] = this.getColumnIds(displayedVirtualColumns);
+        if (previouslyResizedColumnIds.length >= autoWidthColumnIds.length) {
+            this.resizing = false;
+            this.columnWidths = this.getColumnWidths(columnApi.getAllDisplayedVirtualColumns());
+            this.setState({
+                resized: true,
+            });
+            return;
+        }
+
+        const newColumnIds = difference(autoWidthColumnIds, previouslyResizedColumnIds);
+        columnApi.autoSizeColumns(newColumnIds);
+        setTimeout(() => {
+            this.autoresizeVisibleColumns(columnApi, autoWidthColumnIds);
+        }, AGGRID_RENDER_NEW_COLUMNS_TIMEOUT);
+    };
+
+    private autoresizeColumns = (event: AgGridEvent) => {
+        if (
+            !this.state.execution ||
+            event.api.getRenderedNodes().length === 0 ||
+            event.api.getCacheBlockState()[0].pageStatus !== "loaded" ||
+            this.state.resized ||
+            this.resizing
+        ) {
+            return;
+        }
+        this.resizing = true;
+        this.autoresizeVisibleColumns(event.columnApi, []);
+    };
 
     private createAGGridDataSource() {
         const onSuccess = (
@@ -476,8 +558,15 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         );
     };
 
-    private onModelUpdated = () => {
+    private isColumnAutoresizeEnabled = () =>
+        this.props.config.columnSizing ? this.props.config.columnSizing.defaultWidth === "viewport" : false;
+
+    private onModelUpdated = (event: ModelUpdatedEvent) => {
         this.updateStickyRow();
+        const shouldAutoresizeColumns = this.isColumnAutoresizeEnabled() && this.getExecution();
+        if (shouldAutoresizeColumns) {
+            this.autoresizeColumns(event);
+        }
     };
 
     private getAttributeHeader(colId: string, columnDefs: IGridHeader[]): Execution.IAttributeHeader {
@@ -633,6 +722,17 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             return; // only update the height once the user is done setting the column size
         }
         this.updateDesiredHeight(this.state.execution.executionResult);
+        if (
+            columnEvent &&
+            columnEvent.source !== ColumnEventSourceType.AUTOSIZE_COLUMNS &&
+            columnEvent.columns
+        ) {
+            columnEvent.columns.forEach(column => {
+                this.columnWidths[
+                    this.getColumnIdentifier(column.getDefinition() as IGridHeader)
+                ] = column.getActualWidth();
+            });
+        }
     };
 
     private onMenuAggregationClick = (menuAggregationClickConfig: IMenuAggregationClickConfig) => {
@@ -705,6 +805,12 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             intl: this.props.intl,
         };
 
+        let maxWidthProp = {};
+        if (this.isColumnAutoresizeEnabled()) {
+            this.enrichColumnDefinitionsWithWidths(getTreeLeaves(columnDefs), this.columnWidths);
+            maxWidthProp = { maxWidth: 500 };
+        }
+
         return {
             // Initial data
             columnDefs,
@@ -717,7 +823,8 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
                     enableSorting: true,
                     ...commonHeaderComponentParams,
                 },
-                minWidth: 50,
+                minWidth: 60,
+                ...maxWidthProp,
                 sortable: true,
                 resizable: true,
             },
@@ -820,6 +927,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             // Custom CSS classes
             rowClass: "gd-table-row",
             rowHeight: DEFAULT_ROW_HEIGHT,
+            autoSizePadding: DEFAULT_AUTOSIZE_PADDING,
         };
     };
 
@@ -982,6 +1090,34 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
     private isHeaderResizer(target: HTMLElement) {
         return target.classList.contains("ag-header-cell-resize");
+    }
+
+    private getColumnIdentifier(columnDef: IGridHeader): string {
+        return (columnDef.drillItems || [])
+            .map((item: IMappingHeader) => {
+                if (isMappingHeaderAttribute(item)) {
+                    return item.attributeHeader.uri;
+                } else if (isMappingHeaderAttributeItem(item)) {
+                    return item.attributeHeaderItem.uri;
+                } else if (isMappingHeaderMeasureItem(item)) {
+                    return item.measureHeaderItem.uri;
+                }
+
+                return undefined;
+            })
+            .filter((item: string) => item)
+            .join(".");
+    }
+
+    private enrichColumnDefinitionsWithWidths(columnDefinitions: IGridHeader[], columnWidths: IColumnWidths) {
+        columnDefinitions.forEach((columnDefinition: IGridHeader) => {
+            if (columnDefinition) {
+                const width = columnWidths[this.getColumnIdentifier(columnDefinition)];
+                if (width) {
+                    columnDefinition.width = width;
+                }
+            }
+        });
     }
 }
 

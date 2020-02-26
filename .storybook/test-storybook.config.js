@@ -122,6 +122,14 @@ const configuration = {
                 readySelector: '.screenshot-ready-wrapper-done'
             }
         },
+        'Core components/PivotTable': {
+            'auto resize columns in the viewport - with grand total and subtotal': {
+                readySelector: '.screenshot-ready-wrapper-done'
+            },
+            'auto resize columns in the viewport - simple table': {
+                readySelector: '.screenshot-ready-wrapper-done'
+            }
+        },
         'Internal/Drilldown': {
             'Combo chart with onFiredDrillEvent': {
                 readySelector: '.screenshot-ready-wrapper-done'

@@ -17,6 +17,12 @@ The REST API versions in the table are just for your information as the values a
 
 - We ask developers to consider using the Headline component instead of the KPI component. The KPI component may be eventually marked as deprecated in one of the next major versions.
 
+## 7.4.0
+
+### Added
+
+- Column auto-sizing in pivot tables can now be configured (applied to visible columns during initial table load).
+
 ## 7.3.0
 
 ### Added
