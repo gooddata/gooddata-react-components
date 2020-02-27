@@ -47,7 +47,7 @@ export function getBulletChartUiConfig(
 
     const primaryMeasuresCount = getItemsCount(buckets, BucketNames.MEASURES);
     const secondaryMeasuresCount = getItemsCount(buckets, BucketNames.SECONDARY_MEASURES);
-    const tertiaryMeasuresCount = getItemsCount(buckets, BucketNames.SECONDARY_MEASURES);
+    const tertiaryMeasuresCount = getItemsCount(buckets, BucketNames.TERTIARY_MEASURES);
 
     if (primaryMeasuresCount === 0 && (secondaryMeasuresCount !== 0 || tertiaryMeasuresCount !== 0)) {
         referencePointConfigured[UICONFIG].customError = {
