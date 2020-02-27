@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import noop = require("lodash/noop");
 import { storiesOf } from "@storybook/react";
@@ -559,13 +559,13 @@ storiesOf("Internal/Drilldown", module)
     )
     .add("Pivot table with subtotal and drillable measure", () => {
         const measures = [
-            Model.measure("/gdc/md/aiugpog6irti75nk93qc1wd1t2wl3xfs/obj/1144").localIdentifier("m1"),
-            Model.measure("/gdc/md/aiugpog6irti75nk93qc1wd1t2wl3xfs/obj/1145").localIdentifier("m2"),
+            Model.measure("/gdc/md/storybook/obj/1144").localIdentifier("m1"),
+            Model.measure("/gdc/md/storybook/obj/1145").localIdentifier("m2"),
         ];
 
         const attributes = [
-            Model.attribute("/gdc/md/aiugpog6irti75nk93qc1wd1t2wl3xfs/obj/1024").localIdentifier("a1"),
-            Model.attribute("/gdc/md/aiugpog6irti75nk93qc1wd1t2wl3xfs/obj/1027").localIdentifier("a2"),
+            Model.attribute("/gdc/md/storybook/obj/1024").localIdentifier("a1"),
+            Model.attribute("/gdc/md/storybook/obj/1027").localIdentifier("a2"),
         ];
 
         const totals: VisualizationInput.ITotal[] = [
@@ -805,11 +805,7 @@ storiesOf("Internal/Drilldown", module)
                     onDataTooLarge={noop}
                     onNegativeValues={noop}
                     {...dataSet}
-                    drillableItems={[
-                        headerPredicateFactory.composedFromUri(
-                            "/gdc/md/hzyl5wlh8rnu0ixmbzlaqpzf09ttb7c8/obj/67097",
-                        ),
-                    ]}
+                    drillableItems={[headerPredicateFactory.composedFromUri("/gdc/md/storybook/obj/67097")]}
                 />,
                 500,
                 "100%",

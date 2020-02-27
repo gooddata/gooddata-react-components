@@ -376,16 +376,14 @@ storiesOf("Core components/PivotTable", module)
         ),
     )
     .add("subtotals - all labels", () => {
-        const measures = [
-            Model.measure("/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/2352").localIdentifier("m1"),
-        ];
+        const measures = [Model.measure("/gdc/md/storybook/obj/2352").localIdentifier("m1")];
 
         const attributes = [
-            Model.attribute("/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/2188").localIdentifier("a1"),
-            Model.attribute("/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/2197").localIdentifier("a2"),
-            Model.attribute("/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/2211").localIdentifier("a3"),
-            Model.attribute("/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/2005").localIdentifier("a4"),
-            Model.attribute("/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/2205").localIdentifier("a5"),
+            Model.attribute("/gdc/md/storybook/obj/2188").localIdentifier("a1"),
+            Model.attribute("/gdc/md/storybook/obj/2197").localIdentifier("a2"),
+            Model.attribute("/gdc/md/storybook/obj/2211").localIdentifier("a3"),
+            Model.attribute("/gdc/md/storybook/obj/2005").localIdentifier("a4"),
+            Model.attribute("/gdc/md/storybook/obj/2205").localIdentifier("a5"),
         ];
 
         const totals: VisualizationInput.ITotal[] = [
@@ -437,13 +435,13 @@ storiesOf("Core components/PivotTable", module)
     })
     .add("subtotals - two measures, two row attributes", () => {
         const measures = [
-            Model.measure("/gdc/md/aiugpog6irti75nk93qc1wd1t2wl3xfs/obj/1144").localIdentifier("m1"),
-            Model.measure("/gdc/md/aiugpog6irti75nk93qc1wd1t2wl3xfs/obj/1145").localIdentifier("m2"),
+            Model.measure("/gdc/md/storybook/obj/1144").localIdentifier("m1"),
+            Model.measure("/gdc/md/storybook/obj/1145").localIdentifier("m2"),
         ];
 
         const attributes = [
-            Model.attribute("/gdc/md/aiugpog6irti75nk93qc1wd1t2wl3xfs/obj/1024").localIdentifier("a1"),
-            Model.attribute("/gdc/md/aiugpog6irti75nk93qc1wd1t2wl3xfs/obj/1027").localIdentifier("a2"),
+            Model.attribute("/gdc/md/storybook/obj/1024").localIdentifier("a1"),
+            Model.attribute("/gdc/md/storybook/obj/1027").localIdentifier("a2"),
         ];
 
         const totals: VisualizationInput.ITotal[] = [
@@ -475,13 +473,13 @@ storiesOf("Core components/PivotTable", module)
     })
     .add("grand total and subtotal - two measures, two row attributes", () => {
         const measures = [
-            Model.measure("/gdc/md/aiugpog6irti75nk93qc1wd1t2wl3xfs/obj/1144").localIdentifier("m1"),
-            Model.measure("/gdc/md/aiugpog6irti75nk93qc1wd1t2wl3xfs/obj/1145").localIdentifier("m2"),
+            Model.measure("/gdc/md/storybook/obj/1144").localIdentifier("m1"),
+            Model.measure("/gdc/md/storybook/obj/1145").localIdentifier("m2"),
         ];
 
         const attributes = [
-            Model.attribute("/gdc/md/aiugpog6irti75nk93qc1wd1t2wl3xfs/obj/1024").localIdentifier("a1"),
-            Model.attribute("/gdc/md/aiugpog6irti75nk93qc1wd1t2wl3xfs/obj/1027").localIdentifier("a2"),
+            Model.attribute("/gdc/md/storybook/obj/1024").localIdentifier("a1"),
+            Model.attribute("/gdc/md/storybook/obj/1027").localIdentifier("a2"),
         ];
 
         const totals: VisualizationInput.ITotal[] = [
@@ -530,13 +528,13 @@ storiesOf("Core components/PivotTable", module)
     )
     .add("auto resize columns in the viewport - with grand total and subtotal", () => {
         const measures = [
-            Model.measure("/gdc/md/aiugpog6irti75nk93qc1wd1t2wl3xfs/obj/1144").localIdentifier("m1"),
-            Model.measure("/gdc/md/aiugpog6irti75nk93qc1wd1t2wl3xfs/obj/1145").localIdentifier("m2"),
+            Model.measure("/gdc/md/storybook/obj/1144").localIdentifier("m1"),
+            Model.measure("/gdc/md/storybook/obj/1145").localIdentifier("m2"),
         ];
 
         const attributes = [
-            Model.attribute("/gdc/md/aiugpog6irti75nk93qc1wd1t2wl3xfs/obj/1024").localIdentifier("a1"),
-            Model.attribute("/gdc/md/aiugpog6irti75nk93qc1wd1t2wl3xfs/obj/1027").localIdentifier("a2"),
+            Model.attribute("/gdc/md/storybook/obj/1024").localIdentifier("a1"),
+            Model.attribute("/gdc/md/storybook/obj/1027").localIdentifier("a2"),
         ];
 
         const totals: VisualizationInput.ITotal[] = [

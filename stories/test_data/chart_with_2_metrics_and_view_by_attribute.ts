@@ -1,7 +1,8 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 const template: any = {
-    executionRequest: require("./bar_chart_with_2_metrics_and_view_by_attribute_request.json").execution,
-    executionResponse: require("./bar_chart_with_2_metrics_and_view_by_attribute_response.json")
+    executionRequest: require("./bar_chart_with_2_metrics_and_view_by_attribute_request.js")("storybook")
+        .execution,
+    executionResponse: require("./bar_chart_with_2_metrics_and_view_by_attribute_response.js")("storybook")
         .executionResponse,
 };
 
@@ -31,7 +32,7 @@ const SD160Case01 = [["250744", "-40914", "2225030", "51180"], ["30816", "140816
 const SD160Case02 = [["250744", "-4091400", "3341006", "51180"], ["30816", "140816", "41102", "-51280"]];
 
 // tslint:disable-next-line
-const executionResult = require("./bar_chart_with_2_metrics_and_view_by_attribute_result.json")
+const executionResult = require("./bar_chart_with_2_metrics_and_view_by_attribute_result.js")("storybook")
     .executionResult;
 
 export const positiveDataset: any = {

@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { screenshotWrap } from "@gooddata/test-storybook";
@@ -192,9 +192,7 @@ storiesOf("Internal/OptionalStacking/Column, Bar, DualAxis Chart", module)
                 <Visualization
                     {...chartWithTwoAttributesAndSomeNullDatapoints}
                     drillableItems={[
-                        HeaderPredicateFactory.uriMatch(
-                            "/gdc/md/jroecoqa7jywstxy1hxp8lwl2c4nc10t/obj/1095/elements?id=966643",
-                        ),
+                        HeaderPredicateFactory.uriMatch("/gdc/md/storybook/obj/1095/elements?id=966643"),
                     ]}
                     config={{
                         type: "column",
