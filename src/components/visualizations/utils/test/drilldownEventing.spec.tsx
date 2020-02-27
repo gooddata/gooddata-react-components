@@ -237,24 +237,49 @@ describe("Drilldown Eventing", () => {
     });
 
     describe("bullet chart", () => {
-        it("should fire correct data for target measure drilling", () => {
-            const drillConfig = { afm, onFiredDrillEvent: () => true };
-            const target: any = { dispatchEvent: jest.fn() };
-
-            const targetPoint: any = {
-                x: 1,
-                y: 2,
-                target: 100,
-                series: {
-                    type: "bullet",
-                    userOptions: {
-                        bulletChartMeasureType: "target",
-                    },
+        const drillConfig = { afm, onFiredDrillEvent: () => true };
+        const targetPoint: any = {
+            x: 1,
+            y: 2,
+            target: 100,
+            series: {
+                type: "bullet",
+                userOptions: {
+                    bulletChartMeasureType: "target",
                 },
-                drillIntersection: [],
-            };
-            const targetPointClickEventData: any = { point: targetPoint };
+            },
+            drillIntersection: [],
+        };
 
+        const primaryPoint: any = {
+            x: 1,
+            y: 2,
+            target: 100,
+            series: {
+                type: "bar",
+                userOptions: {
+                    bulletChartMeasureType: "primary",
+                },
+            },
+            drillIntersection: [],
+        };
+
+        const comparativePoint: any = {
+            x: 1,
+            y: 3,
+            target: 100,
+            series: {
+                type: "bar",
+                userOptions: {
+                    bulletChartMeasureType: "comparative",
+                },
+            },
+            drillIntersection: [],
+        };
+
+        it("should fire correct data for target measure drilling", () => {
+            const target: any = { dispatchEvent: jest.fn() };
+            const targetPointClickEventData: any = { point: targetPoint };
             chartClick(
                 drillConfig,
                 targetPointClickEventData as Highcharts.DrilldownEventObject,
@@ -269,23 +294,8 @@ describe("Drilldown Eventing", () => {
         });
 
         it("should fire correct data for primary measure drilling", () => {
-            const drillConfig = { afm, onFiredDrillEvent: () => true };
             const target: any = { dispatchEvent: jest.fn() };
-
-            const primaryPoint: any = {
-                x: 1,
-                y: 2,
-                target: 100,
-                series: {
-                    type: "bar",
-                    userOptions: {
-                        bulletChartMeasureType: "primary",
-                    },
-                },
-                drillIntersection: [],
-            };
             const primaryPointClickEventData: any = { point: primaryPoint };
-
             chartClick(
                 drillConfig,
                 primaryPointClickEventData,
@@ -300,23 +310,8 @@ describe("Drilldown Eventing", () => {
         });
 
         it("should fire correct data for comparative measure drilling", () => {
-            const drillConfig = { afm, onFiredDrillEvent: () => true };
             const target: any = { dispatchEvent: jest.fn() };
-
-            const comparativePoint: any = {
-                x: 1,
-                y: 2,
-                target: 100,
-                series: {
-                    type: "bar",
-                    userOptions: {
-                        bulletChartMeasureType: "comparative",
-                    },
-                },
-                drillIntersection: [],
-            };
             const comparativePointClickEventData: any = { point: comparativePoint };
-
             chartClick(
                 drillConfig,
                 comparativePointClickEventData,
@@ -327,7 +322,27 @@ describe("Drilldown Eventing", () => {
             jest.runAllTimers();
 
             expect(target.dispatchEvent.mock.calls[0][0].detail.drillContext.element).toBe("comparative");
-            expect(target.dispatchEvent.mock.calls[0][0].detail.drillContext.y).toBe(2);
+            expect(target.dispatchEvent.mock.calls[0][0].detail.drillContext.y).toBe(3);
+        });
+
+        it("should fire correct data for attribute drilling", () => {
+            const target: any = { dispatchEvent: jest.fn() };
+            const pointClickEventData: any = { points: [targetPoint, primaryPoint, comparativePoint] };
+
+            chartClick(
+                drillConfig,
+                pointClickEventData as Highcharts.DrilldownEventObject,
+                target as EventTarget,
+                VisualizationTypes.BULLET,
+            );
+
+            jest.runAllTimers();
+
+            expect(target.dispatchEvent.mock.calls[0][0].detail.drillContext.points).toEqual([
+                { intersection: [], x: 1, y: 100 },
+                { intersection: [], x: 1, y: 2 },
+                { intersection: [], x: 1, y: 3 },
+            ]);
         });
     });
 
