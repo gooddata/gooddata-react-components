@@ -455,15 +455,17 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     };
 
     private autoresizeColumns = (event: AgGridEvent) => {
-        if (
+        const skipResizing =
             !this.state.execution ||
-            event.api.getRenderedNodes().length === 0 ||
-            event.api.getCacheBlockState()[0].pageStatus !== "loaded" ||
             this.state.resized ||
-            this.resizing
-        ) {
+            this.resizing ||
+            event.api.getRenderedNodes().length === 0 ||
+            event.api.getCacheBlockState()[0] === undefined ||
+            event.api.getCacheBlockState()[0].pageStatus !== "loaded";
+        if (skipResizing) {
             return;
         }
+
         this.resizing = true;
         this.autoresizeVisibleColumns(event.columnApi, []);
     };
