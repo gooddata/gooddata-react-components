@@ -3,7 +3,12 @@ import get = require("lodash/get");
 import { VisualizationObject } from "@gooddata/typings";
 import * as BucketNames from "../../constants/bucketNames";
 import { IVisualizationProperties } from "../interfaces/Visualization";
-import { isBarChart, isBubbleChart, isScatterPlot } from "../../components/visualizations/utils/common";
+import {
+    isBarChart,
+    isBubbleChart,
+    isBulletChart,
+    isScatterPlot,
+} from "../../components/visualizations/utils/common";
 import { getBucketItems } from "../../helpers/mdObjBucketHelper";
 import { areAllMeasuresOnSingleAxis, getMeasuresFromMdObject } from "../../helpers/MdObjectHelper";
 
@@ -94,18 +99,17 @@ export function countItemsOnAxes(
     controls: IVisualizationProperties,
     mdObject: VisualizationObject.IVisualizationObjectContent,
 ) {
-    // BB-1855 check if this needs to be updated to also cover bullet chart
-    const isBarChartType = isBarChart(type);
+    const isBarFamilyChartType = isBarChart(type) || isBulletChart(type);
 
     const { viewByItemCount, measureItemCount, secondaryMeasureItemCount } = countItemsInMdObject(mdObject);
     const totalMeasureItemCount = measureItemCount + secondaryMeasureItemCount;
 
-    const secondaryMeasureCountInConfig = (isBarChartType
+    const secondaryMeasureCountInConfig = (isBarFamilyChartType
         ? get(controls, "secondary_xaxis.measures", [])
         : get(controls, "secondary_yaxis.measures", [])
     ).length;
 
-    if (isBarChartType) {
+    if (isBarFamilyChartType) {
         return {
             yaxis: viewByItemCount,
             xaxis: totalMeasureItemCount - secondaryMeasureCountInConfig,
@@ -125,4 +129,10 @@ export function countItemsOnAxes(
         yaxis: totalMeasureItemCount - secondaryMeasureCountInConfig,
         secondary_yaxis: secondaryMeasureCountInConfig,
     };
+}
+
+export function isDisplayFormUri(
+    displayForm: VisualizationObject.IObjUriQualifier | VisualizationObject.IObjIdentifierQualifier,
+): displayForm is VisualizationObject.IObjUriQualifier {
+    return displayForm.hasOwnProperty("uri");
 }

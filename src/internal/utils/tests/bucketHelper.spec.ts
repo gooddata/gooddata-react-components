@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import cloneDeep = require("lodash/cloneDeep");
 import set = require("lodash/set");
 import { ATTRIBUTE, DATE_DATASET_ATTRIBUTE, METRIC } from "../../constants/bucket";
@@ -34,6 +34,7 @@ import {
     removeDuplicateBucketItems,
     sanitizeFilters,
     setBucketTitles,
+    getOccupiedMeasureBucketsLocalIdentifiers,
 } from "../bucketHelper";
 import {
     IBucket,
@@ -46,11 +47,11 @@ import { DEFAULT_BASE_CHART_UICONFIG } from "../../constants/uiConfig";
 import * as referencePointMocks from "../../mocks/referencePointMocks";
 import { createInternalIntl } from "../internalIntlProvider";
 
-import { VisualizationObject } from "@gooddata/typings";
+import { Execution, VisualizationObject } from "@gooddata/typings";
 import { visualizationObjectMock } from "../../mocks/visualizationObjectMocks";
 import { OverTimeComparisonTypes } from "../../../interfaces/OverTimeComparison";
 import * as BucketNames from "../../../constants/bucketNames";
-import { VisualizationTypes } from "../../../constants/visualizationTypes";
+import { VisType, VisualizationTypes } from "../../../constants/visualizationTypes";
 import { DEFAULT_LOCALE } from "../../../constants/localization";
 
 const simpleMeasure1 = { localIdentifier: "m1" };
@@ -2539,4 +2540,57 @@ describe("getAllMeasuresShowOnSecondaryAxis", () => {
             referencePointMocks.masterMeasureItems.slice(2),
         );
     });
+});
+
+describe("getOccupiedMeasureBucketsLocalIdentifiers", () => {
+    it.each([
+        [
+            "an empty array when the visualization type is not the Bullet",
+            [],
+            "bar",
+            visualizationObjectMock.oneMeasureNoView,
+            [["1"]],
+        ],
+        [
+            "an array of 'measures' and 'secondary_measures' when the visualization type is the Bullet and there are measures in buckets",
+            ["measures", "secondary_measures"],
+            "bullet",
+            visualizationObjectMock.measuresAndSecondaryMeasuresNoView,
+            [["1"], ["2"]],
+        ],
+        [
+            "an array of 'measures' and 'tertiary_measures' when the visualization type is the Bullet and there are measures in buckets",
+            ["measures", "tertiary_measures"],
+            "bullet",
+            visualizationObjectMock.measuresAndTertiaryMeasuresNoView,
+            [["1"], ["2"]],
+        ],
+        [
+            "an array of 'measures', 'secondary_measures' and 'tertiary_measures' when the visualization type is the Bullet and there are measures in buckets",
+            ["measures", "secondary_measures", "tertiary_measures"],
+            "bullet",
+            visualizationObjectMock.measuresAndSecondaryMeasuresAndTertiaryMeasuresNoView,
+            [["1"], ["2"], ["3"]],
+        ],
+        [
+            "an array of 'measures' and 'tertiary_measures' when the visualization type is the Bullet and there are measures buckets except the 'secondary_measures' bucket",
+            ["measures", "tertiary_measures"],
+            "bullet",
+            visualizationObjectMock.measuresAndNoSecondaryMeasuresAndTertiaryMeasuresNoView,
+            [["1"], ["3"]],
+        ],
+    ])(
+        `should return %s`,
+        (
+            _conditionDescription: string,
+            expectedValue: string[],
+            type: VisType,
+            mdObject: VisualizationObject.IVisualizationObjectContent,
+            executionResultData: Execution.DataValue[][],
+        ) => {
+            expect(getOccupiedMeasureBucketsLocalIdentifiers(type, mdObject, executionResultData)).toEqual(
+                expectedValue,
+            );
+        },
+    );
 });

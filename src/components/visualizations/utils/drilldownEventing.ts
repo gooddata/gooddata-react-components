@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import get = require("lodash/get");
 import debounce = require("lodash/debounce");
 import * as CustomEvent from "custom-event";
@@ -34,7 +34,13 @@ import {
     DrillEventIntersectionElementHeader,
 } from "../../../interfaces/DrillEvents";
 import { OnFiredDrillEvent } from "../../../interfaces/Events";
-import { isComboChart, isHeatmap, isTreemap, getAttributeElementIdFromAttributeElementUri } from "./common";
+import {
+    isComboChart,
+    isHeatmap,
+    isTreemap,
+    getAttributeElementIdFromAttributeElementUri,
+    isBulletChart,
+} from "./common";
 import { getVisualizationType } from "../../../helpers/visualizationType";
 import { getMasterMeasureObjQualifier } from "../../../helpers/afmHelper";
 import { AFM, Execution } from "@gooddata/typings";
@@ -109,6 +115,10 @@ function composeDrillContextGroup(
     };
 }
 
+function getClickableElementNameForBulletChart(point: any) {
+    return point.series.userOptions.bulletChartMeasureType;
+}
+
 function composeDrillContextPoint(
     point: IHighchartsPointObject,
     chartType: ChartType,
@@ -120,14 +130,14 @@ function composeDrillContextPoint(
                   value: point.value ? point.value.toString() : "",
               }
             : {};
+    const elementChartType: ChartType = get(point, "series.type", chartType);
     const xyProp = isTreemap(chartType)
         ? {}
         : {
               x: point.x,
-              y: point.y,
+              y: elementChartType === "bullet" ? point.target : point.y,
           };
 
-    const elementChartType: ChartType = get(point, "series.type", chartType);
     const customProp: Partial<IDrillEventContextPointBase> = isComboChart(chartType)
         ? {
               elementChartType,
@@ -136,7 +146,9 @@ function composeDrillContextPoint(
 
     return {
         type: chartType,
-        element: getClickableElementNameByChartType(elementChartType),
+        element: isBulletChart(chartType)
+            ? getClickableElementNameForBulletChart(point)
+            : getClickableElementNameByChartType(elementChartType),
         intersection: point.drillIntersection,
         ...xyProp,
         ...zProp,

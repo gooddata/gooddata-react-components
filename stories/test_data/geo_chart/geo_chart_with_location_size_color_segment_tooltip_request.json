@@ -1,0 +1,58 @@
+{
+    "execution": {
+        "afm": {
+            "measures": [
+                {
+                    "localIdentifier": "size",
+                    "definition": {
+                        "measure": {
+                            "item": {
+                                "uri": "/gdc/md/storybook/obj/20"
+                            }
+                        }
+                    }
+                },
+                {
+                    "localIdentifier": "color",
+                    "definition": {
+                        "measure": {
+                            "item": {
+                                "uri": "/gdc/md/storybook/obj/21"
+                            }
+                        }
+                    }
+                }
+            ],
+            "attributes": [
+                {
+                    "displayForm": {
+                        "uri": "/gdc/md/storybook/obj/30.df"
+                    },
+                    "localIdentifier": "location"
+                },
+                {
+                    "displayForm": {
+                        "uri": "/gdc/md/storybook/obj/23.df"
+                    },
+                    "localIdentifier": "segmentBy"
+                },
+                {
+                    "displayForm": {
+                        "uri": "/gdc/md/storybook/obj/24.df"
+                    },
+                    "localIdentifier": "tooltip"
+                }
+            ]
+        },
+        "resultSpec": {
+            "dimensions": [
+                {
+                    "itemIdentifiers": ["measureGroup"]
+                },
+                {
+                    "itemIdentifiers": ["location", "segmentBy", "tooltip"]
+                }
+            ]
+        }
+    }
+}

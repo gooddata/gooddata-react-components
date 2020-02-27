@@ -1,22 +1,21 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { mount, ReactWrapper } from "enzyme";
 import { oneAttributeOneMeasureSortByMeasureExecutionObject } from "../../../execution/fixtures/ExecuteAfm.fixtures";
 import { createIntlMock } from "../../visualizations/utils/intlUtils";
-import noop = require("lodash/noop");
 
 import {
+    IPivotTableInnerProps,
     PivotTable,
     PivotTableInner,
-    IPivotTableInnerProps,
     WATCHING_TABLE_RENDERED_INTERVAL,
     WATCHING_TABLE_RENDERED_MAX_TIME,
 } from "../PivotTable";
 import {
-    oneMeasureDataSource,
-    oneAttributeOneMeasureDataSource,
-    twoMeasuresOneDimensionDataSource,
     executionObjectWithTotalsDataSource,
+    oneAttributeOneMeasureDataSource,
+    oneMeasureDataSource,
+    twoMeasuresOneDimensionDataSource,
 } from "../../tests/mocks";
 import { getParsedFields } from "../pivotTable/agGridUtils";
 import { GroupingProviderFactory } from "../pivotTable/GroupingProvider";
@@ -27,6 +26,7 @@ import { waitFor } from "../../filters/AttributeFilter/tests/utils";
 import { IGridCellEvent } from "../pivotTable/agGridTypes";
 import { IDrillEventExtended } from "../../../interfaces/DrillEvents";
 import { Execution } from "@gooddata/typings";
+import noop = require("lodash/noop");
 
 const intl = createIntlMock();
 
@@ -66,6 +66,33 @@ describe("PivotTable", () => {
     it("should render PivotTableInner", () => {
         const wrapper = renderComponent();
         expect(wrapper.find(PivotTableInner)).toHaveLength(1);
+    });
+
+    describe("column sizing", () => {
+        it("should auto-resize columns if executing and default width should fit the viewport", done => {
+            const wrapper = renderComponent({
+                config: { columnSizing: { defaultWidth: "viewport" } },
+            });
+            const table = getTableInstanceFromWrapper(wrapper);
+            const autoresizeColumns = jest.spyOn(table, "autoresizeVisibleColumns");
+            autoresizeColumns.mockImplementation(() => {
+                expect(autoresizeColumns).toHaveBeenCalledTimes(1);
+                done();
+            });
+            wrapper.update();
+        });
+
+        it("should not auto-resize columns it the column sizing is not configured", async () => {
+            const wrapper = renderComponent({
+                config: { columnSizing: undefined },
+            });
+            const table = getTableInstanceFromWrapper(wrapper);
+            const autoresizeColumns = jest.spyOn(table, "autoresizeVisibleColumns");
+            autoresizeColumns.mockImplementation(noop);
+
+            await waitFor(waitForDataLoaded(wrapper));
+            expect(autoresizeColumns).toHaveBeenCalledTimes(0);
+        });
     });
 
     describe("cellClick", () => {
@@ -286,9 +313,13 @@ describe("PivotTable", () => {
         it("should NOT group rows when not sorted by first attribute", done => {
             // check second async invocation since we are waiting for datasource to be updated with specified resultSpec
             const onDataSourceUpdateSuccess = () => {
-                expect(createProvider).toHaveBeenCalledTimes(2);
-                expect(createProvider).toHaveBeenNthCalledWith(2, false);
-                done();
+                try {
+                    expect(createProvider).toHaveBeenCalledTimes(2);
+                    expect(createProvider).toHaveBeenNthCalledWith(2, false);
+                    done();
+                } catch (error) {
+                    done(error);
+                }
             };
 
             renderComponentForGrouping({

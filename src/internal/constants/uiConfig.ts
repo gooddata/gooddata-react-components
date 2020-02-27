@@ -1,9 +1,10 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import { IUiConfig } from "../interfaces/Visualization";
 
 import { METRIC, FACT, ATTRIBUTE, DATE } from "./bucket";
 import { OverTimeComparisonTypes } from "../../interfaces/OverTimeComparison";
 import { VisualizationTypes } from "../../constants/visualizationTypes";
+import { MEASURES, SECONDARY_MEASURES, TERTIARY_MEASURES, VIEW } from "../../constants/bucketNames";
 
 export const MAX_METRICS_COUNT = 20;
 export const DEFAULT_PIE_METRICS_COUNT = 1;
@@ -16,6 +17,8 @@ export const MAX_VIEW_COUNT = 2;
 export const DEFAULT_HEADLINE_METRICS_COUNT = 1;
 export const DEFAULT_XIRR_METRICS_COUNT = 1;
 export const DEFAULT_XIRR_ATTRIBUTES_COUNT = 1;
+export const DEFAULT_GEO_ATTRIBUTES_COUNT = 1;
+export const DEFAULT_PUSHPIN_METRICS_COUNT = 1;
 
 export const UICONFIG = "uiConfig";
 export const RECOMMENDATIONS = "recommendations";
@@ -71,6 +74,14 @@ export const enabledExportConfig = {
     exportConfig: { supported: true },
 };
 
+export const disabledNoMetricConfig = {
+    noMetricAccepted: { supported: false },
+};
+
+export const enabledNoMetricConfig = {
+    noMetricAccepted: { supported: true },
+};
+
 export const disabledOpenAsReportConfig = {
     openAsReport: { supported: false },
 };
@@ -82,6 +93,7 @@ export const enabledOpenAsReportConfig = {
 export const defaultRootUiConfigProperties: Partial<IUiConfig> = {
     recommendations: {},
     supportedOverTimeComparisonTypes: [],
+    ...disabledNoMetricConfig,
     ...disabledOpenAsReportConfig,
     ...enabledExportConfig,
 };
@@ -380,6 +392,7 @@ export const DEFAULT_PIVOT_TABLE_UICONFIG: IUiConfig = {
     },
     ...defaultRootUiConfigProperties,
     ...disabledOpenAsReportConfig,
+    ...enabledNoMetricConfig,
     supportedOverTimeComparisonTypes: [
         OverTimeComparisonTypes.SAME_PERIOD_PREVIOUS_YEAR,
         OverTimeComparisonTypes.PREVIOUS_PERIOD,
@@ -400,6 +413,7 @@ export const DEFAULT_TABLE_UICONFIG: IUiConfig = {
         ...defaultFilters,
     },
     ...defaultRootUiConfigProperties,
+    ...enabledNoMetricConfig,
     ...enabledOpenAsReportConfig,
     supportedOverTimeComparisonTypes: [
         OverTimeComparisonTypes.SAME_PERIOD_PREVIOUS_YEAR,
@@ -539,4 +553,77 @@ export const DEFAULT_XIRR_UICONFIG: IUiConfig = {
     },
     ...defaultRootUiConfigProperties,
     ...disabledExportConfig,
+};
+
+const geoMeasuresBase = {
+    ...measuresBase,
+    allowsReordering: false,
+    itemsLimit: DEFAULT_PUSHPIN_METRICS_COUNT,
+    isShowInPercentVisible: false,
+    canAddItems: true,
+};
+
+const geoAttributesBase = {
+    ...viewBase,
+    accepts: [ATTRIBUTE],
+    itemsLimit: DEFAULT_GEO_ATTRIBUTES_COUNT,
+};
+
+export const GEO_PUSHPIN_CHART_UICONFIG: IUiConfig = {
+    buckets: {
+        location: {
+            ...geoAttributesBase,
+        },
+        size: {
+            ...geoMeasuresBase,
+        },
+        color: {
+            ...geoMeasuresBase,
+        },
+        segment: {
+            ...geoAttributesBase,
+        },
+        ...defaultFilters,
+    },
+    supportedLocationIcon: { supported: true },
+    ...defaultRootUiConfigProperties,
+    ...enabledNoMetricConfig,
+};
+
+export const DEFAULT_BULLET_CHART_CONFIG: IUiConfig = {
+    buckets: {
+        [MEASURES]: {
+            ...measuresBase,
+            isShowOnSecondaryAxisVisible: false,
+            isShowInPercentVisible: false,
+            allowsReordering: false,
+            canAddItems: true,
+            itemsLimit: 1,
+        },
+        [SECONDARY_MEASURES]: {
+            ...measuresBase,
+            isShowOnSecondaryAxisVisible: false,
+            isShowInPercentVisible: false,
+            allowsReordering: false,
+            canAddItems: true,
+            itemsLimit: 1,
+        },
+        [TERTIARY_MEASURES]: {
+            ...measuresBase,
+            isShowOnSecondaryAxisVisible: false,
+            isShowInPercentVisible: false,
+            allowsReordering: false,
+            canAddItems: true,
+            itemsLimit: 1,
+        },
+        [VIEW]: {
+            ...viewBase,
+            allowsReordering: true,
+            allowsSwapping: true,
+            canAddItems: true,
+            itemsLimit: 2,
+        },
+        ...defaultFilters,
+    },
+    ...defaultRootUiConfigProperties,
 };

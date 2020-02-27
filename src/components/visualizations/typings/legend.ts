@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { TOP } from "../chart/legend/PositionTypes";
 
 export type PositionType = "left" | "right" | "top" | "bottom" | "auto";
@@ -26,6 +26,16 @@ export interface IHeatmapLegendItem {
     isVisible?: boolean;
     color: string;
     legendIndex: number;
+}
+
+export interface IColorLegendItem {
+    range: IRange;
+    color: string;
+}
+
+export interface IGeoChartLegendData {
+    colorData?: IColorLegendItem[];
+    sizeData?: number[];
 }
 
 export interface IRange {

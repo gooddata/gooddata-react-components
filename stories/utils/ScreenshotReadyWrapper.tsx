@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 
 export interface IScreenshotReadyWrapperProps {
@@ -78,5 +78,14 @@ export function createHighChartResolver(numOfCharts: number) {
 export function createTableResolver(numOfTables: number) {
     return (element: HTMLElement) => {
         return element.getElementsByClassName("viz-table-wrap").length === numOfTables;
+    };
+}
+
+export function visualizationNotLoadingResolver() {
+    return (element: HTMLElement) => {
+        return (
+            element.getElementsByClassName("s-loading").length === 0 &&
+            element.getElementsByClassName("s-pivot-table").length > 0
+        );
     };
 }

@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import range = require("lodash/range");
 import get = require("lodash/get");
 import set = require("lodash/set");
@@ -34,14 +34,7 @@ import * as fixtures from "../../../../../stories/test_data/fixtures";
 import { PIE_CHART_LIMIT, STACK_BY_DIMENSION_INDEX } from "../constants";
 import { DEFAULT_COLOR_PALETTE, getLighterColor, getRgbString, GRAY, TRANSPARENT } from "../../utils/color";
 
-import {
-    TreemapColorStrategy,
-    MeasureColorStrategy,
-    AttributeColorStrategy,
-    BubbleChartColorStrategy,
-    HeatmapColorStrategy,
-    IColorStrategy,
-} from "../colorFactory";
+import { IColorStrategy } from "../colorFactory";
 import {
     IChartConfig,
     IColorPaletteItem,
@@ -51,6 +44,11 @@ import {
 } from "../../../../interfaces/Config";
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 import { NORMAL_STACK, PERCENT_STACK } from "../highcharts/getOptionalStackingConfiguration";
+import HeatmapColorStrategy from "../colorStrategies/heatmap";
+import TreemapColorStrategy from "../colorStrategies/treemap";
+import BubbleChartColorStrategy from "../colorStrategies/bubbleChart";
+import MeasureColorStrategy from "../colorStrategies/measure";
+import AttributeColorStrategy from "../colorStrategies/attribute";
 
 const FIRST_DEFAULT_COLOR_ITEM_AS_STRING = getRgbString(DEFAULT_COLOR_PALETTE[0]);
 const SECOND_DEFAULT_COLOR_ITEM_AS_STRING = getRgbString(DEFAULT_COLOR_PALETTE[1]);

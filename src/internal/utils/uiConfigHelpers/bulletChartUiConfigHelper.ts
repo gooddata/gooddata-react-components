@@ -1,0 +1,60 @@
+// (C) 2019-2020 GoodData Corporation
+import cloneDeep = require("lodash/cloneDeep");
+import get = require("lodash/get");
+import { IntlShape } from "react-intl";
+import * as BucketNames from "../../../constants/bucketNames";
+import { IExtendedReferencePoint, IBucket } from "../../interfaces/Visualization";
+import { UICONFIG } from "../../constants/uiConfig";
+import { BUCKETS } from "../../constants/bucket";
+import { setBucketTitles, getItemsCount } from "./../bucketHelper";
+import { getTranslation } from "../translations";
+
+import * as bulletPrimaryMeasureIcon from "../../assets/bullet/bucket-title-primary.svg";
+import * as bulletTargetMeasureIcon from "../../assets/bullet/bucket-title-target.svg";
+import * as bulletComparativeMeasureIcon from "../../assets/bullet/bucket-title-comparative.svg";
+import * as bulletViewByIcon from "../../assets/bullet/bucket-title-view-by.svg";
+
+export function getBulletChartUiConfig(
+    referencePoint: IExtendedReferencePoint,
+    intl: IntlShape,
+    visualizationType: string,
+): IExtendedReferencePoint {
+    const referencePointConfigured = cloneDeep(referencePoint);
+
+    referencePointConfigured[UICONFIG] = setBucketTitles(referencePointConfigured, visualizationType, intl);
+
+    referencePointConfigured[UICONFIG].buckets[BucketNames.MEASURES] = {
+        ...referencePointConfigured[UICONFIG].buckets[BucketNames.MEASURES],
+        icon: bulletPrimaryMeasureIcon as any,
+    };
+
+    referencePointConfigured[UICONFIG].buckets[BucketNames.SECONDARY_MEASURES] = {
+        ...referencePointConfigured[UICONFIG].buckets[BucketNames.SECONDARY_MEASURES],
+        icon: bulletTargetMeasureIcon as any,
+    };
+
+    referencePointConfigured[UICONFIG].buckets[BucketNames.TERTIARY_MEASURES] = {
+        ...referencePointConfigured[UICONFIG].buckets[BucketNames.TERTIARY_MEASURES],
+        icon: bulletComparativeMeasureIcon as any,
+    };
+
+    referencePointConfigured[UICONFIG].buckets[BucketNames.VIEW] = {
+        ...referencePointConfigured[UICONFIG].buckets[BucketNames.VIEW],
+        icon: bulletViewByIcon as any,
+    };
+
+    const buckets: IBucket[] = get(referencePoint, BUCKETS, []);
+
+    const primaryMeasuresCount = getItemsCount(buckets, BucketNames.MEASURES);
+    const secondaryMeasuresCount = getItemsCount(buckets, BucketNames.SECONDARY_MEASURES);
+    const tertiaryMeasuresCount = getItemsCount(buckets, BucketNames.SECONDARY_MEASURES);
+
+    if (primaryMeasuresCount === 0 && (secondaryMeasuresCount !== 0 || tertiaryMeasuresCount !== 0)) {
+        referencePointConfigured[UICONFIG].customError = {
+            heading: getTranslation("dashboard.error.missing_primary_bucket_item.heading", intl),
+            text: getTranslation("dashboard.error.missing_primary_bucket_item.text", intl),
+        };
+    }
+
+    return referencePointConfigured;
+}

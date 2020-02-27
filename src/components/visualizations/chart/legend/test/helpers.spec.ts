@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import {
     ITEM_HEIGHT,
     LEGEND_PADDING,
@@ -6,8 +6,8 @@ import {
     UTF_NON_BREAKING_SPACE,
     calculateFluidLegend,
     calculateStaticLegend,
-    getHeatmapLegendConfiguration,
-    buildHeatmapLabelsConfig,
+    getColorLegendConfiguration,
+    buildColorLabelsConfig,
     heatmapLegendConfigMatrix,
     heatmapSmallLegendConfigMatrix,
     verticalHeatmapConfig,
@@ -86,7 +86,7 @@ describe("helpers", () => {
         });
     });
 
-    describe("getHeatmapLegendConfiguration", () => {
+    describe("getColorLegendConfiguration", () => {
         const format = "#,##";
         const numericSymbols = ["k", "m", "b", "g"];
         const series = [
@@ -148,12 +148,12 @@ describe("helpers", () => {
 
         it("should prepare legend config without shortening when everything fits", () => {
             const expectedResult = {
-                classes: ["viz-legend", "heatmap-legend", "position-top", null],
+                classes: ["viz-legend", "color-legend", "position-top", null],
                 labels,
                 boxes,
                 position: "top",
             };
-            const result = getHeatmapLegendConfiguration(series, format, numericSymbols, false, "top");
+            const result = getColorLegendConfiguration(series, format, numericSymbols, false, "top");
 
             expect(result).toEqual(expectedResult);
         });
@@ -170,36 +170,36 @@ describe("helpers", () => {
                 { key: "label-7", label: "70", style: { textAlign: "left", height: 15, lineHeight: "20px" } },
             ];
             const expectedResult = {
-                classes: ["viz-legend", "heatmap-legend", "position-right", null],
+                classes: ["viz-legend", "color-legend", "position-right", null],
                 labels: expectedLabels,
                 boxes,
                 position: "right",
             };
-            const result = getHeatmapLegendConfiguration(series, format, numericSymbols, false, null);
+            const result = getColorLegendConfiguration(series, format, numericSymbols, false, null);
 
             expect(result).toEqual(expectedResult);
         });
 
         it("should prepare small legend config without shortening when everything fits", () => {
             const expectedResult = {
-                classes: ["viz-legend", "heatmap-legend", "position-top", "small"],
+                classes: ["viz-legend", "color-legend", "position-top", "small"],
                 labels: labelsSmall,
                 boxes,
                 position: "top",
             };
-            const result = getHeatmapLegendConfiguration(series, format, numericSymbols, true, "top");
+            const result = getColorLegendConfiguration(series, format, numericSymbols, true, "top");
 
             expect(result).toEqual(expectedResult);
         });
 
         it("should prepare small legend config with bottom position, without shortening when everything fits", () => {
             const expectedResult = {
-                classes: ["viz-legend", "heatmap-legend", "position-bottom", "small"],
+                classes: ["viz-legend", "color-legend", "position-bottom", "small"],
                 labels: labelsSmall,
                 boxes,
                 position: "bottom",
             };
-            const result = getHeatmapLegendConfiguration(series, format, numericSymbols, true, "right");
+            const result = getColorLegendConfiguration(series, format, numericSymbols, true, "right");
 
             expect(result).toEqual(expectedResult);
         });
@@ -217,12 +217,12 @@ describe("helpers", () => {
                 { key: "label-8", label: "100007", style: { textAlign: "right", width: 45 } },
             ];
             const expectedResult = {
-                classes: ["viz-legend", "heatmap-legend", "position-top", null],
+                classes: ["viz-legend", "color-legend", "position-top", null],
                 labels: expectedLabels,
                 boxes,
                 position: "top",
             };
-            const result = getHeatmapLegendConfiguration(
+            const result = getColorLegendConfiguration(
                 seriesForShortening,
                 format,
                 numericSymbols,
@@ -246,12 +246,12 @@ describe("helpers", () => {
                 { key: "label-8", label: "100007", style: { textAlign: "right", width: 35 } },
             ];
             const expectedResult = {
-                classes: ["viz-legend", "heatmap-legend", "position-top", "small"],
+                classes: ["viz-legend", "color-legend", "position-top", "small"],
                 labels: expectedLabels,
                 boxes,
                 position: "top",
             };
-            const result = getHeatmapLegendConfiguration(
+            const result = getColorLegendConfiguration(
                 seriesForShortening,
                 format,
                 numericSymbols,
@@ -266,7 +266,7 @@ describe("helpers", () => {
             const labels = ["0", "1", "2", "3", "4", "5", "6", "7"];
 
             heatmapLegendConfigMatrix.forEach((config: any) => {
-                const elementsConfig = buildHeatmapLabelsConfig(labels, config);
+                const elementsConfig = buildColorLabelsConfig(labels, config);
 
                 const width = elementsConfig.reduce((sum: number, item: any) => {
                     return sum + item.style.width;
@@ -280,7 +280,7 @@ describe("helpers", () => {
             const labels = ["0", "1", "2", "3", "4", "5", "6", "7"];
 
             heatmapSmallLegendConfigMatrix.forEach((config: any) => {
-                const elementsConfig = buildHeatmapLabelsConfig(labels, config);
+                const elementsConfig = buildColorLabelsConfig(labels, config);
 
                 const width = elementsConfig.reduce((sum: number, item: any) => {
                     return sum + item.style.width;
@@ -293,7 +293,7 @@ describe("helpers", () => {
         it("should sum heights to 210 in vertical legend", () => {
             const labels = ["0", "1", "2", "3", "4", "5", "6", "7"];
 
-            const elementsConfig = buildHeatmapLabelsConfig(labels, verticalHeatmapConfig);
+            const elementsConfig = buildColorLabelsConfig(labels, verticalHeatmapConfig);
 
             const width = elementsConfig.reduce((sum: number, item: any) => {
                 return sum + item.style.height;

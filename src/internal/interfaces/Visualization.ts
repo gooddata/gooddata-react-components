@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import { AFM, Execution, VisualizationObject } from "@gooddata/typings";
 import { DataLayer } from "@gooddata/gooddata-js";
 import { ISeparators } from "@gooddata/numberjs";
@@ -217,6 +217,10 @@ export interface IExportUiConfig {
     supported?: boolean;
 }
 
+export interface INoMetricUiConfig {
+    supported?: boolean;
+}
+
 export interface IOpenAsReportUiConfig {
     supported?: boolean;
     warningMessage?: string;
@@ -235,16 +239,22 @@ export interface IOptionalStacking {
     canStackInPercent?: boolean;
 }
 
+export interface ISupportedLocationIcon {
+    supported?: boolean;
+}
+
 export interface IUiConfig {
     buckets: IBucketsUiConfig;
     recommendations?: IRecommendations;
     exportConfig?: IExportUiConfig;
+    noMetricAccepted?: INoMetricUiConfig;
     openAsReport?: IOpenAsReportUiConfig;
     customError?: ICustomError;
     supportedOverTimeComparisonTypes?: OverTimeComparisonType[];
     supportedChartTypes?: ChartType[];
     axis?: string;
     optionalStacking?: IOptionalStacking;
+    supportedLocationIcon?: ISupportedLocationIcon;
 }
 
 export interface IVisualizationProperties {

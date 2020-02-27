@@ -303,6 +303,17 @@ function getScatterDimensions(mdObject: VisualizationObject.IVisualizationObject
     ];
 }
 
+export function getGeoChartDimensions(buckets: VisualizationObject.IBucket[]): AFM.IDimension[] {
+    const { attributes = [], measures = [] }: AFM.IAfm = convertBucketsToAFM(buckets);
+    const chartDimensions: AFM.IDimension[] = [];
+
+    if (measures.length > 0) {
+        chartDimensions.push({ itemIdentifiers: [MEASUREGROUP] });
+    }
+    chartDimensions.push({ itemIdentifiers: attributes.map((attr: AFM.IAttribute) => attr.localIdentifier) });
+    return chartDimensions;
+}
+
 // Heatmap
 export function getHeatmapDimensionsFromMdObj(
     mdObject: VisualizationObject.IVisualizationObjectContent,
@@ -428,6 +439,9 @@ export function generateDimensions(
         case VisualizationTypes.XIRR: {
             return getXirrDimensions(mdObject);
         }
+        case VisualizationTypes.PUSHPIN: {
+            return getGeoChartDimensions(mdObject.buckets);
+        }
     }
     return [];
 }
@@ -460,7 +474,6 @@ export function generateStackedDimensions(buckets: VisualizationObject.IBucket[]
     ];
 }
 
-// for LineChart, AreaChart, BarChart, ColumnChart
 export function generateDefaultDimensions(afm: AFM.IAfm): AFM.IDimension[] {
     return [
         {

@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { Execution } from "@gooddata/typings";
 import * as invariant from "invariant";
 import { IUnwrappedAttributeHeaderWithItems } from "../components/visualizations/chart/chartOptionsBuilder";
@@ -134,4 +134,71 @@ export function getNthDimensionHeaders(
         return executionResponse.dimensions[headerIndex].headers;
     }
     return null;
+}
+
+export function getHeaderItemName(headerItem: Execution.IResultHeaderItem): string {
+    if (headerItem && Execution.isAttributeHeaderItem(headerItem)) {
+        return headerItem.attributeHeaderItem.name;
+    }
+    return "";
+}
+
+export function getAttributeHeadersInDimension(
+    dimensions: Execution.IResultDimension[],
+): Array<Execution.IAttributeHeader["attributeHeader"]> {
+    return dimensions.reduce(
+        (
+            result: Array<Execution.IAttributeHeader["attributeHeader"]>,
+            dimension: Execution.IResultDimension,
+        ): Array<Execution.IAttributeHeader["attributeHeader"]> => {
+            const { headers } = dimension;
+            const filteredAttributeHeaders = headers.reduce(
+                (
+                    result: Array<Execution.IAttributeHeader["attributeHeader"]>,
+                    header: Execution.IMeasureGroupHeader | Execution.IAttributeHeader,
+                ): Array<Execution.IAttributeHeader["attributeHeader"]> => {
+                    if (Execution.isAttributeHeader(header)) {
+                        result.push(header.attributeHeader);
+                    }
+                    return result;
+                },
+                [],
+            );
+            return [...result, ...filteredAttributeHeaders];
+        },
+        [],
+    );
+}
+
+export function getMeasureGroupHeaderItemsInDimension(
+    dimensions: Execution.IResultDimension[],
+): Execution.IMeasureHeaderItem[] {
+    return dimensions.reduce(
+        (
+            result: Execution.IMeasureHeaderItem[],
+            dimension: Execution.IResultDimension,
+        ): Execution.IMeasureHeaderItem[] => {
+            const { headers } = dimension;
+            const filteredMeasureHeaders = headers.reduce(
+                (
+                    result: Execution.IMeasureHeaderItem[],
+                    header: Execution.IMeasureGroupHeader | Execution.IAttributeHeader,
+                ): Execution.IMeasureHeaderItem[] => {
+                    if (Execution.isMeasureGroupHeader(header)) {
+                        return [...result, ...header.measureGroupHeader.items];
+                    }
+                    return result;
+                },
+                [],
+            );
+            return [...result, ...filteredMeasureHeaders];
+        },
+        [],
+    );
+}
+
+export function isTwoDimensionsData(
+    data: Execution.DataValue[][] | Execution.DataValue[],
+): data is Execution.DataValue[][] {
+    return Array.isArray(data[0]);
 }

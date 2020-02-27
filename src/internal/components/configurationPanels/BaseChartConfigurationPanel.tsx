@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import * as classNames from "classnames";
 import { FormattedMessage } from "react-intl";
@@ -8,7 +8,7 @@ import Bubble from "@gooddata/goodstrap/lib/Bubble/Bubble";
 import BubbleHoverTrigger from "@gooddata/goodstrap/lib/Bubble/BubbleHoverTrigger";
 
 import * as BucketNames from "../../../constants/bucketNames";
-import MinMaxControl from "../configurationControls//MinMaxControl";
+import MinMaxControl from "../configurationControls/MinMaxControl";
 import ConfigurationPanelContent from "./ConfigurationPanelContent";
 import ConfigSection from "../configurationControls/ConfigSection";
 import CheckboxControl from "../configurationControls/CheckboxControl";

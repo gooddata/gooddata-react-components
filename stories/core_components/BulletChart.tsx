@@ -3,7 +3,7 @@ import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { screenshotWrap } from "@gooddata/test-storybook";
 
-import { BulletChart } from "../../src";
+import { BulletChart, HeaderPredicateFactory } from "../../src";
 import { onErrorHandler } from "../mocks";
 import { CUSTOM_COLORS } from "../data/colors";
 import {
@@ -389,6 +389,27 @@ storiesOf("Core components/BulletChart", module)
                     onError={onErrorHandler}
                     LoadingComponent={null}
                     ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
+    .add("drillable items", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BulletChart
+                    projectId="storybook"
+                    primaryMeasure={MEASURE_1}
+                    targetMeasure={MEASURE_2}
+                    comparativeMeasure={MEASURE_3}
+                    viewBy={[ATTRIBUTE_1]}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                    drillableItems={[
+                        HeaderPredicateFactory.uriMatch("/gdc/md/storybook/obj/1"),
+                        HeaderPredicateFactory.uriMatch("/gdc/md/storybook/obj/2"),
+                        HeaderPredicateFactory.uriMatch("/gdc/md/storybook/obj/3"),
+                    ]}
                 />
             </div>,
         ),

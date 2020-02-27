@@ -3,6 +3,7 @@
 exports[`getBulletChartSeries should return expected bullet chart series 1`] = `
 Array [
   Object {
+    "bulletChartMeasureType": "primary",
     "color": "rgb(255,0,0)",
     "data": Array [
       Object {
@@ -26,6 +27,7 @@ Array [
 exports[`getBulletChartSeries should return expected bullet chart series 2`] = `
 Array [
   Object {
+    "bulletChartMeasureType": "target",
     "color": "rgb(0,0,179)",
     "data": Array [
       Object {
@@ -53,6 +55,7 @@ Array [
 exports[`getBulletChartSeries should return expected bullet chart series 3`] = `
 Array [
   Object {
+    "bulletChartMeasureType": "comparative",
     "color": "rgb(217,220,226)",
     "data": Array [
       Object {
@@ -75,6 +78,7 @@ Array [
 exports[`getBulletChartSeries should return expected bullet chart series 4`] = `
 Array [
   Object {
+    "bulletChartMeasureType": "primary",
     "color": "rgb(0,0,255)",
     "data": Array [
       Object {
@@ -87,12 +91,13 @@ Array [
       },
     ],
     "legendIndex": 0,
-    "maxPointWidth": 100,
+    "maxPointWidth": 75,
     "name": "Primary measure",
-    "pointPadding": 0.1,
+    "pointPadding": 0.2,
     "zIndex": 1,
   },
   Object {
+    "bulletChartMeasureType": "target",
     "color": "rgb(0,0,179)",
     "data": Array [
       Object {
@@ -120,6 +125,7 @@ Array [
 exports[`getBulletChartSeries should return expected bullet chart series 5`] = `
 Array [
   Object {
+    "bulletChartMeasureType": "primary",
     "color": "rgb(255,0,0)",
     "data": Array [
       Object {
@@ -138,6 +144,7 @@ Array [
     "zIndex": 1,
   },
   Object {
+    "bulletChartMeasureType": "comparative",
     "color": "rgb(217,220,226)",
     "data": Array [
       Object {
@@ -160,6 +167,7 @@ Array [
 exports[`getBulletChartSeries should return expected bullet chart series 6`] = `
 Array [
   Object {
+    "bulletChartMeasureType": "target",
     "color": "rgb(0,0,179)",
     "data": Array [
       Object {
@@ -182,6 +190,7 @@ Array [
     "zIndex": 2,
   },
   Object {
+    "bulletChartMeasureType": "comparative",
     "color": "rgb(217,220,226)",
     "data": Array [
       Object {
@@ -204,6 +213,7 @@ Array [
 exports[`getBulletChartSeries should return expected bullet chart series 7`] = `
 Array [
   Object {
+    "bulletChartMeasureType": "primary",
     "color": "rgb(255,0,0)",
     "data": Array [
       Object {
@@ -222,6 +232,7 @@ Array [
     "zIndex": 1,
   },
   Object {
+    "bulletChartMeasureType": "target",
     "color": "rgb(179,0,0)",
     "data": Array [
       Object {
@@ -244,6 +255,7 @@ Array [
     "zIndex": 2,
   },
   Object {
+    "bulletChartMeasureType": "comparative",
     "color": "rgb(217,220,226)",
     "data": Array [
       Object {

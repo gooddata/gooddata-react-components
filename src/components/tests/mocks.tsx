@@ -47,6 +47,7 @@ export class ResponsiveTable extends DummyComponent {}
 export class IndigoTable extends DummyComponent {}
 export class Visualization extends DummyComponent {}
 export class BaseChart extends DummyComponent {}
+export class GeoPushpinChart extends DummyComponent {}
 export class Table extends DummyComponent {}
 export class Xirr extends DummyComponent {}
 export class LoadingComponent extends DummyComponent {}

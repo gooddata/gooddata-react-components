@@ -1,11 +1,10 @@
-// (C) 2019-2020 GoodData Corporation
+// (C) 2020 GoodData Corporation
 import { Execution, VisualizationObject } from "@gooddata/typings";
 
 import { getBulletChartSeries } from "../bulletChartOptions";
-import { BulletChartColorStrategy } from "../../colorFactory";
+import BulletChartColorStrategy from "../../colorStrategies/bulletChart";
 import { IColorPalette } from "../../../../../interfaces/Config";
 import { SECONDARY_MEASURES, MEASURES, TERTIARY_MEASURES } from "../../../../../constants/bucketNames";
-import { createMeasure } from "../../../../../../__mocks__/fixtures";
 
 const getMeasureGroupWithItems = (measureGroupItems: any) => ({
     items: measureGroupItems,
@@ -24,7 +23,11 @@ const getExecutionResponse = (measureGroup: any): Execution.IExecutionResponse =
     links: { executionResult: "foo" },
 });
 
-const getColorStrategy = (colorPalette: IColorPalette, measureGroup: any) =>
+const getColorStrategy = (
+    colorPalette: IColorPalette,
+    measureGroup: any,
+    occupiedMeasureBucketsLocalIdentifiers: VisualizationObject.Identifier[],
+) =>
     new BulletChartColorStrategy(
         colorPalette,
         undefined,
@@ -32,6 +35,7 @@ const getColorStrategy = (colorPalette: IColorPalette, measureGroup: any) =>
         undefined,
         getExecutionResponse(measureGroup),
         {},
+        occupiedMeasureBucketsLocalIdentifiers,
     );
 
 const getExecutionResultForNMeasures = (measuresCount: number) =>
@@ -84,48 +88,35 @@ describe("getBulletChartSeries", () => {
         },
     ];
 
-    const buckets = [
-        {
-            localIdentifier: MEASURES,
-            items: [createMeasure(1)],
-        },
-        {
-            localIdentifier: SECONDARY_MEASURES,
-            items: [createMeasure(2)],
-        },
-        {
-            localIdentifier: TERTIARY_MEASURES,
-            items: [createMeasure(3)],
-        },
-    ];
+    const occupiedMeasureBucketsLocalIdentifiers = [MEASURES, SECONDARY_MEASURES, TERTIARY_MEASURES];
 
     it.each([
-        [colorPaletteRed, 1, [availableMeasureGroupItems[0]], [buckets[0]]],
-        [colorPaletteBlue, 1, [availableMeasureGroupItems[1]], [buckets[1]]],
-        [colorPaletteRed, 1, [availableMeasureGroupItems[2]], [buckets[2]]],
+        [colorPaletteRed, 1, [availableMeasureGroupItems[0]], [occupiedMeasureBucketsLocalIdentifiers[0]]],
+        [colorPaletteBlue, 1, [availableMeasureGroupItems[1]], [occupiedMeasureBucketsLocalIdentifiers[1]]],
+        [colorPaletteRed, 1, [availableMeasureGroupItems[2]], [occupiedMeasureBucketsLocalIdentifiers[2]]],
         [
             colorPaletteBlue,
             2,
             [availableMeasureGroupItems[0], availableMeasureGroupItems[1]],
-            [buckets[0], buckets[1]],
+            [occupiedMeasureBucketsLocalIdentifiers[0], occupiedMeasureBucketsLocalIdentifiers[1]],
         ],
         [
             colorPaletteRed,
             2,
             [availableMeasureGroupItems[0], availableMeasureGroupItems[2]],
-            [buckets[0], buckets[2]],
+            [occupiedMeasureBucketsLocalIdentifiers[0], occupiedMeasureBucketsLocalIdentifiers[2]],
         ],
         [
             colorPaletteBlue,
             2,
             [availableMeasureGroupItems[1], availableMeasureGroupItems[2]],
-            [buckets[1], buckets[2]],
+            [occupiedMeasureBucketsLocalIdentifiers[1], occupiedMeasureBucketsLocalIdentifiers[2]],
         ],
         [
             colorPaletteRed,
             3,
             [availableMeasureGroupItems[0], availableMeasureGroupItems[1], availableMeasureGroupItems[2]],
-            buckets,
+            occupiedMeasureBucketsLocalIdentifiers,
         ],
     ])(
         "should return expected bullet chart series",
@@ -133,13 +124,22 @@ describe("getBulletChartSeries", () => {
             colorPalette: IColorPalette,
             numberOfMeasures: number,
             measureGroupItems: any,
-            buckets: VisualizationObject.IBucket[],
+            occupiedMeasureBucketsLocalIdentifiers: VisualizationObject.Identifier[],
         ) => {
             const executionResultData = getExecutionResultForNMeasures(numberOfMeasures);
             const measureGroup = getMeasureGroupWithItems(measureGroupItems);
-            const colorStrategy = getColorStrategy(colorPalette, measureGroup);
+            const colorStrategy = getColorStrategy(
+                colorPalette,
+                measureGroup,
+                occupiedMeasureBucketsLocalIdentifiers,
+            );
             expect(
-                getBulletChartSeries(executionResultData, measureGroup, colorStrategy, buckets),
+                getBulletChartSeries(
+                    executionResultData,
+                    measureGroup,
+                    colorStrategy,
+                    occupiedMeasureBucketsLocalIdentifiers,
+                ),
             ).toMatchSnapshot();
         },
     );

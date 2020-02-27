@@ -199,6 +199,89 @@ const barChartVisualizationObjects = [
     },
 ];
 
+const geoChartVisualizationObjects = [
+    {
+        title: 'GeoPushpinChart chart with Location, Size, Color, Segment and Tooltip',
+        identifier: 'pushpin-chart-location-size-color-segment-tooltip',
+        type: 'local:pushpin',
+        buckets: [{
+            localIdentifier: 'size',
+            items: [{
+                localIdentifier: 'size',
+                identifier: '20',
+            }]
+        }, {
+            localIdentifier: 'color',
+            items: [{
+                localIdentifier: 'color',
+                identifier: '21',
+            }]
+        },{
+            localIdentifier: 'location',
+            items: [{
+                localIdentifier: 'location',
+                displayForm: '30.df',
+            }]
+        },{
+            localIdentifier: 'segment',
+            items: [{
+                localIdentifier: 'segment',
+                displayForm: '23.df',
+            }]
+        },{
+            localIdentifier: 'tooltipText',
+            items: [{
+                localIdentifier: 'tooltip',
+                displayForm: '24.df',
+            }]
+        }],
+    },
+];
+
+const geoChartAfmExecutions = [
+    {   
+        _description: "GeoPushpin with location",
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_request.json"),
+        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_response.json"),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_result.json")
+    },
+    {
+        _description: "GeoPushpin with location and size",
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_request.json"),
+        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_response.json"),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_result.json")
+    },
+    {
+        _description: "GeoPushpin with location and color",
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_color_request.json"),
+        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_color_response.json"),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_color_result.json")
+    },
+    {
+        _description: "GeoPushpin with location, size and segment",
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_segment_request.json"),
+        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_segment_response.json"),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_segment_result.json")
+    },
+    {
+        _description: "GeoPushpin with location, size an color",
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_request.json"),
+        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_response.json"),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_result.json")
+    },
+    {
+        _description: "GeoPushpin with location, size, color, segment and tooltip",
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_request.json"),
+        executionResponse: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_response.json"),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_result.json")
+    },
+    {
+        _description: "GeoPushpin with location, size, color, segment and tooltip with Location filter",
+        execution: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_filters_request.json"),
+        executionResult: require("./stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_filters_result.json")
+    }
+];
+
 const getBaseProjectSchema = (title, identifier) => {
     return {
         project: {
@@ -230,6 +313,14 @@ const getBaseProjectSchema = (title, identifier) => {
                 {
                     identifier: '9',
                     title: 'Saved null'
+                },
+                {
+                    identifier: '20',
+                    title: 'Size'
+                },
+                {
+                    identifier: '21',
+                    title: 'Color'
                 }
             ],
             attributes: [{
@@ -280,6 +371,21 @@ const getBaseProjectSchema = (title, identifier) => {
                         'rep19',
                         'rep20'
                     ]
+                },
+                {
+                    identifier: '30',
+                    title: 'City',
+                    elements: ['New York', 'Chicago', 'San Antonio', 'San Diego', 'Austin', 'Fort Worth', 'Charlotte']
+                },
+                {
+                    identifier: '23',
+                    title: 'Store Type',
+                    elements: ["Speciality", "Department", "Convenience", "Discount"]
+                },
+                {
+                    identifier: '24',
+                    title: 'Tooltip',
+                    elements:['City', 'State']
                 }
             ],
             dateDataSets: [{
@@ -2383,6 +2489,7 @@ const getBaseProjectSchema = (title, identifier) => {
             ...pivotTableSubtotalsAfmExecutions,
             ...pivotTableGrandtotalSubtotalAfmExecutions,
             ...xirrAfmExecutions,
+            ...geoChartAfmExecutions,
         ],
         visualizationClasses: [{
             title: 'Table',
@@ -2393,6 +2500,9 @@ const getBaseProjectSchema = (title, identifier) => {
         }, {
             title: 'Bar',
             url: 'local:bar'
+        }, {
+            title: 'Pushpin',
+            url: 'local:pushpin'
         }, {
             title: 'Line',
             url: 'local:line'
@@ -2796,7 +2906,8 @@ const getBaseProjectSchema = (title, identifier) => {
                 }]
             },
 
-            ...barChartVisualizationObjects
+            ...barChartVisualizationObjects,
+            ...geoChartVisualizationObjects,
         ],
         featureFlags
     }

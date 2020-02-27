@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import get = require("lodash/get");
 import { FormattedMessage } from "react-intl";
@@ -23,10 +23,14 @@ import {
 
 export default class BubbleChartConfigurationPanel extends ConfigurationPanelContent {
     protected renderConfigurationPanel() {
-        const { xAxisVisible, yAxisVisible, gridEnabled } = this.getControlProperties();
-
         const { featureFlags, propertiesMeta, properties, pushData, type, mdObject } = this.props;
+
         const controls = properties && properties.controls;
+
+        const xAxisVisible = get(controls, "xaxis.visible", true);
+        const yAxisVisible = get(controls, "yaxis.visible", true);
+        const gridEnabled = get(controls, "grid.enabled", true);
+
         const controlsDisabled = this.isControlDisabled();
         const { xaxis: itemsOnXAxis, yaxis: itemsOnYAxis } = countItemsOnAxes(type, controls, mdObject);
         const xAxisNameSectionDisabled = controlsDisabled || itemsOnXAxis !== 1;
@@ -158,17 +162,5 @@ export default class BubbleChartConfigurationPanel extends ConfigurationPanelCon
         return classNames("bubble-primary", {
             invisible: !this.isControlDisabled(),
         });
-    }
-
-    private getControlProperties() {
-        const xAxisVisible = get(this.props, "properties.controls.xaxis.visible", true);
-        const yAxisVisible = get(this.props, "properties.controls.yaxis.visible", true);
-        const gridEnabled = get(this.props, "properties.controls.grid.enabled", true);
-
-        return {
-            xAxisVisible,
-            gridEnabled,
-            yAxisVisible,
-        };
     }
 }

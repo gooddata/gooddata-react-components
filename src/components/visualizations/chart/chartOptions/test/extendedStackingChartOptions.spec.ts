@@ -1,10 +1,10 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { Execution } from "@gooddata/typings";
 import { getCategoriesForTwoAttributes } from "../extendedStackingChartOptions";
 import { getDrillableSeries, getSeries, IUnwrappedAttributeHeaderWithItems } from "../../chartOptionsBuilder";
 import { barChartWith4MetricsAndViewBy2Attribute } from "../../../../../../stories/test_data/fixtures";
 import { getMVSForViewByTwoAttributes } from "../../test/helper";
-import { MeasureColorStrategy } from "../../colorFactory";
+import MeasureColorStrategy from "../../colorStrategies/measure";
 import { DEFAULT_COLOR_PALETTE } from "../../../utils/color";
 import * as headerPredicateFactory from "../../../../../factory/HeaderPredicateFactory";
 
