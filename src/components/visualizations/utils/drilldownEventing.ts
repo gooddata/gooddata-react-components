@@ -87,14 +87,19 @@ export function fireDrillEvent(onFiredDrillEvent: OnFiredDrillEvent, data: any, 
     }
 }
 
+const getElementChartType = (chartType: ChartType, point: IHighchartsPointObject): ChartType => {
+    return get(point, "series.type", chartType);
+};
+
 const getDrillPoint = (chartType: ChartType) => (point: IHighchartsPointObject): IDrillPointExtended => {
     const customProps: Partial<IDrillPointBase> = isComboChart(chartType)
         ? { type: get(point, "series.type") }
         : {};
 
+    const elementChartType = getElementChartType(chartType, point);
     const result: IDrillPointExtended = {
         x: point.x,
-        y: point.y,
+        y: elementChartType === "bullet" ? point.target : point.y,
         intersection: point.drillIntersection,
         ...customProps,
     };
@@ -130,7 +135,7 @@ function composeDrillContextPoint(
                   value: point.value ? point.value.toString() : "",
               }
             : {};
-    const elementChartType: ChartType = get(point, "series.type", chartType);
+    const elementChartType = getElementChartType(chartType, point);
     const xyProp = isTreemap(chartType)
         ? {}
         : {
