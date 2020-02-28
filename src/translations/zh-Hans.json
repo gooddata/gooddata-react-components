@@ -38,6 +38,8 @@
     "visualization.ErrorDescriptionUnauthorized": "抱歉，您无法访问此洞察。请登录或请求管理员授予权限。",
     "visualization.ErrorMessageNotFound": "抱歉，我们找不到此洞察",
     "visualization.ErrorDescriptionNotFound": "带此 URL 的洞察不存在。",
+    "geo.ErrorMessageLocationMissing": "您的洞察中没有位置",
+    "geo.ErrorDescriptionLocationMissing": "将地理属性添加到您的洞察中，或切换到其他可视化。完成后，您可以保存它。",
     "gs.filter.loading": "正在加载筛选器...",
     "gs.filter.error": "加载筛选器时出错",
     "gs.list.loading": "正在加载列表...",

@@ -38,6 +38,8 @@
     "visualization.ErrorDescriptionUnauthorized": "Désolé, vous n'avez pas accès à cette perception. Connectez-vous ou demandez à votre administrateur de vous accorder les autorisations.",
     "visualization.ErrorMessageNotFound": "Désolé, cette perception est introuvable",
     "visualization.ErrorDescriptionNotFound": "La perception avec cette URL n'existe pas.",
+    "geo.ErrorMessageLocationMissing": "Aucune localisation dans la perception",
+    "geo.ErrorDescriptionLocationMissing": "Ajoutez un attribut géographique à la perception ou utilisez une autre visualisation. Une fois que vous avez terminé, vous pouvez l'enregistrer.",
     "gs.filter.loading": "Chargement du filtre en cours …",
     "gs.filter.error": "Erreur lors du chargement du filtre",
     "gs.list.loading": "Chargement de la liste en cours…",
