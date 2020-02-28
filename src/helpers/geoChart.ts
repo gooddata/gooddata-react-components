@@ -154,7 +154,8 @@ export function getFormatFromExecutionResponse(
 
 // show clusters when there is location attribute only
 export function isClusteringAllowed(geoData: IGeoData): boolean {
-    return geoData.location && Object.keys(geoData).length === 1;
+    const { color, location, segment, size } = geoData;
+    return location && !(color || segment || size);
 }
 
 export function isGeoConfig(config: IChartConfig | IGeoConfig): config is IGeoConfig {

@@ -131,6 +131,14 @@ describe("getGeoData", () => {
             ],
             [
                 true,
+                "tooltipText attribute",
+                {
+                    location: { index: 0, name: "location" },
+                    tooltipText: { index: 1, name: "tooltipText" },
+                },
+            ],
+            [
+                true,
                 "no others",
                 {
                     location: { index: 0, name: "location" },

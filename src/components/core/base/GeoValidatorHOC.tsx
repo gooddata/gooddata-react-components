@@ -2,7 +2,6 @@
 import * as React from "react";
 import isEqual = require("lodash/isEqual");
 import { injectIntl } from "react-intl";
-import { VisualizationObject } from "@gooddata/typings";
 
 import { IGeoChartInnerProps } from "../GeoChart";
 import { IntlWrapper } from "./IntlWrapper";
@@ -30,7 +29,8 @@ export function geoValidatorHOC<T>(InnerComponent: React.ComponentClass<T>): Rea
 
             if (this.isLocationMissing) {
                 const ErrorComponent = this.props.ErrorComponent || DefaultErrorComponent;
-                const errorProps = this.errorMap[ErrorStates.GEO_LOCATION_MISSING];
+                // in this case, we show "Sorry, we can't display this insight"
+                const errorProps = this.errorMap[ErrorStates.UNKNOWN_ERROR];
                 return <ErrorComponent code={ErrorStates.GEO_LOCATION_MISSING} {...errorProps} />;
             }
 
@@ -38,9 +38,10 @@ export function geoValidatorHOC<T>(InnerComponent: React.ComponentClass<T>): Rea
         }
 
         public shouldComponentUpdate(nextProps: IGeoValidatorProps): boolean {
-            const buckets = this.getBucketsFromProps(this.props);
-            const nextBuckets = this.getBucketsFromProps(nextProps);
-            return !isEqual(buckets, nextBuckets);
+            const { config } = this.props;
+            const { config: nextConfig } = nextProps;
+            // check if buckets, filters and config are changed
+            return !isEqual(config, nextConfig);
         }
 
         public componentDidUpdate(): void {
@@ -52,7 +53,9 @@ export function geoValidatorHOC<T>(InnerComponent: React.ComponentClass<T>): Rea
         }
 
         private initError() {
-            const buckets = this.getBucketsFromProps(this.props);
+            const {
+                config: { mdObject: { buckets = [] } = {} },
+            } = this.props;
             this.isLocationMissing = isLocationMissing(buckets);
         }
 
@@ -62,13 +65,6 @@ export function geoValidatorHOC<T>(InnerComponent: React.ComponentClass<T>): Rea
                 onError(new RuntimeError(ErrorStates.GEO_LOCATION_MISSING));
             }
         }
-
-        private getBucketsFromProps = (props: IGeoValidatorProps): VisualizationObject.IBucket[] => {
-            const {
-                config: { mdObject: { buckets = [] } = {} },
-            } = props;
-            return buckets;
-        };
     }
 
     const IntlValidatorHOC = injectIntl<"intl", T & IGeoValidatorProps>(ValidatorHOCWrapped);

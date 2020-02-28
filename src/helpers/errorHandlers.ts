@@ -36,10 +36,6 @@ export function generateErrorMap(intl: IntlShape): IErrorMap {
             message: intl.formatMessage({ id: "visualization.ErrorMessageDataTooLarge" }),
             description: intl.formatMessage({ id: "visualization.ErrorDescriptionDataTooLarge" }),
         },
-        [ErrorStates.GEO_LOCATION_MISSING]: {
-            message: intl.formatMessage({ id: "geo.ErrorMessageLocationMissing" }),
-            description: intl.formatMessage({ id: "geo.ErrorDescriptionLocationMissing" }),
-        },
         [ErrorStates.NOT_FOUND]: {
             message: intl.formatMessage({ id: "visualization.ErrorMessageNotFound" }),
             description: intl.formatMessage({ id: "visualization.ErrorDescriptionNotFound" }),

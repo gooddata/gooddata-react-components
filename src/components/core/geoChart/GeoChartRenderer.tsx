@@ -118,7 +118,7 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
             new mapboxgl.NavigationControl({
                 showCompass: false,
             }),
-            "top-left",
+            "bottom-right",
         );
     };
     private setFilterMap = (): void => {

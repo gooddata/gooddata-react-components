@@ -30,11 +30,11 @@ describe("createPushpinDataLayer", () => {
             ["get", "background", ["object", ["get", "color"]]],
             "rgb(20,178,226)",
         ]);
-        expect(layer.paint["circle-radius"]).toBe(10);
+        expect(layer.paint["circle-radius"]).toBe(4);
         expect(layer.paint["circle-stroke-color"]).toEqual([
             "string",
             ["get", "border", ["object", ["get", "color"]]],
-            "rgb(20,178,226)",
+            "rgb(233,237,241)",
         ]);
     });
 
@@ -75,24 +75,24 @@ describe("createPushpinDataLayer", () => {
         expect(layer.paint["circle-radius"]).toEqual([
             "step",
             ["get", "pushpinRadius"],
-            10,
+            4,
             18,
-            10,
+            4,
             7632.17,
-            28,
+            12,
             15246.33,
-            46,
+            19,
             22860.5,
-            64,
+            26,
             30474.67,
-            82,
+            33,
             38088.83,
-            100,
+            40,
         ]);
         expect(layer.paint["circle-stroke-color"]).toEqual([
             "string",
             ["get", "border", ["object", ["get", "color"]]],
-            "rgb(20,178,226)",
+            "rgb(233,237,241)",
         ]);
     });
 
@@ -130,7 +130,7 @@ describe("createPushpinDataLayer", () => {
         expect(layer.paint["circle-stroke-color"]).toEqual([
             "string",
             ["get", "border", ["object", ["get", "color"]]],
-            "rgb(20,178,226)",
+            "rgb(233,237,241)",
         ]);
     });
 
@@ -176,15 +176,23 @@ describe("createPushpinDataLayer", () => {
                 filter: ["has", "point_count"],
                 id: "gdcClusters",
                 paint: {
-                    "circle-color": ["step", ["get", "point_count"], "#00D398", 9, "#F38700", 99, "#E84C3C"],
-                    "circle-radius": ["step", ["get", "point_count"], 30, 99, 50],
+                    "circle-color": [
+                        "step",
+                        ["get", "point_count"],
+                        "#00D398",
+                        10,
+                        "#F38700",
+                        100,
+                        "#E84C3C",
+                    ],
+                    "circle-radius": ["step", ["get", "point_count"], 15, 100, 25],
                     "circle-stroke-color": [
                         "step",
                         ["get", "point_count"],
                         "#00D398",
-                        9,
+                        10,
                         "#F38700",
-                        99,
+                        100,
                         "#E84C3C",
                     ],
                     "circle-stroke-opacity": 0.2,
@@ -202,6 +210,7 @@ describe("createPushpinDataLayer", () => {
                 layout: {
                     "text-allow-overlap": true,
                     "text-field": "{point_count_abbreviated}",
+                    "text-font": ["Lato Bold"],
                     "text-size": 14,
                 },
                 paint: {
@@ -218,8 +227,8 @@ describe("createPushpinDataLayer", () => {
                 id: "gdcPushpins",
                 paint: {
                     "circle-color": "rgb(20,178,226)",
-                    "circle-radius": 10,
-                    "circle-stroke-color": "rgb(20,178,226)",
+                    "circle-radius": 4,
+                    "circle-stroke-color": "rgb(233,237,241)",
                     "circle-stroke-width": 1,
                 },
                 source: "test_datasource",
