@@ -137,12 +137,11 @@ test("should filter the data formatted in %", async t => {
     await checkCellValue(t, pivotTableSelector, "778,415,730%", CELL_2_1);
 });
 
-// TODO BB-2096 Uncomment the test after BB-1961 webapp changes are in production (currently planned for R198)
-// fixture("Measure Value Filter Errors")
-//     .page(config.url)
-//
-// test("should render error when pivot is configured both with native total and measure value filter", async t => {
-//     await loginUsingLoginForm(`${config.url}/hidden/measure-value-filter-with-native-total`)
-//     await waitForPivotTableStopLoading(t, ".s-pivot-table");
-//     await t.expect(Selector(".s-error").exists).eql(true);
-// });
+fixture("Measure Value Filter Errors")
+    .page(config.url)
+    .beforeEach(loginUsingLoginForm(`${config.url}/hidden/measure-value-filter-with-native-total`));
+
+test("should render error when pivot is configured both with native total and measure value filter", async t => {
+    await waitForPivotTableStopLoading(t, Selector(".s-pivot-table-native-total-mvf"));
+    await t.expect(Selector(".s-error").exists).eql(true);
+});
