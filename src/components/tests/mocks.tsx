@@ -3,19 +3,21 @@ import * as React from "react";
 
 import { IDataSource } from "../../interfaces/DataSource";
 import {
-    oneMeasureResponse,
-    oneMeasureAfm,
-    tooLargeResponse,
-    responseWithTotals,
-    executionObjectWithTotals,
-    oneMeasureOneDimensionResponse,
-    twoMeasuresOneDimensionResponse,
-    twoMeasuresAfm,
     emptyResponse,
-    oneAttributesOneMeasureResponse,
+    enrichedErrorResponse,
+    executionObjectWithTotals,
+    oneAttributeAfm,
+    oneAttributeNoMeasureResponse,
     oneAttributeOneMeasureExecutionObject,
     oneAttributeOneMeasureOneFilterExecutionObject,
-    enrichedErrorResponse,
+    oneAttributesOneMeasureResponse,
+    oneMeasureAfm,
+    oneMeasureOneDimensionResponse,
+    oneMeasureResponse,
+    responseWithTotals,
+    tooLargeResponse,
+    twoMeasuresAfm,
+    twoMeasuresOneDimensionResponse,
 } from "../../execution/fixtures/ExecuteAfm.fixtures";
 
 export const initChartDataLoading = jest.fn(() =>
@@ -86,6 +88,13 @@ export const oneAttributeOneMeasureOneFilterDataSource: IDataSource = {
     getPage: () => Promise.resolve(oneAttributesOneMeasureResponse),
     getAfm: () => oneAttributeOneMeasureOneFilterExecutionObject.execution.afm,
     getFingerprint: () => JSON.stringify(oneAttributesOneMeasureResponse),
+};
+
+export const oneAttributeNoMeasure: IDataSource = {
+    getData: () => Promise.resolve(oneAttributeNoMeasureResponse),
+    getPage: () => Promise.resolve(oneAttributeNoMeasureResponse),
+    getAfm: () => oneAttributeAfm,
+    getFingerprint: () => JSON.stringify(oneAttributeNoMeasureResponse),
 };
 
 export const executionObjectWithTotalsDataSource: IDataSource = {

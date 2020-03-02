@@ -13,6 +13,7 @@ import {
 } from "../PivotTable";
 import {
     executionObjectWithTotalsDataSource,
+    oneAttributeNoMeasure,
     oneAttributeOneMeasureDataSource,
     oneMeasureDataSource,
     twoMeasuresOneDimensionDataSource,
@@ -92,6 +93,22 @@ describe("PivotTable", () => {
 
             await waitFor(waitForDataLoaded(wrapper));
             expect(autoresizeColumns).toHaveBeenCalledTimes(0);
+        });
+
+        it("should auto-resize columns for a table with no measures", done => {
+            const wrapper = renderComponent(
+                {
+                    config: { columnSizing: { defaultWidth: "viewport" } },
+                },
+                oneAttributeNoMeasure,
+            );
+            const table = getTableInstanceFromWrapper(wrapper);
+            const autoresizeColumns = jest.spyOn(table, "autoresizeVisibleColumns");
+            autoresizeColumns.mockImplementation(() => {
+                expect(autoresizeColumns).toHaveBeenCalledTimes(1);
+                done();
+            });
+            wrapper.update();
         });
     });
 

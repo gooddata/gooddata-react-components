@@ -1,5 +1,5 @@
 // (C) 2007-2020 GoodData Corporation
-import { ApiResponseError, ApiExecutionResponseError } from "@gooddata/gooddata-js";
+import { ApiExecutionResponseError, ApiResponseError } from "@gooddata/gooddata-js";
 import { AFM, Execution } from "@gooddata/typings";
 import { MEASUREGROUP } from "../../constants/dimensions";
 
@@ -300,6 +300,15 @@ const twoMeasuresAfm: AFM.IAfm = {
                     },
                 },
             },
+        },
+    ],
+};
+
+const oneAttributeAfm: AFM.IAfm = {
+    attributes: [
+        {
+            displayForm: { uri: "/gdc/md/d20eyb3wfs0xe5l0lfscdnrnyhq1t42q/obj/1027" },
+            localIdentifier: "a1",
         },
     ],
 };
@@ -676,6 +685,125 @@ const oneAttributesOneMeasureResponse: Execution.IExecutionResponses = {
     },
 };
 
+const oneAttributeNoMeasureResponse: Execution.IExecutionResponses = {
+    executionResponse: {
+        dimensions: [
+            {
+                headers: [
+                    {
+                        attributeHeader: {
+                            identifier: "4.df",
+                            uri: "/gdc/md/storybook/obj/4.df",
+                            name: "Colours",
+                            localIdentifier: "a1",
+                            formOf: {
+                                uri: "/gdc/md/storybook/obj/4",
+                                identifier: "4",
+                                name: "Colours",
+                            },
+                        },
+                    },
+                ],
+            },
+            {
+                headers: [],
+            },
+        ],
+        links: {
+            executionResult:
+                "/gdc/app/projects/storybook/executionResults/5dbb0787904d7cd284e2986fd3e30ffd?dimensions=2",
+        },
+    },
+
+    executionResult: {
+        data: [],
+        headerItems: [
+            [
+                [
+                    {
+                        attributeHeaderItem: {
+                            uri: "/gdc/md/storybook/obj/4/elements?id=1",
+                            name: "Pink",
+                        },
+                    },
+                    {
+                        attributeHeaderItem: {
+                            uri: "/gdc/md/storybook/obj/4/elements?id=3",
+                            name: "Purple",
+                        },
+                    },
+                    {
+                        attributeHeaderItem: {
+                            uri: "/gdc/md/storybook/obj/4/elements?id=1",
+                            name: "Pink",
+                        },
+                    },
+                    {
+                        attributeHeaderItem: {
+                            uri: "/gdc/md/storybook/obj/4/elements?id=2",
+                            name: "Red",
+                        },
+                    },
+                    {
+                        attributeHeaderItem: {
+                            uri: "/gdc/md/storybook/obj/4/elements?id=1",
+                            name: "Pink",
+                        },
+                    },
+                    {
+                        attributeHeaderItem: {
+                            uri: "/gdc/md/storybook/obj/4/elements?id=2",
+                            name: "Red",
+                        },
+                    },
+                    {
+                        attributeHeaderItem: {
+                            uri: "/gdc/md/storybook/obj/4/elements?id=3",
+                            name: "Purple",
+                        },
+                    },
+                    {
+                        attributeHeaderItem: {
+                            uri: "/gdc/md/storybook/obj/4/elements?id=4",
+                            name: "Salmon",
+                        },
+                    },
+                    {
+                        attributeHeaderItem: {
+                            uri: "/gdc/md/storybook/obj/4/elements?id=4",
+                            name: "Salmon",
+                        },
+                    },
+                    {
+                        attributeHeaderItem: {
+                            uri: "/gdc/md/storybook/obj/4/elements?id=3",
+                            name: "Purple",
+                        },
+                    },
+                    {
+                        attributeHeaderItem: {
+                            uri: "/gdc/md/storybook/obj/4/elements?id=2",
+                            name: "Red",
+                        },
+                    },
+                    {
+                        attributeHeaderItem: {
+                            uri: "/gdc/md/storybook/obj/4/elements?id=4",
+                            name: "Salmon",
+                        },
+                    },
+                ],
+            ],
+            [],
+        ],
+        paging: {
+            count: [0, 1000],
+            offset: [0, 0],
+            total: [1, 4846],
+        },
+    },
+};
+
 const oneMeasureResponse: Execution.IExecutionResponses = {
     executionResponse: {
         dimensions: [
@@ -823,4 +951,6 @@ export {
     oneAttributeOneMeasureOneFilterExecutionObject,
     oneAttributesOneMeasureResponse,
     oneAttributeOneMeasureSortByMeasureExecutionObject,
+    oneAttributeNoMeasureResponse,
+    oneAttributeAfm,
 };

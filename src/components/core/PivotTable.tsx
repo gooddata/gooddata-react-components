@@ -372,6 +372,10 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         return this.state.execution ? this.state.execution.executionResponse : null;
     };
 
+    private getExecutionResult = () => {
+        return this.state.execution ? this.state.execution.executionResult : null;
+    };
+
     private getAfmFilters = () => {
         return this.props.dataSource.getAfm().filters || [];
     };
@@ -455,14 +459,20 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     };
 
     private autoresizeColumns = (event: AgGridEvent) => {
-        const skipResizing =
-            !this.state.execution ||
-            this.state.resized ||
-            this.resizing ||
-            event.api.getRenderedNodes().length === 0 ||
+        const alreadyResized = () => this.state.resized || this.resizing;
+        const dataNotRendered = () => {
+            const executionResult = this.getExecutionResult();
+            return (
+                executionResult &&
+                executionResult.data.length > 0 &&
+                event.api.getRenderedNodes().length === 0
+            );
+        };
+        const tablePageNotLoaded = () =>
             event.api.getCacheBlockState()[0] === undefined ||
             event.api.getCacheBlockState()[0].pageStatus !== "loaded";
-        if (skipResizing) {
+
+        if (!this.state.execution || alreadyResized() || dataNotRendered() || tablePageNotLoaded()) {
             return;
         }
 
