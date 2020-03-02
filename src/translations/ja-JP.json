@@ -38,6 +38,8 @@
     "visualization.ErrorDescriptionUnauthorized": "申し訳ございません。このインサイトへのアクセス権がありません。ログインするか、管理者に権限を付与してもらうよう依頼してください。",
     "visualization.ErrorMessageNotFound": "申し訳ございません。このインサイトが見つかりません。",
     "visualization.ErrorDescriptionNotFound": "この URL の解析は存在しません。",
+    "geo.ErrorMessageLocationMissing": "このインサイトに位置情報がありません",
+    "geo.ErrorDescriptionLocationMissing": "インサイトにジオ属性を追加するには別の描画に切り替えてください。一旦切り替えたら保存できます。",
     "gs.filter.loading": "フィルターを読み込み中…",
     "gs.filter.error": "フィルターの読み込みエラー",
     "gs.list.loading": "リストを読み込み中…",
