@@ -109,6 +109,21 @@ storiesOf("Core components/GeoPushpinChart", module)
             }),
         ),
     )
+    .add("with location and size, color contains same values", () => {
+        const config: IGeoConfig = {
+            ...DEFAULT_CONFIG,
+            tooltipText: ATTRIBUTE_TOOLTIP_GEOCHART,
+        };
+        return screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                size: MEASURE_SIZE_GEOCHART,
+                color: MEASURE_COLOR_GEOCHART,
+                config,
+            }),
+        );
+    })
     .add("with location, size, color, segmentBy and tooltipText", () => {
         const config: IGeoConfig = {
             ...DEFAULT_CONFIG,

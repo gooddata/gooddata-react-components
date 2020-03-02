@@ -47,6 +47,10 @@ function createPushpinSizeOptions(
     const sizeMax: number = Math.max(...sizeData);
     const sizeMin: number = Math.min(...sizeData);
 
+    if (sizeMax === sizeMin) {
+        return DEFAULT_PUSHPIN_SIZE_VALUE;
+    }
+
     const sizesCount = DEFAULT_PUSHPIN_SIZE_SCALE.length;
     const sizeStep = (sizeMax - sizeMin) / sizesCount;
 
