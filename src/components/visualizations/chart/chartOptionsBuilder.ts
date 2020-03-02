@@ -156,6 +156,7 @@ export const supportedDualAxesChartTypes = [
     VisualizationTypes.COLUMN,
     VisualizationTypes.BAR,
     VisualizationTypes.LINE,
+    VisualizationTypes.BULLET,
     VisualizationTypes.AREA,
     VisualizationTypes.COMBO,
     VisualizationTypes.COMBO2,

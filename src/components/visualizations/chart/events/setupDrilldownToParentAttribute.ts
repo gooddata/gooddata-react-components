@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import get = require("lodash/get");
 import partial = require("lodash/partial");
 import Highcharts from "../highcharts/highchartsEntryPoint";
@@ -54,6 +54,7 @@ function setParentTickDrillable(
 }
 
 export function setupDrilldown(chart: Highcharts.Chart) {
+    console.log("chart: ", chart);
     const xAxes: any[] = (chart && chart.xAxis) || [];
     const axis = xAxes[0];
     if (!axis) {

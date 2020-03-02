@@ -401,14 +401,14 @@ storiesOf("Core components/BulletChart", module)
                     primaryMeasure={MEASURE_1}
                     targetMeasure={MEASURE_2}
                     comparativeMeasure={MEASURE_3}
-                    viewBy={[ATTRIBUTE_1]}
+                    viewBy={[ATTRIBUTE_2, ATTRIBUTE_1]}
                     onError={onErrorHandler}
                     LoadingComponent={null}
                     ErrorComponent={null}
                     drillableItems={[
                         HeaderPredicateFactory.uriMatch("/gdc/md/storybook/obj/1"),
                         HeaderPredicateFactory.uriMatch("/gdc/md/storybook/obj/2"),
-                        HeaderPredicateFactory.uriMatch("/gdc/md/storybook/obj/3"),
+                        HeaderPredicateFactory.uriMatch("/gdc/md/storybook/obj/5/"),
                     ]}
                 />
             </div>,
