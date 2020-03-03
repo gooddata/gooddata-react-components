@@ -29,7 +29,7 @@ import { IGeoConfig, IGeoData } from "../../../interfaces/GeoChart";
 
 import "../../../../styles/scss/geoChart.scss";
 import { handlePushpinMouseEnter, handlePushpinMouseLeave } from "./geoChartTooltip";
-import { isClusteringAllowed } from "../../../helpers/geoChart";
+import { isClusteringAllowed } from "../../../helpers/geoChart/common";
 
 export interface IGeoChartRendererProps {
     config: IGeoConfig;
@@ -131,15 +131,17 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
     };
     private handleMapEvent = () => {
         const { chart, tooltip } = this;
+        const {
+            config: { separators },
+        } = this.props;
         chart.on("load", this.setupMap);
-        chart.on("mouseenter", DEFAULT_LAYER_NAME, handlePushpinMouseEnter(chart, tooltip));
+        chart.on("mouseenter", DEFAULT_LAYER_NAME, handlePushpinMouseEnter(chart, tooltip, separators));
         chart.on("mouseleave", DEFAULT_LAYER_NAME, handlePushpinMouseLeave(chart, tooltip));
     };
 
     private setupMap = (): void => {
         const { chart } = this;
         const {
-            execution: { executionResult },
             config: { selectedSegmentItems },
             geoData,
         } = this.props;
@@ -149,16 +151,11 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
             this.chart.removeLayer("settlement-label");
         }
 
-        chart.addSource(DEFAULT_DATA_SOURCE_NAME, createPushpinDataSource(executionResult, geoData));
+        chart.addSource(DEFAULT_DATA_SOURCE_NAME, createPushpinDataSource(geoData));
 
         if (!isClusteringAllowed(geoData)) {
             chart.addLayer(
-                createPushpinDataLayer(
-                    DEFAULT_DATA_SOURCE_NAME,
-                    executionResult,
-                    geoData,
-                    selectedSegmentItems,
-                ),
+                createPushpinDataLayer(DEFAULT_DATA_SOURCE_NAME, geoData, selectedSegmentItems),
                 "state-label", // pushpin will be rendered under state/county label
             );
         } else {

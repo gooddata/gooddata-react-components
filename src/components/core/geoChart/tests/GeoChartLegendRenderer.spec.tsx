@@ -4,16 +4,23 @@ import { mount } from "enzyme";
 import { withIntl } from "../../../visualizations/utils/intlUtils";
 import GeoChartLegendRenderer, { IGeoChartLegendRendererProps } from "../GeoChartLegendRenderer";
 import { IGeoData } from "../../../../interfaces/GeoChart";
-import { calculateLegendData } from "../geoChartDataSource";
+
+import PushpinSizeLegend from "../legends/PushpinSizeLegend";
+import PushpinCategoryLegend from "../legends/PushpinCategoryLegend";
+import { getGeoData } from "../../../../helpers/geoChart/data";
+import {
+    LOCATION_STRINGS,
+    SIZE_NUMBERS,
+    COLOR_NUMBERS,
+    getExecutionResponse,
+    getGeoConfig,
+    getExecutionResult,
+} from "../../../../../stories/data/geoChart";
 
 interface ILegendFlags {
     hasSizeLegend?: boolean;
     hasColorLegend?: boolean;
 }
-import PushpinSizeLegend from "../legends/PushpinSizeLegend";
-import PushpinCategoryLegend from "../legends/PushpinCategoryLegend";
-import { getGeoData } from "../../../../helpers/geoChart";
-import { getExecutionResponse, getExecutionResult, getGeoConfig } from "../../../../../stories/data/geoChart";
 
 function createComponent(customProps: IGeoChartLegendRendererProps) {
     const legendProps = {
@@ -30,28 +37,25 @@ function getLegendProps(legendFlags: ILegendFlags): IGeoChartLegendRendererProps
             ? {
                   index: 0,
                   name: "size",
+                  data: SIZE_NUMBERS,
+                  format: "#,##0",
               }
             : undefined,
         color: hasColorLegend
             ? {
                   index: hasSizeLegend ? 1 : 0,
                   name: "color",
+                  data: COLOR_NUMBERS,
+                  format: "#,##0",
               }
             : undefined,
         location: {
             index: 0,
             name: "location",
+            data: LOCATION_STRINGS,
         },
     };
-    const executionResult = getExecutionResult(true, false, false, hasSizeLegend, hasColorLegend);
-    const { sizeData, colorData } = calculateLegendData(executionResult, geoData);
-    const sizeFormat = "#,##0";
-    const colorFormat = "#,##0";
     return {
-        sizeData,
-        sizeFormat,
-        colorData,
-        colorFormat,
         geoData,
         config: getGeoConfig({ isWithLocation: true, isWithSize: hasSizeLegend }),
     };
@@ -89,16 +93,16 @@ describe("GeoChartLegendRenderer", () => {
     it("should render Size and Category legend ", () => {
         const execution = {
             executionResponse: getExecutionResponse(true, true, false, true),
+            executionResult: getExecutionResult(true, true, false, true),
         };
         const config = getGeoConfig({ isWithLocation: true, isWithSize: true, isWithSegment: true });
         const { mdObject: { buckets = [] } = {} } = config;
-        const geoData = getGeoData(buckets, execution.executionResponse.dimensions);
+        const geoData = getGeoData(buckets, execution);
 
         const props: IGeoChartLegendRendererProps = {
             config,
             geoData,
-            sizeData: [1],
-            segmentData: [
+            categoryItems: [
                 {
                     name: "a",
                     color: "",

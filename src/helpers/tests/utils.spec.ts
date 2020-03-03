@@ -1,5 +1,5 @@
-// (C) 2007-2019 GoodData Corporation
-import { getObjectIdFromUri, setTelemetryHeaders, percentFormatter, unwrap } from "../utils";
+// (C) 2007-2020 GoodData Corporation
+import { getObjectIdFromUri, setTelemetryHeaders, percentFormatter, unwrap, getMinMax } from "../utils";
 import { factory as createSdk } from "@gooddata/gooddata-js";
 
 describe("getObjectIdFromUri", () => {
@@ -41,5 +41,41 @@ describe("percentFormatter", () => {
 describe("unwrap", () => {
     it("should unwrap an object", () => {
         expect(unwrap({ key: "value" })).toEqual("value");
+    });
+});
+
+describe("getMinMax", () => {
+    it("should return empty min/max", () => {
+        const data: number[] = [NaN, null, undefined];
+        expect(getMinMax(data)).toEqual({});
+    });
+
+    it("should return min/max", () => {
+        const data: number[] = [100, 10, 0];
+        expect(getMinMax(data)).toEqual({
+            min: 0,
+            max: 100,
+        });
+    });
+
+    it("should return min/max with ignoring null or NaN values", () => {
+        const data: number[] = [NaN, 100, 10, 0, null, undefined];
+        expect(getMinMax(data)).toEqual({
+            min: 0,
+            max: 100,
+        });
+    });
+
+    it("should return min === max", () => {
+        const data: number[] = [NaN, null, undefined, 0, 0];
+        expect(getMinMax(data)).toEqual({ min: 0, max: 0 });
+    });
+
+    it("should return min/max with negative value", () => {
+        const data: number[] = [NaN, 100, 10, 0, null, undefined, -50, -100];
+        expect(getMinMax(data)).toEqual({
+            min: -100,
+            max: 100,
+        });
     });
 });

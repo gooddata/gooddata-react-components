@@ -1,5 +1,4 @@
 // (C) 2020 GoodData Corporation
-import { Execution } from "@gooddata/typings";
 import { IPushpinColor } from "../../../../interfaces/GeoChart";
 import {
     getColorIndexInPalette,
@@ -9,24 +8,14 @@ import {
 } from "../geoChartColor";
 
 describe("getPushpinColors", () => {
-    function createSegmentItems(count: number): Execution.IResultAttributeHeaderItem[] {
+    function createSegmentItems(count: number): string[] {
         return Array(count)
             .fill(0)
-            .map(
-                (_item: number, index: number): Execution.IResultAttributeHeaderItem => ({
-                    attributeHeaderItem: {
-                        uri: `uri_${index}`,
-                        name: `name_${index}`,
-                    },
-                }),
-            );
+            .map((_item: number, index: number): string => `name_${index}`);
     }
 
     it("should return pushpin RGB colors", () => {
-        const duplicatedSegmentItems: Execution.IResultAttributeHeaderItem[] = [
-            ...createSegmentItems(5),
-            ...createSegmentItems(5),
-        ];
+        const duplicatedSegmentItems: string[] = [...createSegmentItems(5), ...createSegmentItems(5)];
         const colors: number[] = [10, 20, 30, 40, 50, 10, 20, 30, 40, 50];
         const expectedColors: IPushpinColor[] = [
             { background: "rgb(215,242,250)", border: "rgb(20,178,226)" },
@@ -54,7 +43,7 @@ describe("getPushpinColors", () => {
     });
 
     it("should return pushpin RGB colors with null value with segment", () => {
-        const segmentItems: Execution.IResultAttributeHeaderItem[] = createSegmentItems(5);
+        const segmentItems: string[] = createSegmentItems(5);
         const colors: number[] = [10, null, 30, 40, 50];
         const expectedColors: IPushpinColor[] = [
             { background: "rgb(215,242,250)", border: "rgb(20,178,226)" },
@@ -80,22 +69,7 @@ describe("getPushpinColors", () => {
 
     it("should return pushpin RGB colors with null value with some null segment items", () => {
         const colors: number[] = [10, null, 30, 40, null, null];
-        const segmentItems: Execution.IResultAttributeHeaderItem[] = [
-            ...createSegmentItems(2),
-            ...createSegmentItems(2),
-            {
-                attributeHeaderItem: {
-                    uri: "uri_5",
-                    name: "",
-                },
-            },
-            {
-                attributeHeaderItem: {
-                    uri: "uri_6",
-                    name: undefined,
-                },
-            },
-        ];
+        const segmentItems: string[] = [...createSegmentItems(2), ...createSegmentItems(2), "", undefined];
         const expectedColors: IPushpinColor[] = [
             { background: "rgb(215,242,250)", border: "rgb(20,178,226)" },
             { background: "rgb(212,244,236)", border: "rgb(0,193,141)" },

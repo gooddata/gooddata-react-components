@@ -1,6 +1,5 @@
 // (C) 2019-2020 GoodData Corporation
 import mapboxgl from "mapbox-gl";
-import { Execution } from "@gooddata/typings";
 import {
     createPushpinDataLayer,
     createClusterLabels,
@@ -8,7 +7,7 @@ import {
     createUnclusterPoints,
 } from "../geoChartDataLayers";
 import { IGeoData } from "../../../../interfaces/GeoChart";
-import { getExecutionResult } from "../../../../../stories/data/geoChart";
+import { LOCATION_STRINGS, SIZE_NUMBERS } from "../../../../../stories/data/geoChart";
 
 describe("createPushpinDataLayer", () => {
     const dataSourceName: string = "test_datasource";
@@ -18,13 +17,10 @@ describe("createPushpinDataLayer", () => {
             location: {
                 index: 0,
                 name: "location",
+                data: [],
             },
         };
-        const layer: mapboxgl.Layer = createPushpinDataLayer(
-            dataSourceName,
-            getExecutionResult(true),
-            geoData,
-        );
+        const layer: mapboxgl.Layer = createPushpinDataLayer(dataSourceName, geoData);
 
         expect(layer.paint["circle-color"]).toEqual([
             "string",
@@ -44,65 +40,22 @@ describe("createPushpinDataLayer", () => {
             size: {
                 index: 0,
                 name: "size",
+                data: [1, 1, 1],
+                format: "#,##0.00",
             },
             color: {
                 index: 1,
                 name: "color",
+                data: [10, 10, 10],
+                format: "#,##0.00",
             },
             location: {
                 index: 0,
                 name: "location",
+                data: ["44.500000;-89.500000", "44.500000;-89.500000", "44.500000;-89.500000"],
             },
         };
-        const excutionResult: Execution.IExecutionResult = {
-            data: [Array(3).fill(1), Array(3).fill(10)],
-            headerItems: [
-                [
-                    [
-                        {
-                            measureHeaderItem: {
-                                name: "Size",
-                                order: 0,
-                            },
-                        },
-                        {
-                            measureHeaderItem: {
-                                name: "Color",
-                                order: 1,
-                            },
-                        },
-                    ],
-                ],
-                [
-                    [
-                        {
-                            attributeHeaderItem: {
-                                name: "44.500000;-89.500000",
-                                uri: "/gdc/md/projectId/obj/694/elements?id=1808",
-                            },
-                        },
-                        {
-                            attributeHeaderItem: {
-                                name: "44.500000;-89.500000",
-                                uri: "/gdc/md/projectId/obj/694/elements?id=1809",
-                            },
-                        },
-                        {
-                            attributeHeaderItem: {
-                                name: "44.500000;-89.500000",
-                                uri: "/gdc/md/projectId/obj/694/elements?id=1810",
-                            },
-                        },
-                    ],
-                ],
-            ],
-            paging: {
-                count: [2, 3],
-                offset: [0, 0],
-                total: [2, 3],
-            },
-        };
-        const layer: mapboxgl.Layer = createPushpinDataLayer(dataSourceName, excutionResult, geoData);
+        const layer: mapboxgl.Layer = createPushpinDataLayer(dataSourceName, geoData);
 
         expect(layer.paint["circle-color"]).toEqual([
             "string",
@@ -122,29 +75,32 @@ describe("createPushpinDataLayer", () => {
             size: {
                 index: 0,
                 name: "size",
+                format: "#,##0",
+                data: SIZE_NUMBERS,
             },
             color: {
                 index: 1,
                 name: "color",
+                format: "#,##0",
+                data: [],
             },
             location: {
                 index: 0,
                 name: "location",
+                data: LOCATION_STRINGS,
             },
             segment: {
                 index: 1,
                 name: "segment",
+                data: [],
             },
             tooltipText: {
                 index: 2,
                 name: "tooltipText",
+                data: [],
             },
         };
-        const layer: mapboxgl.Layer = createPushpinDataLayer(
-            dataSourceName,
-            getExecutionResult(true, true, true, true, true),
-            geoData,
-        );
+        const layer: mapboxgl.Layer = createPushpinDataLayer(dataSourceName, geoData);
 
         expect(layer.paint["circle-color"]).toEqual([
             "string",
@@ -180,25 +136,27 @@ describe("createPushpinDataLayer", () => {
             size: {
                 index: 0,
                 name: "size",
+                format: "#,##0",
+                data: [],
             },
             color: {
                 index: 1,
                 name: "color",
+                format: "#,##0",
+                data: [],
             },
             location: {
                 index: 0,
                 name: "location",
+                data: [],
             },
             segment: {
                 index: 1,
                 name: "segment",
+                data: [],
             },
         };
-        const layer: mapboxgl.Layer = createPushpinDataLayer(
-            dataSourceName,
-            getExecutionResult(true, true, false, true, true),
-            geoData,
-        );
+        const layer: mapboxgl.Layer = createPushpinDataLayer(dataSourceName, geoData);
 
         expect(layer.paint["circle-color"]).toEqual([
             "string",
@@ -218,27 +176,28 @@ describe("createPushpinDataLayer", () => {
             size: {
                 index: 0,
                 name: "size",
+                format: "#,##0",
+                data: [],
             },
             color: {
                 index: 1,
                 name: "color",
+                format: "#,##0",
+                data: [],
             },
             location: {
                 index: 0,
                 name: "location",
+                data: [],
             },
             segment: {
                 index: 1,
                 name: "segment",
+                data: [],
             },
         };
         const selectedSegmentItems = ["Hawaii", "HCM"];
-        const layer: mapboxgl.Layer = createPushpinDataLayer(
-            dataSourceName,
-            getExecutionResult(true, true, false, true, true),
-            geoData,
-            selectedSegmentItems,
-        );
+        const layer: mapboxgl.Layer = createPushpinDataLayer(dataSourceName, geoData, selectedSegmentItems);
 
         expect(layer.filter).toEqual([
             "match",

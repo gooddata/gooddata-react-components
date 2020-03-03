@@ -2,6 +2,8 @@
 import { Execution, VisualizationObject } from "@gooddata/typings";
 import { IGeoConfig } from "../../src/interfaces/GeoChart";
 import { measure, attribute } from "../../src/helpers/model";
+import { stringToFloat } from "../../src/helpers/utils";
+import { getHeaderItemName } from "../../src/helpers/executionResultHelper";
 
 interface IGeoOptions {
     isWithLocation?: boolean;
@@ -11,7 +13,7 @@ interface IGeoOptions {
     isWithColor?: boolean;
 }
 
-export const SIZE_DATA: Execution.DataValue[] = [
+export const SIZE_AFM_DATA: Execution.DataValue[] = [
     "1005",
     "943",
     "179",
@@ -63,7 +65,7 @@ export const SIZE_DATA: Execution.DataValue[] = [
     "6832",
     "528",
 ];
-const COLOR_DATA: Execution.DataValue[] = [
+export const COLOR_AFM_DATA: Execution.DataValue[] = [
     "528",
     "6832",
     "3294",
@@ -116,7 +118,7 @@ const COLOR_DATA: Execution.DataValue[] = [
     "1005",
 ];
 
-const LOCATION_DATA: Execution.IResultAttributeHeaderItem[] = [
+const LOCATION_AFM_DATA: Execution.IResultAttributeHeaderItem[] = [
     {
         attributeHeaderItem: {
             name: "44.500000;-89.500000",
@@ -418,7 +420,7 @@ const LOCATION_DATA: Execution.IResultAttributeHeaderItem[] = [
         },
     },
 ];
-const SEGMENT_BY_DATA: Execution.IResultAttributeHeaderItem[] = [
+const SEGMENT_AFM_DATA: Execution.IResultAttributeHeaderItem[] = [
     {
         attributeHeaderItem: {
             name: "General Goods",
@@ -720,7 +722,7 @@ const SEGMENT_BY_DATA: Execution.IResultAttributeHeaderItem[] = [
         },
     },
 ];
-const TOOLTIP_TEXT_DATA: Execution.IResultAttributeHeaderItem[] = [
+const TOOLTIP_TEXT_AFM_DATA: Execution.IResultAttributeHeaderItem[] = [
     {
         attributeHeaderItem: {
             name: "Wisconsin",
@@ -1023,6 +1025,10 @@ const TOOLTIP_TEXT_DATA: Execution.IResultAttributeHeaderItem[] = [
     },
 ];
 
+export const SIZE_NUMBERS: number[] = SIZE_AFM_DATA.map(stringToFloat);
+export const COLOR_NUMBERS: number[] = COLOR_AFM_DATA.map(stringToFloat);
+export const LOCATION_STRINGS: string[] = LOCATION_AFM_DATA.map(getHeaderItemName);
+
 export function getExecutionResult(
     isWithLocation = false,
     isWithSegment = false,
@@ -1035,7 +1041,7 @@ export function getExecutionResult(
     const attrHeaderItems: Execution.IResultAttributeHeaderItem[][] = [];
 
     if (isWithSize) {
-        data.push(SIZE_DATA);
+        data.push(SIZE_AFM_DATA);
         metricHeaderItems.push({
             measureHeaderItem: {
                 name: "PushPin Value [Size]",
@@ -1045,7 +1051,7 @@ export function getExecutionResult(
     }
 
     if (isWithColor) {
-        data.push(COLOR_DATA);
+        data.push(COLOR_AFM_DATA);
         metricHeaderItems.push({
             measureHeaderItem: {
                 name: "PushPin Value [Color]",
@@ -1055,15 +1061,15 @@ export function getExecutionResult(
     }
 
     if (isWithLocation) {
-        attrHeaderItems.push(LOCATION_DATA);
+        attrHeaderItems.push(LOCATION_AFM_DATA);
     }
 
     if (isWithSegment) {
-        attrHeaderItems.push(SEGMENT_BY_DATA);
+        attrHeaderItems.push(SEGMENT_AFM_DATA);
     }
 
     if (isWithTooltipText) {
-        attrHeaderItems.push(TOOLTIP_TEXT_DATA);
+        attrHeaderItems.push(TOOLTIP_TEXT_AFM_DATA);
     }
 
     const headerItems: Execution.IResultHeaderItem[][][] = [[...attrHeaderItems]];

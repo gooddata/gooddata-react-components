@@ -1,8 +1,10 @@
 // (C) 2007-2020 GoodData Corporation
 import isObject = require("lodash/isObject");
+import isFinite = require("lodash/isFinite");
 import { SDK } from "@gooddata/gooddata-js";
 import isNil = require("lodash/isNil");
 import { name as pkgName, version as pkgVersion } from "../../package.json";
+import { IMinMax } from "../interfaces/Utils";
 
 export function setTelemetryHeaders(sdk: SDK, componentName: string, props: object) {
     sdk.config.setJsPackage(pkgName, pkgVersion);
@@ -40,4 +42,22 @@ export function stringToFloat(text: string): number {
         console.warn(`SDK: utils - stringToFloat: ${text} is not a number`);
     }
     return parsedNumber;
+}
+
+/**
+ * Get min/max values in number array and ignore NaN values
+ * @param data
+ */
+export function getMinMax(data: number[]): IMinMax {
+    return data.reduce((result: IMinMax, value: number): IMinMax => {
+        if (!isFinite(value)) {
+            return result;
+        }
+        const min = isFinite(result.min) ? Math.min(value, result.min) : value;
+        const max = isFinite(result.max) ? Math.max(value, result.max) : value;
+        return {
+            min,
+            max,
+        };
+    }, {});
 }

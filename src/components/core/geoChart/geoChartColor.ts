@@ -1,9 +1,8 @@
 // (C) 2020 GoodData Corporation
 import uniq = require("lodash/uniq");
 import range = require("lodash/range");
-import isNumber = require("lodash/isNumber");
+import isEmpty = require("lodash/isEmpty");
 import isFinite = require("lodash/isFinite");
-import { Execution } from "@gooddata/typings";
 import { DEFAULT_COLORS, getColorPalette } from "../../visualizations/utils/color";
 import {
     DEFAULT_PUSHPIN_BORDER_COLOR_VALUE,
@@ -11,16 +10,15 @@ import {
     DEFAULT_PUSHPIN_COLOR_VALUE,
     EMPTY_SEGMENT_ITEM,
 } from "../../../constants/geoChart";
-import { getHeaderItemName } from "../../../helpers/executionResultHelper";
 import { IObjectMapping, IPushpinColor } from "../../../interfaces/GeoChart";
 import { IColorLegendItem } from "../../visualizations/typings/legend";
-import isEmpty = require("lodash/isEmpty");
+import { getMinMax } from "../../../helpers/utils";
 
 const DEFAULT_SEGMENT_ITEM = "default_segment_item";
 const DEFAULT_COLOR_INDEX_IN_PALETTE = DEFAULT_PUSHPIN_COLOR_SCALE - 1;
 
 export function getColorIndexInPalette(value: number, min: number, max: number): number {
-    if (!isNumber(value) || min === max || value === min) {
+    if (!isFinite(value) || min === max || value === min) {
         return 0;
     }
 
@@ -74,25 +72,17 @@ export function getColorPaletteMapping(segmentItems: string[] = []): IObjectMapp
  *           background: "rgb(215,242,250)",
  *      }]
  * @param colorValues
- * @param segmentItems
+ * @param segmentValues
  */
-export function getPushpinColors(
-    colorValues: number[],
-    segmentItems: Execution.IResultHeaderItem[] = [],
-): IPushpinColor[] {
-    if (!colorValues.length && !segmentItems.length) {
+export function getPushpinColors(colorValues: number[], segmentValues: string[] = []): IPushpinColor[] {
+    if (!colorValues.length && !segmentValues.length) {
         return [];
     }
-    const segmentItemNames: string[] = segmentItems.map(
-        (item: Execution.IResultHeaderItem): string => {
-            const name: string = getHeaderItemName(item);
-            return name || EMPTY_SEGMENT_ITEM;
-        },
-    );
-    const uniqSegmentItems: string[] = uniq(segmentItemNames);
-    const colorPaletteMapping = getColorPaletteMapping(uniqSegmentItems);
+    const segmentNames: string[] = segmentValues.map((value: string): string => value || EMPTY_SEGMENT_ITEM);
+    const uniqSegmentNames: string[] = uniq(segmentNames);
+    const colorPaletteMapping = getColorPaletteMapping(uniqSegmentNames);
     if (!colorValues.length) {
-        return segmentItemNames.map(
+        return segmentNames.map(
             (name: string): IPushpinColor => {
                 const palette = colorPaletteMapping[name];
                 return {
@@ -105,9 +95,8 @@ export function getPushpinColors(
 
     const colorsWithoutNull = colorValues.filter(isFinite);
 
-    const min = Math.min(...colorsWithoutNull);
-    const max = Math.max(...colorsWithoutNull);
-    if (min === max && !segmentItems.length) {
+    const { min, max } = getMinMax(colorsWithoutNull);
+    if (min === max && !segmentValues.length) {
         return [
             {
                 border: DEFAULT_PUSHPIN_BORDER_COLOR_VALUE,
@@ -118,9 +107,9 @@ export function getPushpinColors(
 
     return colorValues.map(
         (color: number, index: number): IPushpinColor => {
-            const value = isNumber(color) ? color : min;
+            const value = isFinite(color) ? color : min;
             const colorIndex = getColorIndexInPalette(value, min, max);
-            const segmentItemName = segmentItemNames[index] || DEFAULT_SEGMENT_ITEM;
+            const segmentItemName = segmentNames[index] || DEFAULT_SEGMENT_ITEM;
             const palette = colorPaletteMapping[segmentItemName];
             return {
                 border: palette[DEFAULT_COLOR_INDEX_IN_PALETTE],
