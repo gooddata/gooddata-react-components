@@ -1,5 +1,6 @@
 // (C) 2007-2020 GoodData Corporation
 import * as React from "react";
+import cx from "classnames";
 import get = require("lodash/get");
 import isEqual = require("lodash/isEqual");
 import noop = require("lodash/noop");
@@ -99,19 +100,33 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
     public createMap = () => {
         const { config } = this.props;
         const center = get(config, "center", [DEFAULT_LONGITUDE, DEFAULT_LATITUDE] as [number, number]);
+        const isExportMode = this.isExportMode();
         const zoom = get(config, "zoom", DEFAULT_ZOOM);
 
         this.chart = new mapboxgl.Map({
             ...DEFAULT_MAPBOX_OPTIONS,
             container: this.chartRef,
             center,
+            // If true, the map’s canvas can be exported to a PNG using map.getCanvas().toDataURL().
+            // This is false by default as a performance optimization.
+            preserveDrawingBuffer: isExportMode,
             zoom,
         });
     };
 
     public render() {
-        return <div className="s-gd-geo-chart-renderer mapbox-container" ref={this.setChartRef} />;
+        const isExportMode = this.isExportMode();
+        const classNames = cx("s-gd-geo-chart-renderer", "mapbox-container", {
+            isExportMode,
+            "s-isExportMode": isExportMode,
+        });
+        return <div className={classNames} ref={this.setChartRef} />;
     }
+
+    private isExportMode = (): boolean => {
+        const { config } = this.props;
+        return get(config, "isExportMode", false);
+    };
 
     private createMapControls = () => {
         this.chart.addControl(
@@ -141,15 +156,15 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
     };
 
     private setupMap = (): void => {
-        const { chart } = this;
+        const { chart, handleLayerLoaded, props } = this;
         const {
             config: { selectedSegmentItems },
             geoData,
-        } = this.props;
+        } = props;
 
         // hide city, town, village and hamlet labels
-        if (this.chart.getLayer("settlement-label")) {
-            this.chart.removeLayer("settlement-label");
+        if (chart.getLayer("settlement-label")) {
+            chart.removeLayer("settlement-label");
         }
 
         chart.addSource(DEFAULT_DATA_SOURCE_NAME, createPushpinDataSource(geoData));
@@ -167,7 +182,7 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         }
 
         // keep listening to the data event until the style is loaded
-        chart.on("data", this.handleLayerLoaded);
+        chart.on("data", handleLayerLoaded);
     };
 
     private handleLayerLoaded = () => {

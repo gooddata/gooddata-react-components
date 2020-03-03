@@ -15,12 +15,18 @@
     }
     &.flex-direction-column {
         flex-direction: column;
+
         .geo-legend {
             flex: 1 0 auto;
         }
+
         .mapbox-container {
             flex: 1 1 auto;
             overflow: visible;
+
+            .mapboxgl-canvas {
+                outline: none;
+            }
         }
     }
     &.flex-direction-row {
@@ -128,4 +134,10 @@
 .mapboxgl-popup-content {
     padding: 0;
     pointer-events: none;
+}
+
+// this will fix the scale problem of mapbox canvas when exporting
+.isExportMode .mapboxgl-canvas {
+    width: 100% !important;
+    height: 100% !important;
 }

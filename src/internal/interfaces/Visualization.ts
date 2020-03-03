@@ -314,4 +314,5 @@ export interface IVisualization {
 export interface IGdcConfig {
     separators?: ISeparators;
     colorPalette?: IColorPalette;
+    isExportMode?: boolean;
 }
