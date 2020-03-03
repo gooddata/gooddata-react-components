@@ -165,4 +165,22 @@ describe("PluggableBulletChart", () => {
             properties: {},
         });
     });
+
+    describe("isError property", () => {
+        it("should set to true if primary measure is missing", async () => {
+            await bulletChart.getExtendedReferencePoint(
+                referencePointMocks.secondaryMeasuresAndAttributeReferencePoint,
+            );
+
+            expect((bulletChart as any).isError).toEqual(true);
+        });
+
+        it("should set to true if primary measure is missing", async () => {
+            await bulletChart.getExtendedReferencePoint(
+                referencePointMocks.multipleMetricsNoCategoriesReferencePoint,
+            );
+
+            expect((bulletChart as any).isError).toEqual(false);
+        });
+    });
 });

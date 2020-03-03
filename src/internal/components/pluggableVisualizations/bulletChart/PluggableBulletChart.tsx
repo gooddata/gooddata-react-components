@@ -123,6 +123,12 @@ export class PluggableBulletChart extends PluggableBaseChart {
         );
         newReferencePoint = removeSort(newReferencePoint);
 
+        this.setPrimaryMeasureIsMissingError(
+            primaryMeasuresBucketItems,
+            secondaryMeasuresBucketItems,
+            tertiaryMeasuresBucketItems,
+        );
+
         return Promise.resolve(sanitizeFilters(newReferencePoint));
     }
 
@@ -145,5 +151,14 @@ export class PluggableBulletChart extends PluggableBaseChart {
                 document.querySelector(this.configPanelElement),
             );
         }
+    }
+
+    private setPrimaryMeasureIsMissingError(
+        primaryMeasures: IBucketItem[],
+        secondaryMeasures: IBucketItem[],
+        tertiaryMeasures: IBucketItem[],
+    ): void {
+        this.isError =
+            primaryMeasures.length === 0 && (secondaryMeasures.length > 0 || tertiaryMeasures.length > 0);
     }
 }

@@ -8,6 +8,7 @@ import ConfigSection from "../../configurationControls/ConfigSection";
 import { DEFAULT_LOCALE } from "../../../../constants/localization";
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 import { attributeItemA1 } from "../../../mocks/visualizationObjectMocks";
+import LabelSubsection from "../../configurationControls/axis/LabelSubsection";
 
 describe("BulletChartConfigurationPanel", () => {
     function createComponent(props: IConfigurationPanelContentProps) {
@@ -15,6 +16,19 @@ describe("BulletChartConfigurationPanel", () => {
             lifecycleExperimental: true,
         });
     }
+
+    const testMeasure = {
+        measure: {
+            localIdentifier: "measure1",
+            definition: {
+                measureDefinition: {
+                    item: {
+                        uri: "/gdc/md/projectId/obj/9211",
+                    },
+                },
+            },
+        },
+    };
 
     it("should render configuration panel with enabled controls", () => {
         const mdObject = {
@@ -143,19 +157,6 @@ describe("BulletChartConfigurationPanel", () => {
             type: VisualizationTypes.BULLET,
         };
 
-        const closeBOPMeasure = {
-            measure: {
-                localIdentifier: "measure1",
-                definition: {
-                    measureDefinition: {
-                        item: {
-                            uri: "/gdc/md/projectId/obj/9211",
-                        },
-                    },
-                },
-            },
-        };
-
         const visualizationClass = { uri: "/gdc/md/projectId/obj/76297" };
 
         it("should render configuration panel with enabled name sections", () => {
@@ -163,7 +164,7 @@ describe("BulletChartConfigurationPanel", () => {
                 buckets: [
                     {
                         localIdentifier: "measures",
-                        items: [closeBOPMeasure],
+                        items: [testMeasure],
                     },
                     {
                         localIdentifier: "view",
@@ -212,7 +213,7 @@ describe("BulletChartConfigurationPanel", () => {
                 buckets: [
                     {
                         localIdentifier: "measures",
-                        items: [closeBOPMeasure],
+                        items: [testMeasure],
                     },
                 ],
                 visualizationClass,
@@ -248,6 +249,65 @@ describe("BulletChartConfigurationPanel", () => {
 
             const axisSections = wrapper.find(NameSubsection);
             expect(axisSections.exists()).toEqual(false);
+        });
+    });
+
+    describe("Y axis labels configuration", () => {
+        const defaultProps: IConfigurationPanelContentProps = {
+            isError: false,
+            isLoading: false,
+            locale: DEFAULT_LOCALE,
+            type: VisualizationTypes.BULLET,
+        };
+
+        const visualizationClass = { uri: "/gdc/md/projectId/obj/76297" };
+
+        it("should render labels configuration panel disabled if there is no attribute", () => {
+            const mdObject = {
+                buckets: [
+                    {
+                        localIdentifier: "measures",
+                        items: [testMeasure],
+                    },
+                    {
+                        localIdentifier: "view",
+                        items: [],
+                    },
+                ],
+                visualizationClass,
+            };
+
+            const wrapper = createComponent({
+                ...defaultProps,
+                mdObject,
+            });
+
+            const yAxisSection = wrapper.find(LabelSubsection).at(1);
+            expect(yAxisSection.props().disabled).toEqual(true);
+        });
+
+        it("should render labels configuration panel enabled if there is an attribute", () => {
+            const mdObject = {
+                buckets: [
+                    {
+                        localIdentifier: "measures",
+                        items: [testMeasure],
+                    },
+                    {
+                        localIdentifier: "view",
+                        items: [attributeItemA1],
+                    },
+                ],
+                visualizationClass,
+            };
+
+            const wrapper = createComponent({
+                ...defaultProps,
+                mdObject,
+            });
+
+            const yAxisSection = wrapper.find(LabelSubsection).at(1);
+            expect(yAxisSection.props().disabled).toEqual(false);
         });
     });
 });
