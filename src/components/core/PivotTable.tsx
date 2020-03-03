@@ -7,6 +7,7 @@ import {
     ColumnApi,
     ColumnResizedEvent,
     GridApi,
+    GridColumnsChangedEvent,
     GridReadyEvent,
     IDatasource,
     ModelUpdatedEvent,
@@ -137,8 +138,8 @@ export interface IPivotTableState {
     resized: boolean;
 }
 
-export interface IColumnWidths {
-    [colId: string]: number;
+export interface IResizedColumns {
+    [columnIdentifier: string]: { width: number };
 }
 
 export type IPivotTableInnerProps = IPivotTableProps &
@@ -183,7 +184,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         left: 0,
     };
 
-    private columnWidths: IColumnWidths = {};
+    private resizedColumns: IResizedColumns = {};
     private watchingIntervalId: number | null;
     private watchingTimeoutId: number | null;
     private resizing: boolean = false;
@@ -272,7 +273,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             const dataSourceChanged =
                 this.props.dataSource.getFingerprint() !== prevProps.dataSource.getFingerprint();
             if (dataSourceChanged || totalsPropsChanged || totalsStateChanged) {
-                this.columnWidths = {};
+                this.resizedColumns = {};
                 this.setState({
                     resized: false,
                 });
@@ -430,13 +431,16 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     private getColumnIds = (columns: Column[]): string[] =>
         columns.map((column: Column) => column.getColId());
 
-    private getColumnWidths = (columns: Column[]): IColumnWidths => {
+    private getResizedColumns = (columns: Column[]): IResizedColumns => {
+        const initialValue: IResizedColumns = {};
         return columns.reduce((acc, col) => {
             return {
                 ...acc,
-                [this.getColumnIdentifier(col.getDefinition() as IGridHeader)]: col.getActualWidth(),
+                [this.getColumnIdentifier(col.getDefinition() as IGridHeader)]: {
+                    width: col.getActualWidth(),
+                },
             };
-        }, {});
+        }, initialValue);
     };
 
     private autoresizeVisibleColumns = (columnApi: ColumnApi, previouslyResizedColumnIds: string[]) => {
@@ -444,7 +448,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         const autoWidthColumnIds: string[] = this.getColumnIds(displayedVirtualColumns);
         if (previouslyResizedColumnIds.length >= autoWidthColumnIds.length) {
             this.resizing = false;
-            this.columnWidths = this.getColumnWidths(columnApi.getAllDisplayedVirtualColumns());
+            this.resizedColumns = this.getResizedColumns(columnApi.getAllDisplayedVirtualColumns());
             this.setState({
                 resized: true,
             });
@@ -458,30 +462,28 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         }, AGGRID_RENDER_NEW_COLUMNS_TIMEOUT);
     };
 
-    private autoresizeColumns = (event: AgGridEvent) => {
+    private autoresizeColumns = (
+        event: AgGridEvent,
+        force: boolean = false,
+        previouslyResizedColumnIds: string[] = [],
+    ) => {
         const alreadyResized = () => this.state.resized || this.resizing;
-        const dataNotRendered = () => {
+        const dataRendered = () => {
             const executionResult = this.getExecutionResult();
             return (
                 executionResult &&
-                executionResult.data.length > 0 &&
-                event.api.getRenderedNodes().length === 0
+                (executionResult.data.length === 0 || event.api.getRenderedNodes().length > 0)
             );
         };
-        const tablePagesNotLoaded = () => {
+        const tablePagesLoaded = () => {
             const pages = event.api.getCacheBlockState();
-            const pageIds = Object.keys(pages);
-            return (
-                pageIds.length <= 0 || pageIds.some((pageId: string) => pages[pageId].pageStatus !== "loaded")
-            );
+            return Object.keys(pages).every((pageId: string) => pages[pageId].pageStatus === "loaded");
         };
 
-        if (!this.state.execution || alreadyResized() || dataNotRendered() || tablePagesNotLoaded()) {
-            return;
+        if (force || (this.state.execution && !alreadyResized() && dataRendered() && tablePagesLoaded())) {
+            this.resizing = true;
+            this.autoresizeVisibleColumns(event.columnApi, previouslyResizedColumnIds);
         }
-
-        this.resizing = true;
-        this.autoresizeVisibleColumns(event.columnApi, []);
     };
 
     private createAGGridDataSource() {
@@ -536,6 +538,22 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
         if (this.props.groupRows) {
             initializeStickyRow(this.gridApi);
+        }
+    };
+
+    private onVirtualColumnsChanged = (event: GridColumnsChangedEvent) => {
+        const { execution, columnDefs } = this.state;
+        const tableIsNotScrolled = () => {
+            const horizontalPixelRange = event.api.getHorizontalPixelRange();
+            const verticalPixelRange = event.api.getVerticalPixelRange();
+            return horizontalPixelRange.left === 0 && verticalPixelRange.top === 0;
+        };
+        if (execution && tableIsNotScrolled()) {
+            const resizedColumnIdentifiers = Object.keys(this.resizedColumns);
+            const previouslyResizedColumnIds = getTreeLeaves(columnDefs)
+                .filter(d => resizedColumnIdentifiers.includes(this.getColumnIdentifier(d)))
+                .map(d => d.field);
+            this.autoresizeColumns(event, true, previouslyResizedColumnIds);
         }
     };
 
@@ -744,9 +762,9 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             columnEvent.columns
         ) {
             columnEvent.columns.forEach(column => {
-                this.columnWidths[
-                    this.getColumnIdentifier(column.getDefinition() as IGridHeader)
-                ] = column.getActualWidth();
+                this.resizedColumns[this.getColumnIdentifier(column.getDefinition() as IGridHeader)] = {
+                    width: column.getActualWidth(),
+                };
             });
         }
     };
@@ -823,7 +841,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
         let maxWidthProp = {};
         if (this.isColumnAutoresizeEnabled()) {
-            this.enrichColumnDefinitionsWithWidths(getTreeLeaves(columnDefs), this.columnWidths);
+            this.enrichColumnDefinitionsWithWidths(getTreeLeaves(columnDefs), this.resizedColumns);
             maxWidthProp = { maxWidth: 500 };
         }
 
@@ -874,6 +892,9 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             onFirstDataRendered: this.onFirstDataRendered,
             onModelUpdated: this.onModelUpdated,
             onBodyScroll: this.onBodyScroll,
+            ...(this.isColumnAutoresizeEnabled() && {
+                onVirtualColumnsChanged: this.onVirtualColumnsChanged,
+            }),
 
             // this provides persistent row selection (if enabled)
             getRowNodeId,
@@ -999,7 +1020,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
     private getHeaderClass = (classList: string) => (headerClassParams: any): string => {
         const colDef: IGridHeader = headerClassParams.colDef;
-        const { field, measureIndex } = colDef;
+        const { field, measureIndex, index } = colDef;
         const treeIndexes = colDef
             ? indexOfTreeNode(
                   colDef,
@@ -1015,7 +1036,10 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             "gd-column-group-header",
             colGroupIndex !== null ? `gd-column-group-header-${colGroupIndex}` : null,
             colGroupIndex !== null ? `s-table-measure-column-header-group-cell-${colGroupIndex}` : null,
-            measureIndex !== null ? `s-table-measure-column-header-cell-${measureIndex}` : null,
+            measureIndex !== null && measureIndex !== undefined
+                ? `s-table-measure-column-header-cell-${measureIndex}`
+                : null,
+            index ? `s-table-measure-column-header-index-${index}` : null,
             !field ? "gd-column-group-header--empty" : null,
             isFirstColumn ? "gd-column-group-header--first" : null,
         );
@@ -1125,12 +1149,15 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             .join(".");
     }
 
-    private enrichColumnDefinitionsWithWidths(columnDefinitions: IGridHeader[], columnWidths: IColumnWidths) {
+    private enrichColumnDefinitionsWithWidths(
+        columnDefinitions: IGridHeader[],
+        resizedColumns: IResizedColumns,
+    ) {
         columnDefinitions.forEach((columnDefinition: IGridHeader) => {
             if (columnDefinition) {
-                const width = columnWidths[this.getColumnIdentifier(columnDefinition)];
-                if (width) {
-                    columnDefinition.width = width;
+                const resizedColumn = resizedColumns[this.getColumnIdentifier(columnDefinition)];
+                if (resizedColumn) {
+                    columnDefinition.width = resizedColumn.width;
                 }
             }
         });
