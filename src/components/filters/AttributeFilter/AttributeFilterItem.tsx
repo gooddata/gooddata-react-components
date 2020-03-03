@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import * as PropTypes from "prop-types";
 import * as classNames from "classnames";
@@ -41,7 +41,6 @@ export class AttributeFilterItem extends React.PureComponent<IAttributeFilterIte
 
     public render() {
         const { item } = this.props;
-
         if (!item || item.source.empty) {
             return this.renderLoadingItem();
         }
@@ -55,6 +54,7 @@ export class AttributeFilterItem extends React.PureComponent<IAttributeFilterIte
                     readOnly={true}
                     checked={item.selected}
                 />
+
                 <span>{item.source.title}</span>
             </div>
         );
