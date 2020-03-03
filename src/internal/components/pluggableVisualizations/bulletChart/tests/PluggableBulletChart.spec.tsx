@@ -2,8 +2,10 @@
 import noop = require("lodash/noop");
 import { PluggableBulletChart } from "../PluggableBulletChart";
 import * as referencePointMocks from "../../../../mocks/referencePointMocks";
-import { IBucket, IFilters } from "../../../../interfaces/Visualization";
+import { IBucket, IFilters, IReferencePoint } from "../../../../interfaces/Visualization";
 import { DEFAULT_BULLET_CHART_CONFIG } from "../../../../constants/uiConfig";
+import { MEASURES, SECONDARY_MEASURES, TERTIARY_MEASURES } from "../../../../../constants/bucketNames";
+import { OverTimeComparisonTypes } from "../../../../..";
 
 const defaultProps = {
     projectId: "PROJECTID",
@@ -67,10 +69,28 @@ describe("PluggableBulletChart", () => {
             referencePointMocks.multipleMetricsAndCategoriesReferencePoint,
         );
 
+        const expectedUiConfig = {
+            ...DEFAULT_BULLET_CHART_CONFIG,
+            buckets: {
+                [MEASURES]: {
+                    ...DEFAULT_BULLET_CHART_CONFIG.buckets[MEASURES],
+                    canAddItems: false,
+                },
+                [SECONDARY_MEASURES]: {
+                    ...DEFAULT_BULLET_CHART_CONFIG.buckets[MEASURES],
+                    canAddItems: false,
+                },
+                [TERTIARY_MEASURES]: {
+                    ...DEFAULT_BULLET_CHART_CONFIG.buckets[MEASURES],
+                    canAddItems: false,
+                },
+            },
+        };
+
         expect(extendedReferencePoint).toMatchObject({
             buckets: expectedBuckets,
             filters: expectedFilters,
-            uiConfig: DEFAULT_BULLET_CHART_CONFIG,
+            uiConfig: expectedUiConfig,
             properties: {},
         });
     });
@@ -113,10 +133,28 @@ describe("PluggableBulletChart", () => {
             referencePointMocks.multipleMetricsNoCategoriesReferencePoint,
         );
 
+        const expectedUiConfig = {
+            ...DEFAULT_BULLET_CHART_CONFIG,
+            buckets: {
+                [MEASURES]: {
+                    ...DEFAULT_BULLET_CHART_CONFIG.buckets[MEASURES],
+                    canAddItems: false,
+                },
+                [SECONDARY_MEASURES]: {
+                    ...DEFAULT_BULLET_CHART_CONFIG.buckets[MEASURES],
+                    canAddItems: false,
+                },
+                [TERTIARY_MEASURES]: {
+                    ...DEFAULT_BULLET_CHART_CONFIG.buckets[MEASURES],
+                    canAddItems: false,
+                },
+            },
+        };
+
         expect(extendedReferencePoint).toMatchObject({
             buckets: expectedBuckets,
             filters: expectedFilters,
-            uiConfig: DEFAULT_BULLET_CHART_CONFIG,
+            uiConfig: expectedUiConfig,
             properties: {},
         });
     });
@@ -158,10 +196,24 @@ describe("PluggableBulletChart", () => {
             referencePointMocks.secondaryMeasuresAndAttributeReferencePoint,
         );
 
+        const expectedUiConfig = {
+            ...DEFAULT_BULLET_CHART_CONFIG,
+            buckets: {
+                [SECONDARY_MEASURES]: {
+                    ...DEFAULT_BULLET_CHART_CONFIG.buckets[MEASURES],
+                    canAddItems: false,
+                },
+                [TERTIARY_MEASURES]: {
+                    ...DEFAULT_BULLET_CHART_CONFIG.buckets[MEASURES],
+                    canAddItems: false,
+                },
+            },
+        };
+
         expect(extendedReferencePoint).toMatchObject({
             buckets: expectedBuckets,
             filters: expectedFilters,
-            uiConfig: DEFAULT_BULLET_CHART_CONFIG,
+            uiConfig: expectedUiConfig,
             properties: {},
         });
     });
@@ -181,6 +233,250 @@ describe("PluggableBulletChart", () => {
             );
 
             expect((bulletChart as any).isError).toEqual(false);
+        });
+    });
+
+    describe("Arithmetic measures", () => {
+        it("should add AM that does fit", async () => {
+            const extendedReferencePoint = await bulletChart.getExtendedReferencePoint({
+                buckets: [
+                    {
+                        localIdentifier: "measures",
+                        items: [
+                            referencePointMocks.arithmeticMeasureItems[3],
+                            referencePointMocks.derivedMeasureItems[0],
+                            referencePointMocks.masterMeasureItems[1],
+                            referencePointMocks.masterMeasureItems[0],
+                        ],
+                    },
+                ],
+                filters: {
+                    localIdentifier: "filters",
+                    items: [referencePointMocks.overTimeComparisonDateItem],
+                },
+            });
+
+            expect(extendedReferencePoint.buckets).toEqual([
+                {
+                    localIdentifier: "measures",
+                    items: [referencePointMocks.arithmeticMeasureItems[3]],
+                },
+                {
+                    localIdentifier: "secondary_measures",
+                    items: [referencePointMocks.derivedMeasureItems[0]],
+                },
+                {
+                    localIdentifier: "tertiary_measures",
+                    items: [referencePointMocks.masterMeasureItems[0]],
+                },
+                {
+                    localIdentifier: "view",
+                    items: [],
+                },
+            ]);
+        });
+
+        it("should skip AM that does not fit and place derived together with master", async () => {
+            const extendedReferencePoint = await bulletChart.getExtendedReferencePoint({
+                buckets: [
+                    {
+                        localIdentifier: "measures",
+                        items: [
+                            referencePointMocks.masterMeasureItems[0],
+                            referencePointMocks.arithmeticMeasureItems[6],
+                            referencePointMocks.masterMeasureItems[1],
+                            referencePointMocks.derivedMeasureItems[0],
+                            referencePointMocks.masterMeasureItems[2],
+                        ],
+                    },
+                ],
+                filters: {
+                    localIdentifier: "filters",
+                    items: [referencePointMocks.overTimeComparisonDateItem],
+                },
+            });
+
+            expect(extendedReferencePoint.buckets).toEqual([
+                {
+                    localIdentifier: "measures",
+                    items: [referencePointMocks.masterMeasureItems[0]],
+                },
+                {
+                    localIdentifier: "secondary_measures",
+                    items: [referencePointMocks.masterMeasureItems[1]],
+                },
+                {
+                    localIdentifier: "tertiary_measures",
+                    items: [referencePointMocks.derivedMeasureItems[0]],
+                },
+                {
+                    localIdentifier: "view",
+                    items: [],
+                },
+            ]);
+        });
+
+        it("should accept arithmetic measure when it has the same measure in both operands", async () => {
+            const extendedReferencePoint = await bulletChart.getExtendedReferencePoint({
+                buckets: [
+                    {
+                        localIdentifier: "measures",
+                        items: [
+                            referencePointMocks.arithmeticMeasureItems[2],
+                            referencePointMocks.masterMeasureItems[0],
+                            referencePointMocks.masterMeasureItems[1],
+                        ],
+                    },
+                ],
+                filters: {
+                    localIdentifier: "filters",
+                    items: [referencePointMocks.overTimeComparisonDateItem],
+                },
+            });
+
+            expect(extendedReferencePoint.buckets).toEqual([
+                {
+                    localIdentifier: "measures",
+                    items: [referencePointMocks.arithmeticMeasureItems[2]],
+                },
+                {
+                    localIdentifier: "secondary_measures",
+                    items: [referencePointMocks.masterMeasureItems[0]],
+                },
+                {
+                    localIdentifier: "tertiary_measures",
+                    items: [referencePointMocks.masterMeasureItems[1]],
+                },
+                {
+                    localIdentifier: "view",
+                    items: [],
+                },
+            ]);
+        });
+    });
+
+    describe("Over Time Comparison", () => {
+        it("should return reference point containing uiConfig with PP, SP supported comparison types", async () => {
+            const extendedReferencePoint = await bulletChart.getExtendedReferencePoint(
+                referencePointMocks.emptyReferencePoint,
+            );
+
+            expect(extendedReferencePoint.uiConfig.supportedOverTimeComparisonTypes).toEqual([
+                OverTimeComparisonTypes.SAME_PERIOD_PREVIOUS_YEAR,
+                OverTimeComparisonTypes.PREVIOUS_PERIOD,
+            ]);
+        });
+
+        describe("placing new derived items", () => {
+            it("should place new derived bucket item to tertiary measures bucket", async () => {
+                const referencePoint: IReferencePoint = {
+                    buckets: [
+                        {
+                            localIdentifier: "measures",
+                            items: [referencePointMocks.masterMeasureItems[0]],
+                        },
+                        {
+                            localIdentifier: "secondary_measures",
+                            items: [referencePointMocks.masterMeasureItems[1]],
+                        },
+                        {
+                            localIdentifier: "tertiary_measures",
+                            items: [],
+                        },
+                        {
+                            localIdentifier: "view",
+                            items: [],
+                        },
+                    ],
+                    filters: {
+                        localIdentifier: "filters",
+                        items: [referencePointMocks.overTimeComparisonDateItem],
+                    },
+                };
+
+                const referencePointWithDerivedItems = await bulletChart.addNewDerivedBucketItems(
+                    referencePoint,
+                    [referencePointMocks.derivedMeasureItems[0]],
+                );
+
+                const extendedReferencePoint = await bulletChart.getExtendedReferencePoint(
+                    referencePointWithDerivedItems,
+                );
+
+                expect(extendedReferencePoint.buckets).toEqual([
+                    {
+                        localIdentifier: "measures",
+                        items: [referencePointMocks.masterMeasureItems[0]],
+                    },
+                    {
+                        localIdentifier: "secondary_measures",
+                        items: [referencePointMocks.masterMeasureItems[1]],
+                    },
+                    {
+                        localIdentifier: "tertiary_measures",
+                        items: [referencePointMocks.derivedMeasureItems[0]],
+                    },
+                    {
+                        localIdentifier: "view",
+                        items: [],
+                    },
+                ]);
+            });
+
+            it("should place new derived bucket item to secondary measures bucket", async () => {
+                const referencePoint: IReferencePoint = {
+                    buckets: [
+                        {
+                            localIdentifier: "measures",
+                            items: [referencePointMocks.masterMeasureItems[0]],
+                        },
+                        {
+                            localIdentifier: "secondary_measures",
+                            items: [],
+                        },
+                        {
+                            localIdentifier: "tertiary_measures",
+                            items: [],
+                        },
+                        {
+                            localIdentifier: "view",
+                            items: [],
+                        },
+                    ],
+                    filters: {
+                        localIdentifier: "filters",
+                        items: [referencePointMocks.overTimeComparisonDateItem],
+                    },
+                };
+
+                const referencePointWithDerivedItems = await bulletChart.addNewDerivedBucketItems(
+                    referencePoint,
+                    [referencePointMocks.derivedMeasureItems[0]],
+                );
+
+                const extendedReferencePoint = await bulletChart.getExtendedReferencePoint(
+                    referencePointWithDerivedItems,
+                );
+
+                expect(extendedReferencePoint.buckets).toEqual([
+                    {
+                        localIdentifier: "measures",
+                        items: [referencePointMocks.masterMeasureItems[0]],
+                    },
+                    {
+                        localIdentifier: "secondary_measures",
+                        items: [referencePointMocks.derivedMeasureItems[0]],
+                    },
+                    {
+                        localIdentifier: "tertiary_measures",
+                        items: [],
+                    },
+                    {
+                        localIdentifier: "view",
+                        items: [],
+                    },
+                ]);
+            });
         });
     });
 });
