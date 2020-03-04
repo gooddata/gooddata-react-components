@@ -37,7 +37,6 @@ import {
     isOneOfTypes,
     isAreaChart,
     isRotationInRange,
-    isTreemap,
     isHeatmap,
     isScatterPlot,
     isBubbleChart,
@@ -561,15 +560,6 @@ function getLabelsConfiguration(chartOptions: IChartOptions, _config: any, chart
 
     const style = getLabelStyle(type, stacking);
 
-    const drilldown =
-        stacking || isTreemap(type)
-            ? {
-                  activeDataLabelStyle: {
-                      color: "#ffffff",
-                  },
-              }
-            : {};
-
     const yAxis = yAxes.map((axis: any) => ({
         defaultFormat: get(axis, "format"),
     }));
@@ -590,7 +580,6 @@ function getLabelsConfiguration(chartOptions: IChartOptions, _config: any, chart
     };
 
     return {
-        drilldown,
         plotOptions: {
             gdcOptions: {
                 dataLabels: {
