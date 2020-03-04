@@ -17,3 +17,9 @@ export const ATTRIBUTE_SEGMENT_GEOCHART: VisualizationObject.IVisualizationAttri
 export const ATTRIBUTE_TOOLTIP_GEOCHART: VisualizationObject.IVisualizationAttribute = attribute(
     "/gdc/md/storybook/obj/24.df",
 ).localIdentifier("tooltip");
+export const MEASURE_SIZE_RATIO_GEOCHART: VisualizationObject.IMeasure = measure("/gdc/md/storybook/obj/20")
+    .localIdentifier("size")
+    .ratio();
+export const MEASURE_COLOR_RATIO_GEOCHART: VisualizationObject.IMeasure = measure("/gdc/md/storybook/obj/21")
+    .localIdentifier("color")
+    .ratio();

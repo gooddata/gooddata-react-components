@@ -1,8 +1,12 @@
 // (C) 2007-2020 GoodData Corporation
 import isObject = require("lodash/isObject");
 import isFinite = require("lodash/isFinite");
-import { SDK } from "@gooddata/gooddata-js";
+import get = require("lodash/get");
+import set = require("lodash/set");
 import isNil = require("lodash/isNil");
+import { VisualizationObject } from "@gooddata/typings";
+import { SDK } from "@gooddata/gooddata-js";
+
 import { name as pkgName, version as pkgVersion } from "../../package.json";
 import { IMinMax } from "../interfaces/Utils";
 
@@ -60,4 +64,19 @@ export function getMinMax(data: number[]): IMinMax {
             max,
         };
     }, {});
+}
+
+export function disableBucketItemComputeRatio<T extends VisualizationObject.BucketItem>(item: T): T {
+    if (getComputeRatio(item)) {
+        setComputeRatio(item, false);
+    }
+    return item;
+}
+
+export function getComputeRatio(bucketItem: VisualizationObject.BucketItem): boolean {
+    return get(bucketItem, ["measure", "definition", "measureDefinition", "computeRatio"], false);
+}
+
+function setComputeRatio(bucketItem: VisualizationObject.BucketItem, value: boolean) {
+    set(bucketItem, ["measure", "definition", "measureDefinition", "computeRatio"], value);
 }

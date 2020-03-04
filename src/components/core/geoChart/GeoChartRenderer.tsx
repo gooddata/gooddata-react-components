@@ -77,7 +77,7 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
                 this.removeMap();
                 this.createMap();
             }
-        } else if (!isEqual(selectedSegmentItems, prevSelectedSegmentItems)) {
+        } else if (selectedSegmentItems && !isEqual(selectedSegmentItems, prevSelectedSegmentItems)) {
             this.setFilterMap();
         }
     }
@@ -110,7 +110,7 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
     };
 
     public render() {
-        return <div className="s-gd-geo-chart-renderer" ref={this.setChartRef} />;
+        return <div className="s-gd-geo-chart-renderer mapbox-container" ref={this.setChartRef} />;
     }
 
     private createMapControls = () => {
@@ -125,6 +125,7 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         const {
             config: { selectedSegmentItems },
         } = this.props;
+
         if (this.chart.getLayer(DEFAULT_LAYER_NAME)) {
             this.chart.setFilter(DEFAULT_LAYER_NAME, createPushpinFilter(selectedSegmentItems));
         }

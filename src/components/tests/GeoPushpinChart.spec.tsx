@@ -7,12 +7,14 @@ import { AFM, VisualizationObject } from "@gooddata/typings";
 import { GeoPushpinChart } from "../GeoPushpinChart";
 import { Model } from "../../../src";
 import { IGeoConfig, IGeoPushpinChartProps } from "../../interfaces/GeoChart";
+import {
+    MEASURE_COLOR_RATIO_GEOCHART,
+    MEASURE_SIZE_RATIO_GEOCHART,
+} from "../../../stories/data/geoChartComponentProps";
 
 describe("Geo Pushpin Chart", () => {
     const size: VisualizationObject.IMeasure = Model.measure("measure_size").localIdentifier("size");
-
     const color: VisualizationObject.IMeasure = Model.measure("measure_color").localIdentifier("color");
-
     const location: VisualizationObject.IVisualizationAttribute = Model.attribute(
         "attribute_location",
     ).localIdentifier("location");
@@ -37,6 +39,7 @@ describe("Geo Pushpin Chart", () => {
         const wrapper = renderShallowComponent({ sdk: factory({ domain: "example.com" }) });
         expect(wrapper).toHaveLength(1);
     });
+
     it("should render component with Size, Location and convert the bucket to AFM and resultSpec", () => {
         const wrapper = renderShallowComponent({ size });
         const expectedAfm: AFM.IAfm = {
@@ -150,6 +153,44 @@ describe("Geo Pushpin Chart", () => {
             ],
         };
         expect(wrapper).toHaveLength(1);
+        expect(wrapper.prop("afm")).toEqual(expectedAfm);
+        expect(wrapper.prop("resultSpec")).toEqual(expectedResultSpec);
+    });
+
+    it("should render component with measure ignore ratio", () => {
+        const wrapper = renderShallowComponent({
+            size: MEASURE_SIZE_RATIO_GEOCHART,
+            color: MEASURE_COLOR_RATIO_GEOCHART,
+        });
+        const expectedAfm: AFM.IAfm = {
+            measures: [
+                {
+                    localIdentifier: "size",
+                    definition: { measure: { item: { uri: "/gdc/md/storybook/obj/20" } } },
+                },
+                {
+                    localIdentifier: "color",
+                    definition: { measure: { item: { uri: "/gdc/md/storybook/obj/21" } } },
+                },
+            ],
+            attributes: [
+                {
+                    localIdentifier: "location",
+                    displayForm: { identifier: "attribute_location" },
+                },
+            ],
+        };
+        const expectedResultSpec = {
+            dimensions: [
+                {
+                    itemIdentifiers: ["measureGroup"],
+                },
+                {
+                    itemIdentifiers: ["location"],
+                },
+            ],
+        };
+
         expect(wrapper.prop("afm")).toEqual(expectedAfm);
         expect(wrapper.prop("resultSpec")).toEqual(expectedResultSpec);
     });

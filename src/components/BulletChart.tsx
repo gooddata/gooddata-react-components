@@ -9,11 +9,8 @@ import { ICommonChartProps } from "./core/base/BaseChart";
 import { convertBucketsToAFM, convertBucketsToMdObject } from "../helpers/conversion";
 import { getStackingResultSpec } from "../helpers/resultSpec";
 import { MEASURES, SECONDARY_MEASURES, TERTIARY_MEASURES, ATTRIBUTE } from "../constants/bucketNames";
-import {
-    getViewByTwoAttributes,
-    sanitizeConfig,
-    disableBucketItemComputeRatio,
-} from "../helpers/optionalStacking/common";
+import { getViewByTwoAttributes, sanitizeConfig } from "../helpers/optionalStacking/common";
+import { disableBucketItemComputeRatio } from "../helpers/utils";
 
 export interface IBulletChartBucketProps {
     primaryMeasure: VisualizationInput.AttributeOrMeasure;

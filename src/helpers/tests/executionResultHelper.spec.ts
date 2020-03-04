@@ -22,6 +22,7 @@ import {
     getNthAttributeName,
     getNthDimensionHeaders,
 } from "../executionResultHelper";
+import { getExecutionResponse } from "../../../stories/data/geoChart";
 
 describe("findInDimensionHeaders", () => {
     it("should call supplied callback for all headers in all dimensions until it returns a non null value", () => {
@@ -234,34 +235,32 @@ describe("getHeaderItemName", () => {
 });
 
 describe("getHeadersInDimension", () => {
-    const executionResponse = require("../../../stories/test_data/geo_chart/geo_chart_with_location_size_color_segment_tooltip_response.js")(
-        "storybook",
-    ).executionResponse;
+    const executionResponse = getExecutionResponse(true, true, true, true, true);
 
     it("should return attribute headers", () => {
         const { dimensions } = executionResponse;
         const attributeHeaders = getAttributeHeadersInDimension(dimensions);
         expect(attributeHeaders).toEqual([
             {
-                formOf: { identifier: "30", name: "City", uri: "/gdc/md/storybook/obj/30" },
-                identifier: "30.df",
-                localIdentifier: "location",
-                name: "City",
-                uri: "/gdc/md/storybook/obj/30.df",
+                formOf: { identifier: "attr.State", name: "State", uri: "any-uri" },
+                identifier: "label.State",
+                localIdentifier: "a_State",
+                name: "State",
+                uri: "/gdc/md/projectId/obj/1",
             },
             {
-                formOf: { identifier: "23", name: "Store Type", uri: "/gdc/md/storybook/obj/23" },
-                identifier: "23.df",
-                localIdentifier: "segmentBy",
-                name: "Store Type",
-                uri: "/gdc/md/storybook/obj/23.df",
+                formOf: { identifier: "attr.Type", name: "Type", uri: "any-uri" },
+                identifier: "label.Type",
+                localIdentifier: "a_Type",
+                name: "Type",
+                uri: "/gdc/md/projectId/obj/2",
             },
             {
-                formOf: { identifier: "24", name: "Tooltip", uri: "/gdc/md/storybook/obj/24" },
-                identifier: "24.df",
-                localIdentifier: "tooltip",
-                name: "Tooltip",
-                uri: "/gdc/md/storybook/obj/24.df",
+                formOf: { identifier: "attr.State", name: "State", uri: "any-uri" },
+                identifier: "label.State",
+                localIdentifier: "a_State",
+                name: "State",
+                uri: "/gdc/md/projectId/obj/3",
             },
         ]);
     });
@@ -272,20 +271,18 @@ describe("getHeadersInDimension", () => {
         expect(measureHeaderItems).toEqual([
             {
                 measureHeaderItem: {
-                    format: "#,##0.00",
-                    identifier: "20",
-                    localIdentifier: "size",
-                    name: "Size",
-                    uri: "/gdc/md/storybook/obj/20",
+                    format: "#,##0",
+                    identifier: "measure.Population",
+                    localIdentifier: "m_size",
+                    name: "Population",
                 },
             },
             {
                 measureHeaderItem: {
-                    format: "#,##0.00",
-                    identifier: "21",
-                    localIdentifier: "color",
-                    name: "Color",
-                    uri: "/gdc/md/storybook/obj/21",
+                    format: "#,##0",
+                    identifier: "measure.Area",
+                    localIdentifier: "m_color",
+                    name: "Area",
                 },
             },
         ]);

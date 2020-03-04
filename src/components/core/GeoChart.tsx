@@ -27,7 +27,7 @@ import {
 import { DEFAULT_COLORS } from "../visualizations/utils/color";
 import { isDataOfReasonableSize } from "../../helpers/geoChart/common";
 import { getGeoData } from "../../helpers/geoChart/data";
-import { TOP } from "../visualizations/chart/legend/PositionTypes";
+import { TOP, BOTTOM } from "../visualizations/chart/legend/PositionTypes";
 
 export function renderChart(props: IGeoChartRendererProps): React.ReactElement {
     return <GeoChartRenderer {...props} />;
@@ -83,6 +83,7 @@ export class GeoChartInner extends BaseVisualization<IGeoChartInnerProps, IGeoCh
         if (!this.shouldGeoChartUpdate(prevProps)) {
             return;
         }
+
         const {
             config: { mdObject: { buckets = [] } = {} },
             execution,
@@ -112,12 +113,23 @@ export class GeoChartInner extends BaseVisualization<IGeoChartInnerProps, IGeoCh
     }
 
     public renderVisualization() {
+        const classes: string = `gd-geo-component s-gd-geo-component flex-direction-${this.getFlexDirection()}`;
         return (
-            <div className="gd-geo-component s-gd-geo-component">
+            <div className={classes}>
                 {this.renderLegend()}
                 {this.renderChart()}
             </div>
         );
+    }
+
+    private getFlexDirection() {
+        const { legendPosition: position } = this.props;
+
+        if (position === TOP || position === BOTTOM) {
+            return "column";
+        }
+
+        return "row";
     }
 
     private shouldGeoChartUpdate = (prevProps: IGeoChartInnerProps): boolean => {
