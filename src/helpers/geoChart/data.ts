@@ -1,7 +1,7 @@
 // (C) 2020 GoodData Corporation
 import get = require("lodash/get");
 import { Execution, VisualizationObject } from "@gooddata/typings";
-import { IGeoData, IObjectMapping } from "../../interfaces/GeoChart";
+import { IGeoData, IGeoLngLatLike, IObjectMapping } from "../../interfaces/GeoChart";
 import { COLOR, LOCATION, SEGMENT, SIZE, TOOLTIP_TEXT } from "../../constants/bucketNames";
 import {
     getAttributeHeadersInDimension,
@@ -16,6 +16,21 @@ import { isDisplayFormUri } from "../../internal/utils/mdObjectHelper";
 interface IBucketItemInfo {
     uri: VisualizationObject.IObjUriQualifier["uri"];
     localIdentifier: VisualizationObject.IObjUriQualifier["uri"];
+}
+
+export function getLocation(latlng: string): IGeoLngLatLike | null {
+    if (!latlng) {
+        return null;
+    }
+
+    const [latitude, longitude] = latlng.split(";").map(stringToFloat);
+    if (isNaN(latitude) || isNaN(longitude)) {
+        // tslint:disable-next-line:no-console
+        console.warn("UI-SDK: geoChartDataSource - getLocation: invalid location", latlng);
+        return null;
+    }
+
+    return [longitude, latitude];
 }
 
 export function getGeoData(
@@ -33,7 +48,8 @@ export function getGeoData(
     const colorIndex: number = get(geoData, `${COLOR}.index`);
 
     if (locationIndex !== undefined) {
-        geoData[LOCATION].data = getAttributeData(attributeHeaderItems, locationIndex);
+        const locationData: string[] = getAttributeData(attributeHeaderItems, locationIndex);
+        geoData[LOCATION].data = locationData.map(getLocation);
     }
 
     if (segmentIndex !== undefined) {

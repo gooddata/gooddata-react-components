@@ -26,11 +26,12 @@ import {
     DEFAULT_ZOOM,
     DEFAULT_TOOLTIP_OPTIONS,
 } from "../../../constants/geoChart";
-import { IGeoConfig, IGeoData } from "../../../interfaces/GeoChart";
+import { IGeoConfig, IGeoData, IGeoLngLatBounds, IGeoLngLatLike } from "../../../interfaces/GeoChart";
 
 import "../../../../styles/scss/geoChart.scss";
 import { handlePushpinMouseEnter, handlePushpinMouseLeave } from "./geoChartTooltip";
 import { isClusteringAllowed } from "../../../helpers/geoChart/common";
+import { getLngLatBounds } from "../../../helpers/geoChart/lngLatBounds";
 
 export interface IGeoChartRendererProps {
     config: IGeoConfig;
@@ -58,27 +59,12 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
     }
 
     public componentDidUpdate(prevProps: IGeoChartRendererProps) {
-        if (!this.props.execution) {
-            return;
-        }
         const {
-            execution: { executionResponse },
             config: { selectedSegmentItems },
         } = this.props;
-        const {
-            execution: { executionResponse: prevExecutionResponse = {} } = {},
-            config: { selectedSegmentItems: prevSelectedSegmentItems = [] } = {},
-        } = prevProps || {};
+        const { config: { selectedSegmentItems: prevSelectedSegmentItems = [] } = {} } = prevProps || {};
 
-        if (!isEqual(executionResponse, prevExecutionResponse)) {
-            if (prevExecutionResponse) {
-                this.cleanupMap();
-                this.setupMap();
-            } else {
-                this.removeMap();
-                this.createMap();
-            }
-        } else if (selectedSegmentItems && !isEqual(selectedSegmentItems, prevSelectedSegmentItems)) {
+        if (selectedSegmentItems && !isEqual(selectedSegmentItems, prevSelectedSegmentItems)) {
             this.setFilterMap();
         }
     }
@@ -98,15 +84,31 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
     };
 
     public createMap = () => {
-        const { config } = this.props;
-        const center = get(config, "center", [DEFAULT_LONGITUDE, DEFAULT_LATITUDE] as [number, number]);
+        const {
+            config,
+            geoData: {
+                location: { data },
+            },
+        } = this.props;
+
+        const center: IGeoLngLatLike = get<IGeoConfig, "center">(config, "center");
         const isExportMode = this.isExportMode();
-        const zoom = get(config, "zoom", DEFAULT_ZOOM);
+        const zoom: number = get<IGeoConfig, "zoom", number>(config, "zoom", DEFAULT_ZOOM);
+
+        let bounds: mapboxgl.LngLatBoundsLike;
+        // use `center` config if it exists
+        if (!center) {
+            const lngLatBounds: IGeoLngLatBounds = getLngLatBounds(data);
+            if (lngLatBounds) {
+                bounds = [lngLatBounds.northEast, lngLatBounds.southWest];
+            }
+        }
 
         this.chart = new mapboxgl.Map({
             ...DEFAULT_MAPBOX_OPTIONS,
+            bounds,
             container: this.chartRef,
-            center,
+            center: center || [DEFAULT_LONGITUDE, DEFAULT_LATITUDE],
             // If true, the map’s canvas can be exported to a PNG using map.getCanvas().toDataURL().
             // This is false by default as a performance optimization.
             preserveDrawingBuffer: isExportMode,
@@ -201,28 +203,33 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
     };
 
     private cleanupMap = (): void => {
-        const { geoData } = this.props;
+        const {
+            chart,
+            props: { geoData },
+        } = this;
 
-        if (this.chart.getLayer(DEFAULT_LAYER_NAME)) {
-            this.chart.removeLayer(DEFAULT_LAYER_NAME);
+        if (chart.getLayer(DEFAULT_LAYER_NAME)) {
+            chart.removeLayer(DEFAULT_LAYER_NAME);
         }
 
         if (isClusteringAllowed(geoData)) {
-            if (this.chart.getLayer(DEFAULT_CLUSTER_LAYER_NAME)) {
-                this.chart.removeLayer(DEFAULT_CLUSTER_LAYER_NAME);
+            if (chart.getLayer(DEFAULT_CLUSTER_LAYER_NAME)) {
+                chart.removeLayer(DEFAULT_CLUSTER_LAYER_NAME);
             }
-            if (this.chart.getLayer(DEFAULT_CLUSTER_LABELS_CONFIG.id)) {
-                this.chart.removeLayer(DEFAULT_CLUSTER_LABELS_CONFIG.id);
+            if (chart.getLayer(DEFAULT_CLUSTER_LABELS_CONFIG.id)) {
+                chart.removeLayer(DEFAULT_CLUSTER_LABELS_CONFIG.id);
             }
         }
-        if (this.chart.getSource(DEFAULT_DATA_SOURCE_NAME)) {
-            this.chart.removeSource(DEFAULT_DATA_SOURCE_NAME);
+        if (chart.getSource(DEFAULT_DATA_SOURCE_NAME)) {
+            chart.removeSource(DEFAULT_DATA_SOURCE_NAME);
         }
     };
 
     private removeMap = (): void => {
-        if (this.chart) {
-            this.chart.remove();
+        if (!this.chart) {
+            return;
         }
+        this.cleanupMap();
+        this.chart.remove();
     };
 }

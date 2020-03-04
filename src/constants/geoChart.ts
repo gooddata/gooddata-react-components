@@ -76,6 +76,9 @@ export const DEFAULT_MAPBOX_OPTIONS = {
     attributionControl: false,
     // If false , the "drag to rotate" interaction is disabled
     dragRotate: false,
+    fitBoundsOptions: { padding: 60 },
+    // The maximum zoom level of the map (0-24).
+    maxZoom: 14,
     // If false , the map's pitch (tilt) control with "drag to rotate" interaction will be disabled.
     pitchWithRotate: false,
     // If false , the "pinch to rotate and zoom" interaction is disabled

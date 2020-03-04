@@ -16,7 +16,7 @@ import { getExecutionResponse, getExecutionResult } from "../../../../stories/da
 
 describe("common", () => {
     describe("isDataOfReasonableSize", () => {
-        it.each([[51, true], [49, false]])(
+        it.each([[51, true], [30, false]])(
             "should return isDataOfReasonableSize is %s",
             (limit: number, expectedResult: boolean) => {
                 const geoData: IGeoData = { location: { index: 0, name: "location", data: [] } };

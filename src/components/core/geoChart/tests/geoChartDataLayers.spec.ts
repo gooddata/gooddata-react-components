@@ -7,7 +7,7 @@ import {
     createUnclusterPoints,
 } from "../geoChartDataLayers";
 import { IGeoData } from "../../../../interfaces/GeoChart";
-import { LOCATION_STRINGS, SIZE_NUMBERS } from "../../../../../stories/data/geoChart";
+import { LOCATION_LNGLATS, SIZE_NUMBERS } from "../../../../../stories/data/geoChart";
 
 describe("createPushpinDataLayer", () => {
     const dataSourceName: string = "test_datasource";
@@ -52,7 +52,7 @@ describe("createPushpinDataLayer", () => {
             location: {
                 index: 0,
                 name: "location",
-                data: ["44.500000;-89.500000", "44.500000;-89.500000", "44.500000;-89.500000"],
+                data: [[44.5, -89.5], [44.5, -89.5], [44.5, -89.5]],
             },
         };
         const layer: mapboxgl.Layer = createPushpinDataLayer(dataSourceName, geoData);
@@ -87,7 +87,7 @@ describe("createPushpinDataLayer", () => {
             location: {
                 index: 0,
                 name: "location",
-                data: LOCATION_STRINGS,
+                data: LOCATION_LNGLATS,
             },
             segment: {
                 index: 1,
@@ -113,15 +113,15 @@ describe("createPushpinDataLayer", () => {
             4,
             18,
             4,
-            7632.17,
+            3718.33,
             12,
-            15246.33,
+            7418.67,
             19,
-            22860.5,
+            11119,
             26,
-            30474.67,
+            14819.33,
             33,
-            38088.83,
+            18519.67,
             40,
         ]);
         expect(layer.paint["circle-stroke-color"]).toEqual([

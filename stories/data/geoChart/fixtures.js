@@ -24,8 +24,6 @@ const SIZE_AFM_DATA = [
     "1381",
     "2627",
     "8732",
-    "45703",
-    "11107",
     "570",
     "1121",
     "1605",
@@ -76,8 +74,6 @@ const COLOR_AFM_DATA = [
     "869",
     "433",
     "1605",
-    "1121",
-    "570",
     "11107",
     "45703",
     "8732",
@@ -247,18 +243,6 @@ function getLocationAFMData(projectId = "storybook") {
         },
         {
             attributeHeaderItem: {
-                name: "20.716179;-158.214676",
-                uri: `/gdc/md/${projectId}/obj/694/elements?id=1925`,
-            },
-        },
-        {
-            attributeHeaderItem: {
-                name: "66.160507;-153.369141",
-                uri: `/gdc/md/${projectId}/obj/694/elements?id=1851`,
-            },
-        },
-        {
-            attributeHeaderItem: {
                 name: "35.860119;-86.660156",
                 uri: `/gdc/md/${projectId}/obj/694/elements?id=1927`,
             },
@@ -412,18 +396,6 @@ function getLocationAFMData(projectId = "storybook") {
 
 function getSegmentAFMData(projectId = "storybook") {
     return [
-        {
-            attributeHeaderItem: {
-                name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
-            },
-        },
-        {
-            attributeHeaderItem: {
-                name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
-            },
-        },
         {
             attributeHeaderItem: {
                 name: "General Goods",
@@ -853,18 +825,6 @@ function getTooltipTextAFMData(projectId = "storybook") {
             attributeHeaderItem: {
                 name: "Georgia",
                 uri: `/gdc/md/${projectId}/obj/694/elements?id=1925`,
-            },
-        },
-        {
-            attributeHeaderItem: {
-                name: "Hawaii",
-                uri: `/gdc/md/${projectId}/obj/694/elements?id=1851`,
-            },
-        },
-        {
-            attributeHeaderItem: {
-                name: "Alaska",
-                uri: `/gdc/md/${projectId}/obj/694/elements?id=1927`,
             },
         },
         {

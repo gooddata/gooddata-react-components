@@ -9,7 +9,7 @@ import PushpinSizeLegend from "../legends/PushpinSizeLegend";
 import PushpinCategoryLegend from "../legends/PushpinCategoryLegend";
 import { getGeoData } from "../../../../helpers/geoChart/data";
 import {
-    LOCATION_STRINGS,
+    LOCATION_LNGLATS,
     SIZE_NUMBERS,
     COLOR_NUMBERS,
     getExecutionResponse,
@@ -52,7 +52,7 @@ function getLegendProps(legendFlags: ILegendFlags): IGeoChartLegendRendererProps
         location: {
             index: 0,
             name: "location",
-            data: LOCATION_STRINGS,
+            data: LOCATION_LNGLATS,
         },
     };
     return {
