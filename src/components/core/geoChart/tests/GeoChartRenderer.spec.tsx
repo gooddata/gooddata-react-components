@@ -16,4 +16,14 @@ describe("GeoChartRenderer", () => {
         const wrapper = createComponent();
         expect(wrapper.hasClass("s-gd-geo-chart-renderer")).toBe(true);
     });
+
+    it("should render GeoChartRenderer component in export mode", () => {
+        const wrapper = createComponent({
+            config: {
+                isExportMode: true,
+                mapboxToken: "",
+            },
+        });
+        expect(wrapper.hasClass("s-isExportMode")).toBe(true);
+    });
 });

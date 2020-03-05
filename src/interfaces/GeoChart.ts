@@ -42,6 +42,7 @@ export interface IGeoData {
 
 export interface IGeoConfig {
     center?: [number, number];
+    isExportMode?: boolean;
     limit?: number;
     mdObject?: VisualizationObject.IVisualizationObjectContent;
     selectedSegmentItems?: string[];
