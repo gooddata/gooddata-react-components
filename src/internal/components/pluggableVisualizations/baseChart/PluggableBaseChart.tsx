@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import { IntlShape } from "react-intl";
 import isEmpty = require("lodash/isEmpty");
@@ -217,6 +217,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
         const masterMeasures = filterOutDerivedMeasures(measures);
 
         const allAttributes = getAllAttributeItemsWithPreference(buckets, [
+            BucketNames.LOCATION,
             BucketNames.VIEW,
             BucketNames.TREND,
             BucketNames.STACK,

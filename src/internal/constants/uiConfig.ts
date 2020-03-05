@@ -566,6 +566,7 @@ const geoMeasuresBase = {
 const geoAttributesBase = {
     ...viewBase,
     accepts: [ATTRIBUTE],
+    canAddItems: true,
     itemsLimit: DEFAULT_GEO_ATTRIBUTES_COUNT,
 };
 

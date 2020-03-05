@@ -1,10 +1,11 @@
 // (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import { render } from "react-dom";
-
-import cloneDeep = require("lodash/cloneDeep");
 import get = require("lodash/get");
 import set = require("lodash/set");
+import isEmpty = require("lodash/isEmpty");
+import includes = require("lodash/includes");
+import cloneDeep = require("lodash/cloneDeep");
 
 import { VisualizationObject, AFM } from "@gooddata/typings";
 
@@ -17,21 +18,23 @@ import {
     IVisProps,
     IBucketItem,
     IBucket,
+    IUiConfig,
 } from "../../../interfaces/Visualization";
 import { PluggableBaseChart } from "../baseChart/PluggableBaseChart";
 import { BUCKETS, METRIC, ATTRIBUTE } from "../../../constants/bucket";
 import { GEO_PUSHPIN_CHART_UICONFIG } from "../../../constants/uiConfig";
 import {
     sanitizeFilters,
-    getBucketItemsByType,
     getPreferredBucketItems,
-    hasBucket,
+    getMeasures,
+    removeShowOnSecondaryAxis,
+    getAttributeItemsWithoutStacks,
+    isDateBucketItem,
 } from "../../../utils/bucketHelper";
 import { setGeoPushpinUiConfig } from "../../../utils/uiConfigHelpers/geoPushpinChartUiConfigHelper";
 import { removeSort, createSorts } from "../../../utils/sort";
 import { getReferencePointWithSupportedProperties } from "../../../utils/propertiesHelper";
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
-
 import UnsupportedConfigurationPanel from "../../configurationPanels/UnsupportedConfigurationPanel";
 import { DASHBOARDS_ENVIRONMENT } from "../../../constants/properties";
 import { GeoChart } from "../../../../components/core/GeoChart";
@@ -52,49 +55,69 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
     }
 
     public getExtendedReferencePoint(referencePoint: IReferencePoint): Promise<IExtendedReferencePoint> {
-        const clonedReferencePoint = cloneDeep(referencePoint);
-        let newReferencePoint: IExtendedReferencePoint = {
-            ...clonedReferencePoint,
-            uiConfig: cloneDeep(GEO_PUSHPIN_CHART_UICONFIG),
-        };
+        return super
+            .getExtendedReferencePoint(referencePoint)
+            .then((extendedReferencePoint: IExtendedReferencePoint) => {
+                let newReferencePoint: IExtendedReferencePoint = setGeoPushpinUiConfig(
+                    extendedReferencePoint,
+                    this.intl,
+                    this.type,
+                );
+                newReferencePoint = getReferencePointWithSupportedProperties(
+                    newReferencePoint,
+                    this.supportedPropertiesList,
+                );
+                newReferencePoint = removeSort(newReferencePoint);
+                return Promise.resolve(sanitizeFilters(newReferencePoint));
+            });
+    }
 
-        const buckets = get(clonedReferencePoint, BUCKETS, []);
-        const locations = getBucketItemsByType(buckets, BucketNames.LOCATION, [ATTRIBUTE]);
-        const measuresSize = this.getMeasureSizeBucketItem(buckets);
-        const measuresColor = this.getMeasureColorBucketItem(buckets);
-        const segments = getPreferredBucketItems(
+    public getUiConfig(): IUiConfig {
+        return cloneDeep(GEO_PUSHPIN_CHART_UICONFIG);
+    }
+
+    protected configureBuckets(extendedReferencePoint: IExtendedReferencePoint): IExtendedReferencePoint {
+        const buckets: IBucket[] = get(extendedReferencePoint, BUCKETS, []);
+        const allMeasures: IBucketItem[] = getMeasures(buckets);
+        const primaryMeasures: IBucketItem[] = getPreferredBucketItems(
             buckets,
-            [BucketNames.STACK, BucketNames.SEGMENT],
-            [ATTRIBUTE],
+            [BucketNames.MEASURES, BucketNames.SIZE],
+            [METRIC],
         );
+        const secondaryMeasures: IBucketItem[] = getPreferredBucketItems(
+            buckets,
+            [BucketNames.SECONDARY_MEASURES, BucketNames.COLOR],
+            [METRIC],
+        );
+        const sizeMeasures: IBucketItem[] = (primaryMeasures.length > 0
+            ? primaryMeasures
+            : allMeasures.filter((measure: IBucketItem): boolean => !includes(secondaryMeasures, measure))
+        ).slice(0, this.getPreferedBucketItemLimit(BucketNames.SIZE));
 
-        set(newReferencePoint, BUCKETS, [
+        const colorMeasures: IBucketItem[] = (secondaryMeasures.length > 0
+            ? secondaryMeasures
+            : allMeasures.filter((measure: IBucketItem): boolean => !includes(sizeMeasures, measure))
+        ).slice(0, this.getPreferedBucketItemLimit(BucketNames.COLOR));
+
+        set(extendedReferencePoint, BUCKETS, [
             {
                 localIdentifier: BucketNames.LOCATION,
-                items: locations,
+                items: this.getLocationItems(buckets),
             },
             {
                 localIdentifier: BucketNames.SIZE,
-                items: measuresSize,
+                items: removeShowOnSecondaryAxis(sizeMeasures),
             },
             {
                 localIdentifier: BucketNames.COLOR,
-                items: measuresColor,
+                items: removeShowOnSecondaryAxis(colorMeasures),
             },
             {
                 localIdentifier: BucketNames.SEGMENT,
-                items: segments,
+                items: this.getSegmentItems(buckets),
             },
         ]);
-
-        newReferencePoint = setGeoPushpinUiConfig(newReferencePoint, this.intl, this.type);
-        newReferencePoint = getReferencePointWithSupportedProperties(
-            newReferencePoint,
-            this.supportedPropertiesList,
-        );
-        newReferencePoint = removeSort(newReferencePoint);
-
-        return Promise.resolve(sanitizeFilters(newReferencePoint));
+        return extendedReferencePoint;
     }
 
     protected renderConfigurationPanel() {
@@ -196,23 +219,36 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
         };
     }
 
-    private getMeasureSizeBucketItem(buckets: IBucket[]): IBucketItem[] {
-        if (hasBucket(buckets, BucketNames.MEASURES)) {
-            return getBucketItemsByType(buckets, BucketNames.MEASURES, [METRIC]).slice(0, 1);
+    private getSegmentItems(buckets: IBucket[]): IBucketItem[] {
+        let segments = getPreferredBucketItems(
+            buckets,
+            [BucketNames.STACK, BucketNames.SEGMENT, BucketNames.COLUMNS],
+            [ATTRIBUTE],
+        );
+        const nonSegmentAttributes = getAttributeItemsWithoutStacks(buckets);
+        if (nonSegmentAttributes.length > 1 && isEmpty(segments)) {
+            // first attribute is taken, find next available non-date attribute
+            const [, ...attributesWithoutFirst] = nonSegmentAttributes;
+            const nonDate = attributesWithoutFirst.filter(
+                (attribute: IBucketItem) => !isDateBucketItem(attribute),
+            );
+            segments = nonDate.slice(0, 1);
         }
-
-        return getBucketItemsByType(buckets, BucketNames.SIZE, [METRIC]);
+        return segments.slice(0, this.getPreferedBucketItemLimit(BucketNames.SEGMENT));
     }
 
-    private getMeasureColorBucketItem(buckets: IBucket[]): IBucketItem[] {
-        if (hasBucket(buckets, BucketNames.SECONDARY_MEASURES)) {
-            return getBucketItemsByType(buckets, BucketNames.SECONDARY_MEASURES, [METRIC]).slice(0, 1);
-        }
+    private getLocationItems(buckets: IBucket[]): IBucketItem[] {
+        const locationItems: IBucketItem[] = getPreferredBucketItems(
+            buckets,
+            [BucketNames.ATTRIBUTE, BucketNames.VIEW, BucketNames.LOCATION, BucketNames.TREND],
+            [ATTRIBUTE],
+        ).filter((bucketItem: IBucketItem): boolean => Boolean(bucketItem.locationDisplayFormUri));
 
-        if (hasBucket(buckets, BucketNames.MEASURES)) {
-            return getBucketItemsByType(buckets, BucketNames.MEASURES, [METRIC]).slice(1, 2);
-        }
+        return locationItems.slice(0, this.getPreferedBucketItemLimit(BucketNames.LOCATION));
+    }
 
-        return getBucketItemsByType(buckets, BucketNames.COLOR, [METRIC]);
+    private getPreferedBucketItemLimit(preferredBucket: string): number {
+        const { buckets: bucketsUiConfig } = this.getUiConfig();
+        return bucketsUiConfig[preferredBucket].itemsLimit;
     }
 }

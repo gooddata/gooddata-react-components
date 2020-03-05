@@ -1,4 +1,5 @@
 // (C) 2007-2020 GoodData Corporation
+export const FILTERS = "filters";
 export const MEASURES = "measures";
 export const SECONDARY_MEASURES = "secondary_measures";
 export const TERTIARY_MEASURES = "tertiary_measures";
