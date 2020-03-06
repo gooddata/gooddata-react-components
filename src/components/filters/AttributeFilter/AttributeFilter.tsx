@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import * as PropTypes from "prop-types";
 import pick = require("lodash/pick");
@@ -13,6 +13,7 @@ import { AttributeLoader, IAttributeLoaderChildrenProps } from "./AttributeLoade
 import { setTelemetryHeaders } from "../../../helpers/utils";
 import { IAttributeElement } from "./model";
 import * as Model from "../../../helpers/model";
+import { IntlTranslationsProvider, ITranslationsComponentProps } from "../../core/base/TranslationsProvider";
 
 export interface IAttributeFilterProps {
     onApply?: (...params: any[]) => any; // TODO: make the types more specific (FET-282)
@@ -229,16 +230,22 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps> 
         }
 
         const dropdownProps: any = pick(this.props, Object.keys(AttributeDropdownWrapped.propTypes));
+
         const { md } = this.sdk;
         return (
-            <AttributeDropdown
-                attributeDisplayForm={attributeDisplayForm}
-                metadata={md}
-                {...dropdownProps}
-                selection={this.getSelection()}
-                isInverted={this.isInverted()}
-                onApply={this.onApply}
-            />
+            <IntlTranslationsProvider>
+                {(translationProps: ITranslationsComponentProps) => (
+                    <AttributeDropdown
+                        attributeDisplayForm={attributeDisplayForm}
+                        metadata={md}
+                        {...dropdownProps}
+                        {...translationProps}
+                        selection={this.getSelection()}
+                        isInverted={this.isInverted()}
+                        onApply={this.onApply}
+                    />
+                )}
+            </IntlTranslationsProvider>
         );
     }
 }

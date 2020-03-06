@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import * as PropTypes from "prop-types";
 import InvertableList from "@gooddata/goodstrap/lib/List/InvertableList";
@@ -16,6 +16,8 @@ import range = require("lodash/range");
 import isEqual = require("lodash/isEqual");
 import debounce = require("lodash/debounce");
 import noop = require("lodash/noop");
+import cloneDeep = require("lodash/cloneDeep");
+import isEmpty = require("lodash/isEmpty");
 
 import { AttributeFilterItem } from "./AttributeFilterItem";
 import { IAttributeDisplayForm, IAttributeElement } from "./model";
@@ -56,6 +58,8 @@ export interface IAttributeDropdownProps {
     fullscreenOnMobile?: boolean;
     metadata: IAttributeMetadata;
     title?: string;
+    numericSymbols: string[];
+    emptyHeaderString: string;
 
     getListItem?: (...params: any[]) => any; // TODO: make the types more specific (FET-282)
     getListError?: (...params: any[]) => any; // TODO: make the types more specific (FET-282)
@@ -141,6 +145,9 @@ export class AttributeDropdownWrapped extends React.PureComponent<
 
         getListItem: PropTypes.func,
         getListError: PropTypes.func,
+
+        numericSymbols: PropTypes.array,
+        emptyHeaderString: PropTypes.string,
 
         metadata: PropTypes.shape({
             getValidElements: PropTypes.func.isRequired,
@@ -322,7 +329,7 @@ export class AttributeDropdownWrapped extends React.PureComponent<
                 filteredItemsCount: result.data.totalCount,
                 isListReady: true,
                 listError: null,
-                items,
+                items: this.emptyValueItem(items),
                 selection: updatedSelection,
                 prevSelection: updatedPrevSelection,
                 isListInitialising: false,
@@ -364,6 +371,18 @@ export class AttributeDropdownWrapped extends React.PureComponent<
                 {this.renderButtons(applyDisabled)}
             </div>
         );
+    }
+
+    private emptyValueItem(item: IAttributeElement[]): IAttributeElement[] {
+        const itemClone = cloneDeep(item);
+
+        itemClone.forEach(item => {
+            if (isEmpty(item.title)) {
+                item.title = this.props.emptyHeaderString;
+            }
+        });
+
+        return itemClone;
     }
 
     private renderList() {
