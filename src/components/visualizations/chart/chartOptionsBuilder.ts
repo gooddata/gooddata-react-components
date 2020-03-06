@@ -155,6 +155,7 @@ const nullColor: IPatternObject = {
 export const supportedDualAxesChartTypes = [
     VisualizationTypes.COLUMN,
     VisualizationTypes.BAR,
+    VisualizationTypes.BULLET,
     VisualizationTypes.LINE,
     VisualizationTypes.AREA,
     VisualizationTypes.COMBO,

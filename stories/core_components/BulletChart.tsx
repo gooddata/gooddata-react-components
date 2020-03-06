@@ -413,4 +413,21 @@ storiesOf("Core components/BulletChart", module)
                 />
             </div>,
         ),
+    )
+    .add("drill on the second attribute", () =>
+        screenshotWrap(
+            <div style={wrapperStyle}>
+                <BulletChart
+                    projectId="storybook"
+                    primaryMeasure={MEASURE_1}
+                    targetMeasure={MEASURE_2}
+                    comparativeMeasure={MEASURE_3}
+                    viewBy={[ATTRIBUTE_1, ATTRIBUTE_2]}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                    drillableItems={[HeaderPredicateFactory.localIdentifierMatch("a2")]}
+                />
+            </div>,
+        ),
     );
