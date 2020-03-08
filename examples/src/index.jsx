@@ -38,7 +38,8 @@ export class App extends React.Component {
         };
         this.logout = this.logout.bind(this);
 
-        console.log("App - MAPBOX_TOKEN - DefinePlugin", MAPBOX_TOKEN);
+        // console.log("App - MAPBOX_TOKEN - DefinePlugin", MAPBOX_TOKEN);
+        console.log("App - MAPBOX_TOKEN - Dotenv", process.env.MAPBOX_TOKEN);
     }
 
     componentDidMount() {

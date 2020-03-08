@@ -6,6 +6,7 @@ const CircularDependencyPlugin = require("circular-dependency-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
 const webpack = require("webpack");
 const StatsPlugin = require("stats-webpack-plugin");
+const Dotenv = require('dotenv-webpack');
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -82,9 +83,13 @@ module.exports = async (env, argv) => {
         new webpack.DefinePlugin({
             BACKEND_URL: JSON.stringify(backendUrl),
             BASEPATH: JSON.stringify(basePath),
-            MAPBOX_TOKEN: JSON.stringify(process.env.MAPBOX_TOKEN),
+            // MAPBOX_TOKEN: JSON.stringify(process.env.MAPBOX_TOKEN),
         }),
         new SimplestProgressPlugin(),
+        new Dotenv({
+            path: '../.env', // local env
+            systemvars: true // heroku env
+        }),
     ];
 
     if (isProduction) {
