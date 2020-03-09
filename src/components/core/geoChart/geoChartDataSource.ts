@@ -1,29 +1,15 @@
 // (C) 2019-2020 GoodData Corporation
-import { IGeoData, IPushpinColor } from "../../../interfaces/GeoChart";
+import { IGeoData, IGeoLngLatLike, IPushpinColor } from "../../../interfaces/GeoChart";
 import {
     DEFAULT_CLUSTER_RADIUS,
     DEFAULT_CLUSTER_MAX_ZOOM,
     DEFAULT_PUSHPIN_SIZE_VALUE,
 } from "../../../constants/geoChart";
 import { isClusteringAllowed } from "../../../helpers/geoChart/common";
-import { stringToFloat } from "../../../helpers/utils";
 import { getPushpinColors } from "./geoChartColor";
 
 type IGeoDataSourceFeature = GeoJSON.Feature<GeoJSON.Geometry, GeoJSON.GeoJsonProperties>;
 export type IGeoDataSourceFeatures = IGeoDataSourceFeature[];
-
-function getLocation(latlng: string): [number, number] | null {
-    if (!latlng) {
-        return null;
-    }
-    const [latitude, longitude] = latlng.split(";").map(stringToFloat);
-    if (isNaN(latitude) || isNaN(longitude)) {
-        // tslint:disable-next-line:no-console
-        console.warn("UI-SDK: geoChartDataSource - getLocation: invalid location", latlng);
-    } else {
-        return [longitude, latitude];
-    }
-}
 
 function transformPushpinDataSource(geoData: IGeoData): IGeoDataSourceFeatures {
     const { color, location, segment, size, tooltipText } = geoData;
@@ -51,8 +37,11 @@ function transformPushpinDataSource(geoData: IGeoData): IGeoDataSourceFeatures {
     const pushpinColors: IPushpinColor[] = getPushpinColors(colorData, segmentData);
 
     const features = locationData.reduce(
-        (result: IGeoDataSourceFeatures, locationValue: string, index: number): IGeoDataSourceFeatures => {
-            const coordinates = getLocation(locationValue);
+        (
+            result: IGeoDataSourceFeatures,
+            coordinates: IGeoLngLatLike,
+            index: number,
+        ): IGeoDataSourceFeatures => {
             if (!coordinates) {
                 return result;
             }

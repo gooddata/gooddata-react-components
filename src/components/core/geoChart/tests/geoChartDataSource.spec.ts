@@ -2,7 +2,7 @@
 import mapboxgl from "mapbox-gl";
 import { createPushpinDataSource } from "../geoChartDataSource";
 import { IGeoData } from "../../../../interfaces/GeoChart";
-import { LOCATION_STRINGS, SIZE_NUMBERS, COLOR_NUMBERS } from "../../../../../stories/data/geoChart";
+import { LOCATION_LNGLATS, SIZE_NUMBERS, COLOR_NUMBERS } from "../../../../../stories/data/geoChart";
 
 describe("createPushpinDataSource", () => {
     it("should return empty data source", () => {
@@ -38,7 +38,7 @@ describe("createPushpinDataSource", () => {
             location: {
                 index: 0,
                 name: "location",
-                data: LOCATION_STRINGS,
+                data: LOCATION_LNGLATS,
             },
         };
         const source: mapboxgl.GeoJSONSourceRaw = createPushpinDataSource(geoData);
@@ -83,7 +83,7 @@ describe("createPushpinDataSource", () => {
             location: {
                 index: 0,
                 name: "location",
-                data: ["19.0415;-155.6254", "19.0698;-155.5751", "19.0716;-155.6143"],
+                data: [[-155.6254, 19.0415], [-155.5751, 19.0698], [-155.6143, 19.0716]],
             },
         };
         const source: mapboxgl.GeoJSONSourceRaw = createPushpinDataSource(geoData);

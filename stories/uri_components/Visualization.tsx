@@ -407,8 +407,6 @@ storiesOf("URI components", module)
                     identifier="pushpin-chart-location-size-color-segment-tooltip"
                     config={{
                         mapboxToken: process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN,
-                        center: [-94.60376, 38.573936],
-                        zoom: 3.3,
                     }}
                     afterRender={afterRender}
                     onError={onErrorHandler}

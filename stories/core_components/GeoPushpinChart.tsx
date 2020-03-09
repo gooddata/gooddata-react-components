@@ -18,8 +18,6 @@ import {
 const wrapperStyle: React.CSSProperties = { width: 900, height: 600, position: "relative" };
 
 const DEFAULT_CONFIG: IGeoConfig = {
-    center: [-94.60376, 38.573936],
-    zoom: 3.3,
     mapboxToken: process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN,
 };
 

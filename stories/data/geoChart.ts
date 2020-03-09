@@ -1,9 +1,10 @@
 // (C) 2019-2020 GoodData Corporation
 import { Execution, VisualizationObject } from "@gooddata/typings";
-import { IGeoConfig } from "../../src/interfaces/GeoChart";
+import { IGeoConfig, IGeoLngLatLike } from "../../src/interfaces/GeoChart";
 import { measure, attribute } from "../../src/helpers/model";
 import { stringToFloat } from "../../src/helpers/utils";
 import { getHeaderItemName } from "../../src/helpers/executionResultHelper";
+import { getLocation } from "../../src/helpers/geoChart/data";
 // tslint:disable-next-line: no-var-requires
 const fixtures = require("./geoChart/fixtures");
 
@@ -17,7 +18,10 @@ interface IGeoOptions {
 
 export const SIZE_NUMBERS: number[] = fixtures.SIZE_AFM_DATA.map(stringToFloat);
 export const COLOR_NUMBERS: number[] = fixtures.COLOR_AFM_DATA.map(stringToFloat);
-export const LOCATION_STRINGS: string[] = fixtures.getLocationAFMData().map(getHeaderItemName);
+export const LOCATION_LNGLATS: IGeoLngLatLike[] = fixtures
+    .getLocationAFMData()
+    .map(getHeaderItemName)
+    .map(getLocation);
 
 export function getExecutionResult(
     isWithLocation = false,

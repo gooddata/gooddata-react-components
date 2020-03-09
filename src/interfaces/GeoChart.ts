@@ -3,6 +3,13 @@ import { ISeparators } from "@gooddata/numberjs";
 import { VisualizationInput, VisualizationObject } from "@gooddata/typings";
 import { ICommonChartProps } from "../components/core/base/BaseChart";
 
+export type IGeoLngLatLike = [number, number]; // [lng lat]
+
+export interface IGeoLngLatBounds {
+    northEast: IGeoLngLatLike;
+    southWest: IGeoLngLatLike;
+}
+
 export interface IGeoTooltipItem {
     title: string;
     value: string | number;
@@ -27,13 +34,17 @@ export interface IGeoAttributeItem extends IGeoDataItem {
     data: string[];
 }
 
+export interface IGeoLocationItem extends IGeoDataItem {
+    data: IGeoLngLatLike[];
+}
+
 export interface IGeoMeasureItem extends IGeoDataItem {
     format: string;
     data: number[];
 }
 
 export interface IGeoData {
-    location?: IGeoAttributeItem;
+    location?: IGeoLocationItem;
     size?: IGeoMeasureItem;
     color?: IGeoMeasureItem;
     segment?: IGeoAttributeItem;
@@ -41,7 +52,7 @@ export interface IGeoData {
 }
 
 export interface IGeoConfig {
-    center?: [number, number];
+    center?: IGeoLngLatLike;
     isExportMode?: boolean;
     limit?: number;
     mdObject?: VisualizationObject.IVisualizationObjectContent;
