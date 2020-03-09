@@ -71,31 +71,37 @@ describe("PivotTable", () => {
 
     describe("column sizing", () => {
         it("should auto-resize columns if executing and default width should fit the viewport", done => {
+            expect.assertions(1);
             const wrapper = renderComponent({
                 config: { columnSizing: { defaultWidth: "viewport" } },
             });
             const table = getTableInstanceFromWrapper(wrapper);
-            const autoresizeColumns = jest.spyOn(table, "autoresizeVisibleColumns");
-            autoresizeColumns.mockImplementation(() => {
-                expect(autoresizeColumns).toHaveBeenCalledTimes(1);
-                done();
-            });
+            const autoresizeVisibleColumns = jest.spyOn(table, "autoresizeVisibleColumns");
+            try {
+                autoresizeVisibleColumns.mockImplementation(() => {
+                    expect(autoresizeVisibleColumns).toHaveBeenCalledTimes(1);
+                    done();
+                });
+            } catch (e) {
+                done.fail(e);
+            }
             wrapper.update();
         });
 
-        it("should not auto-resize columns it the column sizing is not configured", async () => {
+        it("should not auto-resize columns if the column sizing is not configured", async () => {
             const wrapper = renderComponent({
                 config: { columnSizing: undefined },
             });
             const table = getTableInstanceFromWrapper(wrapper);
-            const autoresizeColumns = jest.spyOn(table, "autoresizeVisibleColumns");
-            autoresizeColumns.mockImplementation(noop);
+            const autoresizeVisibleColumns = jest.spyOn(table, "autoresizeVisibleColumns");
+            autoresizeVisibleColumns.mockImplementation(noop);
 
             await waitFor(waitForDataLoaded(wrapper));
-            expect(autoresizeColumns).toHaveBeenCalledTimes(0);
+            expect(autoresizeVisibleColumns).toHaveBeenCalledTimes(0);
         });
 
         it("should auto-resize columns for a table with no measures", done => {
+            expect.assertions(2);
             const wrapper = renderComponent(
                 {
                     config: { columnSizing: { defaultWidth: "viewport" } },
@@ -103,11 +109,18 @@ describe("PivotTable", () => {
                 oneAttributeNoMeasure,
             );
             const table = getTableInstanceFromWrapper(wrapper);
-            const autoresizeColumns = jest.spyOn(table, "autoresizeVisibleColumns");
-            autoresizeColumns.mockImplementation(() => {
-                expect(autoresizeColumns).toHaveBeenCalledTimes(1);
-                done();
-            });
+            const autoresizeColumnsByColumnId = jest.spyOn(table, "autoresizeColumnsByColumnId");
+            try {
+                autoresizeColumnsByColumnId.mockImplementation(() => {
+                    expect(autoresizeColumnsByColumnId).toHaveBeenCalledTimes(1);
+                    expect(autoresizeColumnsByColumnId).toHaveBeenCalledWith(expect.any(Object), [
+                        "a_4DOTdf",
+                    ]);
+                    done();
+                });
+            } catch (e) {
+                done.fail(e);
+            }
             wrapper.update();
         });
     });
