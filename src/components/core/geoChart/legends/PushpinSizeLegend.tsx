@@ -13,12 +13,18 @@ export interface IPushpinSizeLegendProps {
 export default function PushpinSizeLegend(props: IPushpinSizeLegendProps): JSX.Element {
     const { sizes = [], format, numericSymbols = [], measureName } = props;
     const sizeData = sizes.filter(isFinite);
+
+    if (!sizeData.length) {
+        return null;
+    }
+
     const min = Math.min(...sizeData);
     const max = Math.max(...sizeData);
 
     if (min === max) {
         return null;
     }
+
     const averageValue: number = calculateAverage(sizeData);
     const diff: number = max - min;
 

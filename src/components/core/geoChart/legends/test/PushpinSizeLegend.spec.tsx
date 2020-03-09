@@ -44,6 +44,17 @@ describe("PushpinSizeLegend", () => {
                 .text(),
         ).toEqual("20");
     });
+    it("should not render component when Size contains all null values", () => {
+        const sizes: number[] = [null, null, null];
+        const props = {
+            sizes,
+            format: "#,##0.00",
+            numericSymbols: ["k", "M", "G", "T", "P", "E"],
+            measureName: "population",
+        };
+        const wrapper = createComponent(props);
+        expect(wrapper.hasClass("s-pushpin-size-legend")).toBe(false);
+    });
     it("should not render component when min value is equal to max value", () => {
         const sizes: number[] = [1000, 1000, 1000];
         const props = {
