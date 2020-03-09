@@ -40,3 +40,31 @@ test("should trigger resize after attribute filter change", async t => {
     const newWidth = await Selector(tableWrapper).find(firstAttributeCellSelector).clientWidth;
     await t.expect(newWidth).lt(originalWidth);
 });
+
+async function resizeTable(t, tableQuerySelector, width) {
+    await t.eval(
+        () => {
+            document.querySelector(tableQuerySelector).style.width = width;
+        },
+        { dependencies: { tableQuerySelector, width } },
+    );
+}
+
+async function resizeAndVerifyColumnVisibility(t, tableSelector, columnSelector) {
+    const tableElement = Selector(tableSelector);
+    const columnElement = await tableElement.find(columnSelector);
+    await t.expect(columnElement.exists).eql(false);
+    await resizeTable(t, tableSelector, "1200px");
+    await t.expect(columnElement.visible).eql(true);
+}
+
+test("should resize newly displayed columns after the whole table is resized", async t => {
+    const table = ".s-pivot-table-sizing-with-subtotals";
+    const originalAttributeCell = ".s-cell-1-4";
+    const newlyDisplayedAttributeCell = ".s-cell-1-8";
+
+    await resizeAndVerifyColumnVisibility(t, table, newlyDisplayedAttributeCell);
+    const newlyDisplayedColumnWidth = await Selector(table).find(newlyDisplayedAttributeCell).clientWidth;
+    const originalColumnWidth = await Selector(table).find(originalAttributeCell).clientWidth;
+    await t.expect(newlyDisplayedColumnWidth).eql(originalColumnWidth);
+});

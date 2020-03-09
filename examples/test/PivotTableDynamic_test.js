@@ -1,23 +1,23 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { Selector } from "testcafe";
 import { config } from "./utils/config";
 import {
-    loginUsingLoginForm,
-    checkCellValue,
-    waitForPivotTableStopLoading,
     checkCellHasClassName,
     checkCellHasNotClassName,
+    checkCellValue,
     checkDrill,
+    loginUsingLoginForm,
+    waitForPivotTableStopLoading,
 } from "./utils/helpers";
 import {
-    measuresDrillParams,
-    rowAttributesDrillParams,
+    attributeOnDrillExtendedParams,
     columnAndRowAttributesDrillParams,
-    measuresColumnAndRowAttributesDrillParams,
     measuresAndColumnAttributesDrillParams,
     measuresAndRowAttributesDrillParams,
-    attributeOnDrillExtendedParams,
+    measuresColumnAndRowAttributesDrillParams,
+    measuresDrillParams,
     metricOnDrillExtendedParams,
+    rowAttributesDrillParams,
 } from "./PivotTableDynamicFixtures.js";
 
 const PIVOT_TABLE_MEASURES_COLUMN_AND_ROW_ATTRIBUTES = ".s-pivot-table-measuresColumnAndRowAttributes";
@@ -51,7 +51,7 @@ const CELL_9_0 = ".s-cell-9-0";
 const DRILLABLE_CELL_CLASSNAME = "gd-cell-drillable";
 const HIDDEN_CELL_CLASSNAME = "s-gd-cell-hide";
 
-const MENU_CATEGORY = ".s-table-measure-column-header-group-cell-2 .s-header-cell-label";
+const MENU_CATEGORY = ".s-table-measure-column-header-index-2 .s-header-cell-label";
 const FRANCHISE_FEES =
     ".s-table-measure-column-header-group-cell-0.s-table-measure-column-header-cell-0 .s-header-cell-label";
 
