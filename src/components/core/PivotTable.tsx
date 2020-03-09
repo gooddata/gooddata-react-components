@@ -468,11 +468,15 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
                 event.api.getRenderedNodes().length === 0
             );
         };
-        const tablePageNotLoaded = () =>
-            event.api.getCacheBlockState()[0] === undefined ||
-            event.api.getCacheBlockState()[0].pageStatus !== "loaded";
+        const tablePagesNotLoaded = () => {
+            const pages = event.api.getCacheBlockState();
+            const pageIds = Object.keys(pages);
+            return (
+                pageIds.length <= 0 || pageIds.some((pageId: string) => pages[pageId].pageStatus !== "loaded")
+            );
+        };
 
-        if (!this.state.execution || alreadyResized() || dataNotRendered() || tablePageNotLoaded()) {
+        if (!this.state.execution || alreadyResized() || dataNotRendered() || tablePagesNotLoaded()) {
             return;
         }
 

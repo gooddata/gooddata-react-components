@@ -566,4 +566,22 @@ storiesOf("Core components/PivotTable", module)
                 </div>
             </ScreenshotReadyWrapper>,
         );
+    })
+    .add("auto resize columns works with small pageSize", () => {
+        return screenshotWrap(
+            <ScreenshotReadyWrapper resolver={visualizationNotLoadingResolver()}>
+                <div style={{ ...wrapperStyle, height: 600 }} className="s-table">
+                    <PivotTable
+                        projectId="storybook"
+                        measures={[MEASURE_1]}
+                        rows={[ATTRIBUTE_COUNTRY]}
+                        config={{ columnSizing: { defaultWidth: "viewport" } }}
+                        onError={onErrorHandler}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                        pageSize={5}
+                    />
+                </div>
+            </ScreenshotReadyWrapper>,
+        );
     });

@@ -128,6 +128,9 @@ const configuration = {
             },
             'auto resize columns in the viewport - simple table': {
                 readySelector: '.screenshot-ready-wrapper-done'
+            },
+            'auto resize columns works with small pageSize': {
+                readySelector: '.screenshot-ready-wrapper-done'
             }
         },
         'Internal/Drilldown': {
