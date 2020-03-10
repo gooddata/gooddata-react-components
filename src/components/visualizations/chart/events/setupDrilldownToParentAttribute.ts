@@ -1,5 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
-import get = require("lodash/get");
+// (C) 2007-2020 GoodData Corporation
 import partial = require("lodash/partial");
 import Highcharts from "../highcharts/highchartsEntryPoint";
 import { styleVariables } from "../../styles/variables";
@@ -12,13 +11,20 @@ import {
     IHighchartsPointObject,
 } from "../../../../interfaces/DrillEvents";
 
-function getDDPointsInParentTick(axis: any, tick: IHighchartsParentTick): IHighchartsPointObject[] {
+export function getDDPointsInParentTick(axis: any, tick: IHighchartsParentTick): IHighchartsPointObject[] {
     const { startAt, leaves } = tick;
     const ddPoints: IHighchartsPointObject[] = []; // drilldown points
 
     for (let i = startAt; i < startAt + leaves; i++) {
         ddPoints.push(...axis.getDDPoints(i));
     }
+
+    // replace y value by target value for bullet chart target
+    ddPoints.forEach(ddPoint => {
+        if (!!ddPoint.target) {
+            ddPoint.y = ddPoint.target;
+        }
+    });
 
     return ddPoints;
 }
@@ -53,7 +59,7 @@ function setParentTickDrillable(
     }
 }
 
-export function setupDrilldown(chart: Highcharts.Chart) {
+export function setupDrilldown(chart: Highcharts.Chart, chartType: ChartType) {
     const xAxes: any[] = (chart && chart.xAxis) || [];
     const axis = xAxes[0];
     if (!axis) {
@@ -61,7 +67,6 @@ export function setupDrilldown(chart: Highcharts.Chart) {
     }
 
     // not support chart without type
-    const chartType: ChartType | null = get(chart, "options.chart.type", null);
     if (!chartType) {
         return;
     }
