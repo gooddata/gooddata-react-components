@@ -4,12 +4,23 @@ import { VisualizationObject } from "@gooddata/typings";
 import { mount, ReactWrapper } from "enzyme";
 import { geoValidatorHOC } from "../GeoValidatorHOC";
 import { ErrorComponent } from "../../../simple/ErrorComponent";
-import { LOCATION_ITEM, SIZE_ITEM } from "../../../../helpers/tests/geoChart/fixtures";
+import {
+    LOCATION_ITEM,
+    SIZE_ITEM,
+    COLOR_ITEM,
+    SEGMENT_BY_ITEM,
+} from "../../../../helpers/tests/geoChart/fixtures";
+import { IDataSource } from "../../../../interfaces/DataSource";
 import { OnError } from "../../../../interfaces/Events";
 import { IGeoConfig } from "../../../../interfaces/GeoChart";
+import {
+    locationSizeColorSegmentDataSource,
+    locationSizeColorSegmentFiltersDataSource,
+} from "../../../tests/mocks";
 
 interface ITestInnerComponentProps {
     config?: IGeoConfig;
+    dataSource: IDataSource;
     onError?: OnError;
 }
 class TestInnerComponent extends React.Component<ITestInnerComponentProps> {
@@ -26,6 +37,7 @@ describe("GeoValidatorHOC", () => {
             config: {
                 mapboxToken: "",
             },
+            dataSource: locationSizeColorSegmentDataSource,
             ...customProps,
         };
         const WrappedComponent = geoValidatorHOC(TestInnerComponent);
@@ -100,38 +112,44 @@ describe("GeoValidatorHOC", () => {
     });
 
     it("should component be updated to new prop when filters changed", () => {
-        const buckets: VisualizationObject.IBucket[] = [LOCATION_ITEM, SIZE_ITEM];
-        const filters: VisualizationObject.VisualizationObjectExtendedFilter[] = [
-            {
-                positiveAttributeFilter: {
-                    displayForm: {
-                        identifier: "some-identifier",
-                    },
-                    in: ["e1", "e2"],
-                },
-            },
-        ];
         const config: IGeoConfig = {
             mapboxToken: "",
             mdObject: {
-                buckets,
-                filters: [],
-                visualizationClass,
-            },
-        };
-        const configWithFilters: IGeoConfig = {
-            mapboxToken: "",
-            mdObject: {
-                buckets,
-                filters,
+                buckets: [SIZE_ITEM, COLOR_ITEM, LOCATION_ITEM, SEGMENT_BY_ITEM],
                 visualizationClass,
             },
         };
 
         const wrapper = createComponent({ config });
-        expect(wrapper.find(TestInnerComponent).prop("config").mdObject.filters).toEqual([]);
+        expect(
+            wrapper
+                .find(TestInnerComponent)
+                .prop("dataSource")
+                .getAfm().filters,
+        ).toEqual([]);
 
-        wrapper.setProps({ config: configWithFilters });
-        expect(wrapper.find(TestInnerComponent).prop("config").mdObject.filters).toEqual(filters);
+        wrapper.setProps({ config, dataSource: locationSizeColorSegmentFiltersDataSource });
+        expect(
+            wrapper
+                .find(TestInnerComponent)
+                .prop("dataSource")
+                .getAfm().filters,
+        ).toEqual([
+            {
+                positiveAttributeFilter: {
+                    displayForm: { uri: "/gdc/md/projectId/obj/2" },
+                    in: [
+                        "/gdc/md/projectId/obj/71/elements?id=7644",
+                        "/gdc/md/projectId/obj/71/elements?id=722",
+                    ],
+                },
+            },
+            {
+                positiveAttributeFilter: {
+                    displayForm: { uri: "/gdc/md/projectId/obj/2" },
+                    in: ["/gdc/md/projectId/obj/71/elements?id=7644"],
+                },
+            },
+        ]);
     });
 });

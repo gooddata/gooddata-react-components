@@ -932,6 +932,287 @@ const twoMeasuresOneDimensionResponse: Execution.IExecutionResponses = {
     },
 };
 
+const locationSizeColorSegmentAfm: AFM.IAfm = {
+    measures: [
+        {
+            localIdentifier: "m_size",
+            definition: {
+                measure: {
+                    item: { uri: "/gdc/md/projectId/obj/4" },
+                    aggregation: "sum",
+                },
+            },
+        },
+        {
+            localIdentifier: "m_color",
+            definition: {
+                measure: {
+                    item: { uri: "/gdc/md/projectId/obj/5" },
+                    aggregation: "sum",
+                },
+            },
+        },
+    ],
+    attributes: [
+        {
+            displayForm: { uri: "/gdc/md/projectId/obj/1" },
+            localIdentifier: "a_location",
+        },
+        {
+            displayForm: { uri: "/gdc/md/projectId/obj/2" },
+            localIdentifier: "a_segmentBy",
+        },
+    ],
+    filters: [],
+};
+
+const locationSizeColorSegmentResponse: Execution.IExecutionResponses = {
+    executionResponse: {
+        dimensions: [
+            {
+                headers: [
+                    {
+                        measureGroupHeader: {
+                            items: [
+                                {
+                                    measureHeaderItem: {
+                                        name: "Sum of dst",
+                                        format: "#,##0.00",
+                                        localIdentifier: "m_size",
+                                    },
+                                },
+                                {
+                                    measureHeaderItem: {
+                                        name: "Sum of value",
+                                        format: "#,##0.00",
+                                        localIdentifier: "m_color",
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                ],
+            },
+            {
+                headers: [
+                    {
+                        attributeHeader: {
+                            name: "latlon",
+                            localIdentifier: "a_location",
+                            uri: "/gdc/md/projectId/obj/1",
+                            identifier: "label.ziplatlong.latlon",
+                            formOf: {
+                                name: "GEO pushpin",
+                                uri: "/gdc/md/projectId/obj/79",
+                                identifier: "attr.ziplatlong.latlon",
+                            },
+                        },
+                    },
+                    {
+                        attributeHeader: {
+                            name: "state",
+                            localIdentifier: "a_segmentBy",
+                            uri: "/gdc/md/projectId/obj/2",
+                            identifier: "label.ziplatlong.state",
+                            formOf: {
+                                name: "state",
+                                uri: "/gdc/md/projectId/obj/71",
+                                identifier: "attr.ziplatlong.state",
+                            },
+                        },
+                    },
+                ],
+            },
+        ],
+        links: {
+            executionResult: "/gdc/app/projects/projectId/executionResults/8917638730922032128",
+        },
+    },
+    executionResult: {
+        data: [["54", "36"], ["39509", "84832"]],
+        paging: { count: [2, 2], offset: [0, 0], total: [2, 2] },
+        headerItems: [
+            [
+                [
+                    { measureHeaderItem: { name: "Sum of dst", order: 0 } },
+                    { measureHeaderItem: { name: "Sum of value", order: 1 } },
+                ],
+            ],
+            [
+                [
+                    {
+                        attributeHeaderItem: {
+                            name: "42.627312;-78.73768",
+                            uri: "/gdc/md/projectId/obj/79/elements?id=2207",
+                        },
+                    },
+                    {
+                        attributeHeaderItem: {
+                            name: "43.345875;-73.40651",
+                            uri: "/gdc/md/projectId/obj/79/elements?id=6559",
+                        },
+                    },
+                ],
+                [
+                    {
+                        attributeHeaderItem: {
+                            name: "MA",
+                            uri: "/gdc/md/projectId/obj/71/elements?id=722",
+                        },
+                    },
+                    {
+                        attributeHeaderItem: {
+                            name: "CT",
+                            uri: "/gdc/md/projectId/obj/71/elements?id=7644",
+                        },
+                    },
+                ],
+            ],
+        ],
+    },
+};
+
+const locationSizeColorSegmentFiltersAfm: AFM.IAfm = {
+    measures: [
+        {
+            localIdentifier: "m_size",
+            definition: {
+                measure: {
+                    item: { uri: "/gdc/md/projectId/obj/4" },
+                    aggregation: "sum",
+                },
+            },
+        },
+        {
+            localIdentifier: "m_color",
+            definition: {
+                measure: {
+                    item: { uri: "/gdc/md/projectId/obj/5" },
+                    aggregation: "sum",
+                },
+            },
+        },
+    ],
+    attributes: [
+        {
+            displayForm: { uri: "/gdc/md/projectId/obj/1" },
+            localIdentifier: "a_location",
+        },
+        {
+            displayForm: { uri: "/gdc/md/projectId/obj/2" },
+            localIdentifier: "a_segmentBy",
+        },
+    ],
+    filters: [
+        {
+            positiveAttributeFilter: {
+                displayForm: { uri: "/gdc/md/projectId/obj/2" },
+                in: ["/gdc/md/projectId/obj/71/elements?id=7644", "/gdc/md/projectId/obj/71/elements?id=722"],
+            },
+        },
+        {
+            positiveAttributeFilter: {
+                displayForm: { uri: "/gdc/md/projectId/obj/2" },
+                in: ["/gdc/md/projectId/obj/71/elements?id=7644"],
+            },
+        },
+    ],
+};
+
+const locationSizeColorSegmentFiltersResponse: Execution.IExecutionResponses = {
+    executionResponse: {
+        dimensions: [
+            {
+                headers: [
+                    {
+                        measureGroupHeader: {
+                            items: [
+                                {
+                                    measureHeaderItem: {
+                                        name: "Sum of dst",
+                                        format: "#,##0.00",
+                                        localIdentifier: "m_size",
+                                    },
+                                },
+                                {
+                                    measureHeaderItem: {
+                                        name: "Sum of value",
+                                        format: "#,##0.00",
+                                        localIdentifier: "m_color",
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                ],
+            },
+            {
+                headers: [
+                    {
+                        attributeHeader: {
+                            name: "latlon",
+                            localIdentifier: "a_location",
+                            uri: "/gdc/md/projectId/obj/1",
+                            identifier: "label.ziplatlong.latlon",
+                            formOf: {
+                                name: "GEO pushpin",
+                                uri: "/gdc/md/projectId/obj/79",
+                                identifier: "attr.ziplatlong.latlon",
+                            },
+                        },
+                    },
+                    {
+                        attributeHeader: {
+                            name: "state",
+                            localIdentifier: "a_segmentBy",
+                            uri: "/gdc/md/projectId/obj/2",
+                            identifier: "label.ziplatlong.state",
+                            formOf: {
+                                name: "state",
+                                uri: "/gdc/md/projectId/obj/71",
+                                identifier: "attr.ziplatlong.state",
+                            },
+                        },
+                    },
+                ],
+            },
+        ],
+        links: {
+            executionResult: "/gdc/app/projects/projectId/executionResults/6726824952228314112",
+        },
+    },
+    executionResult: {
+        data: [["36"], ["84832"]],
+        paging: { count: [2, 270], offset: [0, 0], total: [2, 270] },
+        headerItems: [
+            [
+                [
+                    { measureHeaderItem: { name: "Sum of dst", order: 0 } },
+                    { measureHeaderItem: { name: "Sum of value", order: 1 } },
+                ],
+            ],
+            [
+                [
+                    {
+                        attributeHeaderItem: {
+                            name: "43.345875;-73.40651",
+                            uri: "/gdc/md/projectId/obj/79/elements?id=6559",
+                        },
+                    },
+                ],
+                [
+                    {
+                        attributeHeaderItem: {
+                            name: "CT",
+                            uri: "/gdc/md/projectId/obj/71/elements?id=7644",
+                        },
+                    },
+                ],
+            ],
+        ],
+    },
+};
+
 export {
     emptyResponse,
     emptyResponseWithNull,
@@ -939,6 +1220,10 @@ export {
     attributeOnlyResponse,
     tooLargeResponse,
     enrichedErrorResponse,
+    locationSizeColorSegmentAfm,
+    locationSizeColorSegmentResponse,
+    locationSizeColorSegmentFiltersAfm,
+    locationSizeColorSegmentFiltersResponse,
     oneMeasureResponse,
     oneMeasureAfm,
     twoMeasuresAfm,
