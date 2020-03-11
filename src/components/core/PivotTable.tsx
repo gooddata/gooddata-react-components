@@ -159,6 +159,7 @@ const AG_NUMERIC_HEADER_CLASSNAME = "ag-numeric-header";
 export const WATCHING_TABLE_RENDERED_INTERVAL = 500;
 export const WATCHING_TABLE_RENDERED_MAX_TIME = 15000;
 const AGGRID_RENDER_NEW_COLUMNS_TIMEOUT = 100;
+const AGGRID_BEFORE_RESIZE_TIMEOUT = 100;
 
 /**
  * Pivot Table react component
@@ -486,7 +487,9 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
         if (force || (this.state.execution && !alreadyResized() && dataRendered() && tablePagesLoaded())) {
             this.resizing = true;
-            this.autoresizeVisibleColumns(event.columnApi, previouslyResizedColumnIds);
+            setTimeout(() => {
+                this.autoresizeVisibleColumns(event.columnApi, previouslyResizedColumnIds);
+            }, AGGRID_BEFORE_RESIZE_TIMEOUT);
         }
     };
 
