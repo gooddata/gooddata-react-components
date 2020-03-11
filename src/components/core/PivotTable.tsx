@@ -456,11 +456,15 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         }
 
         const newColumnIds = difference(autoWidthColumnIds, previouslyResizedColumnIds);
-        columnApi.autoSizeColumns(newColumnIds);
+        this.autoresizeColumnsByColumnId(columnApi, newColumnIds);
         setTimeout(() => {
             this.autoresizeVisibleColumns(columnApi, autoWidthColumnIds);
         }, AGGRID_RENDER_NEW_COLUMNS_TIMEOUT);
     };
+
+    private autoresizeColumnsByColumnId(columnApi: ColumnApi, columnIds: string[]) {
+        columnApi.autoSizeColumns(columnIds);
+    }
 
     private autoresizeColumns = (
         event: AgGridEvent,
@@ -1140,7 +1144,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
                 } else if (isMappingHeaderAttributeItem(item)) {
                     return item.attributeHeaderItem.uri;
                 } else if (isMappingHeaderMeasureItem(item)) {
-                    return item.measureHeaderItem.uri;
+                    return item.measureHeaderItem.uri || item.measureHeaderItem.localIdentifier;
                 }
 
                 return undefined;
