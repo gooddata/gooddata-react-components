@@ -70,7 +70,7 @@ export const DEFAULT_PUSHPIN_OPTIONS = {
 export const DEFAULT_PUSHPIN_SIZE_SCALE = [4, 12, 19, 26, 33, 40];
 export const DEFAULT_PUSHPIN_SIZE_VALUE = 4;
 
-const DEFAULT_MAPBOX_STYLE = "mapbox://styles/kulhy/ck1ap34ki033y1cpcgjjpa0uf";
+const DEFAULT_MAPBOX_STYLE = "mapbox://styles/mapbox/light-v10";
 export const DEFAULT_MAPBOX_OPTIONS = {
     // hide mapbox's information on map
     attributionControl: false,
