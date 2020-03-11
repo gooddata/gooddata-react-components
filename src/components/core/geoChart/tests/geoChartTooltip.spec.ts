@@ -74,17 +74,17 @@ describe("geoChartTooltip", () => {
                 <div class="content gd-viz-tooltip-content"><div class="gd-viz-tooltip-item">
                 <span class="gd-viz-tooltip-title">State</span>
                 <div class="gd-viz-tooltip-value-wraper" >
-                    <span class="gd-viz-tooltip-value">N/A</span>
+                    <span class="gd-viz-tooltip-value">-</span>
                 </div>
             </div><div class="gd-viz-tooltip-item">
                 <span class="gd-viz-tooltip-title">Population</span>
                 <div class="gd-viz-tooltip-value-wraper" >
-                    <span class="gd-viz-tooltip-value">N/A</span>
+                    <span class="gd-viz-tooltip-value">-</span>
                 </div>
             </div><div class="gd-viz-tooltip-item">
                 <span class="gd-viz-tooltip-title">Area</span>
                 <div class="gd-viz-tooltip-value-wraper" >
-                    <span class="gd-viz-tooltip-value">N/A</span>
+                    <span class="gd-viz-tooltip-value">-</span>
                 </div>
             </div></div>
             </div>`);

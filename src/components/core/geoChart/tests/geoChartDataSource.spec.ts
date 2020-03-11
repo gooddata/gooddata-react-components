@@ -52,10 +52,10 @@ describe("createPushpinDataSource", () => {
             properties: {
                 pushpinRadius: 1005,
                 color: {
-                    background: "rgb(176,229,245)",
+                    background: "rgb(215,242,250)",
                     border: "rgb(20,178,226)",
                     title: "color",
-                    value: 528,
+                    value: NaN,
                     format: "#,##0.00",
                 },
                 locationName: {
