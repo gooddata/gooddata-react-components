@@ -91,10 +91,23 @@ const getElementChartType = (chartType: ChartType, point: IHighchartsPointObject
     return get(point, "series.type", chartType);
 };
 
+const getDrillPointCustomProps = (
+    point: IHighchartsPointObject,
+    chartType: ChartType,
+): Partial<IDrillPointBase> => {
+    if (isComboChart(chartType)) {
+        return { type: get(point, "series.type") };
+    }
+
+    if (isBulletChart(chartType)) {
+        return { type: get(point, "series.userOptions.bulletChartMeasureType") };
+    }
+
+    return {};
+};
+
 const getDrillPoint = (chartType: ChartType) => (point: IHighchartsPointObject): IDrillPointExtended => {
-    const customProps: Partial<IDrillPointBase> = isComboChart(chartType)
-        ? { type: get(point, "series.type") }
-        : {};
+    const customProps = getDrillPointCustomProps(point, chartType);
 
     const elementChartType = getElementChartType(chartType, point);
     const result: IDrillPointExtended = {
@@ -258,11 +271,17 @@ const getDrillEvent = (
     chartType: ChartType,
     afm: AFM.IAfm,
 ): IDrillEventExtended => {
-    const contextPoints: IDrillPointExtended[] = points.map((point: IHighchartsPointObject) => ({
-        x: point.x,
-        y: point.y,
-        intersection: point.drillIntersection,
-    }));
+    const contextPoints: IDrillPointExtended[] = points.map((point: IHighchartsPointObject) => {
+        const customProps = isBulletChart(chartType)
+            ? { type: get(point, "series.userOptions.bulletChartMeasureType") }
+            : {};
+        return {
+            x: point.x,
+            y: point.y,
+            intersection: point.drillIntersection,
+            ...customProps,
+        };
+    });
 
     const drillContext: IDrillEventContextExtended = {
         type: chartType,

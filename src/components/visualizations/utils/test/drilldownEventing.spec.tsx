@@ -339,9 +339,9 @@ describe("Drilldown Eventing", () => {
             jest.runAllTimers();
 
             expect(target.dispatchEvent.mock.calls[0][0].detail.drillContext.points).toEqual([
-                { intersection: [], x: 1, y: 100 },
-                { intersection: [], x: 1, y: 2 },
-                { intersection: [], x: 1, y: 3 },
+                { intersection: [], type: "target", x: 1, y: 100 },
+                { intersection: [], type: "primary", x: 1, y: 2 },
+                { intersection: [], type: "comparative", x: 1, y: 3 },
             ]);
         });
     });
