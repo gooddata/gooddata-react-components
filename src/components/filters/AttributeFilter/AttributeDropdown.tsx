@@ -361,6 +361,7 @@ export class AttributeDropdownWrapped extends React.PureComponent<
         } else {
             this.restoreSelection();
             this.resetSearchString();
+            this.dataSource.getData({});
         }
     };
 
