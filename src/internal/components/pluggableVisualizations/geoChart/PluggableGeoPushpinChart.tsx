@@ -44,7 +44,6 @@ import { IGeoConfig, IGeoLngLatObj } from "../../../../interfaces/GeoChart";
 import { GEOPUSHPIN_SUPPORTED_PROPERTIES } from "../../../constants/supportedProperties";
 import GeoPushpinConfigurationPanel from "../../configurationPanels/GeoPushpinConfigurationPanel";
 import { IChartConfig } from "../../../..";
-import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from "../../../../constants/geoChart";
 
 export class PluggableGeoPushpinChart extends PluggableBaseChart {
     private geoPushpinElement: string;
@@ -173,11 +172,11 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
         config: IGdcConfig,
         supportedControls: IVisualizationProperties,
     ): IChartConfig {
-        const lat: number = get(supportedControls, "center.lat", DEFAULT_LATITUDE);
-        const lng: number = get(supportedControls, "center.lng", DEFAULT_LONGITUDE);
+        const center = get(supportedControls, "center");
+        const centerProp = center ? { center } : {};
         const geoChartConfig = {
             ...config,
-            center: [lng, lat],
+            ...centerProp,
         };
         return {
             mdObject,
