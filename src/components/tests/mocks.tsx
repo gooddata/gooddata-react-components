@@ -6,6 +6,10 @@ import {
     emptyResponse,
     enrichedErrorResponse,
     executionObjectWithTotals,
+    locationSizeColorSegmentAfm,
+    locationSizeColorSegmentResponse,
+    locationSizeColorSegmentFiltersAfm,
+    locationSizeColorSegmentFiltersResponse,
     oneAttributeAfm,
     oneAttributeNoMeasureResponse,
     oneAttributeOneMeasureExecutionObject,
@@ -54,6 +58,20 @@ export class Table extends DummyComponent {}
 export class Xirr extends DummyComponent {}
 export class LoadingComponent extends DummyComponent {}
 export class ErrorComponent extends DummyComponent {}
+
+export const locationSizeColorSegmentDataSource: IDataSource = {
+    getData: () => Promise.resolve(locationSizeColorSegmentResponse),
+    getPage: () => Promise.resolve(locationSizeColorSegmentResponse),
+    getAfm: () => locationSizeColorSegmentAfm,
+    getFingerprint: () => JSON.stringify(locationSizeColorSegmentResponse),
+};
+
+export const locationSizeColorSegmentFiltersDataSource: IDataSource = {
+    getData: () => Promise.resolve(locationSizeColorSegmentFiltersResponse),
+    getPage: () => Promise.resolve(locationSizeColorSegmentFiltersResponse),
+    getAfm: () => locationSizeColorSegmentFiltersAfm,
+    getFingerprint: () => JSON.stringify(locationSizeColorSegmentFiltersResponse),
+};
 
 export const oneMeasureDataSource: IDataSource = {
     getData: () => Promise.resolve(oneMeasureResponse),
