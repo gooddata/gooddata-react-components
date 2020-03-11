@@ -1,9 +1,8 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import noop = require("lodash/noop");
 import { getHighchartsOptions } from "../highChartsCreators";
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 import { supportedDualAxesChartTypes } from "../chartOptionsBuilder";
-import { handleChartLoad } from "../highcharts/commonConfiguration";
 import { IDrillConfig } from "../../../../interfaces/DrillEvents";
 
 const chartOptions = {
@@ -197,7 +196,7 @@ describe("highChartCreators", () => {
         it("should dual axis charts be registered render event", () => {
             supportedDualAxesChartTypes.forEach((type: string) => {
                 const config = getConfig(type);
-                expect(config.chart.events.render).toBe(handleChartLoad);
+                expect(config.chart.events.render).toBeTruthy();
             });
         });
 

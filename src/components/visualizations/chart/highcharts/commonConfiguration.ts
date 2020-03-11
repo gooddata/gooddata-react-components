@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import cloneDeep = require("lodash/cloneDeep");
 import invoke = require("lodash/invoke");
 import get = require("lodash/get");
@@ -12,6 +12,7 @@ import { supportedDualAxesChartTypes } from "../chartOptionsBuilder";
 import { setupDrilldown } from "../events/setupDrilldownToParentAttribute";
 import { IHighchartsAxisExtend } from "../../../../interfaces/HighchartsExtend";
 import { IDrillConfig } from "../../../../interfaces/DrillEvents";
+import { ChartType } from "../../../..";
 
 const isTouchDevice = "ontouchstart" in window || navigator.msMaxTouchPoints;
 const HIGHCHART_PLOT_LIMITED_RANGE = 1e5;
@@ -143,13 +144,15 @@ function registerDrilldownHandler(configuration: any, chartOptions: any, drillCo
     return configuration;
 }
 
-export function handleChartLoad(): void {
-    setupDrilldown(this);
+export function handleChartLoad(chartType: ChartType) {
+    return function() {
+        setupDrilldown(this, chartType);
+    };
 }
 
 function registerRenderHandler(configuration: any, chartOptions: any) {
     if (isOneOfTypes(chartOptions.type, supportedDualAxesChartTypes)) {
-        set(configuration, "chart.events.render", handleChartLoad);
+        set(configuration, "chart.events.render", handleChartLoad(chartOptions.type));
     }
     return configuration;
 }
