@@ -73,16 +73,20 @@ export const DEFAULT_PUSHPIN_SIZE_SCALE = [4, 12, 19, 26, 33, 40];
 export const DEFAULT_PUSHPIN_SIZE_VALUE = 4;
 
 const DEFAULT_MAPBOX_STYLE = "mapbox://styles/mapbox/light-v10";
-export const DEFAULT_MAPBOX_OPTIONS = {
+export const DEFAULT_MAPBOX_OPTIONS: Partial<mapboxgl.MapboxOptions> = {
     // hide mapbox's information on map
     attributionControl: false,
     // If false , the "drag to rotate" interaction is disabled
     dragRotate: false,
     fitBoundsOptions: { padding: 60 },
+    // Disable infinite geochart scrolling
+    maxBounds: [[-180, -84], [180, 84]],
     // The maximum zoom level of the map (0-24).
     maxZoom: 14,
     // If false , the map's pitch (tilt) control with "drag to rotate" interaction will be disabled.
     pitchWithRotate: false,
+    // Disable infinite geochart scrolling
+    renderWorldCopies: false,
     // If false , the "pinch to rotate and zoom" interaction is disabled
     touchZoomRotate: false,
     style: DEFAULT_MAPBOX_STYLE,
