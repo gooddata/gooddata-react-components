@@ -40,7 +40,7 @@ import { getReferencePointWithSupportedProperties } from "../../../utils/propert
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 import { DASHBOARDS_ENVIRONMENT } from "../../../constants/properties";
 import { GeoChart } from "../../../../components/core/GeoChart";
-import { IGeoConfig, IGeoLngLatObj } from "../../../../interfaces/GeoChart";
+import { IGeoConfig, IGeoLngLat } from "../../../../interfaces/GeoChart";
 import { GEOPUSHPIN_SUPPORTED_PROPERTIES } from "../../../constants/supportedProperties";
 import GeoPushpinConfigurationPanel from "../../configurationPanels/GeoPushpinConfigurationPanel";
 import { IChartConfig } from "../../../..";
@@ -323,7 +323,7 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
         return referencePointConfigured;
     }
 
-    private handleOnCenterPositionChanged = (center: IGeoLngLatObj): void => {
+    private handleOnCenterPositionChanged = (center: IGeoLngLat): void => {
         this.handlePushData({
             properties: {
                 controls: {
