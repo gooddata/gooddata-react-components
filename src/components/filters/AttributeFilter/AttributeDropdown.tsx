@@ -385,6 +385,10 @@ export class AttributeDropdownWrapped extends React.PureComponent<
         return itemClone;
     }
 
+    private getItemKey(item: IAttributeElement) {
+        return item.uri;
+    }
+
     private renderList() {
         const {
             isListReady,
@@ -421,6 +425,7 @@ export class AttributeDropdownWrapped extends React.PureComponent<
                 onRangeChange={this.onRangeChange}
                 onSearch={this.onSearch}
                 onSelect={this.onSelect}
+                getItemKey={this.getItemKey}
             />,
         );
     }
