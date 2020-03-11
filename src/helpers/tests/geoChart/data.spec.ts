@@ -2,7 +2,7 @@
 import { Execution, VisualizationObject } from "@gooddata/typings";
 import { COLOR_ITEM, LOCATION_ITEM, SEGMENT_BY_ITEM, SIZE_ITEM, TOOLTIP_TEXT_ITEM } from "./fixtures";
 import { getExecutionResponse, getExecutionResult } from "../../../../stories/data/geoChart";
-import { getGeoData, getLocation } from "../../geoChart/data";
+import { getGeoData, getLocation, getGeoBucketsFromMdObject } from "../../geoChart/data";
 
 describe("getLocation", () => {
     it("should return [lng, lat] from location string", () => {
@@ -667,5 +667,71 @@ describe("geoChartData", () => {
                 name: "Population",
             },
         });
+    });
+});
+
+describe("getGeoBucketsFromMdObject", () => {
+    const attributeGeo1 = {
+        visualizationAttribute: {
+            localIdentifier: "localIdentifier123",
+            displayForm: {
+                uri: "/gdc/displayform/geo1",
+            },
+        },
+    };
+    const attributeGeo2 = {
+        visualizationAttribute: {
+            localIdentifier: "tooltipText",
+            displayForm: {
+                uri: "/gdc/displayform/geo2",
+            },
+        },
+    };
+
+    it("should return buckets have tooltip text when geo pushpin has location item", () => {
+        const mdObject = {
+            visualizationClass: {
+                uri: "/gdc/visualizationclass/1",
+            },
+            buckets: [
+                {
+                    localIdentifier: "location",
+                    items: [attributeGeo1],
+                },
+            ],
+            properties: '{"controls":{"tooltipText":"/gdc/displayform/geo2"}}',
+        };
+        const buckets = getGeoBucketsFromMdObject(mdObject);
+        expect(buckets).toEqual([
+            {
+                localIdentifier: "location",
+                items: [attributeGeo1],
+            },
+            {
+                localIdentifier: "tooltipText",
+                items: [attributeGeo2],
+            },
+        ]);
+    });
+
+    it("should return buckets without tooltip text when geo pushpin does not have location item", () => {
+        const mdObject = {
+            visualizationClass: {
+                uri: "/gdc/visualizationclass/1",
+            },
+            buckets: [
+                {
+                    localIdentifier: "size",
+                    items: [attributeGeo1],
+                },
+            ],
+        };
+        const buckets = getGeoBucketsFromMdObject(mdObject);
+        expect(buckets).toEqual([
+            {
+                localIdentifier: "size",
+                items: [attributeGeo1],
+            },
+        ]);
     });
 });

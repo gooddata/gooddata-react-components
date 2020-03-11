@@ -12,6 +12,7 @@ import {
 import { stringToFloat } from "../utils";
 import { getFormatFromExecutionResponse, getGeoAttributeHeaderItems } from "./common";
 import { isDisplayFormUri } from "../../internal/utils/mdObjectHelper";
+import { parseGeoPropertyItem } from "../../components/core/geoChart/geoChartTooltip";
 
 interface IBucketItemInfo {
     uri: VisualizationObject.IObjUriQualifier["uri"];
@@ -177,3 +178,35 @@ function getBucketItemInfo(bucketItem: VisualizationObject.BucketItem): IBucketI
     const uri = isDisplayFormUri(item) && item.uri;
     return { uri, localIdentifier };
 }
+
+function buildTooltipBucketItem(tooltipText: string): VisualizationObject.IBucket {
+    return {
+        localIdentifier: TOOLTIP_TEXT,
+        items: [
+            {
+                visualizationAttribute: {
+                    localIdentifier: TOOLTIP_TEXT,
+                    displayForm: {
+                        uri: tooltipText,
+                    },
+                },
+            },
+        ],
+    };
+}
+
+export const getGeoBucketsFromMdObject = (
+    mdObject: VisualizationObject.IVisualizationObjectContent,
+): VisualizationObject.IBucket[] => {
+    if (!mdObject) {
+        return [];
+    }
+    const { buckets = [], properties } = mdObject;
+    const propertiesObj = parseGeoPropertyItem(properties);
+    const tooltipText = get(propertiesObj, "controls.tooltipText");
+    if (tooltipText) {
+        return [...buckets, buildTooltipBucketItem(tooltipText)];
+    }
+
+    return buckets;
+};

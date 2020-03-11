@@ -19,14 +19,19 @@ import {
     DEFAULT_CLUSTER_LABELS_CONFIG,
     DEFAULT_CLUSTER_LAYER_NAME,
     DEFAULT_DATA_SOURCE_NAME,
-    DEFAULT_LATITUDE,
     DEFAULT_LAYER_NAME,
-    DEFAULT_LONGITUDE,
     DEFAULT_MAPBOX_OPTIONS,
     DEFAULT_ZOOM,
     DEFAULT_TOOLTIP_OPTIONS,
+    DEFAULT_CENTER,
 } from "../../../constants/geoChart";
-import { IGeoConfig, IGeoData, IGeoLngLatBounds, IGeoLngLatLike } from "../../../interfaces/GeoChart";
+import {
+    IGeoConfig,
+    IGeoData,
+    IGeoLngLatBounds,
+    IGeoLngLatLike,
+    IGeoLngLatObj,
+} from "../../../interfaces/GeoChart";
 
 import "../../../../styles/scss/geoChart.scss";
 import { handlePushpinMouseEnter, handlePushpinMouseLeave } from "./geoChartTooltip";
@@ -38,6 +43,8 @@ export interface IGeoChartRendererProps {
     execution: Execution.IExecutionResponses;
     geoData: IGeoData;
     afterRender(): void;
+    onCenterPositionChanged(center: IGeoLngLatObj): void;
+    onZoomChanged(zoom: number): void;
 }
 
 export default class GeoChartRenderer extends React.Component<IGeoChartRendererProps> {
@@ -46,6 +53,8 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
             mapboxToken: "",
         },
         afterRender: noop,
+        onZoomChanged: noop,
+        onCenterPositionChanged: noop,
     };
 
     private chart: mapboxgl.Map;
@@ -58,6 +67,25 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         mapboxgl.accessToken = props.config.mapboxToken;
     }
 
+    public shouldComponentUpdate(nextProps: IGeoChartRendererProps) {
+        const {
+            config: { center: nextCenter = DEFAULT_CENTER, zoom: nextZoom = DEFAULT_ZOOM },
+        } = nextProps;
+        const { chart } = this;
+
+        if (chart) {
+            const { lat, lng } = chart.getCenter();
+            const chartCenter = [lng, lat];
+            const chartZoom = chart.getZoom();
+            return !isEqual(chartCenter, nextCenter) || !isEqual(chartZoom, nextZoom);
+        }
+
+        const {
+            config: { center: currentCenter = DEFAULT_CENTER, zoom: currentZoom = DEFAULT_ZOOM },
+        } = this.props;
+        return !isEqual(currentCenter, nextCenter) || !isEqual(currentZoom, nextZoom);
+    }
+
     public componentDidUpdate(prevProps: IGeoChartRendererProps) {
         const {
             config: { selectedSegmentItems },
@@ -68,6 +96,7 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
             this.setFilterMap();
         }
     }
+
     public componentDidMount() {
         this.createTooltip();
         this.createMap();
@@ -108,7 +137,7 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
             ...DEFAULT_MAPBOX_OPTIONS,
             bounds,
             container: this.chartRef,
-            center: center || [DEFAULT_LONGITUDE, DEFAULT_LATITUDE],
+            center: center || DEFAULT_CENTER,
             // If true, the map’s canvas can be exported to a PNG using map.getCanvas().toDataURL().
             // This is false by default as a performance optimization.
             preserveDrawingBuffer: isExportMode,
@@ -155,6 +184,8 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         chart.on("load", this.setupMap);
         chart.on("mouseenter", DEFAULT_LAYER_NAME, handlePushpinMouseEnter(chart, tooltip, separators));
         chart.on("mouseleave", DEFAULT_LAYER_NAME, handlePushpinMouseLeave(chart, tooltip));
+        chart.on("moveend", this.handlePushpinMoveEnd);
+        chart.on("zoomend", this.handlePushpinZoomEnd);
     };
 
     private setupMap = (): void => {
@@ -231,5 +262,21 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         }
         this.cleanupMap();
         this.chart.remove();
+    };
+
+    private handlePushpinMoveEnd = (e: mapboxgl.EventData): void => {
+        const { target } = e;
+        const { onCenterPositionChanged } = this.props;
+        const { lng, lat } = target.getCenter();
+        const center: IGeoLngLatObj = { lng, lat };
+        onCenterPositionChanged(center);
+    };
+
+    private handlePushpinZoomEnd = (e: mapboxgl.EventData): void => {
+        const { target } = e;
+        const { onZoomChanged } = this.props;
+        const zoom: number = target.getZoom();
+
+        onZoomChanged(zoom);
     };
 }

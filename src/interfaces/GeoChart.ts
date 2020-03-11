@@ -5,6 +5,11 @@ import { ICommonChartProps } from "../components/core/base/BaseChart";
 
 export type IGeoLngLatLike = [number, number]; // [lng lat]
 
+export interface IGeoLngLatObj {
+    lat: number;
+    lng: number;
+}
+
 export interface IGeoLngLatBounds {
     northEast: IGeoLngLatLike;
     southWest: IGeoLngLatLike;

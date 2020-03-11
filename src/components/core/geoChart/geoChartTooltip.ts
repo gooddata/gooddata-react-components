@@ -84,7 +84,7 @@ function getTooltipItemHtml(item: IGeoTooltipItem): string {
             </div>`;
 }
 
-function parseGeoPropertyItem(item: string): GeoJSON.GeoJsonProperties {
+export function parseGeoPropertyItem(item: string): GeoJSON.GeoJsonProperties {
     try {
         return JSON.parse(item);
     } catch (e) {

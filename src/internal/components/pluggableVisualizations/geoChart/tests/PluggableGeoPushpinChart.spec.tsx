@@ -62,6 +62,7 @@ describe("PluggableGeoPushpinChart", () => {
                             aggregation: null,
                             attribute: "attr.owner.country",
                             locationDisplayFormUri: "/geo/attribute/displayform/uri/1",
+                            dfUri: "/geo/attribute/displayform/uri/2",
                         },
                     ],
                 },
@@ -136,6 +137,18 @@ describe("PluggableGeoPushpinChart", () => {
                     items: [],
                 },
             ]);
+        });
+
+        it("should return a new reference point with geoPushpin supported properties list", async () => {
+            const geoPushpinChart = createComponent();
+            const extendedReferencePoint = await geoPushpinChart.getExtendedReferencePoint(
+                referencePointMocks.simpleGeoPushpinReferencePoint,
+            );
+            expect(extendedReferencePoint.properties).toEqual({
+                controls: {
+                    tooltipText: "/geo/attribute/displayform/uri/2",
+                },
+            });
         });
     });
 });
