@@ -361,6 +361,7 @@ export class AttributeDropdownWrapped extends React.PureComponent<
         } else {
             this.restoreSelection();
             this.resetSearchString();
+            this.dataSource.getData({});
         }
     };
 
@@ -383,6 +384,10 @@ export class AttributeDropdownWrapped extends React.PureComponent<
         });
 
         return itemClone;
+    }
+
+    private getItemKey(item: IAttributeElement) {
+        return item.uri;
     }
 
     private renderList() {
@@ -421,6 +426,7 @@ export class AttributeDropdownWrapped extends React.PureComponent<
                 onRangeChange={this.onRangeChange}
                 onSearch={this.onSearch}
                 onSelect={this.onSelect}
+                getItemKey={this.getItemKey}
             />,
         );
     }
