@@ -136,24 +136,44 @@ describe("getDDPointsInParentTick", () => {
         const ddPointsForBulletChart = [
             [
                 {
+                    series: {
+                        userOptions: {
+                            bulletChartMeasureType: "primary",
+                        },
+                    },
                     x: 0,
                     y: 200,
                 },
                 {
+                    series: {
+                        userOptions: {
+                            bulletChartMeasureType: "target",
+                        },
+                    },
                     x: 0,
                     y: 0,
                     target: 300,
                 },
                 {
+                    series: {
+                        userOptions: {
+                            bulletChartMeasureType: "comparative",
+                        },
+                    },
                     x: 0,
                     y: 400,
                 },
             ],
             [
                 {
+                    series: {
+                        userOptions: {
+                            bulletChartMeasureType: "target",
+                        },
+                    },
                     x: 0,
                     y: 0,
-                    target: 500,
+                    target: null,
                 },
             ],
         ];
@@ -170,22 +190,42 @@ describe("getDDPointsInParentTick", () => {
 
         const expectedDDPoints = [
             {
+                series: {
+                    userOptions: {
+                        bulletChartMeasureType: "primary",
+                    },
+                },
                 x: 0,
                 y: 200,
             },
             {
+                series: {
+                    userOptions: {
+                        bulletChartMeasureType: "target",
+                    },
+                },
                 x: 0,
                 y: 300,
                 target: 300,
             },
             {
+                series: {
+                    userOptions: {
+                        bulletChartMeasureType: "comparative",
+                    },
+                },
                 x: 0,
                 y: 400,
             },
             {
+                series: {
+                    userOptions: {
+                        bulletChartMeasureType: "target",
+                    },
+                },
                 x: 0,
-                y: 500,
-                target: 500,
+                y: null,
+                target: null,
             },
         ];
 
