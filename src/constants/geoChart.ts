@@ -111,7 +111,8 @@ export const DEFAULT_PUSHPIN_OPTIONS = {
     "circle-stroke-width": 1,
 };
 
-const DEFAULT_MAPBOX_STYLE = "mapbox://styles/mapbox/light-v10";
+const DEFAULT_MAPBOX_STYLE = "mapbox://styles/gooddata/ck88ltry127yx1iql358df6xn";
+
 export const DEFAULT_MAPBOX_OPTIONS: Partial<mapboxgl.MapboxOptions> = {
     // hide mapbox's information on map
     attributionControl: false,
