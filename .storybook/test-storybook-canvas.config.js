@@ -19,6 +19,9 @@ const configuration = {
             'with Include all data viewport': DEFAULT_SCENARIO_CONFIG,
             'with disabled interactive and zoom control button': DEFAULT_SCENARIO_CONFIG,
             'with color and segment alias shown in tooltip': DEFAULT_SCENARIO_CONFIG,
+            'with disabled groupNearbyPoints': DEFAULT_SCENARIO_CONFIG,
+            'with enabled groupNearbyPoints': DEFAULT_SCENARIO_CONFIG,
+            'with config point size': DEFAULT_SCENARIO_CONFIG,
         },
         'URI components': {
             'GeoPushpinChart example': DEFAULT_SCENARIO_CONFIG,

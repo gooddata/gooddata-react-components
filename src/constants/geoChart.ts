@@ -58,6 +58,25 @@ export const DEFAULT_CLUSTER_POINT_SIZES: mapboxgl.Expression = [
     100,
     25, // point count is greater than or equal to 100
 ];
+
+export const PUSHPIN_SIZE_OPTIONS_MAP = {
+    min: {
+        default: 8,
+        "0.5x": 4,
+        "0.75x": 6,
+        normal: 8,
+        "1.25x": 10,
+        "1.5x": 12,
+    },
+    max: {
+        default: 60,
+        "0.5x": 30,
+        "0.75x": 45,
+        normal: 60,
+        "1.25x": 75,
+        "1.5x": 90,
+    },
+};
 export const DEFAULT_CLUSTER_RADIUS = 50; // inside this Radius, points will be clustered (defaults to 50)
 
 export const DEFAULT_DATA_POINTS_LIMIT = 2000;
@@ -91,9 +110,6 @@ export const DEFAULT_PUSHPIN_COLOR_VALUE = DEFAULT_COLORS[0];
 export const DEFAULT_PUSHPIN_OPTIONS = {
     "circle-stroke-width": 1,
 };
-
-export const DEFAULT_PUSHPIN_SIZE_SCALE = [4, 12, 19, 26, 33, 40];
-export const DEFAULT_PUSHPIN_SIZE_VALUE = 4;
 
 const DEFAULT_MAPBOX_STYLE = "mapbox://styles/mapbox/light-v10";
 export const DEFAULT_MAPBOX_OPTIONS: Partial<mapboxgl.MapboxOptions> = {

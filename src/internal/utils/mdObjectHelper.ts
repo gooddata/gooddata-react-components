@@ -59,6 +59,27 @@ export function hasMeasures(mdObject: VisualizationObject.IVisualizationObjectCo
     return mdObject && getMeasuresFromMdObject(mdObject).length > 0;
 }
 
+export function hasSizeMeasure(mdObject: VisualizationObject.IVisualizationObjectContent): boolean {
+    const sizeBucket = mdObject && findBucketByLocalIdentifier(mdObject.buckets, BucketNames.SIZE);
+    return sizeBucket && get(sizeBucket, "items").length > 0;
+}
+
+export function hasLocationAttribute(mdObject: VisualizationObject.IVisualizationObjectContent): boolean {
+    if (!mdObject) {
+        return false;
+    }
+
+    return getBucketItems(mdObject.buckets, BucketNames.LOCATION).length > 0;
+}
+
+export function hasSegmentAttribute(mdObject: VisualizationObject.IVisualizationObjectContent): boolean {
+    if (!mdObject) {
+        return false;
+    }
+
+    return getBucketItems(mdObject.buckets, BucketNames.SEGMENT).length > 0;
+}
+
 // don't support sort by total value for dual axis
 export function canSortStackTotalValue(
     mdObject: VisualizationObject.IVisualizationObjectContent,
