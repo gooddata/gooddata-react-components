@@ -685,9 +685,12 @@ const oneAttributesOneMeasureResponse: Execution.IExecutionResponses = {
     },
 };
 
-const oneAttributeNoMeasureResponse: Execution.IExecutionResponses = {
+const oneColumnAttributeNoMeasureResponse: Execution.IExecutionResponses = {
     executionResponse: {
         dimensions: [
+            {
+                headers: [],
+            },
             {
                 headers: [
                     {
@@ -705,9 +708,6 @@ const oneAttributeNoMeasureResponse: Execution.IExecutionResponses = {
                     },
                 ],
             },
-            {
-                headers: [],
-            },
         ],
         links: {
             executionResult:
@@ -718,6 +718,7 @@ const oneAttributeNoMeasureResponse: Execution.IExecutionResponses = {
     executionResult: {
         data: [],
         headerItems: [
+            [],
             [
                 [
                     {
@@ -794,7 +795,6 @@ const oneAttributeNoMeasureResponse: Execution.IExecutionResponses = {
                     },
                 ],
             ],
-            [],
         ],
         paging: {
             count: [0, 1000],
@@ -1236,6 +1236,6 @@ export {
     oneAttributeOneMeasureOneFilterExecutionObject,
     oneAttributesOneMeasureResponse,
     oneAttributeOneMeasureSortByMeasureExecutionObject,
-    oneAttributeNoMeasureResponse,
+    oneColumnAttributeNoMeasureResponse,
     oneAttributeAfm,
 };
