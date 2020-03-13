@@ -213,4 +213,19 @@ storiesOf("Core components/GeoPushpinChart", module)
                 },
             }),
         ),
-    );
+    )
+    .add("with disabled interactive and zoom control button", () => {
+        const config: IGeoConfig = {
+            ...DEFAULT_CONFIG,
+            viewport: {
+                freezed: true,
+            },
+        };
+        return screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                config,
+            }),
+        );
+    });

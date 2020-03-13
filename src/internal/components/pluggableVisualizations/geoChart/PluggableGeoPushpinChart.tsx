@@ -146,9 +146,16 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
     ): IChartConfig {
         const center = get(supportedControls, "center");
         const centerProp = center ? { center } : {};
+        const { isInEditMode, isExportMode } = config;
+        const isViewportFreezed = {
+            viewport: {
+                freezed: isInEditMode || isExportMode,
+            },
+        };
         const geoChartConfig = {
             ...config,
             ...centerProp,
+            ...isViewportFreezed,
         };
         return {
             mdObject,
