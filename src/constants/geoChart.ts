@@ -1,7 +1,7 @@
 // (C) 2019-2020 GoodData Corporation
 import mapboxgl from "mapbox-gl";
 import { DEFAULT_COLORS } from "../components/visualizations/utils/color";
-import { IGeoLngLatLike } from "../interfaces/GeoChart";
+import { IGeoLngLat } from "../interfaces/GeoChart";
 
 export const DEFAULT_CLUSTER_FILTER = ["has", "point_count"];
 export const DEFAULT_CLUSTER_LABELS_CONFIG = {
@@ -57,7 +57,10 @@ export const DEFAULT_LAYER_NAME = "gdcPushpins";
 export const DEFAULT_LATITUDE: number = 34;
 export const DEFAULT_LONGITUDE: number = 5;
 export const DEFAULT_ZOOM: number = 2;
-export const DEFAULT_CENTER: IGeoLngLatLike = [DEFAULT_LONGITUDE, DEFAULT_LATITUDE];
+export const DEFAULT_CENTER: IGeoLngLat = {
+    lat: DEFAULT_LATITUDE,
+    lng: DEFAULT_LONGITUDE,
+};
 
 export const DEFAULT_PUSHPIN_BORDER_COLOR_VALUE = "rgb(233,237,241)";
 

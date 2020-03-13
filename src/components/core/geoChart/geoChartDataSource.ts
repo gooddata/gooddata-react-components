@@ -1,5 +1,5 @@
 // (C) 2019-2020 GoodData Corporation
-import { IGeoData, IGeoLngLatLike, IPushpinColor } from "../../../interfaces/GeoChart";
+import { IGeoData, IGeoLngLat, IPushpinColor } from "../../../interfaces/GeoChart";
 import {
     DEFAULT_CLUSTER_RADIUS,
     DEFAULT_CLUSTER_MAX_ZOOM,
@@ -37,14 +37,12 @@ function transformPushpinDataSource(geoData: IGeoData): IGeoDataSourceFeatures {
     const pushpinColors: IPushpinColor[] = getPushpinColors(colorData, segmentData);
 
     const features = locationData.reduce(
-        (
-            result: IGeoDataSourceFeatures,
-            coordinates: IGeoLngLatLike,
-            index: number,
-        ): IGeoDataSourceFeatures => {
+        (result: IGeoDataSourceFeatures, coordinates: IGeoLngLat, index: number): IGeoDataSourceFeatures => {
             if (!coordinates) {
                 return result;
             }
+
+            const { lat, lng } = coordinates;
 
             const sizeValue = hasSize ? sizeData[index] : DEFAULT_PUSHPIN_SIZE_VALUE;
             const colorValue = hasColor ? colorData[index] : undefined;
@@ -58,7 +56,7 @@ function transformPushpinDataSource(geoData: IGeoData): IGeoDataSourceFeatures {
                     type: "Feature",
                     geometry: {
                         type: "Point",
-                        coordinates,
+                        coordinates: [lng, lat], // Mapbox requires number[]
                     },
                     properties: {
                         pushpinRadius: sizeValue,

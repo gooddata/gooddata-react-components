@@ -59,7 +59,10 @@ storiesOf("Core components/GeoPushpinChart", module)
                 location: ATTRIBUTE_LOCATION_GEOCHART,
                 config: {
                     ...DEFAULT_CONFIG,
-                    center: [-94.922363, 36.800486],
+                    center: {
+                        lat: 36.800486,
+                        lng: -94.922363,
+                    },
                     zoom: 6,
                 },
             }),
