@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { Selector } from "testcafe";
 import { config } from "./utils/config";
 import { loginUsingLoginForm, checkRenderChart } from "./utils/helpers";
@@ -79,4 +79,11 @@ test("Headline should render", async t => {
 
 test("Heatmap should render", async t => {
     await checkRenderChart(".s-heat-map", t);
+});
+
+test("GeoPushpinChart should render", async t => {
+    const geoPushpinChart = Selector(".s-geo-pushpin-chart-category");
+
+    await t.expect(geoPushpinChart.exists).ok();
+    await t.expect(geoPushpinChart.find("canvas").exists).ok();
 });
