@@ -22,6 +22,9 @@ import isEmpty = require("lodash/isEmpty");
 import { AttributeFilterItem } from "./AttributeFilterItem";
 import { IAttributeDisplayForm, IAttributeElement } from "./model";
 
+import * as MediaQueries from "../../../constants/MediaQueries";
+import MediaQuery from "react-responsive";
+
 const ITEM_HEIGHT = 28;
 const LIST_WIDTH = 240;
 const MAX_SELECTION_SIZE = 500;
@@ -407,27 +410,32 @@ export class AttributeDropdownWrapped extends React.PureComponent<
         }
 
         return this.renderOverlayWrap(
-            <InvertableList
-                items={items}
-                itemsCount={parseInt(totalCount, 10)}
-                filteredItemsCount={parseInt(filteredItemsCount, 10)}
-                selection={selection}
-                isInverted={this.state.isInverted}
-                showSearchField={true}
-                searchString={searchString}
-                isLoading={!isListReady}
-                isLoadingClass={getLoadingClass}
-                noItemsFound={isListReady && !items.length}
-                rowItem={<AttributeFilterItem />}
-                maxSelectionSize={MAX_SELECTION_SIZE}
-                width={LIST_WIDTH}
-                itemHeight={ITEM_HEIGHT}
-                height={ITEM_HEIGHT * VISIBLE_ITEMS_COUNT}
-                onRangeChange={this.onRangeChange}
-                onSearch={this.onSearch}
-                onSelect={this.onSelect}
-                getItemKey={this.getItemKey}
-            />,
+            <MediaQuery query={MediaQueries.IS_MOBILE_DEVICE}>
+                {isMobile => (
+                    <InvertableList
+                        items={items}
+                        itemsCount={parseInt(totalCount, 10)}
+                        filteredItemsCount={parseInt(filteredItemsCount, 10)}
+                        selection={selection}
+                        isInverted={this.state.isInverted}
+                        showSearchField={true}
+                        searchString={searchString}
+                        isLoading={!isListReady}
+                        isLoadingClass={getLoadingClass}
+                        noItemsFound={isListReady && !items.length}
+                        rowItem={<AttributeFilterItem />}
+                        maxSelectionSize={MAX_SELECTION_SIZE}
+                        width={LIST_WIDTH}
+                        itemHeight={ITEM_HEIGHT}
+                        height={ITEM_HEIGHT * VISIBLE_ITEMS_COUNT}
+                        onRangeChange={this.onRangeChange}
+                        onSearch={this.onSearch}
+                        onSelect={this.onSelect}
+                        getItemKey={this.getItemKey}
+                        isMobile={this.props.fullscreenOnMobile ? isMobile : false}
+                    />
+                )}
+            </MediaQuery>,
         );
     }
 
