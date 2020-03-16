@@ -25,13 +25,7 @@ import {
     DEFAULT_TOOLTIP_OPTIONS,
     DEFAULT_CENTER,
 } from "../../../constants/geoChart";
-import {
-    IGeoConfig,
-    IGeoData,
-    IGeoLngLatBounds,
-    IGeoLngLatLike,
-    IGeoLngLatObj,
-} from "../../../interfaces/GeoChart";
+import { IGeoConfig, IGeoData, IGeoLngLatBounds, IGeoLngLat } from "../../../interfaces/GeoChart";
 
 import "../../../../styles/scss/geoChart.scss";
 import { handlePushpinMouseEnter, handlePushpinMouseLeave } from "./geoChartTooltip";
@@ -43,7 +37,7 @@ export interface IGeoChartRendererProps {
     execution: Execution.IExecutionResponses;
     geoData: IGeoData;
     afterRender(): void;
-    onCenterPositionChanged(center: IGeoLngLatObj): void;
+    onCenterPositionChanged(center: IGeoLngLat): void;
     onZoomChanged(zoom: number): void;
 }
 
@@ -120,7 +114,7 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
             },
         } = this.props;
 
-        const center: IGeoLngLatLike = get<IGeoConfig, "center">(config, "center");
+        const center: IGeoLngLat = get<IGeoConfig, "center">(config, "center");
         const isExportMode = this.isExportMode();
         const zoom: number = get<IGeoConfig, "zoom", number>(config, "zoom", DEFAULT_ZOOM);
 
@@ -268,7 +262,7 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         const { target } = e;
         const { onCenterPositionChanged } = this.props;
         const { lng, lat } = target.getCenter();
-        const center: IGeoLngLatObj = { lng, lat };
+        const center: IGeoLngLat = { lng, lat };
         onCenterPositionChanged(center);
     };
 

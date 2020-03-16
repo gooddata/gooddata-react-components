@@ -99,7 +99,7 @@ describe("geoChartTooltip", () => {
                 size: {
                     title: '<script>alert("Population")</script>',
                     value: 111,
-                    format: "#,##0.00",
+                    format: "[>=24][red]#,##0.00R",
                 },
             };
             const tooltipHtml = getTooltipHtml(geoProperties, "rgb(0,0,0)");
@@ -113,7 +113,7 @@ describe("geoChartTooltip", () => {
             </div><div class="gd-viz-tooltip-item">
                 <span class="gd-viz-tooltip-title">&lt;script&gt;alert(&quot;Population&quot;)&lt;/script&gt;</span>
                 <div class="gd-viz-tooltip-value-wraper" >
-                    <span class="gd-viz-tooltip-value">111.00</span>
+                    <span class="gd-viz-tooltip-value">111.00R</span>
                 </div>
             </div></div>
             </div>`);

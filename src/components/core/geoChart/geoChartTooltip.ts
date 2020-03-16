@@ -4,7 +4,8 @@ import isEmpty = require("lodash/isEmpty");
 import isFinite = require("lodash/isFinite");
 import escape = require("lodash/escape");
 import mapboxgl from "mapbox-gl";
-import { ISeparators, numberFormat } from "@gooddata/numberjs";
+import { ISeparators } from "@gooddata/numberjs";
+import { formatValueForTooltip } from "../../visualizations/chart/tooltip";
 import { DEFAULT_PUSHPIN_COLOR_VALUE, NULL_TOOLTIP_VALUE } from "../../../constants/geoChart";
 import { IGeoTooltipItem } from "../../../interfaces/GeoChart";
 
@@ -20,7 +21,7 @@ function formatMeasure(item: IGeoTooltipItem, separators?: ISeparators): IGeoToo
     const { title, value, format } = item;
     return {
         title,
-        value: isFinite(value) ? numberFormat(value, format, null, separators) : NULL_TOOLTIP_VALUE,
+        value: isFinite(value) ? formatValueForTooltip(value, format, separators) : NULL_TOOLTIP_VALUE,
     };
 }
 
