@@ -473,11 +473,16 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         previouslyResizedColumnIds: string[] = [],
     ) => {
         const alreadyResized = () => this.state.resized || this.resizing;
+        const noRowHeadersOrRows = (executionResult: Execution.IExecutionResult) =>
+            executionResult &&
+            (executionResult.data.length === 0 &&
+                executionResult.headerItems[0] &&
+                executionResult.headerItems[0].length === 0);
         const dataRendered = () => {
             const executionResult = this.getExecutionResult();
             return (
-                executionResult &&
-                (executionResult.data.length === 0 || event.api.getRenderedNodes().length > 0)
+                noRowHeadersOrRows(executionResult) ||
+                (executionResult && event.api.getRenderedNodes().length > 0)
             );
         };
         const tablePagesLoaded = () => {
@@ -485,7 +490,12 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             return Object.keys(pages).every((pageId: string) => pages[pageId].pageStatus === "loaded");
         };
 
-        if (force || (this.state.execution && !alreadyResized() && dataRendered() && tablePagesLoaded())) {
+        if (
+            this.state.execution &&
+            tablePagesLoaded() &&
+            dataRendered() &&
+            (!alreadyResized() || (alreadyResized() && force))
+        ) {
             this.resizing = true;
             setTimeout(() => {
                 this.autoresizeVisibleColumns(event.columnApi, previouslyResizedColumnIds);

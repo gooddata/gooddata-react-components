@@ -11,7 +11,7 @@ import {
     locationSizeColorSegmentFiltersAfm,
     locationSizeColorSegmentFiltersResponse,
     oneAttributeAfm,
-    oneAttributeNoMeasureResponse,
+    oneColumnAttributeNoMeasureResponse,
     oneAttributeOneMeasureExecutionObject,
     oneAttributeOneMeasureOneFilterExecutionObject,
     oneAttributesOneMeasureResponse,
@@ -108,11 +108,11 @@ export const oneAttributeOneMeasureOneFilterDataSource: IDataSource = {
     getFingerprint: () => JSON.stringify(oneAttributesOneMeasureResponse),
 };
 
-export const oneAttributeNoMeasure: IDataSource = {
-    getData: () => Promise.resolve(oneAttributeNoMeasureResponse),
-    getPage: () => Promise.resolve(oneAttributeNoMeasureResponse),
+export const oneColumnAttributeNoMeasure: IDataSource = {
+    getData: () => Promise.resolve(oneColumnAttributeNoMeasureResponse),
+    getPage: () => Promise.resolve(oneColumnAttributeNoMeasureResponse),
     getAfm: () => oneAttributeAfm,
-    getFingerprint: () => JSON.stringify(oneAttributeNoMeasureResponse),
+    getFingerprint: () => JSON.stringify(oneColumnAttributeNoMeasureResponse),
 };
 
 export const executionObjectWithTotalsDataSource: IDataSource = {
