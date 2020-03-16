@@ -29,13 +29,14 @@ export function getExecutionResult(
     isWithTooltipText = false,
     isWithSize = false,
     isWithColor = false,
+    limit: number = 50,
 ): Execution.IExecutionResult {
     const data = [];
     const metricHeaderItems: Execution.IResultMeasureHeaderItem[] = [];
     const attrHeaderItems: Execution.IResultAttributeHeaderItem[][] = [];
 
     if (isWithSize) {
-        data.push(fixtures.SIZE_AFM_DATA);
+        data.push(fixtures.SIZE_AFM_DATA.slice(0, limit));
         metricHeaderItems.push({
             measureHeaderItem: {
                 name: "PushPin Value [Size]",
@@ -45,7 +46,7 @@ export function getExecutionResult(
     }
 
     if (isWithColor) {
-        data.push(fixtures.COLOR_AFM_DATA);
+        data.push(fixtures.COLOR_AFM_DATA.slice(0, limit));
         metricHeaderItems.push({
             measureHeaderItem: {
                 name: "PushPin Value [Color]",
@@ -55,15 +56,15 @@ export function getExecutionResult(
     }
 
     if (isWithLocation) {
-        attrHeaderItems.push(fixtures.getLocationAFMData());
+        attrHeaderItems.push(fixtures.getLocationAFMData().slice(0, limit));
     }
 
     if (isWithSegment) {
-        attrHeaderItems.push(fixtures.getSegmentAFMData());
+        attrHeaderItems.push(fixtures.getSegmentAFMData().slice(0, limit));
     }
 
     if (isWithTooltipText) {
-        attrHeaderItems.push(fixtures.getTooltipTextAFMData());
+        attrHeaderItems.push(fixtures.getTooltipTextAFMData().slice(0, limit));
     }
 
     const headerItems: Execution.IResultHeaderItem[][][] = [[...attrHeaderItems]];
@@ -75,34 +76,43 @@ export function getExecutionResult(
     return {
         data,
         paging: {
-            count: [2, 50],
+            count: [2, limit],
             offset: [0, 0],
-            total: [2, 50],
+            total: [2, limit],
         },
         headerItems,
     };
 }
 
-const getAttributeHeader = (name: string, uri: string): Execution.IAttributeHeader => ({
+const getAttributeHeader = (
+    name: string,
+    uri: string,
+    localIdentifier: string,
+): Execution.IAttributeHeader => ({
     attributeHeader: {
         name,
-        localIdentifier: `a_${name}`,
+        localIdentifier,
         uri,
-        identifier: `label.${name}`,
+        identifier: `label.${name.toLowerCase()}`,
         formOf: {
             name,
             uri: "any-uri",
-            identifier: `attr.${name}`,
+            identifier: `attr.${name.toLowerCase()}`,
         },
     },
 });
 
-const getMeasureHeaderItem = (name: string, localIdentifier: string): Execution.IMeasureHeaderItem => ({
+const getMeasureHeaderItem = (
+    name: string,
+    localIdentifier: string,
+    uri: string,
+): Execution.IMeasureHeaderItem => ({
     measureHeaderItem: {
         name,
         format: "#,##0",
         localIdentifier,
-        identifier: `measure.${name}`,
+        uri,
+        identifier: `measure.${name.toLowerCase()}`,
     },
 });
 
@@ -118,23 +128,27 @@ export function getExecutionResponse(
     const resultDimensions: Execution.IResultDimension[] = [];
 
     if (isWithLocation) {
-        attributesHeaders.push(getAttributeHeader("State", "/gdc/md/projectId/obj/1"));
+        attributesHeaders.push(getAttributeHeader("State", "/gdc/md/projectId/obj/1", "a_state"));
     }
 
     if (isWithSegment) {
-        attributesHeaders.push(getAttributeHeader("Type", "/gdc/md/projectId/obj/2"));
+        attributesHeaders.push(getAttributeHeader("Type", "/gdc/md/projectId/obj/2", "a_type"));
     }
 
     if (isWithTooltipText) {
-        attributesHeaders.push(getAttributeHeader("State", "/gdc/md/projectId/obj/3"));
+        attributesHeaders.push(
+            getAttributeHeader("State", "/gdc/md/projectId/obj/3", "a_state_tooltip_text"),
+        );
     }
 
     if (isWithSize) {
-        measureHeaderItems.push(getMeasureHeaderItem("Population", "m_size"));
+        measureHeaderItems.push(
+            getMeasureHeaderItem("Population", "m_population", "/gdc/md/projectId/obj/4"),
+        );
     }
 
     if (isWithColor) {
-        measureHeaderItems.push(getMeasureHeaderItem("Area", "m_color"));
+        measureHeaderItems.push(getMeasureHeaderItem("Area", "m_area", "/gdc/md/projectId/obj/5"));
     }
 
     if (measureHeaderItems.length) {
@@ -173,35 +187,35 @@ export function getGeoConfig(props: IGeoOptions): IGeoConfig {
     if (isWithLocation) {
         buckets.push({
             localIdentifier: "location",
-            items: [attribute("/gdc/md/projectId/obj/1").localIdentifier("location")],
+            items: [attribute("/gdc/md/projectId/obj/1").localIdentifier("a_state")],
         });
     }
 
     if (isWithSegment) {
         buckets.push({
             localIdentifier: "segment",
-            items: [attribute("/gdc/md/projectId/obj/2").localIdentifier("segment")],
+            items: [attribute("/gdc/md/projectId/obj/2").localIdentifier("a_type")],
         });
     }
 
     if (isWithTooltipText) {
         buckets.push({
             localIdentifier: "toolTipText",
-            items: [attribute("/gdc/md/projectId/obj/3").localIdentifier("tooltipText")],
+            items: [attribute("/gdc/md/projectId/obj/3").localIdentifier("a_state_tooltip_text")],
         });
     }
 
     if (isWithSize) {
         buckets.push({
             localIdentifier: "size",
-            items: [measure("/gdc/md/projectId/obj/4").localIdentifier("m_size")],
+            items: [measure("/gdc/md/projectId/obj/4").localIdentifier("m_population")],
         });
     }
 
     if (isWithColor) {
         buckets.push({
             localIdentifier: "color",
-            items: [measure("/gdc/md/projectId/obj/5").localIdentifier("m_color")],
+            items: [measure("/gdc/md/projectId/obj/5").localIdentifier("m_area")],
         });
     }
     const mdObject: VisualizationObject.IVisualizationObjectContent = {
