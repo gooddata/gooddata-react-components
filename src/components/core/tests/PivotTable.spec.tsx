@@ -13,7 +13,7 @@ import {
 } from "../PivotTable";
 import {
     executionObjectWithTotalsDataSource,
-    oneAttributeNoMeasure,
+    oneColumnAttributeNoMeasure,
     oneAttributeOneMeasureDataSource,
     oneMeasureDataSource,
     twoMeasuresOneDimensionDataSource,
@@ -106,7 +106,7 @@ describe("PivotTable", () => {
                 {
                     config: { columnSizing: { defaultWidth: "viewport" } },
                 },
-                oneAttributeNoMeasure,
+                oneColumnAttributeNoMeasure,
             );
             const table = getTableInstanceFromWrapper(wrapper);
             const autoresizeColumnsByColumnId = jest.spyOn(table, "autoresizeColumnsByColumnId");
@@ -114,7 +114,8 @@ describe("PivotTable", () => {
                 autoresizeColumnsByColumnId.mockImplementation(() => {
                     expect(autoresizeColumnsByColumnId).toHaveBeenCalledTimes(1);
                     expect(autoresizeColumnsByColumnId).toHaveBeenCalledWith(expect.any(Object), [
-                        "a_4DOTdf",
+                        "a_4_1",
+                        "a_4_3",
                     ]);
                     done();
                 });
