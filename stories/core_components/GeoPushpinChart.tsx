@@ -171,4 +171,46 @@ storiesOf("Core components/GeoPushpinChart", module)
                 config,
             }),
         );
-    });
+    })
+    .add("with North America viewport", () =>
+        screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                config: {
+                    ...DEFAULT_CONFIG,
+                    viewport: {
+                        area: "continent_na",
+                    },
+                },
+            }),
+        ),
+    )
+    .add("with World viewport", () =>
+        screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                config: {
+                    ...DEFAULT_CONFIG,
+                    viewport: {
+                        area: "world",
+                    },
+                },
+            }),
+        ),
+    )
+    .add("with Include all data viewport", () =>
+        screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                config: {
+                    ...DEFAULT_CONFIG,
+                    viewport: {
+                        area: "auto",
+                    },
+                },
+            }),
+        ),
+    );

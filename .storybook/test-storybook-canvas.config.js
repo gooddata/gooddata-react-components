@@ -14,6 +14,9 @@ const configuration = {
             'with location and size, color contains same values': DEFAULT_SCENARIO_CONFIG,
             'with location, size, color, segmentBy and tooltipText': DEFAULT_SCENARIO_CONFIG,
             'with location, size, color, segmentBy, tooltipText and location filter': DEFAULT_SCENARIO_CONFIG,
+            'with North America viewport': DEFAULT_SCENARIO_CONFIG,
+            'with World viewport': DEFAULT_SCENARIO_CONFIG,
+            'with Include all data viewport': DEFAULT_SCENARIO_CONFIG,
         },
         'URI components': {
             'GeoPushpinChart example': DEFAULT_SCENARIO_CONFIG,
