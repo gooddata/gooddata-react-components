@@ -1,5 +1,5 @@
 // (C) 2020 GoodData Corporation
-import { IGeoLngLatBounds, IGeoLngLatLike } from "../../interfaces/GeoChart";
+import { IGeoLngLatBounds, IGeoLngLat } from "../../interfaces/GeoChart";
 
 /*
  * @method getLngLatBounds: IGeoLngLatBounds
@@ -15,7 +15,7 @@ import { IGeoLngLatBounds, IGeoLngLatLike } from "../../interfaces/GeoChart";
  * bounds && map.fitBounds([bounds.northEast, bounds.southWest], { padding: 60 });
  * ```
  */
-export function getLngLatBounds(lnglats: IGeoLngLatLike[]): IGeoLngLatBounds {
+export function getLngLatBounds(lnglats: IGeoLngLat[]): IGeoLngLatBounds {
     if (!lnglats || !lnglats.length) {
         return;
     }
@@ -25,7 +25,7 @@ export function getLngLatBounds(lnglats: IGeoLngLatLike[]): IGeoLngLatBounds {
 
 // @method extendLngLatBounds: IGeoLngLatBounds
 // Extend the bounds to contain the given point
-function extendLngLatBounds(bounds: IGeoLngLatBounds, lnglat: IGeoLngLatLike): IGeoLngLatBounds {
+function extendLngLatBounds(bounds: IGeoLngLatBounds, lnglat: IGeoLngLat): IGeoLngLatBounds {
     if (!bounds) {
         return {
             northEast: lnglat,
@@ -35,7 +35,13 @@ function extendLngLatBounds(bounds: IGeoLngLatBounds, lnglat: IGeoLngLatLike): I
 
     const { northEast, southWest } = bounds;
     return {
-        northEast: [Math.max(lnglat[0], northEast[0]), Math.max(lnglat[1], northEast[1])],
-        southWest: [Math.min(lnglat[0], southWest[0]), Math.min(lnglat[1], southWest[1])],
+        northEast: {
+            lat: Math.max(lnglat.lat, northEast.lat),
+            lng: Math.max(lnglat.lng, northEast.lng),
+        },
+        southWest: {
+            lat: Math.min(lnglat.lat, southWest.lat),
+            lng: Math.min(lnglat.lng, southWest.lng),
+        },
     };
 }

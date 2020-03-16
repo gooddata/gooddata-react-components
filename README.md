@@ -56,6 +56,14 @@ heroku config:set DOMAIN_ADMIN_USERNAME=x@gooddata.com DOMAIN_ADMIN_PASSWORD=xy 
 git push heroku HEAD:master
 heroku open
 ```
+### Enable Geo Chart for Storybook and Live Examples
+Geo chart uses Mapbox to render map which requires a Mapbox access token.
+- Register an account and create Mapbox access token at [guide](https://docs.mapbox.com/help/how-mapbox-works/access-tokens/)
+- Store the created token at `.env`:
+```bash
+echo -e "EXAMPLE_MAPBOX_ACCESS_TOKEN=token" >> .env # only need to run once
+echo -e "STORYBOOK_MAPBOX_ACCESS_TOKEN=token" >> .env # only need to run once
+```
 
 ### Run Live Examples Locally
 To run *GoodData.UI Live Examples* locally:
@@ -67,12 +75,9 @@ yarn examples
 ```
 Then open https://localhost:8999 and login using Live Examples account (you can [create one here](https://gooddata-examples.herokuapp.com/registration)).
 
-### Run storybook locally for Geo chart 
-Geo chart uses Mapbox to render map which requires a mapbox access token.
-- Register an account and create Mapbox token as [guide](https://docs.mapbox.com/help/how-mapbox-works/access-tokens/)
+### Run Storybook locally
 - Run storybook with token stored in `.env` for more secure
 ```bash
-echo "STORYBOOK_MAPBOX_ACCESS_TOKEN=token" > .env # only need to run once
 yarn storybook
 ```
 - Or run storybook with token env param exposed to cli (not suggested)
