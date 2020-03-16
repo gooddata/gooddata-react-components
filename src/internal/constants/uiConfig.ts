@@ -627,4 +627,8 @@ export const DEFAULT_BULLET_CHART_CONFIG: IUiConfig = {
         ...defaultFilters,
     },
     ...defaultRootUiConfigProperties,
+    supportedOverTimeComparisonTypes: [
+        OverTimeComparisonTypes.SAME_PERIOD_PREVIOUS_YEAR,
+        OverTimeComparisonTypes.PREVIOUS_PERIOD,
+    ],
 };

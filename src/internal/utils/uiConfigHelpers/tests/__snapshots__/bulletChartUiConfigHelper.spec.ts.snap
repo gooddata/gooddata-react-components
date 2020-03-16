@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`comboChartUiConfigHelper getBulletChartUiConfig should return bullet chart ui config 1`] = `
+exports[`bulletChartUiConfigHelper getBulletChartUiConfig should return bullet chart ui config 1`] = `
 Object {
   "buckets": Array [
     Object {
@@ -79,7 +79,7 @@ Object {
         "allowsDuplicateItems": true,
         "allowsReordering": false,
         "allowsSwapping": true,
-        "canAddItems": true,
+        "canAddItems": false,
         "enabled": true,
         "icon": "",
         "isShowInPercentEnabled": false,
@@ -98,7 +98,7 @@ Object {
         "allowsDuplicateItems": true,
         "allowsReordering": false,
         "allowsSwapping": true,
-        "canAddItems": true,
+        "canAddItems": false,
         "enabled": true,
         "icon": "",
         "isShowInPercentEnabled": false,
@@ -117,7 +117,7 @@ Object {
         "allowsDuplicateItems": true,
         "allowsReordering": false,
         "allowsSwapping": true,
-        "canAddItems": true,
+        "canAddItems": false,
         "enabled": true,
         "icon": "",
         "isShowInPercentEnabled": false,
@@ -152,7 +152,10 @@ Object {
       "supported": false,
     },
     "recommendations": Object {},
-    "supportedOverTimeComparisonTypes": Array [],
+    "supportedOverTimeComparisonTypes": Array [
+      "same_period_previous_year",
+      "previous_period",
+    ],
   },
 }
 `;
