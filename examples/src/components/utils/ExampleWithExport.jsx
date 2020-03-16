@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 /* eslint-disable react/jsx-closing-tag-location */
 import React from "react";
 import get from "lodash/get";
@@ -14,13 +14,19 @@ export class ExampleWithExport extends React.Component {
         this.state = {
             showExportDialog: false,
             errorMessage: null,
+            exportResult: undefined,
         };
 
         this.doExport = this.doExport.bind(this);
     }
 
+    /**
+     * This will be called by child visualization once it successfully renders
+     * and its underlying data is ready for export. The child visualization will
+     * call this with one parameter: function that can be called to trigger the exports.
+     */
     onExportReady = exportResult => {
-        this.exportResult = exportResult;
+        this.setState({ exportResult });
     };
 
     getExportDialog = () => {
@@ -85,7 +91,7 @@ export class ExampleWithExport extends React.Component {
 
     async doExport(exportConfig) {
         try {
-            const result = await this.exportResult(exportConfig);
+            const result = await this.state.exportResult(exportConfig);
             this.setState({ errorMessage: null });
             this.downloadFile(result.uri);
         } catch (error) {
@@ -114,16 +120,32 @@ export class ExampleWithExport extends React.Component {
             <div style={{ height: 367 }}>
                 {this.props.children(this.onExportReady)}
                 <div style={{ marginTop: 15 }}>
-                    <button className="gd-button gd-button-secondary" onClick={this.exportToCSV}>
+                    <button
+                        className="gd-button gd-button-secondary"
+                        onClick={this.exportToCSV}
+                        disabled={!this.state.exportResult}
+                    >
                         Export CSV
                     </button>
-                    <button className="gd-button gd-button-secondary" onClick={this.exportToXLSX}>
+                    <button
+                        className="gd-button gd-button-secondary"
+                        onClick={this.exportToXLSX}
+                        disabled={!this.state.exportResult}
+                    >
                         Export XLSX
                     </button>
-                    <button className="gd-button gd-button-secondary" onClick={this.exportWithCustomName}>
+                    <button
+                        className="gd-button gd-button-secondary"
+                        onClick={this.exportWithCustomName}
+                        disabled={!this.state.exportResult}
+                    >
                         Export with custom name CustomName
                     </button>
-                    <button className="gd-button gd-button-secondary" onClick={this.exportWithDialog}>
+                    <button
+                        className="gd-button gd-button-secondary"
+                        onClick={this.exportWithDialog}
+                        disabled={!this.state.exportResult}
+                    >
                         Export using Export Dialog
                     </button>
                 </div>
