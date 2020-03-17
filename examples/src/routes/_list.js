@@ -34,7 +34,6 @@ import MeasureValueFilterComponent from "./MeasureValueFilterComponent";
 import DateFilter from "./DateFilter";
 import OnDrillHandling from "./OnDrillHandling";
 import Xirr from "./Xirr";
-import BulletChart from "./BulletChart";
 import NativeTotalAndMeasureValueFilterTest from "../components/NativeTotalAndMeasureValueFilterTest";
 import { PivotTableSizing } from "./PivotTableSizing";
 
@@ -278,11 +277,6 @@ export const hiddenPaths = [
         path: "/hidden/xirr",
         title: "XIRR visualization",
         Component: Xirr,
-    },
-    {
-        path: "/hidden/bullet-chart",
-        title: "Bullet chart",
-        Component: BulletChart,
     },
     {
         path: "/hidden/pivot-table-sizing",

@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import React from "react";
 
 import ExampleWithSource from "../components/utils/ExampleWithSource";
@@ -17,6 +17,7 @@ import VisualizationDonutExample from "../components/VisualizationDonutByIdentif
 import VisualizationTreemapExample from "../components/VisualizationTreemapByIdentifierExample";
 import VisualizationHeatmapExample from "../components/VisualizationHeatmapByIdentifierExample";
 import VisualizationComboExample from "../components/VisualizationComboByIdentifierExample";
+import VisualizationBulletExample from "../components/VisualizationBulletByIdentifierExample";
 
 import VisualizationColumnChartExampleSRC from "!raw-loader!../components/VisualizationColumnChartByIdentifierExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import VisualizationTableExampleSRC from "!raw-loader!../components/VisualizationTableByIdentifierExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
@@ -32,6 +33,7 @@ import VisualizationDonutExampleSRC from "!raw-loader!../components/Visualizatio
 import VisualizationTreemapExampleSRC from "!raw-loader!../components/VisualizationTreemapByIdentifierExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import VisualizationHeatmapExampleSRC from "!raw-loader!../components/VisualizationHeatmapByIdentifierExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import VisualizationComboExampleSRC from "!raw-loader!../components/VisualizationComboByIdentifierExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
+import VisualizationBulletExampleSRC from "!raw-loader!../components/VisualizationBulletByIdentifierExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 
 export const VisualizationByIdentifier = () => (
     <div>
@@ -92,6 +94,11 @@ export const VisualizationByIdentifier = () => (
 
         <h2 id="bubble">Bubble Chart</h2>
         <ExampleWithSource for={VisualizationBubbleExample} source={VisualizationBubbleExampleSRC} />
+
+        <hr className="separator" />
+
+        <h2 id="bullet">Bullet Chart</h2>
+        <ExampleWithSource for={VisualizationBulletExample} source={VisualizationBulletExampleSRC} />
 
         <hr className="separator" />
 

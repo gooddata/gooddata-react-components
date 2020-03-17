@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import React from "react";
 
 import ExampleWithSource from "../components/utils/ExampleWithSource";
@@ -16,6 +16,7 @@ import VisualizationDonutExample from "../components/VisualizationDonutByUriExam
 import VisualizationTreemapExample from "../components/VisualizationTreemapByUriExample";
 import VisualizationHeatmapExample from "../components/VisualizationHeatmapByUriExample";
 import VisualizationComboExample from "../components/VisualizationComboByUriExample";
+import VisualizationBulletExample from "../components/VisualizationBulletByUriExample";
 
 import VisualizationColumnChartByUriExampleSRC from "!raw-loader!../components/VisualizationColumnChartByUriExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import VisualizationTableExampleSRC from "!raw-loader!../components/VisualizationTableByUriExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
@@ -30,6 +31,7 @@ import VisualizationDonutExampleSRC from "!raw-loader!../components/Visualizatio
 import VisualizationTreemapExampleSRC from "!raw-loader!../components/VisualizationTreemapByUriExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import VisualizationHeatmapExampleSRC from "!raw-loader!../components/VisualizationHeatmapByUriExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import VisualizationComboExampleSRC from "!raw-loader!../components/VisualizationComboByUriExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
+import VisualizationBulletExampleSRC from "!raw-loader!../components/VisualizationBulletByUriExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 
 export const VisualizationByUri = () => (
     <div>
@@ -81,6 +83,11 @@ export const VisualizationByUri = () => (
 
         <h2 id="bubble">Bubble Chart</h2>
         <ExampleWithSource for={VisualizationBubbleExample} source={VisualizationBubbleExampleSRC} />
+
+        <hr className="separator" />
+
+        <h2 id="bullet">Bullet Chart</h2>
+        <ExampleWithSource for={VisualizationBulletExample} source={VisualizationBulletExampleSRC} />
 
         <hr className="separator" />
 

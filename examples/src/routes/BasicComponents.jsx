@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import React from "react";
 
 import ExampleWithSource from "../components/utils/ExampleWithSource";
@@ -13,6 +13,7 @@ import DonutChartExample from "../components/DonutChartExample";
 import ComboChartExample from "../components/ComboChartExample";
 import ScatterPlotExample from "../components/ScatterPlotExample";
 import BubbleChartExample from "../components/BubbleChartExample";
+import BulletChartExample from "../components/BulletChartExample";
 import TreemapExample from "../components/TreemapExample";
 import HeatmapExample from "../components/HeatmapExample";
 import TableExample from "../components/TableExample";
@@ -29,6 +30,7 @@ import DonutChartExampleSRC from "!raw-loader!../components/DonutChartExample"; 
 import ComboChartExampleSRC from "!raw-loader!../components/ComboChartExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import ScatterPlotExampleSRC from "!raw-loader!../components/ScatterPlotExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import BubbleChartExampleSRC from "!raw-loader!../components/BubbleChartExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
+import BulletChartExampleSRC from "!raw-loader!../components/BulletChartExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import TreemapExampleSRC from "!raw-loader!../components/TreemapExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import HeatmapExampleSRC from "!raw-loader!../components/HeatmapExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import TableExampleSRC from "!raw-loader!../components/TableExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
@@ -81,6 +83,9 @@ export const BasicComponents = () => (
 
         <h2 id="bubble-chart">Bubble chart</h2>
         <ExampleWithSource for={BubbleChartExample} source={BubbleChartExampleSRC} />
+
+        <h2 id="bullet-chart">Bullet chart</h2>
+        <ExampleWithSource for={BulletChartExample} source={BulletChartExampleSRC} />
 
         <h2 id="treemap">Treemap</h2>
         <ExampleWithSource for={TreemapExample} source={TreemapExampleSRC} />
