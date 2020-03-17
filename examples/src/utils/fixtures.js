@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 
 const demoProject = {
     "https://secure.gooddata.com": "k26dtejorcqlqf11crn6imbeevp2q4kg",
@@ -36,6 +36,8 @@ export const scatterVisualizationIdentifier = "ab4aHg6lej5e";
 export const scatterVisualizationUri = `/gdc/md/${demoProjectId}/obj/9277`;
 export const bubbleVisualizationIdentifier = "abNaJG2Aed2M";
 export const bubbleVisualizationUri = `/gdc/md/${demoProjectId}/obj/9280`;
+export const bulletVisualizationIdentifier = "aaQxY4PLbBsQ";
+export const bulletVisualizationUri = `/gdc/md/${demoProjectId}/obj/9481`;
 export const pieVisualizationIdentifier = "aaraOcrmdjZd";
 export const pieVisualizationUri = `/gdc/md/${demoProjectId}/obj/9281`;
 export const donutVisualizationIdentifier = "absaJEALgcdO";

@@ -6,7 +6,6 @@ import "@gooddata/react-components/styles/css/main.css";
 
 import {
     projectId,
-    monthDateIdentifier,
     franchiseFeesAdRoyaltyIdentifier,
     franchiseFeesIdentifier,
     franchiseFeesIdentifierOngoingRoyalty,
@@ -16,11 +15,7 @@ import {
 const primaryMeasure = Model.measure(franchiseFeesAdRoyaltyIdentifier).format("#,##0");
 const targetMeasure = Model.measure(franchiseFeesIdentifier).format("#,##0");
 const comparativeMeasure = Model.measure(franchiseFeesIdentifierOngoingRoyalty).format("#,##0");
-const viewBy = [Model.attribute(locationResortIdentifier), Model.attribute(monthDateIdentifier)];
-const filters = [
-    Model.positiveAttributeFilter(locationResortIdentifier, ["Irving", "Montgomery"], true),
-    Model.positiveAttributeFilter(monthDateIdentifier, ["Jan", "Mar", "May"], true),
-];
+const locationResort = Model.attribute(locationResortIdentifier);
 
 export class BulletChartExample extends Component {
     render() {
@@ -31,8 +26,7 @@ export class BulletChartExample extends Component {
                     primaryMeasure={primaryMeasure}
                     targetMeasure={targetMeasure}
                     comparativeMeasure={comparativeMeasure}
-                    viewBy={viewBy}
-                    filters={filters}
+                    viewBy={locationResort}
                 />
             </div>
         );
