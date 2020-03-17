@@ -52,7 +52,20 @@ describe("createPushpinDataLayer", () => {
             location: {
                 index: 0,
                 name: "location",
-                data: [[44.5, -89.5], [44.5, -89.5], [44.5, -89.5]],
+                data: [
+                    {
+                        lat: -89.5,
+                        lng: 44.5,
+                    },
+                    {
+                        lat: -89.5,
+                        lng: 44.5,
+                    },
+                    {
+                        lat: -89.5,
+                        lng: 44.5,
+                    },
+                ],
             },
         };
         const layer: mapboxgl.Layer = createPushpinDataLayer(dataSourceName, geoData);

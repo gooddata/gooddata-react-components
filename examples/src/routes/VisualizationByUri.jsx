@@ -17,6 +17,7 @@ import VisualizationTreemapExample from "../components/VisualizationTreemapByUri
 import VisualizationHeatmapExample from "../components/VisualizationHeatmapByUriExample";
 import VisualizationComboExample from "../components/VisualizationComboByUriExample";
 import VisualizationBulletExample from "../components/VisualizationBulletByUriExample";
+import VisualizationGeoPushpinChartByUriExample from "../components/VisualizationGeoPushpinChartByUriExample";
 
 import VisualizationColumnChartByUriExampleSRC from "!raw-loader!../components/VisualizationColumnChartByUriExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import VisualizationTableExampleSRC from "!raw-loader!../components/VisualizationTableByUriExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
@@ -32,6 +33,7 @@ import VisualizationTreemapExampleSRC from "!raw-loader!../components/Visualizat
 import VisualizationHeatmapExampleSRC from "!raw-loader!../components/VisualizationHeatmapByUriExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import VisualizationComboExampleSRC from "!raw-loader!../components/VisualizationComboByUriExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import VisualizationBulletExampleSRC from "!raw-loader!../components/VisualizationBulletByUriExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
+import VisualizationGeoPushpinChartByUriExampleSRC from "!raw-loader!../components/VisualizationGeoPushpinChartByUriExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 
 export const VisualizationByUri = () => (
     <div>
@@ -113,6 +115,14 @@ export const VisualizationByUri = () => (
 
         <h2 id="combo">Combo Chart</h2>
         <ExampleWithSource for={VisualizationComboExample} source={VisualizationComboExampleSRC} />
+
+        <hr className="separator" />
+
+        <h2 id="geo-pushpin-chart">Geo Pushpin Chart</h2>
+        <ExampleWithSource
+            for={VisualizationGeoPushpinChartByUriExample}
+            source={VisualizationGeoPushpinChartByUriExampleSRC}
+        />
     </div>
 );
 
