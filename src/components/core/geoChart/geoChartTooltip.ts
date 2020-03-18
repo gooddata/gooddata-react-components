@@ -17,6 +17,10 @@ function isTooltipItemValid(item: IGeoTooltipItem): boolean {
     return Boolean(title);
 }
 
+function escapeAttributeValue(value: number | string): number | string {
+    return isFinite(value) ? value : escape(String(value));
+}
+
 function formatMeasure(item: IGeoTooltipItem, separators?: ISeparators): IGeoTooltipItem {
     const { title, value, format } = item;
     return {
@@ -29,7 +33,7 @@ function formatAttribute(item: IGeoTooltipItem): IGeoTooltipItem {
     const { value } = item;
     return {
         ...item,
-        value: Boolean(value) ? value : NULL_TOOLTIP_VALUE,
+        value: Boolean(value) ? escapeAttributeValue(value) : NULL_TOOLTIP_VALUE,
     };
 }
 
@@ -74,13 +78,13 @@ function getTooltipItemHtml(item: IGeoTooltipItem): string {
         return "";
     }
 
+    // value is escaped in formatAttribute or formatMeasure function
     const { title, value } = item;
-    const escapedValue = isFinite(value) ? value : escape(String(value));
 
     return `<div class="gd-viz-tooltip-item">
                 <span class="gd-viz-tooltip-title">${escape(title)}</span>
-                <div class="gd-viz-tooltip-value-wraper" >
-                    <span class="gd-viz-tooltip-value">${escapedValue}</span>
+                <div class="gd-viz-tooltip-value-wraper">
+                    <span class="gd-viz-tooltip-value">${value}</span>
                 </div>
             </div>`;
 }
