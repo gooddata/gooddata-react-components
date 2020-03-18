@@ -50,7 +50,10 @@ export class GeoPushpinChartConfigurationExample extends Component {
     render() {
         const style = { height: "500px", position: "relative" };
         const geoConfig = {
-            center: [-80.5, 39], // [lng, lat]
+            center: {
+                lat: 39,
+                lng: -80.5,
+            },
             zoom: 6,
             tooltipText: tooltipTextAttribute,
             mapboxToken: MAPBOX_TOKEN,
