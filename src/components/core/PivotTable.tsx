@@ -595,18 +595,24 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     private onFirstDataRendered = () => {
         // Since issue here is not resolved, https://github.com/ag-grid/ag-grid/issues/3263,
         // work-around by using 'setInterval'
-        this.watchingIntervalId = window.setInterval(
-            this.startWatchingTableRendered,
-            WATCHING_TABLE_RENDERED_INTERVAL,
-        );
+        if (!this.watchingIntervalId) {
+            // onFirstDataRendered can be called multiple times
+            this.watchingIntervalId = window.setInterval(
+                this.startWatchingTableRendered,
+                WATCHING_TABLE_RENDERED_INTERVAL,
+            );
+        }
 
         // after 15s, this table might or not (due to long backend execution) be rendered
         // either way, 'afterRender' should be called to notify to KPI dashboard
         // if KPI dashboard is in export mode, its content could be exported as much as possible even without this table
-        this.watchingTimeoutId = window.setTimeout(
-            this.stopWatchingTableRendered,
-            WATCHING_TABLE_RENDERED_MAX_TIME,
-        );
+        if (!this.watchingTimeoutId) {
+            // onFirstDataRendered can be called multiple times
+            this.watchingTimeoutId = window.setTimeout(
+                this.stopWatchingTableRendered,
+                WATCHING_TABLE_RENDERED_MAX_TIME,
+            );
+        }
     };
 
     private isColumnAutoresizeEnabled = () =>
