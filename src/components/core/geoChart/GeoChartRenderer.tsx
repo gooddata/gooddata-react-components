@@ -21,9 +21,9 @@ import {
     DEFAULT_DATA_SOURCE_NAME,
     DEFAULT_LAYER_NAME,
     DEFAULT_MAPBOX_OPTIONS,
-    DEFAULT_ZOOM,
     DEFAULT_TOOLTIP_OPTIONS,
-    DEFAULT_CENTER,
+    DRAG_PAN_EVENT,
+    SCROLL_ZOOM_EVENT,
 } from "../../../constants/geoChart";
 import { IGeoConfig, IGeoData, IGeoLngLat } from "../../../interfaces/GeoChart";
 
@@ -54,30 +54,26 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
     private chart: mapboxgl.Map;
     private tooltip: mapboxgl.Popup;
     private chartRef: HTMLElement;
+    private navigationControlButton: mapboxgl.NavigationControl;
 
     public constructor(props: IGeoChartRendererProps) {
         super(props);
 
         mapboxgl.accessToken = props.config.mapboxToken;
+        this.navigationControlButton = new mapboxgl.NavigationControl({
+            showCompass: false,
+        });
     }
 
     public shouldComponentUpdate(nextProps: IGeoChartRendererProps) {
         const {
-            config: { center: nextCenter = DEFAULT_CENTER, zoom: nextZoom = DEFAULT_ZOOM },
-        } = nextProps;
-        const { chart } = this;
-
-        if (chart) {
-            const { lat, lng } = chart.getCenter();
-            const chartCenter = [lng, lat];
-            const chartZoom = chart.getZoom();
-            return !isEqual(chartCenter, nextCenter) || !isEqual(chartZoom, nextZoom);
-        }
-
-        const {
-            config: { center: currentCenter = DEFAULT_CENTER, zoom: currentZoom = DEFAULT_ZOOM },
+            config: { center, zoom, viewport },
         } = this.props;
-        return !isEqual(currentCenter, nextCenter) || !isEqual(currentZoom, nextZoom);
+        const {
+            config: { center: nextCenter, zoom: nextZoom, viewport: nextViewport },
+        } = nextProps;
+
+        return !isEqual(center, nextCenter) || zoom !== nextZoom || !isEqual(viewport, nextViewport);
     }
 
     public componentDidUpdate(prevProps: IGeoChartRendererProps) {
@@ -86,6 +82,7 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         } = this.props;
         const { config: { selectedSegmentItems: prevSelectedSegmentItems = [] } = {} } = prevProps || {};
 
+        this.updatePanAndZoomFromConfig();
         if (selectedSegmentItems && !isEqual(selectedSegmentItems, prevSelectedSegmentItems)) {
             this.setFilterMap();
         }
@@ -114,6 +111,7 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
             },
         } = this.props;
         const isExportMode = this.isExportMode();
+        const isViewportFreezed = this.isViewportFreezed();
 
         this.chart = new mapboxgl.Map({
             ...DEFAULT_MAPBOX_OPTIONS,
@@ -122,6 +120,7 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
             // If true, the map’s canvas can be exported to a PNG using map.getCanvas().toDataURL().
             // This is false by default as a performance optimization.
             preserveDrawingBuffer: isExportMode,
+            interactive: !isViewportFreezed,
         });
     };
 
@@ -139,14 +138,43 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         return get(config, "isExportMode", false);
     };
 
-    private createMapControls = () => {
-        this.chart.addControl(
-            new mapboxgl.NavigationControl({
-                showCompass: false,
-            }),
-            "bottom-right",
-        );
+    private isViewportFreezed = (): boolean => {
+        const { config } = this.props;
+        return get(config, "viewport.freezed", false);
     };
+
+    private createMapControls = (): void => {
+        const isViewportFreezed = this.isViewportFreezed();
+
+        if (!isViewportFreezed) {
+            this.chart.addControl(this.navigationControlButton, "bottom-right");
+            return;
+        }
+
+        if (this.chart.loaded()) {
+            this.chart.removeControl(this.navigationControlButton);
+        }
+    };
+
+    private togglePanAndZoomEvents = (): void => {
+        const isViewportFreezed = this.isViewportFreezed();
+        if (!this.chart) {
+            return;
+        }
+        if (isViewportFreezed) {
+            this.chart[DRAG_PAN_EVENT].disable();
+            this.chart[SCROLL_ZOOM_EVENT].disable();
+        } else {
+            this.chart[DRAG_PAN_EVENT].enable();
+            this.chart[SCROLL_ZOOM_EVENT].enable();
+        }
+    };
+
+    private updatePanAndZoomFromConfig = (): void => {
+        this.createMapControls();
+        this.togglePanAndZoomEvents();
+    };
+
     private setFilterMap = (): void => {
         const {
             config: { selectedSegmentItems },
@@ -156,6 +184,7 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
             this.chart.setFilter(DEFAULT_LAYER_NAME, createPushpinFilter(selectedSegmentItems));
         }
     };
+
     private handleMapEvent = () => {
         const { chart, tooltip } = this;
         const {
