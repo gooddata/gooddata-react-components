@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 @import "~@gooddata/goodstrap/lib/core/styles/variables.scss";
 
 $gd-date-range-picker-hover-bgcolor: $is-focused-background;
@@ -12,9 +12,9 @@ $gd-day-picker-width: 268px;
 .gd-date-range-picker {
     position: relative;
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    flex-direction: row;
 
     &-dash {
         margin: 0 5px;
@@ -47,8 +47,8 @@ $gd-day-picker-width: 268px;
 
             &[value=""]::before {
                 content: attr(placeholder);
-                margin-right: 5px;
                 color: transparentize($gd-color-link, 0.25);
+                margin-right: 5px;
             }
 
             @media #{$medium-up} {
@@ -63,9 +63,9 @@ $gd-day-picker-width: 268px;
             display: flex;
             align-items: center;
             height: 100%;
-            font-size: 16px;
             color: $gd-color-highlight;
             pointer-events: none;
+            font-size: 16px;
         }
 
         &-error &-field {
@@ -100,8 +100,8 @@ $gd-day-picker-width: 268px;
             display: table;
             border-spacing: 0;
             border-collapse: collapse;
-            margin-top: 0;
             user-select: none;
+            margin-top: 0;
         }
 
         .DayPicker-NavBar {
@@ -117,16 +117,16 @@ $gd-day-picker-width: 268px;
             box-sizing: content-box;
             width: 1.5rem;
             height: 1.5rem;
+            cursor: pointer;
             text-align: center;
             background-image: none;
-            cursor: pointer;
 
             &::before {
                 display: block;
+                color: $gd-color-highlight;
                 padding-top: 0.15em;
                 font-family: Indigo;
                 font-size: 18px;
-                color: $gd-color-highlight;
             }
 
             &:hover {
@@ -141,6 +141,8 @@ $gd-day-picker-width: 268px;
             &--prev {
                 left: 0.15em;
 
+                // refactor?
+                // stylelint-disable-next-line max-nesting-depth
                 &::before {
                     content: "\e630";
                 }
@@ -149,6 +151,8 @@ $gd-day-picker-width: 268px;
             &--next {
                 right: 0.35em;
 
+                // refactor?
+                // stylelint-disable-next-line max-nesting-depth
                 &::before {
                     content: "\e631";
                 }
@@ -157,14 +161,14 @@ $gd-day-picker-width: 268px;
 
         .DayPicker-Caption {
             display: table-caption;
+            color: #000;
+            cursor: default;
             margin-left: 0.25em;
             margin-right: 0.25em;
             margin-bottom: 1em;
             font-family: Avenir;
             font-size: 17px;
             text-align: center;
-            color: #000;
-            cursor: default;
         }
 
         .DayPicker-Weekdays {
@@ -177,13 +181,13 @@ $gd-day-picker-width: 268px;
 
         .DayPicker-Weekday {
             display: table-cell;
+            color: $gd-color-state-blank;
+            cursor: help;
             padding-bottom: 0.5em;
             font-family: Avenir;
             font-weight: 400;
             font-size: 13px;
             text-align: center;
-            color: $gd-color-state-blank;
-            cursor: help;
 
             abbr {
                 text-decoration: none;
@@ -202,11 +206,11 @@ $gd-day-picker-width: 268px;
         .DayPicker-Day {
             display: table-cell;
             padding: 0.3125em 0.55em;
+            color: $gd-color-text;
             font-family: Avenir;
             font-size: 14px;
             font-weight: 700;
             text-align: center;
-            color: $gd-color-text;
             border-radius: 0;
 
             &:hover {
@@ -215,9 +219,11 @@ $gd-day-picker-width: 268px;
             }
 
             &--disabled {
-                font-weight: 400;
                 color: $gd-color-disabled;
+                font-weight: 400;
 
+                // refactor?
+                // stylelint-disable-next-line max-nesting-depth
                 &:hover {
                     background: transparent;
                     cursor: default;
@@ -225,8 +231,8 @@ $gd-day-picker-width: 268px;
             }
 
             &--outside {
-                font-weight: normal;
                 color: $gd-color-disabled;
+                font-weight: normal;
             }
         }
 
@@ -250,10 +256,10 @@ $gd-day-picker-width: 268px;
     }
 
     &-error-message {
-        margin-top: 5px;
         padding: 2px 10px;
-        border-radius: 3px;
         color: $gd-color-warning-text;
+        margin-top: 5px;
+        border-radius: 3px;
         background-color: $gd-color-warning;
     }
 }

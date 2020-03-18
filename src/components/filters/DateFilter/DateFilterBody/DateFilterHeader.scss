@@ -1,5 +1,4 @@
-// (C) 2019 GoodData Corporation
-/* (C) 2019 GoodData Corporation */
+// (C) 2019-2020 GoodData Corporation
 @import "~@gooddata/goodstrap/lib/core/styles/variables.scss";
 
 .gd-extended-date-filter-header {
@@ -7,10 +6,10 @@
     width: 100%;
     padding: 10px;
     border: none;
+    background: $gd-color-white;
     border-top: 1px solid $border-color;
     border-bottom: 1px solid $border-color;
     font-size: nth(map-get($gd-typo, font-sizes), 4);
     text-align: left;
     font-weight: bold;
-    background: $gd-color-white;
 }

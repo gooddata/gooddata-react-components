@@ -2,17 +2,17 @@
 
 .gd-viz-tooltip {
     position: relative;
+    color: $gd-color-dark;
     border-radius: 3px;
     font-family: $font-stack-roman;
-    color: $gd-color-dark;
     background-color: transparentize($gd-color-white, 0.05);
 
     .tt-name {
+        color: #999;
         font-family: $font-stack-roman;
         font-size: 12px;
         word-wrap: break-word;
         text-transform: uppercase;
-        color: #999;
     }
 
     .tt-tooltip {
@@ -36,11 +36,11 @@
 .gd-viz-tooltip-content {
     display: block;
     padding: 10px 9px 9px;
-    border-radius: 3px;
     border: 1px solid transparentize($bubble-light-border-base, 0.3);
     box-shadow: 0 1px 3px 0 rgba(20, 56, 93, 0.1), 0 2px 9px 0 rgba(20, 56, 93, 0.15);
     line-height: 1.3;
     white-space: normal;
+    border-radius: 3px;
 
     @media #{$insight-small-only} {
         max-width: none;
@@ -59,12 +59,12 @@
 .gd-viz-tooltip-title {
     display: block;
     overflow: hidden;
+    white-space: nowrap;
+    color: $gd-color-label;
     font-size: 12px;
     font-weight: normal;
-    white-space: nowrap;
     text-overflow: ellipsis;
     text-align: left;
-    color: $gd-color-label;
 }
 
 .gd-viz-tooltip-value-wraper {
@@ -75,41 +75,41 @@
     position: relative;
     display: block;
     overflow: hidden;
-    font-size: 14px;
     line-height: 1.3em;
+    font-size: 14px;
     max-height: 2.6em;
     text-align: justify;
     margin-right: -1em;
     padding-right: 1em;
     word-wrap: break-word;
 
-    &:before {
+    &::before {
         content: "...";
         position: absolute;
         right: 0;
         bottom: 0;
     }
 
-    &:after {
+    &::after {
         content: "";
         position: absolute;
         right: 0;
         width: 1em;
         height: 1em;
-        margin-top: 0.2em;
         background: white;
+        margin-top: 0.2em;
     }
 }
 
 .gd-viz-tooltip-value-max-content {
     display: block;
-    overflow: hidden;
-    font-size: 14px;
-    height: 0;
-    font-weight: normal;
-    white-space: nowrap;
-    text-align: left;
     visibility: hidden;
+    overflow: hidden;
+    height: 0;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: normal;
+    text-align: left;
 }
 
 .multiline-supported {
@@ -118,24 +118,26 @@
     }
 
     .gd-viz-tooltip-value {
-        text-align: left;
-        line-height: 1.3em;
-        max-height: 2.6em;
         margin: 0;
         padding: 0;
+        line-height: 1.3em;
+        text-align: left;
+        max-height: 2.6em;
 
         &.clamp-two-line {
+            // stylelint-disable-next-line value-no-vendor-prefix
+            display: -webkit-box;
+
             /*! autoprefixer: ignore next */
             -webkit-box-orient: vertical;
-            display: -webkit-box;
             -webkit-line-clamp: 2;
         }
 
-        &:before {
+        &::before {
             content: none;
         }
 
-        &:after {
+        &::after {
             content: none;
         }
     }
@@ -146,5 +148,6 @@
     g.highcharts-tooltip {
         visibility: hidden;
     }
+
     z-index: 3005;
 }

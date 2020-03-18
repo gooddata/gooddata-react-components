@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 @import "~@gooddata/goodstrap/lib/core/styles/variables.scss";
 
 .gd-visible-scrollbar {
@@ -6,9 +6,9 @@
 
     // Emulate MacOS scroll-bar design
     &::-webkit-scrollbar {
+        width: 8px;
         -webkit-appearance: none;
         appearance: none;
-        width: 8px;
     }
 
     &::-webkit-scrollbar-thumb {

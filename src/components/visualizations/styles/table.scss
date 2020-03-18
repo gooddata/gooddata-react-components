@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
 
 @import "~fixed-data-table-2/dist/fixed-data-table.css";
@@ -16,11 +16,11 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
 .indigo-table-component {
     position: relative;
     overflow: hidden;
+    line-height: 100%;
+    color: #333;
     font-family: "Avenir", "Helvetica Neue", Arial, sans-serif;
     font-size: 12px;
     font-weight: normal;
-    line-height: 100%;
-    color: #333;
 
     &.has-hidden-rows {
         &:not(.has-footer) .fixedDataTableLayout_rowsContainer::after {
@@ -30,8 +30,8 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
             bottom: 13px;
             left: 0;
             display: block;
-            border-top: 1px solid transparentize($gd-color-dark, 0.92);
             box-shadow: 0 -1px 0 0 transparentize($gd-color-dark, 0.97);
+            border-top: 1px solid transparentize($gd-color-dark, 0.92);
         }
 
         .indigo-table-component-content,
@@ -110,14 +110,14 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
 
     .fixedDataTableLayout_topShadow {
         height: 100px;
-        margin-top: -100px;
         box-shadow: 0 -1px 6px 0 transparentize($gd-color-dark, 0.5);
         pointer-events: none;
+        margin-top: -100px;
     }
 
     .fixedDataTableLayout_bottomShadow {
-        margin-top: 0;
         box-shadow: 0 -1px 5px 0 transparentize($gd-color-dark, 0.79);
+        margin-top: 0;
     }
 
     .fixedDataTableCellGroupLayout_cellGroup > .public_fixedDataTableCell_main {
@@ -197,9 +197,9 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
                     position: relative;
                     top: 1px;
                     display: inherit;
+                    vertical-align: bottom;
                     font-family: Indigo;
                     font-size: 10px;
-                    vertical-align: bottom;
                 }
             }
 
@@ -214,6 +214,8 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
                 overflow: hidden;
                 text-overflow: ellipsis;
 
+                // refactor?
+                // stylelint-disable-next-line max-nesting-depth
                 &::before {
                     // disable system tooltip in Safari
                     content: "";
@@ -223,12 +225,14 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
         }
 
         .fixedDataTableCellLayout_main {
-            font-size: 12px;
-            font-weight: normal;
             color: $gd-color-state-blank;
             background: none;
+            font-size: 12px;
+            font-weight: normal;
 
             &:last-child {
+                // refactor?
+                // stylelint-disable-next-line max-nesting-depth
                 .public_fixedDataTableCell_cellContent {
                     padding-right: 20px;
                 }
@@ -256,11 +260,11 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
     }
 
     .fixedDataTableLayout_footer .fixedDataTableCellLayout_main {
+        color: $gd-color-dark;
+        background: none;
         font-size: 10px;
         font-weight: bold;
         text-transform: uppercase;
-        color: $gd-color-dark;
-        background: none;
 
         .gd-cell {
             padding: 0;
@@ -271,9 +275,9 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
             box-sizing: border-box;
             overflow: hidden;
             padding: 0 8px;
+            line-height: 30px;
             border-bottom: 1px solid $footer-border;
             font-size: 12px;
-            line-height: 30px;
             text-transform: none;
             text-overflow: ellipsis;
 
@@ -305,8 +309,8 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
             &::before {
                 width: 18px;
                 height: 18px;
-                font-size: 15px;
                 line-height: 14px;
+                font-size: 15px;
             }
         }
 
@@ -324,10 +328,10 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
         display: none;
         height: 28px;
         padding: 5px 0;
-        border-radius: 4px;
         line-height: 25px;
-        text-align: center;
         cursor: pointer;
+        border-radius: 4px;
+        text-align: center;
 
         &.hidden {
             visibility: hidden;
@@ -339,25 +343,25 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
             width: 26px;
             height: 26px;
             border: 1px solid $button-normal-border-color;
-            border-radius: 50%;
             box-shadow: 0 1px 1px 0 $button-shadow-darker;
-            font-size: 16px;
-            font-weight: normal;
             line-height: 27px;
             color: $gd-color-disabled;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: normal;
             background-color: $gd-color-light;
         }
 
         &:hover::before {
-            border-color: $button-normal-hover-border-color;
             box-shadow: 0 1px 1px 0 $button-shadow-darker, inset 0 -1px 0 0 $button-normal-hover-box-shadow;
             background: $button-normal-hover-bg;
+            border-color: $button-normal-hover-border-color;
         }
 
         &:focus::before {
-            border-color: transparentize($gd-color-highlight, 0.25);
             box-shadow: 0 0 3px 1px $button-normal-focus-shadow, 0 1px 2px 0 $button-shadow-darker,
                 inset 0 -1px 0 0 $button-normal-hover-box-shadow;
+            border-color: transparentize($gd-color-highlight, 0.25);
         }
 
         &,
@@ -385,9 +389,9 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
     .indigo-totals-add-row-button:active::before {
         @include gradient-linear($button-normal-active-gradient-top, $button-normal-active-gradient-bottom);
 
-        border-color: $button-normal-active-border-color;
         box-shadow: inset 0 1px 0 0 $button-normal-active-shadow;
         color: $gd-color-highlight;
+        border-color: $button-normal-active-border-color;
     }
 
     .indigo-totals-add-row-button.highlighted,
@@ -452,10 +456,10 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
 }
 
 .overlay-wrapper.self-tr .indigo-totals-select-type-list::before {
+    top: -8px;
     right: 8px;
     left: auto;
     margin: 0;
-    top: -8px;
     box-shadow: -3px -3px 5px 0 rgba(0, 0, 0, 0.05);
 }
 
@@ -465,8 +469,8 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
     right: 0;
     bottom: 50px;
     width: 100%;
-    padding-bottom: 2px;
     pointer-events: none;
+    padding-bottom: 2px;
 
     .indigo-totals-remove-row {
         position: relative;
@@ -498,11 +502,11 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
             height: 25px;
             padding: 0 0 0 9px;
             border: none;
-            border-radius: 10px;
             outline: none;
             background: transparent;
             cursor: pointer;
             pointer-events: auto;
+            border-radius: 10px;
 
             &::before {
                 content: "\E639";
@@ -512,13 +516,13 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
                 height: 11px;
                 padding: 0;
                 border: 2px solid $gd-color-highlight;
+                line-height: 13px;
+                color: #fff;
+                background: $gd-color-highlight;
                 border-radius: 50%;
                 font-family: "Indigo";
                 font-size: 16px;
-                line-height: 13px;
                 text-indent: -2px;
-                color: #fff;
-                background: $gd-color-highlight;
             }
 
             &:hover {
@@ -526,8 +530,8 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
             }
 
             &:hover::before {
-                border-color: $gd-color-negative;
                 background: $gd-color-negative;
+                border-color: $gd-color-negative;
             }
         }
     }
@@ -546,9 +550,9 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
 }
 
 .gd-cell-drillable {
-    font-weight: bold;
     color: $gd-color-text;
     cursor: pointer;
+    font-weight: bold;
 
     &:hover {
         text-decoration: underline;
@@ -647,11 +651,11 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
 
         .gd-dialog-header {
             overflow: auto;
-            max-height: 105px;
-            margin: 0 -20px 10px -20px;
+            margin: 0 -20px 10px;
             padding: 0 50px 10px 20px;
-            border-bottom: 1px solid $border-color;
             white-space: normal;
+            max-height: 105px;
+            border-bottom: 1px solid $border-color;
         }
     }
 
@@ -675,8 +679,8 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
             padding-right: 25px;
 
             &::after {
-                font-size: 10px;
                 line-height: 23px;
+                font-size: 10px;
             }
         }
 

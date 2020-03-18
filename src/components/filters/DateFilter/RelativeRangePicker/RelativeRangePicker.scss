@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 @import "~@gooddata/goodstrap/lib/core/styles/variables.scss";
 
 $gd-relative-range-picker-picker-width: 180px;
@@ -6,9 +6,9 @@ $gd-relative-range-picker-picker-width: 180px;
 .gd-relative-range-picker {
     position: relative;
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
     align-items: baseline;
+    flex-direction: row;
 
     .gd-dynamic-select-input-wrapper {
         @media #{$medium-up} {
@@ -27,8 +27,8 @@ $gd-relative-range-picker-picker-width: 180px;
         }
 
         &-mobile {
-            flex-direction: column;
             overflow: hidden;
+            flex-direction: column;
 
             .gd-select-separator {
                 padding: 0;
@@ -37,9 +37,9 @@ $gd-relative-range-picker-picker-width: 180px;
             .gd-select-menu-wrapper .gd-select-menu {
                 position: relative;
                 z-index: auto;
+                box-shadow: none;
                 border-radius: 0;
                 background-color: $gd-color-white;
-                box-shadow: none;
             }
 
             .gd-input-field {

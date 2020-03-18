@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 @import "~@gooddata/goodstrap/lib/core/styles/typo-mixins";
 
 .headline {
@@ -10,8 +10,8 @@
         overflow: hidden;
         height: 60px;
         line-height: 60px;
-        font-size: 50px;
         white-space: nowrap;
+        font-size: 50px;
 
         .headline-value-wrapper {
             display: inline-block;
@@ -94,9 +94,9 @@
         justify-content: center;
         flex-wrap: nowrap;
         overflow: hidden;
+        color: $gd-color-state-blank;
         margin-top: 10px;
         margin-bottom: 15px;
-        color: $gd-color-state-blank;
 
         @include gd-font-base;
     }
@@ -115,21 +115,21 @@
         .headline-value-wrapper {
             overflow: hidden;
             height: 20px;
+            line-height: 20px;
+            white-space: nowrap;
             margin-bottom: 0.25em;
             font-size: 17px;
             font-weight: bold;
-            line-height: 20px;
-            white-space: nowrap;
             text-overflow: ellipsis;
         }
 
         .headline-title-wrapper {
             overflow: hidden;
-            text-overflow: ellipsis;
             margin: 0;
             padding: 0;
-            font-size: 12px;
             white-space: nowrap;
+            text-overflow: ellipsis;
+            font-size: 12px;
         }
     }
 }

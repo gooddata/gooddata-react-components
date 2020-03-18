@@ -1,5 +1,4 @@
-// (C) 2019 GoodData Corporation
-/* (C) 2019 GoodData Corporation */
+// (C) 2019-2020 GoodData Corporation
 @import "~@gooddata/goodstrap/lib/core/styles/variables.scss";
 @import "~@gooddata/goodstrap/lib/Button/styles/variables.scss";
 
@@ -7,9 +6,9 @@
     &-body {
         display: flex;
         flex: 1 1 auto;
+        overflow: hidden;
         flex-direction: column;
         max-height: 600px;
-        overflow: hidden;
     }
 
     &-body-mobile {
@@ -27,6 +26,7 @@
             }
 
             .List {
+                // stylelint-disable-next-line declaration-no-important
                 width: 100% !important;
             }
         }
@@ -39,12 +39,12 @@
     &-body-wrapper {
         // We have additional wrapper so we can set 2 max-heights
         display: flex;
-        flex-direction: column;
         overflow: auto;
-        -webkit-overflow-scrolling: touch;
-        max-height: 100vh;
         width: 100%;
         padding: 10px 0 0;
+        flex-direction: column;
+        -webkit-overflow-scrolling: touch;
+        max-height: 100vh;
 
         @media #{$medium-up} {
             min-width: 335px;
@@ -53,8 +53,8 @@
 
     &-body-mobile &-body-wrapper {
         flex: 1 1 auto;
-        max-height: none;
         padding: 0;
+        max-height: none;
         border-bottom: 1px solid $border-color;
 
         .gd-list-item:last-child {
@@ -112,15 +112,15 @@
     }
 
     &-body-mobile &-exclude-current {
-        margin-top: 0;
         padding: 10px 10px 0;
+        margin-top: 0;
     }
 
     &-edit-mode-message {
         margin: 0 10px 5px;
-        font-size: 12px;
         line-height: 16px;
         color: $gd-color-state-blank;
+        font-size: 12px;
 
         &-text {
             margin-bottom: 10px;

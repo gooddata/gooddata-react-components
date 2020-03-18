@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 @import "~@gooddata/goodstrap/lib/core/styles/variables.scss";
 
 $color-picker-item-size: 20px;
@@ -26,17 +26,17 @@ $color-picker-spacing: 5px;
     flex: 0 0 auto;
     width: $color-picker-item-size;
     height: $color-picker-item-size;
+    line-height: $color-picker-item-size;
     margin-right: 10px;
     text-align: center;
-    line-height: $color-picker-item-size;
 
     &::before {
         width: 100%;
         height: 100%;
-        opacity: 0;
         color: $gd-color-white;
-        font-size: 16px;
+        opacity: 0;
         transition: opacity 0.2s;
+        font-size: 16px;
     }
 }
 
@@ -67,9 +67,9 @@ $color-picker-spacing: 5px;
     &:focus,
     &:active,
     &.gd-color-list-item-active {
-        border-color: $gd-color-white;
         box-shadow: 0 0 1px 1px transparentize($gd-color-dark, 0.85);
         transform: scale(1.1);
+        border-color: $gd-color-white;
     }
 }
 
@@ -90,8 +90,8 @@ $color-picker-spacing: 5px;
     }
 
     .gd-button-link {
-        width: 100%;
         justify-content: center;
+        width: 100%;
         margin: 0;
         padding: 0;
         text-align: center;
@@ -117,8 +117,8 @@ $color-picker-spacing: 5px;
 
 .gd-color-unsupported {
     padding: 20px 10px;
-    font-size: 12.5px;
     line-height: 15px;
-    text-align: center;
     color: $gd-color-text-dimmed;
+    font-size: 12.5px;
+    text-align: center;
 }

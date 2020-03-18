@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 @import "~@gooddata/goodstrap/lib/core/styles/variables";
 @import "~@gooddata/goodstrap/lib/Button/styles/variables";
 
@@ -105,11 +105,15 @@ $header-cell-resize-width: 20px;
             &:last-child {
                 border-bottom: none;
 
+                // refactor?
+                // stylelint-disable-next-line max-nesting-depth
                 .ag-header-cell,
                 .ag-header-group-cell-with-group {
                     border-bottom-style: solid;
                 }
 
+                // refactor?
+                // stylelint-disable-next-line max-nesting-depth
                 .gd-pivot-table-header {
                     min-height: 30px;
                 }
@@ -126,14 +130,14 @@ $header-cell-resize-width: 20px;
             opacity: 0;
 
             &::after {
+                content: "";
+                box-sizing: content-box;
+                display: block;
                 width: $header-cell-resize-width / 2;
+                height: 16px;
                 margin-right: $header-cell-resize-width / 2;
                 border-right: 1px solid $gd-color-highlight;
                 text-indent: $header-cell-resize-width / 2;
-                height: 16px;
-                content: "";
-                display: block;
-                box-sizing: content-box;
             }
         }
 
@@ -153,8 +157,8 @@ $header-cell-resize-width: 20px;
         }
 
         .gd-row-total {
-            border-bottom-color: transparent;
             color: $gd-color-dark;
+            border-bottom-color: transparent;
             font-weight: bold;
             background-color: #e7ebef;
 
@@ -197,9 +201,10 @@ $header-cell-resize-width: 20px;
         .ag-floating-top {
             position: absolute;
             z-index: 1;
-            pointer-events: none;
             display: none;
+            // stylelint-disable-next-line declaration-no-important
             overflow: hidden !important;
+            pointer-events: none;
             border-bottom: none;
 
             &.gd-visible-sticky-row {
@@ -209,16 +214,22 @@ $header-cell-resize-width: 20px;
             .ag-row {
                 background-color: transparent;
 
+                // refactor?
+                // stylelint-disable-next-line max-nesting-depth
                 .ag-cell {
                     background-color: #fff;
                     border-top-color: white;
 
+                    // refactor?
+                    // stylelint-disable-next-line max-nesting-depth
                     &.gd-hidden-sticky-column {
+                        color: transparent;
                         border-top-color: transparent;
                         background-color: transparent;
-                        color: transparent;
                     }
 
+                    // refactor?
+                    // stylelint-disable-next-line max-nesting-depth
                     &.gd-measure-column,
                     &.gd-column-attribute-column {
                         display: none;
@@ -228,6 +239,7 @@ $header-cell-resize-width: 20px;
         }
 
         .ag-floating-bottom {
+            // stylelint-disable-next-line declaration-no-important
             overflow: auto !important;
             border-top: none;
         }
@@ -235,12 +247,12 @@ $header-cell-resize-width: 20px;
 }
 
 .gd-pivot-table-header {
-    display: flex;
     position: relative;
+    display: flex;
     margin: 0 -11px 1px;
+    line-height: 28px;
     flex-direction: row;
     min-height: 29px;
-    line-height: 28px;
 
     .ag-header-group-cell-with-group & {
         line-height: 26px;
@@ -249,11 +261,11 @@ $header-cell-resize-width: 20px;
     &-label {
         display: flex;
         flex: 1 1 auto;
-        flex-direction: row;
-        padding: 0 11px;
-        overflow: hidden;
         justify-content: flex-start;
         align-items: flex-end;
+        overflow: hidden;
+        padding: 0 11px;
+        flex-direction: row;
 
         &--right {
             justify-content: flex-end;
@@ -268,10 +280,10 @@ $header-cell-resize-width: 20px;
         }
 
         &-text {
-            flex: 0 1 auto;
-            white-space: nowrap;
             position: relative;
+            flex: 0 1 auto;
             overflow: hidden;
+            white-space: nowrap;
             text-overflow: ellipsis;
         }
 
@@ -292,8 +304,8 @@ $header-cell-resize-width: 20px;
 
     &--numeric &-label {
         &-text {
-            text-align: right;
             flex: 1 1 auto;
+            text-align: right;
         }
     }
 
@@ -311,15 +323,15 @@ $header-cell-resize-width: 20px;
 
     &-menu {
         display: inline-flex;
-        align-items: center;
-        justify-content: center;
         flex: 0 0 auto;
+        justify-content: center;
+        align-items: center;
         overflow: hidden;
+        opacity: 0;
+        cursor: pointer;
+        transition: width 200ms, opacity 100ms;
         border-top: 2px solid transparent;
         background-color: $gd-color-highlight-dimmed;
-        opacity: 0;
-        transition: width 200ms, opacity 100ms;
-        cursor: pointer;
 
         &:hover {
             background-color: darken($gd-color-highlight-dimmed, 3%);
@@ -344,12 +356,16 @@ $header-cell-resize-width: 20px;
         &--open {
             &,
             .ag-header-cell-sortable & {
+                // refactor?
+                // stylelint-disable-next-line max-nesting-depth
                 &,
                 &:hover {
                     border-color: $button-normal-border-color;
                     background-color: $button-normal-hover-bg;
                 }
 
+                // refactor?
+                // stylelint-disable-next-line max-nesting-depth
                 &:active {
                     border-color: $button-normal-active-border-color;
 
@@ -366,8 +382,8 @@ $header-cell-resize-width: 20px;
     &-arrow-down {
         display: inline-block;
         flex: 0 0 auto;
-        margin-left: 4px;
         line-height: 16px;
+        margin-left: 4px;
         font-size: 12px;
         font-weight: normal;
 
@@ -376,9 +392,9 @@ $header-cell-resize-width: 20px;
             position: relative;
             top: 1px;
             display: inherit;
+            vertical-align: bottom;
             font-family: Indigo;
             font-size: 10px;
-            vertical-align: bottom;
         }
     }
 
@@ -389,14 +405,14 @@ $header-cell-resize-width: 20px;
 }
 
 .gd-aggregation-menu-item {
-    .gd-list-item-header:before {
-        display: block;
+    .gd-list-item-header::before {
         content: "";
         position: absolute;
+        top: 13px;
+        left: 10px;
+        display: block;
         width: 12px;
         height: 11px;
-        left: 10px;
-        top: 13px;
         background-image: url("~@gooddata/goodstrap/lib/core/styles/icons/rows.svg");
     }
 
@@ -409,11 +425,11 @@ $header-cell-resize-width: 20px;
         }
 
         .gd-aggregation-menu-item-inner {
-            padding: 4px 30px;
-            flex: auto;
-            cursor: pointer;
             position: relative;
             z-index: 2;
+            flex: auto;
+            padding: 4px 30px;
+            cursor: pointer;
         }
 
         &.is-submenu .gd-aggregation-menu-item-inner {
@@ -423,8 +439,8 @@ $header-cell-resize-width: 20px;
     }
 
     .gd-aggregation-submenu .gd-aggregation-menu-item-inner {
-        max-width: 190px;
         overflow: hidden;
+        max-width: 190px;
         text-overflow: ellipsis;
     }
 

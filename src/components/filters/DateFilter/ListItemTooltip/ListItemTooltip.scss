@@ -1,13 +1,13 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 @import "~@gooddata/goodstrap/lib/core/styles/variables.scss";
 
 .gd-list-item-tooltip {
     position: relative;
     top: 1px; // Align icon precisely with text
-    margin-left: 6px;
     // ListItem changes color to blue when it is selected, we do not want to propagate this color to the tooltip icon
     // (it is icon font so color is inherited just like with regular text)
     color: initial;
+    margin-left: 6px;
 }
 
 .gd-list-item-tooltip-icon {
