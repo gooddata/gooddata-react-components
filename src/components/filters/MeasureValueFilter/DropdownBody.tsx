@@ -14,6 +14,7 @@ import {
     isRangeOperator,
 } from "../../../interfaces/MeasureValueFilter";
 import * as Operator from "../../../constants/measureValueFilterOperators";
+import isEqual = require("lodash/isEqual");
 
 // The platform supports 6 decimal places
 const MAX_DECIMAL_PLACES = 6;
@@ -166,6 +167,14 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
 
     private isApplyButtonDisabled = () => {
         const { operator } = this.state;
+
+        if (this.props.usePercentage) {
+            const initialPercentageValue = this.convertToPercentageValue(
+                this.props.value,
+                this.state.operator,
+            );
+            return isEqual(this.state.value, initialPercentageValue);
+        }
 
         if (isComparisonOperator(operator)) {
             return this.isApplyButtonDisabledForComparison();
