@@ -25,12 +25,12 @@ import {
     DEFAULT_TOOLTIP_OPTIONS,
     DEFAULT_CENTER,
 } from "../../../constants/geoChart";
-import { IGeoConfig, IGeoData, IGeoLngLatBounds, IGeoLngLat } from "../../../interfaces/GeoChart";
+import { IGeoConfig, IGeoData, IGeoLngLat } from "../../../interfaces/GeoChart";
 
 import "../../../../styles/scss/geoChart.scss";
 import { handlePushpinMouseEnter, handlePushpinMouseLeave } from "./geoChartTooltip";
 import { isClusteringAllowed } from "../../../helpers/geoChart/common";
-import { getLngLatBounds } from "../../../helpers/geoChart/lngLatBounds";
+import { getViewportOptions } from "../../../helpers/geoChart/viewport";
 
 export interface IGeoChartRendererProps {
     config: IGeoConfig;
@@ -113,29 +113,15 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
                 location: { data },
             },
         } = this.props;
-
-        const center: IGeoLngLat = get<IGeoConfig, "center">(config, "center");
         const isExportMode = this.isExportMode();
-        const zoom: number = get<IGeoConfig, "zoom", number>(config, "zoom", DEFAULT_ZOOM);
-
-        let bounds: mapboxgl.LngLatBoundsLike;
-        // use `center` config if it exists
-        if (!center) {
-            const lngLatBounds: IGeoLngLatBounds = getLngLatBounds(data);
-            if (lngLatBounds) {
-                bounds = [lngLatBounds.northEast, lngLatBounds.southWest];
-            }
-        }
 
         this.chart = new mapboxgl.Map({
             ...DEFAULT_MAPBOX_OPTIONS,
-            bounds,
+            ...getViewportOptions(data, config),
             container: this.chartRef,
-            center: center || DEFAULT_CENTER,
             // If true, the map’s canvas can be exported to a PNG using map.getCanvas().toDataURL().
             // This is false by default as a performance optimization.
             preserveDrawingBuffer: isExportMode,
-            zoom,
         });
     };
 

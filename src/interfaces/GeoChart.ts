@@ -54,6 +54,24 @@ export interface IGeoData {
     tooltipText?: IGeoAttributeItem;
 }
 
+export type IGeoConfigViewportArea =
+    | "auto" // default, Include all data
+    | "continent_af" // Africa
+    | "continent_as" // Asia
+    | "continent_au" // Australia + NZ
+    | "continent_eu" // Europe
+    | "continent_na" // North America
+    | "continent_sa" // South America
+    | "world";
+
+export interface IGeoConfigViewport {
+    area?: IGeoConfigViewportArea;
+}
+
+export interface IGeoViewports {
+    [key: string]: mapboxgl.LngLatBoundsLike;
+}
+
 export interface IGeoConfig {
     center?: IGeoLngLat;
     isExportMode?: boolean;
@@ -64,6 +82,7 @@ export interface IGeoConfig {
     zoom?: number; // in the 0-22 zoom range
     mapboxToken: string;
     separators?: ISeparators;
+    viewport?: IGeoConfigViewport;
 }
 
 export interface IGeoPushpinChartProps extends ICommonChartProps {

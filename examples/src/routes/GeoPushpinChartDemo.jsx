@@ -6,11 +6,13 @@ import GeoPushpinChartClusteringExample from "../components/GeoPushpinChartClust
 import GeoPushpinChartWithColorLegendExample from "../components/GeoPushpinChartWithColorLegendExample";
 import GeoPushpinChartWithCategoryLegendExample from "../components/GeoPushpinChartWithCategoryLegendExample";
 import GeoPushpinChartConfigurationExample from "../components/GeoPushpinChartConfigurationExample";
+import GeoPushpinChartConfigurationViewportExample from "../components/GeoPushpinChartConfigurationViewportExample";
 
 import GeoPushpinChartClusteringExampleSRC from "!raw-loader!../components/GeoPushpinChartClusteringExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import GeoPushpinChartWithColorLegendExampleSRC from "!raw-loader!../components/GeoPushpinChartWithColorLegendExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import GeoPushpinChartWithCategoryLegendExampleSRC from "!raw-loader!../components/GeoPushpinChartWithCategoryLegendExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import GeoPushpinChartConfigurationExampleSRC from "!raw-loader!../components/GeoPushpinChartConfigurationExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
+import GeoPushpinChartConfigurationViewportExampleSRC from "!raw-loader!../components/GeoPushpinChartConfigurationViewportExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 
 export const GeoPushpinChartDemo = () => (
     <div>
@@ -46,6 +48,14 @@ export const GeoPushpinChartDemo = () => (
         <ExampleWithSource
             for={() => <GeoPushpinChartConfigurationExample />}
             source={GeoPushpinChartConfigurationExampleSRC}
+        />
+
+        <h2 id="geo-pushpin-chart-configuration-viewport">
+            Example of Geo Pushpin Chart with Configuration - Viewport
+        </h2>
+        <ExampleWithSource
+            for={() => <GeoPushpinChartConfigurationViewportExample />}
+            source={GeoPushpinChartConfigurationViewportExampleSRC}
         />
     </div>
 );

@@ -12,17 +12,20 @@ const CHART_WITH_CLUSTERING = Selector(".s-geo-pushpin-chart-clustering");
 const CHART_WITH_COLOR_LEGEND = Selector(".s-geo-pushpin-chart-color");
 const CHART_WITH_CATEGORY_LEGEND = Selector(".s-geo-pushpin-chart-category");
 const CHART_WITH_CONFIGURATION = Selector(".s-geo-pushpin-chart-configuration");
+const CHART_WITH_CONFIGURATION_VIEWPORT = Selector(".s-geo-pushpin-chart-configuration-viewport");
 
 test("should render all charts", async t => {
     await t.expect(CHART_WITH_CLUSTERING.exists).ok();
     await t.expect(CHART_WITH_COLOR_LEGEND.exists).ok();
     await t.expect(CHART_WITH_CATEGORY_LEGEND.exists).ok();
     await t.expect(CHART_WITH_CONFIGURATION.exists).ok();
+    await t.expect(CHART_WITH_CONFIGURATION_VIEWPORT.exists).ok();
 
     await t.expect(CHART_WITH_CLUSTERING.find("canvas").exists).ok();
     await t.expect(CHART_WITH_COLOR_LEGEND.find("canvas").exists).ok();
     await t.expect(CHART_WITH_CATEGORY_LEGEND.find("canvas").exists).ok();
     await t.expect(CHART_WITH_CONFIGURATION.find("canvas").exists).ok();
+    await t.expect(CHART_WITH_CONFIGURATION_VIEWPORT.find("canvas").exists).ok();
 });
 
 test("should not render the legend with Clustering", async t => {
