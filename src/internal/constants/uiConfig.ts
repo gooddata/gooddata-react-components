@@ -1,7 +1,7 @@
 // (C) 2019-2020 GoodData Corporation
 import { IUiConfig } from "../interfaces/Visualization";
 
-import { METRIC, FACT, ATTRIBUTE, DATE } from "./bucket";
+import { METRIC, FACT, ATTRIBUTE, DATE, GEO_ATTRIBUTE } from "./bucket";
 import { OverTimeComparisonTypes } from "../../interfaces/OverTimeComparison";
 import { VisualizationTypes } from "../../constants/visualizationTypes";
 import { MEASURES, SECONDARY_MEASURES, TERTIARY_MEASURES, VIEW } from "../../constants/bucketNames";
@@ -574,6 +574,7 @@ export const GEO_PUSHPIN_CHART_UICONFIG: IUiConfig = {
     buckets: {
         location: {
             ...geoAttributesBase,
+            accepts: [ATTRIBUTE, GEO_ATTRIBUTE],
         },
         size: {
             ...geoMeasuresBase,
