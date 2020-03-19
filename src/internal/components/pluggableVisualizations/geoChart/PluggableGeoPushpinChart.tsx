@@ -6,7 +6,6 @@ import set = require("lodash/set");
 import isEmpty = require("lodash/isEmpty");
 import includes = require("lodash/includes");
 import cloneDeep = require("lodash/cloneDeep");
-import noop = require("lodash/noop");
 
 import { VisualizationObject, AFM } from "@gooddata/typings";
 
@@ -21,7 +20,6 @@ import {
     IBucket,
     IUiConfig,
     IGdcConfig,
-    IVisCallbacks,
 } from "../../../interfaces/Visualization";
 import { PluggableBaseChart } from "../baseChart/PluggableBaseChart";
 import { BUCKETS, METRIC, ATTRIBUTE } from "../../../constants/bucket";
@@ -40,7 +38,7 @@ import { getReferencePointWithSupportedProperties } from "../../../utils/propert
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 import { DASHBOARDS_ENVIRONMENT } from "../../../constants/properties";
 import { GeoChart } from "../../../../components/core/GeoChart";
-import { IGeoConfig, IGeoLngLatObj } from "../../../../interfaces/GeoChart";
+import { IGeoConfig } from "../../../../interfaces/GeoChart";
 import { GEOPUSHPIN_SUPPORTED_PROPERTIES } from "../../../constants/supportedProperties";
 import GeoPushpinConfigurationPanel from "../../configurationPanels/GeoPushpinConfigurationPanel";
 import { IChartConfig } from "../../../..";
@@ -81,31 +79,6 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
     public getUiConfig(): IUiConfig {
         return cloneDeep(GEO_PUSHPIN_CHART_UICONFIG);
     }
-
-    protected handlePushData = (data: any) => {
-        const pushData = get<IVisCallbacks, "pushData", typeof noop>(this.callbacks, "pushData", noop);
-        const controls = get<IVisualizationProperties, "controls", any>(
-            this.visualizationProperties,
-            "controls",
-            {},
-        );
-        const newControls = get<IVisualizationProperties, "properties.controls", any>(
-            data,
-            "properties.controls",
-            {},
-        );
-
-        pushData({
-            ...data,
-            properties: {
-                controls: {
-                    ...controls,
-                    ...newControls,
-                },
-            },
-            references: this.references,
-        });
-    };
 
     protected configureBuckets(extendedReferencePoint: IExtendedReferencePoint): IExtendedReferencePoint {
         const buckets: IBucket[] = get(extendedReferencePoint, BUCKETS, []);
@@ -154,13 +127,12 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
     protected renderConfigurationPanel() {
         const configPanelElement = document.querySelector(this.configPanelElement);
         if (configPanelElement) {
-            const properties: IVisualizationProperties = get(this, "visualizationProperties.properties", {});
-
             render(
                 <GeoPushpinConfigurationPanel
                     locale={this.locale}
                     pushData={this.callbacks.pushData}
-                    properties={properties}
+                    properties={this.visualizationProperties}
+                    references={this.references}
                 />,
                 configPanelElement,
             );
@@ -174,9 +146,16 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
     ): IChartConfig {
         const center = get(supportedControls, "center");
         const centerProp = center ? { center } : {};
+        const { isInEditMode, isExportMode } = config;
+        const isViewportFreezed = {
+            viewport: {
+                freezed: isInEditMode || isExportMode,
+            },
+        };
         const geoChartConfig = {
             ...config,
             ...centerProp,
+            ...isViewportFreezed,
         };
         return {
             mdObject,
@@ -228,8 +207,6 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
             dataSource,
             resultSpec,
             pushData: this.handlePushData,
-            onCenterPositionChanged: this.handleOnCenterPositionChanged,
-            onZoomChanged: this.handleOnZoomChanged,
             afterRender,
             onDrill,
             onError,
@@ -322,24 +299,4 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
         });
         return referencePointConfigured;
     }
-
-    private handleOnCenterPositionChanged = (center: IGeoLngLatObj): void => {
-        this.handlePushData({
-            properties: {
-                controls: {
-                    center,
-                },
-            },
-        });
-    };
-
-    private handleOnZoomChanged = (zoom: number): void => {
-        this.handlePushData({
-            properties: {
-                controls: {
-                    zoom,
-                },
-            },
-        });
-    };
 }

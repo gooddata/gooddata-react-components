@@ -160,6 +160,16 @@ export const arithmeticMeasureItems: IBucketItem[] = [
         operator: "sum",
         operandLocalIdentifiers: ["m2_pop", "m1"],
     },
+    {
+        localIdentifier: "am7",
+        type: "metric",
+        aggregation: null,
+        attribute: null,
+        showInPercent: null,
+        showOnSecondaryAxis: null,
+        operator: "sum",
+        operandLocalIdentifiers: ["m1", "m3"],
+    },
 ];
 
 export const masterMeasuresWithPercentage: IBucketItem[] = masterMeasureItems.map((measure: IBucketItem) => ({

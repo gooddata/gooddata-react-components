@@ -1,7 +1,7 @@
 // (C) 2020 GoodData Corporation
 import get = require("lodash/get");
 import { Execution, VisualizationObject } from "@gooddata/typings";
-import { IGeoData, IGeoLngLatLike, IObjectMapping } from "../../interfaces/GeoChart";
+import { IGeoData, IGeoLngLat, IObjectMapping } from "../../interfaces/GeoChart";
 import { COLOR, LOCATION, SEGMENT, SIZE, TOOLTIP_TEXT } from "../../constants/bucketNames";
 import {
     getAttributeHeadersInDimension,
@@ -19,7 +19,7 @@ interface IBucketItemInfo {
     localIdentifier: VisualizationObject.IObjUriQualifier["uri"];
 }
 
-export function getLocation(latlng: string): IGeoLngLatLike | null {
+export function getLocation(latlng: string): IGeoLngLat | null {
     if (!latlng) {
         return null;
     }
@@ -31,7 +31,10 @@ export function getLocation(latlng: string): IGeoLngLatLike | null {
         return null;
     }
 
-    return [longitude, latitude];
+    return {
+        lat: latitude,
+        lng: longitude,
+    };
 }
 
 export function getGeoData(

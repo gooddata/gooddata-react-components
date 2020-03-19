@@ -23,18 +23,27 @@ export function getBulletChartUiConfig(
 
     referencePointConfigured[UICONFIG] = setBucketTitles(referencePointConfigured, visualizationType, intl);
 
+    const buckets: IBucket[] = get(referencePoint, BUCKETS, []);
+
+    const primaryMeasuresCount = getItemsCount(buckets, BucketNames.MEASURES);
+    const secondaryMeasuresCount = getItemsCount(buckets, BucketNames.SECONDARY_MEASURES);
+    const tertiaryMeasuresCount = getItemsCount(buckets, BucketNames.TERTIARY_MEASURES);
+
     referencePointConfigured[UICONFIG].buckets[BucketNames.MEASURES] = {
         ...referencePointConfigured[UICONFIG].buckets[BucketNames.MEASURES],
+        canAddItems: primaryMeasuresCount < 1,
         icon: bulletPrimaryMeasureIcon as any,
     };
 
     referencePointConfigured[UICONFIG].buckets[BucketNames.SECONDARY_MEASURES] = {
         ...referencePointConfigured[UICONFIG].buckets[BucketNames.SECONDARY_MEASURES],
+        canAddItems: secondaryMeasuresCount < 1,
         icon: bulletTargetMeasureIcon as any,
     };
 
     referencePointConfigured[UICONFIG].buckets[BucketNames.TERTIARY_MEASURES] = {
         ...referencePointConfigured[UICONFIG].buckets[BucketNames.TERTIARY_MEASURES],
+        canAddItems: tertiaryMeasuresCount < 1,
         icon: bulletComparativeMeasureIcon as any,
     };
 
@@ -42,12 +51,6 @@ export function getBulletChartUiConfig(
         ...referencePointConfigured[UICONFIG].buckets[BucketNames.VIEW],
         icon: bulletViewByIcon as any,
     };
-
-    const buckets: IBucket[] = get(referencePoint, BUCKETS, []);
-
-    const primaryMeasuresCount = getItemsCount(buckets, BucketNames.MEASURES);
-    const secondaryMeasuresCount = getItemsCount(buckets, BucketNames.SECONDARY_MEASURES);
-    const tertiaryMeasuresCount = getItemsCount(buckets, BucketNames.TERTIARY_MEASURES);
 
     if (primaryMeasuresCount === 0 && (secondaryMeasuresCount !== 0 || tertiaryMeasuresCount !== 0)) {
         referencePointConfigured[UICONFIG].customError = {

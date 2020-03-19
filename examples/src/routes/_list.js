@@ -36,6 +36,7 @@ import OnDrillHandling from "./OnDrillHandling";
 import Xirr from "./Xirr";
 import NativeTotalAndMeasureValueFilterTest from "../components/NativeTotalAndMeasureValueFilterTest";
 import { PivotTableSizing } from "./PivotTableSizing";
+import GeoPushpinChartDemo from "./GeoPushpinChartDemo";
 
 export const advancedUseCasesRoutes = [
     {
@@ -164,6 +165,11 @@ export const sideNavigationRoutes = [
         path: "/pivot-table",
         title: "Pivot Table",
         Component: PivotTableDemo,
+    },
+    {
+        path: "/geo-pushpin-chart",
+        title: "Geo Pushpin Chart",
+        Component: GeoPushpinChartDemo,
     },
     {
         path: "/visualization",

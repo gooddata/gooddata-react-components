@@ -52,7 +52,20 @@ describe("createPushpinDataLayer", () => {
             location: {
                 index: 0,
                 name: "location",
-                data: [[44.5, -89.5], [44.5, -89.5], [44.5, -89.5]],
+                data: [
+                    {
+                        lat: -89.5,
+                        lng: 44.5,
+                    },
+                    {
+                        lat: -89.5,
+                        lng: 44.5,
+                    },
+                    {
+                        lat: -89.5,
+                        lng: 44.5,
+                    },
+                ],
             },
         };
         const layer: mapboxgl.Layer = createPushpinDataLayer(dataSourceName, geoData);
@@ -108,21 +121,26 @@ describe("createPushpinDataLayer", () => {
             "rgb(20,178,226)",
         ]);
         expect(layer.paint["circle-radius"]).toEqual([
-            "step",
-            ["get", "pushpinRadius"],
+            "case",
+            ["==", ["get", "pushpinRadius"], null],
             4,
-            18,
-            4,
-            3718.33,
-            12,
-            7418.67,
-            19,
-            11119,
-            26,
-            14819.33,
-            33,
-            18519.67,
-            40,
+            [
+                "step",
+                ["get", "pushpinRadius"],
+                4,
+                18,
+                4,
+                3718.33,
+                12,
+                7418.67,
+                19,
+                11119,
+                26,
+                14819.33,
+                33,
+                18519.67,
+                40,
+            ],
         ]);
         expect(layer.paint["circle-stroke-color"]).toEqual([
             "string",

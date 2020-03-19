@@ -55,8 +55,7 @@ function createPushpinSizeOptions(geoData: IGeoData): mapboxgl.Expression | numb
         }
         sizeOptions.push(stepValue, DEFAULT_PUSHPIN_SIZE_SCALE[index]);
     }
-
-    return sizeOptions;
+    return ["case", ["==", ["get", "pushpinRadius"], null], DEFAULT_PUSHPIN_SIZE_VALUE, sizeOptions];
 }
 
 export function createPushpinFilter(selectedSegmentItems: string[]): mapboxgl.Expression {

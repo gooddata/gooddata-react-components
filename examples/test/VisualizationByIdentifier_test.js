@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { Selector } from "testcafe";
 import { config } from "./utils/config";
 import { loginUsingGreyPages } from "./utils/helpers";
@@ -92,4 +92,8 @@ test("Treemap should render", async t => {
 
 test("Heatmap should render", async t => {
     await checkRenderedChart(".s-visualization-heatmap", t);
+});
+
+test("GeoPushpinChart should render", async t => {
+    await checkRenderedChart(".s-visualization-geo-pushpin", t);
 });
