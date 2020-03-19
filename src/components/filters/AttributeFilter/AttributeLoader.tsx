@@ -1,7 +1,7 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import * as PropTypes from "prop-types";
-import { IAttributeDisplayForm } from "./model";
+import { IAttributeDisplayForm, IAttribute } from "./model";
 
 export interface IAttributeLoaderMetadataProps {
     getObjectUri: (...params: any[]) => any; // TODO: make the types more specific (FET-282)
@@ -18,6 +18,7 @@ export interface IAttributeLoaderProps {
 }
 
 export interface IAttributeLoaderState {
+    attribute: IAttribute;
     attributeDisplayForm: IAttributeDisplayForm;
     isLoading: boolean;
     isUsingIdentifier: boolean;
@@ -25,6 +26,7 @@ export interface IAttributeLoaderState {
 }
 
 export interface IAttributeLoaderChildrenProps {
+    attribute: IAttribute;
     attributeDisplayForm: IAttributeDisplayForm;
     isLoading: boolean;
     isUsingIdentifier: boolean;
@@ -64,6 +66,15 @@ function getAttributeDisplayForm(
     });
 }
 
+function getAttribute(metadata: IAttributeLoaderMetadataProps, uri: string): Promise<IAttribute> {
+    return metadata.getObjectDetails(uri).then((result: any) => {
+        if (!result || !result.attribute) {
+            throw new Error('Invalid data uri. Required data uri must be of type "attribute"');
+        }
+        return result.attribute;
+    });
+}
+
 export class AttributeLoader extends React.PureComponent<IAttributeLoaderProps, IAttributeLoaderState> {
     public static propTypes = {
         projectId: PropTypes.string,
@@ -85,6 +96,7 @@ export class AttributeLoader extends React.PureComponent<IAttributeLoaderProps, 
         super(props);
 
         this.state = {
+            attribute: null,
             attributeDisplayForm: null,
             isLoading: true,
             isUsingIdentifier: false,
@@ -93,7 +105,7 @@ export class AttributeLoader extends React.PureComponent<IAttributeLoaderProps, 
     }
 
     public componentDidMount() {
-        this.getAttributeDisplayForm(this.props);
+        this.getAttributeDetails(this.props);
     }
 
     public componentWillReceiveProps(nextProps: IAttributeLoaderProps) {
@@ -106,13 +118,14 @@ export class AttributeLoader extends React.PureComponent<IAttributeLoaderProps, 
                 isLoading: true,
                 attributeDisplayForm: null, // invalidate
             });
-            this.getAttributeDisplayForm(nextProps);
+            this.getAttributeDetails(nextProps);
         }
     }
 
     public render() {
-        const { attributeDisplayForm, isLoading, isUsingIdentifier, error } = this.state;
+        const { attributeDisplayForm, isLoading, isUsingIdentifier, error, attribute } = this.state;
         return this.props.children({
+            attribute,
             attributeDisplayForm,
             isLoading,
             isUsingIdentifier,
@@ -120,18 +133,23 @@ export class AttributeLoader extends React.PureComponent<IAttributeLoaderProps, 
         });
     }
 
-    private getAttributeDisplayForm(props: IAttributeLoaderProps) {
+    private getAttributeDetails(props: IAttributeLoaderProps) {
         const { metadata, projectId, uri, identifier } = props;
         getAttributeUri(metadata, projectId, uri, identifier)
             .then((dfUri: string) => getAttributeDisplayForm(metadata, dfUri))
             .then(
                 (attributeDisplayForm: IAttributeDisplayForm) => {
-                    this.setState({
-                        attributeDisplayForm,
-                        isLoading: false,
-                        isUsingIdentifier: !!identifier,
-                        error: null,
-                    });
+                    getAttribute(metadata, attributeDisplayForm.content.formOf).then(
+                        (attribute: IAttribute) => {
+                            this.setState({
+                                attribute,
+                                attributeDisplayForm,
+                                isLoading: false,
+                                isUsingIdentifier: !!identifier,
+                                error: null,
+                            });
+                        },
+                    );
                 },
                 (error: any) => {
                     this.setState({

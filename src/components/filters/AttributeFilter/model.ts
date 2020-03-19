@@ -1,10 +1,20 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
+export interface IMeta {
+    title: string;
+    uri: string;
+    identifier: string;
+}
 export interface IAttributeDisplayForm {
-    meta: {
-        title: string;
-        uri: string;
-        identifier: string;
+    content: {
+        formOf: string;
+        expression: string[];
+        default: number;
     };
+    meta: IMeta;
+}
+
+export interface IAttribute {
+    meta: IMeta;
 }
 
 export interface IAttributeElement {

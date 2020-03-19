@@ -1227,10 +1227,10 @@
     rxjs "^5.5.6"
     uuid "^3.2.1"
 
-"@gooddata/goodstrap@68.1.0-alpha-tulean-TLE-RAIL2070-2020-03-19T10-27-59-665Z":
-  version "68.1.0-alpha-tulean-TLE-RAIL2070-2020-03-19T10-27-59-665Z"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-68.1.0-alpha-tulean-TLE-RAIL2070-2020-03-19T10-27-59-665Z.tgz#e5b72f02719ed3ecd6623699750779d23eb0a6ad"
-  integrity sha512-jYbeUEo5BgLpGKHD5p+U7BaYa/QQbGRv4rHhGQT8nzvITBnY6yoZgOg9oIiYph5mjL94czJ4vDVGFSozzWM4gg==
+"@gooddata/goodstrap@68.1.0-alpha-tulean-TLE-RAIL2070-2020-03-19T14-28-25-303Z":
+  version "68.1.0-alpha-tulean-TLE-RAIL2070-2020-03-19T14-28-25-303Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-68.1.0-alpha-tulean-TLE-RAIL2070-2020-03-19T14-28-25-303Z.tgz#5ee9cfe21e5414df3e76d0b914a51e9bd40d24fe"
+  integrity sha512-ndO0FI2GH0SQuat1tLPQoLKjkYC8ro1Y2RvtOCFjzHjAwWx1NPZ4lOJHT+VO7k4ZqkS9QS8Z6cj4ywHFpQl9Ow==
   dependencies:
     "@babel/runtime-corejs2" "^7.0.0"
     "@gooddata/js-utils" "^3.5.0"
