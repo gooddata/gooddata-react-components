@@ -1,7 +1,17 @@
 // (C) 2019-2020 GoodData Corporation
 import mapboxgl from "mapbox-gl";
 import { DEFAULT_COLORS } from "../components/visualizations/utils/color";
-import { IGeoLngLatLike } from "../interfaces/GeoChart";
+import { IGeoLngLat, IGeoViewports } from "../interfaces/GeoChart";
+
+export const VIEWPORTS: IGeoViewports = {
+    continent_af: [{ lat: -36.3318, lng: -20.2255 }, { lat: 37.982, lng: 54.4841 }], // Africa
+    continent_as: [{ lat: -9.8256, lng: 24.3532 }, { lat: 79.488044, lng: 180 }], // Asia
+    continent_au: [{ lat: -47.9436, lng: 109.8601 }, { lat: 0, lng: 180 }], // Australia + NZ
+    continent_eu: [{ lat: 33.6033, lng: -26.5876 }, { lat: 77.442, lng: 78.3182 }], // Europe
+    continent_na: [{ lat: 2.2236, lng: -170.4181 }, { lat: 72.0157, lng: -52.69208 }], // North America
+    continent_sa: [{ lat: -56.8929, lng: -90.242 }, { lat: 14.0995, lng: -31.3784 }], // South America
+    world: [{ lat: -84, lng: -180 }, { lat: 84, lng: 180 }],
+};
 
 export const DEFAULT_CLUSTER_FILTER = ["has", "point_count"];
 export const DEFAULT_CLUSTER_LABELS_CONFIG = {
@@ -54,10 +64,16 @@ export const DEFAULT_DATA_POINTS_LIMIT = 2000;
 export const DEFAULT_DATA_SOURCE_NAME = "gdcPushpinsData";
 export const DEFAULT_LAYER_NAME = "gdcPushpins";
 
+export const DRAG_PAN_EVENT = "dragPan";
+export const SCROLL_ZOOM_EVENT = "scrollZoom";
+
 export const DEFAULT_LATITUDE: number = 34;
 export const DEFAULT_LONGITUDE: number = 5;
 export const DEFAULT_ZOOM: number = 2;
-export const DEFAULT_CENTER: IGeoLngLatLike = [DEFAULT_LONGITUDE, DEFAULT_LATITUDE];
+export const DEFAULT_CENTER: IGeoLngLat = {
+    lat: DEFAULT_LATITUDE,
+    lng: DEFAULT_LONGITUDE,
+};
 
 export const DEFAULT_PUSHPIN_BORDER_COLOR_VALUE = "rgb(233,237,241)";
 
@@ -78,9 +94,9 @@ export const DEFAULT_MAPBOX_OPTIONS: Partial<mapboxgl.MapboxOptions> = {
     attributionControl: false,
     // If false , the "drag to rotate" interaction is disabled
     dragRotate: false,
-    fitBoundsOptions: { padding: 60 },
+    fitBoundsOptions: { padding: 45 },
     // Disable infinite geochart scrolling
-    maxBounds: [[-180, -84], [180, 84]],
+    maxBounds: VIEWPORTS.world,
     // The maximum zoom level of the map (0-24).
     maxZoom: 14,
     // If false , the map's pitch (tilt) control with "drag to rotate" interaction will be disabled.

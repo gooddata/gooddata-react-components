@@ -19,6 +19,7 @@ import HeatmapExample from "../components/HeatmapExample";
 import TableExample from "../components/TableExample";
 import HeadlineExample from "../components/HeadlineExample";
 import KpiExample from "../components/KpiExample";
+import GeoPushpinChartWithCategoryLegendExample from "../components/GeoPushpinChartWithCategoryLegendExample";
 
 import BarChartExampleSRC from "!raw-loader!../components/BarChartExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import ColumnChartExampleSRC from "!raw-loader!../components/ColumnChartExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
@@ -36,6 +37,7 @@ import HeatmapExampleSRC from "!raw-loader!../components/HeatmapExample"; // esl
 import TableExampleSRC from "!raw-loader!../components/TableExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import HeadlineExampleSRC from "!raw-loader!../components/HeadlineExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import KpiExampleSRC from "!raw-loader!../components/KpiExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
+import GeoPushpinChartWithCategoryLegendExampleSRC from "!raw-loader!../components/GeoPushpinChartWithCategoryLegendExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 
 export const BasicComponents = () => (
     <div>
@@ -107,6 +109,12 @@ export const BasicComponents = () => (
             one measure.
         </p>
         <ExampleWithSource for={KpiExample} source={KpiExampleSRC} />
+
+        <h2 id="geo-pushpin-chart">Example of Geo Pushpin Chart with Size and Category Legend</h2>
+        <ExampleWithSource
+            for={GeoPushpinChartWithCategoryLegendExample}
+            source={GeoPushpinChartWithCategoryLegendExampleSRC}
+        />
     </div>
 );
 

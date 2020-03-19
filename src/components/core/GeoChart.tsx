@@ -23,7 +23,7 @@ import {
     IGeoData,
     IPushpinCategoryLegendItem,
     IValidationResult,
-    IGeoLngLatObj,
+    IGeoLngLat,
 } from "../../interfaces/GeoChart";
 import { DEFAULT_COLORS } from "../visualizations/utils/color";
 import { isDataOfReasonableSize } from "../../helpers/geoChart/common";
@@ -43,7 +43,7 @@ export interface ICoreGeoChartProps extends ICommonChartProps, IDataSourceProvid
     config?: IGeoConfig;
     chartRenderer?: (props: IGeoChartRendererProps) => React.ReactElement;
     legendRenderer?: (props: IGeoChartLegendRendererProps) => React.ReactElement;
-    onCenterPositionChanged?: (center: IGeoLngLatObj) => void;
+    onCenterPositionChanged?: (center: IGeoLngLat) => void;
     onZoomChanged?: (zoom: number) => void;
 }
 
