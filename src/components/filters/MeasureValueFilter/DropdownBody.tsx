@@ -139,6 +139,10 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
             return false;
         }
 
+        if (this.props.usePercentage) {
+            return value === this.round(this.props.value.value * 100);
+        }
+
         return value === this.props.value.value;
     }
 
@@ -155,6 +159,13 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
 
         if (this.state.operator !== this.props.operator) {
             return false;
+        }
+
+        if (this.props.usePercentage) {
+            return (
+                from === this.round(this.props.value.from * 100) &&
+                to === this.round(this.props.value.to * 100)
+            );
         }
 
         return from === this.props.value.from && to === this.props.value.to;
