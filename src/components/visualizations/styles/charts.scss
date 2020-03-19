@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 @import "~@gooddata/goodstrap/lib/Bubble/styles/mixins";
 @import "~@gooddata/goodstrap/lib/core/styles/variables";
 @import "~@gooddata/goodstrap/lib/core/styles/mixins";
@@ -65,6 +65,10 @@ $paging-button-small-size: 22px;
         fill: $gd-color-state-blank !important;
     }
     // stylelint-enable
+}
+
+.hidden-empty-series {
+    display: none;
 }
 
 @import "./legend.scss";

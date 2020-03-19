@@ -23,20 +23,19 @@ const isTargetMeasurePresent = (bucketLocalIdentifiers: VisualizationObject.Iden
     bucketLocalIdentifiers.includes(SECONDARY_MEASURES);
 
 const getValue = (
-    value: string,
-    seriesIndex: number,
-    measureBucketsLocalIdentifiers: VisualizationObject.Identifier[],
+    value: number,
+    isTarget: boolean,
 ): {
     y: number;
     target?: number;
 } =>
-    isTargetSeries(seriesIndex, measureBucketsLocalIdentifiers)
+    isTarget
         ? {
-              target: parseValue(value),
+              target: value === null ? 0 : value,
               y: 0,
           }
         : {
-              y: parseValue(value),
+              y: value,
           };
 
 const getSeriesItemData = (
@@ -45,14 +44,21 @@ const getSeriesItemData = (
     seriesIndex: number,
     measureBucketsLocalIdentifiers: VisualizationObject.Identifier[],
 ) =>
-    seriesItem.map((pointValue: string) => ({
-        ...getValue(pointValue, seriesIndex, measureBucketsLocalIdentifiers),
-        format: unwrap(measureGroup.items[seriesIndex]).format,
-        marker: {
-            enabled: pointValue !== null,
-        },
-        name: unwrap(measureGroup.items[seriesIndex]).name,
-    }));
+    seriesItem.map((pointValue: string) => {
+        const value = parseValue(pointValue);
+        const isTarget = isTargetSeries(seriesIndex, measureBucketsLocalIdentifiers);
+        const classNameProp = isTarget && value === null ? { className: "hidden-empty-series" } : {};
+
+        return {
+            ...classNameProp,
+            ...getValue(value, isTarget),
+            format: unwrap(measureGroup.items[seriesIndex]).format,
+            marker: {
+                enabled: pointValue !== null,
+            },
+            name: unwrap(measureGroup.items[seriesIndex]).name,
+        };
+    });
 
 const getPrimarySeriesMaxPointWidth = (onlyPrimaryMeasure: boolean) => {
     if (!onlyPrimaryMeasure) {
