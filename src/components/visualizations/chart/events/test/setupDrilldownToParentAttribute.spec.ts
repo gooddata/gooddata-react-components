@@ -230,5 +230,8 @@ describe("getDDPointsInParentTick", () => {
         ];
 
         expect(getDDPointsInParentTick(axis, tick)).toEqual(expectedDDPoints);
+
+        // The original axis drillpoints are not mutated
+        expect(ddPointsForBulletChart[0][1].y).toEqual(0);
     });
 });

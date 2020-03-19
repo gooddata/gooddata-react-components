@@ -11,13 +11,14 @@ import {
     IHighchartsPointObject,
 } from "../../../../interfaces/DrillEvents";
 import get = require("lodash/get");
+import cloneDeep = require("lodash/cloneDeep");
 
 export function getDDPointsInParentTick(axis: any, tick: IHighchartsParentTick): IHighchartsPointObject[] {
     const { startAt, leaves } = tick;
     const ddPoints: IHighchartsPointObject[] = []; // drilldown points
 
     for (let i = startAt; i < startAt + leaves; i++) {
-        ddPoints.push(...axis.getDDPoints(i));
+        ddPoints.push(...cloneDeep(axis.getDDPoints(i)));
     }
 
     // replace y value by target value for bullet chart target
