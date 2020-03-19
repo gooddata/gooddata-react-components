@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { IElement } from "@gooddata/gooddata-js";
 import get = require("lodash/get");
 
@@ -374,6 +374,9 @@ export const SPELLS = [
     "Youthful Appearance",
 ];
 
+export const ATTRIBUTE_URI = "/gdc/md/projectId/obj/122";
+export const ATTRIBUTE_URI_2 = "/gdc/md/projectId/obj/455";
+export const ATTRIBUTE_URI_3 = "/gdc/md/projectId/obj/788";
 export const ATTRIBUTE_DISPLAY_FORM_URI = "/gdc/md/projectId/obj/123";
 export const ATTRIBUTE_DISPLAY_FORM_URI_2 = "/gdc/md/projectId/obj/456";
 export const ATTRIBUTE_DISPLAY_FORM_URI_3 = "/gdc/md/projectId/obj/789";
@@ -434,6 +437,9 @@ export function createMetadataMock() {
             if (uri === ATTRIBUTE_DISPLAY_FORM_URI) {
                 return Promise.resolve({
                     attributeDisplayForm: {
+                        content: {
+                            formOf: ATTRIBUTE_URI,
+                        },
                         meta: {
                             title: "Attribute",
                             uri,
@@ -444,6 +450,9 @@ export function createMetadataMock() {
             if (uri === ATTRIBUTE_DISPLAY_FORM_URI_2) {
                 return Promise.resolve({
                     attributeDisplayForm: {
+                        content: {
+                            formOf: ATTRIBUTE_URI_2,
+                        },
                         meta: {
                             title: "Attribute 2",
                             uri,
@@ -451,14 +460,46 @@ export function createMetadataMock() {
                     },
                 });
             }
-            return Promise.resolve({
-                attributeDisplayForm: {
-                    meta: {
-                        title: "Country",
-                        uri,
+            if (uri === ATTRIBUTE_DISPLAY_FORM_URI_3) {
+                return Promise.resolve({
+                    attributeDisplayForm: {
+                        content: {
+                            formOf: ATTRIBUTE_URI_3,
+                        },
+                        meta: {
+                            title: "Country",
+                            uri,
+                        },
                     },
-                },
-            });
+                });
+            }
+            if (uri === ATTRIBUTE_URI) {
+                return Promise.resolve({
+                    attribute: {
+                        meta: {
+                            title: "Attribute",
+                        },
+                    },
+                });
+            }
+            if (uri === ATTRIBUTE_URI_2) {
+                return Promise.resolve({
+                    attribute: {
+                        meta: {
+                            title: "Attribute 2",
+                        },
+                    },
+                });
+            }
+            if (uri === ATTRIBUTE_URI_3) {
+                return Promise.resolve({
+                    attribute: {
+                        meta: {
+                            title: "Attribute 3",
+                        },
+                    },
+                });
+            }
         }),
         getIdentifiersFromUris: jest.fn((_projectId, uris: string[]) => {
             const uriMap = {

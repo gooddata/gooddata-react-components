@@ -153,6 +153,7 @@ export class AttributeLoader extends React.PureComponent<IAttributeLoaderProps, 
                 },
                 (error: any) => {
                     this.setState({
+                        attribute: null,
                         attributeDisplayForm: null,
                         isLoading: false,
                         error,

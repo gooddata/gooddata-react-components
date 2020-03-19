@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import * as ReactTestUtils from "react-dom/test-utils";
 import { mount } from "enzyme";
@@ -10,6 +10,7 @@ import { IntlWrapper } from "../../../core/base/IntlWrapper";
 import {
     createMetadataMock,
     waitFor,
+    ATTRIBUTE_URI,
     ATTRIBUTE_DISPLAY_FORM_URI,
     ATTRIBUTE_DISPLAY_FORM_IDENTIFIER,
 } from "./utils";
@@ -21,7 +22,7 @@ const maxDelay = 2000;
 describe("AttributeDropdown", () => {
     function renderComponent(props: any = {}) {
         const {
-            projectId = "storybook",
+            projectId = "projectId",
             onApply = (f: (...params: any[]) => any /* TODO: make the types more specific (FET-282) */) => f,
             metadata = createMetadataMock(),
         } = props;
@@ -35,17 +36,26 @@ describe("AttributeDropdown", () => {
     function createADF() {
         return {
             content: {
-                expression: "[/gdc/md/storybook/obj/123]",
-                formOf: "/gdc/md/storybook/obj/3",
+                expression: "[/gdc/md/projectId/obj/123]",
+                formOf: ATTRIBUTE_URI,
             },
             links: {
-                elements: "/gdc/md/storybook/obj/3/elements",
+                elements: "/gdc/md/projectId/obj/3/elements",
             },
             meta: {
                 category: "attributeDisplayForm",
                 identifier: ATTRIBUTE_DISPLAY_FORM_IDENTIFIER,
                 title: "Country",
                 uri: ATTRIBUTE_DISPLAY_FORM_URI,
+            },
+        };
+    }
+
+    function createAttribute() {
+        return {
+            meta: {
+                title: "Country",
+                uri: ATTRIBUTE_URI,
             },
         };
     }
@@ -57,22 +67,23 @@ describe("AttributeDropdown", () => {
 
     it("should render attribute as default title", () => {
         const attributeDisplayForm = createADF();
-        const wrapper = renderComponent({ attributeDisplayForm });
-        expect(wrapper.find(".gd-attribute-filter .gd-button-text").text()).toBe(
-            attributeDisplayForm.meta.title,
-        );
+        const attribute = createAttribute();
+        const wrapper = renderComponent({ attributeDisplayForm, attribute });
+        expect(wrapper.find(".gd-attribute-filter .gd-button-text").text()).toBe(attribute.meta.title);
     });
 
     it("should render custom title if provided", () => {
         const attributeDisplayForm = createADF();
         const title = "Custom title";
-        const wrapper = renderComponent({ attributeDisplayForm, title });
+        const attribute = createAttribute();
+        const wrapper = renderComponent({ attributeDisplayForm, title, attribute });
         expect(wrapper.find(".gd-attribute-filter .gd-button-text").text()).toBe(title);
     });
 
     it("should render overlay on click and display loading", () => {
         const attributeDisplayForm = createADF();
-        const wrapper = renderComponent({ attributeDisplayForm });
+        const attribute = createAttribute();
+        const wrapper = renderComponent({ attributeDisplayForm, attribute });
         wrapper.find("button.s-country").simulate("click");
         expect(document.querySelectorAll(".s-isLoading")).toHaveLength(1);
     });
@@ -83,7 +94,8 @@ describe("AttributeDropdown", () => {
 
     it("should render overlay with loaded items", async done => {
         const attributeDisplayForm = createADF();
-        const wrapper = renderComponent({ attributeDisplayForm });
+        const attribute = createAttribute();
+        const wrapper = renderComponent({ attributeDisplayForm, attribute });
 
         // wait for the plugin to initialize before click
         await testUtils.delay(600);
@@ -103,6 +115,7 @@ describe("AttributeDropdown", () => {
 
     it("should run onApply with current selection", async done => {
         const attributeDisplayForm = createADF();
+        const attribute = createAttribute();
         const onApply = jest.fn((selection, isInverted) => {
             expect(selection).toEqual([
                 {
@@ -114,6 +127,7 @@ describe("AttributeDropdown", () => {
         });
         const wrapper = renderComponent({
             attributeDisplayForm,
+            attribute,
             onApply,
         });
         // wait for the plugin to initialize before click
@@ -137,8 +151,10 @@ describe("AttributeDropdown", () => {
 
     it("should keep selection after Apply", async () => {
         const attributeDisplayForm = createADF();
+        const attribute = createAttribute();
         const wrapper = renderComponent({
             attributeDisplayForm,
+            attribute,
         });
 
         wrapper.find(".s-country.dropdown-button").simulate("click");
@@ -159,8 +175,10 @@ describe("AttributeDropdown", () => {
 
     it("should reset selection on Cancel", async () => {
         const attributeDisplayForm = createADF();
+        const attribute = createAttribute();
         const wrapper = renderComponent({
             attributeDisplayForm,
+            attribute,
         });
 
         wrapper.find(".s-country.dropdown-button").simulate("click");
@@ -181,8 +199,10 @@ describe("AttributeDropdown", () => {
 
     it("should limit items by search string", async () => {
         const attributeDisplayForm = createADF();
+        const attribute = createAttribute();
         const wrapper = renderComponent({
             attributeDisplayForm,
+            attribute,
         });
 
         wrapper.find(".s-country.dropdown-button").simulate("click");
@@ -195,8 +215,10 @@ describe("AttributeDropdown", () => {
 
     it("should reset search string on Cancel", async () => {
         const attributeDisplayForm = createADF();
+        const attribute = createAttribute();
         const wrapper = renderComponent({
             attributeDisplayForm,
+            attribute,
         });
 
         wrapper.find(".s-country.dropdown-button").simulate("click");
