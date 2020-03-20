@@ -64,8 +64,15 @@ export const DEFAULT_DATA_POINTS_LIMIT = 2000;
 export const DEFAULT_DATA_SOURCE_NAME = "gdcPushpinsData";
 export const DEFAULT_LAYER_NAME = "gdcPushpins";
 
-export const DRAG_PAN_EVENT = "dragPan";
-export const SCROLL_ZOOM_EVENT = "scrollZoom";
+export const INTERACTION_EVENTS: string[] = [
+    "scrollZoom",
+    "boxZoom",
+    "dragRotate",
+    "dragPan",
+    "keyboard",
+    "doubleClickZoom",
+    "touchZoomRotate",
+];
 
 export const DEFAULT_LATITUDE: number = 34;
 export const DEFAULT_LONGITUDE: number = 5;
