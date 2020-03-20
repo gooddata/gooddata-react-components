@@ -22,8 +22,7 @@ import {
     DEFAULT_LAYER_NAME,
     DEFAULT_MAPBOX_OPTIONS,
     DEFAULT_TOOLTIP_OPTIONS,
-    DRAG_PAN_EVENT,
-    SCROLL_ZOOM_EVENT,
+    INTERACTION_EVENTS,
 } from "../../../constants/geoChart";
 import { IGeoConfig, IGeoData, IGeoLngLat } from "../../../interfaces/GeoChart";
 
@@ -63,17 +62,6 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         this.navigationControlButton = new mapboxgl.NavigationControl({
             showCompass: false,
         });
-    }
-
-    public shouldComponentUpdate(nextProps: IGeoChartRendererProps) {
-        const {
-            config: { center, zoom, viewport },
-        } = this.props;
-        const {
-            config: { center: nextCenter, zoom: nextZoom, viewport: nextViewport },
-        } = nextProps;
-
-        return !isEqual(center, nextCenter) || zoom !== nextZoom || !isEqual(viewport, nextViewport);
     }
 
     public componentDidUpdate(prevProps: IGeoChartRendererProps) {
@@ -156,23 +144,21 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         }
     };
 
-    private togglePanAndZoomEvents = (): void => {
+    private toggleInteractionEvents = (): void => {
         const isViewportFreezed = this.isViewportFreezed();
         if (!this.chart) {
             return;
         }
-        if (isViewportFreezed) {
-            this.chart[DRAG_PAN_EVENT].disable();
-            this.chart[SCROLL_ZOOM_EVENT].disable();
-        } else {
-            this.chart[DRAG_PAN_EVENT].enable();
-            this.chart[SCROLL_ZOOM_EVENT].enable();
-        }
+
+        const action = isViewportFreezed ? "disable" : "enable";
+        INTERACTION_EVENTS.forEach(
+            (interactionEvent: string): void => this.chart[interactionEvent][action](),
+        );
     };
 
     private updatePanAndZoomFromConfig = (): void => {
         this.createMapControls();
-        this.togglePanAndZoomEvents();
+        this.toggleInteractionEvents();
     };
 
     private setFilterMap = (): void => {
