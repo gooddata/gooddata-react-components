@@ -1,13 +1,28 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
 import * as cx from "classnames";
 
 import LegendList from "./LegendList";
-import { TOP, BOTTOM } from "./PositionTypes";
+import { BOTTOM, TOP } from "./PositionTypes";
 import { calculateStaticLegend, ITEM_HEIGHT } from "./helpers";
+import { ChartType } from "../../../../constants/visualizationTypes";
+import { IPushpinCategoryLegendItem } from "../../../../interfaces/GeoChart";
 
-export default class StaticLegend extends React.PureComponent<any, any> {
+interface IStaticLegendProps {
+    chartType: ChartType;
+    containerHeight: number;
+    position: string;
+    series: IPushpinCategoryLegendItem[];
+    shouldFillAvailableSpace?: boolean;
+    onItemClick?(item: IPushpinCategoryLegendItem): void;
+}
+
+interface IStaticLegendState {
+    page: number;
+}
+
+export default class StaticLegend extends React.PureComponent<IStaticLegendProps, IStaticLegendState> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -26,12 +41,12 @@ export default class StaticLegend extends React.PureComponent<any, any> {
         this.setState({ page: this.state.page - 1 });
     }
 
-    public renderPagingButton(type: any, handler: any, disabled: any) {
+    public renderPagingButton(type: string, handler: () => void, disabled: boolean) {
         const classes = cx("gd-button-link", "gd-button-icon-only", `icon-chevron-${type}`, "paging-button");
         return <button className={classes} onClick={handler} disabled={disabled} />;
     }
 
-    public renderPaging(visibleItemsCount: any) {
+    public renderPaging(visibleItemsCount: number) {
         const { page } = this.state;
         const pagesCount = Math.ceil(this.props.series.length / visibleItemsCount);
 
@@ -52,7 +67,14 @@ export default class StaticLegend extends React.PureComponent<any, any> {
     }
 
     public render() {
-        const { series, chartType, onItemClick, position, containerHeight } = this.props;
+        const {
+            containerHeight,
+            chartType,
+            onItemClick,
+            position,
+            series,
+            shouldFillAvailableSpace = true,
+        } = this.props;
         const { page } = this.state;
 
         const classNames = cx("viz-legend", "static", `position-${position}`);
@@ -68,16 +90,21 @@ export default class StaticLegend extends React.PureComponent<any, any> {
             );
         }
 
-        const { hasPaging, visibleItemsCount } = calculateStaticLegend(series.length, containerHeight);
+        const seriesCount = series.length;
+        const { hasPaging, visibleItemsCount } = calculateStaticLegend(seriesCount, containerHeight);
 
         const start = (page - 1) * visibleItemsCount;
         const end = Math.min(visibleItemsCount * page, series.length);
 
         const pagedSeries = series.slice(start, end);
 
+        const heightOfAvailableSpace = visibleItemsCount * ITEM_HEIGHT;
+        const heightOfVisibleItems = Math.min(visibleItemsCount, seriesCount) * ITEM_HEIGHT;
+        const seriesHeight = shouldFillAvailableSpace ? heightOfAvailableSpace : heightOfVisibleItems;
+
         return (
             <div className={classNames}>
-                <div className="series" style={{ height: visibleItemsCount * ITEM_HEIGHT }}>
+                <div className="series" style={{ height: seriesHeight }}>
                     <LegendList chartType={chartType} series={pagedSeries} onItemClick={onItemClick} />
                 </div>
                 {hasPaging && this.renderPaging(visibleItemsCount)}

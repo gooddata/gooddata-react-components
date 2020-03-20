@@ -16,14 +16,13 @@ import Chart, { IChartProps } from "./Chart";
 import Legend, { ILegendProps } from "./legend/Legend";
 import { TOP, LEFT, BOTTOM, RIGHT } from "./legend/PositionTypes";
 import { isPieOrDonutChart, isOneOfTypes } from "../utils/common";
+import { FLUID_LEGEND_THRESHOLD } from "../../../constants/legend";
 import { VisualizationTypes } from "../../../constants/visualizationTypes";
 import { OnLegendReady } from "../../../interfaces/Events";
 import { IChartConfig } from "../../../interfaces/Config";
 import { ILegendOptions } from "../typings/legend";
 import Highcharts from "./highcharts/highchartsEntryPoint";
 import { alignChart } from "./highcharts/helpers";
-
-export const FLUID_LEGEND_THRESHOLD = 768;
 
 export interface IChartHTMLElement extends HTMLElement {
     getChart(): Highcharts.Chart;

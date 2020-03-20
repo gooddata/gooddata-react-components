@@ -72,6 +72,7 @@ export const isComboChart = (type: string) =>
 export const isTreemap = isEqual(VisualizationTypes.TREEMAP);
 export const isFunnelChart = isEqual(VisualizationTypes.FUNNEL);
 export const isHeatmap = isEqual(VisualizationTypes.HEATMAP);
+export const isPushpin = isEqual(VisualizationTypes.PUSHPIN);
 export const isInvertedChartType = (type: string) => isBarChart(type) || isBulletChart(type);
 
 export const isChartSupported = (type: string) => includes(VisualizationTypes, type);

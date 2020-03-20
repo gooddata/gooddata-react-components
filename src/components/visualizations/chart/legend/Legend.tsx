@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import Measure, { Rect } from "react-measure";
 import * as cx from "classnames";
@@ -16,6 +16,7 @@ import {
     ITranslationsComponentProps,
 } from "../../../core/base/TranslationsProvider";
 import { getComboChartSeries, transformToDualAxesSeries } from "./helpers";
+import { isFluidLegendEnabled } from "../../../../helpers/geoChart/common";
 
 export interface ILegendProps {
     responsive?: boolean;
@@ -139,13 +140,13 @@ export default class Legend extends React.PureComponent<ILegendProps, ILegendSta
         const { responsive } = this.props;
         const { showFluidLegend } = this.props;
 
-        const fluidLegend = responsive && showFluidLegend;
+        const isFluidLegend = isFluidLegendEnabled(responsive, showFluidLegend);
 
         if (isHeatmap(this.props.chartType)) {
             return this.renderHeatmapLegend();
         }
 
-        if (fluidLegend) {
+        if (isFluidLegend) {
             return this.renderFluid();
         }
 

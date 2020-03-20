@@ -11,7 +11,7 @@ export class VisualizationGeoPushpinChartByUri extends Component {
         const geoConfig = {
             mapboxToken: MAPBOX_TOKEN,
         };
-        const style = { height: "500px", position: "relative" };
+        const style = { height: "500px" };
         return (
             <div style={style} className="s-visualization-geo-pushpin">
                 <Visualization

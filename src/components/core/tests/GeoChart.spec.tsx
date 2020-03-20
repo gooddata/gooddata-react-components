@@ -5,8 +5,12 @@ import { testUtils } from "@gooddata/js-utils";
 import { VisualizationObject } from "@gooddata/typings";
 
 import { GeoChartInner, IGeoChartInnerProps } from "../GeoChart";
+import { TOP, BOTTOM, LEFT, RIGHT } from "../../visualizations/chart/legend/PositionTypes";
+import { PositionType } from "../../visualizations/typings/legend";
 import { createIntlMock } from "../../visualizations/utils/intlUtils";
 import * as BucketNames from "../../../constants/bucketNames";
+import { FLUID_LEGEND_THRESHOLD } from "../../../constants/legend";
+import { IGeoConfig } from "../../../interfaces/GeoChart";
 import { getExecutionResponse, getExecutionResult, getGeoConfig } from "../../../../stories/data/geoChart";
 
 const intl = createIntlMock();
@@ -32,16 +36,21 @@ const mdObject: VisualizationObject.IVisualizationObjectContent = {
 };
 
 describe("GeoChart", () => {
-    function renderComponent(customProps: Partial<IGeoChartInnerProps> = {}): ShallowWrapper {
+    function renderComponent(
+        customProps: Partial<IGeoChartInnerProps> = {},
+        customConfig: Partial<IGeoConfig> = {},
+    ): ShallowWrapper {
         const defaultProps: Partial<IGeoChartInnerProps> = {
             config: {
                 mdObject,
                 mapboxToken: "",
+                ...customConfig,
             },
             execution: {
                 executionResponse: getExecutionResponse(true),
                 executionResult: getExecutionResult(true),
             },
+            height: 600,
             intl,
         };
         return shallow(<GeoChartInner {...defaultProps} {...customProps} />);
@@ -57,7 +66,12 @@ describe("GeoChart", () => {
 
     it("should render GeoChartInner has flex-direction-row class", async () => {
         const props: Partial<IGeoChartInnerProps> = {
-            legendPosition: "right",
+            config: {
+                legend: {
+                    position: "right",
+                },
+                mapboxToken: "",
+            },
         };
         const wrapper = renderComponent(props);
         expect(wrapper.hasClass("flex-direction-row")).toBe(true);
@@ -65,7 +79,12 @@ describe("GeoChart", () => {
 
     it("should render GeoChartInner has flex-direction-column class", async () => {
         const props: Partial<IGeoChartInnerProps> = {
-            legendPosition: "bottom",
+            config: {
+                legend: {
+                    position: "bottom",
+                },
+                mapboxToken: "",
+            },
         };
         const wrapper = renderComponent(props);
         expect(wrapper.hasClass("flex-direction-column")).toBe(true);
@@ -132,5 +151,108 @@ describe("GeoChart", () => {
         const wrapper = renderComponent(initProps);
         wrapper.setProps(props);
         expect(wrapper.state("enabledLegendItems")).toEqual(expectedState);
+    });
+
+    describe("GeoChart Legend", () => {
+        const defaultDocumentObj: any = {
+            documentElement: {
+                clientWidth: FLUID_LEGEND_THRESHOLD,
+            },
+        };
+
+        interface ICustomComponentProps {
+            documentObj?: any;
+            height?: number;
+            position?: PositionType;
+            responsive?: boolean;
+        }
+
+        const customComponentProps = (props: ICustomComponentProps): Partial<IGeoChartInnerProps> => {
+            const { height = 600, position, responsive = false, documentObj = defaultDocumentObj } = props;
+            return {
+                documentObj,
+                config: {
+                    legend: {
+                        enabled: true,
+                        position,
+                        responsive,
+                    },
+                    mapboxToken: "",
+                },
+                height,
+            };
+        };
+
+        it("should not render if legend is disabled", () => {
+            const legendRenderer = jest.fn().mockReturnValue(<div />);
+            renderComponent({ legendRenderer }, { legend: { enabled: false } });
+            expect(legendRenderer).toHaveBeenCalledTimes(0);
+        });
+
+        it("should set flex-direction-column class for legend position TOP", () => {
+            const customProps = customComponentProps({ position: TOP });
+            const wrapper = renderComponent(customProps);
+            expect(wrapper.hasClass("flex-direction-column")).toBe(true);
+        });
+
+        it("should set flex-direction-column class for legend position BOTTOM", () => {
+            const customProps = customComponentProps({ position: BOTTOM });
+            const wrapper = renderComponent(customProps);
+            expect(wrapper.hasClass("flex-direction-column")).toBe(true);
+        });
+
+        it("should set flex-direction-row class for legend position LEFT", () => {
+            const customProps = customComponentProps({ position: LEFT });
+            const wrapper = renderComponent(customProps);
+            expect(wrapper.hasClass("flex-direction-row")).toBe(true);
+        });
+
+        it("should set flex-direction-column class for legend position LEFT and height is not enough", () => {
+            const customProps = customComponentProps({ height: 100, position: LEFT });
+            const wrapper = renderComponent(customProps);
+            expect(wrapper.hasClass("flex-direction-row")).toBe(true);
+        });
+
+        it("should set flex-direction-row class for legend position RIGHT", () => {
+            const customProps = customComponentProps({ position: RIGHT });
+            const wrapper = renderComponent(customProps);
+            expect(wrapper.hasClass("flex-direction-row")).toBe(true);
+        });
+
+        it("should set responsive-legend class for responsive legend", () => {
+            const customProps = customComponentProps({ responsive: true });
+            const wrapper = renderComponent(customProps);
+            expect(wrapper.hasClass("responsive-legend")).toBe(true);
+        });
+
+        it("should set non-responsive-legend class for non responsive legend", () => {
+            const customProps = customComponentProps({ responsive: false });
+            const wrapper = renderComponent(customProps);
+            expect(wrapper.hasClass("non-responsive-legend")).toBe(true);
+        });
+
+        it("should render responsive legend for mobile", () => {
+            const documentObj = {
+                documentElement: {
+                    clientWidth: FLUID_LEGEND_THRESHOLD - 10,
+                },
+            };
+            const customProps = customComponentProps({ responsive: true, documentObj });
+
+            const wrapper = renderComponent(customProps);
+            expect(wrapper.state("showFluidLegend")).toBeTruthy();
+        });
+
+        it("should render StaticLegend on desktop", () => {
+            const documentObj = {
+                documentElement: {
+                    clientWidth: FLUID_LEGEND_THRESHOLD + 10,
+                },
+            };
+            const customProps = customComponentProps({ responsive: true, documentObj });
+
+            const wrapper = renderComponent(customProps);
+            expect(wrapper.state("showFluidLegend")).toBeFalsy();
+        });
     });
 });

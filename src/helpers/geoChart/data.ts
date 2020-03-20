@@ -1,7 +1,13 @@
 // (C) 2020 GoodData Corporation
 import get = require("lodash/get");
 import { Execution, VisualizationObject } from "@gooddata/typings";
-import { IGeoData, IGeoLngLat, IObjectMapping } from "../../interfaces/GeoChart";
+import {
+    IAvailableLegends,
+    IGeoData,
+    IGeoLngLat,
+    IObjectMapping,
+    IPushpinCategoryLegendItem,
+} from "../../interfaces/GeoChart";
 import { COLOR, LOCATION, SEGMENT, SIZE, TOOLTIP_TEXT } from "../../constants/bucketNames";
 import {
     getAttributeHeadersInDimension,
@@ -9,7 +15,7 @@ import {
     getMeasureGroupHeaderItemsInDimension,
     isTwoDimensionsData,
 } from "../executionResultHelper";
-import { stringToFloat } from "../utils";
+import { getMinMax, stringToFloat } from "../utils";
 import { getFormatFromExecutionResponse, getGeoAttributeHeaderItems } from "./common";
 import { isDisplayFormUri } from "../../internal/utils/mdObjectHelper";
 import { parseGeoPropertyItem } from "../../components/core/geoChart/geoChartTooltip";
@@ -225,3 +231,23 @@ export const getGeoBucketsFromMdObject = (
 
     return buckets;
 };
+
+export function getAvailableLegends(
+    categoryItems: IPushpinCategoryLegendItem[],
+    geoData: IGeoData,
+): IAvailableLegends {
+    const { color: { data: colorData = [] } = {}, size: { data: sizeData = [] } = {} } = geoData;
+
+    const { min: minColor, max: maxColor } = getMinMax(colorData);
+    const { min: minSize, max: maxSize } = getMinMax(sizeData);
+
+    const hasCategoryLegend = Boolean(categoryItems && categoryItems.length);
+    const hasColorLegend = Boolean(colorData.length) && minColor !== maxColor && !hasCategoryLegend;
+    const hasSizeLegend = Boolean(sizeData.length) && minSize !== maxSize;
+
+    return {
+        hasCategoryLegend,
+        hasColorLegend,
+        hasSizeLegend,
+    };
+}

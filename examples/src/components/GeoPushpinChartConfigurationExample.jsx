@@ -48,7 +48,7 @@ export class GeoPushpinChartConfigurationExample extends Component {
     }
 
     render() {
-        const style = { height: "500px", position: "relative" };
+        const style = { height: "500px" };
         const geoConfig = {
             center: {
                 lat: 39,

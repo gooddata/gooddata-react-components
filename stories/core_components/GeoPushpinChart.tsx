@@ -17,7 +17,7 @@ import {
     MEASURE_COLOR_GEOCHART_ALIAS,
 } from "../data/geoChartComponentProps";
 
-const wrapperStyle: React.CSSProperties = { width: 900, height: 600, position: "relative" };
+const wrapperStyle: React.CSSProperties = { width: 900, height: 600 };
 
 const DEFAULT_CONFIG: IGeoConfig = {
     mapboxToken: process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN,
@@ -25,10 +25,13 @@ const DEFAULT_CONFIG: IGeoConfig = {
 
 const afterRender = () => console.log("GDC_GEO_CANVAS_READY"); // tslint:disable-line:no-console
 
-function renderGeoPushpinChart(props: IGeoPushpinChartProps): React.ReactElement {
+function renderGeoPushpinChart(
+    props: IGeoPushpinChartProps,
+    customStyles: React.CSSProperties = {},
+): React.ReactElement {
     const { projectId, location, size, color, segmentBy, config, filters } = props;
     return (
-        <div style={wrapperStyle}>
+        <div style={{ ...wrapperStyle, ...customStyles }}>
             <GeoPushpinChart
                 projectId={projectId}
                 location={location}
@@ -294,3 +297,120 @@ storiesOf("Core components/GeoPushpinChart", module)
             }),
         );
     });
+
+storiesOf("Core components/GeoPushpinChart/Config/Legend", module)
+    .add("with legend is disabled", () =>
+        screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                size: MEASURE_SIZE_GEOCHART,
+                color: MEASURE_COLOR_GEOCHART,
+                config: {
+                    ...DEFAULT_CONFIG,
+                    legend: {
+                        enabled: false,
+                    },
+                },
+            }),
+        ),
+    )
+    .add("with legend position is auto", () =>
+        screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                size: MEASURE_SIZE_GEOCHART,
+                color: MEASURE_COLOR_GEOCHART,
+                config: {
+                    ...DEFAULT_CONFIG,
+                    legend: {
+                        position: "auto",
+                    },
+                },
+            }),
+        ),
+    )
+    .add("with legend position is left", () =>
+        screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                size: MEASURE_SIZE_GEOCHART,
+                color: MEASURE_COLOR_GEOCHART,
+                config: {
+                    ...DEFAULT_CONFIG,
+                    legend: {
+                        position: "left",
+                    },
+                },
+            }),
+        ),
+    )
+    .add("with legend position is right", () =>
+        screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                size: MEASURE_SIZE_GEOCHART,
+                segmentBy: ATTRIBUTE_SEGMENT_GEOCHART,
+                config: {
+                    ...DEFAULT_CONFIG,
+                    legend: {
+                        position: "right",
+                    },
+                },
+            }),
+        ),
+    )
+    .add("with legend position is top", () =>
+        screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                size: MEASURE_SIZE_GEOCHART,
+                segmentBy: ATTRIBUTE_SEGMENT_GEOCHART,
+                config: {
+                    ...DEFAULT_CONFIG,
+                    legend: {
+                        position: "top",
+                    },
+                },
+            }),
+        ),
+    )
+    .add("with legend position is bottom", () =>
+        screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                size: MEASURE_SIZE_GEOCHART,
+                segmentBy: ATTRIBUTE_SEGMENT_GEOCHART,
+                config: {
+                    ...DEFAULT_CONFIG,
+                    legend: {
+                        position: "bottom",
+                    },
+                },
+            }),
+        ),
+    )
+    .add("with legend position is left and height of container is not enough", () =>
+        screenshotWrap(
+            renderGeoPushpinChart(
+                {
+                    projectId: "storybook",
+                    location: ATTRIBUTE_LOCATION_GEOCHART,
+                    size: MEASURE_SIZE_GEOCHART,
+                    color: MEASURE_COLOR_GEOCHART,
+                    config: {
+                        ...DEFAULT_CONFIG,
+                        legend: {
+                            position: "left",
+                        },
+                    },
+                },
+                { height: 150 },
+            ),
+        ),
+    );

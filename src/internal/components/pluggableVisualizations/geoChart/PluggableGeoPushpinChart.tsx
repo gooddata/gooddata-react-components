@@ -147,8 +147,9 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
         config: IGdcConfig,
         supportedControls: IVisualizationProperties,
     ): IChartConfig {
-        const { center, viewport = {} } = supportedControls;
+        const { center, legend, viewport = {} } = supportedControls;
         const centerProp = center ? { center } : {};
+        const legendProp = legend ? { legend } : {};
         const { isInEditMode, isExportMode } = config;
         const viewportProp = {
             viewport: {
@@ -159,6 +160,7 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
         const geoChartConfig = {
             ...config,
             ...centerProp,
+            ...legendProp,
             ...viewportProp,
         };
         return {

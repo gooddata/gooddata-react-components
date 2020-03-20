@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import ConfigSection from "../ConfigSection";
 import LegendPositionControl from "./LegendPositionControl";
@@ -22,7 +22,7 @@ export class LegendSection extends React.PureComponent<ILegendSection, {}> {
 
         const toggleDisabled = controlsDisabled || legendToggleDisabledByVisualization;
         const legendPositionControlDisabled = !legendEnabled || toggleDisabled;
-        const showDisabledMessage = !controlsDisabled && legendToggleDisabledByVisualization;
+        const showDisabledMessage = controlsDisabled || legendToggleDisabledByVisualization;
 
         return (
             <ConfigSection

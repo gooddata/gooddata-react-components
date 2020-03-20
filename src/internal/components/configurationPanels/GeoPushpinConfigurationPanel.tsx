@@ -20,10 +20,12 @@ import {
     hasMeasures,
     hasLocationAttribute,
     hasSegmentAttribute,
+    hasColorMeasure,
     hasSizeMeasure,
 } from "../../utils/mdObjectHelper";
 import PushpinSizeControl from "../configurationControls/PushpinSizeControl";
 import PushpinViewportControl from "../configurationControls/PushpinViewportControl";
+import LegendSection from "../configurationControls/legend/LegendSection";
 
 export default class GeoPushpinConfigurationPanel extends ConfigurationPanelContent {
     protected getControlProperties() {
@@ -33,6 +35,22 @@ export default class GeoPushpinConfigurationPanel extends ConfigurationPanelCont
         return {
             groupNearbyPoints,
         };
+    }
+
+    protected renderLegendSection() {
+        const { mdObject, properties, propertiesMeta, pushData } = this.props;
+        const isLegendVisible =
+            hasSegmentAttribute(mdObject) || hasColorMeasure(mdObject) || hasSizeMeasure(mdObject);
+        const controlsDisabled = this.isControlDisabled() || !isLegendVisible;
+
+        return (
+            <LegendSection
+                properties={properties}
+                propertiesMeta={propertiesMeta}
+                controlsDisabled={controlsDisabled}
+                pushData={pushData}
+            />
+        );
     }
 
     protected renderViewportSection(): React.ReactElement {
@@ -102,6 +120,7 @@ export default class GeoPushpinConfigurationPanel extends ConfigurationPanelCont
         return (
             <BubbleHoverTrigger showDelay={SHOW_DELAY_DEFAULT} hideDelay={HIDE_DELAY_DEFAULT}>
                 <div>
+                    {this.renderLegendSection()}
                     {this.renderViewportSection()}
                     {this.renderPointsSection()}
                 </div>

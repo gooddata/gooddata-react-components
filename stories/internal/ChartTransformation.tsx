@@ -1,16 +1,16 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 import { screenshotWrap } from "@gooddata/test-storybook";
 
 import ChartTransformation from "../../src/components/visualizations/chart/ChartTransformation";
-import { FLUID_LEGEND_THRESHOLD } from "../../src/components/visualizations/chart/HighChartsRenderer";
 import { immutableSet } from "../../src/components/visualizations/utils/common";
 import {
     STACK_BY_DIMENSION_INDEX,
     VIEW_BY_DIMENSION_INDEX,
 } from "../../src/components/visualizations/chart/constants";
+import { FLUID_LEGEND_THRESHOLD } from "../../src/constants/legend";
 
 import fixtureDataSets, * as fixtures from "../test_data/fixtures";
 

@@ -39,7 +39,7 @@ export class GeoPushpinChartWithColorLegendExample extends Component {
     }
 
     render() {
-        const style = { height: "500px", position: "relative" };
+        const style = { height: "500px" };
         return (
             <div style={style} className="s-geo-pushpin-chart-color">
                 <GeoPushpinChart

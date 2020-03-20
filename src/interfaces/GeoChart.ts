@@ -1,6 +1,7 @@
 // (C) 2020 GoodData Corporation
 import { ISeparators } from "@gooddata/numberjs";
 import { VisualizationInput, VisualizationObject } from "@gooddata/typings";
+import { ILegendConfig } from "./Config";
 import { ICommonChartProps } from "../components/core/base/BaseChart";
 
 export interface IGeoLngLat {
@@ -84,6 +85,7 @@ export interface IGeoPointsConfig {
 export interface IGeoConfig {
     center?: IGeoLngLat;
     isExportMode?: boolean;
+    legend?: ILegendConfig;
     limit?: number;
     mdObject?: VisualizationObject.IVisualizationObjectContent;
     selectedSegmentItems?: string[];
@@ -118,4 +120,10 @@ export interface IPushpinCategoryLegendItem {
 
 export interface IValidationResult {
     isDataTooLarge: boolean;
+}
+
+export interface IAvailableLegends {
+    hasCategoryLegend: boolean;
+    hasColorLegend: boolean;
+    hasSizeLegend: boolean;
 }
