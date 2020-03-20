@@ -45,6 +45,7 @@
     "dashboard.bucket.view_title.column": "Afficher par",
     "dashboard.bucket.view_title.bar": "Afficher par",
     "dashboard.bucket.view_title.area": "Afficher par",
+    "dashboard.bucket.view_title.bullet": "Afficher par",
     "dashboard.bucket.view_title.heatmap": "Lignes",
     "dashboard.bucket.trend_title.line": "Analyser la tendance par",
     "dashboard.bucket.view_title.combo": "Afficher par",
@@ -127,5 +128,11 @@
     "gs.noData.noMatchingData": "Aucune donnée correspondante",
     "gs.noData.noDataAvailable": "Aucune donnée correspondante",
     "properties.colors.unsupported": "Aucune couleur dans cette configuration de la perception",
-    "export_unsupported.colors": "La perception n'est pas compatible avec les couleurs personnalisées. Pour ouvrir la perception en tant que rapport, cliquez sur Réinitialiser les couleurs dans Configuration —> Couleurs"
+    "export_unsupported.colors": "La perception n'est pas compatible avec les couleurs personnalisées. Pour ouvrir la perception en tant que rapport, cliquez sur Réinitialiser les couleurs dans Configuration —> Couleurs",
+    "dashboard.bucket.measures_title.bullet": "Mesure",
+    "dashboard.bucket.secondary_measures_title.bullet": "Mesure",
+    "dashboard.bucket.tertiary_measures_title.bullet": "Mesure",
+    "dashboard.bucket.measures_subtitle.bullet": "Principal",
+    "dashboard.bucket.secondary_measures_subtitle.bullet": "Objectif",
+    "dashboard.bucket.tertiary_measures_subtitle.bullet": "Comparaison"
 }
