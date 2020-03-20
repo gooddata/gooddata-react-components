@@ -18,6 +18,7 @@ const configuration = {
             'with World viewport': DEFAULT_SCENARIO_CONFIG,
             'with Include all data viewport': DEFAULT_SCENARIO_CONFIG,
             'with disabled interactive and zoom control button': DEFAULT_SCENARIO_CONFIG,
+            'with color and segment alias shown in tooltip': DEFAULT_SCENARIO_CONFIG,
         },
         'URI components': {
             'GeoPushpinChart example': DEFAULT_SCENARIO_CONFIG,

@@ -13,6 +13,8 @@ import {
     MEASURE_COLOR_GEOCHART,
     ATTRIBUTE_SEGMENT_GEOCHART,
     ATTRIBUTE_TOOLTIP_GEOCHART,
+    ATTRIBUTE_SEGMENT_GEOCHART_ALIAS,
+    MEASURE_COLOR_GEOCHART_ALIAS,
 } from "../data/geoChartComponentProps";
 
 const wrapperStyle: React.CSSProperties = { width: 900, height: 600, position: "relative" };
@@ -225,6 +227,22 @@ storiesOf("Core components/GeoPushpinChart", module)
             renderGeoPushpinChart({
                 projectId: "storybook",
                 location: ATTRIBUTE_LOCATION_GEOCHART,
+                config,
+            }),
+        );
+    })
+    .add("with color and segment alias shown in tooltip", () => {
+        const config: IGeoConfig = {
+            ...DEFAULT_CONFIG,
+            tooltipText: ATTRIBUTE_TOOLTIP_GEOCHART,
+        };
+        return screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                size: MEASURE_SIZE_GEOCHART,
+                color: MEASURE_COLOR_GEOCHART_ALIAS,
+                segmentBy: ATTRIBUTE_SEGMENT_GEOCHART_ALIAS,
                 config,
             }),
         );
