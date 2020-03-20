@@ -45,6 +45,7 @@
     "dashboard.bucket.view_title.column": "Anzeigen nach",
     "dashboard.bucket.view_title.bar": "Anzeigen nach",
     "dashboard.bucket.view_title.area": "Anzeigen nach",
+    "dashboard.bucket.view_title.bullet": "Anzeigen nach",
     "dashboard.bucket.view_title.heatmap": "Zeilen",
     "dashboard.bucket.trend_title.line": "Trend nach",
     "dashboard.bucket.view_title.combo": "Anzeigen nach",
@@ -127,5 +128,11 @@
     "gs.noData.noMatchingData": "Keine übereinstimmenden Daten",
     "gs.noData.noDataAvailable": "Keine übereinstimmenden Daten",
     "properties.colors.unsupported": "Für diese Konfiguration der Betrachtung gibt es keine Farben",
-    "export_unsupported.colors": "Die Betrachtung ist nicht mit benutzerdefinierten Farben kompatibel. Um die Betrachtung als Bericht zu öffnen, klicken Sie auf Farben in Konfiguration zurücksetzen —> Farben."
+    "export_unsupported.colors": "Die Betrachtung ist nicht mit benutzerdefinierten Farben kompatibel. Um die Betrachtung als Bericht zu öffnen, klicken Sie auf Farben in Konfiguration zurücksetzen —> Farben.",
+    "dashboard.bucket.measures_title.bullet": "Messung",
+    "dashboard.bucket.secondary_measures_title.bullet": "Messung",
+    "dashboard.bucket.tertiary_measures_title.bullet": "Messung",
+    "dashboard.bucket.measures_subtitle.bullet": "Primär",
+    "dashboard.bucket.secondary_measures_subtitle.bullet": "Ziel",
+    "dashboard.bucket.tertiary_measures_subtitle.bullet": "Komparativ"
 }
