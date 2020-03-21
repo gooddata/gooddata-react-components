@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { mount, ReactWrapper } from "enzyme";
 import { VisualizationInput } from "@gooddata/typings";
@@ -23,7 +23,7 @@ describe("AttributeFilter", () => {
         };
 
         const props = {
-            projectId: "storybook",
+            projectId: "projectId",
             sdk,
             ...customProps,
         };

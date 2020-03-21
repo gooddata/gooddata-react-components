@@ -221,7 +221,12 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps> 
         return [];
     }
 
-    private renderContent({ isLoading, attributeDisplayForm, error }: IAttributeLoaderChildrenProps) {
+    private renderContent({
+        isLoading,
+        attributeDisplayForm,
+        error,
+        attribute,
+    }: IAttributeLoaderChildrenProps) {
         if (isLoading) {
             return <this.props.FilterLoading />;
         }
@@ -236,6 +241,7 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps> 
             <IntlTranslationsProvider>
                 {(translationProps: ITranslationsComponentProps) => (
                     <AttributeDropdown
+                        attribute={attribute}
                         attributeDisplayForm={attributeDisplayForm}
                         metadata={md}
                         {...dropdownProps}
