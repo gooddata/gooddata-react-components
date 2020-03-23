@@ -565,12 +565,12 @@
         "limit": 0
     },
     "properties.legend.position.up": {
-        "value": "up",
+        "value": "top",
         "comment": "",
         "limit": 0
     },
     "properties.legend.position.down": {
-        "value": "down",
+        "value": "bottom",
         "comment": "",
         "limit": 0
     },
