@@ -21,7 +21,8 @@ The REST API versions in the table are just for your information as the values a
 
 ### Added
 
-- Column auto-sizing in pivot tables can now be configured (applied to visible columns during initial table load).
+- Bullet chart component ([doc](https://sdk.gooddata.com/gooddata-ui/docs/bullet_chart_component.html))
+- Column auto-sizing in pivot tables (applied to visible columns during the initial table load)
 
 ## 7.3.0
 
