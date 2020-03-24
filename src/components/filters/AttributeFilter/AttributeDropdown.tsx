@@ -20,7 +20,7 @@ import cloneDeep = require("lodash/cloneDeep");
 import isEmpty = require("lodash/isEmpty");
 
 import { AttributeFilterItem } from "./AttributeFilterItem";
-import { IAttributeDisplayForm, IAttributeElement } from "./model";
+import { IAttributeDisplayForm, IAttributeElement, IAttribute } from "./model";
 
 const ITEM_HEIGHT = 28;
 const LIST_WIDTH = 240;
@@ -50,6 +50,7 @@ export interface IAttributeMetadata {
 }
 
 export interface IAttributeDropdownProps {
+    attribute: IAttribute;
     attributeDisplayForm: IAttributeDisplayForm;
     projectId?: string; // remove it in SDK 8 because it is not used anywhere - breaking change
     selection: IAttributeElement[];
@@ -133,6 +134,7 @@ export class AttributeDropdownWrapped extends React.PureComponent<
     IAttributeDropdownState
 > {
     public static propTypes = {
+        attribute: PropTypes.object.isRequired,
         attributeDisplayForm: PropTypes.object.isRequired,
         projectId: PropTypes.string,
         selection: PropTypes.array,
@@ -198,15 +200,15 @@ export class AttributeDropdownWrapped extends React.PureComponent<
     }
 
     public render() {
-        const { attributeDisplayForm, title } = this.props;
+        const { attribute, title } = this.props;
         const classes = classNames(
             "gd-attribute-filter",
-            attributeDisplayForm ? `gd-id-${stringUtils.simplifyText(attributeDisplayForm.meta.title)}` : "",
+            attribute ? `gd-id-${stringUtils.simplifyText(attribute.meta.title)}` : "",
         );
 
         return (
             <Dropdown
-                button={<DropdownButton value={title || attributeDisplayForm.meta.title} />}
+                button={<DropdownButton value={title || attribute.meta.title} />}
                 ref={(ref: any) => (this.dropdownRef = ref)}
                 body={this.renderList()}
                 className={classes}

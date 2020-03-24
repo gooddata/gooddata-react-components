@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { mount } from "enzyme";
 import { testUtils } from "@gooddata/js-utils";
@@ -40,7 +40,7 @@ describe("AttributeLoader", () => {
             wrapper.update();
             expect(wrapper.isEmptyRender()).toEqual(false);
             expect(metadata.getObjectUri).toHaveBeenCalledTimes(0);
-            expect(metadata.getObjectDetails).toHaveBeenCalledTimes(1);
+            expect(metadata.getObjectDetails).toHaveBeenCalledTimes(2);
             expect(wrapper.find(".s-is-using-uri")).toHaveLength(1);
             expect(wrapper.text()).toEqual("Attribute");
         });
@@ -60,7 +60,7 @@ describe("AttributeLoader", () => {
             wrapper.update();
             expect(wrapper.isEmptyRender()).toEqual(false);
             expect(metadata.getObjectUri).toHaveBeenCalledTimes(1);
-            expect(metadata.getObjectDetails).toHaveBeenCalledTimes(1);
+            expect(metadata.getObjectDetails).toHaveBeenCalledTimes(2);
             expect(wrapper.find(".s-is-using-identifier")).toHaveLength(1);
             expect(wrapper.text()).toEqual("Attribute");
         });
@@ -80,7 +80,7 @@ describe("AttributeLoader", () => {
             wrapper.update();
             expect(wrapper.isEmptyRender()).toEqual(false);
             expect(metadata.getObjectUri).toHaveBeenCalledTimes(1);
-            expect(metadata.getObjectDetails).toHaveBeenCalledTimes(1);
+            expect(metadata.getObjectDetails).toHaveBeenCalledTimes(2);
             expect(wrapper.text()).toEqual("Attribute");
 
             wrapper.setProps({
@@ -92,7 +92,7 @@ describe("AttributeLoader", () => {
             return testUtils.delay().then(() => {
                 wrapper.update();
                 expect(metadata.getObjectUri).toHaveBeenCalledTimes(2);
-                expect(metadata.getObjectDetails).toHaveBeenCalledTimes(2);
+                expect(metadata.getObjectDetails).toHaveBeenCalledTimes(4);
                 expect(wrapper.text()).toEqual("Attribute 2");
             });
         });
