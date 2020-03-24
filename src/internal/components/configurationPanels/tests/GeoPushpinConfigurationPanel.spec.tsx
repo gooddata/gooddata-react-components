@@ -7,6 +7,7 @@ import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 import GeoPushpinConfigurationPanel from "../GeoPushpinConfigurationPanel";
 import CheckboxControl from "../../configurationControls/CheckboxControl";
 import PushpinSizeControl from "../../configurationControls/PushpinSizeControl";
+import PushpinViewportControl from "../../configurationControls/PushpinViewportControl";
 
 describe("GeoPushpinConfigurationPanel", () => {
     function createComponent(props: IConfigurationPanelContentProps): ShallowWrapper {
@@ -21,6 +22,19 @@ describe("GeoPushpinConfigurationPanel", () => {
             },
         },
     };
+
+    const noLocationMdObject = {
+        buckets: [
+            {
+                localIdentifier: "size",
+                items: [] as any,
+            },
+        ],
+        visualizationClass: {
+            uri: "/gdc/md/a8pxyfcimmbcgczhy0o4w775oabma8im/obj/952",
+        },
+    };
+
     const clusteringMdObject = {
         buckets: [
             {
@@ -77,6 +91,23 @@ describe("GeoPushpinConfigurationPanel", () => {
         locale: DEFAULT_LOCALE,
         type: VisualizationTypes.PUSHPIN,
     };
+
+    it("should render config panel with Default viewport dropdown is disabled", async () => {
+        const wrapper = createComponent({
+            ...defaultProps,
+            mdObject: noLocationMdObject,
+        });
+
+        const isDisabled = await wrapper.find(PushpinViewportControl).prop("disabled");
+        expect(isDisabled).toEqual(true);
+    });
+
+    it("should render config panel with Default viewport dropdown is enabled", async () => {
+        const wrapper = createComponent(defaultProps);
+
+        const isDisabled = await wrapper.find(PushpinViewportControl).prop("disabled");
+        expect(isDisabled).toEqual(false);
+    });
 
     it("should render config panel with groupNearbyPoints checkbox is disabled", async () => {
         const wrapper = createComponent(defaultProps);

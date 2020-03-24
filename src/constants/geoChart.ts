@@ -4,12 +4,12 @@ import { DEFAULT_COLORS } from "../components/visualizations/utils/color";
 import { IGeoLngLat, IGeoViewports } from "../interfaces/GeoChart";
 
 export const VIEWPORTS: IGeoViewports = {
-    continent_af: [{ lat: -36.3318, lng: -20.2255 }, { lat: 37.982, lng: 54.4841 }], // Africa
-    continent_as: [{ lat: -9.8256, lng: 24.3532 }, { lat: 79.488044, lng: 180 }], // Asia
-    continent_au: [{ lat: -47.9436, lng: 109.8601 }, { lat: 0, lng: 180 }], // Australia + NZ
-    continent_eu: [{ lat: 33.6033, lng: -26.5876 }, { lat: 77.442, lng: 78.3182 }], // Europe
-    continent_na: [{ lat: 2.2236, lng: -170.4181 }, { lat: 72.0157, lng: -52.69208 }], // North America
-    continent_sa: [{ lat: -56.8929, lng: -90.242 }, { lat: 14.0995, lng: -31.3784 }], // South America
+    continent_af: [{ lat: -36, lng: -20 }, { lat: 38, lng: 54 }], // Africa
+    continent_as: [{ lat: -9, lng: 24 }, { lat: 79, lng: 180 }], // Asia
+    continent_au: [{ lat: -50, lng: 107 }, { lat: 0, lng: 180 }], // Australia + NZ
+    continent_eu: [{ lat: 33, lng: -24 }, { lat: 72, lng: 64 }], // Europe
+    continent_na: [{ lat: 2, lng: -170 }, { lat: 72, lng: -52 }], // North America
+    continent_sa: [{ lat: -56, lng: -90 }, { lat: 14, lng: -31 }], // South America
     world: [{ lat: -84, lng: -180 }, { lat: 84, lng: 180 }],
 };
 
@@ -117,7 +117,9 @@ export const DEFAULT_MAPBOX_OPTIONS: Partial<mapboxgl.MapboxOptions> = {
     attributionControl: false,
     // If false , the "drag to rotate" interaction is disabled
     dragRotate: false,
-    fitBoundsOptions: { padding: 45 },
+    // set maxDuration: 1 will remove the animation when viewport is changed
+    // to fix the flaky problem when toggle segment on World viewport
+    fitBoundsOptions: { padding: 45, maxDuration: 1 },
     // Disable infinite geochart scrolling
     maxBounds: VIEWPORTS.world,
     // The maximum zoom level of the map (0-24).
