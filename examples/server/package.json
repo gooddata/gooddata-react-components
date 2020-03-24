@@ -16,7 +16,7 @@
     "http-proxy-middleware": "^0.20.0"
   },
   "devDependencies": {
-    "jest": "^24.9.0",
+    "jest": "25.1.0",
     "supertest": "^4.0.2"
   }
 }

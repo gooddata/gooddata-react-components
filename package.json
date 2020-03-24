@@ -12,6 +12,9 @@
     "styles",
     "LICENSE"
   ],
+  "resolutions": {
+    "**/fsevents": "^1.2.9"
+  },
   "devDependencies": {
     "@babel/core": "7.4.4",
     "@babel/plugin-proposal-class-properties": "7.4.4",
