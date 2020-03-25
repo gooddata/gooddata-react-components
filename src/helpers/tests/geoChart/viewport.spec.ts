@@ -44,12 +44,12 @@ describe("viewport", () => {
                 "continent_af",
                 [
                     {
-                        lat: -36.3318,
-                        lng: -20.2255,
+                        lat: -36,
+                        lng: -20,
                     },
                     {
-                        lat: 37.982,
-                        lng: 54.4841,
+                        lat: 38,
+                        lng: 54,
                     },
                 ],
             ],
@@ -57,11 +57,11 @@ describe("viewport", () => {
                 "continent_as",
                 [
                     {
-                        lat: -9.8256,
-                        lng: 24.3532,
+                        lat: -9,
+                        lng: 24,
                     },
                     {
-                        lat: 79.488044,
+                        lat: 79,
                         lng: 180,
                     },
                 ],
@@ -70,8 +70,8 @@ describe("viewport", () => {
                 "continent_au",
                 [
                     {
-                        lat: -47.9436,
-                        lng: 109.8601,
+                        lat: -50,
+                        lng: 107,
                     },
                     {
                         lat: 0,
@@ -83,12 +83,12 @@ describe("viewport", () => {
                 "continent_eu",
                 [
                     {
-                        lat: 33.6033,
-                        lng: -26.5876,
+                        lat: 33,
+                        lng: -24,
                     },
                     {
-                        lat: 77.442,
-                        lng: 78.3182,
+                        lat: 72,
+                        lng: 64,
                     },
                 ],
             ],
@@ -96,12 +96,12 @@ describe("viewport", () => {
                 "continent_na",
                 [
                     {
-                        lat: 2.2236,
-                        lng: -170.4181,
+                        lat: 2,
+                        lng: -170,
                     },
                     {
-                        lat: 72.0157,
-                        lng: -52.69208,
+                        lat: 72,
+                        lng: -52,
                     },
                 ],
             ],
@@ -109,12 +109,12 @@ describe("viewport", () => {
                 "continent_sa",
                 [
                     {
-                        lat: -56.8929,
-                        lng: -90.242,
+                        lat: -56,
+                        lng: -90,
                     },
                     {
-                        lat: 14.0995,
-                        lng: -31.3784,
+                        lat: 14,
+                        lng: -31,
                     },
                 ],
             ],

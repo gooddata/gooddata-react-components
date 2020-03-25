@@ -11,6 +11,18 @@ export const pushpinSizeDropdownItems: IDropdownItem[] = [
     { title: "properties.points.size.extra_large", value: "1.5x" },
 ];
 
+export const pushpinViewportDropdownItems: IDropdownItem[] = [
+    { title: "properties.viewport.area.auto_default", value: "auto" },
+    { title: "properties.viewport.area.world", value: "world" },
+    { type: "header", title: "properties.viewport.area.continents" },
+    { title: "properties.viewport.area.continent_af", value: "continent_af" },
+    { title: "properties.viewport.area.continent_na", value: "continent_na" },
+    { title: "properties.viewport.area.continent_sa", value: "continent_sa" },
+    { title: "properties.viewport.area.continent_as", value: "continent_as" },
+    { title: "properties.viewport.area.continent_au", value: "continent_au" },
+    { title: "properties.viewport.area.continent_eu", value: "continent_eu" },
+];
+
 export const rotationDropdownItems: IDropdownItem[] = [
     { title: "properties.auto_default", value: "auto" },
     { type: "separator" },

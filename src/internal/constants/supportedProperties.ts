@@ -219,4 +219,5 @@ export const GEOPUSHPIN_SUPPORTED_PROPERTIES = [
     "points.groupNearbyPoints",
     "points.minSize",
     "points.maxSize",
+    "viewport.area",
 ];

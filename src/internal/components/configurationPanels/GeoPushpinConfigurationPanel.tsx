@@ -23,6 +23,7 @@ import {
     hasSizeMeasure,
 } from "../../utils/mdObjectHelper";
 import PushpinSizeControl from "../configurationControls/PushpinSizeControl";
+import PushpinViewportControl from "../configurationControls/PushpinViewportControl";
 
 export default class GeoPushpinConfigurationPanel extends ConfigurationPanelContent {
     public componentDidMount() {
@@ -43,7 +44,26 @@ export default class GeoPushpinConfigurationPanel extends ConfigurationPanelCont
         };
     }
 
-    protected renderPointsSection() {
+    protected renderViewportSection(): React.ReactElement {
+        const { properties, propertiesMeta, pushData } = this.props;
+        return (
+            <ConfigSection
+                id="map_section"
+                title="properties.map.title"
+                propertiesMeta={propertiesMeta}
+                properties={properties}
+                pushData={pushData}
+            >
+                <PushpinViewportControl
+                    properties={properties}
+                    disabled={this.isControlDisabled()}
+                    pushData={pushData}
+                />
+            </ConfigSection>
+        );
+    }
+
+    protected renderPointsSection(): React.ReactElement {
         const { groupNearbyPoints } = this.getControlProperties();
 
         const { properties, propertiesMeta, pushData, mdObject } = this.props;
@@ -90,7 +110,10 @@ export default class GeoPushpinConfigurationPanel extends ConfigurationPanelCont
     protected renderConfigurationPanel() {
         return (
             <BubbleHoverTrigger showDelay={SHOW_DELAY_DEFAULT} hideDelay={HIDE_DELAY_DEFAULT}>
-                <div>{this.renderPointsSection()}</div>
+                <div>
+                    {this.renderViewportSection()}
+                    {this.renderPointsSection()}
+                </div>
                 <Bubble
                     className={this.getBubbleClassNames()}
                     arrowOffsets={{ "tc bc": [BUBBLE_ARROW_OFFSET_X, BUBBLE_ARROW_OFFSET_Y] }}

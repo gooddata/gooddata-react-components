@@ -129,6 +129,7 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         // Then calling resetMap here is needed
         this.resetMap();
         this.updatePanAndZoom();
+        this.updateViewport();
     };
 
     private resetMap = (): void => {
@@ -169,6 +170,19 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
     private updatePanAndZoom = (): void => {
         this.createMapControls();
         this.toggleInteractionEvents();
+    };
+
+    private updateViewport = (): void => {
+        const {
+            config,
+            geoData: {
+                location: { data },
+            },
+        } = this.props;
+        const { bounds } = getViewportOptions(data, config);
+        if (bounds) {
+            this.chart.fitBounds(bounds, DEFAULT_MAPBOX_OPTIONS.fitBoundsOptions);
+        }
     };
 
     private setFilterMap = (): void => {
