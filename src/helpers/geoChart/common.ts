@@ -57,9 +57,9 @@ export function getFormatFromExecutionResponse(
 }
 
 // show clusters when there is location attribute only
-export function isClusteringAllowed(geoData: IGeoData): boolean {
+export function isClusteringAllowed(geoData: IGeoData, groupNearbyPoints: boolean = true): boolean {
     const { color, location, segment, size } = geoData;
-    return location && !(color || segment || size);
+    return groupNearbyPoints && location && !(color || segment || size);
 }
 
 export function isGeoConfig(config: IChartConfig | IGeoConfig): config is IGeoConfig {

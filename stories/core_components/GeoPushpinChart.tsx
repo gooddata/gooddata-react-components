@@ -246,4 +246,51 @@ storiesOf("Core components/GeoPushpinChart", module)
                 config,
             }),
         );
+    })
+    .add("with disabled groupNearbyPoints", () => {
+        const config: IGeoConfig = {
+            ...DEFAULT_CONFIG,
+            points: {
+                groupNearbyPoints: false,
+            },
+        };
+        return screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                config,
+            }),
+        );
+    })
+    .add("with enabled groupNearbyPoints", () => {
+        const config: IGeoConfig = {
+            ...DEFAULT_CONFIG,
+            points: {
+                groupNearbyPoints: true,
+            },
+        };
+        return screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                config,
+            }),
+        );
+    })
+    .add("with config point size", () => {
+        const config: IGeoConfig = {
+            ...DEFAULT_CONFIG,
+            points: {
+                minSize: "0.5x",
+                maxSize: "1.5x",
+            },
+        };
+        return screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                size: MEASURE_SIZE_GEOCHART,
+                config,
+            }),
+        );
     });

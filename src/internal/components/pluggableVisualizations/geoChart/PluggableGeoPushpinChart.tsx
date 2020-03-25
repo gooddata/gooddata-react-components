@@ -31,10 +31,10 @@ import {
     removeShowOnSecondaryAxis,
     getAttributeItemsWithoutStacks,
     isDateBucketItem,
+    getItemsCount,
 } from "../../../utils/bucketHelper";
 import { setGeoPushpinUiConfig } from "../../../utils/uiConfigHelpers/geoPushpinChartUiConfigHelper";
 import { removeSort, createSorts } from "../../../utils/sort";
-import { getReferencePointWithSupportedProperties } from "../../../utils/propertiesHelper";
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 import { DASHBOARDS_ENVIRONMENT } from "../../../constants/properties";
 import { GeoChart } from "../../../../components/core/GeoChart";
@@ -51,7 +51,6 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
 
         const { callbacks, element, visualizationProperties } = props;
         this.type = VisualizationTypes.PUSHPIN;
-        this.supportedPropertiesList = GEOPUSHPIN_SUPPORTED_PROPERTIES;
         this.callbacks = callbacks;
         this.geoPushpinElement = element;
         this.initializeProperties(visualizationProperties);
@@ -67,10 +66,6 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
                     this.type,
                 );
                 newReferencePoint = this.updateSupportedProperties(newReferencePoint);
-                newReferencePoint = getReferencePointWithSupportedProperties(
-                    newReferencePoint,
-                    this.supportedPropertiesList,
-                );
                 newReferencePoint = removeSort(newReferencePoint);
                 return Promise.resolve(sanitizeFilters(newReferencePoint));
             });
@@ -78,6 +73,10 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
 
     public getUiConfig(): IUiConfig {
         return cloneDeep(GEO_PUSHPIN_CHART_UICONFIG);
+    }
+
+    protected getSupportedPropertiesList() {
+        return GEOPUSHPIN_SUPPORTED_PROPERTIES;
     }
 
     protected configureBuckets(extendedReferencePoint: IExtendedReferencePoint): IExtendedReferencePoint {
@@ -133,6 +132,12 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
                     pushData={this.callbacks.pushData}
                     properties={this.visualizationProperties}
                     references={this.references}
+                    propertiesMeta={this.propertiesMeta}
+                    mdObject={this.mdObject}
+                    colors={this.colors}
+                    type={this.type}
+                    isError={this.isError}
+                    isLoading={this.isLoading}
                 />,
                 configPanelElement,
             );
@@ -290,9 +295,18 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
         const { dfUri } = locationItem;
         const visualizationProperties = this.visualizationProperties || {};
         const { controls = {} } = visualizationProperties;
+        const hasSizeMesure = getItemsCount(buckets, BucketNames.SIZE) > 0;
+        const hasColorMesure = getItemsCount(buckets, BucketNames.COLOR) > 0;
+        const hasLocationAttribute = getItemsCount(buckets, BucketNames.LOCATION) > 0;
+        const hasSegmentAttribute = getItemsCount(buckets, BucketNames.SEGMENT) > 0;
+        const groupNearbyPoints =
+            hasLocationAttribute && !hasColorMesure && !hasSizeMesure && !hasSegmentAttribute;
         // For tooltip text, displayFrom uri must be default displayFrom
         set(referencePointConfigured, "properties", {
             controls: {
+                points: {
+                    groupNearbyPoints,
+                },
                 ...controls,
                 tooltipText: dfUri,
             },

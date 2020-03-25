@@ -146,6 +146,9 @@ describe("PluggableGeoPushpinChart", () => {
             );
             expect(extendedReferencePoint.properties).toEqual({
                 controls: {
+                    points: {
+                        groupNearbyPoints: false,
+                    },
                     tooltipText: "/geo/attribute/displayform/uri/2",
                 },
             });

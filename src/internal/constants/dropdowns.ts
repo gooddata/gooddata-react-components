@@ -1,5 +1,15 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import { IDropdownItem } from "../components/configurationControls/DropdownControl";
+
+export const pushpinSizeDropdownItems: IDropdownItem[] = [
+    { title: "properties.auto_default", value: "default" },
+    { type: "separator" },
+    { title: "properties.points.size.extra_small", value: "0.5x" },
+    { title: "properties.points.size.small", value: "0.75x" },
+    { title: "properties.points.size.normal", value: "normal" },
+    { title: "properties.points.size.large", value: "1.25x" },
+    { title: "properties.points.size.extra_large", value: "1.5x" },
+];
 
 export const rotationDropdownItems: IDropdownItem[] = [
     { title: "properties.auto_default", value: "auto" },
