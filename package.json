@@ -122,7 +122,7 @@
     "@gooddata/goodstrap": "^68.2.1",
     "@gooddata/js-utils": "^3.5.0",
     "@gooddata/numberjs": "^3.2.4",
-    "@gooddata/typings": "^2.22.0",
+    "@gooddata/typings": "^2.23.0",
     "@types/mapbox-gl": "^1.6.1",
     "ag-grid-community": "20.0.0",
     "ag-grid-react": "20.0.0",

@@ -34,12 +34,16 @@ export const isRangeCondition = (
 export const getMeasureValueFilterCondition = (
     operator: string,
     value: IMeasureValueFilterValue,
+    treatNullValuesAsZero: boolean,
 ): AFM.MeasureValueFilterCondition => {
+    const treatNullValuesAsProperty = treatNullValuesAsZero ? { treatNullValuesAs: 0 } : {};
+
     if (isComparisonOperator(operator)) {
         return {
             comparison: {
                 operator,
                 value: value.value || 0,
+                ...treatNullValuesAsProperty,
             },
         };
     } else if (isRangeOperator(operator)) {
@@ -48,6 +52,7 @@ export const getMeasureValueFilterCondition = (
                 operator,
                 from: value.from || 0,
                 to: value.to || 0,
+                ...treatNullValuesAsProperty,
             },
         };
     }

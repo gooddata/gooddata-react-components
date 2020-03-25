@@ -1498,10 +1498,10 @@
     tslint-microsoft-contrib "6.1.0"
     tslint-react "3.6.0"
 
-"@gooddata/typings@^2.22.0":
-  version "2.22.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/typings/-/typings-2.22.0.tgz#0ae09d7b0c619ca2a6cd101b33ced774a5a1d534"
-  integrity sha512-AD5Cd1tFu7GJ9Px+jDT7QyTm6ofyeKH5zdmOjrm8YWG6fmwTcCEigLvrekHUSCdGceeAlHXpkqFXQXNjzspEtQ==
+"@gooddata/typings@^2.22.0", "@gooddata/typings@^2.23.0":
+  version "2.23.0"
+  resolved "https://registry.yarnpkg.com/@gooddata/typings/-/typings-2.23.0.tgz#256fdcc52bb22366b9256ab4a36476adeba4c8fb"
+  integrity sha512-wiXbxsdjivlwRJmQW8Xkur9XyulagsYoLtou47LbvM9gF0jPtM+vmc/2strQuHCMUio8Hb4BDCqRFaTZoC2Q5Q==
   dependencies:
     lodash "^4.17.11"
 
