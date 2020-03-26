@@ -2,7 +2,7 @@
 import get = require("lodash/get");
 import isEqual = require("lodash/isEqual");
 import { VisualizationObject, Execution } from "@gooddata/typings";
-import { IChartConfig } from "../../interfaces/Config";
+import { IChartConfig, IColorAssignment } from "../../interfaces/Config";
 import { IGeoConfig, IGeoData, IGeoPointsConfig } from "../../interfaces/GeoChart";
 import { LOCATION } from "../../constants/bucketNames";
 
@@ -80,4 +80,11 @@ export function isPointsConfigChanged(
 
 export function isFluidLegendEnabled(responsive: boolean, showFluidLegend: boolean): boolean {
     return responsive && showFluidLegend;
+}
+
+export function isColorAssignmentItemChanged(
+    prevColorAssigment: IColorAssignment[],
+    colorAssigment: IColorAssignment[],
+): boolean {
+    return !isEqual(prevColorAssigment, colorAssigment);
 }

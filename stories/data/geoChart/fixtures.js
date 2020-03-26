@@ -399,289 +399,290 @@ function getSegmentAFMData(projectId = "storybook") {
         {
             attributeHeaderItem: {
                 name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=1`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=1`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=1`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=1`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=1`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=1`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=1`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=1`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=1`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=1`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=1`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=1`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=1`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=1`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=1`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
-            },
-        },
-        {
-            attributeHeaderItem: {
-                name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
-            },
-        },
-        {
-            attributeHeaderItem: {
-                name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
-            },
-        },
-        {
-            attributeHeaderItem: {
-                name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
-            },
-        },
-        {
-            attributeHeaderItem: {
-                name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
-            },
-        },
-        {
-            attributeHeaderItem: {
-                name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
-            },
-        },
-        {
-            attributeHeaderItem: {
-                name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
-            },
-        },
-        {
-            attributeHeaderItem: {
-                name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
-            },
-        },
-        {
-            attributeHeaderItem: {
-                name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
-            },
-        },
-        {
-            attributeHeaderItem: {
-                name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
-            },
-        },
-        {
-            attributeHeaderItem: {
-                name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
-            },
-        },
-        {
-            attributeHeaderItem: {
-                name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
-            },
-        },
-        {
-            attributeHeaderItem: {
-                name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
-            },
-        },
-        {
-            attributeHeaderItem: {
-                name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
-            },
-        },
-        {
-            attributeHeaderItem: {
-                name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
-            },
-        },
-        {
-            attributeHeaderItem: {
-                name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
-            },
-        },
-        {
-            attributeHeaderItem: {
-                name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
-            },
-        },
-        {
-            attributeHeaderItem: {
-                name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
-            },
-        },
-        {
-            attributeHeaderItem: {
-                name: "General Goods",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2027`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=1`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "Toy Store",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2029`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=2`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "Toy Store",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2029`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=2`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "Toy Store",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2029`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=2`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "Toy Store",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2029`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=2`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "Toy Store",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2029`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=2`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "Toy Store",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2029`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=2`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "Toy Store",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2029`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=2`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "Toy Store",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2029`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=2`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "Toy Store",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2029`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=2`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "Toy Store",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2029`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=2`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "Toy Store",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2029`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=2`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "Toy Store",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2029`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=2`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "Toy Store",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2029`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=2`,
             },
         },
         {
             attributeHeaderItem: {
                 name: "Toy Store",
-                uri: `/gdc/md/${projectId}/obj/790/elements?id=2029`,
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=2`,
+            },
+        },
+
+        {
+            attributeHeaderItem: {
+                name: "Speciality",
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=3`,
+            },
+        },
+        {
+            attributeHeaderItem: {
+                name: "Speciality",
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=3`,
+            },
+        },
+        {
+            attributeHeaderItem: {
+                name: "Speciality",
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=3`,
+            },
+        },
+        {
+            attributeHeaderItem: {
+                name: "Speciality",
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=3`,
+            },
+        },
+        {
+            attributeHeaderItem: {
+                name: "Speciality",
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=3`,
+            },
+        },
+        {
+            attributeHeaderItem: {
+                name: "Speciality",
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=3`,
+            },
+        },
+        {
+            attributeHeaderItem: {
+                name: "Convenience",
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=4`,
+            },
+        },
+        {
+            attributeHeaderItem: {
+                name: "Convenience",
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=4`,
+            },
+        },
+        {
+            attributeHeaderItem: {
+                name: "Convenience",
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=4`,
+            },
+        },
+        {
+            attributeHeaderItem: {
+                name: "Convenience",
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=4`,
+            },
+        },
+        {
+            attributeHeaderItem: {
+                name: "Convenience",
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=4`,
+            },
+        },
+        {
+            attributeHeaderItem: {
+                name: "Convenience",
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=4`,
+            },
+        },
+        {
+            attributeHeaderItem: {
+                name: "Convenience",
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=4`,
+            },
+        },
+        {
+            attributeHeaderItem: {
+                name: "Convenience",
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=4`,
+            },
+        },
+        {
+            attributeHeaderItem: {
+                name: "Convenience",
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=4`,
+            },
+        },
+        {
+            attributeHeaderItem: {
+                name: "Convenience",
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=4`,
+            },
+        },
+        {
+            attributeHeaderItem: {
+                name: "Convenience",
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=4`,
+            },
+        },
+        {
+            attributeHeaderItem: {
+                name: "Convenience",
+                uri: `/gdc/md/${projectId}/obj/23/elements?id=4`,
             },
         },
     ];

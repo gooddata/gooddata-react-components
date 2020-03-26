@@ -16,13 +16,13 @@ import Chart, { IChartProps } from "./Chart";
 import Legend, { ILegendProps } from "./legend/Legend";
 import { TOP, LEFT, BOTTOM, RIGHT } from "./legend/PositionTypes";
 import { isPieOrDonutChart, isOneOfTypes } from "../utils/common";
-import { FLUID_LEGEND_THRESHOLD } from "../../../constants/legend";
 import { VisualizationTypes } from "../../../constants/visualizationTypes";
 import { OnLegendReady } from "../../../interfaces/Events";
 import { IChartConfig } from "../../../interfaces/Config";
 import { ILegendOptions } from "../typings/legend";
 import Highcharts from "./highcharts/highchartsEntryPoint";
 import { alignChart } from "./highcharts/helpers";
+import { shouldShowFluid } from "../../../helpers/utils";
 
 export interface IChartHTMLElement extends HTMLElement {
     getChart(): Highcharts.Chart;
@@ -93,7 +93,7 @@ export default class HighChartsRenderer extends React.PureComponent<
 
         this.state = {
             legendItemsEnabled: [],
-            showFluidLegend: this.shouldShowFluid(),
+            showFluidLegend: shouldShowFluid(this.props.documentObj),
         };
         this.setChartRef = this.setChartRef.bind(this);
         this.onLegendItemClick = this.onLegendItemClick.bind(this);
@@ -101,16 +101,12 @@ export default class HighChartsRenderer extends React.PureComponent<
     }
 
     public onWindowResize() {
+        const { documentObj } = this.props;
         this.setState({
-            showFluidLegend: this.shouldShowFluid(),
+            showFluidLegend: shouldShowFluid(documentObj),
         });
 
         this.realignPieOrDonutChart();
-    }
-
-    public shouldShowFluid() {
-        const { documentObj } = this.props;
-        return documentObj.documentElement.clientWidth < FLUID_LEGEND_THRESHOLD;
     }
 
     public componentWillMount() {

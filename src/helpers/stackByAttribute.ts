@@ -1,9 +1,7 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { Execution } from "@gooddata/typings";
-import {
-    getTreemapAttributes,
-    IUnwrappedAttributeHeaderWithItems,
-} from "../components/visualizations/chart/chartOptionsBuilder";
+import { getTreemapAttributes } from "../components/visualizations/chart/chartOptionsBuilder";
+import { IUnwrappedAttributeHeaderWithItems } from "../components/visualizations/typings/chart";
 import { STACK_BY_DIMENSION_INDEX } from "../components/visualizations/chart/constants";
 import { isTreemap } from "../components/visualizations/utils/common";
 import { findAttributeInDimension } from "./executionResultHelper";

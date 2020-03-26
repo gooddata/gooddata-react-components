@@ -30,6 +30,12 @@ const legendStories = [
     "with legend position is top",
     "with legend position is bottom",
     "with legend position is left and height of container is not enough",
+    
+];
+const colorMappingStories = [
+    "with custom colors",
+    "with custom colors, color mapping for SegmentBy",
+    "with color mapping for Location",
 ];
 
 const configuration = {
@@ -42,6 +48,13 @@ const configuration = {
             {},
         ),
         "Core components/GeoPushpinChart/Config/Legend": legendStories.reduce(
+            (result, story) => ({
+                ...result,
+                [story]: DEFAULT_SCENARIO_CONFIG,
+            }),
+            {},
+        ),
+        "Core components/GeoPushpinChart/Config/Color": colorMappingStories.reduce(
             (result, story) => ({
                 ...result,
                 [story]: DEFAULT_SCENARIO_CONFIG,

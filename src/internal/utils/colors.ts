@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import produce from "immer";
 import get = require("lodash/get");
 import set = require("lodash/set");
@@ -100,8 +100,9 @@ export function getProperties(
         return newProperties;
     } else if (MappingHeader.isMappingHeaderAttributeItem(item)) {
         return mergeColorMappingToProperties(properties, item.attributeHeaderItem.uri, color);
+    } else if (MappingHeader.isMappingHeaderAttribute(item)) {
+        return mergeColorMappingToProperties(properties, item.attributeHeader.uri, color);
     }
-
     return {};
 }
 
@@ -118,36 +119,24 @@ export function getValidProperties(
             const { id } = mappingItem;
             const colorValue = mappingItem.color.value;
 
-            const isMeasureInAssignment = colorAssignments.find(
-                (colorAssignment: ChartConfiguration.IColorAssignment) => {
-                    if (MappingHeader.isMappingHeaderMeasureItem(colorAssignment.headerItem)) {
-                        return (
-                            colorAssignment.headerItem.measureHeaderItem.localIdentifier === id &&
-                            isEqual(colorAssignment.color.value, colorValue)
-                        );
-                    }
+            return !!colorAssignments.find((colorAssignment: ChartConfiguration.IColorAssignment) => {
+                if (MappingHeader.isMappingHeaderMeasureItem(colorAssignment.headerItem)) {
+                    return (
+                        colorAssignment.headerItem.measureHeaderItem.localIdentifier === id &&
+                        isEqual(colorAssignment.color.value, colorValue)
+                    );
+                }
 
-                    return false;
-                },
-            );
+                if (MappingHeader.isMappingHeaderAttributeItem(colorAssignment.headerItem)) {
+                    return colorAssignment.headerItem.attributeHeaderItem.uri === id;
+                }
 
-            if (isMeasureInAssignment) {
-                return true;
-            }
+                if (MappingHeader.isMappingHeaderAttribute(colorAssignment.headerItem)) {
+                    return colorAssignment.headerItem.attributeHeader.uri === id;
+                }
 
-            const isAttributeInAssignment = colorAssignments.find(
-                (colorAssignment: ChartConfiguration.IColorAssignment) => {
-                    if (MappingHeader.isMappingHeaderAttributeItem(colorAssignment.headerItem)) {
-                        return colorAssignment.headerItem.attributeHeaderItem.uri === id;
-                    }
-
-                    return false;
-                },
-            );
-
-            if (isAttributeInAssignment) {
-                return true;
-            }
+                return false;
+            });
         },
     );
 

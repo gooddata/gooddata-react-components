@@ -14,6 +14,7 @@ import {
 import { isClusteringAllowed } from "../../../helpers/geoChart/common";
 import { getPushpinColors } from "./geoChartColor";
 import { getMinMax } from "../../../helpers/utils";
+import { IColorStrategy } from "../../visualizations/chart/colorFactory";
 
 type IGeoDataSourceFeature = GeoJSON.Feature<GeoJSON.Geometry, GeoJSON.GeoJsonProperties>;
 export type IGeoDataSourceFeatures = IGeoDataSourceFeature[];
@@ -21,6 +22,7 @@ export type IGeoDataSourceFeatures = IGeoDataSourceFeature[];
 function transformPushpinDataSource(
     geoData: IGeoData,
     geoPointsConfig: IGeoPointsConfig,
+    colorStrategy: IColorStrategy,
 ): IGeoDataSourceFeatures {
     const { color, location, segment, size, tooltipText } = geoData;
 
@@ -45,7 +47,7 @@ function transformPushpinDataSource(
     const sizeFormat = hasSize ? size.format : "";
     const colorFormat = hasColor ? color.format : "";
 
-    const pushpinColors: IPushpinColor[] = getPushpinColors(colorData, segmentData);
+    const pushpinColors: IPushpinColor[] = getPushpinColors(colorData, segmentData, colorStrategy);
 
     const features = locationData.reduce(
         (result: IGeoDataSourceFeatures, coordinates: IGeoLngLat, index: number): IGeoDataSourceFeatures => {
@@ -122,6 +124,7 @@ const calculateSizeInPixel = (
 
 export const createPushpinDataSource = (
     geoData: IGeoData,
+    colorStrategy: IColorStrategy,
     config?: IGeoConfig,
 ): mapboxgl.GeoJSONSourceRaw => {
     const { points: geoPointsConfig = {} } = config || {};
@@ -130,7 +133,7 @@ export const createPushpinDataSource = (
         type: "geojson",
         data: {
             type: "FeatureCollection",
-            features: transformPushpinDataSource(geoData, geoPointsConfig),
+            features: transformPushpinDataSource(geoData, geoPointsConfig, colorStrategy),
         },
     };
     if (isClusteringAllowed(geoData, groupNearbyPoints)) {

@@ -26,6 +26,7 @@ import {
 import PushpinSizeControl from "../configurationControls/PushpinSizeControl";
 import PushpinViewportControl from "../configurationControls/PushpinViewportControl";
 import LegendSection from "../configurationControls/legend/LegendSection";
+import ColorsSection from "../configurationControls/colors/ColorsSection";
 
 export default class GeoPushpinConfigurationPanel extends ConfigurationPanelContent {
     protected getControlProperties() {
@@ -120,6 +121,7 @@ export default class GeoPushpinConfigurationPanel extends ConfigurationPanelCont
         return (
             <BubbleHoverTrigger showDelay={SHOW_DELAY_DEFAULT} hideDelay={HIDE_DELAY_DEFAULT}>
                 <div>
+                    {this.renderColorSection()}
                     {this.renderLegendSection()}
                     {this.renderViewportSection()}
                     {this.renderPointsSection()}
@@ -132,6 +134,34 @@ export default class GeoPushpinConfigurationPanel extends ConfigurationPanelCont
                     <FormattedMessage id="properties.config.not_applicable" />
                 </Bubble>
             </BubbleHoverTrigger>
+        );
+    }
+
+    protected renderColorSection() {
+        const {
+            properties,
+            propertiesMeta,
+            pushData,
+            colors,
+            featureFlags,
+            references,
+            isLoading,
+        } = this.props;
+
+        const controlsDisabled = this.isControlDisabled();
+
+        return (
+            <ColorsSection
+                properties={properties}
+                propertiesMeta={propertiesMeta}
+                references={references}
+                colors={colors}
+                controlsDisabled={controlsDisabled}
+                pushData={pushData}
+                hasMeasures={true} // hasMeasures is true because Color Config is based on Attribute
+                showCustomPicker={featureFlags.enableCustomColorPicker as boolean}
+                isLoading={isLoading}
+            />
         );
     }
 }

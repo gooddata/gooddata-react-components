@@ -9,3 +9,5 @@ export const stateNamesUri = `/gdc/md/${projectId}/obj/9462`;
 export const cityNamesUri = `/gdc/md/${projectId}/obj/9460`;
 export const geoPushpinChartVisualizationIdentifier = "acebcI3fhaRI";
 export const geoPushpinChartVisualizationUri = `/gdc/md/${projectId}/obj/9480`;
+export const predicateAttributeHeaderItemUri = `/gdc/md/${projectId}/obj/9461/elements?id=10456587`;
+export const predicateAttributeHeaderItemName = `Hawaii`;

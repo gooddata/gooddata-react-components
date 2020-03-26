@@ -8,6 +8,7 @@ import GeoPushpinChartWithCategoryLegendExample from "../components/GeoPushpinCh
 import GeoPushpinChartConfigurationExample from "../components/GeoPushpinChartConfigurationExample";
 import GeoPushpinChartConfigurationLegendExample from "../components/GeoPushpinChartConfigurationLegendExample";
 import GeoPushpinChartConfigurationViewportExample from "../components/GeoPushpinChartConfigurationViewportExample";
+import GeoPushpinChartConfigurationColorMappingExample from "../components/GeoPushpinChartConfigurationColorMappingExample";
 
 import GeoPushpinChartClusteringExampleSRC from "!raw-loader!../components/GeoPushpinChartClusteringExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import GeoPushpinChartWithColorLegendExampleSRC from "!raw-loader!../components/GeoPushpinChartWithColorLegendExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
@@ -15,6 +16,7 @@ import GeoPushpinChartWithCategoryLegendExampleSRC from "!raw-loader!../componen
 import GeoPushpinChartConfigurationExampleSRC from "!raw-loader!../components/GeoPushpinChartConfigurationExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import GeoPushpinChartConfigurationLegendExampleSRC from "!raw-loader!../components/GeoPushpinChartConfigurationLegendExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import GeoPushpinChartConfigurationViewportExampleSRC from "!raw-loader!../components/GeoPushpinChartConfigurationViewportExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
+import GeoPushpinChartConfigurationColorMappingExampleSRC from "!raw-loader!../components/GeoPushpinChartConfigurationColorMappingExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 
 export const GeoPushpinChartDemo = () => (
     <div>
@@ -70,6 +72,14 @@ export const GeoPushpinChartDemo = () => (
         <ExampleWithSource
             for={() => <GeoPushpinChartConfigurationViewportExample />}
             source={GeoPushpinChartConfigurationViewportExampleSRC}
+        />
+
+        <h2 id="geo-pushpin-chart-configuration-color-mapping">
+            Example of Geo Pushpin Chart with Configuration - Custom Palette and Color Mapping
+        </h2>
+        <ExampleWithSource
+            for={() => <GeoPushpinChartConfigurationColorMappingExample />}
+            source={GeoPushpinChartConfigurationColorMappingExampleSRC}
         />
     </div>
 );

@@ -1,9 +1,11 @@
 // (C) 2007-2019 GoodData Corporation
+const fixtures = require("./stories/data/geoChart/fixtures");
 
 const featureFlags = {
     enableAxisNameConfiguration: true,
     enableSortingByTotalGroup: true,
 };
+const lnglatElements = fixtures.getLocationAFMData().map((location) => location.attributeHeaderItem.name);
 
 const barChartAfmExecutions = (projectId) => [
     {
@@ -320,7 +322,15 @@ const getBaseProjectSchema = (title, identifier) => {
                 {
                     identifier: '21',
                     title: 'Color'
-                }
+                },
+                {
+                    identifier: '22',
+                    title: 'Size sames value'
+                },
+                {
+                    identifier: '23',
+                    title: 'Color'
+                },
             ],
             attributes: [{
                     identifier: '3',
@@ -374,12 +384,12 @@ const getBaseProjectSchema = (title, identifier) => {
                 {
                     identifier: '30',
                     title: 'City',
-                    elements: ['New York', 'Chicago', 'San Antonio', 'San Diego', 'Austin', 'Fort Worth', 'Charlotte']
+                    elements: lnglatElements
                 },
                 {
                     identifier: '23',
                     title: 'Store Type',
-                    elements: ["Speciality", "Department", "Convenience", "Discount"]
+                    elements: ["Speciality", "General Goods", "Convenience", "Toy Store"]
                 },
                 {
                     identifier: '24',
