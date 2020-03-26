@@ -1,4 +1,4 @@
-[![npm version](https://badge.fury.io/js/%40gooddata%2Freact-components.svg)](https://www.npmjs.com/package/@gooddata/react-components) 
+[![npm version](https://badge.fury.io/js/%40gooddata%2Freact-components.svg)](https://www.npmjs.com/package/@gooddata/react-components)
 
 # GoodData.UI React components
 > A React-based JavaScript library for building data-driven applications
@@ -24,6 +24,14 @@ because they are not intended to be part of the public API.
 ## Contributing
 
 We welcome any contribution in form of [issues](https://github.com/gooddata/gooddata-react-components/issues) or [pull requests](https://github.com/gooddata/gooddata-react-components/pulls).
+
+Install [Node.js](http://nodejs.org) (node 12.16.1, npm v6.13.4) and [Yarn](https://classic.yarnpkg.com) (1.22.4).
+
+Install dependencies:
+```
+yarn install --frozen-lockfile
+```
+
 These commands may come in handy while developing:
 
 | command | description |
@@ -56,6 +64,14 @@ heroku config:set DOMAIN_ADMIN_USERNAME=x@gooddata.com DOMAIN_ADMIN_PASSWORD=xy 
 git push heroku HEAD:master
 heroku open
 ```
+### Enable Geo Chart for Storybook and Live Examples
+Geo chart uses Mapbox to render map which requires a Mapbox access token.
+- Register an account and create Mapbox access token at [guide](https://docs.mapbox.com/help/how-mapbox-works/access-tokens/)
+- Store the created token at `.env`:
+```bash
+echo -e "EXAMPLE_MAPBOX_ACCESS_TOKEN=token" >> .env # only need to run once
+echo -e "STORYBOOK_MAPBOX_ACCESS_TOKEN=token" >> .env # only need to run once
+```
 
 ### Run Live Examples Locally
 To run *GoodData.UI Live Examples* locally:
@@ -67,12 +83,9 @@ yarn examples
 ```
 Then open https://localhost:8999 and login using Live Examples account (you can [create one here](https://gooddata-examples.herokuapp.com/registration)).
 
-### Run storybook locally for Geo chart 
-Geo chart uses Mapbox to render map which requires a mapbox access token.
-- Register an account and create Mapbox token as [guide](https://docs.mapbox.com/help/how-mapbox-works/access-tokens/)
+### Run Storybook locally
 - Run storybook with token stored in `.env` for more secure
 ```bash
-echo "STORYBOOK_MAPBOX_ACCESS_TOKEN=token" > .env # only need to run once
 yarn storybook
 ```
 - Or run storybook with token env param exposed to cli (not suggested)
@@ -82,7 +95,7 @@ STORYBOOK_MAPBOX_ACCESS_TOKEN=token yarn storybook
 - Apply either above way to `yarn build-storybook` or `yarn test-storybook`
 
 ### Source code formatting
-The source code in the repository is formatted by [Prettier](https://prettier.io/). 
+The source code in the repository is formatted by [Prettier](https://prettier.io/).
 The format of the code is validated by our Continuous Integration server and is one of the requirements of successful merge.
 
 Prettier is supported by every major IDE. You can find the list of supported editors and how to configure them [here](https://prettier.io/docs/en/editors.html).
@@ -93,9 +106,24 @@ In the case, when your editor is not supported or you don't want to setup the in
 
 - see [CHANGELOG.md](CHANGELOG.md)
 
+## Supported versions
+
+In order to make the user experience with integrating GoodData UI SDK as smooth and secure as possible and to ensure that the SDK is using the latest features of the platform, we will only provide support to two most recent major versions of UI SDK.
+
+The most recent majors will be supported in the following modes:
+
+- The latest major version will receive all new functionality and all bug fixes
+- The previous major version will only receive fixes to critical issues and security fixes. These fixes will be applied on top of last released version of the previous major
+
+The customers are encouraged to always use the latest version of the UI SDK.
+
+In case of using older versions, the user might face API incompatibility, performance or security issues.
+
+Please follow the installation instructions to update to the newest version.
+
 ## License
 
-(C) 2007-2018 GoodData Corporation
+(C) 2007-2020 GoodData Corporation
 
 This project is dual licensed:
 

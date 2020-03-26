@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import forEach = require("lodash/forEach");
 import set = require("lodash/set");
 import isEmpty = require("lodash/isEmpty");
@@ -62,7 +62,7 @@ export function configureOverTimeComparison(
             newItems = keepOnlyMasterAndDerivedMeasuresOfType(newItems, derivedOfTypeToKeep);
         }
 
-        bucket.items.splice(0, bucket.items.length, ...newItems);
+        bucket.items = newItems;
     });
 
     return extendedReferencePoint;

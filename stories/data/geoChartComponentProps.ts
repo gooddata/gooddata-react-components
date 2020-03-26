@@ -16,10 +16,20 @@ export const ATTRIBUTE_SEGMENT_GEOCHART: VisualizationObject.IVisualizationAttri
 ).localIdentifier("segmentBy");
 export const ATTRIBUTE_TOOLTIP_GEOCHART: VisualizationObject.IVisualizationAttribute = attribute(
     "/gdc/md/storybook/obj/24.df",
-).localIdentifier("tooltip");
+)
+    .localIdentifier("tooltip")
+    .alias("");
 export const MEASURE_SIZE_RATIO_GEOCHART: VisualizationObject.IMeasure = measure("/gdc/md/storybook/obj/20")
     .localIdentifier("size")
     .ratio();
 export const MEASURE_COLOR_RATIO_GEOCHART: VisualizationObject.IMeasure = measure("/gdc/md/storybook/obj/21")
     .localIdentifier("color")
     .ratio();
+export const MEASURE_COLOR_GEOCHART_ALIAS: VisualizationObject.IMeasure = measure("/gdc/md/storybook/obj/21")
+    .localIdentifier("color")
+    .alias("Color Alias");
+export const ATTRIBUTE_SEGMENT_GEOCHART_ALIAS: VisualizationObject.IVisualizationAttribute = attribute(
+    "/gdc/md/storybook/obj/23.df",
+)
+    .localIdentifier("segmentBy")
+    .alias("Category Alias");

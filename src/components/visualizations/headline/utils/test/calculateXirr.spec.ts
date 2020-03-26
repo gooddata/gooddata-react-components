@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import { calculateXirr } from "../calculateXirr";
 
 describe("calculateXirr", () => {
@@ -27,7 +27,7 @@ describe("calculateXirr", () => {
         ];
 
         const actual = calculateXirr(xirrInput);
-        const expected = 0.37336253350955556;
+        const expected = 0.3733625335095555;
         expect(actual).toEqual(expected);
     });
 

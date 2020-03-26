@@ -18,6 +18,7 @@ import VisualizationTreemapExample from "../components/VisualizationTreemapByIde
 import VisualizationHeatmapExample from "../components/VisualizationHeatmapByIdentifierExample";
 import VisualizationComboExample from "../components/VisualizationComboByIdentifierExample";
 import VisualizationBulletExample from "../components/VisualizationBulletByIdentifierExample";
+import VisualizationGeoPushpinChartByIdentifierExample from "../components/VisualizationGeoPushpinChartByIdentifierExample";
 
 import VisualizationColumnChartExampleSRC from "!raw-loader!../components/VisualizationColumnChartByIdentifierExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import VisualizationTableExampleSRC from "!raw-loader!../components/VisualizationTableByIdentifierExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
@@ -34,6 +35,7 @@ import VisualizationTreemapExampleSRC from "!raw-loader!../components/Visualizat
 import VisualizationHeatmapExampleSRC from "!raw-loader!../components/VisualizationHeatmapByIdentifierExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import VisualizationComboExampleSRC from "!raw-loader!../components/VisualizationComboByIdentifierExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import VisualizationBulletExampleSRC from "!raw-loader!../components/VisualizationBulletByIdentifierExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
+import VisualizationGeoPushpinChartByIdentifierExampleSRC from "!raw-loader!../components/VisualizationGeoPushpinChartByIdentifierExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 
 export const VisualizationByIdentifier = () => (
     <div>
@@ -124,6 +126,14 @@ export const VisualizationByIdentifier = () => (
 
         <h2 id="combo">Combo Chart</h2>
         <ExampleWithSource for={VisualizationComboExample} source={VisualizationComboExampleSRC} />
+
+        <hr className="separator" />
+
+        <h2 id="geo-pushpin-chart">Geo Pushpin Chart</h2>
+        <ExampleWithSource
+            for={VisualizationGeoPushpinChartByIdentifierExample}
+            source={VisualizationGeoPushpinChartByIdentifierExampleSRC}
+        />
     </div>
 );
 

@@ -6,6 +6,7 @@ const CircularDependencyPlugin = require("circular-dependency-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
 const webpack = require("webpack");
 const StatsPlugin = require("stats-webpack-plugin");
+const Dotenv = require("dotenv-webpack");
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -37,7 +38,6 @@ module.exports = async (env, argv) => {
     const backendParam = env ? env.backend : "";
     const backendUrl = backendShortcuts[backendParam] || backendParam || defaultBackend;
     console.log("Backend URI: ", backendUrl); // eslint-disable-line no-console
-
     const isProduction = argv.mode === "production";
 
     // see also production proxy at /examples/server/src/endpoints/proxy.js
@@ -84,6 +84,10 @@ module.exports = async (env, argv) => {
             BASEPATH: JSON.stringify(basePath),
         }),
         new SimplestProgressPlugin(),
+        new Dotenv({ 
+            path: "../.env", // one environment for both storybook and examples
+            systemvars: true
+        })
     ];
 
     if (isProduction) {

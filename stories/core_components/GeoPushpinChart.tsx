@@ -13,6 +13,8 @@ import {
     MEASURE_COLOR_GEOCHART,
     ATTRIBUTE_SEGMENT_GEOCHART,
     ATTRIBUTE_TOOLTIP_GEOCHART,
+    ATTRIBUTE_SEGMENT_GEOCHART_ALIAS,
+    MEASURE_COLOR_GEOCHART_ALIAS,
 } from "../data/geoChartComponentProps";
 
 const wrapperStyle: React.CSSProperties = { width: 900, height: 600, position: "relative" };
@@ -59,7 +61,10 @@ storiesOf("Core components/GeoPushpinChart", module)
                 location: ATTRIBUTE_LOCATION_GEOCHART,
                 config: {
                     ...DEFAULT_CONFIG,
-                    center: [-94.922363, 36.800486],
+                    center: {
+                        lat: 36.800486,
+                        lng: -94.922363,
+                    },
                     zoom: 6,
                 },
             }),
@@ -165,6 +170,126 @@ storiesOf("Core components/GeoPushpinChart", module)
                 color: MEASURE_COLOR_GEOCHART,
                 segmentBy: ATTRIBUTE_SEGMENT_GEOCHART,
                 filters: [locationFilter],
+                config,
+            }),
+        );
+    })
+    .add("with North America viewport", () =>
+        screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                config: {
+                    ...DEFAULT_CONFIG,
+                    viewport: {
+                        area: "continent_na",
+                    },
+                },
+            }),
+        ),
+    )
+    .add("with World viewport", () =>
+        screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                config: {
+                    ...DEFAULT_CONFIG,
+                    viewport: {
+                        area: "world",
+                    },
+                },
+            }),
+        ),
+    )
+    .add("with Include all data viewport", () =>
+        screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                config: {
+                    ...DEFAULT_CONFIG,
+                    viewport: {
+                        area: "auto",
+                    },
+                },
+            }),
+        ),
+    )
+    .add("with disabled interactive and zoom control button", () => {
+        const config: IGeoConfig = {
+            ...DEFAULT_CONFIG,
+            viewport: {
+                freezed: true,
+            },
+        };
+        return screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                config,
+            }),
+        );
+    })
+    .add("with color and segment alias shown in tooltip", () => {
+        const config: IGeoConfig = {
+            ...DEFAULT_CONFIG,
+            tooltipText: ATTRIBUTE_TOOLTIP_GEOCHART,
+        };
+        return screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                size: MEASURE_SIZE_GEOCHART,
+                color: MEASURE_COLOR_GEOCHART_ALIAS,
+                segmentBy: ATTRIBUTE_SEGMENT_GEOCHART_ALIAS,
+                config,
+            }),
+        );
+    })
+    .add("with disabled groupNearbyPoints", () => {
+        const config: IGeoConfig = {
+            ...DEFAULT_CONFIG,
+            points: {
+                groupNearbyPoints: false,
+            },
+        };
+        return screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                config,
+            }),
+        );
+    })
+    .add("with enabled groupNearbyPoints", () => {
+        const config: IGeoConfig = {
+            ...DEFAULT_CONFIG,
+            points: {
+                groupNearbyPoints: true,
+            },
+        };
+        return screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                config,
+            }),
+        );
+    })
+    .add("with config point size", () => {
+        const config: IGeoConfig = {
+            ...DEFAULT_CONFIG,
+            points: {
+                minSize: "0.5x",
+                maxSize: "1.5x",
+            },
+        };
+        return screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                size: MEASURE_SIZE_GEOCHART,
                 config,
             }),
         );

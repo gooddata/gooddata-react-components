@@ -358,6 +358,17 @@ describe("Measure value filter AFM wrapper", () => {
                 expect(component.isApplyButtonDisabled()).toEqual(false);
             });
 
+            it("should disable apply button when value is equal to prop value with comparison operator using percentage values", () => {
+                const filter = Model.measureValueFilter("myMeasure").condition(Operator.EQUAL_TO, {
+                    value: 10,
+                });
+                const component = renderComponent({ filter, usePercentage: true });
+
+                component.setComparisonValue("100").setComparisonValue("1000");
+
+                expect(component.isApplyButtonDisabled()).toEqual(true);
+            });
+
             it('should disable apply button when "to" value is empty', () => {
                 const filter = Model.measureValueFilter("myMeasure").condition(Operator.BETWEEN, {
                     from: 10,
@@ -385,11 +396,23 @@ describe("Measure value filter AFM wrapper", () => {
             it("should disable apply button when value is equal to prop value with range operator", () => {
                 const filter = Model.measureValueFilter("myMeasure").condition(Operator.BETWEEN, {
                     from: 10,
-                    to: 10,
+                    to: 20,
                 });
                 const component = renderComponent({ filter });
 
-                component.setRangeTo("100").setRangeTo("10");
+                component.setRangeTo("200").setRangeTo("20");
+
+                expect(component.isApplyButtonDisabled()).toEqual(true);
+            });
+
+            it("should disable apply button when value is equal to prop value with range operator using percentage values", () => {
+                const filter = Model.measureValueFilter("myMeasure").condition(Operator.BETWEEN, {
+                    from: 10,
+                    to: 20,
+                });
+                const component = renderComponent({ filter, usePercentage: true });
+
+                component.setRangeFrom("100").setRangeFrom("1000");
 
                 expect(component.isApplyButtonDisabled()).toEqual(true);
             });

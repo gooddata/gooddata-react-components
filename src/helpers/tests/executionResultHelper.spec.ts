@@ -242,23 +242,23 @@ describe("getHeadersInDimension", () => {
         const attributeHeaders = getAttributeHeadersInDimension(dimensions);
         expect(attributeHeaders).toEqual([
             {
-                formOf: { identifier: "attr.State", name: "State", uri: "any-uri" },
-                identifier: "label.State",
-                localIdentifier: "a_State",
+                formOf: { identifier: "attr.state", name: "State", uri: "any-uri" },
+                identifier: "label.state",
+                localIdentifier: "a_state",
                 name: "State",
                 uri: "/gdc/md/projectId/obj/1",
             },
             {
-                formOf: { identifier: "attr.Type", name: "Type", uri: "any-uri" },
-                identifier: "label.Type",
-                localIdentifier: "a_Type",
+                formOf: { identifier: "attr.type", name: "Type", uri: "any-uri" },
+                identifier: "label.type",
+                localIdentifier: "a_type",
                 name: "Type",
                 uri: "/gdc/md/projectId/obj/2",
             },
             {
-                formOf: { identifier: "attr.State", name: "State", uri: "any-uri" },
-                identifier: "label.State",
-                localIdentifier: "a_State",
+                formOf: { identifier: "attr.state", name: "State", uri: "any-uri" },
+                identifier: "label.state",
+                localIdentifier: "a_state_tooltip_text",
                 name: "State",
                 uri: "/gdc/md/projectId/obj/3",
             },
@@ -272,17 +272,19 @@ describe("getHeadersInDimension", () => {
             {
                 measureHeaderItem: {
                     format: "#,##0",
-                    identifier: "measure.Population",
-                    localIdentifier: "m_size",
+                    identifier: "measure.population",
+                    localIdentifier: "m_population",
                     name: "Population",
+                    uri: "/gdc/md/projectId/obj/4",
                 },
             },
             {
                 measureHeaderItem: {
                     format: "#,##0",
-                    identifier: "measure.Area",
-                    localIdentifier: "m_color",
+                    identifier: "measure.area",
+                    localIdentifier: "m_area",
                     name: "Area",
+                    uri: "/gdc/md/projectId/obj/5",
                 },
             },
         ]);

@@ -214,4 +214,10 @@ export const BULLET_CHART_SUPPORTED_PROPERTIES = [
     "colorMapping",
 ];
 
-export const GEOPUSHPIN_SUPPORTED_PROPERTIES = ["zoom", "center", "tooltipText"];
+export const GEOPUSHPIN_SUPPORTED_PROPERTIES = [
+    "tooltipText",
+    "points.groupNearbyPoints",
+    "points.minSize",
+    "points.maxSize",
+    "viewport.area",
+];

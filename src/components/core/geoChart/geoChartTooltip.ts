@@ -4,7 +4,8 @@ import isEmpty = require("lodash/isEmpty");
 import isFinite = require("lodash/isFinite");
 import escape = require("lodash/escape");
 import mapboxgl from "mapbox-gl";
-import { ISeparators, numberFormat } from "@gooddata/numberjs";
+import { ISeparators } from "@gooddata/numberjs";
+import { formatValueForTooltip } from "../../visualizations/chart/tooltip";
 import { DEFAULT_PUSHPIN_COLOR_VALUE, NULL_TOOLTIP_VALUE } from "../../../constants/geoChart";
 import { IGeoTooltipItem } from "../../../interfaces/GeoChart";
 
@@ -16,11 +17,15 @@ function isTooltipItemValid(item: IGeoTooltipItem): boolean {
     return Boolean(title);
 }
 
+function escapeAttributeValue(value: number | string): number | string {
+    return isFinite(value) ? value : escape(String(value));
+}
+
 function formatMeasure(item: IGeoTooltipItem, separators?: ISeparators): IGeoTooltipItem {
     const { title, value, format } = item;
     return {
         title,
-        value: isFinite(value) ? numberFormat(value, format, null, separators) : NULL_TOOLTIP_VALUE,
+        value: isFinite(value) ? formatValueForTooltip(value, format, separators) : NULL_TOOLTIP_VALUE,
     };
 }
 
@@ -28,7 +33,7 @@ function formatAttribute(item: IGeoTooltipItem): IGeoTooltipItem {
     const { value } = item;
     return {
         ...item,
-        value: Boolean(value) ? value : NULL_TOOLTIP_VALUE,
+        value: Boolean(value) ? escapeAttributeValue(value) : NULL_TOOLTIP_VALUE,
     };
 }
 
@@ -73,13 +78,13 @@ function getTooltipItemHtml(item: IGeoTooltipItem): string {
         return "";
     }
 
+    // value is escaped in formatAttribute or formatMeasure function
     const { title, value } = item;
-    const escapedValue = isFinite(value) ? value : escape(String(value));
 
     return `<div class="gd-viz-tooltip-item">
                 <span class="gd-viz-tooltip-title">${escape(title)}</span>
-                <div class="gd-viz-tooltip-value-wraper" >
-                    <span class="gd-viz-tooltip-value">${escapedValue}</span>
+                <div class="gd-viz-tooltip-value-wraper">
+                    <span class="gd-viz-tooltip-value">${value}</span>
                 </div>
             </div>`;
 }

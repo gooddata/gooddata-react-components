@@ -604,13 +604,6 @@
         "comment": "",
         "limit": 0
     },
-
-    "filters.allTime.title": {
-        "value": "All time",
-        "comment": "",
-        "limit": 0
-    },
-
     "filters.from": {
         "value": "from",
         "comment": "Displayed as placeholder in static period inputs where user enters date",
@@ -717,7 +710,6 @@
         "comment": "In '{n, plural, =1 {NEXT YEAR} other {# YEARS AHEAD}}' translate only uppercase words. Do not translate the numeric placeholder '#'. Add missing plural forms if your language has any: ask if you need any help.",
         "limit": 0
     },
-
     "filters.allTime.title": {
         "value": "All time",
         "comment": "",

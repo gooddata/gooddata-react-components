@@ -1,7 +1,7 @@
 // (C) 2020 GoodData Corporation
 import get = require("lodash/get");
 import { Execution, VisualizationObject } from "@gooddata/typings";
-import { IGeoData, IGeoLngLatLike, IObjectMapping } from "../../interfaces/GeoChart";
+import { IGeoData, IGeoLngLat, IObjectMapping } from "../../interfaces/GeoChart";
 import { COLOR, LOCATION, SEGMENT, SIZE, TOOLTIP_TEXT } from "../../constants/bucketNames";
 import {
     getAttributeHeadersInDimension,
@@ -15,11 +15,12 @@ import { isDisplayFormUri } from "../../internal/utils/mdObjectHelper";
 import { parseGeoPropertyItem } from "../../components/core/geoChart/geoChartTooltip";
 
 interface IBucketItemInfo {
-    uri: VisualizationObject.IObjUriQualifier["uri"];
+    uri?: VisualizationObject.IObjUriQualifier["uri"];
+    identifier?: VisualizationObject.IObjIdentifierQualifier["identifier"];
     localIdentifier: VisualizationObject.IObjUriQualifier["uri"];
 }
 
-export function getLocation(latlng: string): IGeoLngLatLike | null {
+export function getLocation(latlng: string): IGeoLngLat | null {
     if (!latlng) {
         return null;
     }
@@ -31,7 +32,10 @@ export function getLocation(latlng: string): IGeoLngLatLike | null {
         return null;
     }
 
-    return [longitude, latitude];
+    return {
+        lat: latitude,
+        lng: longitude,
+    };
 }
 
 export function getGeoData(
@@ -122,14 +126,15 @@ function getBucketItemNameAndDataIndex(
             }
             const index = attributeHeaders.findIndex(
                 (attributeHeader: Execution.IAttributeHeader["attributeHeader"]): boolean =>
-                    attributeHeader.localIdentifier === bucketItemInfo.localIdentifier ||
-                    attributeHeader.uri === bucketItemInfo.uri,
+                    attributeHeader.localIdentifier === bucketItemInfo.localIdentifier &&
+                    (attributeHeader.uri === bucketItemInfo.uri ||
+                        attributeHeader.identifier === bucketItemInfo.identifier),
             );
             if (index !== -1) {
-                result[bucketName] = {
-                    index,
-                    name: attributeHeaders[index].name,
-                };
+                const {
+                    formOf: { name },
+                } = attributeHeaders[index];
+                result[bucketName] = { index, name };
             }
         },
     );
@@ -142,8 +147,9 @@ function getBucketItemNameAndDataIndex(
             }
             const index = measureGroupHeader.findIndex(
                 (measureHeaderItem: Execution.IMeasureHeaderItem): boolean =>
-                    measureHeaderItem.measureHeaderItem.localIdentifier === bucketItemInfo.localIdentifier ||
-                    measureHeaderItem.measureHeaderItem.uri === bucketItemInfo.uri,
+                    measureHeaderItem.measureHeaderItem.localIdentifier === bucketItemInfo.localIdentifier &&
+                    (measureHeaderItem.measureHeaderItem.uri === bucketItemInfo.uri ||
+                        measureHeaderItem.measureHeaderItem.identifier === bucketItemInfo.identifier),
             );
             if (index !== -1) {
                 result[bucketName] = {
@@ -157,6 +163,17 @@ function getBucketItemNameAndDataIndex(
     return result;
 }
 
+function getUriAndIdentifier(objQualifier: VisualizationObject.ObjQualifier) {
+    if (isDisplayFormUri(objQualifier)) {
+        return {
+            uri: objQualifier.uri,
+        };
+    }
+    return {
+        identifier: objQualifier.identifier,
+    };
+}
+
 function getBucketItemInfo(bucketItem: VisualizationObject.BucketItem): IBucketItemInfo {
     if (!bucketItem) {
         return null;
@@ -165,18 +182,16 @@ function getBucketItemInfo(bucketItem: VisualizationObject.BucketItem): IBucketI
     // attribute item
     if (VisualizationObject.isVisualizationAttribute(bucketItem)) {
         const { displayForm, localIdentifier } = bucketItem.visualizationAttribute;
-        const uri = isDisplayFormUri(displayForm) && displayForm.uri;
         return {
-            uri,
             localIdentifier,
+            ...getUriAndIdentifier(displayForm),
         };
     }
 
     // measure item
     const { definition, localIdentifier } = bucketItem.measure;
     const item = VisualizationObject.isMeasureDefinition(definition) && definition.measureDefinition.item;
-    const uri = isDisplayFormUri(item) && item.uri;
-    return { uri, localIdentifier };
+    return { localIdentifier, ...getUriAndIdentifier(item) };
 }
 
 function buildTooltipBucketItem(tooltipText: string): VisualizationObject.IBucket {

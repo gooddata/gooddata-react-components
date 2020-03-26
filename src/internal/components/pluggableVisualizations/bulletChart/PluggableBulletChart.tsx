@@ -10,6 +10,7 @@ import {
     IExtendedReferencePoint,
     IVisConstruct,
     IBucketItem,
+    IBucket,
 } from "../../../interfaces/Visualization";
 
 import {
@@ -17,9 +18,10 @@ import {
     getMeasures,
     getPreferredBucketItems,
     getAllAttributeItems,
-    removeAllDerivedMeasures,
-    removeAllArithmeticMeasuresFromDerived,
     limitNumberOfMeasuresInBuckets,
+    findDerivedBucketItem,
+    isDerivedBucketItem,
+    hasDerivedBucketItems,
 } from "../../../utils/bucketHelper";
 
 import * as BucketNames from "../../../../constants/bucketNames";
@@ -55,10 +57,8 @@ export class PluggableBulletChart extends PluggableBaseChart {
             ...clonedReferencePoint,
             uiConfig: cloneDeep(DEFAULT_BULLET_CHART_CONFIG),
         };
-        newReferencePoint = removeAllArithmeticMeasuresFromDerived(newReferencePoint);
-        newReferencePoint = removeAllDerivedMeasures(newReferencePoint);
 
-        const buckets = limitNumberOfMeasuresInBuckets(clonedReferencePoint.buckets, 3);
+        const buckets = limitNumberOfMeasuresInBuckets(clonedReferencePoint.buckets, 3, true);
 
         const originalPrimaryMeasuresBucketItems = getPreferredBucketItems(
             buckets,
@@ -151,6 +151,28 @@ export class PluggableBulletChart extends PluggableBaseChart {
                 document.querySelector(this.configPanelElement),
             );
         }
+    }
+
+    protected mergeDerivedBucketItems(
+        referencePoint: IReferencePoint,
+        bucket: IBucket,
+        newDerivedBucketItems: IBucketItem[],
+    ): IBucketItem[] {
+        return bucket.items.reduce((resultItems: IBucketItem[], bucketItem: IBucketItem) => {
+            resultItems.push(bucketItem);
+
+            const newDerivedBucketItem = findDerivedBucketItem(bucketItem, newDerivedBucketItems);
+            const shouldAddItem =
+                newDerivedBucketItem &&
+                !isDerivedBucketItem(bucketItem) &&
+                !hasDerivedBucketItems(bucketItem, referencePoint.buckets);
+
+            if (shouldAddItem) {
+                resultItems.push(newDerivedBucketItem);
+            }
+
+            return resultItems;
+        }, []);
     }
 
     private setPrimaryMeasureIsMissingError(

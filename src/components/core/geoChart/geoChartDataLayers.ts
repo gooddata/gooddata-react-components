@@ -1,4 +1,5 @@
 // (C) 2019-2020 GoodData Corporation
+import partial = require("lodash/partial");
 import mapboxgl from "mapbox-gl";
 import {
     DEFAULT_CLUSTER_FILTER,
@@ -11,15 +12,14 @@ import {
     DEFAULT_PUSHPIN_BORDER_COLOR_VALUE,
     DEFAULT_PUSHPIN_COLOR_VALUE,
     DEFAULT_PUSHPIN_OPTIONS,
-    DEFAULT_PUSHPIN_SIZE_SCALE,
-    DEFAULT_PUSHPIN_SIZE_VALUE,
     PUSHPIN_STYLE_CIRCLE,
     PUSHPIN_STYLE_CIRCLE_COLOR,
     PUSHPIN_STYLE_CIRCLE_SIZE,
     PUSHPIN_STYLE_CIRCLE_STROKE_COLOR,
     EMPTY_SEGMENT_VALUE,
+    PUSHPIN_SIZE_OPTIONS_MAP,
 } from "../../../constants/geoChart";
-import { IGeoData } from "../../../interfaces/GeoChart";
+import { IGeoData, IGeoPointsConfig, IGeoConfig } from "../../../interfaces/GeoChart";
 import { SEGMENT } from "../../../constants/bucketNames";
 import { getMinMax } from "../../../helpers/utils";
 
@@ -27,36 +27,51 @@ function getExpressionByBucketName(name: string): mapboxgl.Expression {
     return ["get", "value", ["object", ["get", name]]];
 }
 
-function createPushpinSizeOptions(geoData: IGeoData): mapboxgl.Expression | number {
+function createPushpinSizeOptions(
+    geoData: IGeoData,
+    geoPointsConfig: IGeoPointsConfig,
+): mapboxgl.Expression | number {
     const { size } = geoData;
     const hasSize = size !== undefined;
+    const defaultRadius = PUSHPIN_SIZE_OPTIONS_MAP.min.default / 2;
 
     if (!hasSize || size.data.length === 0) {
-        return DEFAULT_PUSHPIN_SIZE_VALUE;
+        return defaultRadius;
     }
 
-    const { min: sizeMin, max: sizeMax } = getMinMax(size.data);
-    if (sizeMax === sizeMin) {
-        return DEFAULT_PUSHPIN_SIZE_VALUE;
+    const { min: minSizeFromData, max: maxSizeFromData } = getMinMax(size.data);
+    if (maxSizeFromData === minSizeFromData) {
+        return defaultRadius;
     }
 
-    const sizesCount = DEFAULT_PUSHPIN_SIZE_SCALE.length;
-    const sizeStep = (sizeMax - sizeMin) / sizesCount;
+    const { minSize: minSizeFromConfig = "default", maxSize: maxSizeFromConfig = "default" } =
+        geoPointsConfig || {};
+    const minSizeInPixel = PUSHPIN_SIZE_OPTIONS_MAP.min[minSizeFromConfig];
+    const maxSizeInPixel = PUSHPIN_SIZE_OPTIONS_MAP.max[maxSizeFromConfig];
+    const base = Math.pow(maxSizeInPixel / minSizeInPixel, 0.25);
+    const getStopPointSize = partial(getPointSize, minSizeInPixel, base);
 
     // The mouseenter event uses queryRenderedFeatures to determine when the mouse is touching a feature
     // And queryRenderedFeatures is not supporting nested object in expression
     // https://github.com/mapbox/mapbox-gl-js/issues/7194
-    const sizeOptions: mapboxgl.Expression = ["step", ["get", "pushpinRadius"], DEFAULT_PUSHPIN_SIZE_VALUE];
-    for (let index = 0; index < sizesCount; index++) {
-        let stepValue = sizeMin + sizeStep * index;
-        stepValue = parseFloat(stepValue.toFixed(2));
-        if (stepValue > sizeMax) {
-            stepValue = sizeMax;
-        }
-        sizeOptions.push(stepValue, DEFAULT_PUSHPIN_SIZE_SCALE[index]);
-    }
+    return [
+        "step",
+        ["get", "pushpinSize"],
+        Math.round(minSizeInPixel / 2), // a
+        getStopPointSize(1),
+        Math.round(getStopPointSize(1) / 2), // ar^1
+        getStopPointSize(2),
+        Math.round(getStopPointSize(2) / 2), // ar^2
+        getStopPointSize(3),
+        Math.round(getStopPointSize(3) / 2), // ar^3
+        maxSizeInPixel,
+        Math.round(maxSizeInPixel / 2), // ar^4
+    ];
+}
 
-    return sizeOptions;
+function getPointSize(minSizeInPixel: number, base: number, exponent: number): number {
+    const stepValue = minSizeInPixel * Math.pow(base, exponent);
+    return parseFloat(stepValue.toFixed(2));
 }
 
 export function createPushpinFilter(selectedSegmentItems: string[]): mapboxgl.Expression {
@@ -80,8 +95,9 @@ function createPushpinBorderOptions(): mapboxgl.Expression {
 export function createPushpinDataLayer(
     dataSourceName: string,
     geoData: IGeoData,
-    selectedSegmentItems?: string[],
+    config: IGeoConfig,
 ): mapboxgl.Layer {
+    const { selectedSegmentItems = [], points: geoPointsConfig = {} } = config || {};
     const layer: mapboxgl.Layer = {
         id: DEFAULT_LAYER_NAME,
         type: PUSHPIN_STYLE_CIRCLE,
@@ -90,10 +106,10 @@ export function createPushpinDataLayer(
             ...DEFAULT_PUSHPIN_OPTIONS,
             [PUSHPIN_STYLE_CIRCLE_COLOR]: createPushpinColorOptions(),
             [PUSHPIN_STYLE_CIRCLE_STROKE_COLOR]: createPushpinBorderOptions(),
-            [PUSHPIN_STYLE_CIRCLE_SIZE]: createPushpinSizeOptions(geoData),
+            [PUSHPIN_STYLE_CIRCLE_SIZE]: createPushpinSizeOptions(geoData, geoPointsConfig),
         },
     };
-    if (selectedSegmentItems !== undefined) {
+    if (selectedSegmentItems.length > 0) {
         layer.filter = createPushpinFilter(selectedSegmentItems);
     }
     return layer;
@@ -143,7 +159,7 @@ export function createUnclusterPoints(dataSourceName: string): mapboxgl.Layer {
             ...DEFAULT_PUSHPIN_OPTIONS,
             [PUSHPIN_STYLE_CIRCLE_COLOR]: DEFAULT_PUSHPIN_COLOR_VALUE,
             [PUSHPIN_STYLE_CIRCLE_STROKE_COLOR]: DEFAULT_PUSHPIN_BORDER_COLOR_VALUE,
-            [PUSHPIN_STYLE_CIRCLE_SIZE]: DEFAULT_PUSHPIN_SIZE_VALUE,
+            [PUSHPIN_STYLE_CIRCLE_SIZE]: PUSHPIN_SIZE_OPTIONS_MAP.min.default / 2,
         },
     };
 }

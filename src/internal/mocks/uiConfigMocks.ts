@@ -1246,7 +1246,7 @@ export const fullySpecifiedXirrUiConfig: IUiConfig = {
 export const defaultGeoPushpinUiConfig: IUiConfig = {
     buckets: {
         location: {
-            accepts: ["attribute"],
+            accepts: ["attribute", "geo_attribute"],
             allowsReordering: false,
             allowsSwapping: true,
             enabled: true,

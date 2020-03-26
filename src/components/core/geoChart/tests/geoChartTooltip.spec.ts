@@ -1,4 +1,5 @@
 // (C) 2020 GoodData Corporation
+import { ISeparators } from "@gooddata/numberjs";
 import { getTooltipHtml, shouldShowTooltip } from "../geoChartTooltip";
 
 describe("geoChartTooltip", () => {
@@ -29,22 +30,22 @@ describe("geoChartTooltip", () => {
                 <span class="stroke gd-viz-tooltip-stroke" style="border-top-color: rgb(0,0,0)"></span>
                 <div class="content gd-viz-tooltip-content"><div class="gd-viz-tooltip-item">
                 <span class="gd-viz-tooltip-title">State</span>
-                <div class="gd-viz-tooltip-value-wraper" >
+                <div class="gd-viz-tooltip-value-wraper">
                     <span class="gd-viz-tooltip-value">Florida</span>
                 </div>
             </div><div class="gd-viz-tooltip-item">
                 <span class="gd-viz-tooltip-title">Population</span>
-                <div class="gd-viz-tooltip-value-wraper" >
+                <div class="gd-viz-tooltip-value-wraper">
                     <span class="gd-viz-tooltip-value">111.00</span>
                 </div>
             </div><div class="gd-viz-tooltip-item">
                 <span class="gd-viz-tooltip-title">Area</span>
-                <div class="gd-viz-tooltip-value-wraper" >
+                <div class="gd-viz-tooltip-value-wraper">
                     <span class="gd-viz-tooltip-value">222.00</span>
                 </div>
             </div><div class="gd-viz-tooltip-item">
                 <span class="gd-viz-tooltip-title">Age</span>
-                <div class="gd-viz-tooltip-value-wraper" >
+                <div class="gd-viz-tooltip-value-wraper">
                     <span class="gd-viz-tooltip-value">20-30</span>
                 </div>
             </div></div>
@@ -73,17 +74,17 @@ describe("geoChartTooltip", () => {
                 <span class="stroke gd-viz-tooltip-stroke" style="border-top-color: rgb(0,0,0)"></span>
                 <div class="content gd-viz-tooltip-content"><div class="gd-viz-tooltip-item">
                 <span class="gd-viz-tooltip-title">State</span>
-                <div class="gd-viz-tooltip-value-wraper" >
+                <div class="gd-viz-tooltip-value-wraper">
                     <span class="gd-viz-tooltip-value">-</span>
                 </div>
             </div><div class="gd-viz-tooltip-item">
                 <span class="gd-viz-tooltip-title">Population</span>
-                <div class="gd-viz-tooltip-value-wraper" >
+                <div class="gd-viz-tooltip-value-wraper">
                     <span class="gd-viz-tooltip-value">-</span>
                 </div>
             </div><div class="gd-viz-tooltip-item">
                 <span class="gd-viz-tooltip-title">Area</span>
-                <div class="gd-viz-tooltip-value-wraper" >
+                <div class="gd-viz-tooltip-value-wraper">
                     <span class="gd-viz-tooltip-value">-</span>
                 </div>
             </div></div>
@@ -96,24 +97,38 @@ describe("geoChartTooltip", () => {
                     title: "<button>State</button>",
                     value: "<span>Florida</span>",
                 },
+                color: {
+                    title: "population [Sum]",
+                    value: 105555562.33,
+                    format: "#,##0.00",
+                },
                 size: {
                     title: '<script>alert("Population")</script>',
                     value: 111,
-                    format: "#,##0.00",
+                    format: "[>=24][red]#,##0.00R",
                 },
             };
-            const tooltipHtml = getTooltipHtml(geoProperties, "rgb(0,0,0)");
+            const separators: ISeparators = {
+                decimal: ",",
+                thousand: "'",
+            };
+            const tooltipHtml = getTooltipHtml(geoProperties, "rgb(0,0,0)", separators);
             expect(tooltipHtml).toBe(`<div class="gd-viz-tooltip">
                 <span class="stroke gd-viz-tooltip-stroke" style="border-top-color: rgb(0,0,0)"></span>
                 <div class="content gd-viz-tooltip-content"><div class="gd-viz-tooltip-item">
                 <span class="gd-viz-tooltip-title">&lt;button&gt;State&lt;/button&gt;</span>
-                <div class="gd-viz-tooltip-value-wraper" >
+                <div class="gd-viz-tooltip-value-wraper">
                     <span class="gd-viz-tooltip-value">&lt;span&gt;Florida&lt;/span&gt;</span>
                 </div>
             </div><div class="gd-viz-tooltip-item">
                 <span class="gd-viz-tooltip-title">&lt;script&gt;alert(&quot;Population&quot;)&lt;/script&gt;</span>
-                <div class="gd-viz-tooltip-value-wraper" >
-                    <span class="gd-viz-tooltip-value">111.00</span>
+                <div class="gd-viz-tooltip-value-wraper">
+                    <span class="gd-viz-tooltip-value">&#39;111,00R</span>
+                </div>
+            </div><div class="gd-viz-tooltip-item">
+                <span class="gd-viz-tooltip-title">population [Sum]</span>
+                <div class="gd-viz-tooltip-value-wraper">
+                    <span class="gd-viz-tooltip-value">&#39;105&#39;555&#39;562,33</span>
                 </div>
             </div></div>
             </div>`);

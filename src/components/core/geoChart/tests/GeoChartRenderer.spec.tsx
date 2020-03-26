@@ -12,8 +12,9 @@ function createComponent(customProps: Partial<IGeoChartRendererProps> = {}): Sha
 }
 
 describe("GeoChartRenderer", () => {
+    const geoData = {};
     it("should render component", () => {
-        const wrapper = createComponent();
+        const wrapper = createComponent({ geoData });
         expect(wrapper.hasClass("s-gd-geo-chart-renderer")).toBe(true);
     });
 
@@ -23,6 +24,7 @@ describe("GeoChartRenderer", () => {
                 isExportMode: true,
                 mapboxToken: "",
             },
+            geoData,
         });
         expect(wrapper.hasClass("s-isExportMode")).toBe(true);
     });

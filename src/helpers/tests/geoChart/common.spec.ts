@@ -62,47 +62,60 @@ describe("common", () => {
         it.each([
             [
                 false,
-                "size measure",
+                "size measure is in bucket",
                 {
                     location: { index: 0, name: "location" },
                     size: { index: 0, name: "size" },
                 },
+                true,
             ],
             [
                 false,
-                "color measure",
+                "color measure is in bucket",
                 {
                     location: { index: 0, name: "location" },
                     color: { index: 1, name: "color" },
                 },
+                true,
             ],
             [
                 false,
-                "segment attribute",
+                "segment attribute is in bucket",
                 {
                     location: { index: 0, name: "location" },
                     segment: { index: 1, name: "segment" },
                 },
+                true,
             ],
             [
                 true,
-                "tooltipText attribute",
+                "tooltipText attribute is in bucket",
                 {
                     location: { index: 0, name: "location" },
                     tooltipText: { index: 1, name: "tooltipText" },
                 },
+                true,
             ],
             [
                 true,
-                "no others",
+                "only location attribute is in bucket",
                 {
                     location: { index: 0, name: "location" },
                 },
+                true,
+            ],
+            [
+                false,
+                "configuration groupNearbyPoints is false",
+                {
+                    location: { index: 0, name: "location" },
+                },
+                false,
             ],
         ])(
-            "should return %s when %s is in bucket",
-            (expectedValue: boolean, _description: string, geoData: IGeoData) => {
-                expect(isClusteringAllowed(geoData)).toEqual(expectedValue);
+            "should return %s when %s",
+            (expectedValue: boolean, _description: string, geoData: IGeoData, groupNearbyPoints: boolean) => {
+                expect(isClusteringAllowed(geoData, groupNearbyPoints)).toEqual(expectedValue);
             },
         );
     });

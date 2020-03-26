@@ -50,7 +50,7 @@ describe("createPushpinDataSource", () => {
                 type: "Point",
             },
             properties: {
-                pushpinRadius: 1005,
+                pushpinSize: 10.311683632105215,
                 color: {
                     background: "rgb(215,242,250)",
                     border: "rgb(20,178,226)",
@@ -83,7 +83,20 @@ describe("createPushpinDataSource", () => {
             location: {
                 index: 0,
                 name: "location",
-                data: [[-155.6254, 19.0415], [-155.5751, 19.0698], [-155.6143, 19.0716]],
+                data: [
+                    {
+                        lat: 19.0415,
+                        lng: -155.6254,
+                    },
+                    {
+                        lat: 19.0698,
+                        lng: -155.5751,
+                    },
+                    {
+                        lat: 19.0716,
+                        lng: -155.6143,
+                    },
+                ],
             },
         };
         const source: mapboxgl.GeoJSONSourceRaw = createPushpinDataSource(geoData);
@@ -93,33 +106,33 @@ describe("createPushpinDataSource", () => {
                 {
                     geometry: { coordinates: [-155.6254, 19.0415], type: "Point" },
                     properties: {
-                        pushpinRadius: 4,
+                        pushpinSize: 8,
                         color: { format: "", title: "", value: undefined },
                         locationName: { title: "", value: undefined },
                         segment: { title: "", value: undefined },
-                        size: { format: "", title: "", value: 4 },
+                        size: { format: "", title: "", value: undefined },
                     },
                     type: "Feature",
                 },
                 {
                     geometry: { coordinates: [-155.5751, 19.0698], type: "Point" },
                     properties: {
-                        pushpinRadius: 4,
+                        pushpinSize: 8,
                         color: { format: "", title: "", value: undefined },
                         locationName: { title: "", value: undefined },
                         segment: { title: "", value: undefined },
-                        size: { format: "", title: "", value: 4 },
+                        size: { format: "", title: "", value: undefined },
                     },
                     type: "Feature",
                 },
                 {
                     geometry: { coordinates: [-155.6143, 19.0716], type: "Point" },
                     properties: {
-                        pushpinRadius: 4,
+                        pushpinSize: 8,
                         color: { format: "", title: "", value: undefined },
                         locationName: { title: "", value: undefined },
                         segment: { title: "", value: undefined },
-                        size: { format: "", title: "", value: 4 },
+                        size: { format: "", title: "", value: undefined },
                     },
                     type: "Feature",
                 },

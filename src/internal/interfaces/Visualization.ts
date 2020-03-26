@@ -317,4 +317,5 @@ export interface IGdcConfig {
     separators?: ISeparators;
     colorPalette?: IColorPalette;
     isExportMode?: boolean;
+    isInEditMode?: boolean;
 }

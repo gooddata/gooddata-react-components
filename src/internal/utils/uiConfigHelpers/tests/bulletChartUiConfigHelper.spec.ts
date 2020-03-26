@@ -6,7 +6,7 @@ import { DEFAULT_BULLET_CHART_CONFIG } from "../../../constants/uiConfig";
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 import { DEFAULT_LOCALE } from "../../../../constants/localization";
 
-describe("comboChartUiConfigHelper", () => {
+describe("bulletChartUiConfigHelper", () => {
     describe("getBulletChartUiConfig", () => {
         const intl = createInternalIntl(DEFAULT_LOCALE);
         const refPointMock = {

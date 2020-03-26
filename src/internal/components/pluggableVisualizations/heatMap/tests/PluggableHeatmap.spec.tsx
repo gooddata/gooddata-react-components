@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import noop = require("lodash/noop");
 import get = require("lodash/get");
 import { PluggableHeatmap } from "../PluggableHeatmap";
@@ -85,6 +85,54 @@ describe("PluggableHeatmap", () => {
             uiConfig: uiConfigMocks.defaultHeatmapUiConfig,
             properties: {},
         });
+    });
+
+    it("heatmap should transform location item to rows bucket", async () => {
+        const heatmap = createComponent();
+
+        const extendedReferencePoint = await heatmap.getExtendedReferencePoint(
+            referencePointMocks.oneMetricAndLocationAndSegmentReferencePoint,
+        );
+
+        expect(extendedReferencePoint.buckets).toEqual([
+            {
+                items: [
+                    {
+                        aggregation: null,
+                        attribute: "aazb6kroa3iC",
+                        localIdentifier: "m1",
+                        showInPercent: null,
+                        showOnSecondaryAxis: null,
+                        type: "metric",
+                    },
+                ],
+                localIdentifier: "measures",
+            },
+            {
+                items: [
+                    {
+                        aggregation: null,
+                        attribute: "attr.owner.country",
+                        dfUri: "/geo/attribute/displayform/uri/2",
+                        localIdentifier: "a1",
+                        locationDisplayFormUri: "/geo/attribute/displayform/uri/1",
+                        type: "attribute",
+                    },
+                ],
+                localIdentifier: "view",
+            },
+            {
+                items: [
+                    {
+                        aggregation: null,
+                        attribute: "attr.stage.iswon",
+                        localIdentifier: "a2",
+                        type: "attribute",
+                    },
+                ],
+                localIdentifier: "stack",
+            },
+        ]);
     });
 
     it("heatmap should not support showInpercent", async () => {

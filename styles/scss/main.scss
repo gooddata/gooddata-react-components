@@ -1,7 +1,11 @@
 // (C) 2007-2020 GoodData Corporation
+$gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
+
+@import "~@gooddata/goodstrap/lib/core/styles/IndigoFont.scss";
 @import "./table.scss";
 @import "./charts.scss";
 @import "./headline.scss";
+@import "./bulletChart.scss";
 @import "./attributeFilter.scss";
 @import "./measureValueFilter.scss";
 

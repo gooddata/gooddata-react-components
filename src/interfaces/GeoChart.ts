@@ -3,16 +3,14 @@ import { ISeparators } from "@gooddata/numberjs";
 import { VisualizationInput, VisualizationObject } from "@gooddata/typings";
 import { ICommonChartProps } from "../components/core/base/BaseChart";
 
-export type IGeoLngLatLike = [number, number]; // [lng lat]
-
-export interface IGeoLngLatObj {
+export interface IGeoLngLat {
     lat: number;
     lng: number;
 }
 
 export interface IGeoLngLatBounds {
-    northEast: IGeoLngLatLike;
-    southWest: IGeoLngLatLike;
+    northEast: IGeoLngLat;
+    southWest: IGeoLngLat;
 }
 
 export interface IGeoTooltipItem {
@@ -40,7 +38,7 @@ export interface IGeoAttributeItem extends IGeoDataItem {
 }
 
 export interface IGeoLocationItem extends IGeoDataItem {
-    data: IGeoLngLatLike[];
+    data: IGeoLngLat[];
 }
 
 export interface IGeoMeasureItem extends IGeoDataItem {
@@ -56,8 +54,35 @@ export interface IGeoData {
     tooltipText?: IGeoAttributeItem;
 }
 
+export type IGeoConfigViewportArea =
+    | "auto" // default, Include all data
+    | "continent_af" // Africa
+    | "continent_as" // Asia
+    | "continent_au" // Australia + NZ
+    | "continent_eu" // Europe
+    | "continent_na" // North America
+    | "continent_sa" // South America
+    | "world";
+
+export interface IGeoConfigViewport {
+    area?: IGeoConfigViewportArea;
+    freezed?: boolean;
+}
+
+export interface IGeoViewports {
+    [key: string]: mapboxgl.LngLatBoundsLike;
+}
+
+export type PushpinSizeOption = "0.5x" | "0.75x" | "normal" | "1.25x" | "1.5x";
+
+export interface IGeoPointsConfig {
+    minSize?: PushpinSizeOption;
+    maxSize?: PushpinSizeOption;
+    groupNearbyPoints?: boolean;
+}
+
 export interface IGeoConfig {
-    center?: IGeoLngLatLike;
+    center?: IGeoLngLat;
     isExportMode?: boolean;
     limit?: number;
     mdObject?: VisualizationObject.IVisualizationObjectContent;
@@ -66,6 +91,8 @@ export interface IGeoConfig {
     zoom?: number; // in the 0-22 zoom range
     mapboxToken: string;
     separators?: ISeparators;
+    viewport?: IGeoConfigViewport;
+    points?: IGeoPointsConfig;
 }
 
 export interface IGeoPushpinChartProps extends ICommonChartProps {
