@@ -32,6 +32,7 @@ import {
     getAttributeItemsWithoutStacks,
     isDateBucketItem,
     getItemsCount,
+    getItemsFromBuckets,
 } from "../../../utils/bucketHelper";
 import { setGeoPushpinUiConfig } from "../../../utils/uiConfigHelpers/geoPushpinChartUiConfigHelper";
 import { removeSort, createSorts } from "../../../utils/sort";
@@ -272,7 +273,7 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
     }
 
     private getLocationItems(buckets: IBucket[]): IBucketItem[] {
-        const locationItems: IBucketItem[] = getPreferredBucketItems(
+        const locationItems: IBucketItem[] = getItemsFromBuckets(
             buckets,
             [BucketNames.ATTRIBUTE, BucketNames.VIEW, BucketNames.LOCATION, BucketNames.TREND],
             [ATTRIBUTE],

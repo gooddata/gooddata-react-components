@@ -97,6 +97,51 @@ describe("PluggableGeoPushpinChart", () => {
             ]);
         });
 
+        it("should transform geo attribute with attribute", async () => {
+            const { viewByWithDateAndGeoAttributeReferencePoint } = referencePointMocks;
+
+            const newExtendedReferencePoint = await geoPushpin.getExtendedReferencePoint(
+                viewByWithDateAndGeoAttributeReferencePoint,
+            );
+
+            expect(newExtendedReferencePoint.buckets).toEqual([
+                {
+                    localIdentifier: "location",
+                    items: [
+                        {
+                            localIdentifier: "a1",
+                            type: "attribute",
+                            aggregation: null,
+                            attribute: "attr.owner.country",
+                            locationDisplayFormUri: "/geo/attribute/displayform/uri/1",
+                            dfUri: "/geo/attribute/displayform/uri/2",
+                        },
+                    ],
+                },
+                {
+                    localIdentifier: "size",
+                    items: [
+                        {
+                            localIdentifier: "m1",
+                            type: "metric",
+                            aggregation: null,
+                            attribute: "aazb6kroa3iC",
+                            showInPercent: null,
+                            showOnSecondaryAxis: null,
+                        },
+                    ],
+                },
+                {
+                    localIdentifier: "color",
+                    items: [],
+                },
+                {
+                    localIdentifier: "segment",
+                    items: [],
+                },
+            ]);
+        });
+
         it("should reset showInPercent and showOnSecondaryAxis for size and color measures", async () => {
             const newExtendedReferencePoint = await geoPushpin.getExtendedReferencePoint(
                 referencePointMocks.twoMeasuresWithShowInPercentOnSecondaryAxisReferencePoint,
