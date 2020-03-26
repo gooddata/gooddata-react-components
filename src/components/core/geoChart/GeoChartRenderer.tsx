@@ -70,6 +70,13 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         } = this.props;
         const { config: { selectedSegmentItems: prevSelectedSegmentItems = [] } = {} } = prevProps || {};
 
+        // only update map when style is ready
+        // work around for ticket SD-898
+        // avoid refresh whole map will be fixed in ticket SD-899
+        if (!this.chart.isStyleLoaded()) {
+            return;
+        }
+
         this.updateMapWithConfig();
 
         if (selectedSegmentItems && !isEqual(selectedSegmentItems, prevSelectedSegmentItems)) {
@@ -269,7 +276,15 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         if (!this.chart) {
             return;
         }
-        this.chart.remove();
+        // try catch to hide the mapbox's error message
+        // TypeError: Cannot read property 'off' of undefined
+        // mapbox is trying to call its function after deleted
+        // https://github.com/mapbox/mapbox-gl-js/blob/master/src/ui/control/navigation_control.js#L118
+        try {
+            this.chart.remove();
+        } catch (_e) {
+            return;
+        }
     };
 
     private handlePushpinMoveEnd = (e: mapboxgl.EventData): void => {
