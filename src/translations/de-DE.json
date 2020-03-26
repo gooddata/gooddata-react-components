@@ -38,8 +38,6 @@
     "visualization.ErrorDescriptionUnauthorized": "Sie haben leider keinen Zugriff auf diese Betrachtung. Melden Sie sich an oder lassen Sie sich die Berechtigung von Ihrem Administrator erteilen.",
     "visualization.ErrorMessageNotFound": "Leider können wir diese Betrachtung nicht finden",
     "visualization.ErrorDescriptionNotFound": "Die Betrachtung mit dieser URL existiert nicht.",
-    "geo.ErrorMessageLocationMissing": "Kein Ort in Ihrer Betrachtung",
-    "geo.ErrorDescriptionLocationMissing": "Fügen Sie ein Geo-Attribut zu Ihrer Betrachtung hinzu oder wechseln Sie zu einer anderen Visualisierung. Sobald Sie fertig sind, können Sie es speichern.",
     "gs.filter.loading": "Filter wird geladen…",
     "gs.filter.error": "Fehler beim Laden des Filters",
     "gs.list.loading": "Liste wird geladen…",
