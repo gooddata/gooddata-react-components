@@ -94,6 +94,7 @@ export class ParentFilterExample extends Component {
             >
                 {({ validElements, isLoading, error }) => {
                     if (error) {
+                        // eslint-disable-next-line no-console
                         console.error("Loading attribute elements failed!", error);
                     }
 
