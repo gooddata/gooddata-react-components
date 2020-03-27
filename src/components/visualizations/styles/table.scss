@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
 
 @import "~fixed-data-table-2/dist/fixed-data-table.css";
@@ -214,6 +214,8 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
                 overflow: hidden;
                 text-overflow: ellipsis;
 
+                // refactor?
+                // stylelint-disable-next-line max-nesting-depth
                 &::before {
                     // disable system tooltip in Safari
                     content: "";
@@ -229,6 +231,8 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
             background: none;
 
             &:last-child {
+                // refactor?
+                // stylelint-disable-next-line max-nesting-depth
                 .public_fixedDataTableCell_cellContent {
                     padding-right: 20px;
                 }
@@ -452,10 +456,10 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
 }
 
 .overlay-wrapper.self-tr .indigo-totals-select-type-list::before {
+    top: -8px;
     right: 8px;
     left: auto;
     margin: 0;
-    top: -8px;
     box-shadow: -3px -3px 5px 0 rgba(0, 0, 0, 0.05);
 }
 
@@ -648,7 +652,7 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
         .gd-dialog-header {
             overflow: auto;
             max-height: 105px;
-            margin: 0 -20px 10px -20px;
+            margin: 0 -20px 10px;
             padding: 0 50px 10px 20px;
             border-bottom: 1px solid $border-color;
             white-space: normal;

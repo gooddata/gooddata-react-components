@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
 
 @import "./_settings.scss";
@@ -12,7 +12,7 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
     display: inline-block;
 
     &-overlay {
-        padding: 16px 8px 8px 8px;
+        padding: 16px 8px 8px;
 
         // TODO: Importing Messages doesn't work. Error styles are termporarily hardcoded here
         .gd-message {

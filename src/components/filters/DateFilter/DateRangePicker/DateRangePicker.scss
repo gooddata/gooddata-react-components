@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 @import "~@gooddata/goodstrap/lib/core/styles/variables.scss";
 
 $gd-date-range-picker-hover-bgcolor: $is-focused-background;
@@ -141,6 +141,8 @@ $gd-day-picker-width: 268px;
             &--prev {
                 left: 0.15em;
 
+                // refactor?
+                // stylelint-disable-next-line max-nesting-depth
                 &::before {
                     content: "\e630";
                 }
@@ -149,6 +151,8 @@ $gd-day-picker-width: 268px;
             &--next {
                 right: 0.35em;
 
+                // refactor?
+                // stylelint-disable-next-line max-nesting-depth
                 &::before {
                     content: "\e631";
                 }
@@ -218,6 +222,8 @@ $gd-day-picker-width: 268px;
                 font-weight: 400;
                 color: $gd-color-disabled;
 
+                // refactor?
+                // stylelint-disable-next-line max-nesting-depth
                 &:hover {
                     background: transparent;
                     cursor: default;

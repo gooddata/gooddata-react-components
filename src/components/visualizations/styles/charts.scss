@@ -60,8 +60,8 @@ $paging-button-small-size: 22px;
     .gd-axis-label-drilling-disabled & {
         text-decoration: none !important; // Override Highcharts inline style
         font-weight: normal !important; // Override Highcharts inline style
-        pointer-events: none;
         color: $gd-color-state-blank !important;
+        pointer-events: none;
         fill: $gd-color-state-blank !important;
     }
     // stylelint-enable

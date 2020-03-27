@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 @import "~@gooddata/goodstrap/lib/core/styles/variables.scss";
 
 $color-picker-item-size: 20px;
@@ -33,8 +33,8 @@ $color-picker-spacing: 5px;
     &::before {
         width: 100%;
         height: 100%;
-        opacity: 0;
         color: $gd-color-white;
+        opacity: 0;
         font-size: 16px;
         transition: opacity 0.2s;
     }
@@ -90,8 +90,8 @@ $color-picker-spacing: 5px;
     }
 
     .gd-button-link {
-        width: 100%;
         justify-content: center;
+        width: 100%;
         margin: 0;
         padding: 0;
         text-align: center;
