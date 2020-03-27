@@ -460,6 +460,9 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         this.autoresizeColumnsByColumnId(columnApi, newColumnIds);
         setTimeout(() => {
             this.autoresizeVisibleColumns(columnApi, autoWidthColumnIds);
+
+            // ONE-4388
+            this.resizeLastColumnToFit(columnApi, autoWidthColumnIds);
         }, AGGRID_RENDER_NEW_COLUMNS_TIMEOUT);
     };
 
@@ -502,6 +505,36 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             }, AGGRID_BEFORE_RESIZE_TIMEOUT);
         }
     };
+
+    private resizeLastColumnToFit(columnApi: ColumnApi, columnIds: string[]) {
+        const columns = columnApi.getAllDisplayedColumns();
+        const padding = 15;
+        const widths = [];
+
+        for (const column of columns) {
+            widths.push(column.getActualWidth());
+        }
+
+        const sumOfWidths = widths.reduce((a: number, b: number) => a + b, 0);
+
+        console.log("width from measure", this.props.config.width);
+        console.log("sum of all widths", sumOfWidths);
+
+        if (sumOfWidths >= this.props.config.width) {
+            return;
+        }
+
+        // remove last width
+        widths.splice(widths.length - 1, 1);
+
+        const sumOfReducedWidths = widths.reduce((a: number, b: number) => a + b, 0);
+        console.log("sum of reduced widths", sumOfReducedWidths);
+        const desiredWidthOfLastColumn = this.props.config.width - sumOfReducedWidths - padding;
+        console.log("desired width", desiredWidthOfLastColumn);
+        const lastColumn = columnIds[columnIds.length - 1];
+
+        columnApi.setColumnWidth(lastColumn, desiredWidthOfLastColumn);
+    }
 
     private createAGGridDataSource() {
         const onSuccess = (
@@ -865,7 +898,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         let maxWidthProp = {};
         if (this.isColumnAutoresizeEnabled()) {
             this.enrichColumnDefinitionsWithWidths(getTreeLeaves(columnDefs), this.resizedColumns);
-            maxWidthProp = { maxWidth: 500 };
+            maxWidthProp = { maxWidth: this.props.config.width };
         }
 
         return {
@@ -1176,11 +1209,21 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         columnDefinitions: IGridHeader[],
         resizedColumns: IResizedColumns,
     ) {
-        columnDefinitions.forEach((columnDefinition: IGridHeader) => {
+        const lastIndex = columnDefinitions.length - 1;
+        const fullWidth = this.props.config.width;
+        let width = 0;
+
+        columnDefinitions.forEach((columnDefinition: IGridHeader, i: number) => {
             if (columnDefinition) {
                 const resizedColumn = resizedColumns[this.getColumnIdentifier(columnDefinition)];
+
                 if (resizedColumn) {
-                    columnDefinition.width = resizedColumn.width;
+                    if (i === lastIndex) {
+                        columnDefinition.width = fullWidth - width;
+                    } else {
+                        width = width + resizedColumn.width;
+                        columnDefinition.width = resizedColumn.width;
+                    }
                 }
             }
         });

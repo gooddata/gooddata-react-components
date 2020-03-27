@@ -17,6 +17,8 @@ export interface IPivotTableConfig {
     separators?: ISeparators;
     menu?: IMenu;
     maxHeight?: number;
+
+    width?: number;
 }
 
 export interface IMenuAggregationClickConfig {
