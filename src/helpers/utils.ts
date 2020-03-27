@@ -89,3 +89,10 @@ export function shouldShowFluid(documentObj: Document) {
 
     return documentObj.documentElement.clientWidth < FLUID_LEGEND_THRESHOLD;
 }
+
+export const sleep = async (delay: number): Promise<void> => {
+    return new Promise(resolve => {
+        // tslint:disable-next-line no-string-based-set-timeout
+        setTimeout(resolve, delay);
+    });
+};

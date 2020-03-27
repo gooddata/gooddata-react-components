@@ -21,6 +21,12 @@ The REST API versions in the table are just for your information as the values a
 
 ### Added
 
+- Columns grow-to-fit in pivot tables (applied for small tables to fit container width)
+
+## 7.5.0
+
+### Added
+
 - Geo pushpin chart component ([doc](https://sdk.gooddata.com/gooddata-ui/docs/geo_pushpin_chart_component.html))
 - Custom toggle button for the measure value filter dropdown
 - Checkbox that allow users to make the execution treat the null values as 0 and include the null results in the filtering process

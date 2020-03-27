@@ -14,6 +14,7 @@ export interface IColumnSizing {
 
 export interface IPivotTableConfig {
     columnSizing?: IColumnSizing;
+    growToFit?: boolean;
     separators?: ISeparators;
     menu?: IMenu;
     maxHeight?: number;

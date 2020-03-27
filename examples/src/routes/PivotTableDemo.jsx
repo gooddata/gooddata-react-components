@@ -16,6 +16,8 @@ import PivotTableSortingAggregationExample from "../components/PivotTableSorting
 import PivotTableSortingAggregationExampleSRC from "!raw-loader!../components/PivotTableSortingAggregationExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import PivotTableSizingExample from "../components/PivotTableSizingExample";
 import PivotTableSizingExampleSRC from "!raw-loader!../components/PivotTableSizingExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
+import PivotTableColumnsGrowToFitExample from "../components/PivotTableColumnsGrowToFitExample";
+import PivotTableColumnsGrowToFitExampleSRC from "!raw-loader!../components/PivotTableColumnsGrowToFitExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 
 export const PivotTableDemo = () => (
     <div>
@@ -58,6 +60,12 @@ export const PivotTableDemo = () => (
 
         <h2 id="table-with-column-sizing">Example of table column sizing</h2>
         <ExampleWithSource for={() => <PivotTableSizingExample />} source={PivotTableSizingExampleSRC} />
+
+        <h2 id="table-with-column-sizing">Example of table grow to fit container</h2>
+        <ExampleWithSource
+            for={() => <PivotTableColumnsGrowToFitExample />}
+            source={PivotTableColumnsGrowToFitExampleSRC}
+        />
     </div>
 );
 
