@@ -1209,21 +1209,11 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         columnDefinitions: IGridHeader[],
         resizedColumns: IResizedColumns,
     ) {
-        const lastIndex = columnDefinitions.length - 1;
-        const fullWidth = this.props.config.width;
-        let width = 0;
-
-        columnDefinitions.forEach((columnDefinition: IGridHeader, i: number) => {
+        columnDefinitions.forEach((columnDefinition: IGridHeader) => {
             if (columnDefinition) {
                 const resizedColumn = resizedColumns[this.getColumnIdentifier(columnDefinition)];
-
                 if (resizedColumn) {
-                    if (i === lastIndex) {
-                        columnDefinition.width = fullWidth - width;
-                    } else {
-                        width = width + resizedColumn.width;
-                        columnDefinition.width = resizedColumn.width;
-                    }
+                    columnDefinition.width = resizedColumn.width;
                 }
             }
         });
