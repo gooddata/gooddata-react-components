@@ -61,6 +61,7 @@ export interface IAttributeDropdownProps {
     title?: string;
     numericSymbols: string[];
     emptyHeaderString: string;
+    isMobile: boolean;
 
     getListItem?: (...params: any[]) => any; // TODO: make the types more specific (FET-282)
     getListError?: (...params: any[]) => any; // TODO: make the types more specific (FET-282)
@@ -139,6 +140,7 @@ export class AttributeDropdownWrapped extends React.PureComponent<
         projectId: PropTypes.string,
         selection: PropTypes.array,
         isInverted: PropTypes.bool,
+        isMobile: PropTypes.bool,
 
         onApply: PropTypes.func.isRequired,
         onApplyWithFilterDefinition: PropTypes.func,
@@ -161,6 +163,7 @@ export class AttributeDropdownWrapped extends React.PureComponent<
         title: null,
         projectId: null,
         selection: new Array<IAttributeElement>(),
+        isMobile: false,
 
         getListItem: () => <AttributeFilterItem />,
         getListError: getDefaultListError,
@@ -367,9 +370,15 @@ export class AttributeDropdownWrapped extends React.PureComponent<
         }
     };
 
+    private getListWidth() {
+        const { isMobile, fullscreenOnMobile } = this.props;
+
+        return fullscreenOnMobile && isMobile ? undefined : LIST_WIDTH;
+    }
+
     private renderOverlayWrap(overlayContent: React.ReactNode, applyDisabled = false) {
         return (
-            <div className="gd-attribute-filter-overlay">
+            <div className="gd-attribute-filter-overlay" style={{ minWidth: this.getListWidth() }}>
                 {overlayContent}
                 {this.renderButtons(applyDisabled)}
             </div>
@@ -422,7 +431,7 @@ export class AttributeDropdownWrapped extends React.PureComponent<
                 noItemsFound={isListReady && !items.length}
                 rowItem={<AttributeFilterItem />}
                 maxSelectionSize={MAX_SELECTION_SIZE}
-                width={LIST_WIDTH}
+                width={this.getListWidth()}
                 itemHeight={ITEM_HEIGHT}
                 height={ITEM_HEIGHT * VISIBLE_ITEMS_COUNT}
                 onRangeChange={this.onRangeChange}
