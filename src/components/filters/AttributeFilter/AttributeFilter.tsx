@@ -14,7 +14,7 @@ import { setTelemetryHeaders } from "../../../helpers/utils";
 import { IAttributeElement } from "./model";
 import * as Model from "../../../helpers/model";
 import { IntlTranslationsProvider, ITranslationsComponentProps } from "../../core/base/TranslationsProvider";
-
+// g
 export interface IAttributeFilterProps {
     onApply?: (...params: any[]) => any; // TODO: make the types more specific (FET-282)
     onApplyWithFilterDefinition?: (
