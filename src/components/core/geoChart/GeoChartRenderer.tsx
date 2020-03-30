@@ -29,7 +29,7 @@ import { IGeoConfig, IGeoData, IGeoLngLat } from "../../../interfaces/GeoChart";
 import "../../../../styles/scss/geoChart.scss";
 import { handlePushpinMouseEnter, handlePushpinMouseLeave } from "./geoChartTooltip";
 import { getViewportOptions } from "../../../helpers/geoChart/viewport";
-import { isClusteringAllowed } from "../../../helpers/geoChart/common";
+import { isClusteringAllowed, isPointsConfigChanged } from "../../../helpers/geoChart/common";
 
 export interface IGeoChartRendererProps {
     config: IGeoConfig;
@@ -68,7 +68,8 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         const {
             config: { selectedSegmentItems },
         } = this.props;
-        const { config: { selectedSegmentItems: prevSelectedSegmentItems = [] } = {} } = prevProps || {};
+        const { config: prevConfig } = prevProps;
+        const { selectedSegmentItems: prevSelectedSegmentItems = [] } = prevConfig || {};
 
         // only update map when style is ready
         // work around for ticket SD-898
@@ -77,7 +78,7 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
             return;
         }
 
-        this.updateMapWithConfig();
+        this.updateMapWithConfig(prevConfig);
 
         if (selectedSegmentItems && !isEqual(selectedSegmentItems, prevSelectedSegmentItems)) {
             this.setFilterMap();
@@ -131,10 +132,12 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         return <div className={classNames} ref={this.setChartRef} />;
     }
 
-    private updateMapWithConfig = (): void => {
-        // Config for clustering and pushpin size lead to change layer setting
-        // Then calling resetMap here is needed
-        this.resetMap();
+    private updateMapWithConfig = (prevConfig: IGeoConfig): void => {
+        if (this.shouldResetMap(prevConfig)) {
+            // Config for clustering and pushpin size lead to change layer setting
+            // Then calling resetMap here is needed
+            this.resetMap();
+        }
         this.updatePanAndZoom();
         this.updateViewport();
     };
@@ -142,6 +145,13 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
     private resetMap = (): void => {
         this.cleanupMap();
         this.setupMap();
+    };
+
+    private shouldResetMap = (prevConfig: IGeoConfig): boolean => {
+        if (isPointsConfigChanged(prevConfig.points, this.props.config.points)) {
+            return true;
+        }
+        return false;
     };
 
     private isViewportFrozen = (): boolean => {

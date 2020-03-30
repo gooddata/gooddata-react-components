@@ -16,12 +16,17 @@ export interface IPushpinSizeControl {
 }
 
 function getPushpinProperty(props: IPushpinSizeControl & WrappedComponentProps) {
-    return get(props, "properties.controls.points", {});
+    const { minSize = "default", maxSize = "default" } = get(props, "properties.controls.points", {});
+    return {
+        minSize,
+        maxSize,
+    };
 }
 
 function PushpinSizeControl(props: IPushpinSizeControl & WrappedComponentProps): React.ReactElement {
-    const { minSize = "default", maxSize = "default" } = getPushpinProperty(props);
+    const { minSize, maxSize } = getPushpinProperty(props);
     const { disabled, properties, pushData, intl } = props;
+    const items = getTranslatedDropdownItems(pushpinSizeDropdownItems, intl);
     return (
         <ConfigSubsection title="properties.points.size.title">
             <DropdownControl
@@ -32,7 +37,7 @@ function PushpinSizeControl(props: IPushpinSizeControl & WrappedComponentProps):
                 showDisabledMessage={disabled}
                 properties={properties}
                 pushData={pushData}
-                items={getTranslatedDropdownItems(pushpinSizeDropdownItems, intl)}
+                items={items}
             />
             <DropdownControl
                 value={maxSize}
@@ -42,7 +47,7 @@ function PushpinSizeControl(props: IPushpinSizeControl & WrappedComponentProps):
                 showDisabledMessage={disabled}
                 properties={properties}
                 pushData={pushData}
-                items={getTranslatedDropdownItems(pushpinSizeDropdownItems, intl)}
+                items={items}
             />
         </ConfigSubsection>
     );

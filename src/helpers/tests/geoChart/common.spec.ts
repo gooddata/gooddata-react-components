@@ -8,9 +8,10 @@ import {
     isLocationMissing,
     calculateAverage,
     getFormatFromExecutionResponse,
+    isPointsConfigChanged,
 } from "../../geoChart/common";
 import { IChartConfig } from "../../../interfaces/Config";
-import { IGeoConfig, IGeoData } from "../../../interfaces/GeoChart";
+import { IGeoConfig, IGeoData, IGeoPointsConfig } from "../../../interfaces/GeoChart";
 import { COLOR_ITEM, LOCATION_ITEM, SEGMENT_BY_ITEM, SIZE_ITEM, TOOLTIP_TEXT_ITEM } from "./fixtures";
 import { getExecutionResponse, getExecutionResult } from "../../../../stories/data/geoChart";
 
@@ -134,6 +135,28 @@ describe("common", () => {
             "should return isGeoConfig %s",
             (expectedValue: boolean, config: IChartConfig | IGeoConfig) => {
                 expect(isGeoConfig(config)).toEqual(expectedValue);
+            },
+        );
+    });
+
+    describe("isPointsConfigChanged", () => {
+        const pointsConfig: IGeoPointsConfig = {
+            groupNearbyPoints: true,
+            minSize: "normal",
+            maxSize: "normal",
+        };
+        it("should return false without changes", () => {
+            expect(isPointsConfigChanged(pointsConfig, pointsConfig)).toBe(false);
+        });
+
+        it.each([["groupNearbyPoints", false], ["minSize", "0.5x"], ["maxSize", "1.25x"]])(
+            "should return true when %s is changed",
+            (configKey: string, configValue: string | boolean) => {
+                expect(
+                    isPointsConfigChanged(pointsConfig, {
+                        [configKey]: configValue,
+                    }),
+                ).toBe(true);
             },
         );
     });
