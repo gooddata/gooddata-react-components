@@ -107,7 +107,7 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
             },
         } = this.props;
         const { isExportMode = false } = config || {};
-        const isViewportFreezed = this.isViewportFreezed();
+        const isViewportFrozen = this.isViewportFrozen();
 
         this.chart = new mapboxgl.Map({
             ...DEFAULT_MAPBOX_OPTIONS,
@@ -115,7 +115,7 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
             container: this.chartRef,
             // If true, the map’s canvas can be exported to a PNG using map.getCanvas().toDataURL().
             // This is false by default as a performance optimization.
-            interactive: !isViewportFreezed,
+            interactive: !isViewportFrozen,
             preserveDrawingBuffer: isExportMode,
         });
     };
@@ -144,38 +144,49 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         this.setupMap();
     };
 
-    private isViewportFreezed = (): boolean => {
+    private isViewportFrozen = (): boolean => {
         const { config } = this.props;
         return get(config, "viewport.freezed", false);
     };
 
-    private createMapControls = (): void => {
-        const isViewportFreezed = this.isViewportFreezed();
-
-        if (!isViewportFreezed) {
-            this.chart.addControl(this.navigationControlButton, "bottom-right");
-            return;
+    private createMapControls() {
+        const isViewportFrozen = this.isViewportFrozen();
+        if (!isViewportFrozen) {
+            this.addMapControls();
         }
+    }
 
-        if (this.chart.loaded()) {
-            this.chart.removeControl(this.navigationControlButton);
+    private removeMapControls = (): void => {
+        this.chart.removeControl(this.navigationControlButton);
+    };
+
+    private addMapControls = (): void => {
+        this.chart.addControl(this.navigationControlButton, "bottom-right");
+    };
+
+    private toggleMapControls = (): void => {
+        const isViewportFrozen = this.isViewportFrozen();
+        if (!isViewportFrozen) {
+            this.addMapControls();
+        } else {
+            this.removeMapControls();
         }
     };
 
     private toggleInteractionEvents = (): void => {
-        const isViewportFreezed = this.isViewportFreezed();
+        const isViewportFrozen = this.isViewportFrozen();
         if (!this.chart) {
             return;
         }
 
-        const action = isViewportFreezed ? "disable" : "enable";
+        const action = isViewportFrozen ? "disable" : "enable";
         INTERACTION_EVENTS.forEach(
             (interactionEvent: string): void => this.chart[interactionEvent][action](),
         );
     };
 
     private updatePanAndZoom = (): void => {
-        this.createMapControls();
+        this.toggleMapControls();
         this.toggleInteractionEvents();
     };
 
