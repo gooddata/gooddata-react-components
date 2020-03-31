@@ -15,6 +15,9 @@ import { IAttributeElement } from "./model";
 import * as Model from "../../../helpers/model";
 import { IntlTranslationsProvider, ITranslationsComponentProps } from "../../core/base/TranslationsProvider";
 
+import * as MediaQueries from "../../../constants/MediaQueries";
+import MediaQuery from "react-responsive";
+
 export interface IAttributeFilterProps {
     onApply?: (...params: any[]) => any; // TODO: make the types more specific (FET-282)
     onApplyWithFilterDefinition?: (
@@ -238,20 +241,25 @@ export class AttributeFilter extends React.PureComponent<IAttributeFilterProps> 
 
         const { md } = this.sdk;
         return (
-            <IntlTranslationsProvider>
-                {(translationProps: ITranslationsComponentProps) => (
-                    <AttributeDropdown
-                        attribute={attribute}
-                        attributeDisplayForm={attributeDisplayForm}
-                        metadata={md}
-                        {...dropdownProps}
-                        {...translationProps}
-                        selection={this.getSelection()}
-                        isInverted={this.isInverted()}
-                        onApply={this.onApply}
-                    />
+            <MediaQuery query={MediaQueries.IS_MOBILE_DEVICE}>
+                {isMobile => (
+                    <IntlTranslationsProvider>
+                        {(translationProps: ITranslationsComponentProps) => (
+                            <AttributeDropdown
+                                attribute={attribute}
+                                attributeDisplayForm={attributeDisplayForm}
+                                metadata={md}
+                                {...dropdownProps}
+                                {...translationProps}
+                                selection={this.getSelection()}
+                                isInverted={this.isInverted()}
+                                onApply={this.onApply}
+                                isMobile={isMobile}
+                            />
+                        )}
+                    </IntlTranslationsProvider>
                 )}
-            </IntlTranslationsProvider>
+            </MediaQuery>
         );
     }
 }
