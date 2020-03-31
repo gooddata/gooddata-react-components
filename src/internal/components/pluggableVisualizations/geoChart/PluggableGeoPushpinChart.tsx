@@ -313,6 +313,10 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
                 tooltipText: dfUri,
             },
         });
+
+        if (this.references) {
+            set(referencePointConfigured, "references", this.references);
+        }
         return referencePointConfigured;
     }
 }
