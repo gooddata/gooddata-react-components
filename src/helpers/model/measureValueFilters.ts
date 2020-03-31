@@ -16,8 +16,8 @@ export class MeasureValueFilterBuilder implements VisualizationInput.IMeasureVal
         };
     }
 
-    public condition = (operator: string, value: IMeasureValueFilterValue) => {
-        const newCondition = getMeasureValueFilterCondition(operator, value);
+    public condition = (operator: string, value: IMeasureValueFilterValue, treatNullValuesAsZero = false) => {
+        const newCondition = getMeasureValueFilterCondition(operator, value, treatNullValuesAsZero);
         if (newCondition === null) {
             delete this.measureValueFilter.condition;
         } else {

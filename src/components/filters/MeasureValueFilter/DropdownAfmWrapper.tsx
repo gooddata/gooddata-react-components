@@ -20,6 +20,8 @@ export interface IDropdownProps {
     locale?: string;
     anchorEl?: EventTarget | string;
     separators?: ISeparators;
+    displayTreatNullAsZeroOption?: boolean;
+    treatNullAsZeroDefaultValue?: boolean;
 }
 
 function getOperator(condition: AFM.MeasureValueFilterCondition): string {
@@ -41,9 +43,39 @@ function getValue(condition: AFM.MeasureValueFilterCondition): IMeasureValueFilt
     return null;
 }
 
+function getTreatNullAsZeroValue(
+    condition: AFM.MeasureValueFilterCondition,
+    treatNullAsZeroDefaultValue: boolean,
+): boolean {
+    if (!condition) {
+        return treatNullAsZeroDefaultValue !== undefined && treatNullAsZeroDefaultValue;
+    }
+
+    return (
+        (isComparisonCondition(condition) && condition.comparison.treatNullValuesAs !== undefined) ||
+        (isRangeCondition(condition) && condition.range.treatNullValuesAs !== undefined) ||
+        false
+    );
+}
+
 export class DropdownAfmWrapper extends React.PureComponent<IDropdownProps> {
+    public static defaultProps: Partial<IDropdownProps> = {
+        displayTreatNullAsZeroOption: false,
+        treatNullAsZeroDefaultValue: false,
+    };
+
     public render() {
-        const { filter, onCancel, usePercentage, warningMessage, locale, anchorEl, separators } = this.props;
+        const {
+            filter,
+            onCancel,
+            usePercentage,
+            warningMessage,
+            locale,
+            anchorEl,
+            separators,
+            displayTreatNullAsZeroOption,
+            treatNullAsZeroDefaultValue,
+        } = this.props;
         const condition = filter ? filter.measureValueFilter.condition : null;
 
         return (
@@ -57,14 +89,16 @@ export class DropdownAfmWrapper extends React.PureComponent<IDropdownProps> {
                 locale={locale}
                 anchorEl={anchorEl}
                 separators={separators}
+                displayTreatNullAsZeroOption={displayTreatNullAsZeroOption}
+                treatNullAsZeroValue={getTreatNullAsZeroValue(condition, treatNullAsZeroDefaultValue)}
             />
         );
     }
 
-    private onApply = (operator: string, value: IMeasureValueFilterValue) => {
+    private onApply = (operator: string, value: IMeasureValueFilterValue, treatNullValuesAsZero: boolean) => {
         const { filter, onApply } = this.props;
 
-        const condition = getMeasureValueFilterCondition(operator, value);
+        const condition = getMeasureValueFilterCondition(operator, value, treatNullValuesAsZero);
 
         let resultFilter;
         if (condition === null) {

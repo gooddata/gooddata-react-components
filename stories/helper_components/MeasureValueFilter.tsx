@@ -10,34 +10,18 @@ import "../../styles/scss/main.scss";
 import { screenshotWrap } from "@gooddata/test-storybook";
 import { DropdownBody } from "../../src/components/filters/MeasureValueFilter/DropdownBody";
 import { IMeasureValueFilterValue } from "../../src/interfaces/MeasureValueFilter";
+import * as Model from "../../src/helpers/model";
 
 const wrapperStyle = { width: 400, height: 400, padding: "1em 1em" };
 
-export interface IDropdownProps {
-    filter?: VisualizationInput.IMeasureValueFilter;
-    usePercentage?: boolean;
-    warningMessage?: string;
-}
-
-const MeasureValueFilterWithButton = (props: IDropdownProps) => {
-    const onApply = (filter: VisualizationInput.IMeasureValueFilter) => {
-        action("apply")(filter);
-    };
-
-    return (
-        <DropdownAfmWrapper
-            onApply={onApply}
-            onCancel={noop}
-            filter={props.filter}
-            usePercentage={props.usePercentage}
-            warningMessage={props.warningMessage}
-        />
-    );
-};
-
 storiesOf("Helper components/Measure value filter", module)
     .add("Measure value filter", () => {
-        return <MeasureValueFilterWithButton />;
+        const onApply = (filter: VisualizationInput.IMeasureValueFilter) => {
+            action("apply")(filter);
+        };
+        const filter = Model.measureValueFilter("myMeasure");
+
+        return <DropdownAfmWrapper onApply={onApply} onCancel={noop} filter={filter} />;
     })
     .add("Measure value filter for measure formatted in percent", () => {
         const value: IMeasureValueFilterValue = {
@@ -71,5 +55,20 @@ storiesOf("Helper components/Measure value filter", module)
                     onApply={noop}
                 />
             </div>,
+        );
+    })
+    .add("Measure value filter with treat-null-as option enabled", () => {
+        const onApply = (filter: VisualizationInput.IMeasureValueFilter) => {
+            action("apply")(filter);
+        };
+        const filter = Model.measureValueFilter("myMeasure").condition("GREATER_THAN", { value: 100 });
+
+        return (
+            <DropdownAfmWrapper
+                onApply={onApply}
+                onCancel={noop}
+                filter={filter}
+                displayTreatNullAsZeroOption={true}
+            />
         );
     });
