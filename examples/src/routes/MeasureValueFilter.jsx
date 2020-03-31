@@ -49,7 +49,7 @@ export const MeasureValueFilter = () => (
                 source={MeasureValueFilterStackedToHundredPercentExampleSRC}
             />
         </div>
-        <h2>Filter a by measure value formatted in %</h2>
+        <h2>Filter by a measure value formatted in %</h2>
         <p>
             When the visualization is filtered by a measure that is formatted in %, the filter value is in{" "}
             <b>the form of a ratio</b> (for instance, 0.5, which is 50%) and not in the percentage scale. This

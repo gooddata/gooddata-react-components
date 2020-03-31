@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 @import "~@gooddata/goodstrap/lib/core/styles/typo-mixins.scss";
 @import "~@gooddata/goodstrap/lib/core/styles/variables.scss";
 @import "~@gooddata/goodstrap/lib/Button/styles/variables";
@@ -8,8 +8,7 @@ $separator-icon: "data:image/svg+xml,%3Csvg width='7' height='26' viewBox='0 0 7
 
 .gd-date-filter-button {
     @include gd-font-base;
-    font-size: nth(map-get($gd-typo, font-sizes), 5);
-    line-height: nth(map-get($gd-typo, line-heights), 1);
+    // stylelint-disable-next-line declaration-no-important
     max-width: none !important;
     position: relative;
     height: 41px;
@@ -22,8 +21,8 @@ $separator-icon: "data:image/svg+xml,%3Csvg width='7' height='26' viewBox='0 0 7
 
     &.disabled {
         cursor: pointer;
-        pointer-events: none;
         user-select: auto;
+        pointer-events: none;
 
         .button-subtitle::after {
             content: none;
@@ -273,6 +272,7 @@ $separator-icon: "data:image/svg+xml,%3Csvg width='7' height='26' viewBox='0 0 7
 .gd-mobile-dropdown-content .gd-date-filter-button-mobile {
     display: block;
     width: auto;
+    height: auto;
     margin: 0;
     padding: 10px;
     border-width: 1px 0;
@@ -280,10 +280,9 @@ $separator-icon: "data:image/svg+xml,%3Csvg width='7' height='26' viewBox='0 0 7
     border-bottom: 1px solid $border-color;
     font-size: nth(map-get($gd-typo, font-sizes), 4);
     text-align: left;
-    line-height: 25px;
-    height: auto;
-    background-color: $gd-color-white;
     box-shadow: 0 1px 2px 0 rgba(20, 56, 93, 0.1);
+    line-height: 25px;
+    background-color: $gd-color-white;
 
     &::after {
         display: none;
