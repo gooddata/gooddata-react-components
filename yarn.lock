@@ -1441,12 +1441,12 @@
     js-cookie "^2.1.4"
     lodash "^4.17.15"
 
-"@gooddata/mock-js@^2.11.0":
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/mock-js/-/mock-js-2.11.0.tgz#286adb38089712847a93410ff1fc05737a1464f3"
-  integrity sha512-2x7N7BBz7RAJs6JkEW0fX4WJtLkWQ/7xMgOBn8nIZZiPYof2KDO4hcy2XW+y63NuOXSDBU+k7XpUVvnZyZIYeA==
+"@gooddata/mock-js@^2.13.0":
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/@gooddata/mock-js/-/mock-js-2.13.0.tgz#3e821ecc1ae2f7346ca488af433a9d3841531dc5"
+  integrity sha512-nlK5VVZkQIPq1qmV8TYOZBQ+Pry0HQCtu0AN5bDC3xEs3kFp4oVZ6mZWV48fUxV60xqSn8Ttf2xfJlkxUeYSmQ==
   dependencies:
-    "@gooddata/typings" "^2.22.0"
+    "@gooddata/typings" "^2.23.0"
     "@types/seedrandom" "2.4.27"
     "@types/uuid" "3.4.3"
     body-parser "1.17.1"
