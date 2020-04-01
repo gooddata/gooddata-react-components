@@ -6,6 +6,7 @@ import isFinite = require("lodash/isFinite");
 import { DEFAULT_COLORS, getColorPalette } from "../../visualizations/utils/color";
 import {
     DEFAULT_PUSHPIN_BORDER_COLOR_VALUE,
+    DEFAULT_PUSHPIN_COLOR_OPACITY,
     DEFAULT_PUSHPIN_COLOR_SCALE,
     DEFAULT_PUSHPIN_COLOR_VALUE,
     EMPTY_SEGMENT_ITEM,
@@ -39,7 +40,7 @@ export function getColorIndexInPalette(value: number, min: number, max: number):
 export function getColorPaletteMapping(segmentItems: string[] = []): IObjectMapping {
     if (!segmentItems.length) {
         return {
-            [DEFAULT_SEGMENT_ITEM]: getColorPalette(DEFAULT_COLORS[0]),
+            [DEFAULT_SEGMENT_ITEM]: getColorPalette(DEFAULT_COLORS[0], DEFAULT_PUSHPIN_COLOR_OPACITY),
         };
     }
 
@@ -48,7 +49,7 @@ export function getColorPaletteMapping(segmentItems: string[] = []): IObjectMapp
         (result: string[][], _item: string, index: number): string[][] => {
             const colorPalette =
                 index < defaultColorsNumber
-                    ? getColorPalette(DEFAULT_COLORS[index])
+                    ? getColorPalette(DEFAULT_COLORS[index], DEFAULT_PUSHPIN_COLOR_OPACITY)
                     : result[index - defaultColorsNumber]; // colors loop every DEFAULT_COLORS.length
             return [...result, colorPalette];
         },

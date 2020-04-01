@@ -156,8 +156,8 @@ function lighter(color: number, percent: number) {
     return Math.round((t - color) * p) + color;
 }
 
-function formatColor(red: number, green: number, blue: number) {
-    return `rgb(${red},${green},${blue})`;
+function formatColor(red: number, green: number, blue: number, opacity: number = 1) {
+    return `rgba(${red},${green},${blue},${opacity})`;
 }
 
 export function parseRGBColorCode(color: string) {
@@ -166,6 +166,11 @@ export function parseRGBColorCode(color: string) {
     const G = parseInt(f[1], 10);
     const B = parseInt(f[2], 10);
     return { R, G, B };
+}
+
+export function rgbToRgba(color: string, opacity: number = 1) {
+    const { R, G, B } = parseRGBColorCode(color);
+    return formatColor(R, G, B, opacity);
 }
 
 /**
@@ -271,12 +276,19 @@ function getCalculatedChannel(channel: number, index: number, step: number): num
     return Math.trunc(channel + index * step);
 }
 
-function getCalculatedColors(count: number, channels: number[], steps: number[]): string[] {
-    return range(1, count).map(
-        (index: number) =>
-            `rgb(${getCalculatedChannel(channels[0], index, steps[0])},` +
-            `${getCalculatedChannel(channels[1], index, steps[1])},` +
-            `${getCalculatedChannel(channels[2], index, steps[2])})`,
+function getCalculatedColors(
+    count: number,
+    channels: number[],
+    steps: number[],
+    opacity: number = 1,
+): string[] {
+    return range(1, count).map((index: number) =>
+        formatColor(
+            getCalculatedChannel(channels[0], index, steps[0]),
+            getCalculatedChannel(channels[1], index, steps[1]),
+            getCalculatedChannel(channels[2], index, steps[2]),
+            opacity,
+        ),
     );
 }
 
@@ -292,13 +304,13 @@ function getRGBColorCode(color: string | IColor): IColor {
     return color;
 }
 
-export function getColorPalette(baseColor: string | IColor): string[] {
+export function getColorPalette(baseColor: string | IColor, opacity: number = 1): string[] {
     const colorItemsCount = 6;
     const { r, g, b } = getRGBColorCode(baseColor);
     const channels = [r, g, b];
     const steps = channels.map(channel => (255 - channel) / colorItemsCount);
-    const generatedColors = getCalculatedColors(colorItemsCount, channels, steps);
-    return [...generatedColors.reverse(), formatColor(r, g, b)];
+    const generatedColors = getCalculatedColors(colorItemsCount, channels, steps, opacity);
+    return [...generatedColors.reverse(), formatColor(r, g, b, opacity)];
 }
 
 // For re-exporting in index.ts
