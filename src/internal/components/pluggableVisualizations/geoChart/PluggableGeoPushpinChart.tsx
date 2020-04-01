@@ -156,7 +156,7 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
         const viewportProp = {
             viewport: {
                 ...viewport,
-                freezed: isInEditMode || isExportMode,
+                frozen: isInEditMode || isExportMode,
             },
         };
         const geoChartConfig = {
