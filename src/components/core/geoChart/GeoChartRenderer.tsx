@@ -146,7 +146,7 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
 
     private isViewportFrozen = (): boolean => {
         const { config } = this.props;
-        return get(config, "viewport.freezed", false);
+        return get(config, "viewport.frozen", false);
     };
 
     private createMapControls() {
