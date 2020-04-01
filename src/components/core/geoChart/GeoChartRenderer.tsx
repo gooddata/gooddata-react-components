@@ -40,6 +40,9 @@ export interface IGeoChartRendererProps {
     onZoomChanged(zoom: number): void;
 }
 
+/*
+ * Test storybook
+ * */
 export default class GeoChartRenderer extends React.Component<IGeoChartRendererProps> {
     public static defaultProps: Partial<IGeoChartRendererProps> = {
         config: {
