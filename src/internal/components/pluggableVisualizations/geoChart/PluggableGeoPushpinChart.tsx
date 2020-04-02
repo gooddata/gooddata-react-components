@@ -25,7 +25,6 @@ import { PluggableBaseChart } from "../baseChart/PluggableBaseChart";
 import { BUCKETS, METRIC, ATTRIBUTE } from "../../../constants/bucket";
 import { GEO_PUSHPIN_CHART_UICONFIG } from "../../../constants/uiConfig";
 import {
-    sanitizeFilters,
     getPreferredBucketItems,
     getMeasures,
     removeShowOnSecondaryAxis,
@@ -35,7 +34,7 @@ import {
     getItemsFromBuckets,
 } from "../../../utils/bucketHelper";
 import { setGeoPushpinUiConfig } from "../../../utils/uiConfigHelpers/geoPushpinChartUiConfigHelper";
-import { removeSort, createSorts } from "../../../utils/sort";
+import { createSorts } from "../../../utils/sort";
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 import { DASHBOARDS_ENVIRONMENT } from "../../../constants/properties";
 import { GeoChart } from "../../../../components/core/GeoChart";
@@ -61,14 +60,12 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
         return super
             .getExtendedReferencePoint(referencePoint)
             .then((extendedReferencePoint: IExtendedReferencePoint) => {
-                let newReferencePoint: IExtendedReferencePoint = setGeoPushpinUiConfig(
+                const newReferencePoint: IExtendedReferencePoint = setGeoPushpinUiConfig(
                     extendedReferencePoint,
                     this.intl,
                     this.type,
                 );
-                newReferencePoint = this.updateSupportedProperties(newReferencePoint);
-                newReferencePoint = removeSort(newReferencePoint);
-                return Promise.resolve(sanitizeFilters(newReferencePoint));
+                return this.updateSupportedProperties(newReferencePoint);
             });
     }
 
@@ -201,7 +198,7 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
         const resultingHeight = this.environment === DASHBOARDS_ENVIRONMENT ? height : undefined;
         const resultSpec = this.getResultSpec(options, visualizationProperties, mdObject);
         const supportedControls: IVisualizationProperties = get(visualizationProperties, "controls", {});
-        const configSupportedControls = !isEmpty(supportedControls) && supportedControls;
+        const configSupportedControls = !isEmpty(supportedControls) && cloneDeep(supportedControls);
         const fullConfig = this.buildVisualizationConfig(mdObject, config, configSupportedControls);
 
         const geoPushpinProps = {
