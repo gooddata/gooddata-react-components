@@ -157,10 +157,17 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
     }
 
     private removeMapControls = (): void => {
-        this.chart.removeControl(this.navigationControlButton);
+        if (this.navigationControlButton) {
+            this.chart.removeControl(this.navigationControlButton);
+        }
     };
 
     private addMapControls = (): void => {
+        if (!this.navigationControlButton) {
+            this.navigationControlButton = new mapboxgl.NavigationControl({
+                showCompass: false,
+            });
+        }
         this.chart.addControl(this.navigationControlButton, "bottom-right");
     };
 
@@ -170,6 +177,7 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
             this.addMapControls();
         } else {
             this.removeMapControls();
+            this.navigationControlButton = null;
         }
     };
 
