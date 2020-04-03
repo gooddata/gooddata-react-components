@@ -59,9 +59,6 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         super(props);
 
         mapboxgl.accessToken = props.config.mapboxToken;
-        this.navigationControlButton = new mapboxgl.NavigationControl({
-            showCompass: false,
-        });
     }
 
     public componentDidUpdate(prevProps: IGeoChartRendererProps) {
@@ -159,6 +156,7 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
     private removeMapControls = (): void => {
         if (this.navigationControlButton) {
             this.chart.removeControl(this.navigationControlButton);
+            this.navigationControlButton = null;
         }
     };
 
@@ -167,8 +165,8 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
             this.navigationControlButton = new mapboxgl.NavigationControl({
                 showCompass: false,
             });
+            this.chart.addControl(this.navigationControlButton, "bottom-right");
         }
-        this.chart.addControl(this.navigationControlButton, "bottom-right");
     };
 
     private toggleMapControls = (): void => {
@@ -177,7 +175,6 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
             this.addMapControls();
         } else {
             this.removeMapControls();
-            this.navigationControlButton = null;
         }
     };
 
