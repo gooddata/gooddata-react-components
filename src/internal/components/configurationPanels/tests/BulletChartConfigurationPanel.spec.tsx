@@ -7,7 +7,7 @@ import NameSubsection from "../../configurationControls/axis/NameSubsection";
 import ConfigSection from "../../configurationControls/ConfigSection";
 import { DEFAULT_LOCALE } from "../../../../constants/localization";
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
-import { attributeItemA1 } from "../../../mocks/visualizationObjectMocks";
+import { attributeItemA1, attributeItemA2 } from "../../../mocks/visualizationObjectMocks";
 import LabelSubsection from "../../configurationControls/axis/LabelSubsection";
 
 describe("BulletChartConfigurationPanel", () => {
@@ -308,6 +308,68 @@ describe("BulletChartConfigurationPanel", () => {
 
             const yAxisSection = wrapper.find(LabelSubsection).at(1);
             expect(yAxisSection.props().disabled).toEqual(false);
+        });
+    });
+
+    describe("Y axis name configuration", () => {
+        const defaultProps: IConfigurationPanelContentProps = {
+            isError: false,
+            isLoading: false,
+            locale: DEFAULT_LOCALE,
+            type: VisualizationTypes.BULLET,
+            featureFlags: {
+                enableAxisNameConfiguration: true,
+            },
+        };
+
+        const visualizationClass = { uri: "/gdc/md/projectId/obj/76297" };
+
+        it("should render name configuration panel enabled if there is an attribute", () => {
+            const mdObject = {
+                buckets: [
+                    {
+                        localIdentifier: "measures",
+                        items: [testMeasure],
+                    },
+                    {
+                        localIdentifier: "view",
+                        items: [attributeItemA1],
+                    },
+                ],
+                visualizationClass,
+            };
+
+            const wrapper = createComponent({
+                ...defaultProps,
+                mdObject,
+            });
+
+            const yAxisSection = wrapper.find(NameSubsection).at(1);
+            expect(yAxisSection.props().disabled).toEqual(false);
+        });
+
+        it("should render name configuration panel disabled if there are two attributes", () => {
+            const mdObject = {
+                buckets: [
+                    {
+                        localIdentifier: "measures",
+                        items: [testMeasure],
+                    },
+                    {
+                        localIdentifier: "view",
+                        items: [attributeItemA1, attributeItemA2],
+                    },
+                ],
+                visualizationClass,
+            };
+
+            const wrapper = createComponent({
+                ...defaultProps,
+                mdObject,
+            });
+
+            const yAxisSection = wrapper.find(NameSubsection).at(1);
+            expect(yAxisSection.props().disabled).toEqual(true);
         });
     });
 });

@@ -1,8 +1,9 @@
 // (C) 2019-2020 GoodData Corporation
 import get = require("lodash/get");
+import isEqual = require("lodash/isEqual");
 import { VisualizationObject, Execution } from "@gooddata/typings";
 import { IChartConfig } from "../../interfaces/Config";
-import { IGeoConfig, IGeoData } from "../../interfaces/GeoChart";
+import { IGeoConfig, IGeoData, IGeoPointsConfig } from "../../interfaces/GeoChart";
 import { LOCATION } from "../../constants/bucketNames";
 
 export function getGeoAttributeHeaderItems(
@@ -68,4 +69,11 @@ export function isGeoConfig(config: IChartConfig | IGeoConfig): config is IGeoCo
 
 export function isChartConfig(config: IChartConfig | IGeoConfig): config is IChartConfig {
     return !isGeoConfig(config);
+}
+
+export function isPointsConfigChanged(
+    prevPointsConfig: IGeoPointsConfig,
+    pointsConfig: IGeoPointsConfig,
+): boolean {
+    return !isEqual(prevPointsConfig, pointsConfig);
 }

@@ -26,15 +26,6 @@ import PushpinSizeControl from "../configurationControls/PushpinSizeControl";
 import PushpinViewportControl from "../configurationControls/PushpinViewportControl";
 
 export default class GeoPushpinConfigurationPanel extends ConfigurationPanelContent {
-    public componentDidMount() {
-        const { properties, references } = this.props;
-        this.props.pushData({
-            properties,
-            references,
-            ignoreUndoRedo: true,
-        });
-    }
-
     protected getControlProperties() {
         const { props } = this;
         const groupNearbyPoints = get(props, "properties.controls.points.groupNearbyPoints", true);

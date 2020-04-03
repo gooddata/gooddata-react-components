@@ -38,8 +38,6 @@
     "visualization.ErrorDescriptionUnauthorized": "Desculpe, você não tem acesso a este insight. Faça login ou peça a seu administrador para conceder-lhe permissões.",
     "visualization.ErrorMessageNotFound": "Desculpe, não foi possível localizar este insight",
     "visualization.ErrorDescriptionNotFound": "Não existe um insight com esta URL.",
-    "geo.ErrorMessageLocationMissing": "Nenhuma localização no seu insight",
-    "geo.ErrorDescriptionLocationMissing": "Adicione um atributo geográfico ao seu insight ou troque a visualização. Depois disso, você poderá salvá-lo.",
     "gs.filter.loading": "Carregando filtro…",
     "gs.filter.error": "Erro ao carregar filtro",
     "gs.list.loading": "Carregando lista…",

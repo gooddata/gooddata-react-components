@@ -220,7 +220,7 @@ storiesOf("Core components/GeoPushpinChart", module)
         const config: IGeoConfig = {
             ...DEFAULT_CONFIG,
             viewport: {
-                freezed: true,
+                frozen: true,
             },
         };
         return screenshotWrap(

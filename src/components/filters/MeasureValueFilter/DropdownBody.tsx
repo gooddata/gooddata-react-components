@@ -14,6 +14,7 @@ import {
     isRangeOperator,
 } from "../../../interfaces/MeasureValueFilter";
 import * as Operator from "../../../constants/measureValueFilterOperators";
+import TreatNullValuesAsZeroCheckbox from "./TreatNullValuesAsZeroCheckbox";
 
 // The platform supports 6 decimal places
 const MAX_DECIMAL_PLACES = 6;
@@ -26,8 +27,10 @@ export interface IDropdownBodyOwnProps {
     locale?: string;
     disableAutofocus?: boolean;
     onCancel?: () => void;
-    onApply: (operator: string, value: IMeasureValueFilterValue) => void;
+    onApply: (operator: string, value: IMeasureValueFilterValue, treatNullValuesAsZero: boolean) => void;
     separators?: ISeparators;
+    displayTreatNullAsZeroOption?: boolean;
+    treatNullAsZeroValue?: boolean;
 }
 
 export type IDropdownBodyProps = IDropdownBodyOwnProps & WrappedComponentProps;
@@ -35,23 +38,25 @@ export type IDropdownBodyProps = IDropdownBodyOwnProps & WrappedComponentProps;
 interface IDropdownBodyState {
     operator: string;
     value: IMeasureValueFilterValue;
+    enabledTreatNullValuesAsZero: boolean;
 }
 
 class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropdownBodyState> {
     constructor(props: IDropdownBodyProps) {
         super(props);
 
-        const { operator, value, usePercentage } = props;
+        const { operator, value, usePercentage, treatNullAsZeroValue } = props;
 
         this.state = {
             operator: operator || Operator.ALL,
             value: (usePercentage ? this.convertToPercentageValue(value, operator) : value) || {},
+            enabledTreatNullValuesAsZero: treatNullAsZeroValue,
         };
     }
 
     public render() {
-        const { onCancel, warningMessage, intl } = this.props;
-        const { operator } = this.state;
+        const { onCancel, warningMessage, displayTreatNullAsZeroOption, intl } = this.props;
+        const { operator, enabledTreatNullValuesAsZero } = this.state;
 
         return (
             <div className="gd-mvf-dropdown-body gd-dialog gd-dropdown overlay s-mvf-dropdown-body">
@@ -68,7 +73,16 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
                     </div>
 
                     {operator !== Operator.ALL && (
-                        <div className="gd-mvf-dropdown-section">{this.renderInputSection()}</div>
+                        <div className="gd-mvf-dropdown-section">
+                            {this.renderInputSection()}
+                            {displayTreatNullAsZeroOption && (
+                                <TreatNullValuesAsZeroCheckbox
+                                    onChange={this.handleTreatNullAsZeroClicked}
+                                    checked={enabledTreatNullValuesAsZero}
+                                    intl={intl}
+                                />
+                            )}
+                        </div>
                     )}
                 </div>
                 <div className="gd-mvf-dropdown-footer">
@@ -131,11 +145,7 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
             return true;
         }
 
-        if (this.props.value === null) {
-            return false;
-        }
-
-        if (this.state.operator !== this.props.operator) {
+        if (this.props.value === null || this.isChanged()) {
             return false;
         }
 
@@ -153,11 +163,7 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
             return true;
         }
 
-        if (this.props.value === null) {
-            return false;
-        }
-
-        if (this.state.operator !== this.props.operator) {
+        if (this.props.value === null || this.isChanged()) {
             return false;
         }
 
@@ -170,6 +176,10 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
 
         return from === this.props.value.from && to === this.props.value.to;
     }
+
+    private isChanged = () =>
+        this.state.operator !== this.props.operator ||
+        this.state.enabledTreatNullValuesAsZero !== this.props.treatNullAsZeroValue;
 
     private isApplyButtonDisabledForAll() {
         return this.props.operator === Operator.ALL;
@@ -203,6 +213,10 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
         this.setState({ value: { ...this.state.value, to } });
     };
 
+    private handleTreatNullAsZeroClicked = (checked: boolean) => {
+        this.setState({ enabledTreatNullValuesAsZero: checked });
+    };
+
     private round = (n: number): number => parseFloat(n.toFixed(MAX_DECIMAL_PLACES));
 
     private convertToRawValue = (
@@ -234,15 +248,13 @@ class DropdownBodyWrapped extends React.PureComponent<IDropdownBodyProps, IDropd
             return;
         }
 
+        const { enabledTreatNullValuesAsZero, operator: stateOperator, value: stateValue } = this.state;
         const { usePercentage } = this.props;
 
-        const operator = this.state.operator === Operator.ALL ? null : this.state.operator;
+        const operator = stateOperator === Operator.ALL ? null : stateOperator;
+        const value = usePercentage ? this.convertToRawValue(stateValue, stateOperator) : stateValue;
 
-        const value = usePercentage
-            ? this.convertToRawValue(this.state.value, this.state.operator)
-            : this.state.value;
-
-        this.props.onApply(operator, value);
+        this.props.onApply(operator, value, enabledTreatNullValuesAsZero);
     };
 }
 

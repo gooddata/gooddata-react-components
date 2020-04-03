@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
 
 @import "./_settings.scss";
@@ -18,13 +18,23 @@ $dialog_width: 250px;
 
         .gd-mvf-warning-message {
             font-size: 12px;
+            padding: 4px 8px 4px 10px;
+            line-height: 1.4em;
             color: $gd-color-warning-text;
             background: transparentize($gd-color-warning, 0.85);
             border-radius: 3px;
             font-family: $gd-font-primary;
-            line-height: 1.4em;
-            padding: 4px 8px 4px 10px;
             margin-top: 4px;
+        }
+
+        .gd-mvf-treat-null-values-as-zero {
+            margin-top: 8px;
+            font-size: 12px;
+
+            .inlineBubbleHelp {
+                margin-left: 4px;
+                font-size: 12px;
+            }
         }
 
         &:last-child {

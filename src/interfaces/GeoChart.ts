@@ -66,7 +66,7 @@ export type IGeoConfigViewportArea =
 
 export interface IGeoConfigViewport {
     area?: IGeoConfigViewportArea;
-    freezed?: boolean;
+    frozen?: boolean;
 }
 
 export interface IGeoViewports {

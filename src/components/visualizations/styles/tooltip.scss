@@ -83,14 +83,14 @@
     padding-right: 1em;
     word-wrap: break-word;
 
-    &:before {
+    &::before {
         content: "...";
         position: absolute;
         right: 0;
         bottom: 0;
     }
 
-    &:after {
+    &::after {
         content: "";
         position: absolute;
         right: 0;
@@ -103,13 +103,13 @@
 
 .gd-viz-tooltip-value-max-content {
     display: block;
+    visibility: hidden;
     overflow: hidden;
     font-size: 14px;
     height: 0;
     font-weight: normal;
     white-space: nowrap;
     text-align: left;
-    visibility: hidden;
 }
 
 .multiline-supported {
@@ -119,23 +119,24 @@
 
     .gd-viz-tooltip-value {
         text-align: left;
-        line-height: 1.3em;
-        max-height: 2.6em;
         margin: 0;
         padding: 0;
+        line-height: 1.3em;
+        max-height: 2.6em;
 
         &.clamp-two-line {
             /*! autoprefixer: ignore next */
             -webkit-box-orient: vertical;
+            // stylelint-disable-next-line value-no-vendor-prefix
             display: -webkit-box;
             -webkit-line-clamp: 2;
         }
 
-        &:before {
+        &::before {
             content: none;
         }
 
-        &:after {
+        &::after {
             content: none;
         }
     }
@@ -146,5 +147,6 @@
     g.highcharts-tooltip {
         visibility: hidden;
     }
+
     z-index: 3005;
 }
