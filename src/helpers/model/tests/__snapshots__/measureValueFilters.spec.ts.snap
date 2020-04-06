@@ -1,0 +1,138 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`measureValueFilter should build comparison filter 1`] = `
+MeasureValueFilterBuilder {
+  "condition": [Function],
+  "getAfmMeasureValueFilter": [Function],
+  "measureValueFilter": Object {
+    "condition": Object {
+      "comparison": Object {
+        "operator": "EQUAL_TO",
+        "value": 200,
+      },
+    },
+    "measure": Object {
+      "localIdentifier": "m1",
+    },
+  },
+}
+`;
+
+exports[`measureValueFilter should build comparison filter with treat null values as zero 1`] = `
+MeasureValueFilterBuilder {
+  "condition": [Function],
+  "getAfmMeasureValueFilter": [Function],
+  "measureValueFilter": Object {
+    "condition": Object {
+      "comparison": Object {
+        "operator": "EQUAL_TO",
+        "treatNullValuesAs": 0,
+        "value": 200,
+      },
+    },
+    "measure": Object {
+      "localIdentifier": "m1",
+    },
+  },
+}
+`;
+
+exports[`measureValueFilter should build filter without condition 1`] = `
+MeasureValueFilterBuilder {
+  "condition": [Function],
+  "getAfmMeasureValueFilter": [Function],
+  "measureValueFilter": Object {
+    "measure": Object {
+      "localIdentifier": "m2",
+    },
+  },
+}
+`;
+
+exports[`measureValueFilter should build range filter 1`] = `
+MeasureValueFilterBuilder {
+  "condition": [Function],
+  "getAfmMeasureValueFilter": [Function],
+  "measureValueFilter": Object {
+    "condition": Object {
+      "range": Object {
+        "from": 100,
+        "operator": "BETWEEN",
+        "to": 300,
+      },
+    },
+    "measure": Object {
+      "localIdentifier": "m2",
+    },
+  },
+}
+`;
+
+exports[`measureValueFilter should build range filter with threat null values as zero 1`] = `
+MeasureValueFilterBuilder {
+  "condition": [Function],
+  "getAfmMeasureValueFilter": [Function],
+  "measureValueFilter": Object {
+    "condition": Object {
+      "range": Object {
+        "from": 100,
+        "operator": "BETWEEN",
+        "to": 300,
+        "treatNullValuesAs": 0,
+      },
+    },
+    "measure": Object {
+      "localIdentifier": "m2",
+    },
+  },
+}
+`;
+
+exports[`measureValueFilter should return filter with zeros in condition when the values are not found in comparison input  1`] = `
+MeasureValueFilterBuilder {
+  "condition": [Function],
+  "getAfmMeasureValueFilter": [Function],
+  "measureValueFilter": Object {
+    "condition": Object {
+      "comparison": Object {
+        "operator": "GREATER_THAN",
+        "value": 0,
+      },
+    },
+    "measure": Object {
+      "localIdentifier": "m2",
+    },
+  },
+}
+`;
+
+exports[`measureValueFilter should return filter with zeros in condition when the values are not found in range input  1`] = `
+MeasureValueFilterBuilder {
+  "condition": [Function],
+  "getAfmMeasureValueFilter": [Function],
+  "measureValueFilter": Object {
+    "condition": Object {
+      "range": Object {
+        "from": 0,
+        "operator": "BETWEEN",
+        "to": 0,
+      },
+    },
+    "measure": Object {
+      "localIdentifier": "m2",
+    },
+  },
+}
+`;
+
+exports[`measureValueFilter should return filter without condition when provided with unknown operator 1`] = `
+MeasureValueFilterBuilder {
+  "condition": [Function],
+  "getAfmMeasureValueFilter": [Function],
+  "measureValueFilter": Object {
+    "measure": Object {
+      "localIdentifier": "m2",
+    },
+  },
+}
+`;
