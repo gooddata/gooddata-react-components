@@ -75,11 +75,11 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
             return;
         }
 
-        this.updateMapWithConfig(prevConfig);
-
         if (selectedSegmentItems && !isEqual(selectedSegmentItems, prevSelectedSegmentItems)) {
-            this.setFilterMap();
+            return this.setFilterMap();
         }
+
+        this.updateMapWithConfig(prevConfig);
     }
 
     public componentDidMount() {
@@ -135,8 +135,9 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
             // Then calling resetMap here is needed
             this.resetMap();
         }
+
         this.updatePanAndZoom();
-        this.updateViewport();
+        this.updateViewport(prevConfig);
     };
 
     private resetMap = (): void => {
@@ -205,13 +206,20 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         this.toggleInteractionEvents();
     };
 
-    private updateViewport = (): void => {
+    private updateViewport = (prevConfig: IGeoConfig): void => {
         const {
             config,
             geoData: {
                 location: { data },
             },
         } = this.props;
+
+        const { viewport: prevViewport } = prevConfig;
+        const { viewport } = config;
+        if (isEqual(prevViewport, viewport)) {
+            return;
+        }
+
         const { bounds } = getViewportOptions(data, config);
         if (bounds) {
             this.chart.fitBounds(bounds, DEFAULT_MAPBOX_OPTIONS.fitBoundsOptions);
