@@ -173,7 +173,8 @@ describe("getDDPointsInParentTick", () => {
                     },
                     x: 0,
                     y: 0,
-                    target: null,
+                    target: 0,
+                    isNullTarget: true,
                 },
             ],
         ];
@@ -224,8 +225,9 @@ describe("getDDPointsInParentTick", () => {
                     },
                 },
                 x: 0,
-                y: null,
-                target: null,
+                y: null as number,
+                target: 0,
+                isNullTarget: true,
             },
         ];
 
