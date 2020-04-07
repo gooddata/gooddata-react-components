@@ -12,14 +12,7 @@ const chartStories = [
     "with location and size, color contains same values",
     "with location, size, color, segmentBy and tooltipText",
     "with location, size, color, segmentBy, tooltipText and location filter",
-    "with North America viewport",
-    "with World viewport",
-    "with Include all data viewport",
-    "with disabled interactive and zoom control button",
     "with color and segment alias shown in tooltip",
-    "with disabled groupNearbyPoints",
-    "with enabled groupNearbyPoints",
-    "with config point size",
 ];
 
 const legendStories = [
@@ -30,12 +23,25 @@ const legendStories = [
     "with legend position is top",
     "with legend position is bottom",
     "with legend position is left and height of container is not enough",
-    
+
 ];
 const colorMappingStories = [
     "with custom colors",
     "with custom colors, color mapping for SegmentBy",
     "with color mapping for Location",
+];
+
+const viewportStories = [
+    "with North America viewport",
+    "with World viewport",
+    "with Include all data viewport",
+    "with disabled interactive and zoom control button",
+];
+
+const pointsStories = [
+    "with disabled groupNearbyPoints",
+    "with enabled groupNearbyPoints",
+    "with config point size",
 ];
 
 const configuration = {
@@ -55,6 +61,20 @@ const configuration = {
             {},
         ),
         "Core components/GeoPushpinChart/Config/Color": colorMappingStories.reduce(
+            (result, story) => ({
+                ...result,
+                [story]: DEFAULT_SCENARIO_CONFIG,
+            }),
+            {},
+        ),
+        "Core components/GeoPushpinChart/Config/Viewport": viewportStories.reduce(
+            (result, story) => ({
+                ...result,
+                [story]: DEFAULT_SCENARIO_CONFIG,
+            }),
+            {},
+        ),
+        "Core components/GeoPushpinChart/Config/Points": pointsStories.reduce(
             (result, story) => ({
                 ...result,
                 [story]: DEFAULT_SCENARIO_CONFIG,

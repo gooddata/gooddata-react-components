@@ -104,16 +104,16 @@ describe("getPushpinColors", () => {
         const colorStrategy: IColorStrategy = createColorStrategy(executionResponse, geoConfig, segmentItems);
         const colors: number[] = [10, 20, 30, 40, 50, 10, 20, 30, 40, 50];
         const expectedColors: IPushpinColor[] = [
-            { background: "rgb(215,242,250)", border: "rgb(20,178,226)" },
-            { background: "rgb(127,224,198)", border: "rgb(0,193,141)" },
-            { background: "rgb(237,136,129)", border: "rgb(229,77,66)" },
-            { background: "rgb(241,134,0)", border: "rgb(241,134,0)" },
-            { background: "rgb(171,85,163)", border: "rgb(171,85,163)" },
-            { background: "rgb(215,242,250)", border: "rgb(20,178,226)" },
-            { background: "rgb(127,224,198)", border: "rgb(0,193,141)" },
-            { background: "rgb(237,136,129)", border: "rgb(229,77,66)" },
-            { background: "rgb(241,134,0)", border: "rgb(241,134,0)" },
-            { background: "rgb(171,85,163)", border: "rgb(171,85,163)" },
+            { background: "rgba(215,242,250,0.7)", border: "rgba(20,178,226,0.7)" },
+            { background: "rgba(127,224,198,0.7)", border: "rgba(0,193,141,0.7)" },
+            { background: "rgba(237,136,129,0.7)", border: "rgba(229,77,66,0.7)" },
+            { background: "rgba(241,134,0,0.7)", border: "rgba(241,134,0,0.7)" },
+            { background: "rgba(171,85,163,0.7)", border: "rgba(171,85,163,0.7)" },
+            { background: "rgba(215,242,250,0.7)", border: "rgba(20,178,226,0.7)" },
+            { background: "rgba(127,224,198,0.7)", border: "rgba(0,193,141,0.7)" },
+            { background: "rgba(237,136,129,0.7)", border: "rgba(229,77,66,0.7)" },
+            { background: "rgba(241,134,0,0.7)", border: "rgba(241,134,0,0.7)" },
+            { background: "rgba(171,85,163,0.7)", border: "rgba(171,85,163,0.7)" },
         ];
         expect(getPushpinColors(colors, duplicatedSegmentItems, colorStrategy)).toEqual(expectedColors);
     });
@@ -124,7 +124,7 @@ describe("getPushpinColors", () => {
         const colorStrategy: IColorStrategy = createColorStrategy(executionResponse, geoConfig);
         expect(getPushpinColors([], undefined, colorStrategy)).toEqual([
             {
-                background: "rgb(20,178,226)",
+                background: "rgba(20,178,226,0.7)",
                 border: "rgb(233,237,241)",
             },
         ]);
@@ -141,7 +141,7 @@ describe("getPushpinColors", () => {
         const geoConfig: IGeoConfig = getGeoConfig({ isWithLocation: true, isWithColor: true });
         const colorStrategy: IColorStrategy = createColorStrategy(executionResponse, geoConfig);
         expect(getPushpinColors([10, 10], undefined, colorStrategy)).toEqual([
-            { background: "rgb(20,178,226)", border: "rgb(233,237,241)" },
+            { background: "rgba(20,178,226,0.7)", border: "rgb(233,237,241)" },
         ]);
     });
 
@@ -162,11 +162,11 @@ describe("getPushpinColors", () => {
         });
         const colorStrategy: IColorStrategy = createColorStrategy(executionResponse, geoConfig, segmentItems);
         const expectedColors: IPushpinColor[] = [
-            { background: "rgb(215,242,250)", border: "rgb(20,178,226)" },
-            { background: "rgb(212,244,236)", border: "rgb(0,193,141)" },
-            { background: "rgb(237,136,129)", border: "rgb(229,77,66)" },
-            { background: "rgb(241,134,0)", border: "rgb(241,134,0)" },
-            { background: "rgb(171,85,163)", border: "rgb(171,85,163)" },
+            { background: "rgba(215,242,250,0.7)", border: "rgba(20,178,226,0.7)" },
+            { background: "rgba(212,244,236,0.7)", border: "rgba(0,193,141,0.7)" },
+            { background: "rgba(237,136,129,0.7)", border: "rgba(229,77,66,0.7)" },
+            { background: "rgba(241,134,0,0.7)", border: "rgba(241,134,0,0.7)" },
+            { background: "rgba(171,85,163,0.7)", border: "rgba(171,85,163,0.7)" },
         ];
         expect(getPushpinColors(colors, segmentItems, colorStrategy)).toEqual(expectedColors);
     });
@@ -183,11 +183,11 @@ describe("getPushpinColors", () => {
         const geoConfig: IGeoConfig = getGeoConfig({ isWithLocation: true, isWithColor: true });
         const colorStrategy: IColorStrategy = createColorStrategy(executionResponse, geoConfig);
         const expectedColors: IPushpinColor[] = [
-            { background: "rgb(215,242,250)", border: "rgb(20,178,226)" },
-            { background: "rgb(215,242,250)", border: "rgb(20,178,226)" },
-            { background: "rgb(98,203,235)", border: "rgb(20,178,226)" },
-            { background: "rgb(20,178,226)", border: "rgb(20,178,226)" },
-            { background: "rgb(20,178,226)", border: "rgb(20,178,226)" },
+            { background: "rgba(215,242,250,0.7)", border: "rgba(20,178,226,0.7)" },
+            { background: "rgba(215,242,250,0.7)", border: "rgba(20,178,226,0.7)" },
+            { background: "rgba(98,203,235,0.7)", border: "rgba(20,178,226,0.7)" },
+            { background: "rgba(20,178,226,0.7)", border: "rgba(20,178,226,0.7)" },
+            { background: "rgba(20,178,226,0.7)", border: "rgba(20,178,226,0.7)" },
         ];
         expect(getPushpinColors(colors, undefined, colorStrategy)).toEqual(expectedColors);
     });
@@ -209,12 +209,12 @@ describe("getPushpinColors", () => {
         });
         const colorStrategy: IColorStrategy = createColorStrategy(executionResponse, geoConfig, segmentItems);
         const expectedColors: IPushpinColor[] = [
-            { background: "rgb(215,242,250)", border: "rgb(20,178,226)" },
-            { background: "rgb(212,244,236)", border: "rgb(0,193,141)" },
-            { background: "rgb(59,190,230)", border: "rgb(20,178,226)" },
-            { background: "rgb(0,193,141)", border: "rgb(0,193,141)" },
-            { background: "rgb(250,225,223)", border: "rgb(229,77,66)" },
-            { background: "rgb(250,225,223)", border: "rgb(229,77,66)" },
+            { background: "rgba(215,242,250,0.7)", border: "rgba(20,178,226,0.7)" },
+            { background: "rgba(212,244,236,0.7)", border: "rgba(0,193,141,0.7)" },
+            { background: "rgba(59,190,230,0.7)", border: "rgba(20,178,226,0.7)" },
+            { background: "rgba(0,193,141,0.7)", border: "rgba(0,193,141,0.7)" },
+            { background: "rgba(250,225,223,0.7)", border: "rgba(229,77,66,0.7)" },
+            { background: "rgba(250,225,223,0.7)", border: "rgba(229,77,66,0.7)" },
         ];
         expect(getPushpinColors(colors, segmentItems, colorStrategy)).toEqual(expectedColors);
     });
@@ -235,13 +235,13 @@ describe("getPushpinColors", () => {
         });
         const colorStrategy: IColorStrategy = createColorStrategy(executionResponse, geoConfig, []);
         const expectedColors: IPushpinColor[] = [
-            { background: "rgb(215,242,250)", border: "rgb(20,178,226)" },
-            { background: "rgb(215,242,250)", border: "rgb(20,178,226)" },
-            { background: "rgb(176,229,245)", border: "rgb(20,178,226)" },
-            { background: "rgb(137,216,240)", border: "rgb(20,178,226)" },
-            { background: "rgb(98,203,235)", border: "rgb(20,178,226)" },
-            { background: "rgb(59,190,230)", border: "rgb(20,178,226)" },
-            { background: "rgb(20,178,226)", border: "rgb(20,178,226)" },
+            { background: "rgba(215,242,250,0.7)", border: "rgba(20,178,226,0.7)" },
+            { background: "rgba(215,242,250,0.7)", border: "rgba(20,178,226,0.7)" },
+            { background: "rgba(176,229,245,0.7)", border: "rgba(20,178,226,0.7)" },
+            { background: "rgba(137,216,240,0.7)", border: "rgba(20,178,226,0.7)" },
+            { background: "rgba(98,203,235,0.7)", border: "rgba(20,178,226,0.7)" },
+            { background: "rgba(59,190,230,0.7)", border: "rgba(20,178,226,0.7)" },
+            { background: "rgba(20,178,226,0.7)", border: "rgba(20,178,226,0.7)" },
         ];
         expect(getPushpinColors(colors, [], colorStrategy)).toEqual(expectedColors);
     });
@@ -265,12 +265,12 @@ describe("getColorPaletteMapping", () => {
         const colorStrategy: IColorStrategy = createColorStrategy(executionResponse, geoConfig, segmentItems);
         expect(getColorPaletteMapping(colorStrategy)).toEqual({
             only_one_item: [
-                "rgb(215,242,250)",
-                "rgb(176,229,245)",
-                "rgb(137,216,240)",
-                "rgb(98,203,235)",
-                "rgb(59,190,230)",
-                "rgb(20,178,226)",
+                "rgba(215,242,250,0.7)",
+                "rgba(176,229,245,0.7)",
+                "rgba(137,216,240,0.7)",
+                "rgba(98,203,235,0.7)",
+                "rgba(59,190,230,0.7)",
+                "rgba(20,178,226,0.7)",
             ],
         });
     });
@@ -279,12 +279,12 @@ describe("getColorPaletteMapping", () => {
         const colorStrategy: IColorStrategy = createColorStrategy(executionResponse, geoConfig, []);
         expect(getColorPaletteMapping(colorStrategy)).toEqual({
             default_segment_item: [
-                "rgb(215,242,250)",
-                "rgb(176,229,245)",
-                "rgb(137,216,240)",
-                "rgb(98,203,235)",
-                "rgb(59,190,230)",
-                "rgb(20,178,226)",
+                "rgba(215,242,250,0.7)",
+                "rgba(176,229,245,0.7)",
+                "rgba(137,216,240,0.7)",
+                "rgba(98,203,235,0.7)",
+                "rgba(59,190,230,0.7)",
+                "rgba(20,178,226,0.7)",
             ],
         });
     });
@@ -296,36 +296,36 @@ describe("getColorPaletteMapping", () => {
         const colorStrategy: IColorStrategy = createColorStrategy(executionResponse, geoConfig, segmentItems);
         expect(getColorPaletteMapping(colorStrategy)).toEqual({
             item0: [
-                "rgb(215,242,250)",
-                "rgb(176,229,245)",
-                "rgb(137,216,240)",
-                "rgb(98,203,235)",
-                "rgb(59,190,230)",
-                "rgb(20,178,226)",
+                "rgba(215,242,250,0.7)",
+                "rgba(176,229,245,0.7)",
+                "rgba(137,216,240,0.7)",
+                "rgba(98,203,235,0.7)",
+                "rgba(59,190,230,0.7)",
+                "rgba(20,178,226,0.7)",
             ],
             item1: [
-                "rgb(212,244,236)",
-                "rgb(170,234,217)",
-                "rgb(127,224,198)",
-                "rgb(85,213,179)",
-                "rgb(42,203,160)",
-                "rgb(0,193,141)",
+                "rgba(212,244,236,0.7)",
+                "rgba(170,234,217,0.7)",
+                "rgba(127,224,198,0.7)",
+                "rgba(85,213,179,0.7)",
+                "rgba(42,203,160,0.7)",
+                "rgba(0,193,141,0.7)",
             ],
             item2: [
-                "rgb(250,225,223)",
-                "rgb(246,195,192)",
-                "rgb(242,166,160)",
-                "rgb(237,136,129)",
-                "rgb(233,106,97)",
-                "rgb(229,77,66)",
+                "rgba(250,225,223,0.7)",
+                "rgba(246,195,192,0.7)",
+                "rgba(242,166,160,0.7)",
+                "rgba(237,136,129,0.7)",
+                "rgba(233,106,97,0.7)",
+                "rgba(229,77,66,0.7)",
             ],
             item3: [
-                "rgb(252,234,212)",
-                "rgb(250,214,170)",
-                "rgb(248,194,127)",
-                "rgb(245,174,85)",
-                "rgb(243,154,42)",
-                "rgb(241,134,0)",
+                "rgba(252,234,212,0.7)",
+                "rgba(250,214,170,0.7)",
+                "rgba(248,194,127,0.7)",
+                "rgba(245,174,85,0.7)",
+                "rgba(243,154,42,0.7)",
+                "rgba(241,134,0,0.7)",
             ],
         });
     });
@@ -374,42 +374,42 @@ describe("generateLegendColorData", () => {
         const colorData = generateLegendColorData(colorSeries, DEFAULT_COLORS[0]);
         expect(colorData).toEqual([
             {
-                color: "rgb(215,242,250)",
+                color: "rgba(215,242,250,0.7)",
                 range: {
                     from: 0,
                     to: 1,
                 },
             },
             {
-                color: "rgb(176,229,245)",
+                color: "rgba(176,229,245,0.7)",
                 range: {
                     from: 1,
                     to: 2,
                 },
             },
             {
-                color: "rgb(137,216,240)",
+                color: "rgba(137,216,240,0.7)",
                 range: {
                     from: 2,
                     to: 3,
                 },
             },
             {
-                color: "rgb(98,203,235)",
+                color: "rgba(98,203,235,0.7)",
                 range: {
                     from: 3,
                     to: 4,
                 },
             },
             {
-                color: "rgb(59,190,230)",
+                color: "rgba(59,190,230,0.7)",
                 range: {
                     from: 4,
                     to: 5,
                 },
             },
             {
-                color: "rgb(20,178,226)",
+                color: "rgba(20,178,226,0.7)",
                 range: {
                     from: 5,
                     to: 6,

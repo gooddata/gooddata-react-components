@@ -1,6 +1,6 @@
 // (C) 2019-2020 GoodData Corporation
 import mapboxgl from "mapbox-gl";
-import { DEFAULT_COLORS } from "../components/visualizations/utils/color";
+import { DEFAULT_COLORS, rgbToRgba } from "../components/visualizations/utils/color";
 import { IGeoLngLat, IGeoViewports } from "../interfaces/GeoChart";
 
 export const VIEWPORTS: IGeoViewports = {
@@ -103,9 +103,10 @@ export const DEFAULT_CENTER: IGeoLngLat = {
 
 export const DEFAULT_PUSHPIN_BORDER_COLOR_VALUE = "rgb(233,237,241)";
 
+export const DEFAULT_PUSHPIN_COLOR_OPACITY = 0.7;
 // 6 steps, should be lesser than 20
 export const DEFAULT_PUSHPIN_COLOR_SCALE = 6;
-export const DEFAULT_PUSHPIN_COLOR_VALUE = DEFAULT_COLORS[0];
+export const DEFAULT_PUSHPIN_COLOR_VALUE = rgbToRgba(DEFAULT_COLORS[0], DEFAULT_PUSHPIN_COLOR_OPACITY);
 
 export const DEFAULT_PUSHPIN_OPTIONS = {
     "circle-stroke-width": 1,

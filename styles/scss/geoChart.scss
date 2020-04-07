@@ -165,6 +165,18 @@
     outline: none;
 }
 
+// always show Mapbox wordmark
+.mapboxgl-ctrl {
+    // stylelint-disable-next-line declaration-no-important
+    display: block !important;
+}
+
+// move AttributionControl to the left of NavigationControl
+.mapboxgl-ctrl-bottom-right {
+    display: flex;
+    align-items: flex-end;
+}
+
 /* Overwrite Mapbox CSS */
 .mapboxgl-popup-tip {
     display: none;
