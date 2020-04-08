@@ -3,23 +3,23 @@ import * as React from "react";
 import { mount } from "enzyme";
 import noop = require("lodash/noop");
 
-import MVFDropdownFragment from "./fragments/MeasureValueFilter";
-import { DropdownAfmWrapper, IDropdownProps } from "../DropdownAfmWrapper";
+import MVFDropdownFragment from "./fragments/MeasureValueFilterDropdown";
+import { MeasureValueFilterDropdown, IMeasureValueFilterDropdownProps } from "../MeasureValueFilterDropdown";
 import * as Operator from "../../../../constants/measureValueFilterOperators";
 import { withIntl } from "../../../visualizations/utils/intlUtils";
 import * as Model from "../../../../helpers/model";
 
-const renderComponent = (props?: Partial<IDropdownProps>) => {
-    const defaultProps: IDropdownProps = {
+const renderComponent = (props?: Partial<IMeasureValueFilterDropdownProps>) => {
+    const defaultProps: IMeasureValueFilterDropdownProps = {
         onApply: noop,
         onCancel: noop,
         filter: Model.measureValueFilter("myMeasure"),
     };
-    const Wrapped = withIntl(DropdownAfmWrapper);
+    const Wrapped = withIntl(MeasureValueFilterDropdown);
     return new MVFDropdownFragment(mount(<Wrapped {...defaultProps} {...props} />));
 };
 
-describe("Measure value filter AFM wrapper", () => {
+describe("Measure value filter dropdown", () => {
     it("should render single value input when comparison type operator is selected", () => {
         const component = renderComponent();
 
@@ -615,8 +615,9 @@ describe("Measure value filter AFM wrapper", () => {
         });
 
         describe("checked state", () => {
-            const renderComponentWithTreatNullAsZeroOption = (props?: Partial<IDropdownProps>) =>
-                renderComponent({ displayTreatNullAsZeroOption: true, ...props });
+            const renderComponentWithTreatNullAsZeroOption = (
+                props?: Partial<IMeasureValueFilterDropdownProps>,
+            ) => renderComponent({ displayTreatNullAsZeroOption: true, ...props });
 
             it("should be checked when passed filter is empty and 'treatNullAsZeroDefaultValue' property is truthy", () => {
                 const filter = Model.measureValueFilter("myMeasure");

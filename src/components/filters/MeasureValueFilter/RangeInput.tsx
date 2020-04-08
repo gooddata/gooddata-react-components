@@ -4,7 +4,7 @@ import InputWithNumberFormat from "@gooddata/goodstrap/lib/Form/InputWithNumberF
 
 import { ISeparators } from "./separators";
 
-export interface IRangeInputProps {
+interface IRangeInputProps {
     from: number;
     to: number;
     usePercentage: boolean;

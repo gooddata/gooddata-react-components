@@ -25,7 +25,8 @@ import { IHeaderPredicate } from "./interfaces/HeaderPredicate";
 import { IPushData, IDrillableItemPushData, IColorsData } from "./interfaces/PushData";
 import { AttributeFilter } from "./components/filters/AttributeFilter/AttributeFilter";
 import { AttributeElements } from "./components/filters/AttributeFilter/AttributeElements";
-import { DropdownAfmWrapper as MeasureValueFilterDropdown } from "./components/filters/MeasureValueFilter/DropdownAfmWrapper";
+import { MeasureValueFilterDropdown } from "./components/filters/MeasureValueFilter/MeasureValueFilterDropdown";
+import { MeasureValueFilter } from "./components/filters/MeasureValueFilter/MeasureValueFilter";
 import * as MeasureValueFilterOperators from "./constants/measureValueFilterOperators";
 import * as PropTypes from "./proptypes/index";
 import { generateDimensions } from "./helpers/dimensions";
@@ -91,6 +92,7 @@ export {
     AttributeElements,
     AttributeFilter,
     MeasureValueFilterDropdown,
+    MeasureValueFilter,
     MeasureValueFilterOperators,
     BarChart,
     BucketNames,
