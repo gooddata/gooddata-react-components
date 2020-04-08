@@ -434,13 +434,11 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
     private getResizedColumns = (columns: Column[]): IResizedColumns => {
         const initialValue: IResizedColumns = {};
-        // ONE-4388
-        const lastColumn = columns.length - 1;
-        return columns.reduce((acc, col, index) => {
+        return columns.reduce((acc, col) => {
             return {
                 ...acc,
                 [this.getColumnIdentifier(col.getDefinition() as IGridHeader)]: {
-                    width: index !== lastColumn ? col.getActualWidth() : null,
+                    width: col.getActualWidth(),
                 },
             };
         }, initialValue);
@@ -812,6 +810,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         }
     };
 
+    // ONE-4388
     private gridSizeChanged = (columnEvent: ColumnResizedEvent) => {
         if (columnEvent.columnApi) {
             this.resizeToFit(columnEvent.columnApi);
@@ -891,9 +890,10 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         let maxWidthProp = {};
         if (this.isColumnAutoresizeEnabled()) {
             this.enrichColumnDefinitionsWithWidths(getTreeLeaves(columnDefs), this.resizedColumns);
-            // ONE-4388
-            maxWidthProp = { maxWidth: this.props.config.width };
+            // ONE-4388 - maxWidth should be ignored if resizeToFit be called
+            maxWidthProp = { maxWidth: 500 };
         }
+
         return {
             // Initial data
             columnDefs,
@@ -923,6 +923,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             onCellClicked: this.cellClicked,
             onSortChanged: this.sortChanged,
             onColumnResized: this.columnResized,
+            // ONE-4388
             onGridSizeChanged: this.gridSizeChanged,
 
             // Basic options
