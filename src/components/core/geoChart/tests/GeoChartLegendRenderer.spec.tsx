@@ -5,8 +5,9 @@ import { withIntl } from "../../../visualizations/utils/intlUtils";
 import GeoChartLegendRenderer, { IGeoChartLegendRendererProps } from "../GeoChartLegendRenderer";
 import { IGeoData } from "../../../../interfaces/GeoChart";
 
-import PushpinSizeLegend from "../legends/PushpinSizeLegend";
 import PushpinCategoryLegend from "../legends/PushpinCategoryLegend";
+import PushpinSizeLegend from "../legends/PushpinSizeLegend";
+import { TOP } from "../../../visualizations/chart/legend/PositionTypes";
 import { getGeoData } from "../../../../helpers/geoChart/data";
 import {
     LOCATION_LNGLATS,
@@ -57,7 +58,6 @@ function getLegendProps(legendFlags: ILegendFlags): IGeoChartLegendRendererProps
     };
     return {
         geoData,
-        config: getGeoConfig({ isWithLocation: true, isWithSize: hasSizeLegend }),
     };
 }
 
@@ -100,7 +100,6 @@ describe("GeoChartLegendRenderer", () => {
         const geoData = getGeoData(buckets, execution);
 
         const props: IGeoChartLegendRendererProps = {
-            config,
             geoData,
             categoryItems: [
                 {
@@ -110,6 +109,7 @@ describe("GeoChartLegendRenderer", () => {
                     isVisible: true,
                 },
             ],
+            position: TOP,
         };
         const wrapper = createComponent(props);
         const sizeLegend = wrapper.find(PushpinSizeLegend);
@@ -119,4 +119,20 @@ describe("GeoChartLegendRenderer", () => {
         expect(sizeLegend.length).toEqual(1);
         expect(categoryLegend.length).toEqual(1);
     });
+
+    it.each([["viz-static-legend-wrap", "static", false], ["viz-fluid-legend-wrap", "fluid", true]])(
+        "should set %s class for %s legend",
+        async (classname: string, _responsiveText: string, responsive: boolean) => {
+            const props: IGeoChartLegendRendererProps = getLegendProps({
+                hasColorLegend: true,
+                hasSizeLegend: true,
+            });
+            const wrapper = createComponent({
+                ...props,
+                responsive,
+                showFluidLegend: true,
+            });
+            expect(await wrapper.find(`.${classname}`)).toHaveLength(1);
+        },
+    );
 });

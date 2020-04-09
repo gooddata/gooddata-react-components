@@ -216,6 +216,7 @@ export const BULLET_CHART_SUPPORTED_PROPERTIES = [
 
 export const GEOPUSHPIN_SUPPORTED_PROPERTIES = [
     "tooltipText",
+    "legend",
     "points.groupNearbyPoints",
     "points.minSize",
     "points.maxSize",

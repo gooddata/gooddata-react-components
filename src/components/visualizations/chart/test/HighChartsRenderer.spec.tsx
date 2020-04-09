@@ -3,11 +3,12 @@ import * as React from "react";
 import { shallow, mount } from "enzyme";
 import noop = require("lodash/noop");
 
-import HighChartsRenderer, { FLUID_LEGEND_THRESHOLD } from "../HighChartsRenderer";
+import HighChartsRenderer from "../HighChartsRenderer";
 import { getHighchartsOptions } from "../highChartsCreators";
 import Chart from "../Chart";
 import Legend from "../legend/Legend";
 import { TOP, BOTTOM, LEFT, RIGHT } from "../legend/PositionTypes";
+import { FLUID_LEGEND_THRESHOLD } from "../../../../constants/legend";
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 
 function createComponent(customProps: any = {}) {

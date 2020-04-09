@@ -77,3 +77,7 @@ export function isPointsConfigChanged(
 ): boolean {
     return !isEqual(prevPointsConfig, pointsConfig);
 }
+
+export function isFluidLegendEnabled(responsive: boolean, showFluidLegend: boolean): boolean {
+    return responsive && showFluidLegend;
+}

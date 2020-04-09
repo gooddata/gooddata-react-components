@@ -1,6 +1,7 @@
 // (C) 2020 GoodData Corporation
 import * as React from "react";
 import { shallow, ShallowWrapper } from "enzyme";
+import { VisualizationObject } from "@gooddata/typings";
 import { IConfigurationPanelContentProps } from "../ConfigurationPanelContent";
 import { DEFAULT_LOCALE } from "../../../../constants/localization";
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
@@ -8,6 +9,7 @@ import GeoPushpinConfigurationPanel from "../GeoPushpinConfigurationPanel";
 import CheckboxControl from "../../configurationControls/CheckboxControl";
 import PushpinSizeControl from "../../configurationControls/PushpinSizeControl";
 import PushpinViewportControl from "../../configurationControls/PushpinViewportControl";
+import LegendSection from "../../configurationControls/legend/LegendSection";
 
 describe("GeoPushpinConfigurationPanel", () => {
     function createComponent(props: IConfigurationPanelContentProps): ShallowWrapper {
@@ -18,7 +20,21 @@ describe("GeoPushpinConfigurationPanel", () => {
         visualizationAttribute: {
             localIdentifier: "379ed0c895204670b239ae36ac446b2a",
             displayForm: {
-                uri: "/gdc/md/a8pxyfcimmbcgczhy0o4w775oabma8im/obj/695",
+                uri: "/gdc/md/myproject/obj/695",
+            },
+        },
+    };
+
+    const sizeItem = {
+        measure: {
+            localIdentifier: "size",
+            title: "Amount Avg",
+            definition: {
+                measureDefinition: {
+                    item: {
+                        uri: "/gdc/md/myproject/obj/8173",
+                    },
+                },
             },
         },
     };
@@ -27,11 +43,11 @@ describe("GeoPushpinConfigurationPanel", () => {
         buckets: [
             {
                 localIdentifier: "size",
-                items: [] as any,
+                items: [sizeItem],
             },
         ],
         visualizationClass: {
-            uri: "/gdc/md/a8pxyfcimmbcgczhy0o4w775oabma8im/obj/952",
+            uri: "/gdc/md/myproject/obj/952",
         },
     };
 
@@ -47,7 +63,23 @@ describe("GeoPushpinConfigurationPanel", () => {
             },
         ],
         visualizationClass: {
-            uri: "/gdc/md/a8pxyfcimmbcgczhy0o4w775oabma8im/obj/952",
+            uri: "/gdc/md/myproject/obj/952",
+        },
+    };
+
+    const locationAndSizeMdObject = {
+        buckets: [
+            {
+                localIdentifier: "location",
+                items: [locationItem],
+            },
+            {
+                localIdentifier: "size",
+                items: [sizeItem],
+            },
+        ],
+        visualizationClass: {
+            uri: "/gdc/md/myproject/obj/952",
         },
     };
 
@@ -92,54 +124,82 @@ describe("GeoPushpinConfigurationPanel", () => {
         type: VisualizationTypes.PUSHPIN,
     };
 
-    it("should render config panel with Default viewport dropdown is disabled", async () => {
-        const wrapper = createComponent({
-            ...defaultProps,
-            mdObject: noLocationMdObject,
+    describe("Legend section", () => {
+        it.each([
+            ["disabled", "no location", true, noLocationMdObject],
+            ["disabled", "no measure or segment", true, clusteringMdObject],
+            ["enabled", "measure or segment", false, locationAndSizeMdObject],
+        ])(
+            "should %s Legend section when there is %s",
+            async (
+                _statusText: string,
+                _conditionText: string,
+                expectedStatus: boolean,
+                mdObject: VisualizationObject.IVisualizationObjectContent,
+            ) => {
+                const wrapper = createComponent({
+                    ...defaultProps,
+                    mdObject,
+                });
+
+                const isDisabled = await wrapper.find(LegendSection).prop("controlsDisabled");
+                expect(isDisabled).toEqual(expectedStatus);
+            },
+        );
+    });
+
+    describe("Map section", () => {
+        it("should render config panel with Default viewport dropdown is disabled", async () => {
+            const wrapper = createComponent({
+                ...defaultProps,
+                mdObject: noLocationMdObject,
+            });
+
+            const isDisabled = await wrapper.find(PushpinViewportControl).prop("disabled");
+            expect(isDisabled).toEqual(true);
         });
 
-        const isDisabled = await wrapper.find(PushpinViewportControl).prop("disabled");
-        expect(isDisabled).toEqual(true);
+        it("should render config panel with Default viewport dropdown is enabled", async () => {
+            const wrapper = createComponent(defaultProps);
+
+            const isDisabled = await wrapper.find(PushpinViewportControl).prop("disabled");
+            expect(isDisabled).toEqual(false);
+        });
     });
 
-    it("should render config panel with Default viewport dropdown is enabled", async () => {
-        const wrapper = createComponent(defaultProps);
+    describe("Points section", () => {
+        it("should render config panel with groupNearbyPoints checkbox is disabled", async () => {
+            const wrapper = createComponent(defaultProps);
 
-        const isDisabled = await wrapper.find(PushpinViewportControl).prop("disabled");
-        expect(isDisabled).toEqual(false);
-    });
-
-    it("should render config panel with groupNearbyPoints checkbox is disabled", async () => {
-        const wrapper = createComponent(defaultProps);
-
-        const isDisabled = await wrapper.find(CheckboxControl).prop("disabled");
-        expect(isDisabled).toEqual(true);
-    });
-
-    it("should render config panel with groupNearbyPoints checkbox is enabled", async () => {
-        const wrapper = createComponent({
-            ...defaultProps,
-            mdObject: clusteringMdObject,
+            const isDisabled = await wrapper.find(CheckboxControl).prop("disabled");
+            expect(isDisabled).toEqual(true);
         });
 
-        const isDisabled = await wrapper.find(CheckboxControl).prop("disabled");
-        expect(isDisabled).toEqual(false);
-    });
+        it("should render config panel with groupNearbyPoints checkbox is enabled", async () => {
+            const wrapper = createComponent({
+                ...defaultProps,
+                mdObject: clusteringMdObject,
+            });
 
-    it("should render config panel with Point size section is disabled", async () => {
-        const wrapper = createComponent({
-            ...defaultProps,
-            mdObject: clusteringMdObject,
+            const isDisabled = await wrapper.find(CheckboxControl).prop("disabled");
+            expect(isDisabled).toEqual(false);
         });
 
-        const isDisabled = await wrapper.find(PushpinSizeControl).prop("disabled");
-        expect(isDisabled).toEqual(true);
-    });
+        it("should render config panel with Point size section is disabled", async () => {
+            const wrapper = createComponent({
+                ...defaultProps,
+                mdObject: clusteringMdObject,
+            });
 
-    it("should render config panel with Point size section is enabled", async () => {
-        const wrapper = createComponent(defaultProps);
+            const isDisabled = await wrapper.find(PushpinSizeControl).prop("disabled");
+            expect(isDisabled).toEqual(true);
+        });
 
-        const isDisabled = await wrapper.find(PushpinSizeControl).prop("disabled");
-        expect(isDisabled).toEqual(false);
+        it("should render config panel with Point size section is enabled", async () => {
+            const wrapper = createComponent(defaultProps);
+
+            const isDisabled = await wrapper.find(PushpinSizeControl).prop("disabled");
+            expect(isDisabled).toEqual(false);
+        });
     });
 });

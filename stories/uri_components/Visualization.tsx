@@ -401,7 +401,7 @@ storiesOf("URI components", module)
     )
     .add("GeoPushpinChart example", () =>
         screenshotWrap(
-            <div style={{ width: 800, height: 400, position: "relative" }}>
+            <div style={{ width: 800, height: 400 }}>
                 <Visualization
                     projectId="storybook"
                     identifier="pushpin-chart-location-size-color-segment-tooltip"

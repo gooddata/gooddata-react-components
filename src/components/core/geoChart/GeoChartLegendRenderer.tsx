@@ -1,70 +1,123 @@
 // (C) 2020 GoodData Corporation
 import * as React from "react";
+import Measure, { ContentRect, MeasuredComponentProps } from "react-measure";
 import cx from "classnames";
-import {
-    IGeoConfig,
-    IGeoData,
-    IGeoMeasureItem,
-    IPushpinCategoryLegendItem,
-} from "../../../interfaces/GeoChart";
-import { TOP } from "../../visualizations/chart/legend/PositionTypes";
-import { ColorLegend } from "../../visualizations/chart/legend/ColorLegend";
-import PushpinSizeLegend from "./legends/PushpinSizeLegend";
-import PushpinCategoryLegend from "../geoChart/legends/PushpinCategoryLegend";
 
-import { useNumbericSymbols } from "../base/hook/TranslationsHook";
 import { generateLegendColorData } from "./geoChartColor";
+import PushpinCategoryLegend from "./legends/PushpinCategoryLegend";
+import PushpinSizeLegend from "./legends/PushpinSizeLegend";
+import { useNumbericSymbols } from "../base/hook/TranslationsHook";
+import { ColorLegend } from "../../visualizations/chart/legend/ColorLegend";
+import { BOTTOM } from "../../visualizations/chart/legend/PositionTypes";
+import { IGeoData, IPushpinCategoryLegendItem } from "../../../interfaces/GeoChart";
+import { isFluidLegendEnabled } from "../../../helpers/geoChart/common";
+import { getAvailableLegends } from "../../../helpers/geoChart/data";
 
 export interface IGeoChartLegendRendererProps {
-    config: IGeoConfig;
-    geoData: IGeoData;
+    categoryItems?: IPushpinCategoryLegendItem[]; // used for Category legend
+    format?: string;
+    geoData?: IGeoData; // used for Color/Size legend
+    height?: number;
+    locale?: string;
     position?: string;
-    categoryItems?: IPushpinCategoryLegendItem[];
-    onItemClick?(item: IPushpinCategoryLegendItem): void;
+    responsive?: boolean;
+    showFluidLegend?: boolean;
+    onItemClick?: (item: IPushpinCategoryLegendItem) => void;
 }
 
 export default function GeoChartLegendRenderer(props: IGeoChartLegendRendererProps): JSX.Element {
-    const numericSymbols = useNumbericSymbols();
-    const { position = TOP, categoryItems, geoData } = props;
-    const { size, color } = geoData;
+    const { categoryItems, geoData, position, responsive, showFluidLegend } = props;
+    const { hasCategoryLegend, hasColorLegend, hasSizeLegend } = getAvailableLegends(categoryItems, geoData);
 
-    const hasSizeData = Boolean(size && size.data.length);
-    const hasSegmentData = Boolean(categoryItems && categoryItems.length);
-    const isColorLegendVisible = Boolean(color && color.data.length && !hasSegmentData);
-    const isLegendVisible = isColorLegendVisible || hasSizeData || hasSegmentData;
-
+    const isLegendVisible = hasCategoryLegend || hasColorLegend || hasSizeLegend;
     if (!isLegendVisible) {
         return null;
     }
 
-    const classes = cx("geo-legend s-geo-legend", `position-${position}`, { "has-size-legend": hasSizeData });
+    const isFluidLegend = isFluidLegendEnabled(responsive, showFluidLegend);
+    const isBottomPosition = isFluidLegend || position === BOTTOM;
+
+    const classNames = cx("geo-legend", "s-geo-legend", {
+        "viz-fluid-legend-wrap": isFluidLegend,
+        "viz-static-legend-wrap": !isFluidLegend,
+        "has-size-legend": hasSizeLegend,
+        [`position-${position}`]: !isBottomPosition,
+        // this is required in case
+        // position is not BOTTOM but isFluidLegend is true
+        "position-bottom": isBottomPosition,
+    });
 
     return (
-        <div className={classes}>
-            {isColorLegendVisible && renderPushpinColorLegend(color, numericSymbols)}
-            {hasSegmentData && renderPushpinCategoryLegend(props)}
-            {hasSizeData && renderPushpinSizeLegend(size, numericSymbols)}
-        </div>
+        <Measure client={true}>
+            {({ measureRef, contentRect }: MeasuredComponentProps) => {
+                return (
+                    <div className={classNames} ref={measureRef}>
+                        {renderPushpinColorLegend(props, hasColorLegend)}
+                        {renderPushpinCategoryLegend(props, contentRect, hasSizeLegend, hasCategoryLegend)}
+                        {renderPushpinSizeLegend(props, hasSizeLegend)}
+                    </div>
+                );
+            }}
+        </Measure>
     );
 }
 
-function renderPushpinSizeLegend(size: IGeoMeasureItem, numericSymbols: string[]): JSX.Element {
-    const { name, format, data } = size;
-    return (
-        <PushpinSizeLegend numericSymbols={numericSymbols} format={format} sizes={data} measureName={name} />
-    );
-}
+function renderPushpinColorLegend(props: IGeoChartLegendRendererProps, hasColorLegend: boolean): JSX.Element {
+    if (!hasColorLegend) {
+        return null;
+    }
 
-function renderPushpinColorLegend(color: IGeoMeasureItem, numericSymbols: string[]): JSX.Element {
-    const { data, format } = color;
+    const {
+        geoData: {
+            color: { data, format },
+        },
+        position,
+        responsive,
+        showFluidLegend,
+    } = props;
+
     const dataWithoutNull = data.filter(isFinite);
     const colorData = generateLegendColorData(dataWithoutNull);
-    return <ColorLegend data={colorData} format={format} numericSymbols={numericSymbols} position={TOP} />;
+    const isSmall: boolean = responsive && showFluidLegend;
+    const numericSymbols: string[] = useNumbericSymbols();
+
+    return (
+        <ColorLegend
+            data={colorData}
+            format={format}
+            isSmall={isSmall}
+            numericSymbols={numericSymbols}
+            position={position}
+        />
+    );
 }
 
-function renderPushpinCategoryLegend(props: IGeoChartLegendRendererProps): JSX.Element {
-    const { position = TOP, categoryItems, onItemClick } = props;
+function renderPushpinCategoryLegend(
+    props: IGeoChartLegendRendererProps,
+    contentRect: ContentRect,
+    hasSizeLegend: boolean,
+    hasCategoryLegend: boolean,
+): JSX.Element {
+    if (!hasCategoryLegend) {
+        return null;
+    }
+
+    return <PushpinCategoryLegend {...props} contentRect={contentRect} hasSizeLegend={hasSizeLegend} />;
+}
+
+function renderPushpinSizeLegend(props: IGeoChartLegendRendererProps, hasSizeLegend: boolean): JSX.Element {
+    if (!hasSizeLegend) {
+        return null;
+    }
+
+    const {
+        geoData: {
+            size: { data, format, name },
+        },
+    } = props;
+    const numericSymbols: string[] = useNumbericSymbols();
+
     return (
-        <PushpinCategoryLegend position={position} categoryItems={categoryItems} onItemClick={onItemClick} />
+        <PushpinSizeLegend format={format} measureName={name} numericSymbols={numericSymbols} sizes={data} />
     );
 }

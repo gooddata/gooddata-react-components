@@ -1,32 +1,57 @@
 const DEFAULT_SCENARIO_CONFIG = {
-    readyEvent: 'GDC_GEO_CANVAS_READY'
+    readyEvent: "GDC_GEO_CANVAS_READY",
 };
+
+const chartStories = [
+    "with location",
+    "with location and show unclustered pins",
+    "with location and size",
+    "with location, size and segmentBy",
+    "with location and color",
+    "with location, size and color",
+    "with location and size, color contains same values",
+    "with location, size, color, segmentBy and tooltipText",
+    "with location, size, color, segmentBy, tooltipText and location filter",
+    "with North America viewport",
+    "with World viewport",
+    "with Include all data viewport",
+    "with disabled interactive and zoom control button",
+    "with color and segment alias shown in tooltip",
+    "with disabled groupNearbyPoints",
+    "with enabled groupNearbyPoints",
+    "with config point size",
+];
+
+const legendStories = [
+    "with legend is disabled",
+    "with legend position is auto",
+    "with legend position is left",
+    "with legend position is right",
+    "with legend position is top",
+    "with legend position is bottom",
+    "with legend position is left and height of container is not enough",
+];
 
 const configuration = {
     sections: {
-        'Core components/GeoPushpinChart': {
-            'with location': DEFAULT_SCENARIO_CONFIG,
-            'with location and show unclustered pins': DEFAULT_SCENARIO_CONFIG,
-            'with location and size': DEFAULT_SCENARIO_CONFIG,
-            'with location, size and segmentBy': DEFAULT_SCENARIO_CONFIG,
-            'with location and color': DEFAULT_SCENARIO_CONFIG,
-            'with location, size and color': DEFAULT_SCENARIO_CONFIG,
-            'with location and size, color contains same values': DEFAULT_SCENARIO_CONFIG,
-            'with location, size, color, segmentBy and tooltipText': DEFAULT_SCENARIO_CONFIG,
-            'with location, size, color, segmentBy, tooltipText and location filter': DEFAULT_SCENARIO_CONFIG,
-            'with North America viewport': DEFAULT_SCENARIO_CONFIG,
-            'with World viewport': DEFAULT_SCENARIO_CONFIG,
-            'with Include all data viewport': DEFAULT_SCENARIO_CONFIG,
-            'with disabled interactive and zoom control button': DEFAULT_SCENARIO_CONFIG,
-            'with color and segment alias shown in tooltip': DEFAULT_SCENARIO_CONFIG,
-            'with disabled groupNearbyPoints': DEFAULT_SCENARIO_CONFIG,
-            'with enabled groupNearbyPoints': DEFAULT_SCENARIO_CONFIG,
-            'with config point size': DEFAULT_SCENARIO_CONFIG,
+        "Core components/GeoPushpinChart": chartStories.reduce(
+            (result, story) => ({
+                ...result,
+                [story]: DEFAULT_SCENARIO_CONFIG,
+            }),
+            {},
+        ),
+        "Core components/GeoPushpinChart/Config/Legend": legendStories.reduce(
+            (result, story) => ({
+                ...result,
+                [story]: DEFAULT_SCENARIO_CONFIG,
+            }),
+            {},
+        ),
+        "URI components": {
+            "GeoPushpinChart example": DEFAULT_SCENARIO_CONFIG,
         },
-        'URI components': {
-            'GeoPushpinChart example': DEFAULT_SCENARIO_CONFIG,
-        }
-    }
+    },
 };
 
 module.exports = configuration;

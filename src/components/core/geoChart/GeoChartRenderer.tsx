@@ -68,6 +68,10 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         const { config: prevConfig } = prevProps;
         const { selectedSegmentItems: prevSelectedSegmentItems = [] } = prevConfig || {};
 
+        // reisze map when component is updated
+        // for exemple: toggle legend, change position of legend
+        this.chart.resize();
+
         // only update map when style is ready
         // work around for ticket SD-898
         // avoid refresh whole map will be fixed in ticket SD-899
