@@ -1402,13 +1402,13 @@
     rxjs "^5.5.6"
     uuid "^3.2.1"
 
-"@gooddata/goodstrap@^68.4.1":
-  version "68.4.1"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-68.4.1.tgz#b4fa196d5039d26cea59b9d0ec06ae7211ccb83a"
-  integrity sha512-tlh/nHXyetymFBgoL8p/50YJyvB7QXMMaJHVBaQGaMWqtNE5vxjoZvO4srkBmdn21uIiHobFoFRaK9Lpey8CVg==
+"@gooddata/goodstrap@^68.5.0":
+  version "68.5.0"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-68.5.0.tgz#1073923c81850a61738852e13c13d00d68dc9d01"
+  integrity sha512-PC3z/eFkYtFGGlsBBas5xYX7GseJX2hqjT3v2/G0uAd71xqKOE0QdUaiW3lRd66hnCM5mm5XfxacP0A449NygA==
   dependencies:
     "@babel/runtime-corejs2" "^7.0.0"
-    "@gooddata/js-utils" "^3.5.0"
+    "@gooddata/js-utils" "^3.10.3"
     classnames "^2.2.6"
     custom-event "^1.0.1"
     element-closest-polyfill "^1.0.0"
@@ -1432,6 +1432,14 @@
     react-transition-group "^1.2.1"
     rxjs "^5.5.6"
     tinycolor2 "^1.4.1"
+
+"@gooddata/js-utils@^3.10.3":
+  version "3.10.3"
+  resolved "https://registry.yarnpkg.com/@gooddata/js-utils/-/js-utils-3.10.3.tgz#6bb65c16fe334f48cfa8d5197232fd3231d25321"
+  integrity sha512-QmdcxcF9QoIJ5bfjHl7rMRDKLVNipksEl1gafDDQd4RSPPiECvKeAoN/toxqDLeMcfpQUPSvhsrz581maltudA==
+  dependencies:
+    js-cookie "^2.1.4"
+    lodash "^4.17.15"
 
 "@gooddata/js-utils@^3.5.0":
   version "3.5.0"
