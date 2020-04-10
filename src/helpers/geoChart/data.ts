@@ -18,7 +18,6 @@ import {
 import { getMinMax, stringToFloat } from "../utils";
 import { getFormatFromExecutionResponse, getGeoAttributeHeaderItems } from "./common";
 import { isDisplayFormUri } from "../../internal/utils/mdObjectHelper";
-import { parseGeoPropertyItem } from "../../components/core/geoChart/geoChartTooltip";
 
 interface IBucketItemInfo {
     uri?: VisualizationObject.IObjUriQualifier["uri"];
@@ -249,5 +248,23 @@ export function getAvailableLegends(
         hasCategoryLegend,
         hasColorLegend,
         hasSizeLegend,
+    };
+}
+
+function parseGeoPropertyItem(item: string): GeoJSON.GeoJsonProperties {
+    try {
+        return JSON.parse(item);
+    } catch (e) {
+        return {};
+    }
+}
+
+export function parseGeoProperties(properties: GeoJSON.GeoJsonProperties): GeoJSON.GeoJsonProperties {
+    const { locationName = "{}", color = "{}", size = "{}", segment = "{}" } = properties;
+    return {
+        locationName: parseGeoPropertyItem(locationName),
+        size: parseGeoPropertyItem(size),
+        color: parseGeoPropertyItem(color),
+        segment: parseGeoPropertyItem(segment),
     };
 }

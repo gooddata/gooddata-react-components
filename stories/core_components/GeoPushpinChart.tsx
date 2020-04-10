@@ -5,7 +5,7 @@ import { VisualizationInput } from "@gooddata/typings";
 import { screenshotWrap } from "@gooddata/test-storybook";
 
 import { IGeoConfig, IGeoPushpinChartProps } from "../../src/interfaces/GeoChart";
-import { GeoPushpinChart } from "../../src";
+import { GeoPushpinChart, HeaderPredicateFactory } from "../../src";
 import { onErrorHandler } from "../mocks";
 import {
     ATTRIBUTE_LOCATION_GEOCHART,
@@ -33,7 +33,7 @@ function renderGeoPushpinChart(
     props: IGeoPushpinChartProps,
     customStyles: React.CSSProperties = {},
 ): React.ReactElement {
-    const { projectId, location, size, color, segmentBy, config, filters } = props;
+    const { projectId, location, size, color, segmentBy, config, drillableItems, filters, onDrill } = props;
     return (
         <div style={{ ...wrapperStyle, ...customStyles }}>
             <GeoPushpinChart
@@ -44,6 +44,8 @@ function renderGeoPushpinChart(
                 segmentBy={segmentBy}
                 filters={filters}
                 config={config}
+                drillableItems={drillableItems}
+                onDrill={onDrill}
                 onError={onErrorHandler}
                 afterRender={afterRender}
             />
@@ -196,7 +198,20 @@ storiesOf("Core components/GeoPushpinChart", module)
                 config,
             }),
         );
-    });
+    })
+    .add("with drillable items", () =>
+        // we don't need a screenshot here
+        // Geo Pushpin chart with/without drill doesn't change the UI
+        renderGeoPushpinChart({
+            projectId: "storybook",
+            config: DEFAULT_CONFIG,
+            drillableItems: [HeaderPredicateFactory.uriMatch("/gdc/md/storybook/obj/23/elements?id=4")],
+            location: ATTRIBUTE_LOCATION_GEOCHART,
+            size: MEASURE_SIZE_GEOCHART,
+            color: MEASURE_COLOR_GEOCHART,
+            segmentBy: ATTRIBUTE_SEGMENT_GEOCHART,
+        }),
+    );
 
 storiesOf("Core components/GeoPushpinChart/Config/Legend", module)
     .add("with legend is disabled", () =>

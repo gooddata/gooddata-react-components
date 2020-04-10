@@ -43,14 +43,19 @@ export function geoValidatorHOC<T>(InnerComponent: React.ComponentClass<T>): Rea
         }
 
         public shouldComponentUpdate(nextProps: IGeoValidatorProps): boolean {
-            const { config, dataSource } = this.props;
-            const { config: nextConfig, dataSource: nextDataSource } = nextProps;
+            const { config, dataSource, drillableItems } = this.props;
+            const {
+                config: nextConfig,
+                dataSource: nextDataSource,
+                drillableItems: nextDrillableItems,
+            } = nextProps;
 
             // check if buckets, filters and config are changed
             const isSameConfig = this.isSameConfig(config, nextConfig);
-            const isSameDatasource = isEqual(dataSource.getAfm(), nextDataSource.getAfm());
+            const isSameDataSource = isEqual(dataSource.getAfm(), nextDataSource.getAfm());
+            const isSameDrillableItems = isEqual(drillableItems, nextDrillableItems);
 
-            return !isSameConfig || !isSameDatasource;
+            return !isSameConfig || !isSameDataSource || !isSameDrillableItems;
         }
 
         public componentDidUpdate(): void {

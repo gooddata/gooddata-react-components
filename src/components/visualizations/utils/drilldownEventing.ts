@@ -1,9 +1,12 @@
 // (C) 2007-2020 GoodData Corporation
 import get = require("lodash/get");
 import debounce = require("lodash/debounce");
+import omit = require("lodash/omit");
+import without = require("lodash/without");
 import * as CustomEvent from "custom-event";
 import * as invariant from "invariant";
 import Highcharts from "../chart/highcharts/highchartsEntryPoint";
+import { IUnwrappedAttributeHeaderWithItems } from "../../visualizations/typings/chart";
 import {
     ChartElementType,
     ChartType,
@@ -32,8 +35,11 @@ import {
     IDrillEventContextPointBase,
     IDrillEventContextBase,
     DrillEventIntersectionElementHeader,
+    IGeoDrillEvent,
 } from "../../../interfaces/DrillEvents";
 import { OnFiredDrillEvent } from "../../../interfaces/Events";
+import { IGeoData } from "../../../interfaces/GeoChart";
+import { IHeaderPredicate } from "../../../interfaces/HeaderPredicate";
 import {
     isComboChart,
     isHeatmap,
@@ -41,6 +47,11 @@ import {
     getAttributeElementIdFromAttributeElementUri,
     isBulletChart,
 } from "./common";
+import { findMeasureGroupInDimensions } from "../../../helpers/executionResultHelper";
+import { findGeoAttributesInDimension } from "../../../helpers/geoChart/executionResultHelper";
+import { parseGeoProperties } from "../../../helpers/geoChart/data";
+
+import { isSomeHeaderPredicateMatched } from "../../../helpers/headerPredicate";
 import { getVisualizationType } from "../../../helpers/visualizationType";
 import { getMasterMeasureObjQualifier } from "../../../helpers/afmHelper";
 import { AFM, Execution } from "@gooddata/typings";
@@ -472,3 +483,131 @@ export const getDrillIntersection = (
         [],
     );
 };
+
+function getDrillIntersectionForGeoChart(
+    drillableItems: IHeaderPredicate[],
+    drillConfig: IDrillConfig,
+    execution: Execution.IExecutionResponses,
+    geoData: IGeoData,
+    locationIndex: number,
+): IDrillEventIntersectionElementExtended[] {
+    const { executionResponse } = execution;
+    const { dimensions } = executionResponse;
+
+    const { items: measureGroupItems = [] } = findMeasureGroupInDimensions(dimensions) || {};
+    const measureHeaders: Execution.IMeasureHeaderItem[] = measureGroupItems.slice(0, 2);
+
+    const { locationAttribute, segmentByAttribute } = findGeoAttributesInDimension(execution, geoData);
+    const {
+        attributeHeader: locationAttributeHeader,
+        attributeHeaderItem: locationAttributeHeaderItem,
+    } = getAttributeHeader(locationAttribute, locationIndex);
+    const {
+        attributeHeader: segmentByAttributeHeader,
+        attributeHeaderItem: segmentByAttributeHeaderItem,
+    } = getAttributeHeader(segmentByAttribute, locationIndex);
+
+    // pin is drillable if a drillableItem matches:
+    //   pin's measure,
+    //   pin's location attribute,
+    //   pin's location attribute item,
+    //   pin's segmentBy attribute,
+    //   pin's segmentBy attribute item,
+    const drillItems: IMappingHeader[] = without(
+        [
+            ...measureHeaders,
+            locationAttributeHeaderItem,
+            locationAttributeHeader,
+            segmentByAttributeHeaderItem,
+            segmentByAttributeHeader,
+        ],
+        undefined,
+    );
+
+    const drilldown: boolean = drillItems.some(
+        (drillableHook: IMappingHeader): boolean =>
+            isSomeHeaderPredicateMatched(drillableItems, drillableHook, drillConfig.afm, executionResponse),
+    );
+
+    if (drilldown) {
+        return getDrillIntersection(drillItems);
+    }
+
+    return undefined;
+}
+
+function getAttributeHeader(
+    attribute: IUnwrappedAttributeHeaderWithItems,
+    dataIndex: number,
+): {
+    attributeHeader: Execution.IAttributeHeader;
+    attributeHeaderItem: Execution.IResultAttributeHeaderItem;
+} {
+    if (attribute) {
+        return {
+            attributeHeader: { attributeHeader: omit(attribute, "items") },
+            attributeHeaderItem: attribute.items[dataIndex],
+        };
+    }
+    return {
+        attributeHeader: undefined,
+        attributeHeaderItem: undefined,
+    };
+}
+
+export function handleGeoPushpinDrillEvent(
+    drillableItems: IHeaderPredicate[],
+    drillConfig: IDrillConfig,
+    execution: Execution.IExecutionResponses,
+    geoData: IGeoData,
+    properties: GeoJSON.GeoJsonProperties,
+    target: EventTarget,
+): void {
+    const { locationIndex } = properties;
+    const drillIntersection: IDrillEventIntersectionElementExtended[] = getDrillIntersectionForGeoChart(
+        drillableItems,
+        drillConfig,
+        execution,
+        geoData,
+        locationIndex,
+    );
+
+    if (!drillIntersection || !drillIntersection.length) {
+        return;
+    }
+
+    const { afm, onDrill, onFiredDrillEvent } = drillConfig;
+    const {
+        locationName: { value: locationNameValue },
+        color: { value: colorValue },
+        segment: { value: segmentByValue },
+        size: { value: sizeValue },
+    } = parseGeoProperties(properties);
+    const locationName: string = locationNameValue ? escape(String(locationNameValue)) : "";
+    const segmentByName: string = segmentByValue ? escape(String(segmentByValue)) : "";
+    const drillContext: IGeoDrillEvent = {
+        element: "pushpin",
+        intersection: drillIntersection,
+        type: "pushpin",
+        color: colorValue,
+        location: locationName,
+        segmentBy: segmentByName,
+        size: sizeValue,
+    };
+    const drillEventExtended: IDrillEventExtended = {
+        executionContext: afm,
+        drillContext,
+    };
+
+    if (onDrill) {
+        onDrill(drillEventExtended);
+    }
+
+    const drillContextLegacy: IDrillEventContext = convertDrillContextToLegacy(drillContext, afm);
+    const drillEventLegacy: IDrillEvent = {
+        executionContext: afm,
+        drillContext: drillContextLegacy,
+    };
+
+    fireDrillEvent(onFiredDrillEvent, drillEventLegacy, target);
+}

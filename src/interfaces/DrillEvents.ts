@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { AFM, Execution } from "@gooddata/typings";
 import Highcharts from "../components/visualizations/chart/highcharts/highchartsEntryPoint";
 import {
@@ -190,6 +190,13 @@ export interface IDrillEventContextExtended extends IDrillEventContextBase {
     points?: IDrillPointExtended[];
     // some drill headers that are relevant for current drill element
     intersection?: IDrillEventIntersectionElementExtended[];
+}
+
+export interface IGeoDrillEvent extends IDrillEventContextExtended {
+    color?: number; // geo chart: color value of the drilled pin
+    location?: string; // geo chart: location of the drilled pin
+    segmentBy?: string; // geo chart: segmentBy of the drilled pin
+    size?: number; // geo chart: size value of the drilled pin
 }
 
 // IDrillEvent is a parameter of the onFiredDrillEvent is callback

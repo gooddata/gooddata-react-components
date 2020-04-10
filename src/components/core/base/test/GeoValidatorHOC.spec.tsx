@@ -4,6 +4,7 @@ import { VisualizationObject } from "@gooddata/typings";
 import { mount, ReactWrapper } from "enzyme";
 import { geoValidatorHOC } from "../GeoValidatorHOC";
 import { ErrorComponent } from "../../../simple/ErrorComponent";
+import { HeaderPredicateFactory } from "../../../../index";
 import {
     LOCATION_ITEM,
     SIZE_ITEM,
@@ -11,8 +12,10 @@ import {
     SEGMENT_BY_ITEM,
 } from "../../../../helpers/tests/geoChart/fixtures";
 import { IDataSource } from "../../../../interfaces/DataSource";
+import { IDrillableItem } from "../../../../interfaces/DrillEvents";
 import { OnError } from "../../../../interfaces/Events";
 import { IGeoConfig } from "../../../../interfaces/GeoChart";
+import { IHeaderPredicate } from "../../../../interfaces/HeaderPredicate";
 import {
     locationSizeColorSegmentDataSource,
     locationSizeColorSegmentFiltersDataSource,
@@ -21,6 +24,7 @@ import {
 interface ITestInnerComponentProps {
     config?: IGeoConfig;
     dataSource: IDataSource;
+    drillableItems?: Array<IDrillableItem | IHeaderPredicate>;
     onError?: OnError;
 }
 class TestInnerComponent extends React.Component<ITestInnerComponentProps> {
@@ -173,5 +177,31 @@ describe("GeoValidatorHOC", () => {
                 },
             },
         ]);
+    });
+
+    it("should component be updated to new prop when drillableItems changed", () => {
+        const config: IGeoConfig = {
+            mapboxToken: "mapboxToken",
+            mdObject: {
+                buckets: [SIZE_ITEM, COLOR_ITEM, LOCATION_ITEM, SEGMENT_BY_ITEM],
+                visualizationClass,
+            },
+        };
+        const drillableItems: Array<IDrillableItem | IHeaderPredicate> = [];
+
+        const wrapper = createComponent({
+            config,
+            drillableItems,
+        });
+        expect(wrapper.find(TestInnerComponent).prop("drillableItems")).toEqual([]);
+
+        const newDrillableItems: Array<IDrillableItem | IHeaderPredicate> = [
+            HeaderPredicateFactory.uriMatch("/abc"),
+        ];
+        wrapper.setProps({
+            config,
+            drillableItems: newDrillableItems,
+        });
+        expect(wrapper.find(TestInnerComponent).prop("drillableItems")).toEqual(newDrillableItems);
     });
 });

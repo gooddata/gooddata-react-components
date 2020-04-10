@@ -1,9 +1,16 @@
 // (C) 2020 GoodData Corporation
 import * as React from "react";
+import { AFM } from "@gooddata/typings";
 import { ShallowWrapper, shallow } from "enzyme";
 import { GeoChartInner, IGeoChartInnerProps, IGeoChartInnerOptions } from "../GeoChartInner";
 import { IGeoConfig } from "../../../../interfaces/GeoChart";
-import { getExecutionResponse, getExecutionResult, getGeoConfig } from "../../../../../stories/data/geoChart";
+import {
+    getAfm,
+    getExecutionResponse,
+    getExecutionResult,
+    getGeoConfig,
+    IMockGeoOptions,
+} from "../../../../../stories/data/geoChart";
 import { getGeoData } from "../../../../helpers/geoChart/data";
 import { DEFAULT_COLOR_PALETTE } from "../../../visualizations/utils/color";
 import { FLUID_LEGEND_THRESHOLD } from "../../../../constants/legend";
@@ -11,16 +18,24 @@ import { LEFT, RIGHT, TOP, BOTTOM } from "../../../visualizations/chart/legend/P
 import { PositionType } from "../../../visualizations/typings/legend";
 import { buildMockColorStrategy } from "./mock";
 
-const execution = {
-    executionResponse: getExecutionResponse(true, true, true, true),
-    executionResult: getExecutionResult(true, true, true, true, true),
+const geoOptions: IMockGeoOptions = {
+    isWithColor: true,
+    isWithLocation: true,
+    isWithSize: true,
+    isWithSegment: true,
+    isWithTooltipText: true,
 };
-const config = getGeoConfig({ isWithLocation: true, isWithSize: true, isWithSegment: true });
+
+const execution = {
+    executionResponse: getExecutionResponse(true, true, true, true, true),
+    executionResult: getExecutionResult(true, true, true, true, true, 5),
+};
+const config = getGeoConfig(geoOptions);
 const { mdObject: { buckets = [] } = {} } = config;
 
 function buildGeoChartOptions(): IGeoChartInnerOptions {
-    const mockColorStrategy = buildMockColorStrategy();
     const geoData = getGeoData(buckets, execution);
+    const mockColorStrategy = buildMockColorStrategy(geoOptions, execution, geoData);
     const categoryItems = [
         {
             name: "General Goods",
@@ -61,20 +76,25 @@ describe("GeoChartInner", () => {
         customProps: Partial<IGeoChartInnerProps> = {},
         customConfig: Partial<IGeoConfig> = {},
     ): ShallowWrapper {
+        const mockAfm: AFM.IAfm = getAfm(geoOptions);
         const defaultProps: Partial<IGeoChartInnerProps> = {
             config: {
                 mapboxToken: "",
                 ...customConfig,
             },
-            execution: {
-                executionResponse: getExecutionResponse(true),
-                executionResult: getExecutionResult(true),
+            dataSource: {
+                getData: () => Promise.resolve(null),
+                getPage: () => Promise.resolve(null),
+                getAfm: () => mockAfm,
+                getFingerprint: () => JSON.stringify(null),
             },
+            execution,
             geoChartOptions: buildGeoChartOptions(),
             height: 600,
         };
         return shallow(<GeoChartInner {...defaultProps} {...customProps} />);
     }
+
     it("should render GeoChartInner", async () => {
         const wrapper = renderComponent();
         expect(wrapper.find(".s-gd-geo-component").length).toBe(1);
@@ -127,6 +147,12 @@ describe("GeoChartInner", () => {
             colorLegendValue: "rgb(20,178,226)",
             format: "#,##0",
             geoData: {
+                color: {
+                    data: [NaN, 6832, 3294, 8340, 957],
+                    format: "#,##0",
+                    index: 1,
+                    name: "Area",
+                },
                 location: {
                     data: [
                         { lat: 44.5, lng: -89.5 },
@@ -134,49 +160,6 @@ describe("GeoChartInner", () => {
                         { lat: 44, lng: -72.699997 },
                         { lat: 31, lng: -100 },
                         { lat: 44.5, lng: -100 },
-                        { lat: 41.700001, lng: -71.5 },
-                        { lat: 44, lng: -120.5 },
-                        { lat: 43, lng: -75 },
-                        { lat: 44, lng: -71.5 },
-                        { lat: 41.5, lng: -100 },
-                        { lat: 38.5, lng: -98 },
-                        { lat: 33, lng: -90 },
-                        { lat: 40, lng: -89 },
-                        { lat: 39, lng: -75.5 },
-                        { lat: 41.599998, lng: -72.699997 },
-                        { lat: 34.799999, lng: -92.199997 },
-                        { lat: 40.273502, lng: -86.126976 },
-                        { lat: 38.573936, lng: -92.60376 },
-                        { lat: 27.994402, lng: -81.760254 },
-                        { lat: 39.876019, lng: -117.224121 },
-                        { lat: 45.367584, lng: -68.972168 },
-                        { lat: 44.182205, lng: -84.506836 },
-                        { lat: 33.247875, lng: -83.441162 },
-                        { lat: 35.860119, lng: -86.660156 },
-                        { lat: 37.926868, lng: -78.024902 },
-                        { lat: 39.833851, lng: -74.871826 },
-                        { lat: 37.839333, lng: -84.27002 },
-                        { lat: 47.650589, lng: -100.437012 },
-                        { lat: 46.39241, lng: -94.63623 },
-                        { lat: 36.084621, lng: -96.921387 },
-                        { lat: 46.96526, lng: -109.533691 },
-                        { lat: 47.751076, lng: -120.740135 },
-                        { lat: 39.41922, lng: -111.950684 },
-                        { lat: 39.113014, lng: -105.358887 },
-                        { lat: 40.367474, lng: -82.996216 },
-                        { lat: 32.31823, lng: -86.902298 },
-                        { lat: 42.032974, lng: -93.581543 },
-                        { lat: 34.307144, lng: -106.018066 },
-                        { lat: 33.836082, lng: -81.163727 },
-                        { lat: 41.203323, lng: -77.194527 },
-                        { lat: 34.048927, lng: -111.093735 },
-                        { lat: 39.045753, lng: -76.641273 },
-                        { lat: 42.407211, lng: -71.382439 },
-                        { lat: 36.778259, lng: -119.417931 },
-                        { lat: 44.068203, lng: -114.742043 },
-                        { lat: 43.07597, lng: -107.290283 },
-                        { lat: 35.782169, lng: -80.793457 },
-                        { lat: 30.39183, lng: -92.329102 },
                     ],
                     index: 0,
                     name: "State",
@@ -188,104 +171,12 @@ describe("GeoChartInner", () => {
                         "General Goods",
                         "General Goods",
                         "General Goods",
-                        "General Goods",
-                        "General Goods",
-                        "General Goods",
-                        "General Goods",
-                        "General Goods",
-                        "General Goods",
-                        "General Goods",
-                        "General Goods",
-                        "General Goods",
-                        "General Goods",
-                        "General Goods",
-                        "Toy Store",
-                        "Toy Store",
-                        "Toy Store",
-                        "Toy Store",
-                        "Toy Store",
-                        "Toy Store",
-                        "Toy Store",
-                        "Toy Store",
-                        "Toy Store",
-                        "Toy Store",
-                        "Toy Store",
-                        "Toy Store",
-                        "Toy Store",
-                        "Toy Store",
-                        "Speciality",
-                        "Speciality",
-                        "Speciality",
-                        "Speciality",
-                        "Speciality",
-                        "Speciality",
-                        "Convenience",
-                        "Convenience",
-                        "Convenience",
-                        "Convenience",
-                        "Convenience",
-                        "Convenience",
-                        "Convenience",
-                        "Convenience",
-                        "Convenience",
-                        "Convenience",
-                        "Convenience",
-                        "Convenience",
                     ],
                     index: 1,
                     name: "Type",
                 },
                 size: {
-                    data: [
-                        1005,
-                        943,
-                        NaN,
-                        4726,
-                        1719,
-                        2844,
-                        838,
-                        3060,
-                        709,
-                        772,
-                        3949,
-                        1766,
-                        1560,
-                        1938,
-                        3836,
-                        5302,
-                        3310,
-                        3500,
-                        2288,
-                        11564,
-                        1381,
-                        2627,
-                        8732,
-                        570,
-                        1121,
-                        1605,
-                        NaN,
-                        869,
-                        12064,
-                        596,
-                        2299,
-                        335,
-                        1782,
-                        1242,
-                        NaN,
-                        5602,
-                        2282,
-                        18,
-                        22220,
-                        7520,
-                        1047,
-                        NaN,
-                        116,
-                        957,
-                        8340,
-                        3294,
-                        6832,
-                        528,
-                    ],
+                    data: [1005, 943, NaN, 4726, 1719],
                     format: "#,##0",
                     index: 0,
                     name: "Population",
