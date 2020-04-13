@@ -198,5 +198,84 @@ describe("PluggableGeoPushpinChart", () => {
                 },
             });
         });
+
+        it("should remove all derived measures", async () => {
+            const geoPushpinChart = createComponent();
+            const extendedReferencePoint = await geoPushpinChart.getExtendedReferencePoint(
+                referencePointMocks.samePeriodPreviousYearRefPoint,
+            );
+
+            expect(extendedReferencePoint.buckets).toEqual([
+                {
+                    localIdentifier: "location",
+                    items: [],
+                },
+                {
+                    localIdentifier: "size",
+                    items: [
+                        {
+                            localIdentifier: "m1",
+                            type: "metric",
+                            aggregation: null,
+                            attribute: "aazb6kroa3iC",
+                            showInPercent: null,
+                            showOnSecondaryAxis: null,
+                        },
+                    ],
+                },
+                {
+                    localIdentifier: "color",
+                    items: [],
+                },
+                {
+                    localIdentifier: "segment",
+                    items: [],
+                },
+            ]);
+        });
+
+        it("should remove all arithmetic measures", async () => {
+            const geoPushpinChart = createComponent();
+            const extendedReferencePoint = await geoPushpinChart.getExtendedReferencePoint(
+                referencePointMocks.firstMeasureArithmeticNoAttributeReferencePoint,
+            );
+
+            expect(extendedReferencePoint.buckets).toEqual([
+                {
+                    localIdentifier: "location",
+                    items: [],
+                },
+                {
+                    localIdentifier: "size",
+                    items: [
+                        {
+                            localIdentifier: "m1",
+                            type: "metric",
+                            aggregation: null,
+                            attribute: "aazb6kroa3iC",
+                            showInPercent: null,
+                            showOnSecondaryAxis: null,
+                        },
+                    ],
+                },
+                {
+                    localIdentifier: "color",
+                    items: [
+                        {
+                            localIdentifier: "m2",
+                            type: "metric",
+                            aggregation: null,
+                            attribute: "af2Ewj9Re2vK",
+                            showInPercent: null,
+                            showOnSecondaryAxis: null,
+                        },
+                    ],
+                },
+                {
+                    localIdentifier: "segment",
+                    items: [],
+                },
+            ]);
+        });
     });
 });

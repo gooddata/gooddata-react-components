@@ -32,6 +32,9 @@ import {
     isDateBucketItem,
     getItemsCount,
     getItemsFromBuckets,
+    removeAllArithmeticMeasuresFromDerived,
+    removeAllDerivedMeasures,
+    limitNumberOfMeasuresInBuckets,
 } from "../../../utils/bucketHelper";
 import { setGeoPushpinUiConfig } from "../../../utils/uiConfigHelpers/geoPushpinChartUiConfigHelper";
 import { createSorts } from "../../../utils/sort";
@@ -42,6 +45,8 @@ import { IGeoConfig } from "../../../../interfaces/GeoChart";
 import { GEOPUSHPIN_SUPPORTED_PROPERTIES } from "../../../constants/supportedProperties";
 import GeoPushpinConfigurationPanel from "../../configurationPanels/GeoPushpinConfigurationPanel";
 import { IChartConfig } from "../../../..";
+
+const NUMBER_MEASURES_IN_BUCKETS_LIMIT = 2;
 
 export class PluggableGeoPushpinChart extends PluggableBaseChart {
     private geoPushpinElement: string;
@@ -78,7 +83,13 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
     }
 
     protected configureBuckets(extendedReferencePoint: IExtendedReferencePoint): IExtendedReferencePoint {
-        const buckets: IBucket[] = get(extendedReferencePoint, BUCKETS, []);
+        const newExtendedReferencePoint: IExtendedReferencePoint = this.sanitizeMeasures(
+            extendedReferencePoint,
+        );
+        const buckets: IBucket[] = limitNumberOfMeasuresInBuckets(
+            newExtendedReferencePoint.buckets,
+            NUMBER_MEASURES_IN_BUCKETS_LIMIT,
+        );
         const allMeasures: IBucketItem[] = getMeasures(buckets);
         const primaryMeasures: IBucketItem[] = getPreferredBucketItems(
             buckets,
@@ -100,7 +111,7 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
             : allMeasures.filter((measure: IBucketItem): boolean => !includes(sizeMeasures, measure))
         ).slice(0, this.getPreferedBucketItemLimit(BucketNames.COLOR));
 
-        set(extendedReferencePoint, BUCKETS, [
+        set(newExtendedReferencePoint, BUCKETS, [
             {
                 localIdentifier: BucketNames.LOCATION,
                 items: this.getLocationItems(buckets),
@@ -118,7 +129,7 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
                 items: this.getSegmentItems(buckets),
             },
         ]);
-        return extendedReferencePoint;
+        return newExtendedReferencePoint;
     }
 
     protected renderConfigurationPanel() {
@@ -224,6 +235,13 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
         };
 
         render(<GeoChart {...geoPushpinProps} />, document.querySelector(geoPushpinElement));
+    }
+
+    private sanitizeMeasures(extendedReferencePoint: IExtendedReferencePoint): IExtendedReferencePoint {
+        const newExtendedReferencePoint: IExtendedReferencePoint = removeAllArithmeticMeasuresFromDerived(
+            extendedReferencePoint,
+        );
+        return removeAllDerivedMeasures(newExtendedReferencePoint);
     }
 
     private getResultSpec(
