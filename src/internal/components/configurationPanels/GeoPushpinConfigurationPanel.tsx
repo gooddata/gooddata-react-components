@@ -95,6 +95,7 @@ export default class GeoPushpinConfigurationPanel extends ConfigurationPanelCont
                     properties={properties}
                     checked={groupNearbyPoints}
                     disabled={isClusteringDisabled}
+                    showDisabledMessage={isClusteringDisabled}
                     pushData={pushData}
                 />
                 <PushpinSizeControl

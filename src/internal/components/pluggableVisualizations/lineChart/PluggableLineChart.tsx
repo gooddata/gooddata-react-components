@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import cloneDeep = require("lodash/cloneDeep");
 import get = require("lodash/get");
@@ -69,6 +69,7 @@ export class PluggableLineChart extends PluggableBaseChart {
         let stacks: IBucketItem[] = getStackItems(buckets);
         const dateItems = getDateItems(buckets);
         const allAttributes = getAllAttributeItemsWithPreference(buckets, [
+            BucketNames.LOCATION,
             BucketNames.TREND,
             BucketNames.VIEW,
             BucketNames.SEGMENT,

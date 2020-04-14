@@ -1,7 +1,7 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import noop = require("lodash/noop");
 import get = require("lodash/get");
-import { IBucket, IFilters } from "../../../../interfaces/Visualization";
+import { IBucket, IFilters, IReferencePoint } from "../../../../interfaces/Visualization";
 import { PluggableLineChart } from "../PluggableLineChart";
 import * as testMocks from "../../../../mocks/testMocks";
 import * as referencePointMocks from "../../../../mocks/referencePointMocks";
@@ -442,6 +442,30 @@ describe("PluggableLineChart", () => {
         const extendedReferencePoint = await lineChart.getExtendedReferencePoint(
             referencePointMocks.dateAttributeOnRowAndColumnReferencePoint,
         );
+
+        expect(extendedReferencePoint.buckets).toEqual(expectedBuckets);
+    });
+
+    it("should transform location attribute to trend by bucket", async () => {
+        const lineChart: PluggableLineChart = createComponent();
+        const referencePoint: IReferencePoint = referencePointMocks.simpleGeoPushpinReferencePoint;
+        const { buckets } = referencePoint;
+        const expectedBuckets: IBucket[] = [
+            {
+                localIdentifier: "measures",
+                items: buckets[1].items,
+            },
+            {
+                localIdentifier: "trend",
+                items: buckets[0].items,
+            },
+            {
+                localIdentifier: "segment",
+                items: buckets[3].items,
+            },
+        ];
+
+        const extendedReferencePoint = await lineChart.getExtendedReferencePoint(referencePoint);
 
         expect(extendedReferencePoint.buckets).toEqual(expectedBuckets);
     });
