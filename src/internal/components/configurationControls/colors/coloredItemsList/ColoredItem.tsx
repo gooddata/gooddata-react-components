@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import { WrappedComponentProps, injectIntl } from "react-intl";
 import { IColorItem } from "@gooddata/gooddata-js";
@@ -64,6 +64,8 @@ class ColoredItem extends React.PureComponent<IColoredItemProps & WrappedCompone
             text = headerItem.measureHeaderItem.name;
         } else if (MappingHeader.isMappingHeaderAttributeItem(headerItem)) {
             text = headerItem.attributeHeaderItem.name;
+        } else if (MappingHeader.isMappingHeaderAttribute(headerItem)) {
+            text = headerItem.attributeHeader.formOf.name;
         }
 
         return text;

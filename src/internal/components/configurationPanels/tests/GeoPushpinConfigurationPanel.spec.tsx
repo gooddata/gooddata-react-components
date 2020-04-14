@@ -10,6 +10,7 @@ import CheckboxControl from "../../configurationControls/CheckboxControl";
 import PushpinSizeControl from "../../configurationControls/PushpinSizeControl";
 import PushpinViewportControl from "../../configurationControls/PushpinViewportControl";
 import LegendSection from "../../configurationControls/legend/LegendSection";
+import ColorsSection from "../../configurationControls/colors/ColorsSection";
 
 describe("GeoPushpinConfigurationPanel", () => {
     function createComponent(props: IConfigurationPanelContentProps): ShallowWrapper {
@@ -201,5 +202,22 @@ describe("GeoPushpinConfigurationPanel", () => {
             const isDisabled = await wrapper.find(PushpinSizeControl).prop("disabled");
             expect(isDisabled).toEqual(false);
         });
+    });
+
+    it("should render config panel with Color section is enabled", async () => {
+        const wrapper = createComponent(defaultProps);
+
+        const isDisabled = await wrapper.find(ColorsSection).prop("controlsDisabled");
+        expect(isDisabled).toEqual(false);
+    });
+
+    it("should render config panel with Color section is disabled", async () => {
+        const wrapper = createComponent({
+            ...defaultProps,
+            mdObject: noLocationMdObject,
+        });
+
+        const isDisabled = await wrapper.find(ColorsSection).prop("controlsDisabled");
+        expect(isDisabled).toEqual(true);
     });
 });

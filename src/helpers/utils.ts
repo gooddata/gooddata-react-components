@@ -9,6 +9,7 @@ import { SDK } from "@gooddata/gooddata-js";
 
 import { name as pkgName, version as pkgVersion } from "../../package.json";
 import { IMinMax } from "../interfaces/Utils";
+import { FLUID_LEGEND_THRESHOLD } from "../constants/legend";
 
 export function setTelemetryHeaders(sdk: SDK, componentName: string, props: object) {
     sdk.config.setJsPackage(pkgName, pkgVersion);
@@ -79,4 +80,12 @@ export function getComputeRatio(bucketItem: VisualizationObject.BucketItem): boo
 
 function setComputeRatio(bucketItem: VisualizationObject.BucketItem, value: boolean) {
     set(bucketItem, ["measure", "definition", "measureDefinition", "computeRatio"], value);
+}
+
+export function shouldShowFluid(documentObj: Document) {
+    if (!documentObj) {
+        return false;
+    }
+
+    return documentObj.documentElement.clientWidth < FLUID_LEGEND_THRESHOLD;
 }

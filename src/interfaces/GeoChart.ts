@@ -1,7 +1,7 @@
 // (C) 2020 GoodData Corporation
 import { ISeparators } from "@gooddata/numberjs";
 import { VisualizationInput, VisualizationObject } from "@gooddata/typings";
-import { ILegendConfig } from "./Config";
+import { ILegendConfig, IColorPalette, IColorMapping } from "./Config";
 import { ICommonChartProps } from "../components/core/base/BaseChart";
 
 export interface IGeoLngLat {
@@ -95,6 +95,9 @@ export interface IGeoConfig {
     separators?: ISeparators;
     viewport?: IGeoConfigViewport;
     points?: IGeoPointsConfig;
+    colors?: string[];
+    colorPalette?: IColorPalette;
+    colorMapping?: IColorMapping[];
 }
 
 export interface IGeoPushpinChartProps extends ICommonChartProps {

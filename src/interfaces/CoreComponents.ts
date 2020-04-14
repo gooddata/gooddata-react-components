@@ -6,7 +6,7 @@ import { ITableProps } from "../components/core/PureTable";
 import { ICommonVisualizationProps } from "../components/core/base/VisualizationLoadingHOC";
 import { IDataSourceProviderInjectedProps } from "../components/afm/DataSourceProvider";
 import { IPivotTableProps } from "../components/core/PivotTable";
-import { ICoreGeoChartProps } from "../components/core/GeoChart";
+import { ICoreGeoChartProps } from "../components/core/geoChart/GeoChartInner";
 
 export interface ICoreComponents {
     BaseChart: React.ComponentClass<IBaseChartProps>;

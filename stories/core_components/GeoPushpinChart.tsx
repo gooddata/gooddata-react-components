@@ -15,7 +15,11 @@ import {
     ATTRIBUTE_TOOLTIP_GEOCHART,
     ATTRIBUTE_SEGMENT_GEOCHART_ALIAS,
     MEASURE_COLOR_GEOCHART_ALIAS,
+    MEASURE_COLOR_SAME_VALUES_GEOCHART,
+    MEASURE_SIZE_SAME_VALUES_GEOCHART,
 } from "../data/geoChartComponentProps";
+import { CUSTOM_COLOR_PALETTE_CONFIG } from "../data/configProps";
+import { attributeItemNameMatch, uriMatch, identifierMatch } from "../../src/factory/HeaderPredicateFactory";
 
 const wrapperStyle: React.CSSProperties = { width: 900, height: 600 };
 
@@ -124,8 +128,8 @@ storiesOf("Core components/GeoPushpinChart", module)
             renderGeoPushpinChart({
                 projectId: "storybook",
                 location: ATTRIBUTE_LOCATION_GEOCHART,
-                size: MEASURE_SIZE_GEOCHART,
-                color: MEASURE_COLOR_GEOCHART,
+                size: MEASURE_SIZE_SAME_VALUES_GEOCHART,
+                color: MEASURE_COLOR_SAME_VALUES_GEOCHART,
                 config,
             }),
         );
@@ -412,5 +416,78 @@ storiesOf("Core components/GeoPushpinChart/Config/Legend", module)
                 },
                 { height: 150 },
             ),
+        ),
+    );
+storiesOf("Core components/GeoPushpinChart/Config/Color", module)
+    .add("with custom colors", () =>
+        screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                size: MEASURE_SIZE_GEOCHART,
+                segmentBy: ATTRIBUTE_SEGMENT_GEOCHART,
+                config: {
+                    ...DEFAULT_CONFIG,
+                    colors: [
+                        "rgb(162, 37, 34)",
+                        "rgb(194, 153, 121)",
+                        "rgb(168, 194, 86)",
+                        "rgb(243, 217, 177)",
+                        "rgb(195, 49, 73)",
+                    ],
+                },
+            }),
+        ),
+    )
+    .add("with custom colors, color mapping for SegmentBy", () =>
+        screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                size: MEASURE_SIZE_GEOCHART,
+                color: MEASURE_COLOR_GEOCHART,
+                segmentBy: ATTRIBUTE_SEGMENT_GEOCHART,
+                config: {
+                    ...DEFAULT_CONFIG,
+                    tooltipText: ATTRIBUTE_TOOLTIP_GEOCHART,
+                    ...CUSTOM_COLOR_PALETTE_CONFIG,
+                    colorMapping: [
+                        {
+                            predicate: uriMatch("/gdc/md/storybook/obj/23/elements?id=3"),
+                            color: {
+                                type: "guid",
+                                value: "03",
+                            },
+                        },
+                        {
+                            predicate: attributeItemNameMatch("Toy Store"),
+                            color: {
+                                type: "rgb",
+                                value: { r: 168, g: 194, b: 86 },
+                            },
+                        },
+                    ],
+                },
+            }),
+        ),
+    )
+    .add("with color mapping for Location", () =>
+        screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: ATTRIBUTE_LOCATION_GEOCHART,
+                config: {
+                    ...DEFAULT_CONFIG,
+                    colorMapping: [
+                        {
+                            predicate: identifierMatch("30.df"),
+                            color: {
+                                type: "guid",
+                                value: "5",
+                            },
+                        },
+                    ],
+                },
+            }),
         ),
     );

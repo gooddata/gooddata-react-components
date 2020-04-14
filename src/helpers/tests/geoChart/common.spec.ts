@@ -9,8 +9,9 @@ import {
     calculateAverage,
     getFormatFromExecutionResponse,
     isPointsConfigChanged,
+    isColorAssignmentItemChanged,
 } from "../../geoChart/common";
-import { IChartConfig } from "../../../interfaces/Config";
+import { IChartConfig, IColorAssignment } from "../../../interfaces/Config";
 import { IGeoConfig, IGeoData, IGeoPointsConfig } from "../../../interfaces/GeoChart";
 import { COLOR_ITEM, LOCATION_ITEM, SEGMENT_BY_ITEM, SIZE_ITEM, TOOLTIP_TEXT_ITEM } from "./fixtures";
 import { getExecutionResponse, getExecutionResult } from "../../../../stories/data/geoChart";
@@ -159,5 +160,39 @@ describe("common", () => {
                 ).toBe(true);
             },
         );
+    });
+
+    describe("isColorAssignmentItemChanged", () => {
+        const colorAssignment: IColorAssignment[] = [
+            {
+                color: { type: "guid", value: "1" },
+                headerItem: {
+                    attributeHeaderItem: {
+                        name: "General Goods",
+                        uri: "/gdc/md/storybook/obj/23/elements?id=1",
+                    },
+                },
+            },
+        ];
+
+        it("should return false without changes", () => {
+            expect(isColorAssignmentItemChanged(colorAssignment, colorAssignment)).toBe(false);
+        });
+
+        it("should return true with colorAssignment is different", () => {
+            const prevColorAssignment: IColorAssignment[] = [
+                ...colorAssignment,
+                {
+                    color: { type: "guid", value: "2" },
+                    headerItem: {
+                        attributeHeaderItem: {
+                            name: "General Goods",
+                            uri: "/gdc/md/storybook/obj/23/elements?id=2",
+                        },
+                    },
+                },
+            ];
+            expect(isColorAssignmentItemChanged(prevColorAssignment, colorAssignment)).toBe(true);
+        });
     });
 });

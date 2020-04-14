@@ -966,6 +966,64 @@ const locationSizeColorSegmentAfm: AFM.IAfm = {
     filters: [],
 };
 
+const locationAfm: AFM.IAfm = {
+    attributes: [
+        {
+            displayForm: { uri: "/gdc/md/projectId/obj/30.df" },
+            localIdentifier: "location",
+        },
+    ],
+};
+
+const locationResponse: Execution.IExecutionResponses = {
+    executionResponse: {
+        dimensions: [
+            {
+                headers: [
+                    {
+                        attributeHeader: {
+                            name: "City",
+                            localIdentifier: "location",
+                            uri: "/gdc/md/projectId/obj/30.df",
+                            identifier: "30.df",
+                            formOf: {
+                                name: "City",
+                                uri: "/gdc/md/projectId/obj/30.df",
+                                identifier: "30.df",
+                            },
+                        },
+                    },
+                ],
+            },
+        ],
+        links: {
+            executionResult: "/gdc/app/projects/projectId/executionResults/8917638730922032128",
+        },
+    },
+    executionResult: {
+        data: [],
+        paging: { count: [2, 2], offset: [0, 0], total: [2, 2] },
+        headerItems: [
+            [
+                [
+                    {
+                        attributeHeaderItem: {
+                            name: "42.627312;-78.73768",
+                            uri: "/gdc/md/projectId/obj/79/elements?id=2207",
+                        },
+                    },
+                    {
+                        attributeHeaderItem: {
+                            name: "43.345875;-73.40651",
+                            uri: "/gdc/md/projectId/obj/79/elements?id=6559",
+                        },
+                    },
+                ],
+            ],
+        ],
+    },
+};
+
 const locationSizeColorSegmentResponse: Execution.IExecutionResponses = {
     executionResponse: {
         dimensions: [
@@ -1220,6 +1278,8 @@ export {
     attributeOnlyResponse,
     tooLargeResponse,
     enrichedErrorResponse,
+    locationAfm,
+    locationResponse,
     locationSizeColorSegmentAfm,
     locationSizeColorSegmentResponse,
     locationSizeColorSegmentFiltersAfm,

@@ -136,6 +136,7 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
                     type={this.type}
                     isError={this.isError}
                     isLoading={this.isLoading}
+                    featureFlags={this.featureFlags}
                 />,
                 configPanelElement,
             );
@@ -148,6 +149,7 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
         supportedControls: IVisualizationProperties,
     ): IChartConfig {
         const { center, legend, viewport = {} } = supportedControls;
+        const { colorMapping } = super.buildVisualizationConfig(mdObject, config, supportedControls);
         const centerProp = center ? { center } : {};
         const legendProp = legend ? { legend } : {};
         const { isInEditMode, isExportMode } = config;
@@ -167,6 +169,7 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
             mdObject,
             ...supportedControls,
             ...geoChartConfig,
+            colorMapping,
         };
     }
 

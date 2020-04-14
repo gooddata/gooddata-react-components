@@ -1,7 +1,7 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import get = require("lodash/get");
 import { Execution } from "@gooddata/typings";
-import { IUnwrappedAttributeHeaderWithItems } from "../chartOptionsBuilder";
+import { IUnwrappedAttributeHeaderWithItems } from "../../typings/chart";
 
 /**
  * Transform

@@ -6,21 +6,21 @@ module.exports = projectId => {
             afm: {
                 measures: [
                     {
-                        localIdentifier: "size",
+                        localIdentifier: "size_same_values",
                         definition: {
                             measure: {
                                 item: {
-                                    uri: `/gdc/md/${projectId}/obj/20`,
+                                    uri: `/gdc/md/${projectId}/obj/22`,
                                 },
                             },
                         },
                     },
                     {
-                        localIdentifier: "color",
+                        localIdentifier: "color_same_values",
                         definition: {
                             measure: {
                                 item: {
-                                    uri: `/gdc/md/${projectId}/obj/21`,
+                                    uri: `/gdc/md/${projectId}/obj/23`,
                                 },
                             },
                         },
