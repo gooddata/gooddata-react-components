@@ -1,11 +1,83 @@
 // (C) 2020 GoodData Corporation
-import { IPushpinColor } from "../../../../interfaces/GeoChart";
+import uniq = require("lodash/uniq");
+import { Execution } from "@gooddata/typings";
 import {
     getColorIndexInPalette,
     getColorPaletteMapping,
     getPushpinColors,
     generateLegendColorData,
 } from "../geoChartColor";
+import { IPushpinColor, IGeoConfig } from "../../../../interfaces/GeoChart";
+import { IColorStrategy } from "../../../visualizations/chart/colorFactory";
+import { DEFAULT_COLOR_PALETTE, DEFAULT_COLORS } from "../../../visualizations/utils/color";
+import { IUnwrappedAttributeHeaderWithItems } from "../../../visualizations/typings/chart";
+import { getGeoConfig, getExecutionResponse } from "../../../../../stories/data/geoChart";
+import { convertBucketsToAFM } from "../../../../helpers/conversion";
+import GeoChartColorStrategy from "../../../visualizations/chart/colorStrategies/geoChart";
+
+import { EMPTY_SEGMENT_ITEM } from "../../../../constants/geoChart";
+
+function createColorStrategy(
+    executionResponse: Execution.IExecutionResponse,
+    geoConfig: IGeoConfig,
+    segmentItems?: string[],
+): IColorStrategy {
+    const afm = convertBucketsToAFM(geoConfig.mdObject.buckets);
+    const locationAttribute: Execution.IAttributeHeader = {
+        attributeHeader: {
+            identifier: "label.state",
+            uri: "/gdc/md/projectId/obj/1",
+            name: "State",
+            localIdentifier: "a_state",
+            formOf: {
+                uri: "/gdc/md/projectId/obj/1",
+                identifier: "label.state",
+                name: "State",
+            },
+        },
+    };
+
+    if (segmentItems && segmentItems.length) {
+        const segmentItemsWithoutNull: string[] = segmentItems.map(
+            (name: string): string => name || EMPTY_SEGMENT_ITEM,
+        );
+        const items = uniq(segmentItemsWithoutNull).map((name, index) => ({
+            attributeHeaderItem: {
+                name,
+                uri: `/gdc/md/projectId/obj/2/elements?id=${index}`,
+            },
+        }));
+        const segmentAttribute: IUnwrappedAttributeHeaderWithItems = {
+            identifier: "label.type",
+            uri: "/gdc/md/projectId/obj/2",
+            name: "Type",
+            localIdentifier: "a_type",
+            formOf: {
+                uri: "/gdc/md/projectId/obj/2",
+                identifier: "label.type",
+                name: "Type",
+            },
+            items,
+        };
+        return new GeoChartColorStrategy(
+            DEFAULT_COLOR_PALETTE,
+            null,
+            null,
+            segmentAttribute,
+            executionResponse,
+            afm,
+        );
+    }
+
+    return new GeoChartColorStrategy(
+        DEFAULT_COLOR_PALETTE,
+        null,
+        locationAttribute,
+        null,
+        executionResponse,
+        afm,
+    );
+}
 
 describe("getPushpinColors", () => {
     function createSegmentItems(count: number): string[] {
@@ -15,7 +87,21 @@ describe("getPushpinColors", () => {
     }
 
     it("should return pushpin RGB colors", () => {
-        const duplicatedSegmentItems: string[] = [...createSegmentItems(5), ...createSegmentItems(5)];
+        const segmentItems = createSegmentItems(5);
+        const duplicatedSegmentItems: string[] = [...segmentItems, ...segmentItems];
+        const executionResponse: Execution.IExecutionResponse = getExecutionResponse(
+            true,
+            true,
+            false,
+            false,
+            true,
+        );
+        const geoConfig: IGeoConfig = getGeoConfig({
+            isWithLocation: true,
+            isWithColor: true,
+            isWithSegment: true,
+        });
+        const colorStrategy: IColorStrategy = createColorStrategy(executionResponse, geoConfig, segmentItems);
         const colors: number[] = [10, 20, 30, 40, 50, 10, 20, 30, 40, 50];
         const expectedColors: IPushpinColor[] = [
             { background: "rgb(215,242,250)", border: "rgb(20,178,226)" },
@@ -29,22 +115,52 @@ describe("getPushpinColors", () => {
             { background: "rgb(241,134,0)", border: "rgb(241,134,0)" },
             { background: "rgb(171,85,163)", border: "rgb(171,85,163)" },
         ];
-        expect(getPushpinColors(colors, duplicatedSegmentItems)).toEqual(expectedColors);
+        expect(getPushpinColors(colors, duplicatedSegmentItems, colorStrategy)).toEqual(expectedColors);
     });
 
-    it("should return empty RGB colors when colors is empty", () => {
-        expect(getPushpinColors([], undefined)).toEqual([]);
+    it("should return default RGB color when colors and segmentBy are empty", () => {
+        const executionResponse: Execution.IExecutionResponse = getExecutionResponse(true);
+        const geoConfig: IGeoConfig = getGeoConfig({ isWithLocation: true });
+        const colorStrategy: IColorStrategy = createColorStrategy(executionResponse, geoConfig);
+        expect(getPushpinColors([], undefined, colorStrategy)).toEqual([
+            {
+                background: "rgb(20,178,226)",
+                border: "rgb(233,237,241)",
+            },
+        ]);
     });
 
-    it("should return one RGB color when all colors having same values", () => {
-        expect(getPushpinColors([10, 10], undefined)).toEqual([
+    it("should return one RGB color when all colors having same values and segmentBy is empty", () => {
+        const executionResponse: Execution.IExecutionResponse = getExecutionResponse(
+            true,
+            false,
+            false,
+            false,
+            true,
+        );
+        const geoConfig: IGeoConfig = getGeoConfig({ isWithLocation: true, isWithColor: true });
+        const colorStrategy: IColorStrategy = createColorStrategy(executionResponse, geoConfig);
+        expect(getPushpinColors([10, 10], undefined, colorStrategy)).toEqual([
             { background: "rgb(20,178,226)", border: "rgb(233,237,241)" },
         ]);
     });
 
-    it("should return pushpin RGB colors with null value with segment", () => {
+    it("should return pushpin RGB colors with null values", () => {
         const segmentItems: string[] = createSegmentItems(5);
         const colors: number[] = [10, null, 30, 40, 50];
+        const executionResponse: Execution.IExecutionResponse = getExecutionResponse(
+            true,
+            true,
+            false,
+            false,
+            true,
+        );
+        const geoConfig: IGeoConfig = getGeoConfig({
+            isWithLocation: true,
+            isWithSegment: true,
+            isWithColor: true,
+        });
+        const colorStrategy: IColorStrategy = createColorStrategy(executionResponse, geoConfig, segmentItems);
         const expectedColors: IPushpinColor[] = [
             { background: "rgb(215,242,250)", border: "rgb(20,178,226)" },
             { background: "rgb(212,244,236)", border: "rgb(0,193,141)" },
@@ -52,11 +168,20 @@ describe("getPushpinColors", () => {
             { background: "rgb(241,134,0)", border: "rgb(241,134,0)" },
             { background: "rgb(171,85,163)", border: "rgb(171,85,163)" },
         ];
-        expect(getPushpinColors(colors, segmentItems)).toEqual(expectedColors);
+        expect(getPushpinColors(colors, segmentItems, colorStrategy)).toEqual(expectedColors);
     });
 
     it("should return pushpin RGB colors with null value without segment", () => {
         const colors: number[] = [10, null, 30, 40, 50];
+        const executionResponse: Execution.IExecutionResponse = getExecutionResponse(
+            true,
+            false,
+            false,
+            false,
+            true,
+        );
+        const geoConfig: IGeoConfig = getGeoConfig({ isWithLocation: true, isWithColor: true });
+        const colorStrategy: IColorStrategy = createColorStrategy(executionResponse, geoConfig);
         const expectedColors: IPushpinColor[] = [
             { background: "rgb(215,242,250)", border: "rgb(20,178,226)" },
             { background: "rgb(215,242,250)", border: "rgb(20,178,226)" },
@@ -64,12 +189,25 @@ describe("getPushpinColors", () => {
             { background: "rgb(20,178,226)", border: "rgb(20,178,226)" },
             { background: "rgb(20,178,226)", border: "rgb(20,178,226)" },
         ];
-        expect(getPushpinColors(colors, undefined)).toEqual(expectedColors);
+        expect(getPushpinColors(colors, undefined, colorStrategy)).toEqual(expectedColors);
     });
 
     it("should return pushpin RGB colors with null value with some null segment items", () => {
         const colors: number[] = [10, null, 30, 40, null, null];
         const segmentItems: string[] = [...createSegmentItems(2), ...createSegmentItems(2), "", undefined];
+        const executionResponse: Execution.IExecutionResponse = getExecutionResponse(
+            true,
+            true,
+            false,
+            false,
+            true,
+        );
+        const geoConfig: IGeoConfig = getGeoConfig({
+            isWithLocation: true,
+            isWithColor: true,
+            isWithSegment: true,
+        });
+        const colorStrategy: IColorStrategy = createColorStrategy(executionResponse, geoConfig, segmentItems);
         const expectedColors: IPushpinColor[] = [
             { background: "rgb(215,242,250)", border: "rgb(20,178,226)" },
             { background: "rgb(212,244,236)", border: "rgb(0,193,141)" },
@@ -78,11 +216,24 @@ describe("getPushpinColors", () => {
             { background: "rgb(250,225,223)", border: "rgb(229,77,66)" },
             { background: "rgb(250,225,223)", border: "rgb(229,77,66)" },
         ];
-        expect(getPushpinColors(colors, segmentItems)).toEqual(expectedColors);
+        expect(getPushpinColors(colors, segmentItems, colorStrategy)).toEqual(expectedColors);
     });
 
     it("should return pushpin RGB colors with range of negative and positive and null values", () => {
         const colors: number[] = [null, -100, -50, 0, 50, 100, 200];
+        const executionResponse: Execution.IExecutionResponse = getExecutionResponse(
+            true,
+            true,
+            false,
+            false,
+            true,
+        );
+        const geoConfig: IGeoConfig = getGeoConfig({
+            isWithLocation: true,
+            isWithColor: true,
+            isWithSegment: true,
+        });
+        const colorStrategy: IColorStrategy = createColorStrategy(executionResponse, geoConfig, []);
         const expectedColors: IPushpinColor[] = [
             { background: "rgb(215,242,250)", border: "rgb(20,178,226)" },
             { background: "rgb(215,242,250)", border: "rgb(20,178,226)" },
@@ -92,13 +243,27 @@ describe("getPushpinColors", () => {
             { background: "rgb(59,190,230)", border: "rgb(20,178,226)" },
             { background: "rgb(20,178,226)", border: "rgb(20,178,226)" },
         ];
-        expect(getPushpinColors(colors, [])).toEqual(expectedColors);
+        expect(getPushpinColors(colors, [], colorStrategy)).toEqual(expectedColors);
     });
 });
 
 describe("getColorPaletteMapping", () => {
+    const executionResponse: Execution.IExecutionResponse = getExecutionResponse(
+        true,
+        true,
+        false,
+        false,
+        true,
+    );
+    const geoConfig: IGeoConfig = getGeoConfig({
+        isWithLocation: true,
+        isWithColor: true,
+        isWithSegment: true,
+    });
     it("should return color palette mapping with one segment item", () => {
-        expect(getColorPaletteMapping(["only_one_item"])).toEqual({
+        const segmentItems: string[] = ["only_one_item"];
+        const colorStrategy: IColorStrategy = createColorStrategy(executionResponse, geoConfig, segmentItems);
+        expect(getColorPaletteMapping(colorStrategy)).toEqual({
             only_one_item: [
                 "rgb(215,242,250)",
                 "rgb(176,229,245)",
@@ -111,7 +276,8 @@ describe("getColorPaletteMapping", () => {
     });
 
     it("should return palette in first default color with no segment item", () => {
-        expect(getColorPaletteMapping([])).toEqual({
+        const colorStrategy: IColorStrategy = createColorStrategy(executionResponse, geoConfig, []);
+        expect(getColorPaletteMapping(colorStrategy)).toEqual({
             default_segment_item: [
                 "rgb(215,242,250)",
                 "rgb(176,229,245)",
@@ -127,7 +293,8 @@ describe("getColorPaletteMapping", () => {
         const segmentItems = Array(4)
             .fill("item")
             .map((item: string, index: number) => `${item}${index}`);
-        expect(getColorPaletteMapping(segmentItems)).toEqual({
+        const colorStrategy: IColorStrategy = createColorStrategy(executionResponse, geoConfig, segmentItems);
+        expect(getColorPaletteMapping(colorStrategy)).toEqual({
             item0: [
                 "rgb(215,242,250)",
                 "rgb(176,229,245)",
@@ -167,7 +334,8 @@ describe("getColorPaletteMapping", () => {
         const segmentItems = Array(21)
             .fill("item")
             .map((item: string, index: number) => `${item}${index}`);
-        const mapping = getColorPaletteMapping(segmentItems);
+        const colorStrategy: IColorStrategy = createColorStrategy(executionResponse, geoConfig, segmentItems);
+        const mapping = getColorPaletteMapping(colorStrategy);
         expect(mapping.item0).toEqual(mapping.item20);
     });
 });
@@ -191,19 +359,19 @@ describe("getColorIndexInPalette", () => {
 
 describe("generateLegendColorData", () => {
     it("should return empty array if have no color series is empty", () => {
-        const colorData = generateLegendColorData([]);
+        const colorData = generateLegendColorData([], DEFAULT_COLORS[0]);
         expect(colorData).toEqual([]);
     });
 
     it("should return empty array if all color series have same values", () => {
         const colorSeries = [1, 1, 1, 1, 1, 1, 1];
-        const colorData = generateLegendColorData(colorSeries);
+        const colorData = generateLegendColorData(colorSeries, DEFAULT_COLORS[0]);
         expect(colorData).toEqual([]);
     });
 
     it("should generate full color items", () => {
         const colorSeries = [0, 1, 2, 3, 4, 5, 6];
-        const colorData = generateLegendColorData(colorSeries);
+        const colorData = generateLegendColorData(colorSeries, DEFAULT_COLORS[0]);
         expect(colorData).toEqual([
             {
                 color: "rgb(215,242,250)",

@@ -28,7 +28,6 @@ describe("createPushpinDataLayer", () => {
         expect(layer.paint["circle-color"]).toEqual([
             "string",
             ["get", "background", ["object", ["get", "color"]]],
-            "rgb(20,178,226)",
         ]);
         expect(layer.paint["circle-radius"]).toBe(4);
         expect(layer.paint["circle-stroke-color"]).toEqual([
@@ -76,7 +75,6 @@ describe("createPushpinDataLayer", () => {
         expect(layer.paint["circle-color"]).toEqual([
             "string",
             ["get", "background", ["object", ["get", "color"]]],
-            "rgb(20,178,226)",
         ]);
         expect(layer.paint["circle-radius"]).toBe(4);
         expect(layer.paint["circle-stroke-color"]).toEqual([
@@ -121,7 +119,6 @@ describe("createPushpinDataLayer", () => {
         expect(layer.paint["circle-color"]).toEqual([
             "string",
             ["get", "background", ["object", ["get", "color"]]],
-            "rgb(20,178,226)",
         ]);
         expect(layer.paint["circle-radius"]).toEqual([
             "step",
@@ -173,7 +170,6 @@ describe("createPushpinDataLayer", () => {
         expect(layer.paint["circle-color"]).toEqual([
             "string",
             ["get", "background", ["object", ["get", "color"]]],
-            "rgb(20,178,226)",
         ]);
 
         expect(layer.paint["circle-stroke-color"]).toEqual([
@@ -279,7 +275,7 @@ describe("createPushpinDataLayer", () => {
                 filter: ["!", ["has", "point_count"]],
                 id: "gdcPushpins",
                 paint: {
-                    "circle-color": "rgb(20,178,226)",
+                    "circle-color": ["string", ["get", "background", ["object", ["get", "color"]]]],
                     "circle-radius": 4,
                     "circle-stroke-color": "rgb(233,237,241)",
                     "circle-stroke-width": 1,

@@ -9,7 +9,11 @@ import { IColor, IColorItem } from "@gooddata/gooddata-js";
 
 import { IColorPalette, IColorPaletteItem, IColorMapping } from "../../../interfaces/Config";
 import { IHeaderPredicate, IHeaderPredicateContext } from "../../../interfaces/HeaderPredicate";
-import { IMappingHeader, isMappingHeaderAttributeItem } from "../../../interfaces/MappingHeader";
+import {
+    IMappingHeader,
+    isMappingHeaderAttributeItem,
+    isMappingHeaderAttribute,
+} from "../../../interfaces/MappingHeader";
 import { getMappingHeaderLocalIdentifier } from "../../../helpers/mappingHeader";
 
 export const WHITE = "rgb(255, 255, 255)";
@@ -260,6 +264,10 @@ export function getColorMappingPredicate(idOrUri: string): IHeaderPredicate {
     return (header: IMappingHeader, _context: IHeaderPredicateContext): boolean => {
         if (isMappingHeaderAttributeItem(header)) {
             return idOrUri ? idOrUri === header.attributeHeaderItem.uri : false;
+        }
+
+        if (isMappingHeaderAttribute(header)) {
+            return idOrUri ? idOrUri === header.attributeHeader.uri : false;
         }
 
         const headerLocalIdentifier = getMappingHeaderLocalIdentifier(header);

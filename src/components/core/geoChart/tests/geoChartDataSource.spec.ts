@@ -3,8 +3,11 @@ import mapboxgl from "mapbox-gl";
 import { createPushpinDataSource } from "../geoChartDataSource";
 import { IGeoData } from "../../../../interfaces/GeoChart";
 import { LOCATION_LNGLATS, SIZE_NUMBERS, COLOR_NUMBERS } from "../../../../../stories/data/geoChart";
+import { buildMockColorStrategy } from "./mock";
 
 describe("createPushpinDataSource", () => {
+    const mockColorStrategy = buildMockColorStrategy();
+
     it("should return empty data source", () => {
         const geoData: IGeoData = {
             location: {
@@ -13,7 +16,7 @@ describe("createPushpinDataSource", () => {
                 data: [],
             },
         };
-        const source: mapboxgl.GeoJSONSourceRaw = createPushpinDataSource(geoData);
+        const source: mapboxgl.GeoJSONSourceRaw = createPushpinDataSource(geoData, mockColorStrategy);
 
         expect(source.data).toEqual({
             type: "FeatureCollection",
@@ -41,7 +44,7 @@ describe("createPushpinDataSource", () => {
                 data: LOCATION_LNGLATS,
             },
         };
-        const source: mapboxgl.GeoJSONSourceRaw = createPushpinDataSource(geoData);
+        const source: mapboxgl.GeoJSONSourceRaw = createPushpinDataSource(geoData, mockColorStrategy);
 
         const data = source.data as GeoJSON.FeatureCollection<GeoJSON.Geometry>;
         expect(data.features[0]).toEqual({
@@ -99,7 +102,7 @@ describe("createPushpinDataSource", () => {
                 ],
             },
         };
-        const source: mapboxgl.GeoJSONSourceRaw = createPushpinDataSource(geoData);
+        const source: mapboxgl.GeoJSONSourceRaw = createPushpinDataSource(geoData, mockColorStrategy);
 
         expect(source.data).toEqual({
             features: [
@@ -107,7 +110,13 @@ describe("createPushpinDataSource", () => {
                     geometry: { coordinates: [-155.6254, 19.0415], type: "Point" },
                     properties: {
                         pushpinSize: 8,
-                        color: { format: "", title: "", value: undefined },
+                        color: {
+                            format: "",
+                            title: "",
+                            value: undefined,
+                            background: "rgb(20,178,226)",
+                            border: "rgb(233,237,241)",
+                        },
                         locationName: { title: "", value: undefined },
                         segment: { title: "", value: undefined },
                         size: { format: "", title: "", value: undefined },
@@ -118,7 +127,13 @@ describe("createPushpinDataSource", () => {
                     geometry: { coordinates: [-155.5751, 19.0698], type: "Point" },
                     properties: {
                         pushpinSize: 8,
-                        color: { format: "", title: "", value: undefined },
+                        color: {
+                            format: "",
+                            title: "",
+                            value: undefined,
+                            background: "rgb(20,178,226)",
+                            border: "rgb(233,237,241)",
+                        },
                         locationName: { title: "", value: undefined },
                         segment: { title: "", value: undefined },
                         size: { format: "", title: "", value: undefined },
@@ -129,7 +144,13 @@ describe("createPushpinDataSource", () => {
                     geometry: { coordinates: [-155.6143, 19.0716], type: "Point" },
                     properties: {
                         pushpinSize: 8,
-                        color: { format: "", title: "", value: undefined },
+                        color: {
+                            format: "",
+                            title: "",
+                            value: undefined,
+                            background: "rgb(20,178,226)",
+                            border: "rgb(233,237,241)",
+                        },
                         locationName: { title: "", value: undefined },
                         segment: { title: "", value: undefined },
                         size: { format: "", title: "", value: undefined },
@@ -155,7 +176,7 @@ describe("createPushpinDataSource", () => {
                 data: [],
             },
         };
-        const source: mapboxgl.GeoJSONSourceRaw = createPushpinDataSource(geoData);
+        const source: mapboxgl.GeoJSONSourceRaw = createPushpinDataSource(geoData, mockColorStrategy);
 
         expect(source.cluster).toBe(undefined);
     });
@@ -168,7 +189,7 @@ describe("createPushpinDataSource", () => {
                 data: [],
             },
         };
-        const source: mapboxgl.GeoJSONSourceRaw = createPushpinDataSource(geoData);
+        const source: mapboxgl.GeoJSONSourceRaw = createPushpinDataSource(geoData, mockColorStrategy);
 
         expect(source.cluster).toBe(true);
         expect(source.clusterMaxZoom).toBe(14);

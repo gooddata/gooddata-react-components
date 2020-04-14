@@ -1,6 +1,14 @@
 // (C) 2007-2020 GoodData Corporation
-import { getObjectIdFromUri, setTelemetryHeaders, percentFormatter, unwrap, getMinMax } from "../utils";
+import {
+    getObjectIdFromUri,
+    setTelemetryHeaders,
+    percentFormatter,
+    unwrap,
+    getMinMax,
+    shouldShowFluid,
+} from "../utils";
 import { factory as createSdk } from "@gooddata/gooddata-js";
+import { FLUID_LEGEND_THRESHOLD } from "../../constants/legend";
 
 describe("getObjectIdFromUri", () => {
     it("should extract object id from uris", () => {
@@ -77,5 +85,29 @@ describe("getMinMax", () => {
             min: -100,
             max: 100,
         });
+    });
+});
+
+describe("shouldShowFluid", () => {
+    it("should return false with empty Object", () => {
+        expect(shouldShowFluid(undefined)).toEqual(false);
+    });
+
+    it("should return false with clientWidth great than FLUID_LEGEND_THRESHOLD", () => {
+        const documentObj: any = {
+            documentElement: {
+                clientWidth: FLUID_LEGEND_THRESHOLD + 10,
+            },
+        };
+        expect(shouldShowFluid(documentObj)).toEqual(false);
+    });
+
+    it("should return true with clientWidth less than FLUID_LEGEND_THRESHOLD", () => {
+        const documentObj: any = {
+            documentElement: {
+                clientWidth: FLUID_LEGEND_THRESHOLD - 10,
+            },
+        };
+        expect(shouldShowFluid(documentObj)).toEqual(true);
     });
 });

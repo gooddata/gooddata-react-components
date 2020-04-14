@@ -100,6 +100,7 @@ import { setMeasuresToSecondaryAxis } from "../../../helpers/dualAxis";
 import { isCssMultiLineTruncationSupported } from "../../../helpers/domUtils";
 import omit = require("lodash/omit");
 import { getOccupiedMeasureBucketsLocalIdentifiers } from "../../../internal/utils/bucketHelper";
+import { IUnwrappedAttributeHeaderWithItems } from "../typings/chart";
 
 const TOOLTIP_PADDING = 10;
 
@@ -178,18 +179,6 @@ export const supportedStackingAttributesChartTypes = [
     VisualizationTypes.COMBO,
     VisualizationTypes.COMBO2,
 ];
-
-type UnwrappedAttributeHeader = Execution.IAttributeHeader["attributeHeader"];
-
-export interface IUnwrappedAttributeHeaderWithItems extends UnwrappedAttributeHeader {
-    items: Execution.IResultAttributeHeaderItem[];
-}
-type UnwrappedAttributeHeaderItem = Execution.IResultAttributeHeaderItem["attributeHeaderItem"];
-export interface IAttributeItem extends UnwrappedAttributeHeaderItem {
-    attribute: IUnwrappedAttributeHeaderWithItems;
-}
-
-export type UnwrappedMeasureHeaderItem = Execution.IMeasureHeaderItem["measureHeaderItem"];
 
 export interface IValidationResult {
     dataTooLarge: boolean;

@@ -33,3 +33,9 @@ export const ATTRIBUTE_SEGMENT_GEOCHART_ALIAS: VisualizationObject.IVisualizatio
 )
     .localIdentifier("segmentBy")
     .alias("Category Alias");
+export const MEASURE_SIZE_SAME_VALUES_GEOCHART: VisualizationObject.IMeasure = measure(
+    "/gdc/md/storybook/obj/22",
+).localIdentifier("size_same_values");
+export const MEASURE_COLOR_SAME_VALUES_GEOCHART: VisualizationObject.IMeasure = measure(
+    "/gdc/md/storybook/obj/23",
+).localIdentifier("color_same_values");

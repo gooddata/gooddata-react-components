@@ -6,6 +6,8 @@ import {
     emptyResponse,
     enrichedErrorResponse,
     executionObjectWithTotals,
+    locationAfm,
+    locationResponse,
     locationSizeColorSegmentAfm,
     locationSizeColorSegmentResponse,
     locationSizeColorSegmentFiltersAfm,
@@ -58,6 +60,13 @@ export class Table extends DummyComponent {}
 export class Xirr extends DummyComponent {}
 export class LoadingComponent extends DummyComponent {}
 export class ErrorComponent extends DummyComponent {}
+
+export const locationDataSource: IDataSource = {
+    getData: () => Promise.resolve(locationResponse),
+    getPage: () => Promise.resolve(locationResponse),
+    getAfm: () => locationAfm,
+    getFingerprint: () => JSON.stringify(locationResponse),
+};
 
 export const locationSizeColorSegmentDataSource: IDataSource = {
     getData: () => Promise.resolve(locationSizeColorSegmentResponse),

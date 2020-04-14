@@ -29,12 +29,18 @@ import { IGeoConfig, IGeoData, IGeoLngLat } from "../../../interfaces/GeoChart";
 import "../../../../styles/scss/geoChart.scss";
 import { handlePushpinMouseEnter, handlePushpinMouseLeave } from "./geoChartTooltip";
 import { getViewportOptions } from "../../../helpers/geoChart/viewport";
-import { isClusteringAllowed, isPointsConfigChanged } from "../../../helpers/geoChart/common";
+import {
+    isClusteringAllowed,
+    isPointsConfigChanged,
+    isColorAssignmentItemChanged,
+} from "../../../helpers/geoChart/common";
+import { IColorStrategy } from "../../visualizations/chart/colorFactory";
 
 export interface IGeoChartRendererProps {
     config: IGeoConfig;
     execution: Execution.IExecutionResponses;
     geoData: IGeoData;
+    colorStrategy: IColorStrategy;
     afterRender(): void;
     onCenterPositionChanged(center: IGeoLngLat): void;
     onZoomChanged(zoom: number): void;
@@ -64,8 +70,9 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
     public componentDidUpdate(prevProps: IGeoChartRendererProps) {
         const {
             config: { selectedSegmentItems },
+            colorStrategy,
         } = this.props;
-        const { config: prevConfig } = prevProps;
+        const { config: prevConfig, colorStrategy: prevColorStrategy } = prevProps;
         const { selectedSegmentItems: prevSelectedSegmentItems = [] } = prevConfig || {};
 
         // reisze map when component is updated
@@ -78,12 +85,17 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         if (!this.chart.isStyleLoaded()) {
             return;
         }
-
-        if (selectedSegmentItems && !isEqual(selectedSegmentItems, prevSelectedSegmentItems)) {
+        const isColorChanged = isColorAssignmentItemChanged(
+            prevColorStrategy.getColorAssignment(),
+            colorStrategy.getColorAssignment(),
+        );
+        const selectedSegmentItemsChanged =
+            selectedSegmentItems && !isEqual(selectedSegmentItems, prevSelectedSegmentItems);
+        if (!isColorChanged && selectedSegmentItemsChanged) {
             return this.setFilterMap();
         }
 
-        this.updateMapWithConfig(prevConfig);
+        this.updateMapWithConfig(prevConfig, prevColorStrategy);
     }
 
     public componentDidMount() {
@@ -130,11 +142,12 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
             isExportMode,
             "s-isExportMode": isExportMode,
         });
+
         return <div className={classNames} ref={this.setChartRef} />;
     }
 
-    private updateMapWithConfig = (prevConfig: IGeoConfig): void => {
-        if (this.shouldResetMap(prevConfig)) {
+    private updateMapWithConfig = (prevConfig: IGeoConfig, prevColorStrategy: IColorStrategy): void => {
+        if (this.shouldResetMap(prevConfig, prevColorStrategy)) {
             // Config for clustering and pushpin size lead to change layer setting
             // Then calling resetMap here is needed
             this.resetMap();
@@ -149,10 +162,22 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         this.setupMap();
     };
 
-    private shouldResetMap = (prevConfig: IGeoConfig): boolean => {
-        if (isPointsConfigChanged(prevConfig.points, this.props.config.points)) {
+    private shouldResetMap = (prevConfig: IGeoConfig, prevColorStrategy: IColorStrategy): boolean => {
+        const { colorStrategy, config } = this.props;
+
+        if (isPointsConfigChanged(prevConfig.points, config.points)) {
             return true;
         }
+
+        if (
+            isColorAssignmentItemChanged(
+                prevColorStrategy.getColorAssignment(),
+                colorStrategy.getColorAssignment(),
+            )
+        ) {
+            return true;
+        }
+
         return false;
     };
 
@@ -254,15 +279,14 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
 
     private setupMap = (): void => {
         const { chart, handleLayerLoaded, props } = this;
-        const { config, geoData } = props;
+        const { config, geoData, colorStrategy } = props;
         const { points: { groupNearbyPoints = true } = {} } = config || {};
-
         // hide city, town, village and hamlet labels
         if (chart.getLayer("settlement-label")) {
             chart.removeLayer("settlement-label");
         }
 
-        chart.addSource(DEFAULT_DATA_SOURCE_NAME, createPushpinDataSource(geoData, config));
+        chart.addSource(DEFAULT_DATA_SOURCE_NAME, createPushpinDataSource(geoData, colorStrategy, config));
 
         if (!isClusteringAllowed(geoData, groupNearbyPoints)) {
             chart.addLayer(
@@ -320,7 +344,7 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         // https://github.com/mapbox/mapbox-gl-js/blob/master/src/ui/control/navigation_control.js#L118
         try {
             this.chart.remove();
-        } catch (_e) {
+        } catch {
             return;
         }
     };

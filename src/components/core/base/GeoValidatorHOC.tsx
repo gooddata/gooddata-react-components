@@ -3,7 +3,7 @@ import * as React from "react";
 import isEqual = require("lodash/isEqual");
 import { injectIntl } from "react-intl";
 
-import { IGeoChartInnerProps } from "../GeoChart";
+import { IGeoChartInnerProps } from "../geoChart/GeoChartInner";
 import { IntlWrapper } from "./IntlWrapper";
 import { ErrorComponent as DefaultErrorComponent } from "../../simple/ErrorComponent";
 import { ErrorStates } from "../../../constants/errorStates";

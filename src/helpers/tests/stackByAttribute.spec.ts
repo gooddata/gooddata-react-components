@@ -1,7 +1,7 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { Execution, VisualizationObject } from "@gooddata/typings";
 import { getStackByAttribute } from "../stackByAttribute";
-import { IUnwrappedAttributeHeaderWithItems } from "../../components/visualizations/chart/chartOptionsBuilder";
+import { IUnwrappedAttributeHeaderWithItems } from "../../components/visualizations/typings/chart";
 import { IChartConfig } from "../../interfaces/Config";
 import { VisualizationTypes } from "../../constants/visualizationTypes";
 

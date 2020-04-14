@@ -113,5 +113,10 @@ describe("getColorMappingPredicate", () => {
 
             expect(predicate(attributeHeaderItem, {} as any)).toEqual(true);
         });
+
+        it("should match predicate when referenced uri matched and attributeHeader tested", () => {
+            const predicate: IHeaderPredicate = getColorMappingPredicate("/attributeUri");
+            expect(predicate(attributeHeader, {} as any)).toEqual(true);
+        });
     });
 });

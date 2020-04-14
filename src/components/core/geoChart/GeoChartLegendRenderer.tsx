@@ -19,6 +19,7 @@ export interface IGeoChartLegendRendererProps {
     geoData?: IGeoData; // used for Color/Size legend
     height?: number;
     locale?: string;
+    colorLegendValue: string;
     position?: string;
     responsive?: boolean;
     showFluidLegend?: boolean;
@@ -74,10 +75,11 @@ function renderPushpinColorLegend(props: IGeoChartLegendRendererProps, hasColorL
         position,
         responsive,
         showFluidLegend,
+        colorLegendValue,
     } = props;
 
     const dataWithoutNull = data.filter(isFinite);
-    const colorData = generateLegendColorData(dataWithoutNull);
+    const colorData = generateLegendColorData(dataWithoutNull, colorLegendValue);
     const isSmall: boolean = responsive && showFluidLegend;
     const numericSymbols: string[] = useNumbericSymbols();
 

@@ -22,6 +22,7 @@ export const LOCATION_LNGLATS: IGeoLngLat[] = fixtures
     .getLocationAFMData()
     .map(getHeaderItemName)
     .map(getLocation);
+export const SEGMENTBY_NUMBERS = fixtures.getSegmentAFMData().map(getHeaderItemName);
 
 export function getExecutionResult(
     isWithLocation = false,
