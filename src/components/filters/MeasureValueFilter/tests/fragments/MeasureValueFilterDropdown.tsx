@@ -8,7 +8,7 @@ const CLASS_CANCEL_BUTTON = ".s-mvf-dropdown-cancel";
 const CLASS_OPERATOR_DROPDOWN_BUTTON = ".s-mvf-operator-dropdown-button";
 const CLASS_OPERATOR_DROPDOWN_BODY = ".s-mvf-operator-dropdown-body";
 
-export default class MeasureValueFilterFragment {
+export default class MeasureValueFilterDropdownFragment {
     private component: ReactWrapper = null;
 
     constructor(component: ReactWrapper) {
@@ -28,7 +28,7 @@ export default class MeasureValueFilterFragment {
     };
 
     public clickCancel = () => {
-        return this.component
+        this.component
             .find(CLASS_CANCEL_BUTTON)
             .hostNodes()
             .simulate("click");

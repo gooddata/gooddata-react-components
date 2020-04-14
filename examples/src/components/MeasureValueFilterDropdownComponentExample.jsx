@@ -41,7 +41,7 @@ DropdownButton.propTypes = {
     onClick: PropTypes.func.isRequired,
 };
 
-export class MeasureValueFilterDropdownExample extends React.PureComponent {
+export class MeasureValueFilterComponentExample extends React.PureComponent {
     constructor(props) {
         super(props);
         this.ref = React.createRef();
@@ -72,7 +72,7 @@ export class MeasureValueFilterDropdownExample extends React.PureComponent {
                     <DropdownButton
                         onClick={this.toggleDropdown}
                         isActive={displayDropdown}
-                        measureTitle="Measure"
+                        measureTitle="Custom button"
                     />
                 </div>
                 {displayDropdown ? (
@@ -83,7 +83,6 @@ export class MeasureValueFilterDropdownExample extends React.PureComponent {
                         anchorEl={this.ref.current}
                     />
                 ) : null}
-                <hr className="separator" />
                 <div style={{ height: 300 }} className="s-pivot-table">
                     <PivotTable
                         projectId={projectId}
@@ -97,4 +96,4 @@ export class MeasureValueFilterDropdownExample extends React.PureComponent {
     }
 }
 
-export default MeasureValueFilterDropdownExample;
+export default MeasureValueFilterComponentExample;

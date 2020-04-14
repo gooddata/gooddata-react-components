@@ -19,7 +19,7 @@ import TreatNullValuesAsZeroCheckbox from "./TreatNullValuesAsZeroCheckbox";
 // The platform supports 6 decimal places
 const MAX_DECIMAL_PLACES = 6;
 
-export interface IDropdownBodyOwnProps {
+interface IDropdownBodyOwnProps {
     operator?: string;
     value?: IMeasureValueFilterValue;
     usePercentage?: boolean;
@@ -33,7 +33,7 @@ export interface IDropdownBodyOwnProps {
     treatNullAsZeroValue?: boolean;
 }
 
-export type IDropdownBodyProps = IDropdownBodyOwnProps & WrappedComponentProps;
+type IDropdownBodyProps = IDropdownBodyOwnProps & WrappedComponentProps;
 
 interface IDropdownBodyState {
     operator: string;

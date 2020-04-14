@@ -1,20 +1,20 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { injectIntl, WrappedComponentProps } from "react-intl";
 import classNames from "classnames";
 import capitalize = require("lodash/capitalize");
-import Button from "@gooddata/goodstrap/lib/Button/Button";
 import { string as stringUtils } from "@gooddata/js-utils";
+import Button from "@gooddata/goodstrap/lib/Button/Button";
 
 import OperatorDropdownBody from "./OperatorDropdownBody";
 import { getOperatorTranslationKey, getOperatorIcon } from "../../../helpers/measureValueFilterOperator";
 
-export interface IOperatorDropdownOwnProps {
+interface IOperatorDropdownOwnProps {
     onSelect: (operator: string) => void;
     operator: string;
 }
 
-export type IOperatorDropdownProps = IOperatorDropdownOwnProps & WrappedComponentProps;
+type IOperatorDropdownProps = IOperatorDropdownOwnProps & WrappedComponentProps;
 
 interface IOperatorDropdownState {
     opened: boolean;

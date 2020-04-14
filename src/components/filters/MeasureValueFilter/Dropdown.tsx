@@ -11,7 +11,7 @@ import { DropdownBody } from "./DropdownBody";
 import * as Operator from "../../../constants/measureValueFilterOperators";
 import { DROPDOWN_ALIGMENTS } from "../../../internal/components/configurationControls/DropdownControl";
 
-export interface IDropdownOwnProps {
+interface IDropdownOwnProps {
     onApply: (operator: string, value: IMeasureValueFilterValue, treatNullValuesAsZero: boolean) => void;
     onCancel: () => void;
     operator?: string;
@@ -25,7 +25,7 @@ export interface IDropdownOwnProps {
     treatNullAsZeroValue?: boolean;
 }
 
-export type IDropdownProps = IDropdownOwnProps & WrappedComponentProps;
+type IDropdownProps = IDropdownOwnProps & WrappedComponentProps;
 
 interface IDropdownState {
     displayDropdown: boolean;

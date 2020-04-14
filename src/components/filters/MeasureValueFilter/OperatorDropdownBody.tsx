@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import { WrappedComponentProps, injectIntl } from "react-intl";
 import Overlay from "@gooddata/goodstrap/lib/core/Overlay";
@@ -7,7 +7,7 @@ import { Separator } from "@gooddata/goodstrap/lib/List/MenuList";
 import OperatorDropdownItem from "./OperatorDropdownItem";
 import * as Operator from "../../../constants/measureValueFilterOperators";
 
-export interface IOperatorDropdownBodyOwnProps {
+interface IOperatorDropdownBodyOwnProps {
     selectedOperator: string;
     onSelect: (operator: string) => void;
     onClose: () => void;

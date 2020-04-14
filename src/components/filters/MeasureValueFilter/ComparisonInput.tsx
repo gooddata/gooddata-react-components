@@ -1,9 +1,10 @@
 // (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import InputWithNumberFormat from "@gooddata/goodstrap/lib/Form/InputWithNumberFormat";
+
 import { ISeparators } from "./separators";
 
-export interface IComparisonInputProps {
+interface IComparisonInputProps {
     value: number;
     usePercentage: boolean;
     disableAutofocus?: boolean;

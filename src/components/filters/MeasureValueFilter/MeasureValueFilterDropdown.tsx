@@ -1,8 +1,7 @@
 // (C) 2019-2020 GoodData Corporation
 import * as React from "react";
+import { AFM } from "@gooddata/typings";
 
-import { AFM, VisualizationInput } from "@gooddata/typings";
-import { ISeparators } from "./separators";
 import { Dropdown } from "./Dropdown";
 import {
     getMeasureValueFilterCondition,
@@ -10,18 +9,10 @@ import {
     isComparisonCondition,
     isRangeCondition,
 } from "../../../interfaces/MeasureValueFilter";
+import { IMeasureValueFilterCommonProps } from "./typings";
 
-export interface IDropdownProps {
-    filter: VisualizationInput.IMeasureValueFilter;
-    onApply: (filter: AFM.IMeasureValueFilter) => void;
-    onCancel: () => void;
-    usePercentage?: boolean;
-    warningMessage?: string;
-    locale?: string;
+export interface IMeasureValueFilterDropdownProps extends IMeasureValueFilterCommonProps {
     anchorEl?: EventTarget | string;
-    separators?: ISeparators;
-    displayTreatNullAsZeroOption?: boolean;
-    treatNullAsZeroDefaultValue?: boolean;
 }
 
 function getOperator(condition: AFM.MeasureValueFilterCondition): string {
@@ -58,8 +49,8 @@ function getTreatNullAsZeroValue(
     );
 }
 
-export class DropdownAfmWrapper extends React.PureComponent<IDropdownProps> {
-    public static defaultProps: Partial<IDropdownProps> = {
+export class MeasureValueFilterDropdown extends React.PureComponent<IMeasureValueFilterDropdownProps> {
+    public static defaultProps: Partial<IMeasureValueFilterDropdownProps> = {
         displayTreatNullAsZeroOption: false,
         treatNullAsZeroDefaultValue: false,
     };

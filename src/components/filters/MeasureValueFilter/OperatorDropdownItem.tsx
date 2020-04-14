@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { injectIntl, WrappedComponentProps } from "react-intl";
 import classNames from "classnames";
@@ -10,14 +10,14 @@ import Bubble from "@gooddata/goodstrap/lib/Bubble/Bubble";
 
 import { getOperatorTranslationKey, getOperatorIcon } from "../../../helpers/measureValueFilterOperator";
 
-export interface IOperatorDropdownItemOwnProps {
+interface IOperatorDropdownItemOwnProps {
     selectedOperator: string;
     operator: string;
     bubbleText?: string;
     onClick: (identifier: string) => void;
 }
 
-export type IOperatorDropdownItemProps = IOperatorDropdownItemOwnProps & WrappedComponentProps;
+type IOperatorDropdownItemProps = IOperatorDropdownItemOwnProps & WrappedComponentProps;
 
 export class OperatorDropdownItem extends React.PureComponent<IOperatorDropdownItemProps> {
     public static defaultProps: any = {
