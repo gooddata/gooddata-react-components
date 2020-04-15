@@ -46,12 +46,7 @@ import {
     isDrillEventContextTableExtended,
 } from "../../interfaces/DrillEvents";
 import { IHeaderPredicate } from "../../interfaces/HeaderPredicate";
-import {
-    IMappingHeader,
-    isMappingHeaderAttribute,
-    isMappingHeaderAttributeItem,
-    isMappingHeaderMeasureItem,
-} from "../../interfaces/MappingHeader";
+import { IMappingHeader, isMappingHeaderAttribute } from "../../interfaces/MappingHeader";
 import { IMenuAggregationClickConfig, IPivotTableConfig } from "../../interfaces/PivotTable";
 import { IDataSourceProviderInjectedProps } from "../afm/DataSourceProvider";
 import { LoadingComponent } from "../simple/LoadingComponent";
@@ -1156,20 +1151,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     }
 
     private getColumnIdentifier(columnDef: IGridHeader): string {
-        return (columnDef.drillItems || [])
-            .map((item: IMappingHeader) => {
-                if (isMappingHeaderAttribute(item)) {
-                    return item.attributeHeader.uri;
-                } else if (isMappingHeaderAttributeItem(item)) {
-                    return item.attributeHeaderItem.uri;
-                } else if (isMappingHeaderMeasureItem(item)) {
-                    return item.measureHeaderItem.uri || item.measureHeaderItem.localIdentifier;
-                }
-
-                return undefined;
-            })
-            .filter((item: string) => item)
-            .join(".");
+        return columnDef.field || columnDef.colId;
     }
 
     private enrichColumnDefinitionsWithWidths(
