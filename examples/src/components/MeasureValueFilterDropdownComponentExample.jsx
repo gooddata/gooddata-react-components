@@ -83,6 +83,7 @@ export class MeasureValueFilterComponentExample extends React.PureComponent {
                         anchorEl={this.ref.current}
                     />
                 ) : null}
+                <hr className="separator" />
                 <div style={{ height: 300 }} className="s-pivot-table">
                     <PivotTable
                         projectId={projectId}

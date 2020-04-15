@@ -32,6 +32,7 @@ export class MeasureValueFilterComponentExample extends React.PureComponent {
         return (
             <React.Fragment>
                 <MeasureValueFilter onApply={this.onApply} filter={filters[0]} buttonTitle={measureTitle} />
+                <hr className="separator" />
                 <div style={{ height: 300 }} className="s-pivot-table">
                     <PivotTable
                         projectId={projectId}

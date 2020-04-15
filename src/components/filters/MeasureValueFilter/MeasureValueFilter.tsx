@@ -1,5 +1,6 @@
 // (C) 2020 GoodData Corporation
 import * as React from "react";
+import noop = require("lodash/noop");
 import { AFM } from "@gooddata/typings";
 
 import { MeasureValueFilterDropdown } from "./MeasureValueFilterDropdown";
@@ -8,6 +9,7 @@ import { IMeasureValueFilterCommonProps } from "./typings";
 
 export interface IMeasureValueFilterProps extends IMeasureValueFilterCommonProps {
     buttonTitle: string;
+    onCancel?: () => void;
 }
 
 interface IMeasureValueFilterState {
@@ -18,6 +20,10 @@ export class MeasureValueFilter extends React.PureComponent<
     IMeasureValueFilterProps,
     IMeasureValueFilterState
 > {
+    public static defaultProps: Partial<IMeasureValueFilterProps> = {
+        onCancel: noop,
+    };
+
     public state: IMeasureValueFilterState = {
         displayDropdown: false,
     };
