@@ -15,6 +15,10 @@ const CHART_WITH_CONFIGURATION = Selector(".s-geo-pushpin-chart-configuration");
 const CHART_WITH_CONFIGURATION_LEGEND = Selector(".s-geo-pushpin-chart-configuration-legend");
 const CHART_WITH_CONFIGURATION_VIEWPORT = Selector(".s-geo-pushpin-chart-configuration-viewport");
 const CHART_WITH_CONFIGURATION_CUSTOM_COLOR = Selector(".s-geo-pushpin-chart-configuration-custom-color");
+const CHART_WITH_CONFIGURATION_POINTS_SIZE = Selector(".s-geo-pushpin-chart-configuration-points-size");
+const CHART_WITH_CONFIGURATION_POINTS_GROUP_NEARBY = Selector(
+    ".s-geo-pushpin-chart-configuration-points-group-nearby",
+);
 
 test("should render all charts", async t => {
     await t.expect(CHART_WITH_CLUSTERING.exists).ok();
@@ -24,6 +28,8 @@ test("should render all charts", async t => {
     await t.expect(CHART_WITH_CONFIGURATION_LEGEND.exists).ok();
     await t.expect(CHART_WITH_CONFIGURATION_VIEWPORT.exists).ok();
     await t.expect(CHART_WITH_CONFIGURATION_CUSTOM_COLOR.exists).ok();
+    await t.expect(CHART_WITH_CONFIGURATION_POINTS_SIZE.exists).ok();
+    await t.expect(CHART_WITH_CONFIGURATION_POINTS_GROUP_NEARBY.exists).ok();
 
     await t.expect(CHART_WITH_CLUSTERING.find("canvas").exists).ok();
     await t.expect(CHART_WITH_COLOR_LEGEND.find("canvas").exists).ok();
@@ -32,6 +38,8 @@ test("should render all charts", async t => {
     await t.expect(CHART_WITH_CONFIGURATION_LEGEND.find("canvas").exists).ok();
     await t.expect(CHART_WITH_CONFIGURATION_VIEWPORT.find("canvas").exists).ok();
     await t.expect(CHART_WITH_CONFIGURATION_CUSTOM_COLOR.find("canvas").exists).ok();
+    await t.expect(CHART_WITH_CONFIGURATION_POINTS_SIZE.find("canvas").exists).ok();
+    await t.expect(CHART_WITH_CONFIGURATION_POINTS_GROUP_NEARBY.find("canvas").exists).ok();
 });
 
 test("should not render the legend with Clustering", async t => {
