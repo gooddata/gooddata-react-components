@@ -7,6 +7,10 @@ Object {
     "icon": "icon-cloud-rain",
     "message": "visualization.ErrorMessageDataTooLarge",
   },
+  "GEO_MAPBOX_TOKEN_MISSING": Object {
+    "description": "visualization.ErrorDescriptionMissingMapboxToken",
+    "message": "visualization.ErrorMessageGeneric",
+  },
   "NOT_FOUND": Object {
     "description": "visualization.ErrorDescriptionNotFound",
     "message": "visualization.ErrorMessageNotFound",

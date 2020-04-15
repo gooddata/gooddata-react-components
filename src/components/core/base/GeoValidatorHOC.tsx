@@ -18,6 +18,7 @@ export function geoValidatorHOC<T>(InnerComponent: React.ComponentClass<T>): Rea
         private readonly errorMap: IErrorMap;
 
         private isLocationMissing: boolean;
+        private isMapboxTokenMissing: boolean;
 
         constructor(props: T & IGeoValidatorProps) {
             super(props);
@@ -27,11 +28,12 @@ export function geoValidatorHOC<T>(InnerComponent: React.ComponentClass<T>): Rea
         public render() {
             this.initError();
 
+            if (this.isMapboxTokenMissing) {
+                return this.renderErrorComponent(ErrorStates.GEO_MAPBOX_TOKEN_MISSING);
+            }
+
             if (this.isLocationMissing) {
-                const ErrorComponent = this.props.ErrorComponent || DefaultErrorComponent;
-                // in this case, we show "Sorry, we can't display this insight"
-                const errorProps = this.errorMap[ErrorStates.UNKNOWN_ERROR];
-                return <ErrorComponent code={ErrorStates.GEO_LOCATION_MISSING} {...errorProps} />;
+                return this.renderErrorComponent(ErrorStates.GEO_LOCATION_MISSING);
             }
 
             return <InnerComponent key={"InnerComponent"} {...this.props} />;
@@ -58,9 +60,10 @@ export function geoValidatorHOC<T>(InnerComponent: React.ComponentClass<T>): Rea
 
         private initError() {
             const {
-                config: { mdObject: { buckets = [] } = {} },
+                config: { mdObject: { buckets = [] } = {}, mapboxToken },
             } = this.props;
             this.isLocationMissing = isLocationMissing(buckets);
+            this.isMapboxTokenMissing = !Boolean(mapboxToken);
         }
 
         private handleError() {
@@ -68,6 +71,14 @@ export function geoValidatorHOC<T>(InnerComponent: React.ComponentClass<T>): Rea
             if (onError && this.isLocationMissing) {
                 onError(new RuntimeError(ErrorStates.GEO_LOCATION_MISSING));
             }
+        }
+
+        private renderErrorComponent(errorState: string): React.ReactElement {
+            const ErrorComponent = this.props.ErrorComponent || DefaultErrorComponent;
+            // in this case, we show "Sorry, we can't display this insight"
+            const errorProps = this.errorMap[errorState] || this.errorMap[ErrorStates.UNKNOWN_ERROR];
+
+            return <ErrorComponent code={errorState} {...errorProps} />;
         }
     }
 

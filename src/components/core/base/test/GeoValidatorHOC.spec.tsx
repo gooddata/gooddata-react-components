@@ -34,9 +34,6 @@ describe("GeoValidatorHOC", () => {
 
     const createComponent = (customProps: Partial<ITestInnerComponentProps> = {}): ReactWrapper => {
         const props: ITestInnerComponentProps = {
-            config: {
-                mapboxToken: "",
-            },
             dataSource: locationSizeColorSegmentDataSource,
             ...customProps,
         };
@@ -49,7 +46,7 @@ describe("GeoValidatorHOC", () => {
         const onError = jest.fn();
         const wrapper = createComponent({
             config: {
-                mapboxToken: "",
+                mapboxToken: "mapboxToken",
                 mdObject: {
                     buckets,
                     visualizationClass,
@@ -60,14 +57,39 @@ describe("GeoValidatorHOC", () => {
 
         expect(wrapper.find(ErrorComponent).exists()).toEqual(true);
         expect(onError).toBeCalledTimes(1);
+        expect(wrapper.find(ErrorComponent).props()).toEqual(
+            expect.objectContaining({
+                code: "GEO_LOCATION_MISSING",
+                message: "Sorry, we can't display this insight",
+            }),
+        );
     });
 
-    it("should not show GEO_LOCATION_MISSING error", () => {
-        const buckets: VisualizationObject.IBucket[] = [LOCATION_ITEM, SIZE_ITEM];
+    it("should show GEO_MAPBOX_TOKEN_MISSING error", () => {
         const onError = jest.fn();
         const wrapper = createComponent({
             config: {
                 mapboxToken: "",
+            },
+            onError,
+        });
+
+        expect(wrapper.find(ErrorComponent).exists()).toEqual(true);
+        expect(onError).toBeCalledTimes(1);
+        expect(wrapper.find(ErrorComponent).props()).toEqual(
+            expect.objectContaining({
+                description: "An API access token is required to use Mapbox GL in Geo chart (pushpins)",
+                code: "GEO_MAPBOX_TOKEN_MISSING",
+            }),
+        );
+    });
+
+    it("should not render ErrorComponent", () => {
+        const buckets: VisualizationObject.IBucket[] = [LOCATION_ITEM, SIZE_ITEM];
+        const onError = jest.fn();
+        const wrapper = createComponent({
+            config: {
+                mapboxToken: "mapboxToken",
                 mdObject: {
                     buckets,
                     visualizationClass,
@@ -85,14 +107,14 @@ describe("GeoValidatorHOC", () => {
         const bucketsWithLocation: VisualizationObject.IBucket[] = [LOCATION_ITEM, SIZE_ITEM];
         const onError = jest.fn();
         const config: IGeoConfig = {
-            mapboxToken: "",
+            mapboxToken: "mapboxToken",
             mdObject: {
                 buckets,
                 visualizationClass,
             },
         };
         const configWithLocation: IGeoConfig = {
-            mapboxToken: "",
+            mapboxToken: "mapboxToken",
             mdObject: {
                 buckets: bucketsWithLocation,
                 visualizationClass,
@@ -113,7 +135,7 @@ describe("GeoValidatorHOC", () => {
 
     it("should component be updated to new prop when filters changed", () => {
         const config: IGeoConfig = {
-            mapboxToken: "",
+            mapboxToken: "mapboxToken",
             mdObject: {
                 buckets: [SIZE_ITEM, COLOR_ITEM, LOCATION_ITEM, SEGMENT_BY_ITEM],
                 visualizationClass,

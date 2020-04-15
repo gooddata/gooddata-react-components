@@ -44,7 +44,7 @@ describe("GeoChart", () => {
             chartRenderer: jest.fn(),
             legendRenderer: jest.fn(),
             config: {
-                mapboxToken: "",
+                mapboxToken: "mapboxToken",
                 mdObject,
                 ...customConfig,
             },

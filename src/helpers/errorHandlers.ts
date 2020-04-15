@@ -53,6 +53,10 @@ export function generateErrorMap(intl: IntlShape): IErrorMap {
             message: intl.formatMessage({ id: "visualization.ErrorMessageGeneric" }),
             description: intl.formatMessage({ id: "visualization.ErrorDescriptionGeneric" }),
         },
+        [ErrorStates.GEO_MAPBOX_TOKEN_MISSING]: {
+            message: intl.formatMessage({ id: "visualization.ErrorMessageGeneric" }),
+            description: intl.formatMessage({ id: "visualization.ErrorDescriptionMissingMapboxToken" }),
+        },
     };
     return errorMap;
 }
