@@ -5,7 +5,6 @@ import { ISeparators } from "./separators";
 export interface IMeasureValueFilterCommonProps {
     filter: VisualizationInput.IMeasureValueFilter;
     onApply: (filter: AFM.IMeasureValueFilter) => void;
-    onCancel: () => void;
     usePercentage?: boolean;
     warningMessage?: string;
     locale?: string;

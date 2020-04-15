@@ -32,11 +32,11 @@ export class MeasureValueFilterComponentPercentageExample extends React.PureComp
             <React.Fragment>
                 <MeasureValueFilter
                     onApply={this.onApply}
-                    onCancel={this.onCancel}
                     filter={filters[0]}
                     buttonTitle={measureTitle}
                     usePercentage
                 />
+                <hr className="separator" />
                 <div style={{ height: 300 }} className="s-pivot-table">
                     <PivotTable
                         projectId={projectId}
