@@ -3,6 +3,7 @@ import { AFM, Execution, VisualizationObject } from "@gooddata/typings";
 import {
     AgGridEvent,
     BodyScrollEvent,
+    ColDef,
     Column,
     ColumnApi,
     ColumnResizedEvent,
@@ -554,7 +555,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     };
 
     private onVirtualColumnsChanged = (event: GridColumnsChangedEvent) => {
-        const { execution, columnDefs } = this.state;
+        const { execution } = this.state;
         const tableIsNotScrolled = () => {
             const horizontalPixelRange = event.api.getHorizontalPixelRange();
             const verticalPixelRange = event.api.getVerticalPixelRange();
@@ -562,10 +563,11 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         };
         if (execution && tableIsNotScrolled()) {
             const resizedColumnIdentifiers = Object.keys(this.resizedColumns);
-            const previouslyResizedColumnIds = getTreeLeaves(columnDefs)
-                .filter(d => resizedColumnIdentifiers.includes(this.getColumnIdentifier(d)))
-                .map(d => d.field);
-            this.autoresizeColumns(event, true, previouslyResizedColumnIds);
+            const columns = event.columnApi.getAllDisplayedVirtualColumns();
+            const previouslyResizedColumnIdentifiers = columns
+                .filter(d => resizedColumnIdentifiers.includes(this.getColumnIdentifier(d.getColDef())))
+                .map(d => d.getColId());
+            this.autoresizeColumns(event, true, previouslyResizedColumnIdentifiers);
         }
     };
 
@@ -1150,8 +1152,9 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         return target.classList.contains("ag-header-cell-resize");
     }
 
-    private getColumnIdentifier(columnDef: IGridHeader): string {
-        return columnDef.field || columnDef.colId;
+    private getColumnIdentifier(column: IGridHeader | ColDef): string {
+        // field should be always present, fallback to colId could happen for empty columns
+        return column.field || column.colId;
     }
 
     private enrichColumnDefinitionsWithWidths(
