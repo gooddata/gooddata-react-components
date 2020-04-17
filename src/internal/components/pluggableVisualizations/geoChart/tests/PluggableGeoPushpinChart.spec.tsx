@@ -142,6 +142,58 @@ describe("PluggableGeoPushpinChart", () => {
             ]);
         });
 
+        it("should not transform same location attribute on location and segment bucket", async () => {
+            const { viewByWithNonGeoAndGeoAttributeReferencePoint } = referencePointMocks;
+
+            const newExtendedReferencePoint = await geoPushpin.getExtendedReferencePoint(
+                viewByWithNonGeoAndGeoAttributeReferencePoint,
+            );
+
+            expect(newExtendedReferencePoint.buckets).toEqual([
+                {
+                    localIdentifier: "location",
+                    items: [
+                        {
+                            localIdentifier: "a1",
+                            type: "attribute",
+                            aggregation: null,
+                            attribute: "attr.owner.country",
+                            locationDisplayFormUri: "/geo/attribute/displayform/uri/1",
+                            dfUri: "/geo/attribute/displayform/uri/2",
+                        },
+                    ],
+                },
+                {
+                    localIdentifier: "size",
+                    items: [
+                        {
+                            localIdentifier: "m1",
+                            type: "metric",
+                            aggregation: null,
+                            attribute: "aazb6kroa3iC",
+                            showInPercent: null,
+                            showOnSecondaryAxis: null,
+                        },
+                    ],
+                },
+                {
+                    localIdentifier: "color",
+                    items: [],
+                },
+                {
+                    localIdentifier: "segment",
+                    items: [
+                        {
+                            aggregation: null,
+                            attribute: "attr.owner.department",
+                            localIdentifier: "a1",
+                            type: "attribute",
+                        },
+                    ],
+                },
+            ]);
+        });
+
         it("should reset showInPercent and showOnSecondaryAxis for size and color measures", async () => {
             const newExtendedReferencePoint = await geoPushpin.getExtendedReferencePoint(
                 referencePointMocks.twoMeasuresWithShowInPercentOnSecondaryAxisReferencePoint,

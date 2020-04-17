@@ -282,12 +282,11 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
         );
         const nonSegmentAttributes = getAttributeItemsWithoutStacks(buckets);
         if (nonSegmentAttributes.length > 1 && isEmpty(segments)) {
-            // first attribute is taken, find next available non-date attribute
-            const [, ...attributesWithoutFirst] = nonSegmentAttributes;
-            const nonDate = attributesWithoutFirst.filter(
-                (attribute: IBucketItem) => !isDateBucketItem(attribute),
-            );
-            segments = nonDate.slice(0, 1);
+            const locationItems = this.getLocationItems(buckets);
+            segments = nonSegmentAttributes
+                .filter((attribute: IBucketItem): boolean => !includes(locationItems, attribute))
+                .filter((attribute: IBucketItem): boolean => !isDateBucketItem(attribute))
+                .slice(0, 1);
         }
         return segments.slice(0, this.getPreferedBucketItemLimit(BucketNames.SEGMENT));
     }

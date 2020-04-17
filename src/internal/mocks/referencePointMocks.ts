@@ -1221,6 +1221,27 @@ export const viewByWithDateAndGeoAttributeReferencePoint: IReferencePoint = {
     },
 };
 
+export const viewByWithNonGeoAndGeoAttributeReferencePoint: IReferencePoint = {
+    buckets: [
+        {
+            localIdentifier: "measures",
+            items: masterMeasureItems.slice(0, 1),
+        },
+        {
+            localIdentifier: "view",
+            items: [...attributeItems.slice(0, 1), ...geoAttributeItems.slice(0, 1)],
+        },
+        {
+            localIdentifier: "stack",
+            items: [],
+        },
+    ],
+    filters: {
+        localIdentifier: "filters",
+        items: [],
+    },
+};
+
 export const sameCategoryAndStackReferencePoint: IReferencePoint = {
     buckets: [
         {
