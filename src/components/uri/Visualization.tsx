@@ -55,7 +55,7 @@ import { mergeFiltersToAfm } from "../../helpers/afmHelper";
 import { _experimentalDataSourceFactory } from "./experimentalDataSource";
 import IVisualizationObjectContent = VisualizationObject.IVisualizationObjectContent;
 import { getHighchartsAxisNameConfiguration } from "../../internal/utils/propertiesHelper";
-
+import { DEFAULT_LOCALE } from "../../constants/localization";
 export { Requireable };
 
 const { ExecuteAfmAdapter, toAfmResultSpec, createSubject } = DataLayer;
@@ -155,6 +155,21 @@ function fetchVisualizationClass(
     );
 }
 
+function fetchLocalizationFromUser(sdk: SDK, projectId: string): Promise<Localization.ILocale> {
+    const apiCallIdentifier = `localizationFromUser.${projectId}`;
+    const loader = () => sdk.user.getCurrentProfile();
+
+    return getCachedOrLoad(apiCallIdentifier, loader)
+        .then((response: any) => response.language)
+        .catch(e => {
+            // tslint:disable-next-line:no-console
+            console.error(e);
+            return new Promise(resolve => {
+                resolve(DEFAULT_LOCALE);
+            });
+        });
+}
+
 export class VisualizationWrapped extends React.Component<
     IVisualizationProps & WrappedComponentProps,
     IVisualizationState
@@ -181,6 +196,7 @@ export class VisualizationWrapped extends React.Component<
     };
 
     private visualizationUri: string;
+    private decideLocale: Localization.ILocale;
     private adapter: DataLayer.ExecuteAfmAdapter;
     private dataSource: IDataSource;
 
@@ -304,7 +320,6 @@ export class VisualizationWrapped extends React.Component<
             onLegendReady,
             onError,
             onLoadingChanged,
-            locale,
             BaseChartComponent,
             PivotTableComponent,
             GeoPushpinChartComponent,
@@ -316,7 +331,7 @@ export class VisualizationWrapped extends React.Component<
             filters: filtersFromProps,
         } = this.props;
         const { resultSpec, type, error, isLoading, mdObject } = this.state;
-
+        const locale = this.decideLocale;
         if (error) {
             return this.renderError(error);
         } else if (isLoading || !dataSource) {
@@ -397,6 +412,68 @@ export class VisualizationWrapped extends React.Component<
                 );
         }
     }
+    public async prepareDataSources(
+        projectId: string,
+        identifier: string,
+        filters: AFM.ExtendedFilter[] = [],
+    ): Promise<IVisualizationExecInfo> {
+        const { uriResolver, fetchVisObject, fetchVisualizationClass, locale, getFeatureFlags } = this.props;
+
+        // gather all essential information from backend
+
+        const [visualizationUri, featureFlags, localeFromUserAccount] = await Promise.all([
+            uriResolver(this.sdk, projectId, this.visualizationUri, identifier),
+            getFeatureFlags(this.sdk, projectId),
+            fetchLocalizationFromUser(this.sdk, projectId),
+        ]);
+        const mdObject = await fetchVisObject(this.sdk, visualizationUri);
+        const visualizationClassUri: string = MdObjectHelper.getVisualizationClassUri(mdObject);
+        const visualizationClass = await fetchVisualizationClass(this.sdk, visualizationClassUri);
+
+        const visualizationType: VisType = await getVisualizationTypeFromVisualizationClass(
+            visualizationClass,
+        );
+
+        this.visualizationUri = visualizationUri;
+        this.decideLocale = locale ? locale : (localeFromUserAccount as Localization.ILocale);
+
+        this.exportTitle = get(mdObject, "meta.title", "");
+
+        const mdObjectContent: IVisualizationObjectContent = mdObject.content;
+        const mdObjectContentProperties: IProperties | undefined =
+            mdObjectContent && mdObjectContent.properties && JSON.parse(mdObject.content.properties);
+        const secondaryYAxis: IAxisConfig =
+            get(this.props.config, ["secondary_yaxis"], undefined) ||
+            get(mdObjectContentProperties, ["controls", "secondary_yaxis"], undefined);
+        // don't support sort by total value for dual axis
+        const canSortStackTotalValue: boolean =
+            get(mdObjectContentProperties, ["controls", "stackMeasures"], false) &&
+            areAllMeasuresOnSingleAxis(mdObject.content, secondaryYAxis);
+
+        const sortingConfigs: ISortingConfigs = {
+            canSortStackTotalValue,
+            enableSortingByTotalGroup: featureFlags.enableSortingByTotalGroup as boolean,
+        };
+
+        const { afm, resultSpec } = buildAfmResultSpec(
+            mdObject.content,
+            visualizationType,
+            this.decideLocale,
+            sortingConfigs,
+        );
+        const mdObjectTotals = MdObjectHelper.getTotals(mdObject);
+
+        const dataSource = await this.createDataSource(afm, filters);
+
+        return {
+            type: visualizationType,
+            dataSource,
+            resultSpec,
+            totals: mdObjectTotals,
+            mdObject,
+            featureFlags,
+        };
+    }
 
     private renderError(error: RuntimeError) {
         const { intl, ErrorComponent } = this.props;
@@ -421,62 +498,6 @@ export class VisualizationWrapped extends React.Component<
             mergeChartConfigWithProperties(config, mdObjectContent, colorPalette, featureFlags),
             featureFlags,
         );
-    }
-
-    private async prepareDataSources(
-        projectId: string,
-        identifier: string,
-        filters: AFM.ExtendedFilter[] = [],
-    ): Promise<IVisualizationExecInfo> {
-        const { uriResolver, fetchVisObject, fetchVisualizationClass, locale, getFeatureFlags } = this.props;
-
-        // gather all essential information from backend
-
-        const visualizationUri = await uriResolver(this.sdk, projectId, this.visualizationUri, identifier);
-        const mdObject = await fetchVisObject(this.sdk, visualizationUri);
-        const visualizationClassUri: string = MdObjectHelper.getVisualizationClassUri(mdObject);
-        const visualizationClass = await fetchVisualizationClass(this.sdk, visualizationClassUri);
-        const featureFlags = await getFeatureFlags(this.sdk, projectId);
-        const visualizationType: VisType = await getVisualizationTypeFromVisualizationClass(
-            visualizationClass,
-        );
-
-        this.visualizationUri = visualizationUri;
-        this.exportTitle = get(mdObject, "meta.title", "");
-
-        const mdObjectContent: IVisualizationObjectContent = mdObject.content;
-        const mdObjectContentProperties: IProperties | undefined =
-            mdObjectContent && mdObjectContent.properties && JSON.parse(mdObject.content.properties);
-        const secondaryYAxis: IAxisConfig =
-            get(this.props.config, ["secondary_yaxis"], undefined) ||
-            get(mdObjectContentProperties, ["controls", "secondary_yaxis"], undefined);
-        // don't support sort by total value for dual axis
-        const canSortStackTotalValue: boolean =
-            get(mdObjectContentProperties, ["controls", "stackMeasures"], false) &&
-            areAllMeasuresOnSingleAxis(mdObject.content, secondaryYAxis);
-
-        const sortingConfigs: ISortingConfigs = {
-            canSortStackTotalValue,
-            enableSortingByTotalGroup: featureFlags.enableSortingByTotalGroup as boolean,
-        };
-        const { afm, resultSpec } = buildAfmResultSpec(
-            mdObject.content,
-            visualizationType,
-            locale,
-            sortingConfigs,
-        );
-        const mdObjectTotals = MdObjectHelper.getTotals(mdObject);
-
-        const dataSource = await this.createDataSource(afm, filters);
-
-        return {
-            type: visualizationType,
-            dataSource,
-            resultSpec,
-            totals: mdObjectTotals,
-            mdObject,
-            featureFlags,
-        };
     }
 
     private createDataSource(afm: AFM.IAfm, filters: AFM.ExtendedFilter[]): Promise<IDataSource> {

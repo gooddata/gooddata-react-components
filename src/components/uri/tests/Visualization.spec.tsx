@@ -63,6 +63,9 @@ const sdk = {
         getColorPaletteWithGuids: jest.fn(() => Promise.resolve()),
         getFeatureFlags: jest.fn(() => Promise.resolve({})),
     },
+    user: {
+        getCurrentProfile: () => Promise.resolve(),
+    },
 };
 
 function getResponse(response: string, delay: number): Promise<string> {
