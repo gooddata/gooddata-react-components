@@ -2,6 +2,7 @@
 import * as React from "react";
 import isEqual = require("lodash/isEqual");
 import { injectIntl } from "react-intl";
+import { IColorItem } from "@gooddata/gooddata-js";
 
 import { IGeoChartInnerProps } from "../geoChart/GeoChartInner";
 import { IntlWrapper } from "./IntlWrapper";
@@ -10,6 +11,8 @@ import { ErrorStates } from "../../../constants/errorStates";
 import { RuntimeError } from "../../../errors/RuntimeError";
 import { generateErrorMap, IErrorMap } from "../../../helpers/errorHandlers";
 import { isLocationMissing } from "../../../helpers/geoChart/common";
+import { IGeoConfig } from "../../../interfaces/GeoChart";
+import { IColorMapping } from "../../../interfaces/Config";
 
 type IGeoValidatorProps = IGeoChartInnerProps;
 
@@ -44,7 +47,7 @@ export function geoValidatorHOC<T>(InnerComponent: React.ComponentClass<T>): Rea
             const { config: nextConfig, dataSource: nextDataSource } = nextProps;
 
             // check if buckets, filters and config are changed
-            const isSameConfig = isEqual(config, nextConfig);
+            const isSameConfig = this.isSameConfig(config, nextConfig);
             const isSameDatasource = isEqual(dataSource.getAfm(), nextDataSource.getAfm());
 
             return !isSameConfig || !isSameDatasource;
@@ -79,6 +82,25 @@ export function geoValidatorHOC<T>(InnerComponent: React.ComponentClass<T>): Rea
             const errorProps = this.errorMap[errorState] || this.errorMap[ErrorStates.UNKNOWN_ERROR];
 
             return <ErrorComponent code={errorState} {...errorProps} />;
+        }
+
+        private isSameConfig(config: IGeoConfig, nextConfig: IGeoConfig): boolean {
+            const colorMapping = (config.colorMapping || []).map(
+                (currentColor: IColorMapping): IColorItem => currentColor.color,
+            );
+            const nextColorMapping = (nextConfig.colorMapping || []).map(
+                (newColor: IColorMapping): IColorItem => newColor.color,
+            );
+            const configProps = {
+                ...config,
+                colorMapping,
+            };
+            const nextConfigProps = {
+                ...nextConfig,
+                colorMapping: nextColorMapping,
+            };
+
+            return isEqual(configProps, nextConfigProps);
         }
     }
 
