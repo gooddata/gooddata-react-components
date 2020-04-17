@@ -76,4 +76,9 @@ export const ErrorStates = {
      * This error means that request has been cancelled usually after component has been unmounted.
      */
     CANCELLED: "CANCELLED",
+
+    /**
+     * This error means that mapbox token of GeoChart is missing
+     */
+    GEO_MAPBOX_TOKEN_MISSING: "GEO_MAPBOX_TOKEN_MISSING",
 };
