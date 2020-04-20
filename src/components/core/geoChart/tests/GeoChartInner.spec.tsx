@@ -259,12 +259,6 @@ describe("GeoChartInner", () => {
             expect(wrapper.hasClass("flex-direction-row")).toBe(true);
         });
 
-        it("should set flex-direction-column class for legend position LEFT and height is not enough", () => {
-            const customProps = getCustomComponentProps({ height: 100, position: LEFT });
-            const wrapper = renderComponent(customProps);
-            expect(wrapper.hasClass("flex-direction-row")).toBe(true);
-        });
-
         it("should set flex-direction-row class for legend position RIGHT", () => {
             const customProps = getCustomComponentProps({ position: RIGHT });
             const wrapper = renderComponent(customProps);
