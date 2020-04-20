@@ -2,9 +2,10 @@
 import range = require("lodash/range");
 import isEmpty = require("lodash/isEmpty");
 import isFinite = require("lodash/isFinite");
-import { getColorPalette } from "../../visualizations/utils/color";
+import { getColorPalette, rgbToRgba } from "../../visualizations/utils/color";
 import {
     DEFAULT_PUSHPIN_BORDER_COLOR_VALUE,
+    DEFAULT_PUSHPIN_COLOR_OPACITY,
     DEFAULT_PUSHPIN_COLOR_SCALE,
     EMPTY_SEGMENT_ITEM,
 } from "../../../constants/geoChart";
@@ -42,7 +43,7 @@ export function getColorPaletteMapping(colorStrategy: IColorStrategy): IObjectMa
     return colorAssignment.reduce(
         (result: IObjectMapping, item: IColorAssignment, index: number): IObjectMapping => {
             const color = colorStrategy.getColorByIndex(index);
-            const colorPalette = getColorPalette(color);
+            const colorPalette = getColorPalette(color, DEFAULT_PUSHPIN_COLOR_OPACITY);
             // color base on Location
             if (isMappingHeaderAttribute(item.headerItem)) {
                 return {
@@ -77,7 +78,8 @@ export function getPushpinColors(
     segmentValues: string[] = [],
     colorStrategy: IColorStrategy,
 ): IPushpinColor[] {
-    const defaultColor = colorStrategy.getColorByIndex(0);
+    const defaultColorValue = colorStrategy.getColorByIndex(0);
+    const defaultColor = rgbToRgba(defaultColorValue, DEFAULT_PUSHPIN_COLOR_OPACITY);
 
     if (!colorValues.length && !segmentValues.length) {
         return [
@@ -133,7 +135,7 @@ export function generateLegendColorData(colorSeries: number[], colorString: stri
     if (isEmpty(colorSeries)) {
         return [];
     }
-    const colorPalette = getColorPalette(colorString);
+    const colorPalette = getColorPalette(colorString, DEFAULT_PUSHPIN_COLOR_OPACITY);
     const min = Math.min(...colorSeries);
     const max = Math.max(...colorSeries);
     const offset = (max - min) / DEFAULT_PUSHPIN_COLOR_SCALE;
