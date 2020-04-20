@@ -8,7 +8,7 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
 @import "~@gooddata/goodstrap/lib/Form/styles/mixins.scss";
 @import "~@gooddata/goodstrap/lib/core/styles/SVGIcons.scss";
 
-$dialog_width: 250px;
+$dialog_width: 260px;
 
 .gd-mvf-dropdown-body {
     width: $dialog_width;
@@ -30,6 +30,7 @@ $dialog_width: 250px;
         .gd-mvf-treat-null-values-as-zero {
             margin-top: 8px;
             font-size: 12px;
+            white-space: nowrap;
 
             .inlineBubbleHelp {
                 margin: 0 0 2px 5px;
