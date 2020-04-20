@@ -9,6 +9,8 @@ import GeoPushpinChartConfigurationExample from "../components/GeoPushpinChartCo
 import GeoPushpinChartConfigurationLegendExample from "../components/GeoPushpinChartConfigurationLegendExample";
 import GeoPushpinChartConfigurationViewportExample from "../components/GeoPushpinChartConfigurationViewportExample";
 import GeoPushpinChartConfigurationColorMappingExample from "../components/GeoPushpinChartConfigurationColorMappingExample";
+import GeoPushpinChartConfigurationPointsSizeExample from "../components/GeoPushpinChartConfigurationPointsSizeExample";
+import GeoPushpinChartConfigurationPointsGroupNearbyExample from "../components/GeoPushpinChartConfigurationPointsGroupNearbyExample";
 
 import GeoPushpinChartClusteringExampleSRC from "!raw-loader!../components/GeoPushpinChartClusteringExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import GeoPushpinChartWithColorLegendExampleSRC from "!raw-loader!../components/GeoPushpinChartWithColorLegendExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
@@ -17,6 +19,8 @@ import GeoPushpinChartConfigurationExampleSRC from "!raw-loader!../components/Ge
 import GeoPushpinChartConfigurationLegendExampleSRC from "!raw-loader!../components/GeoPushpinChartConfigurationLegendExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import GeoPushpinChartConfigurationViewportExampleSRC from "!raw-loader!../components/GeoPushpinChartConfigurationViewportExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import GeoPushpinChartConfigurationColorMappingExampleSRC from "!raw-loader!../components/GeoPushpinChartConfigurationColorMappingExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
+import GeoPushpinChartConfigurationPointsSizeExampleSRC from "!raw-loader!../components/GeoPushpinChartConfigurationPointsSizeExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
+import GeoPushpinChartConfigurationPointsGroupNearbyExampleSRC from "!raw-loader!../components/GeoPushpinChartConfigurationPointsGroupNearbyExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 
 export const GeoPushpinChartDemo = () => (
     <div>
@@ -80,6 +84,22 @@ export const GeoPushpinChartDemo = () => (
         <ExampleWithSource
             for={() => <GeoPushpinChartConfigurationColorMappingExample />}
             source={GeoPushpinChartConfigurationColorMappingExampleSRC}
+        />
+
+        <h2 id="geo-pushpin-chart-configuration-points-group-nearby">
+            Example of Geo Pushpin Chart with Configuration - Group nearby points
+        </h2>
+        <ExampleWithSource
+            for={() => <GeoPushpinChartConfigurationPointsGroupNearbyExample />}
+            source={GeoPushpinChartConfigurationPointsGroupNearbyExampleSRC}
+        />
+
+        <h2 id="geo-pushpin-chart-configuration-points-size">
+            Example of Geo Pushpin Chart with Configuration - Points size
+        </h2>
+        <ExampleWithSource
+            for={() => <GeoPushpinChartConfigurationPointsSizeExample />}
+            source={GeoPushpinChartConfigurationPointsSizeExampleSRC}
         />
     </div>
 );
