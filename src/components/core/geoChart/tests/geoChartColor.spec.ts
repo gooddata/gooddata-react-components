@@ -15,8 +15,6 @@ import { getGeoConfig, getExecutionResponse } from "../../../../../stories/data/
 import { convertBucketsToAFM } from "../../../../helpers/conversion";
 import GeoChartColorStrategy from "../../../visualizations/chart/colorStrategies/geoChart";
 
-import { EMPTY_SEGMENT_ITEM } from "../../../../constants/geoChart";
-
 function createColorStrategy(
     executionResponse: Execution.IExecutionResponse,
     geoConfig: IGeoConfig,
@@ -39,7 +37,7 @@ function createColorStrategy(
 
     if (segmentItems && segmentItems.length) {
         const segmentItemsWithoutNull: string[] = segmentItems.map(
-            (name: string): string => name || EMPTY_SEGMENT_ITEM,
+            (name: string): string => name || "(empty value)",
         );
         const items = uniq(segmentItemsWithoutNull).map((name, index) => ({
             attributeHeaderItem: {
@@ -190,33 +188,6 @@ describe("getPushpinColors", () => {
             { background: "rgba(20,178,226,0.7)", border: "rgba(20,178,226,0.7)" },
         ];
         expect(getPushpinColors(colors, undefined, colorStrategy)).toEqual(expectedColors);
-    });
-
-    it("should return pushpin RGB colors with null value with some null segment items", () => {
-        const colors: number[] = [10, null, 30, 40, null, null];
-        const segmentItems: string[] = [...createSegmentItems(2), ...createSegmentItems(2), "", undefined];
-        const executionResponse: Execution.IExecutionResponse = getExecutionResponse(
-            true,
-            true,
-            false,
-            false,
-            true,
-        );
-        const geoConfig: IGeoConfig = getGeoConfig({
-            isWithLocation: true,
-            isWithColor: true,
-            isWithSegment: true,
-        });
-        const colorStrategy: IColorStrategy = createColorStrategy(executionResponse, geoConfig, segmentItems);
-        const expectedColors: IPushpinColor[] = [
-            { background: "rgba(215,242,250,0.7)", border: "rgba(20,178,226,0.7)" },
-            { background: "rgba(212,244,236,0.7)", border: "rgba(0,193,141,0.7)" },
-            { background: "rgba(59,190,230,0.7)", border: "rgba(20,178,226,0.7)" },
-            { background: "rgba(0,193,141,0.7)", border: "rgba(0,193,141,0.7)" },
-            { background: "rgba(250,225,223,0.7)", border: "rgba(229,77,66,0.7)" },
-            { background: "rgba(250,225,223,0.7)", border: "rgba(229,77,66,0.7)" },
-        ];
-        expect(getPushpinColors(colors, segmentItems, colorStrategy)).toEqual(expectedColors);
     });
 
     it("should return pushpin RGB colors with range of negative and positive and null values", () => {

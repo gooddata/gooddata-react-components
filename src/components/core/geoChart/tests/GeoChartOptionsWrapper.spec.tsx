@@ -1,6 +1,7 @@
 // (C) 2020 GoodData Corporation
 import * as React from "react";
 import { ShallowWrapper, shallow } from "enzyme";
+import { Execution } from "@gooddata/typings";
 import { GeoChartOptionsWrapper } from "../GeoChartOptionsWrapper";
 import { IGeoChartInnerProps } from "../GeoChartInner";
 import { IGeoConfig } from "../../../../interfaces/GeoChart";
@@ -10,6 +11,7 @@ import { locationDataSource, locationSizeColorSegmentDataSource } from "../../..
 import { DEFAULT_COLOR_PALETTE } from "../../../visualizations/utils/color";
 
 const intl = createIntlMock();
+
 describe("GeoChartOptionsWrapper", () => {
     function renderComponent(
         customProps: Partial<IGeoChartInnerProps> = {},
@@ -29,7 +31,7 @@ describe("GeoChartOptionsWrapper", () => {
         return shallow(<GeoChartOptionsWrapper {...defaultProps} {...customProps} />);
     }
 
-    it("should return geoChartOptions in props  with location bucket", async () => {
+    it("should return geoChartOptions in props with location bucket", async () => {
         const props: Partial<IGeoChartInnerProps> = {
             config: {
                 ...getGeoConfig({ isWithLocation: true }),
@@ -126,6 +128,7 @@ describe("GeoChartOptionsWrapper", () => {
             ],
         });
     });
+
     it("should return geoChartOptions with full buckets", async () => {
         const props: Partial<IGeoChartInnerProps> = {
             config: {
@@ -427,6 +430,67 @@ describe("GeoChartOptionsWrapper", () => {
                 },
             ],
         });
+    });
+
+    it("should return props with new excutionResult be replaced emptyHeaderString", async () => {
+        const executionResult: Execution.IExecutionResult = {
+            data: [],
+            paging: {
+                count: [1, 1],
+                offset: [0, 0],
+                total: [1, 1],
+            },
+            headerItems: [
+                [
+                    [
+                        {
+                            attributeHeaderItem: {
+                                name: "",
+                                uri: "/gdc/md/storybook/obj/694/elements?id=1",
+                            },
+                        },
+                    ],
+                ],
+            ],
+        };
+        const props: Partial<IGeoChartInnerProps> = {
+            config: {
+                ...getGeoConfig({
+                    isWithLocation: true,
+                }),
+                colorPalette: DEFAULT_COLOR_PALETTE.slice(0, 5),
+            },
+            execution: {
+                executionResponse: getExecutionResponse(true),
+                executionResult,
+            },
+            dataSource: locationDataSource,
+        };
+        const wrapper = renderComponent(props);
+        expect(wrapper.prop("execution")).toEqual(
+            expect.objectContaining({
+                executionResult: {
+                    data: [],
+                    paging: {
+                        count: [1, 1],
+                        offset: [0, 0],
+                        total: [1, 1],
+                    },
+                    headerItems: [
+                        [
+                            [
+                                {
+                                    attributeHeaderItem: {
+                                        name: "(empty value)",
+                                        uri: "/gdc/md/storybook/obj/694/elements?id=1",
+                                    },
+                                },
+                            ],
+                        ],
+                    ],
+                },
+            }),
+        );
     });
 
     it("should call onDataTooLarge", () => {

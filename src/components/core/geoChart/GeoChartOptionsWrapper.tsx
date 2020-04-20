@@ -3,7 +3,7 @@ import * as React from "react";
 import * as invariant from "invariant";
 
 import { IGeoData, IPushpinCategoryLegendItem, IValidationResult } from "../../../interfaces/GeoChart";
-import { DEFAULT_DATA_POINTS_LIMIT, EMPTY_SEGMENT_ITEM } from "../../../constants/geoChart";
+import { DEFAULT_DATA_POINTS_LIMIT } from "../../../constants/geoChart";
 import { IColorAssignment, IColorPalette } from "../../../interfaces/Config";
 import { isDataOfReasonableSize } from "../../../helpers/geoChart/common";
 import { getGeoBucketsFromMdObject, getGeoData } from "../../../helpers/geoChart/data";
@@ -13,19 +13,29 @@ import { getColorStrategy } from "../../../helpers/geoChart/colorStrategy";
 import { isMappingHeaderAttributeItem } from "../../../interfaces/MappingHeader";
 import { BaseVisualization } from "../base/BaseVisualization";
 import { GeoChartInner, IGeoChartInnerOptions, IGeoChartInnerProps } from "./GeoChartInner";
+import { fixEmptyHeaderItems } from "../base/utils/fixEmptyHeaderItems";
 
 export class GeoChartOptionsWrapper extends BaseVisualization<IGeoChartInnerProps, null> {
     public static defaultProps: Partial<IGeoChartInnerProps> = GeoChartInner.defaultProps;
+    private emptyHeaderString: string;
+
+    constructor(props: IGeoChartInnerProps) {
+        super(props);
+        this.emptyHeaderString = this.getEmptyHeaderString();
+    }
 
     public renderVisualization(): JSX.Element {
+        const sanitizedProps: IGeoChartInnerProps = this.sanitizeProperties();
+
         const {
             config: { mdObject },
             execution,
             onDataTooLarge,
-        } = this.props;
+        } = sanitizedProps;
+
         const buckets = getGeoBucketsFromMdObject(mdObject);
         const geoData: IGeoData = getGeoData(buckets, execution);
-        const { isDataTooLarge } = this.validateData(geoData);
+        const { isDataTooLarge } = this.validateData(geoData, sanitizedProps);
 
         if (isDataTooLarge) {
             invariant(onDataTooLarge, "GeoChart's onDataTooLarge callback is missing.");
@@ -33,17 +43,20 @@ export class GeoChartOptionsWrapper extends BaseVisualization<IGeoChartInnerProp
             return null;
         }
 
-        const geoChartOptions: IGeoChartInnerOptions = this.buildGeoChartOptions(geoData);
-        return <GeoChartInner {...this.props} geoChartOptions={geoChartOptions} />;
+        const geoChartOptions: IGeoChartInnerOptions = this.buildGeoChartOptions(geoData, sanitizedProps);
+        return <GeoChartInner {...sanitizedProps} geoChartOptions={geoChartOptions} />;
     }
 
-    private buildGeoChartOptions = (geoData: Readonly<IGeoData>): IGeoChartInnerOptions => {
+    private buildGeoChartOptions = (
+        geoData: Readonly<IGeoData>,
+        props: IGeoChartInnerProps,
+    ): IGeoChartInnerOptions => {
         const { segment } = geoData;
         const {
             config: { colors, colorPalette, colorMapping },
             dataSource,
             execution,
-        } = this.props;
+        } = props;
         const palette: IColorPalette = getValidColorPalette(colors, colorPalette);
         const colorStrategy: IColorStrategy = getColorStrategy(
             palette,
@@ -72,7 +85,7 @@ export class GeoChartOptionsWrapper extends BaseVisualization<IGeoChartInnerProp
             (item: IColorAssignment, legendIndex: number): IPushpinCategoryLegendItem => {
                 const name: string = isMappingHeaderAttributeItem(item.headerItem)
                     ? item.headerItem.attributeHeaderItem.name
-                    : EMPTY_SEGMENT_ITEM;
+                    : this.emptyHeaderString;
                 const color: string = colorStrategy.getColorByIndex(legendIndex);
                 return {
                     name,
@@ -84,17 +97,38 @@ export class GeoChartOptionsWrapper extends BaseVisualization<IGeoChartInnerProp
         );
     }
 
-    private validateData = (geoData: IGeoData): IValidationResult => {
-        if (!this.props.execution) {
+    private validateData = (geoData: IGeoData, props: IGeoChartInnerProps): IValidationResult => {
+        if (!props.execution) {
             return;
         }
         const {
             config: { limit = DEFAULT_DATA_POINTS_LIMIT },
             execution: { executionResult },
-        } = this.props;
+        } = props;
 
         return {
             isDataTooLarge: !isDataOfReasonableSize(executionResult, geoData, limit),
         };
     };
+
+    private sanitizeProperties(): IGeoChartInnerProps {
+        const {
+            execution: { executionResult, executionResponse },
+        } = this.props;
+        const executionResultWithResolvedEmptyValues = fixEmptyHeaderItems(
+            executionResult,
+            this.emptyHeaderString,
+        );
+        return {
+            ...this.props,
+            execution: {
+                executionResponse,
+                executionResult: executionResultWithResolvedEmptyValues,
+            },
+        };
+    }
+
+    private getEmptyHeaderString(): string {
+        return `(${this.props.intl.formatMessage({ id: "visualization.emptyValue" })})`;
+    }
 }
