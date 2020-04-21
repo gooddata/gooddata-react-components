@@ -195,8 +195,8 @@
         "limit": 0
     },
     "visualization.ErrorDescriptionMissingMapboxToken": {
-        "value": "An API access token is required to use Mapbox GL in Geo chart (pushpins)",
-        "comment": "Mapbox GL should not be translated",
+        "value": "The Geochart configuration requires a valid API access token.",
+        "comment": "",
         "limit": 0
     },
     "gs.filter.loading": {
