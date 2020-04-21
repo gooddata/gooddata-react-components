@@ -84,10 +84,10 @@ module.exports = async (env, argv) => {
             BASEPATH: JSON.stringify(basePath),
         }),
         new SimplestProgressPlugin(),
-        new Dotenv({ 
+        new Dotenv({
             path: "../.env", // one environment for both storybook and examples
-            systemvars: true
-        })
+            systemvars: true,
+        }),
     ];
 
     if (isProduction) {
@@ -107,6 +107,7 @@ module.exports = async (env, argv) => {
             __filename: true,
         },
         resolve: {
+            mainFields: ["browser", "main", "module"],
             extensions: [".js", ".jsx"],
             alias: {
                 "@gooddata/react-components/styles": path.resolve(__dirname, "../styles/"),
@@ -125,7 +126,9 @@ module.exports = async (env, argv) => {
                 },
                 {
                     test: /\.jsx?$/,
-                    exclude: /node_modules|update-dependencies/,
+                    // we have to explicitly transpile react-intl for it to work in IE11
+                    // see docs https://github.com/formatjs/react-intl/blob/master/docs/Getting-Started.md#webpack
+                    exclude: /update-dependencies|node_modules\/(?!react-intl|intl-messageformat|intl-messageformat-parser)/,
                     use: {
                         loader: "babel-loader",
                     },
