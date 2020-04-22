@@ -175,6 +175,7 @@
 .mapboxgl-ctrl-bottom-right {
     display: flex;
     align-items: flex-end;
+    flex-direction: row-reverse;
 }
 
 /* Overwrite Mapbox CSS */
