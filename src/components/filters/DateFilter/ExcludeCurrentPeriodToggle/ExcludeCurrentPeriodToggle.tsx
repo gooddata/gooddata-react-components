@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import cx from "classnames";
 import { FormattedMessage } from "react-intl";
@@ -25,7 +25,10 @@ export const ExcludeCurrentPeriodToggle: React.FC<IExcludeCurrentPeriodTogglePro
 }) => (
     <div className="gd-extended-date-filter-exclude-current">
         <BubbleHoverTrigger>
-            <label className={cx("s-exclude-current-period", "input-checkbox-label")}>
+            <label
+                className={cx("s-exclude-current-period", "input-checkbox-label")}
+                style={disabled ? { color: "#b0beca" } : { color: "#464e56" }}
+            >
                 <input
                     type="checkbox"
                     className="input-checkbox"
