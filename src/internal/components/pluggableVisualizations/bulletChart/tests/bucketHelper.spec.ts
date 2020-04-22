@@ -11,7 +11,7 @@ describe("bullet chart bucket helper", () => {
     });
 
     describe("transformBucketItems", () => {
-        it("should distribute measures in a single bucket into separate measure buckets with limit of one measure each", () => {
+        it("should distribute measures from a single measure bucket into separate measure buckets with limit of one measure each", () => {
             const buckets = [
                 getBucket(BucketNames.MEASURES, [
                     referencePointMocks.masterMeasureItems[0],
@@ -42,6 +42,24 @@ describe("bullet chart bucket helper", () => {
             expect(actual).toEqual([
                 getBucket(BucketNames.MEASURES, [referencePointMocks.masterMeasureItems[0]]),
                 getBucket(BucketNames.SECONDARY_MEASURES, [referencePointMocks.masterMeasureItems[2]]),
+                getBucket(BucketNames.TERTIARY_MEASURES, [referencePointMocks.masterMeasureItems[1]]),
+                getBucket(BucketNames.VIEW, []),
+            ]);
+        });
+
+        it("should put measure that doesn't fit into it's original bucket into next empty measure bucket", () => {
+            const buckets = [
+                getBucket(BucketNames.MEASURES, []),
+                getBucket(BucketNames.SECONDARY_MEASURES, [
+                    referencePointMocks.masterMeasureItems[0],
+                    referencePointMocks.masterMeasureItems[1],
+                ]),
+            ];
+            const actual = transformBuckets(buckets);
+
+            expect(actual).toEqual([
+                getBucket(BucketNames.MEASURES, []),
+                getBucket(BucketNames.SECONDARY_MEASURES, [referencePointMocks.masterMeasureItems[0]]),
                 getBucket(BucketNames.TERTIARY_MEASURES, [referencePointMocks.masterMeasureItems[1]]),
                 getBucket(BucketNames.VIEW, []),
             ]);
@@ -135,9 +153,9 @@ describe("bullet chart bucket helper", () => {
             const actual = transformBuckets(buckets);
 
             expect(actual).toEqual([
-                getBucket(BucketNames.MEASURES, [referencePointMocks.derivedMeasureItems[0]]),
+                getBucket(BucketNames.MEASURES, []),
                 getBucket(BucketNames.SECONDARY_MEASURES, [referencePointMocks.masterMeasureItems[0]]),
-                getBucket(BucketNames.TERTIARY_MEASURES, []),
+                getBucket(BucketNames.TERTIARY_MEASURES, [referencePointMocks.derivedMeasureItems[0]]),
                 getBucket(BucketNames.VIEW, []),
             ]);
         });

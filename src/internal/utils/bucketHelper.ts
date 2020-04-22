@@ -838,3 +838,48 @@ export const getOccupiedMeasureBucketsLocalIdentifiers = (
         ? notEmptyMeasureBucketsLocalIdentifiers
         : availableMeasureBucketsLocalIdentifiers.slice(0, executionResultData.length);
 };
+
+export interface IMeasureBucketItemsLimit {
+    localIdentifier: string;
+    itemsLimit: number;
+}
+
+export const transformMeasureBuckets = (
+    measureBucketItemsLimits: IMeasureBucketItemsLimit[],
+    buckets: IBucket[],
+) => {
+    let unusedMeasures: IBucketItem[] = [];
+
+    const newBuckets: IBucket[] = measureBucketItemsLimits.map(({ localIdentifier, itemsLimit }) => {
+        const preferredBucketItems = getPreferredBucketItems(buckets, [localIdentifier], [METRIC]);
+        const measuresToBePlaced = preferredBucketItems.splice(0, itemsLimit);
+
+        if (measuresToBePlaced.length === 0) {
+            return {
+                localIdentifier,
+                items: unusedMeasures.splice(0, itemsLimit),
+            };
+        }
+
+        unusedMeasures = [...unusedMeasures, ...preferredBucketItems];
+
+        return {
+            localIdentifier,
+            items: measuresToBePlaced,
+        };
+    });
+
+    return newBuckets.map((bucket: IBucket, bucketIndex: number) => {
+        const bucketItemsLimit = measureBucketItemsLimits[bucketIndex].itemsLimit;
+
+        const freeSlotsCount = bucketItemsLimit - bucket.items.length;
+        if (freeSlotsCount === 0) {
+            return bucket;
+        }
+
+        return {
+            ...bucket,
+            items: [...bucket.items, ...unusedMeasures.splice(0, freeSlotsCount)],
+        };
+    });
+};
