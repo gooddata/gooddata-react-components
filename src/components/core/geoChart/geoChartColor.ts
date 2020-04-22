@@ -7,7 +7,6 @@ import {
     DEFAULT_PUSHPIN_BORDER_COLOR_VALUE,
     DEFAULT_PUSHPIN_COLOR_OPACITY,
     DEFAULT_PUSHPIN_COLOR_SCALE,
-    EMPTY_SEGMENT_ITEM,
 } from "../../../constants/geoChart";
 import { IObjectMapping, IPushpinColor } from "../../../interfaces/GeoChart";
 import { IColorLegendItem } from "../../visualizations/typings/legend";
@@ -90,7 +89,7 @@ export function getPushpinColors(
         ];
     }
 
-    const segmentNames: string[] = segmentValues.map((value: string): string => value || EMPTY_SEGMENT_ITEM);
+    const segmentNames: string[] = segmentValues.map((value: string): string => value);
     const colorPaletteMapping: IObjectMapping = getColorPaletteMapping(colorStrategy);
     if (!colorValues.length) {
         return segmentNames.map(

@@ -82,7 +82,7 @@ describe("GeoValidatorHOC", () => {
         expect(onError).toBeCalledTimes(1);
         expect(wrapper.find(ErrorComponent).props()).toEqual(
             expect.objectContaining({
-                description: "An API access token is required to use Mapbox GL in Geo chart (pushpins)",
+                description: "The Geochart configuration requires a valid API access token.",
                 code: "GEO_MAPBOX_TOKEN_MISSING",
             }),
         );
