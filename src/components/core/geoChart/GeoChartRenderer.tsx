@@ -390,7 +390,10 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
             geoData,
         } = this.props;
         const { features, originalEvent } = e;
-        const { properties } = features[0];
+        const {
+            geometry: { coordinates },
+            properties,
+        } = features[0];
 
         // Disable drilling in edit/export mode
         if (get(viewport, "frozen", false)) {
@@ -406,6 +409,7 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
             execution,
             geoData,
             properties,
+            coordinates,
             originalEvent.target,
         );
     };

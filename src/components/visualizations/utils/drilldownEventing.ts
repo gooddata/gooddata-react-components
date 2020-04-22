@@ -560,10 +560,11 @@ export function handleGeoPushpinDrillEvent(
     drillConfig: IDrillConfig,
     execution: Execution.IExecutionResponses,
     geoData: IGeoData,
-    properties: GeoJSON.GeoJsonProperties,
+    pinProperties: GeoJSON.GeoJsonProperties,
+    pinCoordinates: number[],
     target: EventTarget,
 ): void {
-    const { locationIndex } = properties;
+    const { locationIndex } = pinProperties;
     const drillIntersection: IDrillEventIntersectionElementExtended[] = getDrillIntersectionForGeoChart(
         drillableItems,
         drillConfig,
@@ -577,21 +578,21 @@ export function handleGeoPushpinDrillEvent(
     }
 
     const { afm, onDrill, onFiredDrillEvent } = drillConfig;
+    const [lng, lat] = pinCoordinates;
     const {
         locationName: { value: locationNameValue },
         color: { value: colorValue },
         segment: { value: segmentByValue },
         size: { value: sizeValue },
-    } = parseGeoProperties(properties);
-    const locationName: string = locationNameValue ? escape(String(locationNameValue)) : "";
-    const segmentByName: string = segmentByValue ? escape(String(segmentByValue)) : "";
+    } = parseGeoProperties(pinProperties);
     const drillContext: IGeoDrillEvent = {
         element: "pushpin",
         intersection: drillIntersection,
         type: "pushpin",
         color: colorValue,
-        location: locationName,
-        segmentBy: segmentByName,
+        location: { lat, lng },
+        locationName: locationNameValue,
+        segmentBy: segmentByValue,
         size: sizeValue,
     };
     const drillEventExtended: IDrillEventExtended = {
