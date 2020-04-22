@@ -1,12 +1,10 @@
 // (C) 2020 GoodData Corporation
 import { Selector } from "testcafe";
 import { config } from "./utils/config";
-import { loginUsingLoginForm } from "./utils/helpers";
+import { loginUserAndNavigate } from "./utils/helpers";
 import { DEFAULT_COLOR_PALETTE } from "../src/utils/colors";
 
-fixture("Geo Pushpin Chart Demo")
-    .page(config.url)
-    .beforeEach(loginUsingLoginForm(`${config.url}/geo-pushpin-chart`));
+fixture("Geo Pushpin Chart Demo").beforeEach(loginUserAndNavigate(`${config.url}/geo-pushpin-chart`));
 
 const CHART_WITH_CLUSTERING = Selector(".s-geo-pushpin-chart-clustering");
 const CHART_WITH_COLOR_LEGEND = Selector(".s-geo-pushpin-chart-color");

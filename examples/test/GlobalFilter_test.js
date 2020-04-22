@@ -1,12 +1,9 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { Selector } from "testcafe";
 import { config } from "./utils/config";
-import { loginUsingLoginForm } from "./utils/helpers";
+import { loginUserAndNavigate } from "./utils/helpers";
 
-fixture("Global filter") // eslint-disable-line no-undef
-    .page(config.url)
-    .beforeEach(loginUsingLoginForm(`${config.url}/advanced/global-filters`));
-
+fixture("Global filter").beforeEach(loginUserAndNavigate(`${config.url}/advanced/global-filters`));
 test("should filter components according to selected employee", async t => {
     const displayedNameSelector = Selector(".additional-info > h1");
     const kpiMetricSelector = Selector(".gdc-kpi");

@@ -1,11 +1,9 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { Selector } from "testcafe";
 import { config } from "./utils/config";
-import { loginUsingLoginForm } from "./utils/helpers";
+import { loginUserAndNavigate } from "./utils/helpers";
 
-fixture("Pivot Table Demo") // eslint-disable-line no-undef
-    .page(config.url)
-    .beforeEach(loginUsingLoginForm(`${config.url}/pivot-table`));
+fixture("Pivot Table Demo").beforeEach(loginUserAndNavigate(`${config.url}/pivot-table`));
 
 test("should render all tables", async t => {
     const table = Selector(".s-pivot-table-sorting");

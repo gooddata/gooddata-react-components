@@ -1,7 +1,7 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import { Selector } from "testcafe";
 import { config } from "./utils/config";
-import { loginUsingLoginForm } from "./utils/helpers";
+import { loginUserAndNavigate } from "./utils/helpers";
 
 const DRILLED_VALUE = ".s-drill-value";
 const MENU_CATEGORY_ATTRIBUTE_VALUE = ".ag-body-viewport .s-cell-3-2";
@@ -9,9 +9,7 @@ const FRANCHISE_FEES_MEASURE_VALUE = ".ag-body-viewport .s-cell-3-3";
 const FRANCHISE_FEES_GRAND_TOTAL_VALUE = ".ag-floating-bottom .s-cell-0-3";
 const FRANCHISE_FEES_SUB_TOTAL_VALUE = ".ag-body-viewport .s-cell-5-3";
 
-fixture("Pivot Table Drill")
-    .page(config.url)
-    .beforeEach(loginUsingLoginForm(`${config.url}/drilling/pivot-table-drilling`));
+fixture("Pivot Table Drill").beforeEach(loginUserAndNavigate(`${config.url}/drilling/pivot-table-drilling`));
 
 test("should drill on attribute value", async t => {
     await t

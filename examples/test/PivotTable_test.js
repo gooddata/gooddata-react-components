@@ -1,10 +1,8 @@
 // (C) 2007-2020 GoodData Corporation
 import { config } from "./utils/config";
-import { checkCellValue, loginUsingLoginForm } from "./utils/helpers";
+import { checkCellValue, loginUserAndNavigate } from "./utils/helpers";
 
-fixture("Pivot Table") // eslint-disable-line no-undef
-    .page(config.url)
-    .beforeEach(loginUsingLoginForm(`${config.url}/hidden/pivot-table`));
+fixture("Pivot Table").beforeEach(loginUserAndNavigate(`${config.url}/hidden/pivot-table`));
 
 test("should render all tables", async t => {
     const firstCellFirstRow = ".s-cell-0-0";

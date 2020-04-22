@@ -1,7 +1,7 @@
 // (C) 2007-2020 GoodData Corporation
 import { Selector } from "testcafe";
 import { config } from "./utils/config";
-import { loginUsingLoginForm, checkRenderChart, checkDrill } from "./utils/helpers";
+import { loginUserAndNavigate, checkRenderChart, checkDrill } from "./utils/helpers";
 import {
     barOnDrillExtendedParams,
     headlineOnDrillExtendedParams,
@@ -28,9 +28,9 @@ const bulletTargetMeasureSelector = Selector(
     ".s-bullet-chart .highcharts-series.highcharts-series-1 .highcharts-bullet-target",
 ).nth(2);
 
-fixture("New drill handling by onDrill") // eslint-disable-line no-undef
-    .page(config.url)
-    .beforeEach(loginUsingLoginForm(`${config.url}/hidden/on-drill-drilling`));
+fixture("New drill handling by onDrill").beforeEach(
+    loginUserAndNavigate(`${config.url}/hidden/on-drill-drilling`),
+);
 
 test("OnDrill on Bar chart should work", async t => {
     await checkRenderChart(".s-bar-chart", t);

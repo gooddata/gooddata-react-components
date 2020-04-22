@@ -1,11 +1,9 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { Selector } from "testcafe";
 import { config } from "./utils/config";
-import { loginUsingLoginForm } from "./utils/helpers";
+import { loginUserAndNavigate } from "./utils/helpers";
 
-fixture("Parent filter")
-    .page(config.url)
-    .beforeEach(loginUsingLoginForm(`${config.url}/advanced/parent-filter`));
+fixture("Parent filter").beforeEach(loginUserAndNavigate(`${config.url}/advanced/parent-filter`));
 
 test("Check if child filters are restricted by parent filters and visualization is properly filtered", async t => {
     const dropdownState = Selector(".s-select-state:not(.is-loading)");
