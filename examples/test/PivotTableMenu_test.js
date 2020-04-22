@@ -1,7 +1,7 @@
 // (C) 2007-2020 GoodData Corporation
 import { Selector } from "testcafe";
 import { config } from "./utils/config";
-import { checkCellValue, loginUsingLoginForm, waitForPivotTableStopLoading } from "./utils/helpers";
+import { checkCellValue, loginUserAndNavigate, waitForPivotTableStopLoading } from "./utils/helpers";
 
 const totalValues = {
     sum: ["Sum", "", "", "$1,566,007", "$150,709"],
@@ -60,27 +60,25 @@ async function disableDrilling(t) {
     await t.click(Selector(DRILLING_PRESET_ATTRIBUTE_VALUE_JANUARY));
 }
 
-fixture("Pivot Table Menu")
-    .page(config.url)
-    .beforeEach(async t => {
-        await loginUsingLoginForm(`${config.url}/hidden/pivot-table-dynamic`)(t);
+fixture("Pivot Table Menu").beforeEach(async t => {
+    await loginUserAndNavigate(`${config.url}/hidden/pivot-table-dynamic`)(t);
 
-        await waitForPivotTableStopLoading(t);
-        await t.click(Selector(".s-total-preset-aggregationsWithSubTotals"));
+    await waitForPivotTableStopLoading(t);
+    await t.click(Selector(".s-total-preset-aggregationsWithSubTotals"));
 
-        await disableDrilling(t);
+    await disableDrilling(t);
 
-        await t.click(Selector(".s-group-rows-preset-activeGrouping"));
+    await t.click(Selector(".s-group-rows-preset-activeGrouping"));
 
-        // Cells in ag-grid are windowed (only cells that are in the ag-grid
-        // viewport are visible). Since we need to click on cells that are not
-        // by default visible we need to make the table bigger so they render.
-        // Another option would be to scroll on ag-grid but scroll actions does
-        // not seem to be implemented in test-cafe.
-        await t.click(Selector(".s-total-preset-wide"));
+    // Cells in ag-grid are windowed (only cells that are in the ag-grid
+    // viewport are visible). Since we need to click on cells that are not
+    // by default visible we need to make the table bigger so they render.
+    // Another option would be to scroll on ag-grid but scroll actions does
+    // not seem to be implemented in test-cafe.
+    await t.click(Selector(".s-total-preset-wide"));
 
-        await waitForPivotTableStopLoading(t);
-    });
+    await waitForPivotTableStopLoading(t);
+});
 
 test("should show menu toggler button when mouse hovers over the cell", async t => {
     const measureCell = getMeasureCell(0);

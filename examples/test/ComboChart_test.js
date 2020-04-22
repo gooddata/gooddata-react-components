@@ -1,11 +1,9 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { Selector } from "testcafe";
 import { config } from "./utils/config";
-import { loginUsingLoginForm } from "./utils/helpers";
+import { loginUserAndNavigate } from "./utils/helpers";
 
-fixture("Combo chart") // eslint-disable-line no-undef
-    .page(config.url)
-    .beforeEach(loginUsingLoginForm(`${config.url}/next/combo-chart`));
+fixture("Combo chart").beforeEach(loginUserAndNavigate(`${config.url}/next/combo-chart`));
 
 test("Combo chart should render", async t => {
     const loading = Selector(".s-loading");

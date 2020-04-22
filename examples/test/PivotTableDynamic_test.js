@@ -6,7 +6,7 @@ import {
     checkCellHasNotClassName,
     checkCellValue,
     checkDrill,
-    loginUsingLoginForm,
+    loginUserAndNavigate,
     waitForPivotTableStopLoading,
 } from "./utils/helpers";
 import {
@@ -83,9 +83,7 @@ async function checkNodeIsTransparent(t, selector, isTransparent) {
     }
 }
 
-fixture("Pivot Table Dynamic")
-    .page(config.url)
-    .beforeEach(loginUsingLoginForm(`${config.url}/hidden/pivot-table-dynamic`));
+fixture("Pivot Table Dynamic").beforeEach(loginUserAndNavigate(`${config.url}/hidden/pivot-table-dynamic`));
 
 test("should add drillable classes and run onFiredDrillEvent with correct params", async t => {
     await t.click(Selector(".s-bucket-preset-measures"));

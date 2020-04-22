@@ -1,11 +1,9 @@
 // (C) 2007-2020 GoodData Corporation
 import { Selector } from "testcafe";
 import { config } from "./utils/config";
-import { loginUsingLoginForm, checkRenderChart } from "./utils/helpers";
+import { checkRenderChart, loginUserAndNavigate } from "./utils/helpers";
 
-fixture("Basic components") // eslint-disable-line no-undef
-    .page(config.url)
-    .beforeEach(loginUsingLoginForm(`${config.url}`));
+fixture("Basic components").beforeEach(loginUserAndNavigate(config.url));
 
 test("Column chart should render", async t => {
     await checkRenderChart(".s-column-chart", t);

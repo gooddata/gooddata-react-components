@@ -1,7 +1,7 @@
 // (C) 2007-2020 GoodData Corporation
 import { Selector } from "testcafe";
 import {
-    loginUsingLoginForm,
+    loginUserAndNavigate,
     waitForPivotTableStopLoading,
     checkCellValue,
     checkRenderChart,
@@ -16,9 +16,9 @@ const CELL_0_1 = ".s-cell-0-1";
 const CELL_1_1 = ".s-cell-1-1";
 const CELL_2_1 = ".s-cell-2-1";
 
-fixture("Measure Value Filter")
-    .page(config.url)
-    .beforeEach(loginUsingLoginForm(`${config.url}/measure-value-filter/filter-by-measure-value`));
+fixture("Measure Value Filter").beforeEach(
+    loginUserAndNavigate(`${config.url}/measure-value-filter/filter-by-measure-value`),
+);
 
 test("should filter the data with a comparison operator", async t => {
     const pivotTableSelector = Selector(".s-measure-value-filter-example-1");
@@ -137,9 +137,9 @@ test("should filter the data formatted in %", async t => {
     await checkCellValue(t, pivotTableSelector, "778,415,730%", CELL_2_1);
 });
 
-fixture("Measure Value Filter Errors")
-    .page(config.url)
-    .beforeEach(loginUsingLoginForm(`${config.url}/hidden/measure-value-filter-with-native-total`));
+fixture("Measure Value Filter Errors").beforeEach(
+    loginUserAndNavigate(`${config.url}/hidden/measure-value-filter-with-native-total`),
+);
 
 test("should render error when pivot is configured both with native total and measure value filter", async t => {
     await waitForPivotTableStopLoading(t, Selector(".s-pivot-table-native-total-mvf"));

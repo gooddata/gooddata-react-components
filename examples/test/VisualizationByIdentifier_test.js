@@ -1,12 +1,12 @@
 // (C) 2007-2020 GoodData Corporation
 import { Selector } from "testcafe";
 import { config } from "./utils/config";
-import { loginUsingGreyPages } from "./utils/helpers";
+import { loginUserAndNavigate } from "./utils/helpers";
 import { HIGHCHART_VERSION } from "./utils/constants";
 
-fixture("Visualization by identifier") // eslint-disable-line no-undef
-    .page(config.url)
-    .beforeEach(loginUsingGreyPages(`${config.url}/visualization/visualization-by-identifier`));
+fixture("Visualization by identifier").beforeEach(
+    loginUserAndNavigate(`${config.url}/visualization/visualization-by-identifier`),
+);
 
 async function checkRenderedChart(selector, t) {
     const loading = Selector(".s-loading");

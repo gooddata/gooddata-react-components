@@ -1,5 +1,5 @@
-// (C) 2007-2019 GoodData Corporation
-import { t as testController, Selector } from "testcafe";
+// (C) 2007-2020 GoodData Corporation
+import { t as testController, Selector, Role } from "testcafe";
 import { config } from "./config";
 
 async function getCell(t, selector, cellSelector) {
@@ -118,6 +118,25 @@ export const loginUsingLoginForm = (redirectUri = "/", retryCount = 2) => async 
             return error;
         },
     );
+};
+
+export const regularUser = Role(`${config.url}`, async (tc = testController) => {
+    // wait till s-isWaitingForLoggedInStatus disappears
+    // allow long timeout because of page load
+    await retry(() => selectorExists(".s-isWaitingForLoggedInStatus", false), 15000).catch(error => {
+        // eslint-disable-next-line no-console
+        console.error("ERROR: s-isWaitingForLoggedInStatus forever. Probably a JS issue", error);
+        // no reason to retry, something is most likely broken
+    });
+
+    await tc
+        .typeText(".s-login-input-email", config.username, { paste: true, replace: true })
+        .typeText(".s-login-input-password", config.password, { paste: true, replace: true })
+        .click(".s-login-submit");
+});
+
+export const loginUserAndNavigate = (redirectUri = "/") => async (tc = testController) => {
+    await tc.useRole(regularUser).navigateTo(redirectUri);
 };
 
 export const waitForPivotTableStopLoading = async (t, pivotSelector) => {

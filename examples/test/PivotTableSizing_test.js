@@ -1,11 +1,9 @@
 // (C) 2007-2020 GoodData Corporation
 import { Selector } from "testcafe";
 import { config } from "./utils/config";
-import { checkCellValue, loginUsingLoginForm } from "./utils/helpers";
+import { checkCellValue, loginUserAndNavigate } from "./utils/helpers";
 
-fixture("Pivot Table Sizing")
-    .page(config.url)
-    .beforeEach(loginUsingLoginForm(`${config.url}/hidden/pivot-table-sizing`));
+fixture("Pivot Table Sizing").beforeEach(loginUserAndNavigate(`${config.url}/hidden/pivot-table-sizing`));
 
 test("should render all tables", async t => {
     const firstCellSelector = ".s-cell-0-0";

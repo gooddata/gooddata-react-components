@@ -1,7 +1,7 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { Selector } from "testcafe";
 import { config } from "./utils/config";
-import { loginUsingLoginForm } from "./utils/helpers";
+import { loginUserAndNavigate } from "./utils/helpers";
 
 const clearButton = Selector(".s-clear");
 const selectAllButton = Selector(".s-select_all");
@@ -9,9 +9,9 @@ const applyButton = Selector(".s-apply");
 const attributeFiltersOverlay = Selector(".gd-attribute-filter-overlay");
 const attributeFilterItems = attributeFiltersOverlay.find(".s-attribute-filter-list-item");
 
-fixture("Attribute filter components")
-    .page(config.url)
-    .beforeEach(loginUsingLoginForm(`${config.url}/attribute-filter-components`));
+fixture("Attribute filter components").beforeEach(
+    loginUserAndNavigate(`${config.url}/attribute-filter-components`),
+);
 
 test("Dropdown filter opens, clears, selects all and applies", async t => {
     const dropdownButton = Selector(".s-tested-component .gd-button.s-employee_name");

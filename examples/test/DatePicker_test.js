@@ -1,11 +1,9 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { Selector } from "testcafe";
 import { config } from "./utils/config";
-import { loginUsingLoginForm } from "./utils/helpers";
+import { loginUserAndNavigate } from "./utils/helpers";
 
-fixture("Datepicker")
-    .page(config.url)
-    .beforeEach(loginUsingLoginForm(`${config.url}/advanced/date-picker`));
+fixture("Datepicker").beforeEach(loginUserAndNavigate(`${config.url}/advanced/date-picker`));
 
 test("Should be able to set from and to dates", async t => {
     const datePickerFrom = Selector(".s-date-picker-from .gd-input-field");

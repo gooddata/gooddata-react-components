@@ -1,14 +1,14 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { Selector } from "testcafe";
 import { config } from "./utils/config";
-import { loginUsingLoginForm } from "./utils/helpers";
+import { loginUserAndNavigate } from "./utils/helpers";
 import * as DF from "./utils/dateFilter";
 
 const allTimeTitle = "All time";
 
-fixture("Date Filter basic interactions")
-    .page(config.url)
-    .beforeEach(loginUsingLoginForm(`${config.url}/date-filter-component`));
+fixture("Date Filter basic interactions").beforeEach(
+    loginUserAndNavigate(`${config.url}/date-filter-component`),
+);
 
 test("Filter button click should open/close the filters", async () => {
     await DF.assertDateFilterBodyVisibility(false);
@@ -93,9 +93,9 @@ test("Reopening a relative form should keep it selected and filled", async t => 
     await DF.assertRelativeFormToInputValue("2 years ahead");
 });
 
-fixture("Date Filter with visualization")
-    .page(config.url)
-    .beforeEach(loginUsingLoginForm(`${config.url}/date-filter-component`));
+fixture("Date Filter with visualization").beforeEach(
+    loginUserAndNavigate(`${config.url}/date-filter-component`),
+);
 
 test("Applying date should execute and filter visualization using the selected value", async t => {
     const fromInputValue = DF.dateToAbsoluteInputFormat("2016-01-01");
@@ -122,9 +122,7 @@ test("Applying date should execute and filter visualization using the selected v
         .eql(expectedValues);
 });
 
-fixture("Absolute Date Filter form")
-    .page(config.url)
-    .beforeEach(loginUsingLoginForm(`${config.url}/date-filter-component`));
+fixture("Absolute Date Filter form").beforeEach(loginUserAndNavigate(`${config.url}/date-filter-component`));
 
 test("Calendar appears when from field has focus", async () => {
     await DF.openAbsoluteFormFilter();
@@ -187,9 +185,7 @@ test("It is possible to pick day outside current month", async () => {
     await DF.assertDateFilterButtonText(DF.datesToAbsoluteFilterButtonFormat(from, to));
 });
 
-fixture("Relative Date Filter form")
-    .page(config.url)
-    .beforeEach(loginUsingLoginForm(`${config.url}/date-filter-component`));
+fixture("Relative Date Filter form").beforeEach(loginUserAndNavigate(`${config.url}/date-filter-component`));
 
 test("Select menu is filtered by input", async () => {
     await DF.openRelativeFormFilter();

@@ -1,11 +1,9 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { Selector } from "testcafe";
 import { config } from "./utils/config";
-import { loginUsingLoginForm } from "./utils/helpers";
+import { loginUserAndNavigate } from "./utils/helpers";
 
-fixture("Chart configuration")
-    .page(config.url)
-    .beforeEach(loginUsingLoginForm(`${config.url}/advanced/chart-configuration`));
+fixture("Chart configuration").beforeEach(loginUserAndNavigate(`${config.url}/advanced/chart-configuration`));
 
 const tooltipCssSelector = ".gd-viz-tooltip-item .gd-viz-tooltip-value";
 
