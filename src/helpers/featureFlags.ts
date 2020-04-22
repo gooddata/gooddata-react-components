@@ -2,6 +2,7 @@
 import { IFeatureFlags, SDK } from "@gooddata/gooddata-js";
 import { getCachedOrLoad } from "./sdkCache";
 import { IChartConfig } from "../interfaces/Config";
+import isNil = require("lodash/isNil");
 
 export async function getFeatureFlags(sdk: SDK, projectId: string): Promise<IFeatureFlags> {
     const apiCallIdentifier = `getFeatureFlags.${projectId}`;
@@ -21,11 +22,12 @@ export function setConfigFromFeatureFlags(config: IChartConfig, featureFlags: IF
     }
 
     let result = config;
-
-    if (featureFlags.disableKpiDashboardHeadlineUnderline === true) {
+    if (
+        featureFlags.disableKpiDashboardHeadlineUnderline === true &&
+        (!config || isNil(config.disableDrillUnderline))
+    ) {
         result = { ...result, disableDrillUnderline: true };
     }
-
     return result;
 }
 

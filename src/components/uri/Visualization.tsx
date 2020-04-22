@@ -306,6 +306,7 @@ export class VisualizationWrapped extends React.Component<
             this.subject.next(
                 this.prepareDataSources(nextProps.projectId, nextProps.identifier, nextProps.filters),
             );
+            this.setState({ error: null });
         }
     }
 
