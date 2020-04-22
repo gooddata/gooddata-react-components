@@ -1,6 +1,6 @@
 // (C) 2007-2020 GoodData Corporation
 import cloneDeep = require("lodash/cloneDeep");
-import { AFM } from "@gooddata/typings";
+import { AFM, Execution, VisualizationObject } from "@gooddata/typings";
 import Highcharts from "../../chart/highcharts/highchartsEntryPoint";
 import {
     getClickableElementNameByChartType,
@@ -9,22 +9,42 @@ import {
     createDrillIntersectionElement,
     convertHeadlineDrillIntersectionToLegacy,
     getDrillIntersection,
+    handleGeoPushpinDrillEvent,
     fireDrillEvent,
 } from "../drilldownEventing";
+import { HeaderPredicateFactory } from "../../../../index";
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 import { SeriesChartTypes } from "../../../../constants/series";
 import {
     IDrillConfig,
     IHighchartsPointObject,
+    IDrillEventExtended,
     IDrillEventIntersectionElementExtended,
     IDrillEventIntersectionElement,
     IDrillEvent,
+    IGeoDrillEvent,
 } from "../../../../interfaces/DrillEvents";
+import { IGeoData } from "../../../../interfaces/GeoChart";
+import { IHeaderPredicate } from "../../../../interfaces/HeaderPredicate";
 import { IMappingHeader } from "../../../../interfaces/MappingHeader";
 import { executionToAGGridAdapter } from "../../../core/pivotTable/agGridDataSource";
 import { pivotTableWithColumnAndRowAttributes } from "../../../../../stories/test_data/fixtures";
+import {
+    getAfm,
+    getExecutionResponse,
+    getExecutionResult,
+    IMockGeoOptions,
+} from "../../../../../stories/data/geoChart";
 import { createIntlMock } from "../intlUtils";
 import { getTreeLeaves } from "../../../core/pivotTable/agGridUtils";
+import { getGeoData } from "../../../../helpers/geoChart/data";
+import {
+    COLOR_ITEM,
+    LOCATION_ITEM,
+    SEGMENT_BY_ITEM,
+    SIZE_ITEM,
+    TOOLTIP_TEXT_ITEM,
+} from "../../../../helpers/tests/geoChart/fixtures";
 
 describe("Drilldown Eventing", () => {
     jest.useFakeTimers();
@@ -1296,6 +1316,149 @@ describe("Drilldown Eventing", () => {
 
             expect(eventHandler).toHaveBeenCalledTimes(0);
             expect(drillEventFunction).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("Drilling in Geo chart", () => {
+        const mockGeoOptions: IMockGeoOptions = {
+            isWithColor: true,
+            isWithLocation: true,
+            isWithSegment: true,
+            isWithSize: true,
+            isWithTooltipText: true,
+        };
+        const mockAfm: AFM.IAfm = getAfm(mockGeoOptions);
+        const mockBuckets: VisualizationObject.IBucket[] = [
+            LOCATION_ITEM,
+            SEGMENT_BY_ITEM,
+            TOOLTIP_TEXT_ITEM,
+            SIZE_ITEM,
+            COLOR_ITEM,
+        ];
+        const mockExecution: Execution.IExecutionResponses = {
+            executionResponse: getExecutionResponse(true, true, true, true, true),
+            executionResult: getExecutionResult(true, true, true, true, true, 2),
+        };
+        const mockGeoData: IGeoData = getGeoData(mockBuckets, mockExecution);
+        const mockProperties: GeoJSON.GeoJsonProperties = {
+            locationIndex: 0,
+            locationName: '{ "title": "location title", "value": "location value" }',
+            color: '{ "title": "color title", "value": 1 }',
+            segment: '{ "title": "segment title", "value": "segment value" }',
+            size: '{ "title": "size title", "value": 2 }',
+        };
+
+        const defaultDrillConfig: IDrillConfig = { afm: mockAfm, onFiredDrillEvent: () => true };
+        const target: any = { dispatchEvent: jest.fn() };
+
+        it("should call onDrill", () => {
+            const onDrill = jest.fn();
+            const sizeUri: string = "/gdc/md/projectId/obj/4";
+            const drillableItems: IHeaderPredicate[] = [HeaderPredicateFactory.uriMatch(sizeUri)];
+            const drillConfig: IDrillConfig = { ...defaultDrillConfig, onDrill };
+
+            handleGeoPushpinDrillEvent(
+                drillableItems,
+                drillConfig,
+                mockExecution,
+                mockGeoData,
+                mockProperties,
+                target as EventTarget,
+            );
+
+            const drillIntersection: IDrillEventIntersectionElementExtended[] = [
+                {
+                    header: {
+                        measureHeaderItem: {
+                            format: "#,##0",
+                            identifier: "measure.population",
+                            localIdentifier: "m_population",
+                            name: "Population",
+                            uri: "/gdc/md/projectId/obj/4",
+                        },
+                    },
+                },
+                {
+                    header: {
+                        measureHeaderItem: {
+                            format: "#,##0",
+                            identifier: "measure.area",
+                            localIdentifier: "m_area",
+                            name: "Area",
+                            uri: "/gdc/md/projectId/obj/5",
+                        },
+                    },
+                },
+                {
+                    header: {
+                        attributeHeader: {
+                            formOf: {
+                                identifier: "attr.state",
+                                name: "State",
+                                uri: "any-uri",
+                            },
+                            identifier: "label.state",
+                            localIdentifier: "a_state",
+                            name: "State",
+                            uri: "/gdc/md/projectId/obj/1",
+                        },
+                        attributeHeaderItem: {
+                            name: "44.500000;-89.500000",
+                            uri: "/gdc/md/storybook/obj/694/elements?id=1808",
+                        },
+                    },
+                },
+                {
+                    header: {
+                        attributeHeader: {
+                            formOf: {
+                                identifier: "attr.type",
+                                name: "Type",
+                                uri: "any-uri",
+                            },
+                            identifier: "label.type",
+                            localIdentifier: "a_type",
+                            name: "Type",
+                            uri: "/gdc/md/projectId/obj/2",
+                        },
+                        attributeHeaderItem: {
+                            name: "General Goods",
+                            uri: "/gdc/md/storybook/obj/23/elements?id=1",
+                        },
+                    },
+                },
+            ];
+            const drillContext: IGeoDrillEvent = {
+                color: 1,
+                element: "pushpin",
+                intersection: drillIntersection,
+                type: "pushpin",
+                location: "location%20value",
+                segmentBy: "segment%20value",
+                size: 2,
+            };
+            const drillEventExtended: IDrillEventExtended = {
+                executionContext: mockAfm,
+                drillContext,
+            };
+            expect(onDrill).toHaveBeenCalledWith(drillEventExtended);
+        });
+
+        it("should not call onDrill", () => {
+            const onDrill = jest.fn();
+            const drillableItems: IHeaderPredicate[] = [];
+            const drillConfig = { ...defaultDrillConfig, onDrill };
+
+            handleGeoPushpinDrillEvent(
+                drillableItems,
+                drillConfig,
+                mockExecution,
+                mockGeoData,
+                mockProperties,
+                target as EventTarget,
+            );
+
+            expect(onDrill).toHaveBeenCalledTimes(0);
         });
     });
 });

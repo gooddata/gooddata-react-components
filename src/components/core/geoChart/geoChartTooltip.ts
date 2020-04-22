@@ -7,7 +7,8 @@ import mapboxgl from "mapbox-gl";
 import { ISeparators } from "@gooddata/numberjs";
 import { formatValueForTooltip } from "../../visualizations/chart/tooltip";
 import { DEFAULT_PUSHPIN_COLOR_VALUE, NULL_TOOLTIP_VALUE } from "../../../constants/geoChart";
-import { IGeoTooltipItem } from "../../../interfaces/GeoChart";
+import { IGeoConfig, IGeoTooltipItem } from "../../../interfaces/GeoChart";
+import { parseGeoProperties } from "../../../helpers/geoChart/data";
 
 function isTooltipItemValid(item: IGeoTooltipItem): boolean {
     if (!item) {
@@ -89,29 +90,17 @@ function getTooltipItemHtml(item: IGeoTooltipItem): string {
             </div>`;
 }
 
-export function parseGeoPropertyItem(item: string): GeoJSON.GeoJsonProperties {
-    try {
-        return JSON.parse(item);
-    } catch (e) {
-        return {};
-    }
-}
-
-function parseGeoProperties(properties: GeoJSON.GeoJsonProperties): GeoJSON.GeoJsonProperties {
-    const { locationName = "{}", color = "{}", size = "{}", segment = "{}" } = properties;
-    return {
-        locationName: parseGeoPropertyItem(locationName),
-        size: parseGeoPropertyItem(size),
-        color: parseGeoPropertyItem(color),
-        segment: parseGeoPropertyItem(segment),
-    };
-}
-
 export const handlePushpinMouseEnter = (
+    e: mapboxgl.EventData,
     chart: mapboxgl.Map,
     tooltip: mapboxgl.Popup,
-    separators: ISeparators,
-) => (e: mapboxgl.EventData): void => {
+    config: IGeoConfig,
+) => {
+    if (isTooltipDisabled(config)) {
+        return;
+    }
+
+    const { separators } = config;
     const [feature] = e.features;
     const { properties } = feature;
     const parsedProps = parseGeoProperties(properties);
@@ -132,7 +121,21 @@ export const handlePushpinMouseEnter = (
         .addTo(chart);
 };
 
-export const handlePushpinMouseLeave = (chart: mapboxgl.Map, tooltip: mapboxgl.Popup) => (): void => {
+export const handlePushpinMouseLeave = (
+    _e: mapboxgl.EventData,
+    chart: mapboxgl.Map,
+    tooltip: mapboxgl.Popup,
+    config: IGeoConfig,
+) => {
+    if (isTooltipDisabled(config)) {
+        return;
+    }
     chart.getCanvas().style.cursor = "";
     tooltip.remove();
 };
+
+// Tooltips are now switched off in edit/export mode
+function isTooltipDisabled(config: IGeoConfig): boolean {
+    const { viewport = {} } = config;
+    return Boolean(viewport.frozen);
+}

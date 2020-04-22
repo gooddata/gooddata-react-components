@@ -1,9 +1,9 @@
 // (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import cx from "classnames";
+import get = require("lodash/get");
 import isEqual = require("lodash/isEqual");
 import noop = require("lodash/noop");
-import get = require("lodash/get");
 import mapboxgl = require("mapbox-gl");
 import { Execution } from "@gooddata/typings";
 
@@ -14,7 +14,7 @@ import {
     createUnclusterPoints,
     createPushpinFilter,
 } from "./geoChartDataLayers";
-import { createPushpinDataSource } from "./geoChartDataSource";
+import { createPushpinDataSource, IGeoDataSourceProps } from "./geoChartDataSource";
 import {
     DEFAULT_CLUSTER_LABELS_CONFIG,
     DEFAULT_CLUSTER_LAYER_NAME,
@@ -24,7 +24,9 @@ import {
     DEFAULT_TOOLTIP_OPTIONS,
     INTERACTION_EVENTS,
 } from "../../../constants/geoChart";
+import { IDrillConfig } from "../../../interfaces/DrillEvents";
 import { IGeoConfig, IGeoData, IGeoLngLat } from "../../../interfaces/GeoChart";
+import { IHeaderPredicate } from "../../../interfaces/HeaderPredicate";
 
 import "../../../../styles/scss/geoChart.scss";
 import { handlePushpinMouseEnter, handlePushpinMouseLeave } from "./geoChartTooltip";
@@ -35,9 +37,12 @@ import {
     isColorAssignmentItemChanged,
 } from "../../../helpers/geoChart/common";
 import { IColorStrategy } from "../../visualizations/chart/colorFactory";
+import { handleGeoPushpinDrillEvent } from "../../visualizations/utils/drilldownEventing";
 
 export interface IGeoChartRendererProps {
     config: IGeoConfig;
+    drillableItems: IHeaderPredicate[];
+    drillConfig: IDrillConfig;
     execution: Execution.IExecutionResponses;
     geoData: IGeoData;
     colorStrategy: IColorStrategy;
@@ -272,29 +277,34 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
     };
 
     private handleMapEvent = () => {
-        const { chart, tooltip } = this;
-        const {
-            config: { separators },
-        } = this.props;
+        const { chart } = this;
+        chart.on("click", DEFAULT_LAYER_NAME, this.handleMapClick);
         chart.on("load", this.setupMap);
-        chart.on("mouseenter", DEFAULT_LAYER_NAME, handlePushpinMouseEnter(chart, tooltip, separators));
-        chart.on("mouseleave", DEFAULT_LAYER_NAME, handlePushpinMouseLeave(chart, tooltip));
+        chart.on("mouseenter", DEFAULT_LAYER_NAME, this.handlePushpinMouseEnter);
+        chart.on("mouseleave", DEFAULT_LAYER_NAME, this.handlePushpinMouseLeave);
         chart.on("moveend", this.handlePushpinMoveEnd);
         chart.on("zoomend", this.handlePushpinZoomEnd);
     };
 
     private setupMap = (): void => {
         const { chart, handleLayerLoaded, props } = this;
-        const { config, geoData, colorStrategy } = props;
+        const { colorStrategy, config, geoData } = props;
         const { points: { groupNearbyPoints = true } = {} } = config || {};
         // hide city, town, village and hamlet labels
         if (chart.getLayer("settlement-label")) {
             chart.removeLayer("settlement-label");
         }
 
-        chart.addSource(DEFAULT_DATA_SOURCE_NAME, createPushpinDataSource(geoData, colorStrategy, config));
+        const hasClustering: boolean = isClusteringAllowed(geoData, groupNearbyPoints);
+        const dataSourceProps: IGeoDataSourceProps = {
+            colorStrategy,
+            config,
+            geoData,
+            hasClustering,
+        };
+        chart.addSource(DEFAULT_DATA_SOURCE_NAME, createPushpinDataSource(dataSourceProps));
 
-        if (!isClusteringAllowed(geoData, groupNearbyPoints)) {
+        if (!hasClustering) {
             chart.addLayer(
                 createPushpinDataLayer(DEFAULT_DATA_SOURCE_NAME, geoData, config),
                 "state-label", // pushpin will be rendered under state/county label
@@ -369,5 +379,46 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         const zoom: number = target.getZoom();
 
         onZoomChanged(zoom);
+    };
+
+    private handleMapClick = (e: mapboxgl.EventData): void => {
+        const {
+            config: { viewport },
+            drillableItems,
+            drillConfig,
+            execution,
+            geoData,
+        } = this.props;
+        const { features, originalEvent } = e;
+        const { properties } = features[0];
+
+        // Disable drilling in edit/export mode
+        if (get(viewport, "frozen", false)) {
+            return;
+        }
+
+        // without this, the drill dialog will be closed
+        originalEvent.stopPropagation();
+
+        return handleGeoPushpinDrillEvent(
+            drillableItems,
+            drillConfig,
+            execution,
+            geoData,
+            properties,
+            originalEvent.target,
+        );
+    };
+
+    private handlePushpinMouseEnter = (e: mapboxgl.EventData): void => {
+        const { chart, props, tooltip } = this;
+        const { config } = props;
+        return handlePushpinMouseEnter(e, chart, tooltip, config);
+    };
+
+    private handlePushpinMouseLeave = (e: mapboxgl.EventData): void => {
+        const { chart, props, tooltip } = this;
+        const { config } = props;
+        return handlePushpinMouseLeave(e, chart, tooltip, config);
     };
 }

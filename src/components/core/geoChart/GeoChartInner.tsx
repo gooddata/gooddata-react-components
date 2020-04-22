@@ -23,9 +23,11 @@ import {
 import { PositionType } from "../../visualizations/typings/legend";
 import { isFluidLegendEnabled, isColorAssignmentItemChanged } from "../../../helpers/geoChart/common";
 import { getAvailableLegends } from "../../../helpers/geoChart/data";
+import { convertDrillableItemsToPredicates } from "../../../helpers/headerPredicate";
+import { shouldShowFluid } from "../../../helpers/utils";
 import { HEIGHT_OF_SIZE_LEGEND } from "./legends/PushpinCategoryLegend";
 import { IColorAssignment } from "../../../interfaces/Config";
-import { shouldShowFluid } from "../../../helpers/utils";
+import { IDrillConfig } from "../../../interfaces/DrillEvents";
 
 const HEIGHT_OF_COLOR_LEGEND = 210;
 
@@ -290,17 +292,32 @@ export class GeoChartInner extends React.PureComponent<IGeoChartInnerProps, IGeo
     }
 
     private getChartProps(geoChartOptions: IGeoChartInnerOptions): IGeoChartRendererProps {
-        const { config, execution, afterRender, onCenterPositionChanged, onZoomChanged } = this.props;
+        const {
+            config,
+            dataSource,
+            drillableItems,
+            execution,
+            afterRender,
+            onCenterPositionChanged,
+            onDrill,
+            onFiredDrillEvent,
+            onZoomChanged,
+        } = this.props;
         const { geoData, colorStrategy, categoryItems } = geoChartOptions;
         const segmentIndex: number = get(geoChartOptions, "geoData.segment.index");
+        const drillablePredicates = convertDrillableItemsToPredicates(drillableItems);
+        const drillConfig: IDrillConfig = { afm: dataSource.getAfm(), onDrill, onFiredDrillEvent };
+
         const chartProps: IGeoChartRendererProps = {
+            colorStrategy,
             config,
+            drillableItems: drillablePredicates,
+            drillConfig,
             execution,
             afterRender,
             geoData,
             onCenterPositionChanged,
             onZoomChanged,
-            colorStrategy,
         };
 
         if (segmentIndex) {

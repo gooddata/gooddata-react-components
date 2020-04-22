@@ -47,11 +47,11 @@ export type ChartType =
     | "pareto"
     | "alluvial";
 
-export type GeoPushpinType = "pushpin";
+export type GeoType = "pushpin";
 export type HeadlineType = "headline";
 export type XirrType = "xirr";
 export type TableType = "table";
-export type VisType = ChartType | GeoPushpinType | HeadlineType | TableType | XirrType;
+export type VisType = ChartType | GeoType | HeadlineType | TableType | XirrType;
 
 export type ChartElementType =
     | "slice"
@@ -62,6 +62,8 @@ export type ChartElementType =
     | "target"
     | "primary"
     | "comparative";
+
+export type GeoElementType = "pushpin";
 export type HeadlineElementType = "primaryValue" | "secondaryValue";
 export type TableElementType = "cell";
-export type VisElementType = ChartElementType | HeadlineElementType | TableElementType;
+export type VisElementType = ChartElementType | GeoElementType | HeadlineElementType | TableElementType;

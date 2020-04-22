@@ -1,5 +1,5 @@
 // (C) 2019-2020 GoodData Corporation
-import { Execution, VisualizationObject } from "@gooddata/typings";
+import { AFM, Execution, VisualizationObject } from "@gooddata/typings";
 import { IGeoConfig, IGeoLngLat } from "../../src/interfaces/GeoChart";
 import { measure, attribute } from "../../src/helpers/model";
 import { stringToFloat } from "../../src/helpers/utils";
@@ -8,7 +8,7 @@ import { getLocation } from "../../src/helpers/geoChart/data";
 // tslint:disable-next-line: no-var-requires
 const fixtures = require("./geoChart/fixtures");
 
-interface IGeoOptions {
+export interface IMockGeoOptions {
     isWithLocation?: boolean;
     isWithSegment?: boolean;
     isWithTooltipText?: boolean;
@@ -22,7 +22,8 @@ export const LOCATION_LNGLATS: IGeoLngLat[] = fixtures
     .getLocationAFMData()
     .map(getHeaderItemName)
     .map(getLocation);
-export const SEGMENTBY_NUMBERS = fixtures.getSegmentAFMData().map(getHeaderItemName);
+export const SEGMENTBY_NUMBERS: string[] = fixtures.getSegmentAFMData().map(getHeaderItemName);
+export const TOOLTIPTEXT_NAMES: string[] = fixtures.getTooltipTextAFMData().map(getHeaderItemName);
 
 export function getExecutionResult(
     isWithLocation = false,
@@ -182,7 +183,7 @@ export function getExecutionResponse(
     };
 }
 
-export function getGeoConfig(props: IGeoOptions): IGeoConfig {
+export function getGeoConfig(props: IMockGeoOptions): IGeoConfig {
     const buckets: VisualizationObject.IBucket[] = [];
     const { isWithLocation, isWithSegment, isWithTooltipText, isWithSize, isWithColor } = props;
     if (isWithLocation) {
@@ -230,4 +231,59 @@ export function getGeoConfig(props: IGeoOptions): IGeoConfig {
         mapboxToken: "",
     };
     return config;
+}
+
+export function getAfm(props: IMockGeoOptions, filters: AFM.CompatibilityFilter[] = []): AFM.IAfm {
+    const { isWithColor, isWithLocation, isWithSize, isWithSegment, isWithTooltipText } = props;
+
+    const afm: AFM.IAfm = {
+        measures: [],
+        attributes: [],
+        filters,
+    };
+
+    if (isWithSize) {
+        afm.measures.push({
+            localIdentifier: "m_population",
+            definition: {
+                measure: {
+                    item: { uri: "/gdc/md/projectId/obj/4" },
+                },
+            },
+        });
+    }
+
+    if (isWithColor) {
+        afm.measures.push({
+            localIdentifier: "m_area",
+            definition: {
+                measure: {
+                    item: { uri: "/gdc/md/projectId/obj/5" },
+                },
+            },
+        });
+    }
+
+    if (isWithLocation) {
+        afm.attributes.push({
+            displayForm: { uri: "/gdc/md/projectId/obj/1" },
+            localIdentifier: "a_state",
+        });
+    }
+
+    if (isWithSegment) {
+        afm.attributes.push({
+            displayForm: { uri: "/gdc/md/projectId/obj/2" },
+            localIdentifier: "a_type",
+        });
+    }
+
+    if (isWithTooltipText) {
+        afm.attributes.push({
+            displayForm: { uri: "/gdc/md/projectId/obj/3" },
+            localIdentifier: "a_state_tooltip_text",
+        });
+    }
+
+    return afm;
 }

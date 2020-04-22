@@ -59,8 +59,8 @@ export function findMeasureGroupInDimensions(
 }
 
 export function findAttributeInDimension(
-    dimension: any,
-    attributeHeaderItemsDimension: any,
+    dimension: Execution.IResultDimension,
+    attributeHeaderItemsDimension: Execution.IResultHeaderItem[][],
     indexInDimension?: number,
 ): IUnwrappedAttributeHeaderWithItems {
     return findInDimensionHeaders(

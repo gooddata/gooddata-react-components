@@ -23,8 +23,8 @@ const legendStories = [
     "with legend position is top",
     "with legend position is bottom",
     "with legend position is left and height of container is not enough",
-
 ];
+
 const colorMappingStories = [
     "with custom colors",
     "with custom colors, color mapping for SegmentBy",
