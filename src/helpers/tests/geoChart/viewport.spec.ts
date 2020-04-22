@@ -57,12 +57,12 @@ describe("viewport", () => {
                 "continent_as",
                 [
                     {
-                        lat: -9,
-                        lng: 24,
+                        lat: -8,
+                        lng: 26,
                     },
                     {
-                        lat: 79,
-                        lng: 180,
+                        lat: 64,
+                        lng: 146,
                     },
                 ],
             ],
@@ -83,12 +83,12 @@ describe("viewport", () => {
                 "continent_eu",
                 [
                     {
-                        lat: 33,
+                        lat: 36,
                         lng: -24,
                     },
                     {
                         lat: 72,
-                        lng: 64,
+                        lng: 43,
                     },
                 ],
             ],
@@ -96,7 +96,7 @@ describe("viewport", () => {
                 "continent_na",
                 [
                     {
-                        lat: 2,
+                        lat: 11,
                         lng: -170,
                     },
                     {
