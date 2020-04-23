@@ -3,6 +3,11 @@
 @import "~@gooddata/goodstrap/lib/Button/styles/variables.scss";
 
 .gd-extended-date-filter {
+    .gd-extended-date-filter-container {
+        display: flex;
+        flex: 1 1 auto;
+    }
+
     &-body {
         display: flex;
         flex: 1 1 auto;

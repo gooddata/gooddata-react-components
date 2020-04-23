@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
 
 @import "~@gooddata/goodstrap/lib/core/styles/Tabs";
@@ -27,3 +27,4 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
 @import "../../src/components/filters/DateFilter/RelativeRangePicker/RelativeRangePicker.scss";
 @import "../../src/components/filters/DateFilter/Separator/Separator.scss";
 @import "../../src/components/filters/DateFilter/VisibleScrollbar/VisibleScrollbar.scss";
+@import "../../src/components/filters/DateFilter/ExcludeCurrentPeriodToggle/ExcludeCurrentPeriodToggle.scss";
