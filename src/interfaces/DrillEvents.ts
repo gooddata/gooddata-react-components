@@ -12,6 +12,7 @@ import {
     VisType,
     XirrType,
 } from "../constants/visualizationTypes";
+import { IGeoLngLat } from "../interfaces/GeoChart";
 import { TableRowForDrilling } from "./Table";
 import { OnFiredDrillEvent, OnDrill } from "./Events";
 
@@ -194,7 +195,8 @@ export interface IDrillEventContextExtended extends IDrillEventContextBase {
 
 export interface IGeoDrillEvent extends IDrillEventContextExtended {
     color?: number; // geo chart: color value of the drilled pin
-    location?: string; // geo chart: location of the drilled pin
+    location?: IGeoLngLat; // geo chart: location of the drilled pin
+    locationName?: string; // geo chart: location name of the drilled pin
     segmentBy?: string; // geo chart: segmentBy of the drilled pin
     size?: number; // geo chart: size value of the drilled pin
 }
