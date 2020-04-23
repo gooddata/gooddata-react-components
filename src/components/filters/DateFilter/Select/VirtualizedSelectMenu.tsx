@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import * as PropTypes from "prop-types";
 import { VariableSizeList as List, ListChildComponentProps } from "react-window";
@@ -73,7 +73,7 @@ const optionGetter = <V extends {}>({
 const itemHeightByTypeMap: { [key in SelectItemTypes]: number } = {
     option: 32,
     heading: 22,
-    error: 16,
+    error: 22,
     separator: 1,
 };
 
