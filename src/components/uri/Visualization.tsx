@@ -243,6 +243,7 @@ export class VisualizationWrapped extends React.Component<
                     totals,
                     mdObject,
                     featureFlags,
+                    error: null,
                 });
             },
             error => {

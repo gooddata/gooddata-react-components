@@ -105,7 +105,7 @@ export class DateFilterBody extends React.Component<IDateFilterBodyProps, IDateF
         }
 
         return (
-            <div className="gd-extended-date-filter-container" style={{ display: "flex" }}>
+            <div className="gd-extended-date-filter-container">
                 <div
                     className={cx(
                         "gd-extended-date-filter-body",
