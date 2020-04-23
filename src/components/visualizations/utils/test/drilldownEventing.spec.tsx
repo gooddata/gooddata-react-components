@@ -1347,6 +1347,7 @@ describe("Drilldown Eventing", () => {
             segment: '{ "title": "segment title", "value": "segment value" }',
             size: '{ "title": "size title", "value": 2 }',
         };
+        const mockCoordinates: number[] = [1, 2];
 
         const defaultDrillConfig: IDrillConfig = { afm: mockAfm, onFiredDrillEvent: () => true };
         const target: any = { dispatchEvent: jest.fn() };
@@ -1363,6 +1364,7 @@ describe("Drilldown Eventing", () => {
                 mockExecution,
                 mockGeoData,
                 mockProperties,
+                mockCoordinates,
                 target as EventTarget,
             );
 
@@ -1433,8 +1435,9 @@ describe("Drilldown Eventing", () => {
                 element: "pushpin",
                 intersection: drillIntersection,
                 type: "pushpin",
-                location: "location%20value",
-                segmentBy: "segment%20value",
+                location: { lat: 2, lng: 1 },
+                locationName: "location value",
+                segmentBy: "segment value",
                 size: 2,
             };
             const drillEventExtended: IDrillEventExtended = {
@@ -1455,6 +1458,7 @@ describe("Drilldown Eventing", () => {
                 mockExecution,
                 mockGeoData,
                 mockProperties,
+                mockCoordinates,
                 target as EventTarget,
             );
 

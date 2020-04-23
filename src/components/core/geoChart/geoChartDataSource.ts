@@ -22,7 +22,7 @@ export interface IGeoDataSourceProps {
     hasClustering: boolean;
 }
 
-type IGeoDataSourceFeature = GeoJSON.Feature<GeoJSON.Geometry, GeoJSON.GeoJsonProperties>;
+type IGeoDataSourceFeature = GeoJSON.Feature<GeoJSON.Point, GeoJSON.GeoJsonProperties>;
 export type IGeoDataSourceFeatures = IGeoDataSourceFeature[];
 
 function transformPushpinDataSource(dataSourceProps: IGeoDataSourceProps): IGeoDataSourceFeatures {
