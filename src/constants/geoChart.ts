@@ -5,10 +5,10 @@ import { IGeoLngLat, IGeoViewports } from "../interfaces/GeoChart";
 
 export const VIEWPORTS: IGeoViewports = {
     continent_af: [{ lat: -36, lng: -20 }, { lat: 38, lng: 54 }], // Africa
-    continent_as: [{ lat: -9, lng: 24 }, { lat: 79, lng: 180 }], // Asia
+    continent_as: [{ lat: -8, lng: 26 }, { lat: 64, lng: 146 }], // Asia
     continent_au: [{ lat: -50, lng: 107 }, { lat: 0, lng: 180 }], // Australia + NZ
-    continent_eu: [{ lat: 33, lng: -24 }, { lat: 72, lng: 64 }], // Europe
-    continent_na: [{ lat: 2, lng: -170 }, { lat: 72, lng: -52 }], // North America
+    continent_eu: [{ lat: 36, lng: -24 }, { lat: 72, lng: 43 }], // Europe
+    continent_na: [{ lat: 11, lng: -170 }, { lat: 72, lng: -52 }], // North America
     continent_sa: [{ lat: -56, lng: -90 }, { lat: 14, lng: -31 }], // South America
     world: [{ lat: -84, lng: -180 }, { lat: 84, lng: 180 }],
 };
