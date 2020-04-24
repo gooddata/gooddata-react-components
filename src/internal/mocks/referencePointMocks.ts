@@ -496,6 +496,30 @@ export const secondaryMeasuresAndAttributeReferencePoint: IReferencePoint = {
     },
 };
 
+export const secondaryMeasureReferencePoint: IReferencePoint = {
+    buckets: [
+        {
+            localIdentifier: "measures",
+            items: [],
+        },
+        {
+            localIdentifier: "secondary_measures",
+            items: masterMeasureItems.slice(0, 1),
+        },
+        {
+            localIdentifier: "attribute",
+            items: [],
+        },
+    ],
+    filters: {
+        localIdentifier: "filters",
+        items: [],
+    },
+    properties: {
+        sortItems: [defaultSortItem],
+    },
+};
+
 export const measuresOnSecondaryAxisAndAttributeReferencePoint: IReferencePoint = {
     buckets: [
         {
