@@ -30,8 +30,8 @@ export const exportTo = async (type, title) => {
     // max length of title is 50
     const downloadPath = `${DOWNLOAD_PATH}/${title.substring(0, 50)}.${FileType.properties[type].code}`;
     /* eslint-disable no-await-in-loop */
-    // Wait 60*500 ms or less
-    for (let i = 0; i < 120; i += 1) {
+    // Wait 140*500 ms or less
+    for (let i = 0; i < 140; i += 1) {
         if (fs.existsSync(downloadPath)) break;
         await testController.wait(500);
     }
