@@ -2,7 +2,7 @@
 import { Selector } from "testcafe";
 import fs from "fs";
 import { config } from "./utils/config";
-import { loginUsingLoginForm } from "./utils/helpers";
+import { loginUserAndNavigate } from "./utils/helpers";
 import { enableDownloadForHeadlessChrome, exportToCSV, exportToExcel } from "./utils/exportUtils";
 
 const exportButtonsCSS = ".gd-button-secondary";
@@ -25,22 +25,21 @@ const getExportWithCustomNameButton = chartSelector => {
         .withText("Export with custom name CustomName");
 };
 
-fixture("Export")
-    .page(config.url)
-    .beforeEach(loginUsingLoginForm(`${config.url}/export`));
+fixture("Export").beforeEach(loginUserAndNavigate(`${config.url}/export`));
 
 test("Export chart data", async t => {
     const barChart = Selector(".s-bar-chart");
     const fileName = "BarChart";
     await enableDownloadForHeadlessChrome(t);
     await t
+        .hover(getExportExcelButton(barChart))
         .click(getExportExcelButton(barChart))
         .expect(fs.existsSync(await exportToExcel(fileName)))
         .ok(`Excel file of Bar chart isn't exported`)
-        .click(getExportCSVButton(barChart))
+        .click(await getExportCSVButton(barChart))
         .expect(fs.existsSync(await exportToCSV(fileName)))
         .ok(`CSV file of Bar chart isn't exported`)
-        .click(getExportWithCustomNameButton(barChart))
+        .click(await getExportWithCustomNameButton(barChart))
         .expect(fs.existsSync(await exportToCSV("CustomName")))
         .ok(`CSV with custom name file of Bar chart isn't exported`);
 });
@@ -50,10 +49,11 @@ test("Export table data", async t => {
     const fileName = "Table";
     await enableDownloadForHeadlessChrome(t);
     await t
+        .hover(getExportExcelButton(tableChart))
         .click(getExportExcelButton(tableChart))
         .expect(fs.existsSync(await exportToExcel(fileName)))
         .ok(`Excel file of table isn't exported`)
-        .click(getExportCSVButton(tableChart))
+        .click(await getExportCSVButton(tableChart))
         .expect(fs.existsSync(await exportToCSV(fileName)))
         .ok(`CSV file of table isn't exported`);
 });
@@ -62,10 +62,11 @@ test("Export headline data", async t => {
     const headline = Selector(".s-headline");
     await enableDownloadForHeadlessChrome(t);
     await t
+        .hover(getExportExcelButton(headline))
         .click(getExportExcelButton(headline))
         .expect(fs.existsSync(await exportToExcel("Headline")))
         .ok(`Excel file of headline isn't exported`)
-        .click(getExportCSVButton(headline))
+        .click(await getExportCSVButton(headline))
         .expect(fs.existsSync(await exportToCSV("Headline")))
         .ok(`CSV file of headline isn't exported`);
 });
