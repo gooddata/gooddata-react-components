@@ -2,7 +2,7 @@
 import { useIntl } from "react-intl";
 import { getNumericSymbols } from "../TranslationsProvider";
 
-export function useNumbericSymbols(): string[] {
+export function useNumericSymbols(): string[] {
     const intl = useIntl();
     return getNumericSymbols(intl);
 }

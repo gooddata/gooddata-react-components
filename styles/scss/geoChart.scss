@@ -75,6 +75,15 @@
         margin: 5px 0;
     }
 
+    &.viz-legend.static {
+        margin-left: 0;
+
+        &.position-top,
+        &.position-bottom {
+            align-items: center;
+        }
+    }
+
     .viz-static-legend-wrap {
         display: flex;
         flex: 1 auto;
@@ -91,6 +100,10 @@
 
     &.has-size-legend .color-legend {
         margin-right: 10px;
+    }
+
+    > .paging {
+        margin-left: 20px;
     }
 }
 
@@ -152,6 +165,10 @@
         width: 10px;
         height: 10px;
     }
+}
+
+.geo-legend-paging .pushpin-size-legend {
+    margin-bottom: 20px;
 }
 
 .mapboxgl-map {
