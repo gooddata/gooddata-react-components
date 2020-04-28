@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { IntlWrapper } from "../../src/components/core/base/IntlWrapper";
 
@@ -24,5 +24,13 @@ export function wrap(
         <IntlWrapper {...keyProp}>
             <div style={style}>{component}</div>
         </IntlWrapper>
+    );
+}
+
+export function screenshotTarget(component: JSX.Element, width = 400, height = 400) {
+    return (
+        <div style={{ width, height, padding: "1em 1em" }} className="screenshot-target">
+            {component}
+        </div>
     );
 }

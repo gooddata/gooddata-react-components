@@ -70,6 +70,9 @@ import * as HeaderPredicateFactory from "./factory/HeaderPredicateFactory";
 import * as MappingHeader from "./interfaces/MappingHeader";
 import { ICoreComponents } from "./interfaces/CoreComponents";
 import { BucketExecutor } from "./execution/BucketExecutor";
+import { MeasureNumberFormat } from "./components/measureNumberFormat/MeasureNumberFormat";
+import * as MeasureNumberFormatType from "./components/measureNumberFormat/typings";
+import * as IPositioning from "./typings/positioning";
 
 /**
  * CoreComponents
@@ -164,4 +167,7 @@ export {
     HeaderPredicateFactory,
     MappingHeader,
     withJsxExport,
+    MeasureNumberFormat,
+    MeasureNumberFormatType,
+    IPositioning,
 };
