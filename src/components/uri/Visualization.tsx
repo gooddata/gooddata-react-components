@@ -45,7 +45,7 @@ import { getDefaultBarChartSort, getDefaultTreemapSort } from "../../helpers/sor
 import { convertErrors, generateErrorMap, IErrorMap } from "../../helpers/errorHandlers";
 import { isBarChart, isTreemap } from "../visualizations/utils/common";
 import { getColorMappingPredicate, getColorPaletteFromColors } from "../visualizations/utils/color";
-import { getCachedOrLoad } from "../../helpers/sdkCache";
+import { getCachedOrLoad, clearSdkCache } from "../../helpers/sdkCache";
 import {
     getFeatureFlags,
     setConfigFromFeatureFlags,
@@ -243,6 +243,7 @@ export class VisualizationWrapped extends React.Component<
                     totals,
                     mdObject,
                     featureFlags,
+                    error: null,
                 });
             },
             error => {
@@ -251,6 +252,7 @@ export class VisualizationWrapped extends React.Component<
                     isLoading: false,
                     error: runtimeError,
                 });
+                clearSdkCache();
                 return props.onError(runtimeError);
             },
         );
