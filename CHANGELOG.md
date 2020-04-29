@@ -17,6 +17,17 @@ The REST API versions in the table are just for your information as the values a
 
 - We ask developers to consider using the Headline component instead of the KPI component. The KPI component may be eventually marked as deprecated in one of the next major versions.
 
+## 7.5.0
+
+### Added
+
+- Geo pushpin chart component ([doc](https://sdk.gooddata.com/gooddata-ui/docs/geo_pushpin_chart_component.html))
+- Custom toggle button for the measure value filter dropdown
+
+### Fixed
+
+- Visualization rendering stuck due to an error that persisted after the error was gone
+
 ## 7.4.0
 
 ### Added
