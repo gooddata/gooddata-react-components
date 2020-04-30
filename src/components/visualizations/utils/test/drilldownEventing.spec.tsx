@@ -7,7 +7,6 @@ import {
     chartClick,
     cellClick,
     createDrillIntersectionElement,
-    convertHeadlineDrillIntersectionToLegacy,
     getDrillIntersection,
     handleGeoPushpinDrillEvent,
     fireDrillEvent,
@@ -45,117 +44,12 @@ import {
     SIZE_ITEM,
     TOOLTIP_TEXT_ITEM,
 } from "../../../../helpers/tests/geoChart/fixtures";
+import * as fixtures from "./drilldownEventing.fixtures";
 
 describe("Drilldown Eventing", () => {
     jest.useFakeTimers();
-    const simpleAfm: AFM.IAfm = {
-        measures: [
-            {
-                localIdentifier: "id1",
-                definition: {
-                    measure: {
-                        item: {
-                            uri: "uri1",
-                        },
-                    },
-                },
-            },
-        ],
-    };
-    const afm: AFM.IAfm = {
-        measures: [
-            ...simpleAfm.measures,
-            {
-                localIdentifier: "id2",
-                definition: {
-                    measure: {
-                        item: {
-                            uri: "uri2",
-                        },
-                    },
-                },
-            },
-            {
-                localIdentifier: "id3",
-                definition: {
-                    measure: {
-                        item: {
-                            uri: "uri3",
-                        },
-                    },
-                },
-            },
-        ],
-    };
 
-    const point: Partial<IHighchartsPointObject> = {
-        x: 1,
-        y: 2,
-        value: 678.0,
-        drillIntersection: [
-            {
-                header: {
-                    measureHeaderItem: {
-                        uri: "uri1",
-                        identifier: "identifier1",
-                        localIdentifier: "id1",
-                        name: "title",
-                        format: "",
-                    },
-                },
-            },
-            {
-                header: {
-                    measureHeaderItem: {
-                        uri: "uri2",
-                        identifier: "identifier2",
-                        localIdentifier: "id2",
-                        name: "title",
-                        format: "",
-                    },
-                },
-            },
-            {
-                header: {
-                    measureHeaderItem: {
-                        uri: "uri3",
-                        identifier: "identifier3",
-                        localIdentifier: "id3",
-                        name: "title",
-                        format: "",
-                    },
-                },
-            },
-        ],
-    };
-    const expectedLegacyIntersection: IDrillEventIntersectionElement[] = [
-        {
-            id: "id1",
-            title: "title",
-            header: {
-                uri: "uri1",
-                identifier: "identifier1",
-            },
-        },
-        {
-            id: "id2",
-            title: "title",
-            header: {
-                uri: "uri2",
-                identifier: "identifier2",
-            },
-        },
-        {
-            id: "id3",
-            title: "title",
-            header: {
-                uri: "uri3",
-                identifier: "identifier3",
-            },
-        },
-    ];
-
-    const pointClickEventData = ({ point } as any) as Highcharts.DrilldownEventObject;
+    const pointClickEventData = ({ point: fixtures.point } as any) as Highcharts.DrilldownEventObject;
 
     it("should get clickable chart element name", () => {
         const fn = getClickableElementNameByChartType;
@@ -171,7 +65,7 @@ describe("Drilldown Eventing", () => {
     });
 
     describe("should handle click on point drill context (non-group) when event.points given but null", () => {
-        const drillConfig = { afm, onFiredDrillEvent: () => true, onDrill: jest.fn() };
+        const drillConfig = { afm: fixtures.afm, onFiredDrillEvent: () => true, onDrill: jest.fn() };
         const target = { dispatchEvent: jest.fn() };
         const pointClickEventDataWithNullPoints: Highcharts.DrilldownEventObject = {
             ...pointClickEventData,
@@ -198,13 +92,13 @@ describe("Drilldown Eventing", () => {
                 type: "line",
                 x: 1,
                 y: 2,
-                intersection: point.drillIntersection,
+                intersection: fixtures.point.drillIntersection,
             });
         });
     });
 
     it("should call default fire event on point click and fire correct data", () => {
-        const drillConfig = { afm, onFiredDrillEvent: () => true };
+        const drillConfig = { afm: fixtures.afm, onFiredDrillEvent: () => true };
         const target = { dispatchEvent: jest.fn() };
 
         chartClick(drillConfig, pointClickEventData, (target as any) as EventTarget, VisualizationTypes.LINE);
@@ -214,19 +108,19 @@ describe("Drilldown Eventing", () => {
         expect(target.dispatchEvent).toHaveBeenCalled();
 
         expect(target.dispatchEvent.mock.calls[0][0].detail).toEqual({
-            executionContext: afm,
+            executionContext: fixtures.afm,
             drillContext: {
                 type: "line",
                 element: "point",
                 x: 1,
                 y: 2,
-                intersection: expectedLegacyIntersection,
+                intersection: fixtures.expectedLegacyIntersection,
             },
         });
     });
 
     it('should fire correct data with property "value" for treemap and heatmap', () => {
-        const drillConfig = { afm, onFiredDrillEvent: () => true };
+        const drillConfig = { afm: fixtures.afm, onFiredDrillEvent: () => true };
         const target = { dispatchEvent: jest.fn() };
 
         chartClick(
@@ -257,7 +151,7 @@ describe("Drilldown Eventing", () => {
     });
 
     describe("bullet chart", () => {
-        const drillConfig = { afm, onFiredDrillEvent: () => true };
+        const drillConfig = { afm: fixtures.afm, onFiredDrillEvent: () => true };
 
         const targetPoint: any = {
             x: 1,
@@ -487,7 +381,7 @@ describe("Drilldown Eventing", () => {
             points: pointsWithEmptyValues,
         } as any;
 
-        const drillConfig = { afm, onFiredDrillEvent: () => true };
+        const drillConfig = { afm: fixtures.afm, onFiredDrillEvent: () => true };
         const target = { dispatchEvent: jest.fn() };
 
         const expectedLegacyIntersectionWithEmptyValues: IDrillEventIntersectionElement[] = [
@@ -553,7 +447,7 @@ describe("Drilldown Eventing", () => {
     });
 
     it("should correctly handle z coordinate of point", () => {
-        const drillConfig = { afm, onFiredDrillEvent: () => true };
+        const drillConfig = { afm: fixtures.afm, onFiredDrillEvent: () => true };
         const target = { dispatchEvent: jest.fn() };
         const pointClickWithZEventData = cloneDeep(pointClickEventData);
 
@@ -571,20 +465,20 @@ describe("Drilldown Eventing", () => {
         expect(target.dispatchEvent).toHaveBeenCalled();
 
         expect(target.dispatchEvent.mock.calls[0][0].detail).toEqual({
-            executionContext: afm,
+            executionContext: fixtures.afm,
             drillContext: {
                 type: "bubble",
                 element: "point",
                 x: 1,
                 y: 2,
                 z: 12000,
-                intersection: expectedLegacyIntersection,
+                intersection: fixtures.expectedLegacyIntersection,
             },
         });
     });
 
     it("should call user defined callbacks on point click", () => {
-        const drillConfig = { afm, onFiredDrillEvent: jest.fn(), onDrill: jest.fn() };
+        const drillConfig = { afm: fixtures.afm, onFiredDrillEvent: jest.fn(), onDrill: jest.fn() };
         const target = { dispatchEvent: () => true };
 
         chartClick(drillConfig, pointClickEventData, (target as any) as EventTarget, VisualizationTypes.LINE);
@@ -596,7 +490,7 @@ describe("Drilldown Eventing", () => {
     });
 
     it("should call both default fire event and user defined callback on point click", () => {
-        const drillConfig = { afm, onFiredDrillEvent: jest.fn() };
+        const drillConfig = { afm: fixtures.afm, onFiredDrillEvent: jest.fn() };
         const target = { dispatchEvent: jest.fn() };
 
         chartClick(drillConfig, pointClickEventData, (target as any) as EventTarget, VisualizationTypes.LINE);
@@ -608,7 +502,7 @@ describe("Drilldown Eventing", () => {
     });
 
     it("should only call user defined callback on point click", () => {
-        const drillConfig = { afm, onFiredDrillEvent: jest.fn().mockReturnValue(false) };
+        const drillConfig = { afm: fixtures.afm, onFiredDrillEvent: jest.fn().mockReturnValue(false) };
         const target = { dispatchEvent: jest.fn() };
 
         chartClick(drillConfig, pointClickEventData, (target as any) as EventTarget, VisualizationTypes.LINE);
@@ -620,7 +514,7 @@ describe("Drilldown Eventing", () => {
     });
 
     it("should call fire event on label click", () => {
-        const drillConfig = { afm: simpleAfm, onFiredDrillEvent: () => true };
+        const drillConfig = { afm: fixtures.simpleAfm, onFiredDrillEvent: () => true };
         const target = { dispatchEvent: jest.fn() };
         const clickedPoint: Partial<IHighchartsPointObject> = {
             x: 1,
@@ -671,7 +565,7 @@ describe("Drilldown Eventing", () => {
                     {
                         x: 1,
                         y: 2,
-                        intersection: [expectedLegacyIntersection[0]],
+                        intersection: [fixtures.expectedLegacyIntersection[0]],
                     },
                 ],
             },
@@ -679,7 +573,7 @@ describe("Drilldown Eventing", () => {
     });
 
     it("should call fire event on cell click", () => {
-        const drillConfig = { afm: simpleAfm, onFiredDrillEvent: () => true };
+        const drillConfig = { afm: fixtures.simpleAfm, onFiredDrillEvent: () => true };
         const target = { dispatchEvent: jest.fn() };
         const cellClickEventData = {
             columnIndex: 1,
@@ -702,7 +596,7 @@ describe("Drilldown Eventing", () => {
         expect(target.dispatchEvent).toHaveBeenCalled();
 
         expect(target.dispatchEvent.mock.calls[0][0].detail).toEqual({
-            executionContext: simpleAfm,
+            executionContext: fixtures.simpleAfm,
             drillContext: {
                 type: "table",
                 element: "cell",
@@ -793,7 +687,7 @@ describe("Drilldown Eventing", () => {
         });
 
         it("should fire drill event (non-group) when point value is null and return empty string for value", () => {
-            const drillConfig = { afm, onFiredDrillEvent: jest.fn() };
+            const drillConfig = { afm: fixtures.afm, onFiredDrillEvent: jest.fn() };
             const target = { dispatchEvent: jest.fn() };
             const pointClickEventDataWithPointNullValue: Highcharts.DrilldownEventObject = {
                 ...pointClickEventData,
@@ -819,7 +713,7 @@ describe("Drilldown Eventing", () => {
 
     describe("Drilling in Combo chart", () => {
         const columnPoint: IHighchartsPointObject = {
-            ...point,
+            ...fixtures.point,
             series: { type: SeriesChartTypes.COLUMN },
         } as any;
 
@@ -860,7 +754,7 @@ describe("Drilldown Eventing", () => {
         ];
 
         const linePoint: Partial<IHighchartsPointObject> = {
-            ...point,
+            ...fixtures.point,
             x: 2,
             y: 3,
             series: { type: SeriesChartTypes.LINE },
@@ -903,7 +797,7 @@ describe("Drilldown Eventing", () => {
         };
 
         const comboAfm = {
-            measures: [...afm.measures, ...lineAfm.measures],
+            measures: [...fixtures.afm.measures, ...lineAfm.measures],
         };
 
         const expectedLinePointIntersection = [
@@ -955,7 +849,7 @@ describe("Drilldown Eventing", () => {
                     {
                         x: columnPoint.x,
                         y: columnPoint.y,
-                        intersection: expectedLegacyIntersection,
+                        intersection: fixtures.expectedLegacyIntersection,
                         type: SeriesChartTypes.COLUMN,
                     },
                     {
@@ -1022,7 +916,7 @@ describe("Drilldown Eventing", () => {
         });
 
         it("should NOT add chart type for each point if it is not Combo chart", () => {
-            const drillConfig: IDrillConfig = { afm, onFiredDrillEvent: jest.fn() };
+            const drillConfig: IDrillConfig = { afm: fixtures.afm, onFiredDrillEvent: jest.fn() };
             const target: any = { dispatchEvent: jest.fn() };
             const pointClickEventData: Highcharts.DrilldownEventObject = {
                 point: columnPoint,
@@ -1042,7 +936,7 @@ describe("Drilldown Eventing", () => {
                     {
                         x: columnPoint.x,
                         y: columnPoint.y,
-                        intersection: expectedLegacyIntersection,
+                        intersection: fixtures.expectedLegacyIntersection,
                     },
                 ],
             });
@@ -1071,53 +965,6 @@ describe("Drilldown Eventing", () => {
                     intersection: expectedLinePointIntersection,
                 },
             });
-        });
-    });
-
-    describe("convertHeadlineDrillIntersectionToLegacy", () => {
-        it("should handle empty intersection", () => {
-            expect(convertHeadlineDrillIntersectionToLegacy([], afm)).toEqual([]);
-        });
-
-        it("should convert IMeasureHeaderItem in extended selection", () => {
-            const afm: AFM.IAfm = {
-                measures: [
-                    {
-                        localIdentifier: "m1",
-                        definition: {
-                            measure: {
-                                item: {
-                                    uri: "/gdc/md/project_id/obj/1",
-                                },
-                            },
-                        },
-                    },
-                ],
-            };
-            const drillIntersectionExtended: IDrillEventIntersectionElementExtended = {
-                header: {
-                    measureHeaderItem: {
-                        name: "Lost",
-                        format: "$#,##0.00",
-                        localIdentifier: "m1",
-                        uri: "/gdc/md/project_id/obj/1",
-                        identifier: "metric.lost",
-                    },
-                },
-            };
-            const expectedIntersection = [
-                {
-                    id: "m1",
-                    title: "Lost",
-                    header: {
-                        uri: "/gdc/md/project_id/obj/1",
-                        identifier: "",
-                    },
-                },
-            ];
-            expect(convertHeadlineDrillIntersectionToLegacy([drillIntersectionExtended], afm)).toEqual(
-                expectedIntersection,
-            );
         });
     });
 
