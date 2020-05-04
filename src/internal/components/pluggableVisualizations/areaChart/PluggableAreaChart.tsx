@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import cloneDeep = require("lodash/cloneDeep");
 import get = require("lodash/get");
@@ -88,7 +88,10 @@ export class PluggableAreaChart extends PluggableBaseChart {
 
         newReferencePoint = setAreaChartUiConfig(newReferencePoint, this.intl, this.type);
         newReferencePoint = configurePercent(newReferencePoint, false);
-        newReferencePoint = configureOverTimeComparison(newReferencePoint);
+        newReferencePoint = configureOverTimeComparison(
+            newReferencePoint,
+            !!this.featureFlags.enableWeekFilters,
+        );
 
         this.supportedPropertiesList = removeImmutableOptionalStackingProperties(
             newReferencePoint,
