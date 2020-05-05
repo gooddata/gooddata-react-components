@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import { IGridTotalsRow } from "../agGridTypes";
 import { areTotalsChanged, isInvalidGetRowsRequest, wrapGetPageWithCaching } from "../agGridDataSourceUtils";
 import * as fixtures from "../../../../../stories/test_data/fixtures";
@@ -89,6 +89,19 @@ describe("getGridDataSourceUtils", () => {
             await getPageWithCaching(execution.resultSpec, [0], [1]);
             await getPageWithCaching(execution.resultSpec, [0], [1]);
             expect(getPage).toHaveBeenCalledTimes(1);
+        });
+
+        it("should call getPage only once when called without awaiting", async () => {
+            const execution = fixtures.pivotTableWithColumnAndRowAttributes.executionRequest;
+
+            const getPage = jest.fn(() => Promise.resolve(execution));
+
+            const getPageWithCaching = wrapGetPageWithCaching(getPage);
+            const first = getPageWithCaching(execution.resultSpec, [0], [1]);
+            const second = getPageWithCaching(execution.resultSpec, [0], [1]);
+
+            expect(getPage).toHaveBeenCalledTimes(1);
+            expect(await first).toBe(await second);
         });
 
         it("should call getPage each time if execution params changes", async () => {
