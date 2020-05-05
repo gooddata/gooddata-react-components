@@ -9,7 +9,7 @@ import {
     IMeasureValueFilter,
 } from "../interfaces/Visualization";
 import { OverTimeComparisonTypes } from "../../interfaces/OverTimeComparison";
-import { DATE_DATASET_ATTRIBUTE } from "../constants/bucket";
+import { DATE_DATASET_ATTRIBUTE, DATE, GRANULARITY } from "../constants/bucket";
 
 export const masterMeasureItems: IBucketItem[] = [
     {
@@ -323,6 +323,12 @@ export const attributeItems: IBucketItem[] = [
         attribute: "attr.owner.region",
     },
 ];
+export const sliceByWeekBucketItem: IBucketItem = {
+    localIdentifier: "date-week-attribute",
+    type: DATE,
+    attribute: DATE_DATASET_ATTRIBUTE,
+    granularity: GRANULARITY.week,
+};
 
 export const geoAttributeItems: IBucketItem[] = [
     {

@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import cloneDeep = require("lodash/cloneDeep");
 import get = require("lodash/get");
 import set = require("lodash/set");
@@ -110,7 +110,10 @@ export class PluggableComboChart extends PluggableBaseChart {
 
         newReferencePoint = setComboChartUiConfig(newReferencePoint, this.intl, this.type);
         newReferencePoint = configurePercent(newReferencePoint, this.isPercentDisabled(newReferencePoint));
-        newReferencePoint = configureOverTimeComparison(newReferencePoint);
+        newReferencePoint = configureOverTimeComparison(
+            newReferencePoint,
+            !!this.featureFlags.enableWeekFilters,
+        );
         newReferencePoint = getReferencePointWithSupportedProperties(
             newReferencePoint,
             this.supportedPropertiesList,

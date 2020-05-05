@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import cloneDeep = require("lodash/cloneDeep");
 import get = require("lodash/get");
 import set = require("lodash/set");
@@ -134,6 +134,7 @@ export function setBaseChartUiConfig(
 export function setBaseChartUiConfigRecommendations(
     referencePoint: IExtendedReferencePoint,
     visualizationType: string,
+    weekFiltersEnabled: boolean,
 ): IExtendedReferencePoint {
     // Recommendations
     if (visualizationType === VisualizationTypes.COLUMN) {
@@ -142,7 +143,10 @@ export function setBaseChartUiConfigRecommendations(
 
         const percentEnabled = percentRecommendationEnabled(buckets);
         const comparisonAndTrending = comparisonAndTrendingRecommendationEnabled(buckets);
-        const overTimeComparison = overTimeComparisonRecommendationEnabled(newReferencePoint);
+        const overTimeComparison = overTimeComparisonRecommendationEnabled(
+            newReferencePoint,
+            weekFiltersEnabled,
+        );
         const previousPeriod = previousPeriodRecommendationEnabled(buckets);
 
         set(newReferencePoint, [UICONFIG, RECOMMENDATIONS, "percent"], percentEnabled);

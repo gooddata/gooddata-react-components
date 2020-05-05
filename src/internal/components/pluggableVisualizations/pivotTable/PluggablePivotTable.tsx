@@ -362,7 +362,7 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
 
                     setPivotTableUiConfig(referencePointDraft, this.intl, VisualizationTypes.TABLE);
                     configurePercent(referencePointDraft, false);
-                    configureOverTimeComparison(referencePointDraft);
+                    configureOverTimeComparison(referencePointDraft, !!this.featureFlags.enableWeekFilters);
                     Object.assign(
                         referencePointDraft,
                         getReferencePointWithSupportedProperties(
