@@ -17,7 +17,6 @@ import {
     IDrillEvent,
     IDrillEventIntersectionElement,
     IDrillEventContextTable,
-    IDrillPoint,
     IHighchartsPointObject,
     IDrillConfig,
     ICellDrillEvent,
@@ -27,33 +26,22 @@ import {
     IDrillEventContextExtended,
     IDrillEventExtended,
     IDrillPointExtended,
-    isMappingMeasureHeaderItem,
     IDrillEventContextGroupExtended,
-    isDrillIntersectionAttributeItem,
     IDrillPointBase,
     IDrillEventContextPointExtended,
     IDrillEventContextPointBase,
-    IDrillEventContextBase,
-    DrillEventIntersectionElementHeader,
     IGeoDrillEvent,
 } from "../../../interfaces/DrillEvents";
 import { OnFiredDrillEvent } from "../../../interfaces/Events";
 import { IGeoData } from "../../../interfaces/GeoChart";
 import { IHeaderPredicate } from "../../../interfaces/HeaderPredicate";
-import {
-    isComboChart,
-    isHeatmap,
-    isTreemap,
-    getAttributeElementIdFromAttributeElementUri,
-    isBulletChart,
-} from "./common";
+import { isComboChart, isHeatmap, isTreemap, isBulletChart } from "./common";
 import { findMeasureGroupInDimensions } from "../../../helpers/executionResultHelper";
 import { findGeoAttributesInDimension } from "../../../helpers/geoChart/executionResultHelper";
 import { parseGeoProperties } from "../../../helpers/geoChart/data";
 
 import { isSomeHeaderPredicateMatched } from "../../../helpers/headerPredicate";
 import { getVisualizationType } from "../../../helpers/visualizationType";
-import { getMasterMeasureObjQualifier } from "../../../helpers/afmHelper";
 import { AFM, Execution } from "@gooddata/typings";
 import {
     IMappingHeader,
@@ -61,6 +49,7 @@ import {
     isMappingHeaderAttributeItem,
     isMappingHeaderMeasureItem,
 } from "../../../interfaces/MappingHeader";
+import { convertDrillContextToLegacy } from "./drilldownEventingLegacy";
 
 export function getClickableElementNameByChartType(type: VisType): ChartElementType {
     switch (type) {
@@ -192,51 +181,6 @@ function composeDrillContextPoint(
         ...customProp,
     };
 }
-
-const convertIntersectionToLegacy = (
-    intersection: IDrillEventIntersectionElementExtended[],
-    afm: AFM.IAfm,
-): IDrillEventIntersectionElement[] => {
-    return intersection.map((intersectionItem: IDrillEventIntersectionElementExtended) => {
-        const { header } = intersectionItem;
-        if (isDrillIntersectionAttributeItem(header)) {
-            const { uri: itemUri, name } = header.attributeHeaderItem;
-            const { uri, identifier } = header.attributeHeader;
-            return createDrillIntersectionElement(
-                getAttributeElementIdFromAttributeElementUri(itemUri),
-                name,
-                uri,
-                identifier,
-            );
-        }
-        return convertMeasureHeaderItem(header, afm);
-    });
-};
-
-const convertPointToLegacy = (afm: AFM.IAfm) => (point: IDrillPointExtended): IDrillPoint => {
-    return {
-        ...point,
-        intersection: convertIntersectionToLegacy(point.intersection, afm),
-    };
-};
-
-const convertDrillContextToLegacy = (
-    drillContext: IDrillEventContextExtended,
-    afm: AFM.IAfm,
-): IDrillEventContext => {
-    const isGroup = !!drillContext.points;
-    const convertedProp = isGroup
-        ? {
-              points: drillContext.points.map(convertPointToLegacy(afm)),
-          }
-        : {
-              intersection: convertIntersectionToLegacy(drillContext.intersection, afm),
-          };
-    return {
-        ...(drillContext as IDrillEventContextBase),
-        ...convertedProp,
-    };
-};
 
 const chartClickDebounced = debounce(
     (
@@ -398,53 +342,6 @@ export function createDrillIntersectionElement(
     }
 
     return element;
-}
-
-const convertMeasureHeaderItem = (
-    header: DrillEventIntersectionElementHeader,
-    afm: AFM.IAfm,
-): IDrillEventIntersectionElement => {
-    if (!isMappingMeasureHeaderItem(header)) {
-        throw new Error("Converting wrong item type, IMeasureHeaderItem expected!");
-    }
-
-    const { localIdentifier, name, uri: headerUri, identifier: headerIdentifier } = header.measureHeaderItem;
-
-    const masterMeasureQualifier = getMasterMeasureObjQualifier(afm, localIdentifier);
-
-    if (!masterMeasureQualifier) {
-        throw new Error("The metric ids has not been found in execution request!");
-    }
-
-    const id: string = localIdentifier;
-    const uri = masterMeasureQualifier.uri || headerUri;
-    const identifier = masterMeasureQualifier.identifier || headerIdentifier;
-    return createDrillIntersectionElement(id, name, uri, identifier);
-};
-
-export function convertHeadlineDrillIntersectionToLegacy(
-    intersectionExtended: IDrillEventIntersectionElementExtended[],
-    afm: AFM.IAfm,
-): IDrillEventIntersectionElement[] {
-    return intersectionExtended
-        .filter(({ header }) => isMappingMeasureHeaderItem(header))
-        .map(intersectionElement => {
-            const header = intersectionElement.header as Execution.IMeasureHeaderItem;
-            const { localIdentifier, name } = header.measureHeaderItem;
-
-            const masterMeasureQualifier = getMasterMeasureObjQualifier(afm, localIdentifier);
-
-            if (!masterMeasureQualifier) {
-                throw new Error("The metric ids has not been found in execution request!");
-            }
-
-            return createDrillIntersectionElement(
-                localIdentifier,
-                name,
-                masterMeasureQualifier.uri,
-                masterMeasureQualifier.identifier,
-            );
-        });
 }
 
 // shared by charts and table
