@@ -17,7 +17,7 @@ The REST API versions in the table are just for your information as the values a
 
 - We ask developers to consider using the Headline component instead of the KPI component. The KPI component may be eventually marked as deprecated in one of the next major versions.
 
-## 7.5.0
+## 7.6.0
 
 ### Added
 
@@ -28,6 +28,12 @@ The REST API versions in the table are just for your information as the values a
 ### Fixed
 
 - Visualization rendering stuck due to an error that persisted after the error was gone
+
+## 7.5.0
+
+### Note
+
+- This version was released by accident, please use 7.6.0 instead.
 
 ## 7.4.0
 
