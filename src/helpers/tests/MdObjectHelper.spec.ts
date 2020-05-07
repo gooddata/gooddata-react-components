@@ -172,6 +172,14 @@ describe("MdObjectHelper", () => {
         it("should convert MDO to Geo pushpin chart's bucket props", () => {
             const config: IGeoConfig = {
                 mapboxToken: "",
+                tooltipText: {
+                    visualizationAttribute: {
+                        displayForm: {
+                            uri: "/gdc/md/myproject/obj/853",
+                        },
+                        localIdentifier: "tooltip",
+                    },
+                },
             };
 
             const filtersFromProps: AFM.ExtendedFilter[] = [

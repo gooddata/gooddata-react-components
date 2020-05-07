@@ -230,12 +230,6 @@ const geoChartVisualizationObjects = [
                 localIdentifier: 'segment',
                 displayForm: '23.df',
             }]
-        },{
-            localIdentifier: 'tooltipText',
-            items: [{
-                localIdentifier: 'tooltip',
-                displayForm: '24.df',
-            }]
         }],
     },
 ];

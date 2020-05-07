@@ -1,7 +1,7 @@
 // (C) 2019-2020 GoodData Corporation
 import get = require("lodash/get");
 import isEqual = require("lodash/isEqual");
-import { VisualizationObject, Execution } from "@gooddata/typings";
+import { VisualizationObject, Execution, VisualizationInput } from "@gooddata/typings";
 import { IChartConfig, IColorAssignment } from "../../interfaces/Config";
 import { IGeoConfig, IGeoData, IGeoPointsConfig } from "../../interfaces/GeoChart";
 import { LOCATION } from "../../constants/bucketNames";
@@ -87,4 +87,10 @@ export function isColorAssignmentItemChanged(
     colorAssigment: IColorAssignment[],
 ): boolean {
     return !isEqual(prevColorAssigment, colorAssigment);
+}
+
+export function isTooltipTextValueString(
+    tooltipText: VisualizationInput.IAttribute | string,
+): tooltipText is string {
+    return typeof tooltipText === "string";
 }
