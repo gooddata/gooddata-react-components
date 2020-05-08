@@ -9,7 +9,7 @@ import {
     IMeasureValueFilter,
 } from "../interfaces/Visualization";
 import { OverTimeComparisonTypes } from "../../interfaces/OverTimeComparison";
-import { DATE_DATASET_ATTRIBUTE } from "../constants/bucket";
+import { DATE_DATASET_ATTRIBUTE, DATE, GRANULARITY } from "../constants/bucket";
 
 export const masterMeasureItems: IBucketItem[] = [
     {
@@ -323,6 +323,12 @@ export const attributeItems: IBucketItem[] = [
         attribute: "attr.owner.region",
     },
 ];
+export const sliceByWeekBucketItem: IBucketItem = {
+    localIdentifier: "date-week-attribute",
+    type: DATE,
+    attribute: DATE_DATASET_ATTRIBUTE,
+    granularity: GRANULARITY.week,
+};
 
 export const geoAttributeItems: IBucketItem[] = [
     {
@@ -490,6 +496,30 @@ export const secondaryMeasuresAndAttributeReferencePoint: IReferencePoint = {
     filters: {
         localIdentifier: "filters",
         items: attributeFilters.slice(0, 2),
+    },
+    properties: {
+        sortItems: [defaultSortItem],
+    },
+};
+
+export const secondaryMeasureReferencePoint: IReferencePoint = {
+    buckets: [
+        {
+            localIdentifier: "measures",
+            items: [],
+        },
+        {
+            localIdentifier: "secondary_measures",
+            items: masterMeasureItems.slice(0, 1),
+        },
+        {
+            localIdentifier: "attribute",
+            items: [],
+        },
+    ],
+    filters: {
+        localIdentifier: "filters",
+        items: [],
     },
     properties: {
         sortItems: [defaultSortItem],

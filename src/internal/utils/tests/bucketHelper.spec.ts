@@ -35,6 +35,8 @@ import {
     sanitizeFilters,
     setBucketTitles,
     getOccupiedMeasureBucketsLocalIdentifiers,
+    transformMeasureBuckets,
+    IMeasureBucketItemsLimit,
 } from "../bucketHelper";
 import {
     IBucket,
@@ -2591,6 +2593,213 @@ describe("getOccupiedMeasureBucketsLocalIdentifiers", () => {
             expect(getOccupiedMeasureBucketsLocalIdentifiers(type, mdObject, executionResultData)).toEqual(
                 expectedValue,
             );
+        },
+    );
+});
+
+describe("transformMeasureBuckets", () => {
+    const getBucket = (localIdentifier: string, items: IBucketItem[]) => ({
+        localIdentifier,
+        items,
+    });
+
+    it.each([
+        [
+            "should keep the measures in original buckets if it fits",
+            [
+                getBucket(BucketNames.MEASURES, [referencePointMocks.masterMeasureItems[0]]),
+                getBucket(BucketNames.SECONDARY_MEASURES, []),
+                getBucket(BucketNames.TERTIARY_MEASURES, [referencePointMocks.masterMeasureItems[1]]),
+            ],
+            [
+                {
+                    localIdentifier: BucketNames.MEASURES,
+                    itemsLimit: 1,
+                },
+                {
+                    localIdentifier: BucketNames.SECONDARY_MEASURES,
+                    itemsLimit: 1,
+                },
+                {
+                    localIdentifier: BucketNames.TERTIARY_MEASURES,
+                    itemsLimit: 1,
+                },
+            ],
+            [
+                getBucket(BucketNames.MEASURES, [referencePointMocks.masterMeasureItems[0]]),
+                getBucket(BucketNames.SECONDARY_MEASURES, []),
+                getBucket(BucketNames.TERTIARY_MEASURES, [referencePointMocks.masterMeasureItems[1]]),
+            ],
+        ],
+        [
+            "should omit measure that doesn't fit",
+            [
+                getBucket(BucketNames.MEASURES, [referencePointMocks.masterMeasureItems[0]]),
+                getBucket(BucketNames.SECONDARY_MEASURES, [referencePointMocks.masterMeasureItems[1]]),
+            ],
+            [
+                {
+                    localIdentifier: BucketNames.MEASURES,
+                    itemsLimit: 1,
+                },
+                {
+                    localIdentifier: BucketNames.SECONDARY_MEASURES,
+                    itemsLimit: 1,
+                },
+            ],
+            [
+                getBucket(BucketNames.MEASURES, [referencePointMocks.masterMeasureItems[0]]),
+                getBucket(BucketNames.SECONDARY_MEASURES, [
+                    referencePointMocks.masterMeasureItems[1],
+                    referencePointMocks.masterMeasureItems[2],
+                ]),
+            ],
+        ],
+        [
+            "should distribute measure that doesn't fit into empty measure buckets - case 1",
+            [
+                getBucket(BucketNames.MEASURES, [referencePointMocks.masterMeasureItems[0]]),
+                getBucket(BucketNames.SECONDARY_MEASURES, [referencePointMocks.masterMeasureItems[1]]),
+                getBucket(BucketNames.TERTIARY_MEASURES, [referencePointMocks.masterMeasureItems[2]]),
+            ],
+            [
+                {
+                    localIdentifier: BucketNames.MEASURES,
+                    itemsLimit: 1,
+                },
+                {
+                    localIdentifier: BucketNames.SECONDARY_MEASURES,
+                    itemsLimit: 1,
+                },
+                {
+                    localIdentifier: BucketNames.TERTIARY_MEASURES,
+                    itemsLimit: 1,
+                },
+            ],
+            [
+                getBucket(BucketNames.MEASURES, [referencePointMocks.masterMeasureItems[0]]),
+                getBucket(BucketNames.SECONDARY_MEASURES, [
+                    referencePointMocks.masterMeasureItems[1],
+                    referencePointMocks.masterMeasureItems[2],
+                ]),
+            ],
+        ],
+        [
+            "should distribute measure that doesn't fit into empty measure buckets - case 2",
+            [
+                getBucket(BucketNames.MEASURES, [referencePointMocks.masterMeasureItems[1]]),
+                getBucket(BucketNames.SECONDARY_MEASURES, [referencePointMocks.masterMeasureItems[0]]),
+            ],
+            [
+                {
+                    localIdentifier: BucketNames.MEASURES,
+                    itemsLimit: 1,
+                },
+                {
+                    localIdentifier: BucketNames.SECONDARY_MEASURES,
+                    itemsLimit: 1,
+                },
+            ],
+            [
+                getBucket(BucketNames.SECONDARY_MEASURES, [
+                    referencePointMocks.masterMeasureItems[0],
+                    referencePointMocks.masterMeasureItems[1],
+                ]),
+            ],
+        ],
+        [
+            "should distribute measure that doesn't fit into empty measure buckets - case 3",
+            [
+                getBucket(BucketNames.MEASURES, [referencePointMocks.masterMeasureItems[2]]),
+                getBucket(BucketNames.SECONDARY_MEASURES, [
+                    referencePointMocks.masterMeasureItems[0],
+                    referencePointMocks.masterMeasureItems[1],
+                ]),
+            ],
+            [
+                {
+                    localIdentifier: BucketNames.MEASURES,
+                    itemsLimit: 1,
+                },
+                {
+                    localIdentifier: BucketNames.SECONDARY_MEASURES,
+                    itemsLimit: 2,
+                },
+            ],
+            [
+                getBucket(BucketNames.SECONDARY_MEASURES, [
+                    referencePointMocks.masterMeasureItems[0],
+                    referencePointMocks.masterMeasureItems[1],
+                    referencePointMocks.masterMeasureItems[2],
+                ]),
+            ],
+        ],
+        [
+            "should distribute measure that doesn't fit into empty measure buckets - case 4",
+            [
+                getBucket(BucketNames.MEASURES, [referencePointMocks.masterMeasureItems[2]]),
+                getBucket(BucketNames.SECONDARY_MEASURES, [referencePointMocks.masterMeasureItems[0]]),
+                getBucket(BucketNames.TERTIARY_MEASURES, [referencePointMocks.masterMeasureItems[1]]),
+            ],
+            [
+                {
+                    localIdentifier: BucketNames.MEASURES,
+                    itemsLimit: 1,
+                },
+                {
+                    localIdentifier: BucketNames.SECONDARY_MEASURES,
+                    itemsLimit: 1,
+                },
+                {
+                    localIdentifier: BucketNames.TERTIARY_MEASURES,
+                    itemsLimit: 1,
+                },
+            ],
+            [
+                getBucket(BucketNames.SECONDARY_MEASURES, [
+                    referencePointMocks.masterMeasureItems[0],
+                    referencePointMocks.masterMeasureItems[1],
+                    referencePointMocks.masterMeasureItems[2],
+                ]),
+            ],
+        ],
+        [
+            "should distribute measure that doesn't fit into empty measure buckets - case 5",
+            [
+                getBucket(BucketNames.MEASURES, [
+                    referencePointMocks.masterMeasureItems[0],
+                    referencePointMocks.masterMeasureItems[2],
+                ]),
+                getBucket(BucketNames.SECONDARY_MEASURES, [referencePointMocks.masterMeasureItems[1]]),
+            ],
+            [
+                {
+                    localIdentifier: BucketNames.MEASURES,
+                    itemsLimit: 2,
+                },
+                {
+                    localIdentifier: BucketNames.SECONDARY_MEASURES,
+                    itemsLimit: 1,
+                },
+            ],
+            [
+                getBucket(BucketNames.MEASURES, [referencePointMocks.masterMeasureItems[0]]),
+                getBucket(BucketNames.SECONDARY_MEASURES, [
+                    referencePointMocks.masterMeasureItems[1],
+                    referencePointMocks.masterMeasureItems[2],
+                    referencePointMocks.masterMeasureItems[3],
+                ]),
+            ],
+        ],
+    ])(
+        `should return %s`,
+        (
+            _conditionDescription: string,
+            expectedValue: IBucket[],
+            measureBucketsLocalIdentifiers: IMeasureBucketItemsLimit[],
+            buckets: IBucket[],
+        ) => {
+            expect(transformMeasureBuckets(measureBucketsLocalIdentifiers, buckets)).toEqual(expectedValue);
         },
     );
 });

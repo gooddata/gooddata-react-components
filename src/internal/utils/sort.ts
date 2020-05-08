@@ -48,7 +48,7 @@ function getDefaultTableSort(afm: AFM.IAfm): AFM.SortItem[] {
 }
 
 function getDefaultGeoPushpinSort(afm: AFM.IAfm): AFM.SortItem[] {
-    return SortsHelper.getFirstMeasureSort(afm);
+    return SortsHelper.getDefaultAttributeGeoPushpinSort(afm);
 }
 
 export function getDefaultPivotTableSort(afm: AFM.IAfm): AFM.SortItem[] {

@@ -366,7 +366,7 @@ describe("createSorts", () => {
         expect(createSorts("table", emptyAfm, emptyResultSpec, visualizationProperties)).toEqual([]);
     });
 
-    it("should sort by measure size if chart is geo Pushpin", () => {
+    it("should sort by segmentBy attribute if chart is geo Pushpin", () => {
         const afm: AFM.IAfm = {
             measures: [M1],
             attributes: [A1, A2],
@@ -379,8 +379,15 @@ describe("createSorts", () => {
                 },
             ],
         };
-        const expectedSort: AFM.SortItem[] = [SORTED_BY_M1];
-        expect(createSorts("pushpin", afm, resultSpec, emptyVisualizationProperties)).toEqual(expectedSort);
+
+        expect(createSorts("pushpin", afm, resultSpec, emptyVisualizationProperties)).toEqual([
+            {
+                attributeSortItem: {
+                    attributeIdentifier: "a2",
+                    direction: "asc",
+                },
+            },
+        ]);
     });
 });
 

@@ -20,7 +20,8 @@ import { Visualization, VisualizationEnvironment } from "./components/uri/Visual
 import { ErrorStates, ErrorCodes } from "./constants/errorStates";
 import { VisualizationTypes, ChartType } from "./constants/visualizationTypes";
 import { Execute } from "./execution/Execute";
-import { IDrillableItem, IDrillEventExtended } from "./interfaces/DrillEvents";
+import { IDrillableItem, IDrillEventExtended, IDrillEvent } from "./interfaces/DrillEvents";
+import { convertDrillContextToLegacy } from "./components/visualizations/utils/drilldownEventingLegacy";
 import { IHeaderPredicate } from "./interfaces/HeaderPredicate";
 import { IPushData, IDrillableItemPushData, IColorsData } from "./interfaces/PushData";
 import { AttributeFilter } from "./components/filters/AttributeFilter/AttributeFilter";
@@ -120,6 +121,8 @@ export {
     IDataSourceProviderInjectedProps,
     IDrillableItem,
     IDrillEventExtended,
+    IDrillEvent,
+    convertDrillContextToLegacy,
     ILegendConfig,
     IChartConfig,
     IColorPalette,

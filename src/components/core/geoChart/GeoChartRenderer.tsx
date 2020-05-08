@@ -193,15 +193,16 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
 
     private createMapControls() {
         const isViewportFrozen = this.isViewportFrozen();
-        if (!isViewportFrozen) {
-            this.addMapControls();
-        }
 
         this.chart.addControl(
             new mapboxgl.AttributionControl({
                 compact: true,
             }),
         );
+
+        if (!isViewportFrozen) {
+            this.addMapControls();
+        }
     }
 
     private removeMapControls = (): void => {
