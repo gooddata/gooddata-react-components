@@ -13,11 +13,6 @@ import "../../styles/scss/charts.scss";
 import "../../styles/scss/table.scss";
 import { GERMAN_SEPARATORS } from "../data/numberFormat";
 
-const afterRender = () => {
-    // tslint:disable-next-line:no-console
-    console.log("GDC_GEO_CANVAS_READY");
-};
-
 const defaultFilter: AFM.IAbsoluteDateFilter = {
     absoluteDateFilter: {
         dataSet: {
@@ -392,23 +387,6 @@ storiesOf("URI components", module)
                     uri={"/gdc/md/storybook/obj/1002"}
                     drillableItems={[{ identifier: "1" }, { identifier: "2" }]}
                     onFiredDrillEvent={action("drill-event fired")}
-                    onError={onErrorHandler}
-                    LoadingComponent={null}
-                    ErrorComponent={null}
-                />
-            </div>,
-        ),
-    )
-    .add("GeoPushpinChart example", () =>
-        screenshotWrap(
-            <div style={{ width: 800, height: 400 }}>
-                <Visualization
-                    projectId="storybook"
-                    identifier="pushpin-chart-location-size-color-segment-tooltip"
-                    config={{
-                        mapboxToken: process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN,
-                    }}
-                    afterRender={afterRender}
                     onError={onErrorHandler}
                     LoadingComponent={null}
                     ErrorComponent={null}
