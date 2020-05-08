@@ -1,6 +1,11 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import { AFM } from "@gooddata/typings";
-import { getAttributeSortItem, getDefaultTreemapSort, getFirstAttributeIdentifier } from "../sorts";
+import {
+    getAttributeSortItem,
+    getDefaultTreemapSort,
+    getFirstAttributeIdentifier,
+    getDefaultAttributeGeoPushpinSort,
+} from "../sorts";
 
 import { DESC } from "../../constants/sort";
 
@@ -119,6 +124,23 @@ describe("sorts", () => {
             expect(getFirstAttributeIdentifier(stackedResultSpec, 0)).toEqual("a2");
             expect(getFirstAttributeIdentifier(stackedResultSpec, 1)).toEqual("a1");
             expect(getFirstAttributeIdentifier(stackedResultSpec, 2)).toEqual(null);
+        });
+    });
+
+    describe("getDefaultAttributeGeoPushpinSort", () => {
+        it("should sort by segmentBy attribute if count of attributes greater than 1", () => {
+            expect(getDefaultAttributeGeoPushpinSort(stackedAfm)).toEqual([
+                {
+                    attributeSortItem: {
+                        attributeIdentifier: "a2",
+                        direction: "asc",
+                    },
+                },
+            ]);
+        });
+
+        it("should not sort if segmentBy attribute is not existing", () => {
+            expect(getDefaultAttributeGeoPushpinSort(nonStackedAfm)).toEqual([]);
         });
     });
 });

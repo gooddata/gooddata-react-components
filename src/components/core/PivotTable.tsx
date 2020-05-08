@@ -40,11 +40,11 @@ import {
 
 import {
     IDrillEvent,
-    IDrillEventContextTable,
     IDrillEventContextTableExtended,
     IDrillEventExtended,
     IDrillEventIntersectionElementExtended,
     isDrillEventContextTableExtended,
+    IDrillEventContext,
 } from "../../interfaces/DrillEvents";
 import { IHeaderPredicate } from "../../interfaces/HeaderPredicate";
 import { IMappingHeader, isMappingHeaderAttribute } from "../../interfaces/MappingHeader";
@@ -74,7 +74,7 @@ import {
     ROW_TOTAL,
 } from "./pivotTable/agGridConst";
 import { createAgGridDataSource } from "./pivotTable/agGridDataSource";
-import { convertDrillIntersectionToLegacy, getDrillRowData } from "./pivotTable/agGridDrilling";
+import { getDrillRowData } from "./pivotTable/agGridDrilling";
 import { getSortsFromModel, isSortedByFirstAttibute } from "./pivotTable/agGridSorting";
 import {
     ICustomGridOptions,
@@ -105,6 +105,7 @@ import {
 } from "./pivotTable/stickyRowHandler";
 
 import { getDrillIntersection } from "../visualizations/utils/drilldownEventing";
+import { convertDrillContextToLegacy } from "../visualizations/utils/drilldownEventingLegacy";
 import cloneDeep = require("lodash/cloneDeep");
 import get = require("lodash/get");
 import isEqual = require("lodash/isEqual");
@@ -747,10 +748,10 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         // this type guard is here only for casting because drillContext came from event as IDrillEventContextExtended
         if (isDrillEventContextTableExtended(drillContext)) {
             // Old drill event for backward compatibility
-            const drillContextLegacy: IDrillEventContextTable = {
-                ...drillContext,
-                intersection: convertDrillIntersectionToLegacy(drillContext.intersection, executionContext),
-            };
+            const drillContextLegacy: IDrillEventContext = convertDrillContextToLegacy(
+                drillContext,
+                executionContext,
+            );
             const drillEvent: IDrillEvent = {
                 executionContext,
                 drillContext: drillContextLegacy,

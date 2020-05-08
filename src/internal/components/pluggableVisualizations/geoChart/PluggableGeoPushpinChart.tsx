@@ -259,12 +259,14 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
             dimensions: this.getDimensions(mdObject),
         };
 
-        const hasSizeMeasure = mdObject.buckets.some(bucket => bucket.localIdentifier === BucketNames.SIZE);
+        const hasSegmentAttribute: boolean = mdObject.buckets.some(
+            (bucket: VisualizationObject.IBucket): boolean => bucket.localIdentifier === BucketNames.SEGMENT,
+        );
 
         const allProperties: IVisualizationProperties = get(visualizationProperties, "properties", {});
 
-        // only DESC sort on Size measure to always lay smaller pushpins on top of bigger ones
-        const sorts: AFM.SortItem[] = hasSizeMeasure
+        // sort items by segmentBy by alphabetical order
+        const sorts: AFM.SortItem[] = hasSegmentAttribute
             ? createSorts(this.type, dataSource.getAfm(), resultSpecWithDimensions, allProperties)
             : [];
 

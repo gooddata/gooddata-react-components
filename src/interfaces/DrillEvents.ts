@@ -11,6 +11,7 @@ import {
     VisElementType,
     VisType,
     XirrType,
+    VisualizationTypes,
 } from "../constants/visualizationTypes";
 import { IGeoLngLat } from "../interfaces/GeoChart";
 import { TableRowForDrilling } from "./Table";
@@ -102,7 +103,7 @@ export interface IDrillEventContextTableExtended
 export function isDrillEventContextTableExtended(
     arg: IDrillEventContextBase,
 ): arg is IDrillEventContextTableExtended {
-    return arg.type === "table";
+    return arg.type === VisualizationTypes.TABLE;
 }
 // Drill context for headline
 export interface IDrillEventContextHeadlineBase {
@@ -110,10 +111,17 @@ export interface IDrillEventContextHeadlineBase {
     element: HeadlineElementType;
     value: string;
 }
+
 export interface IDrillEventContextHeadline extends IDrillEventContextHeadlineBase, IDrillEventIntersection {}
 export interface IDrillEventContextHeadlineExtended
     extends IDrillEventContextHeadlineBase,
         IDrillEventIntersectionExtended {}
+
+export function isDrillEventContextHeadlineExtended(
+    arg: IDrillEventContextBase,
+): arg is IDrillEventContextHeadlineExtended {
+    return arg.type === VisualizationTypes.HEADLINE;
+}
 
 // Drill context for XIRR
 export interface IDrillEventContextXirrBase {
@@ -125,6 +133,12 @@ export interface IDrillEventContextXirr extends IDrillEventContextXirrBase, IDri
 export interface IDrillEventContextXirrExtended
     extends IDrillEventContextXirrBase,
         IDrillEventIntersectionExtended {}
+
+export function isDrillEventContextXirrExtended(
+    arg: IDrillEventContextBase,
+): arg is IDrillEventContextXirrExtended {
+    return arg.type === VisualizationTypes.XIRR;
+}
 
 // Drill context for chart
 export interface IDrillEventContextPointBase {

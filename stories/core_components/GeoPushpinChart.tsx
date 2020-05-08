@@ -309,7 +309,7 @@ storiesOf("Core components/GeoPushpinChart/Config/Legend", module)
                         },
                     },
                 },
-                { height: 150 },
+                { height: 300 },
             ),
         ),
     );

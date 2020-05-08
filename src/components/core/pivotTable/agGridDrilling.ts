@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 
 import { AFM, Execution } from "@gooddata/typings";
 import { getMasterMeasureObjQualifier } from "../../../helpers/afmHelper";
@@ -14,6 +14,8 @@ import {
     IDrillEventIntersectionElementExtended,
     isDrillIntersectionAttributeItem,
     isMappingMeasureHeaderItem,
+    IDrillEventContextTable,
+    IDrillEventContextTableExtended,
 } from "../../../interfaces/DrillEvents";
 import { IMappingHeader, isMappingHeaderAttributeItem } from "../../../interfaces/MappingHeader";
 import { getAttributeElementIdFromAttributeElementUri } from "../../visualizations/utils/common";
@@ -59,6 +61,16 @@ const getMeasurePositionInsideIntersection = (
     intersection.findIndex((intersectionElement: IDrillEventIntersectionElementExtended) =>
         isMappingMeasureHeaderItem(intersectionElement.header),
     );
+
+export const convertPivotTableDrillContextToLegacy = (
+    drillContext: IDrillEventContextTableExtended,
+    executionContext: AFM.IAfm,
+): IDrillEventContextTable => {
+    return {
+        ...drillContext,
+        intersection: convertDrillIntersectionToLegacy(drillContext.intersection, executionContext),
+    };
+};
 
 export const convertDrillIntersectionToLegacy = (
     intersectionExtended: IDrillEventIntersectionElementExtended[],

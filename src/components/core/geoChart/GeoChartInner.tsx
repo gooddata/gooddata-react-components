@@ -13,23 +13,14 @@ import GeoChartRenderer, { IGeoChartRendererProps } from "./GeoChartRenderer";
 import GeoChartLegendRenderer, { IGeoChartLegendRendererProps } from "./GeoChartLegendRenderer";
 import { commonDefaultProps, ILoadingInjectedProps } from "../base/VisualizationLoadingHOC";
 import { IColorStrategy } from "../../visualizations/chart/colorFactory";
-import {
-    BOTTOM,
-    LEFT,
-    RIGHT,
-    SUPPORTED_POSITIONS,
-    TOP,
-} from "../../visualizations/chart/legend/PositionTypes";
+import { BOTTOM, LEFT, SUPPORTED_POSITIONS, TOP } from "../../visualizations/chart/legend/PositionTypes";
 import { PositionType } from "../../visualizations/typings/legend";
 import { isFluidLegendEnabled, isColorAssignmentItemChanged } from "../../../helpers/geoChart/common";
 import { getAvailableLegends } from "../../../helpers/geoChart/data";
 import { convertDrillableItemsToPredicates } from "../../../helpers/headerPredicate";
 import { shouldShowFluid } from "../../../helpers/utils";
-import { HEIGHT_OF_SIZE_LEGEND } from "./legends/PushpinCategoryLegend";
 import { IColorAssignment } from "../../../interfaces/Config";
 import { IDrillConfig } from "../../../interfaces/DrillEvents";
-
-const HEIGHT_OF_COLOR_LEGEND = 210;
 
 export function renderChart(props: IGeoChartRendererProps): React.ReactElement {
     return <GeoChartRenderer {...props} />;
@@ -149,16 +140,17 @@ export class GeoChartInner extends React.PureComponent<IGeoChartInnerProps, IGeo
     ): React.ReactElement {
         const { geoChartOptions: geoChartOptionsProp } = this.props;
         const geoChartOptions = this.syncWithLegendItemStates(geoChartOptionsProp);
-        const position = this.getLegendPosition(height, geoChartOptions);
-        const classes = this.getContainerClassName(height, geoChartOptions);
+        const position = this.getLegendPosition();
+        const classes = this.getContainerClassName(position);
         const isLegendRenderedFirst: boolean =
             position === TOP || (position === LEFT && !this.state.showFluidLegend);
+        const legendComponent = this.renderLegend(height, position, geoChartOptions);
 
         return (
             <div className={classes} ref={measureRef}>
-                {isLegendRenderedFirst && this.renderLegend(position, geoChartOptions)}
+                {isLegendRenderedFirst && legendComponent}
                 {this.renderChart(geoChartOptions)}
-                {!isLegendRenderedFirst && this.renderLegend(position, geoChartOptions)}
+                {!isLegendRenderedFirst && legendComponent}
             </div>
         );
     }
@@ -180,12 +172,10 @@ export class GeoChartInner extends React.PureComponent<IGeoChartInnerProps, IGeo
         };
     }
 
-    private getContainerClassName(height: number, geoChartOptions: IGeoChartInnerOptions): string {
+    private getContainerClassName(position: PositionType): string {
         const {
             config: { legend: { responsive = false } = {} },
         } = this.props;
-
-        const position = this.getLegendPosition(height, geoChartOptions);
 
         const flexDirection = this.getFlexDirection(position);
         return cx("viz-line-family-chart-wrap", "gd-geo-component", "s-gd-geo-component", {
@@ -222,37 +212,20 @@ export class GeoChartInner extends React.PureComponent<IGeoChartInnerProps, IGeo
         this.setState({ enabledLegendItems });
     };
 
-    private getLegendPosition(height: number, geoChartOptions: IGeoChartInnerOptions): PositionType {
+    private getLegendPosition(): PositionType {
         const {
             config: { legend: { position = TOP } = {} },
         } = this.props;
-
-        const validatedPosition = position && SUPPORTED_POSITIONS.includes(position) ? position : TOP;
-
-        // if height of color + size is bigger than container
-        // then show legend at bottom instead of left or right
-        if (height !== undefined && (validatedPosition === LEFT || validatedPosition === RIGHT)) {
-            const { geoData = {}, categoryItems = [] } = geoChartOptions || {};
-            const { hasColorLegend, hasSizeLegend } = getAvailableLegends(categoryItems, geoData);
-
-            const heightOfColorAndSizeLegend = HEIGHT_OF_COLOR_LEGEND + HEIGHT_OF_SIZE_LEGEND;
-            const isLegendOverHigh: boolean = height < heightOfColorAndSizeLegend;
-
-            if (hasColorLegend && hasSizeLegend && isLegendOverHigh) {
-                return BOTTOM;
-            }
-        }
-
-        return validatedPosition;
+        return SUPPORTED_POSITIONS.includes(position) ? position : TOP;
     }
 
     private getLegendProps(
+        height: number,
         position: PositionType,
         geoChartOptions: IGeoChartInnerOptions,
     ): IGeoChartLegendRendererProps {
         const {
             config: { legend: { responsive = false } = {} },
-            height,
             locale,
         } = this.props;
         const { enabledLegendItems, showFluidLegend } = this.state;
@@ -346,6 +319,7 @@ export class GeoChartInner extends React.PureComponent<IGeoChartInnerProps, IGeo
     };
 
     private renderLegend = (
+        height: number,
         position: PositionType,
         geoChartOptions: IGeoChartInnerOptions,
     ): React.ReactElement => {
@@ -358,7 +332,11 @@ export class GeoChartInner extends React.PureComponent<IGeoChartInnerProps, IGeo
             return null;
         }
 
-        const legendProps: IGeoChartLegendRendererProps = this.getLegendProps(position, geoChartOptions);
+        const legendProps: IGeoChartLegendRendererProps = this.getLegendProps(
+            height,
+            position,
+            geoChartOptions,
+        );
         return legendRenderer(legendProps);
     };
 

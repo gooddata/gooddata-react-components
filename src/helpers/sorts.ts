@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import get = require("lodash/get");
 import { AFM } from "@gooddata/typings";
 
@@ -98,6 +98,17 @@ export function getFirstMeasureSort(afm: AFM.IAfm): AFM.SortItem[] {
     const measure: AFM.IMeasure = get(afm, "measures.0");
     if (measure) {
         return getMeasureSortItems(measure.localIdentifier, DESC);
+    }
+
+    return [];
+}
+
+export function getDefaultAttributeGeoPushpinSort(afm: AFM.IAfm): AFM.SortItem[] {
+    const { attributes } = afm;
+
+    // sort by second attribute (1st: location, 2nd: segmentBy, 3rd: tooltipText)
+    if (attributes.length > 1) {
+        return getAttributeSortItems(attributes[1].localIdentifier, ASC);
     }
 
     return [];

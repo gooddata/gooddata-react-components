@@ -7,7 +7,9 @@ import { IGeoData } from "../../../../interfaces/GeoChart";
 
 import PushpinCategoryLegend from "../legends/PushpinCategoryLegend";
 import PushpinSizeLegend from "../legends/PushpinSizeLegend";
-import { TOP } from "../../../visualizations/chart/legend/PositionTypes";
+import Paging from "../../../visualizations/chart/legend/Paging";
+import { TOP, LEFT } from "../../../visualizations/chart/legend/PositionTypes";
+import { PositionType } from "../../../visualizations/typings/legend";
 import { getGeoData } from "../../../../helpers/geoChart/data";
 import {
     LOCATION_LNGLATS,
@@ -22,18 +24,24 @@ import { DEFAULT_COLORS } from "../../../visualizations/utils/color";
 interface ILegendFlags {
     hasSizeLegend?: boolean;
     hasColorLegend?: boolean;
+    height?: number;
+    position?: PositionType;
 }
 
-function createComponent(customProps: IGeoChartLegendRendererProps) {
+function createComponent(customProps: IGeoChartLegendRendererProps, customStyles: React.CSSProperties = {}) {
     const legendProps = {
         ...customProps,
     };
     const Wrapped = withIntl(GeoChartLegendRenderer);
-    return mount(<Wrapped {...legendProps} />);
+    return mount(
+        <div {...customStyles}>
+            <Wrapped {...legendProps} />
+        </div>,
+    );
 }
 
 function getLegendProps(legendFlags: ILegendFlags): IGeoChartLegendRendererProps {
-    const { hasSizeLegend = false, hasColorLegend = false } = legendFlags;
+    const { hasSizeLegend = false, hasColorLegend = false, height, position } = legendFlags;
     const geoData: IGeoData = {
         size: hasSizeLegend
             ? {
@@ -60,6 +68,8 @@ function getLegendProps(legendFlags: ILegendFlags): IGeoChartLegendRendererProps
     return {
         geoData,
         colorLegendValue: DEFAULT_COLORS[0],
+        height,
+        position,
     };
 }
 
@@ -90,6 +100,13 @@ describe("GeoChartLegendRenderer", () => {
         expect(await wrapper.find(".s-geo-legend")).toHaveLength(1);
         expect(await wrapper.find(".color-legend")).toHaveLength(1);
         expect(await wrapper.find(".s-pushpin-size-legend")).toHaveLength(1);
+    });
+
+    it("should render Paging for Size and Color legend", async () => {
+        const wrapper = createComponent(
+            getLegendProps({ hasColorLegend: true, hasSizeLegend: true, height: 300, position: LEFT }),
+        );
+        expect(await wrapper.find(Paging)).toHaveLength(1);
     });
 
     it("should render Size and Category legend ", () => {

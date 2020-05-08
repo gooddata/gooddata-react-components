@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import get = require("lodash/get");
 import some = require("lodash/some");
 import every = require("lodash/every");
@@ -174,22 +174,29 @@ export function isShowInPercentAllowed(buckets: IBucket[], filters: IFilters, bu
     );
 }
 
-export function isComparisonOverTimeAllowed(buckets: IBucket[], filters: IFilters) {
-    const rules = [hasNoStacks, hasNoWeekGranularity];
+export function isComparisonOverTimeAllowed(
+    buckets: IBucket[],
+    filters: IFilters,
+    weekFiltersEnabled: boolean,
+) {
+    const rules = weekFiltersEnabled ? [hasNoStacks] : [hasNoStacks, hasNoWeekGranularity];
 
     return allRulesMet(rules, buckets, filters) && hasGlobalDateFilter(filters);
 }
 
-export function overTimeComparisonRecommendationEnabled(referencePoint: IReferencePoint) {
-    const rules = [
+export function overTimeComparisonRecommendationEnabled(
+    referencePoint: IReferencePoint,
+    weekFiltersEnabled: boolean,
+) {
+    const baseRules = [
         noDerivedMeasurePresent,
         hasOneMeasure,
         hasFirstDate,
         hasNoStacks,
         hasOneCategory,
-        hasNoWeekGranularity,
         hasNoMeasureDateFilter,
     ];
+    const rules = weekFiltersEnabled ? baseRules : [...baseRules, hasNoWeekGranularity];
 
     return (
         allRulesMet(rules, get(referencePoint, BUCKETS, [])) &&
