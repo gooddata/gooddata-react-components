@@ -118,17 +118,6 @@ export const geoPushpinMDO: IVisualization = {
                         },
                     ],
                 },
-                {
-                    localIdentifier: "tooltipText",
-                    items: [
-                        {
-                            visualizationAttribute: {
-                                localIdentifier: "tooltip",
-                                displayForm: { uri: "/gdc/md/myproject/obj/853" },
-                            },
-                        },
-                    ],
-                },
             ],
         },
         meta: {

@@ -20,6 +20,8 @@ import { mergeFiltersToAfm } from "./afmHelper";
 import { findBucketByLocalIdentifier } from "./mdObjBucketHelper";
 import { IAxisConfig } from "../interfaces/Config";
 import { IGeoConfig, IGeoPushpinChartProps } from "../interfaces/GeoChart";
+import { attribute } from "../helpers/model/attributes";
+import { isTooltipTextValueString } from "./geoChart/common";
 
 function getTotals(
     mdObject: VisualizationObject.IVisualizationObject,
@@ -84,7 +86,6 @@ export const mdObjectToGeoPushpinBucketProps = (
     const locationBucket = findBucketByLocalIdentifier(contentBuckets, LOCATION);
     const segmentByBucket = findBucketByLocalIdentifier(contentBuckets, SEGMENT);
     const sizeBucket = findBucketByLocalIdentifier(contentBuckets, SIZE);
-    const tooltipTextBucket = findBucketByLocalIdentifier(contentBuckets, TOOLTIP_TEXT);
 
     const color: VisualizationInput.AttributeOrMeasure = colorBucket && colorBucket.items[0];
     const location: VisualizationInput.IAttribute =
@@ -92,11 +93,7 @@ export const mdObjectToGeoPushpinBucketProps = (
     const segmentBy: VisualizationInput.IAttribute =
         segmentByBucket && (segmentByBucket.items[0] as VisualizationObject.IVisualizationAttribute);
     const size: VisualizationInput.AttributeOrMeasure = sizeBucket && sizeBucket.items[0];
-    const tooltipText: VisualizationInput.IAttribute =
-        tooltipTextBucket && (tooltipTextBucket.items[0] as VisualizationObject.IVisualizationAttribute);
 
-    // we'll use the default internal sorting value which
-    // allow us to show the smaller pushpins on top of bigger pushpins
     const sortBy: VisualizationInput.ISort[] = [];
 
     const afmWithoutMergedFilters = DataLayer.toAfmResultSpec(content).afm;
@@ -109,10 +106,12 @@ export const mdObjectToGeoPushpinBucketProps = (
         afmFilter => !AFM.isExpressionFilter(afmFilter),
     ) as VisualizationObject.VisualizationObjectExtendedFilter[];
 
-    const configWithTooltipText: IGeoConfig = {
-        ...config,
-        tooltipText,
-    };
+    const { tooltipText: tooltipTextDisplayForm } = config;
+    const configWithTooltipText: IGeoConfig = { ...config };
+    if (tooltipTextDisplayForm && isTooltipTextValueString(tooltipTextDisplayForm)) {
+        // tooltipText uri was built from properties.control
+        configWithTooltipText.tooltipText = attribute(tooltipTextDisplayForm).localIdentifier(TOOLTIP_TEXT);
+    }
 
     return {
         color,

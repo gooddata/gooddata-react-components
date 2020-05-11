@@ -394,6 +394,24 @@ storiesOf("URI components", module)
             </div>,
         ),
     )
+    /* This test case as it's unstable now. We'll bring it back once SD-948 is resolved. 
+    .add("GeoPushpinChart example", () =>
+         screenshotWrap(
+             <div style={{ width: 800, height: 400 }}>
+                 <Visualization
+                     projectId="storybook"
+                     identifier="pushpin-chart-location-size-color-segment-tooltip"
+                     config={{
+                         mapboxToken: process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN,
+                         tooltipText: attribute("/gdc/md/storybook/obj/24.df").localIdentifier("tooltipText"),
+                     }}
+                     onError={onErrorHandler}
+                     LoadingComponent={null}
+                     ErrorComponent={null}
+                 />
+             </div>,
+         ),
+     ) */
     .add("headline", () =>
         screenshotWrap(
             <div style={{ width: 800, height: 400 }}>

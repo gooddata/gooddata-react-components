@@ -81,9 +81,12 @@ const configuration = {
             }),
             {},
         ),
+        /* This test case as it's unstable now. We'll bring it back once SD-948 is resolved. 
+        .add("GeoPushpinChart example", () =>
         "URI components": {
             "GeoPushpinChart example": DEFAULT_SCENARIO_CONFIG,
         },
+        */
     },
 };
 

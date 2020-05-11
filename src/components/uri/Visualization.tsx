@@ -388,9 +388,13 @@ export class VisualizationWrapped extends React.Component<
                 );
             }
             case VisualizationTypes.PUSHPIN:
+                const processedVisualizationObject = {
+                    ...mdObject,
+                    content: fillMissingTitles(mdObject.content, locale),
+                };
                 const geoBucketProps = mdObjectToGeoPushpinBucketProps(
                     isGeoConfig(config) && config,
-                    mdObject,
+                    processedVisualizationObject,
                     filtersFromProps,
                 );
                 return (
