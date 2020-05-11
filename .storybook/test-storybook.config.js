@@ -131,6 +131,21 @@ const configuration = {
             },
             'auto resize columns works with small pageSize': {
                 readySelector: '.screenshot-ready-wrapper-done'
+            },
+            'auto resize columns and growToFit viewport - simple table': {
+                readySelector: '.screenshot-ready-wrapper-done'
+            },
+            'auto resize columns growToFit viewport not applied when viewport is small after auto resize - simple table': {
+                readySelector: '.screenshot-ready-wrapper-done'
+            },
+            'columns grow to fit viewport - with grand total and subtotal': {
+                readySelector: '.screenshot-ready-wrapper-done'
+            },
+            'columns grow to fit viewport not applied when viewport is small - simple table': {
+                readySelector: '.screenshot-ready-wrapper-done'
+            },
+            'columns grow to fit viewport - simple table': {
+                readySelector: '.screenshot-ready-wrapper-done'
             }
         },
         'Internal/Drilldown': {

@@ -168,3 +168,9 @@ export const checkDrill = async (t, output, selector = ".s-output") => {
         await t.expect(outputElement.textContent).eql(output);
     }
 };
+
+export async function sleep(delay) {
+    return new Promise(resolve => {
+        setTimeout(resolve, delay);
+    });
+}

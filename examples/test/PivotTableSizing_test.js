@@ -1,7 +1,7 @@
 // (C) 2007-2020 GoodData Corporation
-import { Selector } from "testcafe";
+import { Selector, ClientFunction } from "testcafe";
 import { config } from "./utils/config";
-import { checkCellValue, loginUserAndNavigate } from "./utils/helpers";
+import { checkCellValue, loginUserAndNavigate, waitForPivotTableStopLoading, sleep } from "./utils/helpers";
 
 fixture("Pivot Table Sizing").beforeEach(loginUserAndNavigate(`${config.url}/hidden/pivot-table-sizing`));
 
@@ -65,4 +65,105 @@ test("should resize newly displayed columns after the whole table is resized", a
     const newlyDisplayedColumnWidth = await Selector(table).find(newlyDisplayedAttributeCell).clientWidth;
     const originalColumnWidth = await Selector(table).find(originalAttributeCell).clientWidth;
     await t.expect(newlyDisplayedColumnWidth).eql(originalColumnWidth);
+});
+
+fixture("Pivot Table Grow to fit").beforeEach(
+    loginUserAndNavigate(`${config.url}/hidden/pivot-table-sizing`),
+);
+
+test("should render table auto-resized and fitted to container", async t => {
+    const tableSelector = Selector(".s-pivot-table-columns-grow-to-fit");
+    const headersContainer = ".ag-header-container";
+    const headersViewport = ".ag-header-viewport";
+    const toleranceWithScrollBar = 20;
+
+    await waitForPivotTableStopLoading(t, tableSelector);
+
+    const rowHeadersWidth = await tableSelector.find(headersContainer).clientWidth;
+    const headersViewportWidth = await tableSelector.find(headersViewport).clientWidth;
+
+    await t.expect(headersViewportWidth - rowHeadersWidth).gte(0);
+    await t.expect(headersViewportWidth - rowHeadersWidth).lte(toleranceWithScrollBar);
+});
+
+test("should fit to container after resize (size increased)", async t => {
+    const AGGRID_ON_RESIZE_TIMEOUT = 500;
+    const tableSelectorStr = ".s-pivot-table-columns-grow-to-fit";
+    const tableSelector = Selector(tableSelectorStr);
+    const headersContainer = ".ag-header-container";
+    const headersViewport = ".ag-header-viewport";
+    const toleranceWithScrollBar = 20;
+
+    await waitForPivotTableStopLoading(t, tableSelector);
+    await resizeTable(t, tableSelectorStr, "1200px");
+
+    await sleep(AGGRID_ON_RESIZE_TIMEOUT);
+
+    const rowHeadersWidth = await tableSelector.find(headersContainer).clientWidth;
+    const headersViewportWidth = await tableSelector.find(headersViewport).clientWidth;
+
+    await t.expect(headersViewportWidth - rowHeadersWidth).gte(0);
+    await t.expect(headersViewportWidth - rowHeadersWidth).lte(toleranceWithScrollBar);
+});
+
+test("should fit to container after resize (size decreased)", async t => {
+    const AGGRID_ON_RESIZE_TIMEOUT = 500;
+    const tableSelectorStr = ".s-pivot-table-columns-grow-to-fit";
+    const tableSelector = Selector(tableSelectorStr);
+    const headersContainer = ".ag-header-container";
+    const headersViewport = ".ag-header-viewport";
+    const toleranceWithScrollBar = 20;
+
+    await waitForPivotTableStopLoading(t, tableSelector);
+    await resizeTable(t, tableSelectorStr, "650px");
+
+    await sleep(AGGRID_ON_RESIZE_TIMEOUT);
+
+    const rowHeadersWidth = await tableSelector.find(headersContainer).clientWidth;
+    const headersViewportWidth = await tableSelector.find(headersViewport).clientWidth;
+
+    await t.expect(headersViewportWidth - rowHeadersWidth).gte(0);
+    await t.expect(headersViewportWidth - rowHeadersWidth).lte(toleranceWithScrollBar);
+});
+
+async function calculateRowWidth(tableSelector, rowIndex, cellCount) {
+    let total = 0;
+    const scrollContainer = tableSelector.find(".ag-center-cols-viewport");
+
+    const scrollFn = ClientFunction(
+        scrollValue => {
+            scrollContainer().scrollLeft = scrollValue;
+        },
+        { dependencies: { scrollContainer } },
+    );
+
+    await scrollFn(500);
+
+    for (let i = 0; i < cellCount; i += 1) {
+        const cellSelector = `.ag-center-cols-viewport .s-cell-${rowIndex}-${i}`;
+        // eslint-disable-next-line no-await-in-loop
+        const cellWidth = await tableSelector.find(cellSelector).clientWidth;
+        total += cellWidth;
+    }
+
+    return total;
+}
+
+test("should not call fit to grow when container after resize is smaller than cols", async t => {
+    const AGGRID_ON_RESIZE_TIMEOUT = 500;
+    const toleranceWithScrollBar = 20;
+    const tableSelectorStr = ".s-pivot-table-columns-grow-to-fit";
+    const tableSelector = Selector(tableSelectorStr);
+
+    const tableNotGrowToFitSelectorStr = ".s-pivot-table-sizing";
+    const tableNotGrowToFitSelector = Selector(tableNotGrowToFitSelectorStr);
+
+    await waitForPivotTableStopLoading(t, tableSelector);
+    await resizeTable(t, tableSelectorStr, "300px");
+
+    await sleep(AGGRID_ON_RESIZE_TIMEOUT);
+
+    const rowNotGrowToFitWidth = await calculateRowWidth(tableNotGrowToFitSelector, 0, 7);
+    const rowWidth = await calculateRowWidth(tableSelector, 0, 7);
+    await t.expect(rowNotGrowToFitWidth - rowWidth).lte(toleranceWithScrollBar);
 });
