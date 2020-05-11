@@ -49,7 +49,7 @@ export default class StaticLegend extends React.PureComponent<IStaticLegendProps
             <Paging
                 page={page}
                 pagesCount={pagesCount}
-                showNextPage={this.showPrevPage}
+                showNextPage={this.showNextPage}
                 showPrevPage={this.showPrevPage}
             />
         );

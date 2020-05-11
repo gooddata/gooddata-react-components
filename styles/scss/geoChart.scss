@@ -82,6 +82,11 @@
         &.position-bottom {
             align-items: center;
         }
+
+        &.position-left,
+        &.position-right {
+            max-width: 210px;
+        }
     }
 
     .viz-static-legend-wrap {
