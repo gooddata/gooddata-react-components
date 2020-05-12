@@ -56,6 +56,8 @@ import { _experimentalDataSourceFactory } from "./experimentalDataSource";
 import IVisualizationObjectContent = VisualizationObject.IVisualizationObjectContent;
 import { getHighchartsAxisNameConfiguration } from "../../internal/utils/propertiesHelper";
 import { DEFAULT_LOCALE } from "../../constants/localization";
+import { IVisualizationProperties } from "../../internal/interfaces/Visualization";
+import { ColumnWidthItem, IPivotTableConfig } from "../../interfaces/PivotTable";
 export { Requireable };
 
 const { ExecuteAfmAdapter, toAfmResultSpec, createSubject } = DataLayer;
@@ -73,7 +75,7 @@ export interface IVisualizationProps extends IEvents {
     uri?: string;
     identifier?: string;
     locale?: Localization.ILocale;
-    config?: IChartConfig | IGeoConfig;
+    config?: IChartConfig | IGeoConfig | IPivotTableConfig;
     filters?: AFM.ExtendedFilter[];
     drillableItems?: Array<IDrillableItem | IHeaderPredicate>;
     uriResolver?: (sdk: SDK, projectId: string, uri?: string, identifier?: string) => Promise<string>;
@@ -170,6 +172,16 @@ function fetchLocalizationFromUser(sdk: SDK, projectId: string): Promise<Localiz
         });
 }
 
+function getWidthDefs(mdObjectContentProperties: IVisualizationProperties): ColumnWidthItem[] | undefined {
+    return mdObjectContentProperties && mdObjectContentProperties.widthDefs
+        ? mdObjectContentProperties.widthDefs
+        : undefined;
+}
+
+function getProperties(mdObject: VisualizationObject.IVisualizationObject): IVisualizationProperties {
+    return mdObject.content && mdObject.content.properties && JSON.parse(mdObject.content.properties);
+}
+
 export class VisualizationWrapped extends React.Component<
     IVisualizationProps & WrappedComponentProps,
     IVisualizationState
@@ -227,7 +239,6 @@ export class VisualizationWrapped extends React.Component<
 
         this.sdk = props.sdk ? props.sdk.clone() : createSdk();
         setTelemetryHeaders(this.sdk, "Visualization", props);
-
         this.isUnmounted = false;
         this.visualizationUri = props.uri;
 
@@ -375,13 +386,11 @@ export class VisualizationWrapped extends React.Component<
                     filtersFromProps,
                 );
 
+                const mdObjectContentProperties = getProperties(mdObject);
+                const widthDefs = getWidthDefs(mdObjectContentProperties);
                 const pivotTableColumnProps = {
-                    config: {
-                        ...config,
-                        ...getTableConfigFromFeatureFlags(this.state.featureFlags),
-                    },
+                    config: getTableConfigFromFeatureFlags(config, this.state.featureFlags, false, widthDefs), // growToFit is always turned off by environment, until user doesn't provide his own config with growToFit turned on
                 };
-
                 // we do not need to pass totals={totals} because BucketPivotTable deals with changes in totals itself
                 return (
                     <PivotTableComponent {...commonProps} {...pivotBucketProps} {...pivotTableColumnProps} />
@@ -419,6 +428,7 @@ export class VisualizationWrapped extends React.Component<
                 );
         }
     }
+
     public async prepareDataSources(
         projectId: string,
         identifier: string,

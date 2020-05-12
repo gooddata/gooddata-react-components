@@ -2551,7 +2551,17 @@ const getBaseProjectSchema = (title, identifier) => {
                         localIdentifier: '3',
                         displayForm: '3.df'
                     }]
-                }]
+                }],
+                properties: JSON.stringify({
+                    widthDefs: [
+                        {
+                            attributeColumnWidthItem: {
+                                width: 100,
+                                attributeIdentifier: "3",
+                            },
+                        },
+                    ],
+                }),
             },
             {
                 identifier: '1002',
@@ -2960,6 +2970,12 @@ module.exports = [
         ...getBaseProjectSchema('Storybook with table grow to fit', 'growtofitstorybook'),
         featureFlags: {
             enableTableColumnsGrowToFit: true
+        }
+    },
+    {
+        ...getBaseProjectSchema('Storybook with table columns manual resizing', 'manualresizingstorybook'),
+        featureFlags: {
+            enableTableColumnsManualResizing: true,
         }
     },
 ];
