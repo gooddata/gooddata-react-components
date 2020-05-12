@@ -303,6 +303,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     public renderVisualization() {
         const { desiredHeight } = this.state;
         const gridOptions = this.createGridOptions();
+        const CustomLoadingComponent = this.props.LoadingComponent;
 
         // columnDefs are loaded with first page request. Show overlay loading before first page is available.
         const tableLoadingOverlay = this.isTableHidden() ? (
@@ -316,7 +317,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
                     background: "white",
                 }}
             >
-                <LoadingComponent />
+                {CustomLoadingComponent ? <CustomLoadingComponent /> : <LoadingComponent />}
             </div>
         ) : null;
 
