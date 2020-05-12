@@ -37,7 +37,11 @@ import {
     headlineWithTwoMeasures,
     headlineWithAMMeasure,
 } from "../data/headlineExecutionFixtures";
-import { createHighChartResolver, ScreenshotReadyWrapper } from "../utils/ScreenshotReadyWrapper";
+import {
+    createHighChartResolver,
+    ScreenshotReadyWrapper,
+    visualizationNotLoadingResolver,
+} from "../utils/ScreenshotReadyWrapper";
 
 const onFiredDrillEvent = ({
     executionContext,
@@ -526,35 +530,39 @@ storiesOf("Internal/Drilldown", module)
     )
     .add("Pivot table with drillable predicates + legacy drillable items", () =>
         screenshotWrap(
-            <div style={{ width: 600, height: 300 }}>
-                <PivotTable
-                    projectId="storybook"
-                    onFiredDrillEvent={action("onFiredDrillEvent")}
-                    measures={[MEASURE_1, MEASURE_2]}
-                    rows={[ATTRIBUTE_1]}
-                    drillableItems={[
-                        { uri: "/gdc/md/storybook/obj/2" },
-                        headerPredicateFactory.uriMatch("/gdc/md/storybook/obj/1"),
-                    ]}
-                    LoadingComponent={null}
-                    ErrorComponent={null}
-                />
-            </div>,
+            <ScreenshotReadyWrapper resolver={visualizationNotLoadingResolver()}>
+                <div style={{ width: 600, height: 300 }}>
+                    <PivotTable
+                        projectId="storybook"
+                        onFiredDrillEvent={action("onFiredDrillEvent")}
+                        measures={[MEASURE_1, MEASURE_2]}
+                        rows={[ATTRIBUTE_1]}
+                        drillableItems={[
+                            { uri: "/gdc/md/storybook/obj/2" },
+                            headerPredicateFactory.uriMatch("/gdc/md/storybook/obj/1"),
+                        ]}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                    />
+                </div>
+            </ScreenshotReadyWrapper>,
         ),
     )
     .add("Pivot table with AM drillable predicates", () =>
         screenshotWrap(
-            <div style={{ width: 600, height: 300 }}>
-                <PivotTable
-                    projectId="storybook"
-                    onFiredDrillEvent={action("onFiredDrillEvent")}
-                    measures={[MEASURE_AM_1_2, MEASURE_1, MEASURE_2]}
-                    rows={[ATTRIBUTE_1]}
-                    drillableItems={[headerPredicateFactory.composedFromUri("/gdc/md/storybook/obj/1")]}
-                    LoadingComponent={null}
-                    ErrorComponent={null}
-                />
-            </div>,
+            <ScreenshotReadyWrapper resolver={visualizationNotLoadingResolver()}>
+                <div style={{ width: 600, height: 300 }}>
+                    <PivotTable
+                        projectId="storybook"
+                        onFiredDrillEvent={action("onFiredDrillEvent")}
+                        measures={[MEASURE_AM_1_2, MEASURE_1, MEASURE_2]}
+                        rows={[ATTRIBUTE_1]}
+                        drillableItems={[headerPredicateFactory.composedFromUri("/gdc/md/storybook/obj/1")]}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                    />
+                </div>
+            </ScreenshotReadyWrapper>,
         ),
     )
     .add("Pivot table with subtotal and drillable measure", () => {
@@ -582,21 +590,23 @@ storiesOf("Internal/Drilldown", module)
         ];
 
         return screenshotWrap(
-            <div style={{ width: 600, height: 300 }}>
-                <PivotTable
-                    projectId="storybook"
-                    measures={measures}
-                    rows={attributes}
-                    totals={totals}
-                    drillableItems={[
-                        headerPredicateFactory.localIdentifierMatch(
-                            "26cc9aa4d9af4fb48582d42966de5893", // mocked response localidentifier
-                        ),
-                    ]}
-                    LoadingComponent={null}
-                    ErrorComponent={null}
-                />
-            </div>,
+            <ScreenshotReadyWrapper resolver={visualizationNotLoadingResolver()}>
+                <div style={{ width: 600, height: 300 }}>
+                    <PivotTable
+                        projectId="storybook"
+                        measures={measures}
+                        rows={attributes}
+                        totals={totals}
+                        drillableItems={[
+                            headerPredicateFactory.localIdentifierMatch(
+                                "26cc9aa4d9af4fb48582d42966de5893", // mocked response localidentifier
+                            ),
+                        ]}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                    />
+                </div>
+            </ScreenshotReadyWrapper>,
         );
     })
     .add("Combo chart with onFiredDrillEvent", () => {
@@ -1105,20 +1115,22 @@ storiesOf("Internal/Drilldown", module)
     )
     .add("Pivot table drillable with new onDrill callback", () =>
         screenshotWrap(
-            <div style={{ width: 600, height: 300 }}>
-                <PivotTable
-                    projectId="storybook"
-                    onDrill={action("onDrill")}
-                    measures={[MEASURE_1, MEASURE_2]}
-                    rows={[ATTRIBUTE_1]}
-                    drillableItems={[
-                        { uri: "/gdc/md/storybook/obj/2" },
-                        headerPredicateFactory.uriMatch("/gdc/md/storybook/obj/1"),
-                    ]}
-                    LoadingComponent={null}
-                    ErrorComponent={null}
-                />
-            </div>,
+            <ScreenshotReadyWrapper resolver={visualizationNotLoadingResolver()}>
+                <div style={{ width: 600, height: 300 }}>
+                    <PivotTable
+                        projectId="storybook"
+                        onDrill={action("onDrill")}
+                        measures={[MEASURE_1, MEASURE_2]}
+                        rows={[ATTRIBUTE_1]}
+                        drillableItems={[
+                            { uri: "/gdc/md/storybook/obj/2" },
+                            headerPredicateFactory.uriMatch("/gdc/md/storybook/obj/1"),
+                        ]}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                    />
+                </div>
+            </ScreenshotReadyWrapper>,
         ),
     )
     .add("URI Visualization drillable with new onDrill callback", () => {

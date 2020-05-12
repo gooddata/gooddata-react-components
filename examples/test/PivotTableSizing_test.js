@@ -1,7 +1,8 @@
 // (C) 2007-2020 GoodData Corporation
 import { Selector, ClientFunction } from "testcafe";
 import { config } from "./utils/config";
-import { checkCellValue, loginUserAndNavigate, waitForPivotTableStopLoading, sleep } from "./utils/helpers";
+import { loginUserAndNavigate, sleep } from "./utils/helpers";
+import { waitForPivotTableStopLoading, checkCellValue } from "./utils/pivotTableHelpers";
 
 fixture("Pivot Table Sizing").beforeEach(loginUserAndNavigate(`${config.url}/hidden/pivot-table-sizing`));
 

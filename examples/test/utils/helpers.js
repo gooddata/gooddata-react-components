@@ -2,40 +2,6 @@
 import { t as testController, Selector, Role } from "testcafe";
 import { config } from "./config";
 
-async function getCell(t, selector, cellSelector) {
-    const chart = Selector(selector);
-    await t.expect(chart.exists).eql(true, `${selector} not found`);
-    if (!cellSelector) {
-        return null;
-    }
-    const cell = await chart.find(`.ag-body-viewport ${cellSelector}`);
-    await t.expect(cell.exists).eql(true, `${cellSelector} not found in ${selector}`);
-    return cell;
-}
-
-export async function checkCellValue(t, selector, cellValue, cellSelector = ".ag-cell") {
-    const cell = await getCell(t, selector, cellSelector);
-    if (cellValue) {
-        await t
-            .expect(cell.textContent)
-            .eql(cellValue, `expected ${cellSelector} to contain text ${cellValue}`);
-    }
-}
-
-export async function checkCellHasClassName(t, selector, expectedClassName, cellSelector) {
-    const cell = await getCell(t, selector, cellSelector);
-    await t
-        .expect(cell.hasClass(expectedClassName))
-        .ok(`expected ${cellSelector} to has class ${expectedClassName}`);
-}
-
-export async function checkCellHasNotClassName(t, selector, expectedClassName, cellSelector) {
-    const cell = await getCell(t, selector, cellSelector);
-    await t
-        .expect(cell.hasClass(expectedClassName))
-        .notOk(`expected ${cellSelector} to has not class ${expectedClassName}`);
-}
-
 export const loginUsingGreyPages = (redirectUri = "/") => {
     return (tc = testController) =>
         tc
@@ -137,15 +103,6 @@ export const regularUser = Role(`${config.url}`, async (tc = testController) => 
 
 export const loginUserAndNavigate = (redirectUri = "/") => async (tc = testController) => {
     await tc.useRole(regularUser).navigateTo(redirectUri);
-};
-
-export const waitForPivotTableStopLoading = async (t, pivotSelector) => {
-    const loadingSelectorString = ".s-pivot-table .s-loading";
-    const loadingSelector = pivotSelector
-        ? pivotSelector.find(loadingSelectorString)
-        : Selector(loadingSelectorString);
-
-    await t.expect(loadingSelector.exists).notOk();
 };
 
 export const checkRenderChart = async (selector, t) => {

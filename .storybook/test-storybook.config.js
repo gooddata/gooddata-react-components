@@ -8,8 +8,9 @@ const configuration = {
             'readySelector': '.screenshot-target, .screenshot-wrapper .highcharts-container, ' +
                 '.screenshot-wrapper .s-headline-value, .screenshot-wrapper .viz-table-wrap, ' +
                 '.screenshot-wrapper .gdc-kpi, .screenshot-wrapper .gdc-kpi-error, ' +
-                '.screenshot-wrapper .s-error, .screenshot-wrapper .s-pivot-table .s-loading-done, ' +
-                '.screenshot-wrapper .s-gd-geo-chart-renderer .mapboxgl-canvas'
+                '.screenshot-wrapper .s-error, ' +
+                '.screenshot-wrapper .s-gd-geo-chart-renderer .mapboxgl-canvas, ' +
+                '.screenshot-ready-wrapper-done'
         },
         'Core components/AreaChart': {
             'data labels config': {
@@ -114,40 +115,6 @@ const configuration = {
                 readySelector: '.screenshot-ready-wrapper-done'
             }
         },
-        'Core components/Table': {
-            'with supplied height of container': {
-                readySelector: '.screenshot-ready-wrapper-done'
-            },
-            'with table totals and supplied height of container': {
-                readySelector: '.screenshot-ready-wrapper-done'
-            }
-        },
-        'Core components/PivotTable': {
-            'auto resize columns in the viewport - with grand total and subtotal': {
-                readySelector: '.screenshot-ready-wrapper-done'
-            },
-            'auto resize columns in the viewport - simple table': {
-                readySelector: '.screenshot-ready-wrapper-done'
-            },
-            'auto resize columns works with small pageSize': {
-                readySelector: '.screenshot-ready-wrapper-done'
-            },
-            'auto resize columns and growToFit viewport - simple table': {
-                readySelector: '.screenshot-ready-wrapper-done'
-            },
-            'auto resize columns growToFit viewport not applied when viewport is small after auto resize - simple table': {
-                readySelector: '.screenshot-ready-wrapper-done'
-            },
-            'columns grow to fit viewport - with grand total and subtotal': {
-                readySelector: '.screenshot-ready-wrapper-done'
-            },
-            'columns grow to fit viewport not applied when viewport is small - simple table': {
-                readySelector: '.screenshot-ready-wrapper-done'
-            },
-            'columns grow to fit viewport - simple table': {
-                readySelector: '.screenshot-ready-wrapper-done'
-            }
-        },
         'Internal/Drilldown': {
             'Combo chart with onFiredDrillEvent': {
                 readySelector: '.screenshot-ready-wrapper-done'
@@ -158,17 +125,6 @@ const configuration = {
                 readySelector: '.screenshot-ready-wrapper-done'
             }
         },
-        'URI components': {
-            'table with feature flag resizing': {
-                readySelector: '.screenshot-ready-wrapper-done'
-            },
-            'table with feature flag enableTableColumnsGrowToFit set to true': {
-                readySelector: '.screenshot-ready-wrapper-done'
-            },
-            'table with feature flag enableTableColumnsGrowToFit set to false': {
-                readySelector: '.screenshot-ready-wrapper-done'
-            }
-        }
     }
 };
 

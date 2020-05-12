@@ -18,6 +18,8 @@ import PivotTableSizingExample from "../components/PivotTableSizingExample";
 import PivotTableSizingExampleSRC from "!raw-loader!../components/PivotTableSizingExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import PivotTableColumnsGrowToFitExample from "../components/PivotTableColumnsGrowToFitExample";
 import PivotTableColumnsGrowToFitExampleSRC from "!raw-loader!../components/PivotTableColumnsGrowToFitExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
+import PivotTableManualResizingExample from "../components/PivotTableManualResizingExample";
+import PivotTableManualResizingExampleSRC from "!raw-loader!../components/PivotTableManualResizingExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 
 export const PivotTableDemo = () => (
     <div>
@@ -65,6 +67,12 @@ export const PivotTableDemo = () => (
         <ExampleWithSource
             for={() => <PivotTableColumnsGrowToFitExample />}
             source={PivotTableColumnsGrowToFitExampleSRC}
+        />
+
+        <h2 id="table-with-column-sizing">Example of Pivot Table with Manual Resizing</h2>
+        <ExampleWithSource
+            for={() => <PivotTableManualResizingExample />}
+            source={PivotTableManualResizingExampleSRC}
         />
     </div>
 );

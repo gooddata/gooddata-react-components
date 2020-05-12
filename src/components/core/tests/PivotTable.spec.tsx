@@ -1,7 +1,10 @@
 // (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { mount, ReactWrapper } from "enzyme";
-import { oneAttributeOneMeasureSortByMeasureExecutionObject } from "../../../execution/fixtures/ExecuteAfm.fixtures";
+import {
+    oneAttributeOneMeasureSortByMeasureExecutionObject,
+    oneAttributeOneMeasureExecutionObject,
+} from "../../../execution/fixtures/ExecuteAfm.fixtures";
 import { createIntlMock } from "../../visualizations/utils/intlUtils";
 
 import {
@@ -20,7 +23,6 @@ import {
     twoMeasuresOneDimensionDataSource,
     DummyComponent,
 } from "../../tests/mocks";
-import { getParsedFields } from "../pivotTable/agGridUtils";
 import { GroupingProviderFactory } from "../pivotTable/GroupingProvider";
 import * as stickyRowHandler from "../pivotTable/stickyRowHandler";
 import agGridApiWrapper from "../pivotTable/agGridApiWrapper";
@@ -30,6 +32,7 @@ import { IGridCellEvent } from "../pivotTable/agGridTypes";
 import { IDrillEventExtended } from "../../../interfaces/DrillEvents";
 import { Execution } from "@gooddata/typings";
 import noop = require("lodash/noop");
+import { ColumnEventSourceType } from "../../../interfaces/PivotTable";
 
 const intl = createIntlMock();
 
@@ -57,14 +60,28 @@ describe("PivotTable", () => {
 
     function getTableInstance(customProps: Partial<IPivotTableInnerProps> = {}) {
         const wrapper = renderComponent(customProps);
-        const table = wrapper.find(PivotTableInner);
-        return table.instance() as any;
+        return getTableInstanceFromWrapper(wrapper);
     }
 
     function getTableInstanceFromWrapper(wrapper: ReactWrapper) {
         const table = wrapper.find(PivotTableInner);
         return table.instance() as any;
     }
+
+    const columnWidths = [
+        {
+            measureColumnWidthItem: {
+                width: 350,
+                locators: [
+                    {
+                        measureLocatorItem: {
+                            measureIdentifier: "m1",
+                        },
+                    },
+                ],
+            },
+        },
+    ];
 
     it("should render PivotTableInner", () => {
         const wrapper = renderComponent();
@@ -84,6 +101,114 @@ describe("PivotTable", () => {
     it("should render passed LoadingComponent", () => {
         const wrapper = renderComponent({ LoadingComponent: DummyComponent });
         expect(wrapper.find(DummyComponent)).toHaveLength(1);
+    });
+
+    // this describe block needs to be first, otherwise random tests fail
+    describe("componentDidUpdate", () => {
+        it("should grow to fit when this prop is set", async done => {
+            expect.assertions(1);
+            const wrapper = renderComponent(
+                {
+                    resultSpec: oneAttributeOneMeasureExecutionObject.execution.resultSpec,
+                },
+                oneAttributeOneMeasureDataSource,
+            );
+            await waitFor(waitForDataLoaded(wrapper));
+
+            const table = getTableInstanceFromWrapper(wrapper);
+            const growToFit = jest.spyOn(table, "growToFit");
+            try {
+                growToFit.mockImplementation(() => {
+                    expect(growToFit).toHaveBeenCalledTimes(1);
+                    done();
+                });
+            } catch (e) {
+                done.fail(e);
+            }
+
+            wrapper.setProps({
+                config: {
+                    columnSizing: {
+                        growToFit: true,
+                    },
+                },
+            });
+            wrapper.update();
+        });
+
+        it("should grow to fit when columnWidths prop is set", async done => {
+            expect.assertions(1);
+            const wrapper = renderComponent(
+                {
+                    resultSpec: oneAttributeOneMeasureExecutionObject.execution.resultSpec,
+                    config: {
+                        columnSizing: {
+                            growToFit: true,
+                        },
+                    },
+                },
+                oneAttributeOneMeasureDataSource,
+            );
+            await waitFor(waitForDataLoaded(wrapper));
+
+            const table = getTableInstanceFromWrapper(wrapper);
+            const growToFit = jest.spyOn(table, "growToFit");
+            try {
+                growToFit.mockImplementation(() => {
+                    expect(growToFit).toHaveBeenCalledTimes(1);
+                    done();
+                });
+            } catch (e) {
+                done.fail(e);
+            }
+
+            wrapper.setProps({
+                config: {
+                    columnSizing: {
+                        columnWidths,
+                        growToFit: true,
+                    },
+                },
+            });
+            wrapper.update();
+        });
+
+        it("should set inner manuallyResizedColumns according columnWidths prop", async done => {
+            expect.assertions(1);
+            const wrapper = renderComponent(
+                {
+                    resultSpec: oneAttributeOneMeasureExecutionObject.execution.resultSpec,
+                },
+                oneAttributeOneMeasureDataSource,
+            );
+            await waitFor(waitForDataLoaded(wrapper));
+
+            const table = getTableInstanceFromWrapper(wrapper);
+            // didUpdate is async in PivotTable so expect needs to be async too
+            const resetColumnsWidthToDefault = jest.spyOn(table, "resetColumnsWidthToDefault");
+            try {
+                resetColumnsWidthToDefault.mockImplementation(() => {
+                    expect(table.manuallyResizedColumns).toEqual({
+                        m_0: {
+                            width: 350,
+                            source: ColumnEventSourceType.UI_DRAGGED,
+                        },
+                    });
+                    done();
+                });
+            } catch (e) {
+                done.fail(e);
+            }
+
+            wrapper.setProps({
+                config: {
+                    columnSizing: {
+                        columnWidths,
+                    },
+                },
+            });
+            wrapper.update();
+        });
     });
 
     describe("column sizing", () => {
@@ -185,7 +310,7 @@ describe("PivotTable", () => {
             expect(infiniteInitialRowCountRowCount).toBe(1);
         });
 
-        it("should return pageSize when execution not exist", async () => {
+        it("should return pageSize when execution not exist", () => {
             const wrapper = renderComponent();
 
             const table = getTableInstanceFromWrapper(wrapper);
@@ -503,6 +628,7 @@ describe("PivotTable", () => {
 
         afterEach(() => {
             jest.clearAllTimers();
+            jest.useRealTimers();
         });
 
         it("should start watching table rendered", () => {
@@ -602,17 +728,5 @@ describe("PivotTable", () => {
             const currentInnerComponent = wrapper.find(AgGridReact);
             expect(currentInnerComponent.key()).toEqual(agGridComponentKey);
         });
-    });
-});
-
-describe("getParsedFields", () => {
-    it("should return last parsed field from colId", () => {
-        expect(getParsedFields("a_2009")).toEqual([["a", "2009"]]);
-        expect(getParsedFields("a_2009_4-a_2071_12")).toEqual([["a", "2009", "4"], ["a", "2071", "12"]]);
-        expect(getParsedFields("a_2009_4-a_2071_12-m_3")).toEqual([
-            ["a", "2009", "4"],
-            ["a", "2071", "12"],
-            ["m", "3"],
-        ]);
     });
 });

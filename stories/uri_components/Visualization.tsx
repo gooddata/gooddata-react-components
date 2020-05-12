@@ -95,93 +95,105 @@ class DynamicVisualization extends React.Component<any, any> {
 storiesOf("URI components", module)
     .add("table example", () =>
         screenshotWrap(
-            <div style={{ width: 800, height: 400 }}>
-                <Visualization
-                    projectId="storybook"
-                    uri={"/gdc/md/storybook/obj/1001"}
-                    onError={onErrorHandler}
-                    LoadingComponent={null}
-                    ErrorComponent={null}
-                />
-            </div>,
+            <ScreenshotReadyWrapper resolver={visualizationNotLoadingResolver()}>
+                <div style={{ width: 800, height: 400 }}>
+                    <Visualization
+                        projectId="storybook"
+                        uri={"/gdc/md/storybook/obj/1001"}
+                        onError={onErrorHandler}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                    />
+                </div>
+            </ScreenshotReadyWrapper>,
         ),
     )
     .add("table example - experimental execution", () =>
         screenshotWrap(
-            <div style={{ width: 800, height: 400 }}>
-                <Visualization
-                    projectId="storybook"
-                    uri={"/gdc/md/storybook/obj/1001"}
-                    onError={onErrorHandler}
-                    LoadingComponent={null}
-                    ErrorComponent={null}
-                    experimentalVisExecution={true}
-                />
-            </div>,
+            <ScreenshotReadyWrapper resolver={visualizationNotLoadingResolver()}>
+                <div style={{ width: 800, height: 400 }}>
+                    <Visualization
+                        projectId="storybook"
+                        uri={"/gdc/md/storybook/obj/1001"}
+                        onError={onErrorHandler}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                        experimentalVisExecution={true}
+                    />
+                </div>
+            </ScreenshotReadyWrapper>,
         ),
     )
     .add("table example with identifier", () =>
         screenshotWrap(
-            <div style={{ width: 800, height: 400 }}>
-                <Visualization
-                    projectId="storybook"
-                    identifier="1001"
-                    onError={onErrorHandler}
-                    LoadingComponent={null}
-                    ErrorComponent={null}
-                />
-            </div>,
+            <ScreenshotReadyWrapper resolver={visualizationNotLoadingResolver()}>
+                <div style={{ width: 800, height: 400 }}>
+                    <Visualization
+                        projectId="storybook"
+                        identifier="1001"
+                        onError={onErrorHandler}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                    />
+                </div>
+            </ScreenshotReadyWrapper>,
         ),
     )
     .add("table with eventing", () =>
         screenshotWrap(
-            <div style={{ width: 800, height: 400 }}>
-                <Visualization
-                    projectId="storybook"
-                    uri={"/gdc/md/storybook/obj/1001"}
-                    drillableItems={[{ identifier: "1" }, { identifier: "3" }]}
-                    onFiredDrillEvent={action("drill-event fired")}
-                    onError={onErrorHandler}
-                    LoadingComponent={null}
-                    ErrorComponent={null}
-                />
-            </div>,
+            <ScreenshotReadyWrapper resolver={visualizationNotLoadingResolver()}>
+                <div style={{ width: 800, height: 400 }}>
+                    <Visualization
+                        projectId="storybook"
+                        uri={"/gdc/md/storybook/obj/1001"}
+                        drillableItems={[{ identifier: "1" }, { identifier: "3" }]}
+                        onFiredDrillEvent={action("drill-event fired")}
+                        onError={onErrorHandler}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                    />
+                </div>
+            </ScreenshotReadyWrapper>,
         ),
     )
     .add("table resizable", () =>
         screenshotWrap(
-            <div
-                style={{
-                    width: 800,
-                    height: 400,
-                    padding: 10,
-                    border: "solid 1px #000000",
-                    resize: "both",
-                    overflow: "auto",
-                }}
-            >
-                <Visualization
-                    projectId="storybook"
-                    identifier="1001"
-                    onError={onErrorHandler}
-                    LoadingComponent={null}
-                    ErrorComponent={null}
-                />
-            </div>,
+            <ScreenshotReadyWrapper resolver={visualizationNotLoadingResolver()}>
+                <div
+                    style={{
+                        width: 800,
+                        height: 400,
+                        padding: 10,
+                        border: "solid 1px #000000",
+                        resize: "both",
+                        overflow: "auto",
+                    }}
+                >
+                    <Visualization
+                        projectId="storybook"
+                        identifier="1001"
+                        onError={onErrorHandler}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                    />
+                </div>
+            </ScreenshotReadyWrapper>,
         ),
     )
     .add("table with German number format", () =>
         screenshotWrap(
-            <div style={{ width: 800, height: 400 }}>
-                <Visualization
-                    projectId="storybook"
-                    uri={"/gdc/md/storybook/obj/1001"}
-                    config={GERMAN_SEPARATORS}
-                    onError={onErrorHandler}
-                    LoadingComponent={null}
-                    ErrorComponent={null}
-                />
-            </div>,
+            <ScreenshotReadyWrapper resolver={visualizationNotLoadingResolver()}>
+                <div style={{ width: 800, height: 400 }}>
+                    <Visualization
+                        projectId="storybook"
+                        uri={"/gdc/md/storybook/obj/1001"}
+                        config={GERMAN_SEPARATORS}
+                        onError={onErrorHandler}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                    />
+                </div>
+            </ScreenshotReadyWrapper>,
         ),
     )
     .add("table with feature flag resizing", () =>
@@ -508,9 +520,11 @@ storiesOf("URI components", module)
     )
     .add("dynamic visualization test", () =>
         screenshotWrap(
-            <div style={{ width: 800, height: 400 }}>
-                <DynamicVisualization />
-            </div>,
+            <ScreenshotReadyWrapper resolver={visualizationNotLoadingResolver()}>
+                <div style={{ width: 800, height: 400 }}>
+                    <DynamicVisualization />
+                </div>
+            </ScreenshotReadyWrapper>,
         ),
     )
     .add("error", () => (
@@ -591,29 +605,31 @@ storiesOf("URI components", module)
     ))
     .add("Table with measure value filter in visualization object and one additional in filter prop", () =>
         screenshotWrap(
-            <div style={{ width: 800, height: 400 }}>
-                <Visualization
-                    projectId="storybook"
-                    identifier="measure-value-filters"
-                    onError={onErrorHandler}
-                    LoadingComponent={null}
-                    filters={[
-                        {
-                            measureValueFilter: {
-                                measure: {
-                                    localIdentifier: "m2",
-                                },
-                                condition: {
-                                    comparison: {
-                                        operator: "GREATER_THAN",
-                                        value: 500,
+            <ScreenshotReadyWrapper resolver={visualizationNotLoadingResolver()}>
+                <div style={{ width: 800, height: 400 }}>
+                    <Visualization
+                        projectId="storybook"
+                        identifier="measure-value-filters"
+                        onError={onErrorHandler}
+                        LoadingComponent={null}
+                        filters={[
+                            {
+                                measureValueFilter: {
+                                    measure: {
+                                        localIdentifier: "m2",
+                                    },
+                                    condition: {
+                                        comparison: {
+                                            operator: "GREATER_THAN",
+                                            value: 500,
+                                        },
                                     },
                                 },
                             },
-                        },
-                    ]}
-                />
-            </div>,
+                        ]}
+                    />
+                </div>
+            </ScreenshotReadyWrapper>,
         ),
     )
     .add("xirr", () =>
