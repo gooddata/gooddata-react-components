@@ -30,7 +30,9 @@ export class PivotTableColumnsGrowToFitExample extends Component {
                     rows={attributes}
                     columns={columns}
                     config={{
-                        growToFit: true,
+                        columnSizing: {
+                            growToFit: true,
+                        },
                     }}
                     pageSize={20}
                 />

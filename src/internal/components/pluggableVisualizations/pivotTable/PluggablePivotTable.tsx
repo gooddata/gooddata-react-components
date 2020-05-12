@@ -579,8 +579,8 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
             if (!this.featureFlags.enableTableColumnsGrowToFit) {
                 return config;
             }
-
-            return merge(config, { growToFit: true });
+            const columnSizing: IColumnSizing = merge(config.columnSizing, { growToFit: true });
+            return merge(config, { columnSizing });
         }
 
         return config;
