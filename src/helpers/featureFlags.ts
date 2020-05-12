@@ -1,10 +1,10 @@
 // (C) 2007-2020 GoodData Corporation
+import isNil = require("lodash/isNil");
+import isEmpty = require("lodash/isEmpty");
 import { IFeatureFlags, SDK } from "@gooddata/gooddata-js";
 import { getCachedOrLoad } from "./sdkCache";
 import { IChartConfig } from "../interfaces/Config";
-import isNil = require("lodash/isNil");
-import merge = require("lodash/merge");
-import { IColumnSizing, IPivotTableConfig } from "../interfaces/PivotTable";
+import { IColumnSizing, IPivotTableConfig, ColumnWidthItem } from "../interfaces/PivotTable";
 
 export async function getFeatureFlags(sdk: SDK, projectId: string): Promise<IFeatureFlags> {
     const apiCallIdentifier = `getFeatureFlags.${projectId}`;
@@ -33,22 +33,34 @@ export function setConfigFromFeatureFlags(config: IChartConfig, featureFlags: IF
     return result;
 }
 
-export function getTableConfigFromFeatureFlags(featureFlags: IFeatureFlags): IPivotTableConfig {
+export function getTableConfigFromFeatureFlags(
+    config: IPivotTableConfig,
+    featureFlags: IFeatureFlags,
+    isDashboardsEnvironment: boolean = false,
+    widthDefs?: ColumnWidthItem[],
+): IPivotTableConfig {
     let columnSizing: IColumnSizing = {};
 
     if (featureFlags.enableTableColumnsAutoResizing) {
-        columnSizing = merge(columnSizing, {
-            defaultWidth: "viewport",
-        });
+        columnSizing = { defaultWidth: "viewport" };
     }
 
-    if (featureFlags.enableTableColumnsGrowToFit) {
-        columnSizing = merge(columnSizing, {
+    if (featureFlags.enableTableColumnsManualResizing && widthDefs) {
+        columnSizing = {
+            ...columnSizing,
+            columnWidths: widthDefs,
+        };
+    }
+
+    if (featureFlags.enableTableColumnsGrowToFit && isDashboardsEnvironment) {
+        columnSizing = {
+            ...columnSizing,
             growToFit: true,
-        });
+        };
     }
-
+    const columnSizingProp = isEmpty(columnSizing) ? {} : { columnSizing };
     return {
-        columnSizing,
+        ...columnSizingProp,
+        ...config,
     };
 }
