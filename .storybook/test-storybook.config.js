@@ -161,6 +161,12 @@ const configuration = {
         'URI components': {
             'table with feature flag resizing': {
                 readySelector: '.screenshot-ready-wrapper-done'
+            },
+            'table with feature flag enableTableColumnsGrowToFit set to true': {
+                readySelector: '.screenshot-ready-wrapper-done'
+            },
+            'table with feature flag enableTableColumnsGrowToFit set to false': {
+                readySelector: '.screenshot-ready-wrapper-done'
             }
         }
     }
