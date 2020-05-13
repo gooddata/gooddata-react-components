@@ -496,14 +496,22 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
         return new Promise(async resolve => {
             const newColumnIds = difference(autoWidthColumnIds, previouslyResizedColumnIds);
-            this.autoresizeColumnsByColumnId(columnApi, newColumnIds);
-            await sleep(AGGRID_RENDER_NEW_COLUMNS_TIMEOUT);
+            await this.autoresizeColumnsByColumnId(columnApi, newColumnIds);
             resolve(this.autoresizeVisibleColumns(columnApi, autoWidthColumnIds, false));
         });
     };
 
-    private autoresizeColumnsByColumnId(columnApi: ColumnApi, columnIds: string[]) {
+    private async autoresizeColumnsByColumnId(columnApi: ColumnApi, columnIds: string[]) {
         columnApi.autoSizeColumns(columnIds);
+        await sleep(AGGRID_RENDER_NEW_COLUMNS_TIMEOUT);
+
+        columnIds.forEach(colId => {
+            const column = columnApi.getColumn(colId);
+
+            if (column && column.getActualWidth() > AUTO_SIZED_MAX_WIDTH) {
+                column.setActualWidth(AUTO_SIZED_MAX_WIDTH);
+            }
+        });
     }
 
     private shouldPerformAutoresize() {
@@ -978,10 +986,8 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             intl: this.props.intl,
         };
 
-        let maxWidthProp = {};
         if (this.isColumnAutoresizeEnabled()) {
             this.enrichColumnDefinitionsWithWidths(getTreeLeaves(columnDefs), this.resizedColumns);
-            maxWidthProp = { maxWidth: AUTO_SIZED_MAX_WIDTH };
         }
 
         if (this.isGrowToFitEnabled()) {
@@ -989,7 +995,6 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
                 getTreeLeaves(columnDefs),
                 this.growToFittedColumns,
             );
-            maxWidthProp = {};
         }
 
         return {
@@ -1005,7 +1010,6 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
                     ...commonHeaderComponentParams,
                 },
                 minWidth: 60,
-                ...maxWidthProp,
                 sortable: true,
                 resizable: true,
             },
