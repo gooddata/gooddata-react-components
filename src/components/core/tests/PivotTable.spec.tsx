@@ -155,6 +155,29 @@ describe("PivotTable", () => {
             expect(growToFit).toHaveBeenCalledTimes(0);
         });
     });
+    describe("infiniteInitialRowCount", () => {
+        it("should return correct rows number when execution exist", async () => {
+            const wrapper = renderComponent();
+
+            const table = getTableInstanceFromWrapper(wrapper);
+
+            await waitFor(waitForDataLoaded(wrapper));
+
+            const infiniteInitialRowCountRowCount = table.getInfiniteInitialRowCountRowCount();
+
+            expect(infiniteInitialRowCountRowCount).toBe(1);
+        });
+
+        it("should return pageSize when execution not exist", async () => {
+            const wrapper = renderComponent();
+
+            const table = getTableInstanceFromWrapper(wrapper);
+
+            const infiniteInitialRowCountRowCount = table.getInfiniteInitialRowCountRowCount();
+
+            expect(infiniteInitialRowCountRowCount).toBe(100);
+        });
+    });
 
     describe("cellClick", () => {
         const measureCellEvent: Partial<IGridCellEvent> = {
