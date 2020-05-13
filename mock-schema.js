@@ -2951,4 +2951,10 @@ module.exports = [
             enableTableColumnsAutoResizing: true
         }
     },
+    {
+        ...getBaseProjectSchema('Storybook with table grow to fit', 'growtofitstorybook'),
+        featureFlags: {
+            enableTableColumnsGrowToFit: true
+        }
+    },
 ];
