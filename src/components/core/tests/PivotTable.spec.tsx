@@ -11,12 +11,14 @@ import {
     WATCHING_TABLE_RENDERED_INTERVAL,
     WATCHING_TABLE_RENDERED_MAX_TIME,
 } from "../PivotTable";
+import { LoadingComponent } from "../../simple/LoadingComponent";
 import {
     executionObjectWithTotalsDataSource,
     oneColumnAttributeNoMeasure,
     oneAttributeOneMeasureDataSource,
     oneMeasureDataSource,
     twoMeasuresOneDimensionDataSource,
+    DummyComponent,
 } from "../../tests/mocks";
 import { getParsedFields } from "../pivotTable/agGridUtils";
 import { GroupingProviderFactory } from "../pivotTable/GroupingProvider";
@@ -67,6 +69,16 @@ describe("PivotTable", () => {
     it("should render PivotTableInner", () => {
         const wrapper = renderComponent();
         expect(wrapper.find(PivotTableInner)).toHaveLength(1);
+    });
+
+    it("should render default LoadingComponent", () => {
+        const wrapper = renderComponent();
+        expect(wrapper.find(LoadingComponent)).toHaveLength(1);
+    });
+
+    it("should render passed LoadingComponent", () => {
+        const wrapper = renderComponent({ LoadingComponent: DummyComponent });
+        expect(wrapper.find(DummyComponent)).toHaveLength(1);
     });
 
     describe("column sizing", () => {
