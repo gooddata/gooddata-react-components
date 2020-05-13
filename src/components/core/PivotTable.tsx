@@ -967,6 +967,24 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         }
     };
 
+    private getInfiniteInitialRowCountRowCount() {
+        // this method return rowCount from last execution,
+        // remove horizontal scrollbar flickering when sort change for small tables
+
+        const executionResult = this.getExecutionResult();
+        const { pageSize } = this.props;
+        let rowCount = 0;
+
+        if (executionResult && executionResult.paging && executionResult.paging.total) {
+            rowCount = executionResult.paging.total[0];
+        }
+
+        if (rowCount > 0 && rowCount < pageSize) {
+            return rowCount;
+        }
+
+        return pageSize;
+    }
     //
     // grid options & styling
     //
@@ -997,6 +1015,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             );
         }
 
+        const rowCount = this.getInfiniteInitialRowCountRowCount();
         return {
             // Initial data
             columnDefs,
@@ -1038,7 +1057,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             cacheOverflowSize: pageSize,
             cacheBlockSize: pageSize,
             maxConcurrentDatasourceRequests: 1,
-            infiniteInitialRowCount: pageSize,
+            infiniteInitialRowCount: rowCount,
             maxBlocksInCache: 10,
             onGridReady: this.onGridReady,
             onFirstDataRendered: this.onFirstDataRendered,
