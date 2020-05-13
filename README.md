@@ -9,6 +9,7 @@
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/gooddata)
 
 ### Usage
+#TESTING
 With [yarn](https://yarnpkg.com) installed, go to your project directory and run
 ```
 $ yarn add @gooddata/react-components
