@@ -9,12 +9,12 @@ export interface IMenu {
 
 export type DefaultColumnWidth = "viewport" | "unset"; // | "auto"  | number; can be added later see ONE-4276
 export interface IColumnSizing {
-    defaultWidth: DefaultColumnWidth;
+    defaultWidth?: DefaultColumnWidth;
+    growToFit?: boolean;
 }
 
 export interface IPivotTableConfig {
     columnSizing?: IColumnSizing;
-    growToFit?: boolean;
     separators?: ISeparators;
     menu?: IMenu;
     maxHeight?: number;

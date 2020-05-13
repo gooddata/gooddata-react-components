@@ -36,8 +36,8 @@ export class PivotTableSizingWithGrowToFitExample extends Component {
                     config={{
                         columnSizing: {
                             defaultWidth: "viewport",
+                            growToFit: true,
                         },
-                        growToFit: true,
                     }}
                     pageSize={20}
                 />

@@ -519,9 +519,14 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     }
 
     private isColumnAutoresizeEnabled = () =>
-        this.props.config.columnSizing ? this.props.config.columnSizing.defaultWidth === "viewport" : false;
+        this.props.config && this.props.config.columnSizing
+            ? this.props.config.columnSizing.defaultWidth === "viewport"
+            : false;
 
-    private isGrowToFitEnabled = () => !!this.props.config.growToFit;
+    private isGrowToFitEnabled = () =>
+        this.props.config && this.props.config.columnSizing
+            ? !!this.props.config.columnSizing.growToFit
+            : false;
 
     private autoresizeColumns = async (
         event: AgGridEvent,
