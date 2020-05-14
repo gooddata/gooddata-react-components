@@ -1,6 +1,8 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import { IChartOptions } from "../../../../../interfaces/Config";
 import { getAxisNameConfiguration } from "../getAxisNameConfiguration";
+import { VisualizationTypes } from "../../../../../constants/visualizationTypes";
+import { ROTATE_NEGATIVE_90_DEGREES, ALIGN_LEFT, ALIGN_RIGHT } from "../../../../../constants/axisLabel";
 
 describe("getAxisNameConfiguration", () => {
     it("should return highchart axis config", () => {
@@ -52,6 +54,224 @@ describe("getAxisNameConfiguration", () => {
                     title: {
                         align: "high",
                     },
+                },
+            ],
+        });
+    });
+
+    it.each([
+        [
+            VisualizationTypes.COMBO,
+            {
+                type: VisualizationTypes.COMBO,
+                xAxes: [{}, { opposite: true }],
+                yAxes: [{}, { opposite: true }],
+            },
+        ],
+        [
+            VisualizationTypes.COMBO2,
+            {
+                type: VisualizationTypes.COMBO2,
+                xAxes: [{}, { opposite: true }],
+                yAxes: [{}, { opposite: true }],
+            },
+        ],
+        [
+            VisualizationTypes.COLUMN,
+            {
+                type: VisualizationTypes.COLUMN,
+                xAxes: [{}, { opposite: true }],
+                yAxes: [{}, { opposite: true }],
+            },
+        ],
+        [
+            VisualizationTypes.LINE,
+            {
+                type: VisualizationTypes.LINE,
+                xAxes: [{}, { opposite: true }],
+                yAxes: [{}, { opposite: true }],
+            },
+        ],
+    ])(
+        "should return highchart axis config for %s chart with rotated opposite Y axis label",
+        (_, chartOptions: IChartOptions) => {
+            const axisNameConfig = getAxisNameConfiguration(chartOptions);
+            expect(axisNameConfig).toEqual({
+                xAxis: [
+                    {
+                        title: {},
+                    },
+                    {
+                        title: {},
+                    },
+                ],
+                yAxis: [
+                    {
+                        title: {},
+                    },
+                    {
+                        title: { rotation: Number(ROTATE_NEGATIVE_90_DEGREES) },
+                    },
+                ],
+            });
+        },
+    );
+
+    it.each([
+        [
+            VisualizationTypes.COMBO,
+            {
+                type: VisualizationTypes.COMBO,
+                xAxes: [{}, { opposite: true }],
+                yAxes: [{}, { opposite: true }],
+                secondary_yAxisProps: { name: { position: "low" } },
+            },
+        ],
+        [
+            VisualizationTypes.COMBO2,
+            {
+                type: VisualizationTypes.COMBO2,
+                xAxes: [{}, { opposite: true }],
+                yAxes: [{}, { opposite: true }],
+                secondary_yAxisProps: { name: { position: "low" } },
+            },
+        ],
+        [
+            VisualizationTypes.COLUMN,
+            {
+                type: VisualizationTypes.COLUMN,
+                xAxes: [{}, { opposite: true }],
+                yAxes: [{}, { opposite: true }],
+                secondary_yAxisProps: { name: { position: "low" } },
+            },
+        ],
+        [
+            VisualizationTypes.LINE,
+            {
+                type: VisualizationTypes.LINE,
+                xAxes: [{}, { opposite: true }],
+                yAxes: [{}, { opposite: true }],
+                secondary_yAxisProps: { name: { position: "low" } },
+            },
+        ],
+    ])(
+        "should return highchart axis config for %s chart with left low aligned rotated opposite Y axis label",
+        (_, chartOptions: IChartOptions) => {
+            const axisNameConfig = getAxisNameConfiguration(chartOptions);
+            expect(axisNameConfig).toEqual({
+                xAxis: [
+                    {
+                        title: {},
+                    },
+                    {
+                        title: {},
+                    },
+                ],
+                yAxis: [
+                    {
+                        title: {},
+                    },
+                    {
+                        title: {
+                            align: "low",
+                            rotation: Number(ROTATE_NEGATIVE_90_DEGREES),
+                            textAlign: ALIGN_LEFT,
+                        },
+                    },
+                ],
+            });
+        },
+    );
+
+    it.each([
+        [
+            VisualizationTypes.COMBO,
+            {
+                type: VisualizationTypes.COMBO,
+                xAxes: [{}, { opposite: true }],
+                yAxes: [{}, { opposite: true }],
+                secondary_yAxisProps: { name: { position: "high" } },
+            },
+        ],
+        [
+            VisualizationTypes.COMBO2,
+            {
+                type: VisualizationTypes.COMBO2,
+                xAxes: [{}, { opposite: true }],
+                yAxes: [{}, { opposite: true }],
+                secondary_yAxisProps: { name: { position: "high" } },
+            },
+        ],
+        [
+            VisualizationTypes.COLUMN,
+            {
+                type: VisualizationTypes.COLUMN,
+                xAxes: [{}, { opposite: true }],
+                yAxes: [{}, { opposite: true }],
+                secondary_yAxisProps: { name: { position: "high" } },
+            },
+        ],
+        [
+            VisualizationTypes.LINE,
+            {
+                type: VisualizationTypes.LINE,
+                xAxes: [{}, { opposite: true }],
+                yAxes: [{}, { opposite: true }],
+                secondary_yAxisProps: { name: { position: "high" } },
+            },
+        ],
+    ])(
+        "should return highchart axis config for %s chart with right high aligned rotated opposite Y axis label",
+        (_, chartOptions: IChartOptions) => {
+            const axisNameConfig = getAxisNameConfiguration(chartOptions);
+            expect(axisNameConfig).toEqual({
+                xAxis: [
+                    {
+                        title: {},
+                    },
+                    {
+                        title: {},
+                    },
+                ],
+                yAxis: [
+                    {
+                        title: {},
+                    },
+                    {
+                        title: {
+                            align: "high",
+                            rotation: Number(ROTATE_NEGATIVE_90_DEGREES),
+                            textAlign: ALIGN_RIGHT,
+                        },
+                    },
+                ],
+            });
+        },
+    );
+
+    it("should return highchart axis config for bar chart without rotated opposite Y axis label", () => {
+        const chartOptions: IChartOptions = {
+            type: VisualizationTypes.BAR,
+            xAxes: [{}, { opposite: true }],
+            yAxes: [{}, { opposite: true }],
+        };
+
+        const axisNameConfig = getAxisNameConfiguration(chartOptions);
+        expect(axisNameConfig).toEqual({
+            xAxis: [
+                {
+                    title: {},
+                },
+                {
+                    title: {},
+                },
+            ],
+            yAxis: [
+                {
+                    title: {},
+                },
+                {
+                    title: {},
                 },
             ],
         });
