@@ -1384,10 +1384,10 @@
     firstline "^2.0.2"
     line-replace "^1.0.2"
 
-"@gooddata/gooddata-js@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/gooddata-js/-/gooddata-js-13.0.0.tgz#ebbf0dbe0e90e9f129f9cdca8d77a014f4b1aa98"
-  integrity sha512-mBAHX9k2D3xu4GEWOYS/2JMa/1se/DrXg/Z5GxMce/xFp73mh5XuEZcczs9ptJ3AIlvwgiYt7ifCWVuUA8Zo5g==
+"@gooddata/gooddata-js@^13.0.1":
+  version "13.0.1"
+  resolved "https://registry.yarnpkg.com/@gooddata/gooddata-js/-/gooddata-js-13.0.1.tgz#1a738b16d1eeee8742771c2f5886ae4239793e80"
+  integrity sha512-hPWzqvhSzmkBOFGCAOkeqPutn/S3MFdVaY/442Bm9M3dmmdAyhQPIN3PH0FP0ZaKiELpiEiFi9GpiyqxJBsKRw==
   dependencies:
     "@gooddata/typings" "^2.24.0"
     es6-promise "^3.0.2"
