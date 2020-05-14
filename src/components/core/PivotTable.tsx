@@ -114,6 +114,7 @@ import isEqual = require("lodash/isEqual");
 import noop = require("lodash/noop");
 import sumBy = require("lodash/sumBy");
 import difference = require("lodash/difference");
+import { setColumnMaxWidth } from "./pivotTable/agColumnWrapper";
 
 export interface IPivotTableProps extends ICommonChartProps, IDataSourceProviderInjectedProps {
     totals?: VisualizationObject.IVisualizationTotal[];
@@ -197,6 +198,8 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     private watchingIntervalId: number | null;
     private watchingTimeoutId: number | null;
     private resizing: boolean = false;
+    private lastResizedWidth = 0;
+    private lastResizedHeight = 0;
 
     constructor(props: IPivotTableInnerProps) {
         super(props);
@@ -487,7 +490,10 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
         const displayedVirtualColumns = columnApi.getAllDisplayedVirtualColumns();
         const autoWidthColumnIds: string[] = this.getColumnIds(displayedVirtualColumns);
-        if (previouslyResizedColumnIds.length >= autoWidthColumnIds.length) {
+
+        const newColumnIds = difference(autoWidthColumnIds, previouslyResizedColumnIds);
+
+        if (newColumnIds.length === 0) {
             this.resizedColumns = this.getResizedColumns(
                 columnApi.getAllDisplayedVirtualColumns(),
                 ColumnEventSourceType.AUTOSIZE_COLUMNS,
@@ -503,16 +509,12 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     };
 
     private async autoresizeColumnsByColumnId(columnApi: ColumnApi, columnIds: string[]) {
+        setColumnMaxWidth(columnApi, columnIds, AUTO_SIZED_MAX_WIDTH);
+
         columnApi.autoSizeColumns(columnIds);
         await sleep(AGGRID_RENDER_NEW_COLUMNS_TIMEOUT);
 
-        columnIds.forEach(colId => {
-            const column = columnApi.getColumn(colId);
-
-            if (column && column.getActualWidth() > AUTO_SIZED_MAX_WIDTH) {
-                column.setActualWidth(AUTO_SIZED_MAX_WIDTH);
-            }
-        });
+        setColumnMaxWidth(columnApi, columnIds, undefined);
     }
 
     private shouldPerformAutoresize() {
@@ -644,9 +646,28 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         }
     }
 
-    private gridSizeChanged = async (columnEvent: ColumnResizedEvent) => {
-        if (!this.resizing) {
-            this.autoresizeColumns(columnEvent, true, Object.keys(this.resizedColumns));
+    private mapFieldIdToGridId(columnApi: ColumnApi, fieldIds: string[]) {
+        const columns = columnApi.getAllColumns();
+
+        return columns
+            .filter(d => fieldIds.includes(this.getColumnIdentifier(d.getColDef())))
+            .map(d => d.getColId());
+    }
+
+    private gridSizeChanged = async (gridSizeChangedEvent: any) => {
+        if (
+            !this.resizing &&
+            (this.lastResizedWidth !== gridSizeChangedEvent.clientWidth ||
+                this.lastResizedHeight !== gridSizeChangedEvent.clientHeight)
+        ) {
+            this.lastResizedWidth = gridSizeChangedEvent.clientWidth;
+            this.lastResizedHeight = gridSizeChangedEvent.clientHeight;
+
+            const resizedColumnsGridIds = this.mapFieldIdToGridId(
+                gridSizeChangedEvent.columnApi,
+                Object.keys(this.resizedColumns),
+            );
+            this.autoresizeColumns(gridSizeChangedEvent, true, resizedColumnsGridIds);
         }
     };
 
@@ -1316,6 +1337,9 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
                 if (resizedColumn) {
                     columnDefinition.width = resizedColumn.width;
+                    if (resizedColumn.source === ColumnEventSourceType.UI_DRAGGED) {
+                        columnDefinition.suppressSizeToFit = true;
+                    }
                 }
             }
         });
