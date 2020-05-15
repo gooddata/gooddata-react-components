@@ -71,6 +71,11 @@ describe("PivotTable", () => {
         expect(wrapper.find(PivotTableInner)).toHaveLength(1);
     });
 
+    it("should render without LoadingComponent", () => {
+        const wrapper = renderComponent({ LoadingComponent: null });
+        expect(wrapper.find(LoadingComponent)).toHaveLength(0);
+    });
+
     it("should render default LoadingComponent", () => {
         const wrapper = renderComponent();
         expect(wrapper.find(LoadingComponent)).toHaveLength(1);
