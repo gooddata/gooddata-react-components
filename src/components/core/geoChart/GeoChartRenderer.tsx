@@ -23,6 +23,7 @@ import {
     DEFAULT_MAPBOX_OPTIONS,
     DEFAULT_TOOLTIP_OPTIONS,
     INTERACTION_EVENTS,
+    ZOOM_CONTROLS_HEIGHT,
 } from "../../../constants/geoChart";
 import { IDrillConfig } from "../../../interfaces/DrillEvents";
 import { IGeoConfig, IGeoData, IGeoLngLat } from "../../../interfaces/GeoChart";
@@ -281,6 +282,7 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         const { chart } = this;
         chart.on("click", DEFAULT_LAYER_NAME, this.handleMapClick);
         chart.on("load", this.setupMap);
+        chart.on("load", this.adjustChartHeight);
         chart.on("mouseenter", DEFAULT_LAYER_NAME, this.handlePushpinMouseEnter);
         chart.on("mouseleave", DEFAULT_LAYER_NAME, this.handlePushpinMouseLeave);
         chart.on("moveend", this.handlePushpinMoveEnd);
@@ -319,6 +321,25 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
 
         // keep listening to the data event until the style is loaded
         chart.on("data", handleLayerLoaded);
+    };
+
+    private adjustChartHeight = () => {
+        const { chart, chartRef } = this;
+        if (!chartRef) {
+            return;
+        }
+
+        const chartHeight: number = chartRef.clientHeight;
+        const parentHeight: number = chartRef.parentElement.clientHeight;
+        const shouldResize: boolean =
+            chartHeight <= ZOOM_CONTROLS_HEIGHT && ZOOM_CONTROLS_HEIGHT <= parentHeight;
+
+        if (shouldResize) {
+            // set min height to re-position mapbox attribution and zoom control, in case there are too many top legend items
+            // that take all visible height of widget and make geo chart container's height zero
+            chartRef.style.minHeight = `${parentHeight}px`;
+            chart.resize();
+        }
     };
 
     private handleLayerLoaded = () => {
