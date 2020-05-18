@@ -48,6 +48,7 @@ export const heatmapVisualizationIdentifier = "abkaJfMYiiCU";
 export const heatmapVisualizationUri = `/gdc/md/${demoProjectId}/obj/9284`;
 export const columnsVisualizationIdentifier = "aabOspdLbbvs";
 export const columnVisualizationIdentifier = "acFJltTsifSQ";
+export const columnVisualizationMeasureValueFilterIdentifier = "aapcLmQzeIAz";
 export const columnVisualizationUri = `/gdc/md/${demoProjectId}/obj/6862`;
 export const comboVisualizationIdentifier = "aaTJJW6adsaj";
 export const comboVisualizationUri = `/gdc/md/${demoProjectId}/obj/9304`;
