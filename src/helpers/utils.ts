@@ -9,6 +9,7 @@ import { SDK } from "@gooddata/gooddata-js";
 
 import { name as pkgName, version as pkgVersion } from "../../package.json";
 import { IMinMax } from "../interfaces/Utils";
+import { IPositioning } from "../typings/positioning";
 import { FLUID_LEGEND_THRESHOLD } from "../constants/legend";
 
 export function setTelemetryHeaders(sdk: SDK, componentName: string, props: object) {
@@ -96,3 +97,9 @@ export const sleep = async (delay: number): Promise<void> => {
         setTimeout(resolve, delay);
     });
 };
+
+export const positioningToAlignPoints = (positioning: IPositioning[]) =>
+    positioning.map(({ snapPoints, offset }) => ({
+        align: `${snapPoints.parent} ${snapPoints.child}`,
+        offset,
+    }));
