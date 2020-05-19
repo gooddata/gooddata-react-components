@@ -2791,6 +2791,27 @@ describe("transformMeasureBuckets", () => {
                 ]),
             ],
         ],
+        [
+            "should distribute measures after switching from Geo Chart",
+            [
+                getBucket(BucketNames.MEASURES, [referencePointMocks.masterMeasureItems[0]]),
+                getBucket(BucketNames.SECONDARY_MEASURES, [referencePointMocks.masterMeasureItems[1]]),
+            ],
+            [
+                {
+                    localIdentifier: BucketNames.MEASURES,
+                    itemsLimit: 1,
+                },
+                {
+                    localIdentifier: BucketNames.SECONDARY_MEASURES,
+                    itemsLimit: 1,
+                },
+            ],
+            [
+                getBucket(BucketNames.SIZE, [referencePointMocks.masterMeasureItems[0]]),
+                getBucket(BucketNames.COLOR, [referencePointMocks.masterMeasureItems[1]]),
+            ],
+        ],
     ])(
         `should return %s`,
         (
