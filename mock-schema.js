@@ -381,6 +381,11 @@ const getBaseProjectSchema = (title, identifier) => {
                     elements: lnglatElements
                 },
                 {
+                    identifier: '31',
+                    title: 'City',
+                    elements: Array(48).fill(null)
+                },
+                {
                     identifier: '23',
                     title: 'Store Type',
                     elements: ["Speciality", "General Goods", "Convenience", "Toy Store"]

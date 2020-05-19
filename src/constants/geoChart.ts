@@ -3,6 +3,8 @@ import mapboxgl from "mapbox-gl";
 import { DEFAULT_COLORS, rgbToRgba } from "../components/visualizations/utils/color";
 import { IGeoLngLat, IGeoViewports } from "../interfaces/GeoChart";
 
+export const DEFAULT_WORLD_BOUNDS = { northEast: { lat: -84, lng: -180 }, southWest: { lat: 84, lng: 180 } };
+
 export const VIEWPORTS: IGeoViewports = {
     continent_af: [{ lat: -36, lng: -20 }, { lat: 38, lng: 54 }], // Africa
     continent_as: [{ lat: -8, lng: 26 }, { lat: 64, lng: 146 }], // Asia
@@ -10,7 +12,7 @@ export const VIEWPORTS: IGeoViewports = {
     continent_eu: [{ lat: 36, lng: -24 }, { lat: 72, lng: 43 }], // Europe
     continent_na: [{ lat: 11, lng: -170 }, { lat: 72, lng: -52 }], // North America
     continent_sa: [{ lat: -56, lng: -90 }, { lat: 14, lng: -31 }], // South America
-    world: [{ lat: -84, lng: -180 }, { lat: 84, lng: 180 }],
+    world: [DEFAULT_WORLD_BOUNDS.northEast, DEFAULT_WORLD_BOUNDS.southWest], // World
 };
 
 export const DEFAULT_CLUSTER_FILTER = ["has", "point_count"];
