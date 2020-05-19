@@ -145,3 +145,22 @@ test("should render error when pivot is configured both with native total and me
     await waitForPivotTableStopLoading(t, Selector(".s-pivot-table-native-total-mvf"));
     await t.expect(Selector(".s-error").exists).eql(true);
 });
+
+fixture("Measure Value Filter Chart Configuration").beforeEach(
+    loginUserAndNavigate(`${config.url}/hidden/measure-value-filter-with-chart-configuration`),
+);
+
+test("should render data when chart is configured", async t => {
+    const chartValues = Selector(".highcharts-data-label");
+    await t
+        .expect(chartValues.exists)
+        .ok()
+        .expect(chartValues.nth(0).textContent)
+        .eql("-62,203,555")
+        .expect(chartValues.nth(1).textContent)
+        .eql("-24,896,830")
+        .expect(chartValues.nth(2).textContent)
+        .eql("-25,006,270")
+        .expect(chartValues.nth(3).textContent)
+        .eql("-24,823,451");
+});

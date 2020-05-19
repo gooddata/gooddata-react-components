@@ -35,6 +35,7 @@ import DateFilter from "./DateFilter";
 import OnDrillHandling from "./OnDrillHandling";
 import Xirr from "./Xirr";
 import NativeTotalAndMeasureValueFilterTest from "../components/NativeTotalAndMeasureValueFilterTest";
+import MeasureValueFilterChartConfiguration from "../components/MeasureValueFilterChartConfiguration";
 import { PivotTableSizing } from "./PivotTableSizing";
 import GeoPushpinChartDemo from "./GeoPushpinChartDemo";
 
@@ -273,6 +274,11 @@ export const hiddenPaths = [
         path: "/hidden/measure-value-filter-with-native-total",
         title: "Measure value filter with native total",
         Component: NativeTotalAndMeasureValueFilterTest,
+    },
+    {
+        path: "/hidden/measure-value-filter-with-chart-configuration",
+        title: "Measure value filter with chart configuration",
+        Component: MeasureValueFilterChartConfiguration,
     },
     {
         path: "/hidden/on-drill-drilling",
