@@ -319,8 +319,15 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
                     bottom: 0,
                     background: "white",
                 }}
+                className="s-loading"
             >
-                {CustomLoadingComponent ? <CustomLoadingComponent /> : <LoadingComponent />}
+                {CustomLoadingComponent !== null ? (
+                    CustomLoadingComponent ? (
+                        <CustomLoadingComponent />
+                    ) : (
+                        <LoadingComponent />
+                    )
+                ) : null}
             </div>
         ) : null;
 
