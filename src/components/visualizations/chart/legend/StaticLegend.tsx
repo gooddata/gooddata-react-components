@@ -1,9 +1,9 @@
 // (C) 2007-2020 GoodData Corporation
 import * as React from "react";
-import { FormattedMessage } from "react-intl";
 import * as cx from "classnames";
 
 import LegendList from "./LegendList";
+import Paging from "./Paging";
 import { BOTTOM, TOP } from "./PositionTypes";
 import { calculateStaticLegend, ITEM_HEIGHT } from "./helpers";
 import { ChartType } from "../../../../constants/visualizationTypes";
@@ -41,28 +41,17 @@ export default class StaticLegend extends React.PureComponent<IStaticLegendProps
         this.setState({ page: this.state.page - 1 });
     }
 
-    public renderPagingButton(type: string, handler: () => void, disabled: boolean) {
-        const classes = cx("gd-button-link", "gd-button-icon-only", `icon-chevron-${type}`, "paging-button");
-        return <button className={classes} onClick={handler} disabled={disabled} />;
-    }
-
     public renderPaging(visibleItemsCount: number) {
         const { page } = this.state;
         const pagesCount = Math.ceil(this.props.series.length / visibleItemsCount);
 
         return (
-            <div className="paging">
-                {this.renderPagingButton("up", this.showPrevPage, page === 1)}
-                <FormattedMessage
-                    id="visualizations.of"
-                    tagName="span"
-                    values={{
-                        page: <strong>{page}</strong>,
-                        pagesCount,
-                    }}
-                />
-                {this.renderPagingButton("down", this.showNextPage, page === pagesCount)}
-            </div>
+            <Paging
+                page={page}
+                pagesCount={pagesCount}
+                showNextPage={this.showPrevPage}
+                showPrevPage={this.showPrevPage}
+            />
         );
     }
 

@@ -1,21 +1,14 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 
 import { Execution } from "@gooddata/typings";
 import * as fixtures from "../../../../../stories/test_data/fixtures";
 import { IMappingHeader } from "../../../../interfaces/MappingHeader";
 import { createIntlMock } from "../../../visualizations/utils/intlUtils";
 import { executionToAGGridAdapter } from "../agGridDataSource";
-import {
-    getMeasureDrillItem,
-    assignDrillItemsAndType,
-    getDrillRowData,
-    convertDrillIntersectionToLegacy,
-} from "../agGridDrilling";
+import { getMeasureDrillItem, assignDrillItemsAndType, getDrillRowData } from "../agGridDrilling";
 
 import { IGridHeader } from "../agGridTypes";
 import { getTreeLeaves } from "../agGridUtils";
-
-import { getDrillIntersection } from "../../../visualizations/utils/drilldownEventing";
 
 const pivotTableWithColumnAndRowAttributes = fixtures.pivotTableWithColumnAndRowAttributes;
 const intl = createIntlMock();
@@ -123,121 +116,6 @@ describe("assignDrillItemsAndType", () => {
         expect(drillItems).toEqual(expectedDrillItems);
         // assign empty array to drillItems header. Only leaf headers (measures) should have assigned drill items
         expect(header.drillItems).toEqual([]);
-    });
-});
-
-describe("convertDrillIntersectionToLegacy", () => {
-    const afm = pivotTableWithColumnAndRowAttributes.executionRequest.afm;
-    const { columnDefs, rowData } = executionToAGGridAdapter(
-        {
-            executionResponse: pivotTableWithColumnAndRowAttributes.executionResponse,
-            executionResult: pivotTableWithColumnAndRowAttributes.executionResult,
-        },
-        {},
-        intl,
-    );
-
-    const expectedColumnLegacyIntersection = [
-        {
-            header: {
-                identifier: "",
-                uri: "/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/2009/elements?id=1",
-            },
-            id: "1",
-            title: "Q1",
-        },
-        {
-            header: {
-                identifier: "date.aam81lMifn6q",
-                uri: "/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/2011",
-            },
-            id: "year",
-            title: "Quarter (Date)",
-        },
-        {
-            header: {
-                identifier: "",
-                uri: "/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/2071/elements?id=1",
-            },
-            id: "1",
-            title: "Jan",
-        },
-        {
-            header: {
-                identifier: "date.abm81lMifn6q",
-                uri: "/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/2073",
-            },
-            id: "month",
-            title: "Month (Date)",
-        },
-        {
-            header: {
-                identifier: "aabHeqImaK0d",
-                uri: "/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/6694",
-            },
-            id: "franchiseFeesAdRoyaltyIdentifier",
-            title: "$ Franchise Fees (Ad Royalty)",
-        },
-    ];
-    it("should return intersection of row attribute and row attribute value for row header cell", async () => {
-        const rowColDef = columnDefs[0]; // row header
-        const drillItems = [rowData[0].headerItemMap[rowColDef.field], ...rowColDef.drillItems];
-        const intersection = convertDrillIntersectionToLegacy(getDrillIntersection(drillItems), afm);
-        expect(intersection).toEqual([
-            {
-                header: {
-                    identifier: "label.restaurantlocation.locationstate",
-                    uri: "/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/2211",
-                },
-                id: "state",
-                title: "Location State",
-            },
-            {
-                header: {
-                    identifier: "",
-                    uri: "/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/2210/elements?id=6340109",
-                },
-                id: "6340109",
-                title: "Alabama",
-            },
-        ]);
-    });
-
-    it("should return intersection of all column header attributes and values and a measure for column header cell", async () => {
-        const colDef = getTreeLeaves(columnDefs)[3]; // column leaf header
-        const intersection = convertDrillIntersectionToLegacy(getDrillIntersection(colDef.drillItems), afm);
-        expect(intersection).toEqual(expectedColumnLegacyIntersection);
-    });
-
-    it("should remove row attributes and values from intersection when converting to legacy", async () => {
-        const rowColDef = columnDefs[0]; // row header
-        const drillItems = [rowData[0].headerItemMap[rowColDef.field], ...rowColDef.drillItems];
-        const colDef = getTreeLeaves(columnDefs)[3]; // column leaf header
-        const intersection = convertDrillIntersectionToLegacy(
-            getDrillIntersection([...colDef.drillItems, ...drillItems]),
-            afm,
-        );
-        expect(intersection).toEqual(expectedColumnLegacyIntersection);
-    });
-
-    // tslint:disable-next-line:max-line-length
-    it("should return intersection without header property when measure has neither uri nor identifier (arithmetic measure)", async () => {
-        const drillItems: IMappingHeader[] = [
-            {
-                measureHeaderItem: {
-                    localIdentifier: "am1",
-                    name: "Arithmetic measure",
-                    format: "",
-                },
-            },
-        ];
-        const intersection = convertDrillIntersectionToLegacy(getDrillIntersection(drillItems), afm);
-        expect(intersection).toEqual([
-            {
-                id: "am1",
-                title: "Arithmetic measure",
-            },
-        ]);
     });
 });
 

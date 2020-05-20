@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import { AFM, Execution } from "@gooddata/typings";
 import isEqual = require("lodash/isEqual");
 import { GridApi } from "ag-grid-community";
@@ -38,7 +38,7 @@ interface ICachedPageRequest {
         limit: number[];
         offset: number[];
     };
-    response: Execution.IExecutionResponses | null;
+    resultPromise: Promise<Execution.IExecutionResponses>;
 }
 
 /**
@@ -60,17 +60,20 @@ export const wrapGetPageWithCaching = (getPage: IGetPage): IGetPage => {
         };
 
         if (firstCachedPageRequest && isEqual(firstCachedPageRequest.requestParams, requestParams)) {
-            return firstCachedPageRequest.response;
+            const result = await firstCachedPageRequest.resultPromise;
+            return result;
         }
 
-        const execution = await getPage(resultSpec, limit, offset);
+        const resultPromise = getPage(resultSpec, limit, offset);
+
         if (firstCachedPageRequest === null) {
             firstCachedPageRequest = {
                 requestParams,
-                response: execution,
+                resultPromise,
             };
         }
 
+        const execution = await resultPromise;
         return execution;
     };
 };

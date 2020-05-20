@@ -4,13 +4,17 @@ import Measure, { ContentRect, MeasuredComponentProps } from "react-measure";
 import cx from "classnames";
 
 import { generateLegendColorData } from "./geoChartColor";
-import PushpinCategoryLegend from "./legends/PushpinCategoryLegend";
+import PushpinCategoryLegend, { HEIGHT_OF_SIZE_LEGEND } from "./legends/PushpinCategoryLegend";
 import PushpinSizeLegend from "./legends/PushpinSizeLegend";
 import { ColorLegend } from "../../visualizations/chart/legend/ColorLegend";
-import { BOTTOM } from "../../visualizations/chart/legend/PositionTypes";
-import { IGeoData, IPushpinCategoryLegendItem } from "../../../interfaces/GeoChart";
+import Paging from "../../visualizations/chart/legend/Paging";
+import { BOTTOM, LEFT, RIGHT } from "../../visualizations/chart/legend/PositionTypes";
+import { PositionType } from "../../visualizations/typings/legend";
+import { IAvailableLegends, IGeoData, IPushpinCategoryLegendItem } from "../../../interfaces/GeoChart";
 import { isFluidLegendEnabled } from "../../../helpers/geoChart/common";
 import { getAvailableLegends } from "../../../helpers/geoChart/data";
+
+const HEIGHT_OF_COLOR_LEGEND = 210;
 
 export interface IGeoChartLegendRendererProps {
     categoryItems?: IPushpinCategoryLegendItem[]; // used for Category legend
@@ -19,47 +23,125 @@ export interface IGeoChartLegendRendererProps {
     height?: number;
     locale?: string;
     colorLegendValue: string;
-    position?: string;
+    position?: PositionType;
     responsive?: boolean;
     showFluidLegend?: boolean;
     numericSymbols?: string[];
     onItemClick?: (item: IPushpinCategoryLegendItem) => void;
 }
 
-export default function GeoChartLegendRenderer(props: IGeoChartLegendRendererProps): JSX.Element {
-    const { categoryItems, geoData, position, responsive, showFluidLegend } = props;
-    const { hasCategoryLegend, hasColorLegend, hasSizeLegend } = getAvailableLegends(categoryItems, geoData);
-
-    const isLegendVisible = hasCategoryLegend || hasColorLegend || hasSizeLegend;
-    if (!isLegendVisible) {
-        return null;
-    }
+function getClassnames(props: IGeoChartLegendRendererProps, availableLegends: IAvailableLegends): string {
+    const { position, responsive, showFluidLegend } = props;
+    const { hasSizeLegend } = availableLegends;
 
     const isFluidLegend = isFluidLegendEnabled(responsive, showFluidLegend);
     const isBottomPosition = isFluidLegend || position === BOTTOM;
 
-    const classNames = cx("geo-legend", "s-geo-legend", {
+    return cx("geo-legend", "s-geo-legend", "viz-legend", {
         "viz-fluid-legend-wrap": isFluidLegend,
         "viz-static-legend-wrap": !isFluidLegend,
+        static: !isFluidLegend,
         "has-size-legend": hasSizeLegend,
         [`position-${position}`]: !isBottomPosition,
         // this is required in case
         // position is not BOTTOM but isFluidLegend is true
         "position-bottom": isBottomPosition,
     });
+}
+
+export default function GeoChartLegendRenderer(props: IGeoChartLegendRendererProps): JSX.Element {
+    const { categoryItems, geoData, height, position, numericSymbols } = props;
+
+    const availableLegends: IAvailableLegends = getAvailableLegends(categoryItems, geoData);
+    const { hasCategoryLegend, hasColorLegend, hasSizeLegend } = availableLegends;
+    const isLegendVisible = hasCategoryLegend || hasColorLegend || hasSizeLegend;
+    if (!isLegendVisible) {
+        return null;
+    }
+
+    if (hasCategoryLegend) {
+        return renderCategoryAndSizeLegend(props, availableLegends);
+    }
+
+    if (hasColorLegend && hasSizeLegend && shouldShowPagingLegend(height, position)) {
+        return (
+            <ColorAndSizeLegendWithPaging
+                {...props}
+                numericSymbols={numericSymbols}
+                availableLegends={availableLegends}
+            />
+        );
+    }
+
+    return renderColorAndSizeLegend(props, availableLegends);
+}
+
+function renderCategoryAndSizeLegend(
+    props: IGeoChartLegendRendererProps,
+    availableLegends: IAvailableLegends,
+): JSX.Element {
+    const { hasSizeLegend } = availableLegends;
+    const classNames = getClassnames(props, availableLegends);
 
     return (
         <Measure client={true}>
             {({ measureRef, contentRect }: MeasuredComponentProps) => {
                 return (
                     <div className={classNames} ref={measureRef}>
-                        {renderPushpinColorLegend(props, hasColorLegend)}
-                        {renderPushpinCategoryLegend(props, contentRect, hasSizeLegend, hasCategoryLegend)}
+                        {renderPushpinCategoryLegend(props, contentRect, hasSizeLegend)}
                         {renderPushpinSizeLegend(props, hasSizeLegend)}
                     </div>
                 );
             }}
         </Measure>
+    );
+}
+
+// if height of color + size is bigger than container, we will show paging for legends
+function shouldShowPagingLegend(height: number, legendPosition: PositionType): boolean {
+    if (height !== undefined && (legendPosition === LEFT || legendPosition === RIGHT)) {
+        const heightOfColorAndSizeLegend = HEIGHT_OF_COLOR_LEGEND + HEIGHT_OF_SIZE_LEGEND;
+        return height < heightOfColorAndSizeLegend;
+    }
+    return false;
+}
+
+interface IColorAndSizeLegendWithPagingProps extends IGeoChartLegendRendererProps {
+    availableLegends: IAvailableLegends;
+    numericSymbols: string[];
+}
+
+function ColorAndSizeLegendWithPaging(props: IColorAndSizeLegendWithPagingProps): React.ReactElement {
+    const [page, setPage] = React.useState<number>(1);
+
+    const showNextPage = (): void => setPage(2);
+    const showPrevPage = (): void => setPage(1);
+
+    const { availableLegends } = props;
+    const classNames = getClassnames(props, availableLegends);
+    return (
+        <div className={classNames}>
+            <div className="geo-legend-paging">
+                {renderPushpinColorLegend(props, page === 1)}
+                {renderPushpinSizeLegend(props, page === 2)}
+            </div>
+            <Paging page={page} pagesCount={2} showNextPage={showNextPage} showPrevPage={showPrevPage} />
+        </div>
+    );
+}
+
+function renderColorAndSizeLegend(
+    props: IGeoChartLegendRendererProps,
+    availableLegends: IAvailableLegends,
+): JSX.Element {
+    const { hasColorLegend, hasSizeLegend } = availableLegends;
+    const classNames = getClassnames(props, availableLegends);
+
+    return (
+        <div className={classNames}>
+            {renderPushpinColorLegend(props, hasColorLegend)}
+            {renderPushpinSizeLegend(props, hasSizeLegend)}
+        </div>
     );
 }
 
@@ -98,12 +180,7 @@ function renderPushpinCategoryLegend(
     props: IGeoChartLegendRendererProps,
     contentRect: ContentRect,
     hasSizeLegend: boolean,
-    hasCategoryLegend: boolean,
 ): JSX.Element {
-    if (!hasCategoryLegend) {
-        return null;
-    }
-
     return <PushpinCategoryLegend {...props} contentRect={contentRect} hasSizeLegend={hasSizeLegend} />;
 }
 

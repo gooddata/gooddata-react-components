@@ -1,11 +1,12 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import { WrappedComponentProps, injectIntl } from "react-intl";
 import noop = require("lodash/noop");
 
 import { IDrillEvent, IDrillEventExtended } from "../../../interfaces/DrillEvents";
 import Headline, { IHeadlineFiredDrillEventItemContext } from "../headline/Headline";
-import { convertHeadlineDrillIntersectionToLegacy, fireDrillEvent } from "../utils/drilldownEventing";
+import { fireDrillEvent } from "../utils/drilldownEventing";
+import { convertDrillContextToLegacy } from "../utils/drilldownEventingLegacy";
 import { convertDrillableItemsToPredicates } from "../../../helpers/headerPredicate";
 import { getHeadlineData, applyDrillableItems, buildDrillEventData } from "./utils/XirrTransformationUtils";
 import { IHeadlineTransformationProps } from "./types";
@@ -61,18 +62,9 @@ class XirrTransformation extends React.Component<IHeadlineTransformationProps & 
             executionResponse,
         );
         const { executionContext, drillContext } = drillEventDataExtended;
-        const { type, element, value } = drillContext;
         const drillEventDataOld: IDrillEvent = {
             executionContext,
-            drillContext: {
-                type,
-                element,
-                value,
-                intersection: convertHeadlineDrillIntersectionToLegacy(
-                    drillContext.intersection,
-                    executionRequest.afm,
-                ),
-            },
+            drillContext: convertDrillContextToLegacy(drillContext, executionContext),
         };
         fireDrillEvent(onFiredDrillEvent, drillEventDataOld, target);
     };

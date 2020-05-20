@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import { render } from "react-dom";
 import { AFM, VisualizationObject } from "@gooddata/typings";
@@ -78,7 +78,7 @@ export class PluggableHeadline extends PluggableBaseHeadline {
         }
 
         configurePercent(newReferencePoint, true);
-        configureOverTimeComparison(newReferencePoint);
+        configureOverTimeComparison(newReferencePoint, !!this.featureFlags.enableWeekFilters);
 
         newReferencePoint.uiConfig = getHeadlineUiConfig(newReferencePoint, this.intl);
         newReferencePoint = getReferencePointWithSupportedProperties(
