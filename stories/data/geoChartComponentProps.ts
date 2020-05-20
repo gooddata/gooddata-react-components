@@ -5,6 +5,9 @@ import { measure, attribute } from "../../src/helpers/model";
 export const ATTRIBUTE_LOCATION_GEOCHART: VisualizationObject.IVisualizationAttribute = attribute(
     "/gdc/md/storybook/obj/30.df",
 ).localIdentifier("location");
+export const EMPTY_ATTRIBUTE_LOCATION_GEOCHART: VisualizationObject.IVisualizationAttribute = attribute(
+    "/gdc/md/storybook/obj/31.df",
+).localIdentifier("location");
 export const MEASURE_SIZE_GEOCHART: VisualizationObject.IMeasure = measure(
     "/gdc/md/storybook/obj/20",
 ).localIdentifier("size");

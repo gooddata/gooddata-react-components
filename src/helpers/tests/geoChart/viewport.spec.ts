@@ -181,6 +181,14 @@ describe("viewport", () => {
             expect(getLngLatBounds(lnglats)).toEqual(undefined);
         });
 
+        it("should return default World viewport with all empty coordinates", () => {
+            const lnglats: IGeoLngLat[] = [null, null];
+            expect(getLngLatBounds(lnglats)).toEqual({
+                northEast: { lat: -84, lng: -180 },
+                southWest: { lat: 84, lng: 180 },
+            });
+        });
+
         it("should return bounds for one point", () => {
             const lnglats: IGeoLngLat[] = [
                 {
@@ -210,6 +218,31 @@ describe("viewport", () => {
                     lat: -80.5,
                     lng: 39.0,
                 },
+            ];
+            expect(getLngLatBounds(lnglats)).toEqual({
+                northEast: {
+                    lat: -80.5,
+                    lng: 44.5,
+                },
+                southWest: {
+                    lat: -89.5,
+                    lng: 39,
+                },
+            });
+        });
+
+        it("should return bounds for some null points", () => {
+            const lnglats: IGeoLngLat[] = [
+                {
+                    lat: -89.5,
+                    lng: 44.5,
+                },
+                null,
+                {
+                    lat: -80.5,
+                    lng: 39.0,
+                },
+                null,
             ];
             expect(getLngLatBounds(lnglats)).toEqual({
                 northEast: {

@@ -2,7 +2,7 @@
 import get = require("lodash/get");
 import mapboxgl = require("mapbox-gl");
 
-import { DEFAULT_CENTER, DEFAULT_ZOOM, VIEWPORTS } from "../../constants/geoChart";
+import { DEFAULT_CENTER, DEFAULT_WORLD_BOUNDS, DEFAULT_ZOOM, VIEWPORTS } from "../../constants/geoChart";
 import { IGeoConfig, IGeoConfigViewport, IGeoLngLat, IGeoLngLatBounds } from "../../interfaces/GeoChart";
 
 interface IGeoViewport {
@@ -62,12 +62,16 @@ export function getLngLatBounds(lnglats: IGeoLngLat[]): IGeoLngLatBounds {
         return;
     }
 
-    return lnglats.reduce(extendLngLatBounds, undefined);
+    return lnglats.reduce(extendLngLatBounds, undefined) || DEFAULT_WORLD_BOUNDS;
 }
 
 // @method extendLngLatBounds: IGeoLngLatBounds
 // Extend the bounds to contain the given point
 function extendLngLatBounds(bounds: IGeoLngLatBounds, lnglat: IGeoLngLat): IGeoLngLatBounds {
+    if (!lnglat) {
+        return bounds;
+    }
+
     if (!bounds) {
         return {
             northEast: lnglat,

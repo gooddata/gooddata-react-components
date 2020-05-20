@@ -13,6 +13,7 @@ const chartStories = [
     "with location, size, color, segmentBy and tooltipText",
     "with location, size, color, segmentBy, tooltipText and location filter",
     "with color and segment alias shown in tooltip",
+    "empty map",
 ];
 
 const legendStories = [
@@ -81,7 +82,7 @@ const configuration = {
             }),
             {},
         ),
-        /* This test case as it's unstable now. We'll bring it back once SD-948 is resolved. 
+        /* This test case as it's unstable now. We'll bring it back once SD-948 is resolved.
         .add("GeoPushpinChart example", () =>
         "URI components": {
             "GeoPushpinChart example": DEFAULT_SCENARIO_CONFIG,

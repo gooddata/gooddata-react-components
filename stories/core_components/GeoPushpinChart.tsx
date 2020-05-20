@@ -17,6 +17,7 @@ import {
     MEASURE_COLOR_GEOCHART_ALIAS,
     MEASURE_COLOR_SAME_VALUES_GEOCHART,
     MEASURE_SIZE_SAME_VALUES_GEOCHART,
+    EMPTY_ATTRIBUTE_LOCATION_GEOCHART,
 } from "../data/geoChartComponentProps";
 import { CUSTOM_COLOR_PALETTE_CONFIG } from "../data/configProps";
 import { attributeItemNameMatch, uriMatch, identifierMatch } from "../../src/factory/HeaderPredicateFactory";
@@ -195,6 +196,16 @@ storiesOf("Core components/GeoPushpinChart", module)
             color: MEASURE_COLOR_GEOCHART,
             segmentBy: ATTRIBUTE_SEGMENT_GEOCHART,
         }),
+    )
+    .add("empty map", () =>
+        screenshotWrap(
+            renderGeoPushpinChart({
+                projectId: "storybook",
+                location: EMPTY_ATTRIBUTE_LOCATION_GEOCHART,
+                size: MEASURE_SIZE_GEOCHART,
+                config: DEFAULT_CONFIG,
+            }),
+        ),
     );
 
 storiesOf("Core components/GeoPushpinChart/Config/Legend", module)
