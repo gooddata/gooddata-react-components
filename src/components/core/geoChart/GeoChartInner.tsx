@@ -28,6 +28,8 @@ import { shouldShowFluid } from "../../../helpers/utils";
 import { HEIGHT_OF_SIZE_LEGEND } from "./legends/PushpinCategoryLegend";
 import { IColorAssignment } from "../../../interfaces/Config";
 import { IDrillConfig } from "../../../interfaces/DrillEvents";
+import { IntlWrapper } from "../base/IntlWrapper";
+import { IntlTranslationsProvider, ITranslationsComponentProps } from "../base/TranslationsProvider";
 
 const HEIGHT_OF_COLOR_LEGEND = 210;
 
@@ -36,7 +38,15 @@ export function renderChart(props: IGeoChartRendererProps): React.ReactElement {
 }
 
 export function renderLegend(props: IGeoChartLegendRendererProps): React.ReactElement {
-    return <GeoChartLegendRenderer {...props} />;
+    return (
+        <IntlWrapper locale={props.locale}>
+            <IntlTranslationsProvider>
+                {(transplationProps: ITranslationsComponentProps) => (
+                    <GeoChartLegendRenderer {...props} numericSymbols={transplationProps.numericSymbols} />
+                )}
+            </IntlTranslationsProvider>
+        </IntlWrapper>
+    );
 }
 
 export interface ICoreGeoChartProps extends ICommonChartProps, IDataSourceProviderInjectedProps {

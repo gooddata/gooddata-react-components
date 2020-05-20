@@ -18,6 +18,9 @@ import {
     getExecutionResult,
 } from "../../../../../stories/data/geoChart";
 import { DEFAULT_COLORS } from "../../../visualizations/utils/color";
+import { IntlWrapper } from "../../base/IntlWrapper";
+import { IntlTranslationsProvider, ITranslationsComponentProps } from "../../base/TranslationsProvider";
+import { DEFAULT_LOCALE } from "../../../../constants/localization";
 
 interface ILegendFlags {
     hasSizeLegend?: boolean;
@@ -28,7 +31,15 @@ function createComponent(customProps: IGeoChartLegendRendererProps) {
     const legendProps = {
         ...customProps,
     };
-    const Wrapped = withIntl(GeoChartLegendRenderer);
+    const Wrapped = withIntl((props: IGeoChartLegendRendererProps) => (
+        <IntlWrapper locale={DEFAULT_LOCALE}>
+            <IntlTranslationsProvider>
+                {(transplationProps: ITranslationsComponentProps) => (
+                    <GeoChartLegendRenderer {...props} numericSymbols={transplationProps.numericSymbols} />
+                )}
+            </IntlTranslationsProvider>
+        </IntlWrapper>
+    ));
     return mount(<Wrapped {...legendProps} />);
 }
 

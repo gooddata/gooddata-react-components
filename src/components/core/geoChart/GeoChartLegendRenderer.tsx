@@ -6,7 +6,6 @@ import cx from "classnames";
 import { generateLegendColorData } from "./geoChartColor";
 import PushpinCategoryLegend from "./legends/PushpinCategoryLegend";
 import PushpinSizeLegend from "./legends/PushpinSizeLegend";
-import { useNumbericSymbols } from "../base/hook/TranslationsHook";
 import { ColorLegend } from "../../visualizations/chart/legend/ColorLegend";
 import { BOTTOM } from "../../visualizations/chart/legend/PositionTypes";
 import { IGeoData, IPushpinCategoryLegendItem } from "../../../interfaces/GeoChart";
@@ -23,6 +22,7 @@ export interface IGeoChartLegendRendererProps {
     position?: string;
     responsive?: boolean;
     showFluidLegend?: boolean;
+    numericSymbols?: string[];
     onItemClick?: (item: IPushpinCategoryLegendItem) => void;
 }
 
@@ -76,12 +76,12 @@ function renderPushpinColorLegend(props: IGeoChartLegendRendererProps, hasColorL
         responsive,
         showFluidLegend,
         colorLegendValue,
+        numericSymbols,
     } = props;
 
     const dataWithoutNull = data.filter(isFinite);
     const colorData = generateLegendColorData(dataWithoutNull, colorLegendValue);
     const isSmall: boolean = responsive && showFluidLegend;
-    const numericSymbols: string[] = useNumbericSymbols();
 
     return (
         <ColorLegend
@@ -116,8 +116,8 @@ function renderPushpinSizeLegend(props: IGeoChartLegendRendererProps, hasSizeLeg
         geoData: {
             size: { data, format, name },
         },
+        numericSymbols,
     } = props;
-    const numericSymbols: string[] = useNumbericSymbols();
 
     return (
         <PushpinSizeLegend format={format} measureName={name} numericSymbols={numericSymbols} sizes={data} />
