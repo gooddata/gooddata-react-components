@@ -21,13 +21,23 @@ import { convertDrillableItemsToPredicates } from "../../../helpers/headerPredic
 import { shouldShowFluid } from "../../../helpers/utils";
 import { IColorAssignment } from "../../../interfaces/Config";
 import { IDrillConfig } from "../../../interfaces/DrillEvents";
+import { IntlWrapper } from "../base/IntlWrapper";
+import { IntlTranslationsProvider, ITranslationsComponentProps } from "../base/TranslationsProvider";
 
 export function renderChart(props: IGeoChartRendererProps): React.ReactElement {
     return <GeoChartRenderer {...props} />;
 }
 
 export function renderLegend(props: IGeoChartLegendRendererProps): React.ReactElement {
-    return <GeoChartLegendRenderer {...props} />;
+    return (
+        <IntlWrapper locale={props.locale}>
+            <IntlTranslationsProvider>
+                {(transplationProps: ITranslationsComponentProps) => (
+                    <GeoChartLegendRenderer {...props} numericSymbols={transplationProps.numericSymbols} />
+                )}
+            </IntlTranslationsProvider>
+        </IntlWrapper>
+    );
 }
 
 export interface ICoreGeoChartProps extends ICommonChartProps, IDataSourceProviderInjectedProps {
