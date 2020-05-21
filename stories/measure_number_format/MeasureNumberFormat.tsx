@@ -7,6 +7,7 @@ import { screenshotWrap } from "@gooddata/test-storybook";
 
 import {
     IFormatPreset,
+    IFormatTemplate,
     IToggleButtonProps,
     PresetType,
 } from "../../src/components/measureNumberFormat/typings";
@@ -16,7 +17,6 @@ import {
     CUSTOM_FORMAT_PRESET_LOCAL_IDENTIFIER,
 } from "../../src/components/measureNumberFormat/MeasureNumberFormat";
 import { PresetsDropdown } from "../../src/components/measureNumberFormat/presetsDropdown/PresetsDropdown";
-import { IFormatTemplate } from "../../src/components/measureNumberFormat/customFormatDialog/formatTemplatesDropdown/FormatTemplatesDropdown";
 import { createIntlMock } from "../../src/components/visualizations/utils/intlUtils";
 import { CustomFormatDialog } from "../../src/components/measureNumberFormat/customFormatDialog/CustomFormatDialog";
 import { IntlWrapper } from "../../src/components/core/base/IntlWrapper";

@@ -7,10 +7,10 @@ import Button from "@gooddata/goodstrap/lib/Button/Button";
 import { ISeparators } from "../../filters/MeasureValueFilter/separators";
 import { IPositioning, SnapPoint } from "../../../typings/positioning";
 import { positioningToAlignPoints } from "../../../helpers/utils";
-import { IFormatTemplate } from "./formatTemplatesDropdown/FormatTemplatesDropdown";
 import Preview from "./previewSection/Preview";
 import FormatInput from "./FormatInput";
 import DocumentationLink from "./DocumentationLink";
+import { IFormatTemplate } from "../typings";
 
 interface ICustomFormatDialogOwnProps {
     onApply: (formatString: string) => void;

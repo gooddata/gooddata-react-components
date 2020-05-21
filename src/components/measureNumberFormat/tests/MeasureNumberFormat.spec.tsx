@@ -8,8 +8,7 @@ import { ISeparators } from "@gooddata/numberjs";
 import { MeasureNumberFormat, IMeasureNumberFormatOwnProps } from "../MeasureNumberFormat";
 import { withIntl } from "../../visualizations/utils/intlUtils";
 import MeasureNumberFormatFragment from "./fragments/MeasureNumberFormat";
-import { IToggleButtonProps } from "../typings";
-import { IFormatTemplate } from "../customFormatDialog/formatTemplatesDropdown/FormatTemplatesDropdown";
+import { IFormatTemplate, IToggleButtonProps } from "../typings";
 
 const getButtonComponent = (): React.FC<IToggleButtonProps> => ({ isOpened, text, toggleDropdown }) => {
     return (
@@ -130,11 +129,18 @@ describe("Measure number format", () => {
                 component
                     .openPresetsDropdown()
                     .selectCustomFormat()
-                    .setPreviewNumber("1234.5678");
-                expect(component.getPreviewFormattedNumber()).toEqual("1235");
+                    .setCustomFormatValue("#.##");
+                expect(component.getPreviewFormattedNumber()).toEqual("-1234,57");
 
                 component.setCustomFormatValue("#.###");
-                expect(component.getPreviewFormattedNumber()).toEqual("1234,568");
+                expect(component.getPreviewFormattedNumber()).toEqual("-1234,568");
+            });
+
+            it("should not display formatted number when no format is provided", () => {
+                const component = renderComponent();
+
+                component.openPresetsDropdown().selectCustomFormat();
+                expect(component.getPreviewFormattedNumber()).toEqual("");
             });
 
             it("should display extended preview formatted numbers", () => {
@@ -149,7 +155,7 @@ describe("Measure number format", () => {
                 expect(component.getShowExtendedPreviewButton().hasClass("hidden")).toEqual(true);
 
                 const extendedPreviewFormattedValues = component.getExtendedPreviewFormattedValues();
-                const expectedPreviewFormattedValues = ["", "1,234", "123,456", "1234,567"];
+                const expectedPreviewFormattedValues = ["", "1,234", "1234,567"];
                 expect(extendedPreviewFormattedValues).toEqual(expectedPreviewFormattedValues);
             });
         });
@@ -230,7 +236,13 @@ describe("Measure number format", () => {
                 const templatePreviewFormattedValues = component.getTemplatePreviewBubbleFormattedValues(
                     templateName,
                 );
-                const expectedTemplatePreviewFormattedValues = ["€ 0,0", "€ 1,2", "€ 123,5", "€ 1 234,6"];
+                const expectedTemplatePreviewFormattedValues = [
+                    "€ -1 234,6",
+                    "€ -1,2",
+                    "€ 0,0",
+                    "€ 1,2",
+                    "€ 1 234,6",
+                ];
 
                 expect(expectedTemplatePreviewFormattedValues).toEqual(templatePreviewFormattedValues);
 
