@@ -72,6 +72,7 @@ export interface IBaseVisualizationProps extends IVisCallbacks {
     resultSpec?: AFM.IResultSpec;
     environment?: VisualizationEnvironment;
     stickyHeaderOffset?: number;
+    width?: number;
     height?: number;
     locale?: ILocale;
     drillableItems: IDrillableItem[];
@@ -238,6 +239,7 @@ export class BaseVisualization extends React.PureComponent<IBaseVisualizationPro
                     resultSpec: this.props.resultSpec,
                     locale: this.props.locale,
                     dimensions: {
+                        width: this.props.width,
                         height: this.props.height,
                     },
                     custom: {

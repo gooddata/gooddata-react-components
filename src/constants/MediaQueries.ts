@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 
 const SCREEN = "only screen";
 
@@ -18,6 +18,6 @@ const smallRange: IMatchingRange = {
 const getQueryMatching = (range: IMatchingRange) =>
     `${SCREEN} and (min-width:${range.lower}px) and (max-width:${range.upper}px)`;
 
-const mobileRange = smallRange;
+export const mobileRange = smallRange;
 
 export const IS_MOBILE_DEVICE = getQueryMatching(mobileRange);
