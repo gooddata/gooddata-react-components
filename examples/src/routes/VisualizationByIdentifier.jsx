@@ -5,6 +5,7 @@ import ExampleWithSource from "../components/utils/ExampleWithSource";
 
 import VisualizationColumnChartByIdentifierExample from "../components/VisualizationColumnChartByIdentifierExample";
 import VisualizationMeasureValueFilterByIdentifierExample from "../components/VisualizationMeasureValueFilterByIdentifierExample";
+import VisualizationMeasureValueFilterTreatNullAsZeroByIdentifierExample from "../components/VisualizationMeasureValueFilterTreatNullAsZeroByIdentifierExample";
 import VisualizationTableExample from "../components/VisualizationTableByIdentifierExample";
 import CustomVisualizationExample from "../components/CustomVisualizationExample";
 import VisualizationBarExample from "../components/VisualizationBarByIdentifierExample";
@@ -24,6 +25,7 @@ import VisualizationGeoPushpinChartByIdentifierExample from "../components/Visua
 import VisualizationColumnChartExampleSRC from "!raw-loader!../components/VisualizationColumnChartByIdentifierExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import VisualizationTableExampleSRC from "!raw-loader!../components/VisualizationTableByIdentifierExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import VisualizationMeasureValueFilterExampleSRC from "!raw-loader!../components/VisualizationMeasureValueFilterByIdentifierExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
+import VisualizationMeasureValueFilterTreatNullAsZeroByIdentifierExampleSRC from "!raw-loader!../components/VisualizationMeasureValueFilterTreatNullAsZeroByIdentifierExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import CustomVisualizationExampleSRC from "!raw-loader!../components/CustomVisualizationExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import VisualizationBarExampleSRC from "!raw-loader!../components/VisualizationBarByIdentifierExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import VisualizationLineExampleSRC from "!raw-loader!../components/VisualizationLineByIdentifierExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
@@ -143,6 +145,14 @@ export const VisualizationByIdentifier = () => (
         <ExampleWithSource
             for={VisualizationMeasureValueFilterByIdentifierExample}
             source={VisualizationMeasureValueFilterExampleSRC}
+        />
+
+        <h2 id="measure-value-filter-treat-null-as-zero">
+            Measure Value Filter that treats measure null values as zero
+        </h2>
+        <ExampleWithSource
+            for={VisualizationMeasureValueFilterTreatNullAsZeroByIdentifierExample}
+            source={VisualizationMeasureValueFilterTreatNullAsZeroByIdentifierExampleSRC}
         />
     </div>
 );

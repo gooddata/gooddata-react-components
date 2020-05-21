@@ -1,8 +1,12 @@
 // (C) 2007-2020 GoodData Corporation
 import { Selector } from "testcafe";
 import { config } from "./utils/config";
-import { loginUserAndNavigate } from "./utils/helpers";
+import { loginUserAndNavigate, waitForPivotTableStopLoading, checkCellValue } from "./utils/helpers";
 import { HIGHCHART_VERSION } from "./utils/constants";
+
+const CELL_0_1 = ".s-cell-0-1";
+const CELL_1_1 = ".s-cell-1-1";
+const CELL_2_1 = ".s-cell-2-1";
 
 fixture("Visualization by identifier").beforeEach(
     loginUserAndNavigate(`${config.url}/visualization/visualization-by-identifier`),
@@ -109,4 +113,14 @@ test("Measure value filter should render", async t => {
         .eql("53,986,994.50")
         .expect(chartValues.nth(1).textContent)
         .eql("57,264,327.95");
+});
+
+test("Measure Value Filter that treats null as zero should render", async t => {
+    const pivotTableSelector = Selector("#measure-value-filter-treat-null-as-zero ~ div .s-pivot-table");
+
+    await waitForPivotTableStopLoading(t, pivotTableSelector);
+
+    await checkCellValue(t, pivotTableSelector, "1.00", CELL_0_1);
+    await checkCellValue(t, pivotTableSelector, "–", CELL_1_1);
+    await checkCellValue(t, pivotTableSelector, "–", CELL_2_1);
 });
