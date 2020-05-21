@@ -114,7 +114,7 @@ export default function getLegend(legendConfig: any = {}, chartOptions: any): IL
         VisualizationTypes.SCATTER,
         VisualizationTypes.TREEMAP,
         VisualizationTypes.BUBBLE,
-        VisualizationTypes.HEATMAP,
+        VisualizationTypes.FUNNEL,
     ];
     const defaultTopLegendCharts = [
         VisualizationTypes.COLUMN,
@@ -124,6 +124,8 @@ export default function getLegend(legendConfig: any = {}, chartOptions: any): IL
         VisualizationTypes.PIE,
         VisualizationTypes.DONUT,
         VisualizationTypes.BULLET,
+        VisualizationTypes.HEATMAP,
+        VisualizationTypes.PUSHPIN,
     ];
 
     if (legendConfig.position === "auto" || !legendConfig.position) {
