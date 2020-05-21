@@ -46,6 +46,7 @@ export interface ICustomProps {
 export interface IDimensions {
     width?: number; // Note: will not be optional once we start sending it
     height: number;
+    columnWidth?: number; // width in terms of number of columns (1-12)
 }
 
 export interface IVisProps {

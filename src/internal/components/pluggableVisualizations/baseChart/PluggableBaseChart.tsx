@@ -78,6 +78,12 @@ import { DASHBOARDS_ENVIRONMENT } from "../../../constants/properties";
 import { IChartConfig, IColorMapping } from "../../../../interfaces/Config";
 import { unmountComponentsAtNodes } from "../../../utils/domHelper";
 
+export const MAX_WIDTH_FOR_COLLAPSED_LEGEND = 440;
+export const MAX_WIDTH_FOR_COLLAPSED_AUTO_LEGEND = 610;
+
+export const getMaxWidthForCollapsedLegend = (legendPosition: string) =>
+    legendPosition === "auto" ? MAX_WIDTH_FOR_COLLAPSED_AUTO_LEGEND : MAX_WIDTH_FOR_COLLAPSED_LEGEND;
+
 export class PluggableBaseChart extends AbstractPluggableVisualization {
     protected projectId: string;
     protected callbacks: IVisCallbacks;
@@ -527,15 +533,12 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
         mdObject: VisualizationObject.IVisualizationObjectContent,
     ) {
         const legendPosition = get(controlProperties, "legend.position", "auto");
+        const width = this.options.dimensions.width;
 
-        if (legendPosition === "auto") {
-            // Legend has right position always on dashboards or if report is stacked
-            if (this.type === "heatmap") {
-                return this.environment === DASHBOARDS_ENVIRONMENT ? "right" : "top";
-            }
-            return isStacked(mdObject) || this.environment === DASHBOARDS_ENVIRONMENT ? "right" : "auto";
+        if (this.environment === DASHBOARDS_ENVIRONMENT) {
+            return width <= getMaxWidthForCollapsedLegend(legendPosition) ? "top" : legendPosition;
         }
 
-        return legendPosition;
+        return legendPosition === "auto" && isStacked(mdObject) ? "right" : legendPosition;
     }
 }
