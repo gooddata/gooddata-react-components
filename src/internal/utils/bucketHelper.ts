@@ -851,7 +851,16 @@ export const transformMeasureBuckets = (
     let unusedMeasures: IBucketItem[] = [];
 
     const newBuckets: IBucket[] = measureBucketItemsLimits.map(({ localIdentifier, itemsLimit }) => {
-        const preferredBucketItems = getPreferredBucketItems(buckets, [localIdentifier], [METRIC]);
+        const preferedBucketlocalIdentifiers: string[] =
+            localIdentifier === BucketNames.MEASURES
+                ? [BucketNames.MEASURES, BucketNames.SIZE]
+                : localIdentifier === BucketNames.SECONDARY_MEASURES
+                ? [BucketNames.SECONDARY_MEASURES, BucketNames.COLOR]
+                : [localIdentifier];
+
+        const preferredBucketItems = getPreferredBucketItems(buckets, preferedBucketlocalIdentifiers, [
+            METRIC,
+        ]);
         const measuresToBePlaced = preferredBucketItems.splice(0, itemsLimit);
 
         if (measuresToBePlaced.length === 0) {

@@ -159,5 +159,20 @@ describe("bullet chart bucket helper", () => {
                 getBucket(BucketNames.VIEW, []),
             ]);
         });
+
+        it("should distribute measures after switching from Geo Chart", () => {
+            const buckets = [
+                getBucket(BucketNames.SIZE, [referencePointMocks.masterMeasureItems[0]]),
+                getBucket(BucketNames.COLOR, [referencePointMocks.masterMeasureItems[1]]),
+            ];
+            const actual = transformBuckets(buckets);
+
+            expect(actual).toEqual([
+                getBucket(BucketNames.MEASURES, [referencePointMocks.masterMeasureItems[0]]),
+                getBucket(BucketNames.SECONDARY_MEASURES, [referencePointMocks.masterMeasureItems[1]]),
+                getBucket(BucketNames.TERTIARY_MEASURES, []),
+                getBucket(BucketNames.VIEW, []),
+            ]);
+        });
     });
 });

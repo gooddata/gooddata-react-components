@@ -218,6 +218,59 @@ describe("PluggableBulletChart", () => {
         });
     });
 
+    it("should return reference point after switching from Geo Chart", async () => {
+        const {
+            simpleGeoPushpinReferencePoint: { buckets: mockedBuckets, filters: mockedFilters },
+        } = referencePointMocks;
+        const expectedBuckets: IBucket[] = [
+            {
+                localIdentifier: "measures",
+                items: mockedBuckets[1].items.slice(0, 1),
+            },
+            {
+                localIdentifier: "secondary_measures",
+                items: mockedBuckets[2].items.slice(0, 1),
+            },
+            {
+                localIdentifier: "tertiary_measures",
+                items: [],
+            },
+            {
+                localIdentifier: "view",
+                items: [...mockedBuckets[0].items.slice(0, 1), ...mockedBuckets[3].items.slice(0, 1)],
+            },
+        ];
+        const expectedFilters: IFilters = {
+            localIdentifier: "filters",
+            items: mockedFilters.items.slice(0, 1),
+        };
+
+        const extendedReferencePoint = await bulletChart.getExtendedReferencePoint(
+            referencePointMocks.simpleGeoPushpinReferencePoint,
+        );
+
+        const expectedUiConfig = {
+            ...DEFAULT_BULLET_CHART_CONFIG,
+            buckets: {
+                [MEASURES]: {
+                    ...DEFAULT_BULLET_CHART_CONFIG.buckets[MEASURES],
+                    canAddItems: false,
+                },
+                [SECONDARY_MEASURES]: {
+                    ...DEFAULT_BULLET_CHART_CONFIG.buckets[SECONDARY_MEASURES],
+                    canAddItems: false,
+                },
+            },
+        };
+
+        expect(extendedReferencePoint).toMatchObject({
+            buckets: expectedBuckets,
+            filters: expectedFilters,
+            uiConfig: expectedUiConfig,
+            properties: {},
+        });
+    });
+
     describe("isError property", () => {
         it("should set to true if primary measure is missing", async () => {
             await bulletChart.getExtendedReferencePoint(
