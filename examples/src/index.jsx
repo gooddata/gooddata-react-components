@@ -221,6 +221,7 @@ export class App extends React.Component {
                             align-items: stretch;
                             width: 100%;
                             padding: 20px 40px;
+                            min-width: 0;
                         }
                     `}</style>
                     <Header
