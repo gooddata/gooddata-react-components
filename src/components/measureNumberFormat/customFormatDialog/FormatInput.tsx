@@ -3,7 +3,8 @@ import * as React from "react";
 import { injectIntl, WrappedComponentProps } from "react-intl";
 import * as numberJS from "@gooddata/numberjs";
 
-import { FormatTemplatesDropdown, IFormatTemplate } from "./formatTemplatesDropdown/FormatTemplatesDropdown";
+import { FormatTemplatesDropdown } from "./formatTemplatesDropdown/FormatTemplatesDropdown";
+import { IFormatTemplate } from "../typings";
 
 interface IFormatInputOwnProps {
     format: string;
