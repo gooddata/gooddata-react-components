@@ -36,6 +36,7 @@ import OnDrillHandling from "./OnDrillHandling";
 import Xirr from "./Xirr";
 import NativeTotalAndMeasureValueFilterTest from "../components/NativeTotalAndMeasureValueFilterTest";
 import MeasureValueFilterChartConfiguration from "../components/MeasureValueFilterChartConfiguration";
+import MeasureValueFilterTreatNullAsZero from "../components/MeasureValueFilterTreatNullAsZero";
 import { PivotTableSizing } from "./PivotTableSizing";
 import GeoPushpinChartDemo from "./GeoPushpinChartDemo";
 
@@ -279,6 +280,11 @@ export const hiddenPaths = [
         path: "/hidden/measure-value-filter-with-chart-configuration",
         title: "Measure value filter with chart configuration",
         Component: MeasureValueFilterChartConfiguration,
+    },
+    {
+        path: "/hidden/measure-value-filter-with-treat-null-as-zero",
+        title: "Measure value filter with treat null as zero",
+        Component: MeasureValueFilterTreatNullAsZero,
     },
     {
         path: "/hidden/on-drill-drilling",

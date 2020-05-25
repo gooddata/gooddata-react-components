@@ -9,9 +9,10 @@ import MeasureValueFilterComponentPercentageExample from "../components/MeasureV
 import MeasureValueFilterComponentPercentageExampleSRC from "!raw-loader!../components/MeasureValueFilterComponentPercentageExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import MeasureValueFilterComponentRatioExample from "../components/MeasureValueFilterComponentRatioExample";
 import MeasureValueFilterComponentRatioExampleSRC from "!raw-loader!../components/MeasureValueFilterComponentRatioExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
-
 import MeasureValueFilterDropdownComponentExample from "../components/MeasureValueFilterDropdownComponentExample";
 import MeasureValueFilterDropdownComponentExampleSRC from "!raw-loader!../components/MeasureValueFilterDropdownComponentExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
+import MeasureValueFilterTreatNullAsZeroComponentExample from "../components/MeasureValueFilterTreatNullAsZeroComponentExample";
+import MeasureValueFilterTreatNullAsZeroComponentExampleSRC from "!raw-loader!../components/MeasureValueFilterTreatNullAsZeroComponentExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 
 export const MeasureValueFilterComponent = () => (
     <div>
@@ -50,6 +51,16 @@ export const MeasureValueFilterComponent = () => (
             <ExampleWithSource
                 for={MeasureValueFilterDropdownComponentExample}
                 source={MeasureValueFilterDropdownComponentExampleSRC}
+            />
+        </div>
+        <p>
+            This example shows the component for setting up a measure value filter with treat null value as
+            zero
+        </p>
+        <div className="s-measure-value-filter-example-5">
+            <ExampleWithSource
+                for={MeasureValueFilterTreatNullAsZeroComponentExample}
+                source={MeasureValueFilterTreatNullAsZeroComponentExampleSRC}
             />
         </div>
     </div>

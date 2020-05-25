@@ -164,3 +164,15 @@ test("should render data when chart is configured", async t => {
         .expect(chartValues.nth(3).textContent)
         .eql("-24,823,451");
 });
+
+fixture("Measure Value Filter that treats null as zero").beforeEach(
+    loginUserAndNavigate(`${config.url}/hidden/measure-value-filter-with-treat-null-as-zero`),
+);
+
+test("should filter the data with measure value filter that treats measure null values as zero", async t => {
+    const tableSelector = Selector(".s-measure-value-filter-treat-null-as-zero-table");
+
+    await checkCellValue(t, tableSelector, "1.00", CELL_0_1);
+    await checkCellValue(t, tableSelector, "–", CELL_1_1);
+    await checkCellValue(t, tableSelector, "–", CELL_2_1);
+});
