@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import {
     getSupportedPropertiesControls,
     getSupportedProperties,
@@ -6,6 +6,7 @@ import {
     removeImmutableOptionalStackingProperties,
     isDualAxisOrSomeSecondaryAxisMeasure,
     getHighchartsAxisNameConfiguration,
+    getColumnWidthsFromProperties,
 } from "../propertiesHelper";
 import {
     emptyReferencePoint,
@@ -24,6 +25,7 @@ import {
     IBucketItem,
     IVisualizationProperties,
 } from "../../interfaces/Visualization";
+import { ColumnWidthItem } from "../../../interfaces/PivotTable";
 
 describe("propertiesHelper", () => {
     describe("getSupportedPropertiesControls", () => {
@@ -294,6 +296,45 @@ describe("propertiesHelper", () => {
                     },
                 },
             });
+        });
+    });
+
+    describe("getColumnWidthsFromProperties", () => {
+        const columnWidths: ColumnWidthItem[] = [
+            {
+                measureColumnWidthItem: {
+                    width: 100,
+                    locators: [
+                        {
+                            attributeLocatorItem: {
+                                attributeIdentifier: "id",
+                            },
+                        },
+                    ],
+                },
+            },
+        ];
+
+        it("should return correct column widths", () => {
+            const visualizationProperties: IVisualizationProperties = {
+                properties: {
+                    controls: {
+                        columnWidths,
+                    },
+                },
+            };
+            const result = getColumnWidthsFromProperties(visualizationProperties);
+            expect(result).toEqual(columnWidths);
+        });
+
+        it("should return undefined when column widths are not defined", () => {
+            const visualizationProperties: IVisualizationProperties = {
+                properties: {
+                    controls: {},
+                },
+            };
+            const result = getColumnWidthsFromProperties(visualizationProperties);
+            expect(result).toEqual(undefined);
         });
     });
 });

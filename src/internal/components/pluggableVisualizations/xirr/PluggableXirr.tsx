@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import { render } from "react-dom";
 import { VisualizationObject, AFM } from "@gooddata/typings";

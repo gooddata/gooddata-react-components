@@ -10,6 +10,7 @@ import {
 } from "../interfaces/Visualization";
 import { OverTimeComparisonTypes } from "../../interfaces/OverTimeComparison";
 import { DATE_DATASET_ATTRIBUTE, DATE, GRANULARITY } from "../constants/bucket";
+import { ColumnWidthItem } from "../../interfaces/PivotTable";
 
 export const masterMeasureItems: IBucketItem[] = [
     {
@@ -478,6 +479,15 @@ const defaultSortItem = {
     },
 };
 
+const columnWidths: ColumnWidthItem[] = [
+    {
+        attributeColumnWidthItem: {
+            attributeIdentifier: "a1",
+            width: 100,
+        },
+    },
+];
+
 export const secondaryMeasuresAndAttributeReferencePoint: IReferencePoint = {
     buckets: [
         {
@@ -606,6 +616,10 @@ export const simpleStackedReferencePoint: IReferencePoint = {
     },
     properties: {
         sortItems: [defaultSortItem],
+        controls: {
+            columnWidths,
+            test: "test",
+        },
     },
 };
 
