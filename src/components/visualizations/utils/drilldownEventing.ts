@@ -394,7 +394,10 @@ function getDrillIntersectionForGeoChart(
     const { items: measureGroupItems = [] } = findMeasureGroupInDimensions(dimensions) || {};
     const measureHeaders: Execution.IMeasureHeaderItem[] = measureGroupItems.slice(0, 2);
 
-    const { locationAttribute, segmentByAttribute } = findGeoAttributesInDimension(execution, geoData);
+    const { locationAttribute, segmentByAttribute, tooltipTextAttribute } = findGeoAttributesInDimension(
+        execution,
+        geoData,
+    );
     const {
         attributeHeader: locationAttributeHeader,
         attributeHeaderItem: locationAttributeHeaderItem,
@@ -403,6 +406,10 @@ function getDrillIntersectionForGeoChart(
         attributeHeader: segmentByAttributeHeader,
         attributeHeaderItem: segmentByAttributeHeaderItem,
     } = getAttributeHeader(segmentByAttribute, locationIndex);
+    const {
+        attributeHeader: tooltipTextAttributeHeader,
+        attributeHeaderItem: tooltipTextAttributeHeaderItem,
+    } = getAttributeHeader(tooltipTextAttribute, locationIndex);
 
     // pin is drillable if a drillableItem matches:
     //   pin's measure,
@@ -410,6 +417,8 @@ function getDrillIntersectionForGeoChart(
     //   pin's location attribute item,
     //   pin's segmentBy attribute,
     //   pin's segmentBy attribute item,
+    //   pin's tooltipText attribute,
+    //   pin's tooltipText attribute item,
     const drillItems: IMappingHeader[] = without(
         [
             ...measureHeaders,
@@ -417,6 +426,8 @@ function getDrillIntersectionForGeoChart(
             locationAttributeHeader,
             segmentByAttributeHeaderItem,
             segmentByAttributeHeader,
+            tooltipTextAttributeHeaderItem,
+            tooltipTextAttributeHeader,
         ],
         undefined,
     );

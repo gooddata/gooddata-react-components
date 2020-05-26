@@ -1276,6 +1276,25 @@ describe("Drilldown Eventing", () => {
                         },
                     },
                 },
+                {
+                    header: {
+                        attributeHeader: {
+                            formOf: {
+                                identifier: "attr.state",
+                                name: "State",
+                                uri: "any-uri",
+                            },
+                            identifier: "label.state",
+                            localIdentifier: "a_state_tooltip_text",
+                            name: "State",
+                            uri: "/gdc/md/projectId/obj/3",
+                        },
+                        attributeHeaderItem: {
+                            name: "Wisconsin",
+                            uri: "/gdc/md/storybook/obj/694/elements?id=1808",
+                        },
+                    },
+                },
             ];
             const drillContext: IGeoDrillEvent = {
                 color: 1,
