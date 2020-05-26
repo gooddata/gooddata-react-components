@@ -114,6 +114,27 @@ export function getDefaultAttributeGeoPushpinSort(afm: AFM.IAfm): AFM.SortItem[]
     return [];
 }
 
+export function getDefaultHeatmapSort(resultSpec: AFM.IResultSpec): AFM.SortItem[] {
+    if (!resultSpec) {
+        return [];
+    }
+
+    const { sorts } = resultSpec;
+    if (sorts) {
+        return sorts;
+    }
+
+    const { dimensions } = resultSpec;
+    if (dimensions && dimensions.length) {
+        const rowsAttributeIdentifier = dimensions[0].itemIdentifiers[0];
+        return ignoreMeasureGroup(rowsAttributeIdentifier)
+            ? getAttributeSortItems(rowsAttributeIdentifier, DESC)
+            : [];
+    }
+
+    return [];
+}
+
 export function getDefaultBarChartSort(
     afm: AFM.IAfm,
     resultSpec: AFM.IResultSpec,

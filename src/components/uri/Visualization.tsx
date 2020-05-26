@@ -41,9 +41,9 @@ import { LoadingComponent, ILoadingProps } from "../simple/LoadingComponent";
 import { ErrorComponent, IErrorProps } from "../simple/ErrorComponent";
 import { IDrillableItem, generateDimensions, RuntimeError } from "../../";
 import { setTelemetryHeaders } from "../../helpers/utils";
-import { getDefaultBarChartSort, getDefaultTreemapSort } from "../../helpers/sorts";
+import { getDefaultBarChartSort, getDefaultTreemapSort, getDefaultHeatmapSort } from "../../helpers/sorts";
 import { convertErrors, generateErrorMap, IErrorMap } from "../../helpers/errorHandlers";
-import { isBarChart, isTreemap } from "../visualizations/utils/common";
+import { isBarChart, isTreemap, isHeatmap } from "../visualizations/utils/common";
 import { getColorMappingPredicate, getColorPaletteFromColors } from "../visualizations/utils/color";
 import { getCachedOrLoad, clearSdkCache } from "../../helpers/sdkCache";
 import {
@@ -628,10 +628,17 @@ function buildAfmResultSpecForVis(
           }
         : {};
 
+    const heatmapDefaultSorting = isHeatmap(visType)
+        ? {
+              sorts: getDefaultHeatmapSort(resultSpecWithDimensions),
+          }
+        : {};
+
     const resultSpec = {
         ...resultSpecWithDimensions,
         ...barChartDefaultSorting,
         ...treemapDefaultSorting,
+        ...heatmapDefaultSorting,
     };
 
     return {

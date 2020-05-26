@@ -39,6 +39,7 @@ module.exports = projectId => {
                         itemIdentifiers: ["a1", "measureGroup"],
                     },
                 ],
+                sorts: [{ attributeSortItem: { attributeIdentifier: "a2", direction: "desc" } }],
             },
         },
     };
