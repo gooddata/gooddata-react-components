@@ -150,149 +150,74 @@ describe("GeoChartOptionsWrapper", () => {
         const wrapper = renderComponent(props);
         const geoChartOptions = "geoChartOptions";
         expect(wrapper.props()[geoChartOptions]).toEqual({
+            categoryItems: [
+                {
+                    color: "rgb(20,178,226)",
+                    isVisible: true,
+                    legendIndex: 0,
+                    name: "General Goods",
+                    uri: "/gdc/md/storybook/obj/23/elements?id=1",
+                },
+                {
+                    color: "rgb(0,193,141)",
+                    isVisible: true,
+                    legendIndex: 1,
+                    name: "Toy Store",
+                    uri: "/gdc/md/storybook/obj/23/elements?id=2",
+                },
+            ],
+            colorPalette: [
+                { fill: { b: 226, g: 178, r: 20 }, guid: "1" },
+                { fill: { b: 141, g: 193, r: 0 }, guid: "2" },
+                { fill: { b: 66, g: 77, r: 229 }, guid: "3" },
+                { fill: { b: 0, g: 134, r: 241 }, guid: "4" },
+                { fill: { b: 163, g: 85, r: 171 }, guid: "5" },
+            ],
+            colorStrategy: {
+                fullColorAssignment: [
+                    {
+                        color: { type: "guid", value: "1" },
+                        headerItem: {
+                            attributeHeaderItem: {
+                                name: "General Goods",
+                                uri: "/gdc/md/storybook/obj/23/elements?id=1",
+                            },
+                        },
+                    },
+                    {
+                        color: { type: "guid", value: "2" },
+                        headerItem: {
+                            attributeHeaderItem: {
+                                name: "Toy Store",
+                                uri: "/gdc/md/storybook/obj/23/elements?id=2",
+                            },
+                        },
+                    },
+                ],
+                outputColorAssignment: [
+                    {
+                        color: { type: "guid", value: "1" },
+                        headerItem: {
+                            attributeHeaderItem: {
+                                name: "General Goods",
+                                uri: "/gdc/md/storybook/obj/23/elements?id=1",
+                            },
+                        },
+                    },
+                    {
+                        color: { type: "guid", value: "2" },
+                        headerItem: {
+                            attributeHeaderItem: {
+                                name: "Toy Store",
+                                uri: "/gdc/md/storybook/obj/23/elements?id=2",
+                            },
+                        },
+                    },
+                ],
+                palette: ["rgb(20,178,226)", "rgb(0,193,141)"],
+            },
             geoData: {
-                location: {
-                    index: 0,
-                    name: "State",
-                    data: [
-                        {
-                            lat: 44.5,
-                            lng: -89.5,
-                        },
-                        {
-                            lat: 39,
-                            lng: -80.5,
-                        },
-                        {
-                            lat: 44,
-                            lng: -72.699997,
-                        },
-                        {
-                            lat: 31,
-                            lng: -100,
-                        },
-                        {
-                            lat: 44.5,
-                            lng: -100,
-                        },
-                        {
-                            lat: 41.700001,
-                            lng: -71.5,
-                        },
-                        {
-                            lat: 44,
-                            lng: -120.5,
-                        },
-                        {
-                            lat: 43,
-                            lng: -75,
-                        },
-                        {
-                            lat: 44,
-                            lng: -71.5,
-                        },
-                        {
-                            lat: 41.5,
-                            lng: -100,
-                        },
-                        {
-                            lat: 38.5,
-                            lng: -98,
-                        },
-                        {
-                            lat: 33,
-                            lng: -90,
-                        },
-                        {
-                            lat: 40,
-                            lng: -89,
-                        },
-                        {
-                            lat: 39,
-                            lng: -75.5,
-                        },
-                        {
-                            lat: 41.599998,
-                            lng: -72.699997,
-                        },
-                        {
-                            lat: 34.799999,
-                            lng: -92.199997,
-                        },
-                        {
-                            lat: 40.273502,
-                            lng: -86.126976,
-                        },
-                        {
-                            lat: 38.573936,
-                            lng: -92.60376,
-                        },
-                        {
-                            lat: 27.994402,
-                            lng: -81.760254,
-                        },
-                        {
-                            lat: 39.876019,
-                            lng: -117.224121,
-                        },
-                    ],
-                },
-                segment: {
-                    index: 1,
-                    name: "Type",
-                    data: [
-                        "General Goods",
-                        "General Goods",
-                        "General Goods",
-                        "General Goods",
-                        "General Goods",
-                        "General Goods",
-                        "General Goods",
-                        "General Goods",
-                        "General Goods",
-                        "General Goods",
-                        "General Goods",
-                        "General Goods",
-                        "General Goods",
-                        "General Goods",
-                        "General Goods",
-                        "General Goods",
-                        "Toy Store",
-                        "Toy Store",
-                        "Toy Store",
-                        "Toy Store",
-                    ],
-                },
-                size: {
-                    index: 0,
-                    name: "Population",
-                    data: [
-                        1005,
-                        943,
-                        NaN,
-                        4726,
-                        1719,
-                        2844,
-                        838,
-                        3060,
-                        709,
-                        772,
-                        3949,
-                        1766,
-                        1560,
-                        1938,
-                        3836,
-                        5302,
-                        3310,
-                        3500,
-                        2288,
-                        11564,
-                    ],
-                    format: "#,##0",
-                },
                 color: {
-                    index: 1,
-                    name: "Area",
                     data: [
                         NaN,
                         6832,
@@ -316,119 +241,111 @@ describe("GeoChartOptionsWrapper", () => {
                         12064,
                     ],
                     format: "#,##0",
+                    index: 1,
+                    name: "Area",
+                },
+                location: {
+                    data: [
+                        { lat: 44.5, lng: -89.5 },
+                        { lat: 39, lng: -80.5 },
+                        { lat: 44, lng: -72.699997 },
+                        { lat: 31, lng: -100 },
+                        { lat: 44.5, lng: -100 },
+                        { lat: 41.700001, lng: -71.5 },
+                        { lat: 44, lng: -120.5 },
+                        { lat: 43, lng: -75 },
+                        { lat: 44, lng: -71.5 },
+                        { lat: 41.5, lng: -100 },
+                        { lat: 38.5, lng: -98 },
+                        { lat: 33, lng: -90 },
+                        { lat: 40, lng: -89 },
+                        { lat: 39, lng: -75.5 },
+                        { lat: 41.599998, lng: -72.699997 },
+                        { lat: 34.799999, lng: -92.199997 },
+                        { lat: 40.273502, lng: -86.126976 },
+                        { lat: 38.573936, lng: -92.60376 },
+                        { lat: 27.994402, lng: -81.760254 },
+                        { lat: 39.876019, lng: -117.224121 },
+                    ],
+                    index: 0,
+                    name: "State",
+                },
+                segment: {
+                    data: [
+                        "General Goods",
+                        "General Goods",
+                        "General Goods",
+                        "General Goods",
+                        "General Goods",
+                        "General Goods",
+                        "General Goods",
+                        "General Goods",
+                        "General Goods",
+                        "General Goods",
+                        "General Goods",
+                        "General Goods",
+                        "General Goods",
+                        "General Goods",
+                        "General Goods",
+                        "General Goods",
+                        "Toy Store",
+                        "Toy Store",
+                        "Toy Store",
+                        "Toy Store",
+                    ],
+                    index: 1,
+                    name: "Type",
+                    uris: [
+                        "/gdc/md/storybook/obj/23/elements?id=1",
+                        "/gdc/md/storybook/obj/23/elements?id=1",
+                        "/gdc/md/storybook/obj/23/elements?id=1",
+                        "/gdc/md/storybook/obj/23/elements?id=1",
+                        "/gdc/md/storybook/obj/23/elements?id=1",
+                        "/gdc/md/storybook/obj/23/elements?id=1",
+                        "/gdc/md/storybook/obj/23/elements?id=1",
+                        "/gdc/md/storybook/obj/23/elements?id=1",
+                        "/gdc/md/storybook/obj/23/elements?id=1",
+                        "/gdc/md/storybook/obj/23/elements?id=1",
+                        "/gdc/md/storybook/obj/23/elements?id=1",
+                        "/gdc/md/storybook/obj/23/elements?id=1",
+                        "/gdc/md/storybook/obj/23/elements?id=1",
+                        "/gdc/md/storybook/obj/23/elements?id=1",
+                        "/gdc/md/storybook/obj/23/elements?id=1",
+                        "/gdc/md/storybook/obj/23/elements?id=1",
+                        "/gdc/md/storybook/obj/23/elements?id=2",
+                        "/gdc/md/storybook/obj/23/elements?id=2",
+                        "/gdc/md/storybook/obj/23/elements?id=2",
+                        "/gdc/md/storybook/obj/23/elements?id=2",
+                    ],
+                },
+                size: {
+                    data: [
+                        1005,
+                        943,
+                        NaN,
+                        4726,
+                        1719,
+                        2844,
+                        838,
+                        3060,
+                        709,
+                        772,
+                        3949,
+                        1766,
+                        1560,
+                        1938,
+                        3836,
+                        5302,
+                        3310,
+                        3500,
+                        2288,
+                        11564,
+                    ],
+                    format: "#,##0",
+                    index: 0,
+                    name: "Population",
                 },
             },
-            categoryItems: [
-                {
-                    name: "General Goods",
-                    legendIndex: 0,
-                    color: "rgb(20,178,226)",
-                    isVisible: true,
-                },
-                {
-                    name: "Toy Store",
-                    legendIndex: 1,
-                    color: "rgb(0,193,141)",
-                    isVisible: true,
-                },
-            ],
-            colorStrategy: {
-                fullColorAssignment: [
-                    {
-                        headerItem: {
-                            attributeHeaderItem: {
-                                name: "General Goods",
-                                uri: "/gdc/md/storybook/obj/23/elements?id=1",
-                            },
-                        },
-                        color: {
-                            type: "guid",
-                            value: "1",
-                        },
-                    },
-                    {
-                        headerItem: {
-                            attributeHeaderItem: {
-                                name: "Toy Store",
-                                uri: "/gdc/md/storybook/obj/23/elements?id=2",
-                            },
-                        },
-                        color: {
-                            type: "guid",
-                            value: "2",
-                        },
-                    },
-                ],
-                outputColorAssignment: [
-                    {
-                        headerItem: {
-                            attributeHeaderItem: {
-                                name: "General Goods",
-                                uri: "/gdc/md/storybook/obj/23/elements?id=1",
-                            },
-                        },
-                        color: {
-                            type: "guid",
-                            value: "1",
-                        },
-                    },
-                    {
-                        headerItem: {
-                            attributeHeaderItem: {
-                                name: "Toy Store",
-                                uri: "/gdc/md/storybook/obj/23/elements?id=2",
-                            },
-                        },
-                        color: {
-                            type: "guid",
-                            value: "2",
-                        },
-                    },
-                ],
-                palette: ["rgb(20,178,226)", "rgb(0,193,141)"],
-            },
-            colorPalette: [
-                {
-                    guid: "1",
-                    fill: {
-                        r: 20,
-                        g: 178,
-                        b: 226,
-                    },
-                },
-                {
-                    guid: "2",
-                    fill: {
-                        r: 0,
-                        g: 193,
-                        b: 141,
-                    },
-                },
-                {
-                    guid: "3",
-                    fill: {
-                        r: 229,
-                        g: 77,
-                        b: 66,
-                    },
-                },
-                {
-                    guid: "4",
-                    fill: {
-                        r: 241,
-                        g: 134,
-                        b: 0,
-                    },
-                },
-                {
-                    guid: "5",
-                    fill: {
-                        r: 171,
-                        g: 85,
-                        b: 163,
-                    },
-                },
-            ],
         });
     });
 

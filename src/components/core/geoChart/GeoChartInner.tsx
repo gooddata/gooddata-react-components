@@ -307,7 +307,7 @@ export class GeoChartInner extends React.PureComponent<IGeoChartInnerProps, IGeo
             const selectedSegmentItems: string[] = categoryItems.reduce(
                 (result: string[], item: IPushpinCategoryLegendItem): string[] => {
                     if (item.isVisible) {
-                        return [...result, item.name];
+                        return [...result, item.uri];
                     }
                     return result;
                 },

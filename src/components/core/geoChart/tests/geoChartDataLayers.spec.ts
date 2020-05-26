@@ -107,6 +107,7 @@ describe("createPushpinDataLayer", () => {
                 index: 1,
                 name: "segment",
                 data: [],
+                uris: [],
             },
             tooltipText: {
                 index: 2,
@@ -163,6 +164,7 @@ describe("createPushpinDataLayer", () => {
                 index: 1,
                 name: "segment",
                 data: [],
+                uris: [],
             },
         };
         const layer: mapboxgl.Layer = createPushpinDataLayer(dataSourceName, geoData, mapboxConfig);
@@ -202,6 +204,7 @@ describe("createPushpinDataLayer", () => {
                 index: 1,
                 name: "segment",
                 data: [],
+                uris: [],
             },
         };
         const selectedSegmentItems = ["Hawaii", "HCM"];
@@ -212,7 +215,7 @@ describe("createPushpinDataLayer", () => {
 
         expect(layer.filter).toEqual([
             "match",
-            ["get", "value", ["object", ["get", "segment"]]],
+            ["get", "uri", ["object", ["get", "segment"]]],
             ["Hawaii", "HCM"],
             true,
             false,

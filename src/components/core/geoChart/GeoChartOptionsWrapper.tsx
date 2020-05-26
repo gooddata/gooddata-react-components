@@ -83,14 +83,15 @@ export class GeoChartOptionsWrapper extends BaseVisualization<IGeoChartInnerProp
         const colorAssignment: IColorAssignment[] = colorStrategy.getColorAssignment();
         return colorAssignment.map(
             (item: IColorAssignment, legendIndex: number): IPushpinCategoryLegendItem => {
-                const name: string = isMappingHeaderAttributeItem(item.headerItem)
-                    ? item.headerItem.attributeHeaderItem.name
-                    : this.emptyHeaderString;
+                const { name, uri } = isMappingHeaderAttributeItem(item.headerItem)
+                    ? item.headerItem.attributeHeaderItem
+                    : { name: this.emptyHeaderString, uri: this.emptyHeaderString };
                 const color: string = colorStrategy.getColorByIndex(legendIndex);
                 return {
+                    uri,
                     name,
-                    legendIndex,
                     color,
+                    legendIndex,
                     isVisible: true,
                 };
             },

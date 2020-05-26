@@ -22,10 +22,6 @@ import { IGeoData, IGeoPointsConfig, IGeoConfig } from "../../../interfaces/GeoC
 import { SEGMENT } from "../../../constants/bucketNames";
 import { getMinMax } from "../../../helpers/utils";
 
-function getExpressionByBucketName(name: string): mapboxgl.Expression {
-    return ["get", "value", ["object", ["get", name]]];
-}
-
 function createPushpinSizeOptions(
     geoData: IGeoData,
     geoPointsConfig: IGeoPointsConfig,
@@ -76,7 +72,7 @@ function getPointSize(minSizeInPixel: number, base: number, exponent: number): n
 export function createPushpinFilter(selectedSegmentItems: string[]): mapboxgl.Expression {
     return [
         "match",
-        getExpressionByBucketName(SEGMENT),
+        ["get", "uri", ["object", ["get", SEGMENT]]],
         selectedSegmentItems.length ? selectedSegmentItems : [EMPTY_SEGMENT_VALUE],
         true,
         false,

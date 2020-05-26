@@ -135,6 +135,7 @@ describe("GeoChartLegendRenderer", () => {
             categoryItems: [
                 {
                     name: "a",
+                    uri: "/gdc/md/projectId/obj/1",
                     color: "",
                     legendIndex: 0,
                     isVisible: true,
