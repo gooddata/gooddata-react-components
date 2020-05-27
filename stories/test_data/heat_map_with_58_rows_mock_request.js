@@ -39,6 +39,7 @@ module.exports = projectId => {
                         itemIdentifiers: ["Popularity", "measureGroup"],
                     },
                 ],
+                sorts: [{ attributeSortItem: { attributeIdentifier: "country", direction: "desc" } }],
             },
         },
     };

@@ -17,6 +17,12 @@ The REST API versions in the table are just for your information as the values a
 
 - We ask developers to consider using the Headline component instead of the KPI component. The KPI component may be eventually marked as deprecated in one of the next major versions.
 
+## 7.7.0
+
+### Fixed
+
+- Heatmap Y axis is now in ascending order by default
+
 ## 7.6.1
 
 May 20, 2020

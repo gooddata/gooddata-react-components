@@ -5,6 +5,7 @@ import {
     getDefaultTreemapSort,
     getFirstAttributeIdentifier,
     getDefaultAttributeGeoPushpinSort,
+    getDefaultHeatmapSort,
 } from "../sorts";
 
 import { DESC } from "../../constants/sort";
@@ -141,6 +142,90 @@ describe("sorts", () => {
 
         it("should not sort if segmentBy attribute is not existing", () => {
             expect(getDefaultAttributeGeoPushpinSort(nonStackedAfm)).toEqual([]);
+        });
+    });
+
+    describe("getDefaultHeatmapSort", () => {
+        const noSortResultSpec: AFM.IResultSpec = {
+            dimensions: [
+                {
+                    itemIdentifiers: [],
+                },
+                {
+                    itemIdentifiers: ["a1"],
+                },
+            ],
+        };
+
+        const measureGroupResultSpec: AFM.IResultSpec = {
+            dimensions: [
+                {
+                    itemIdentifiers: ["measureGroup"],
+                },
+                {
+                    itemIdentifiers: ["a1"],
+                },
+            ],
+        };
+
+        const rowsResultSpec: AFM.IResultSpec = {
+            dimensions: [
+                {
+                    itemIdentifiers: ["a1"],
+                },
+                {
+                    itemIdentifiers: ["a2"],
+                },
+            ],
+        };
+
+        const customSortsResultSpec: AFM.IResultSpec = {
+            dimensions: [
+                {
+                    itemIdentifiers: ["a1"],
+                },
+                {
+                    itemIdentifiers: ["a2"],
+                },
+            ],
+            sorts: [
+                {
+                    attributeSortItem: {
+                        attributeIdentifier: "a1",
+                        direction: "asc",
+                    },
+                },
+            ],
+        };
+
+        it("should return empty array when resultSpec's first dimension's itemIdentifier is missing", () => {
+            expect(getDefaultHeatmapSort(noSortResultSpec)).toEqual([]);
+        });
+
+        it("should return empty array when resultSpec's first dimension's itemIdentifier is measureGroup", () => {
+            expect(getDefaultHeatmapSort(measureGroupResultSpec)).toEqual([]);
+        });
+
+        it("should return default descending sorts array definition with first dimension's itemIdentifier", () => {
+            expect(getDefaultHeatmapSort(rowsResultSpec)).toEqual([
+                {
+                    attributeSortItem: {
+                        attributeIdentifier: "a1",
+                        direction: "desc",
+                    },
+                },
+            ]);
+        });
+
+        it("should return custom sorts array definition instead of the default one", () => {
+            expect(getDefaultHeatmapSort(customSortsResultSpec)).toEqual([
+                {
+                    attributeSortItem: {
+                        attributeIdentifier: "a1",
+                        direction: "asc",
+                    },
+                },
+            ]);
         });
     });
 });

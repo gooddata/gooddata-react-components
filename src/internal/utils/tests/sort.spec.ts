@@ -345,6 +345,14 @@ describe("createSorts", () => {
                 ).toEqual([]);
             });
         });
+
+        describe("heatmap", () => {
+            it("should return empty array when resultSpec's first dimension's itemIdentifier is measureGroup", () => {
+                expect(
+                    createSorts("heatmap", stackedAfm, stackedResultSpec, emptyVisualizationProperties),
+                ).toEqual([]);
+            });
+        });
     });
 
     it("should extract sort from visualization properties", () => {

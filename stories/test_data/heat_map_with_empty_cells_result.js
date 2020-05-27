@@ -2,20 +2,20 @@
 module.exports = projectId => {
     return {
         executionResult: {
-            data: [["594", "624", null, "873"], ["882", null, "788", "972"], ["530", "858", "786", null]],
+            data: [["882", null, "788", "972"], ["594", "624", null, "873"], ["530", "858", "786", null]],
             headerItems: [
                 [
                     [
                         {
                             attributeHeaderItem: {
-                                uri: "/gdc/md/" + projectId + "/obj/5/elements?id=1",
-                                name: "low",
+                                uri: "/gdc/md/" + projectId + "/obj/5/elements?id=2",
+                                name: "medium",
                             },
                         },
                         {
                             attributeHeaderItem: {
-                                uri: "/gdc/md/" + projectId + "/obj/5/elements?id=2",
-                                name: "medium",
+                                uri: "/gdc/md/" + projectId + "/obj/5/elements?id=1",
+                                name: "low",
                             },
                         },
                         {

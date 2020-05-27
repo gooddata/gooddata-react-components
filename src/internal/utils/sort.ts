@@ -103,6 +103,8 @@ export function createSorts(
             return SortsHelper.getDefaultTreemapSort(afm, resultSpec);
         case VisualizationTypes.PUSHPIN:
             return getDefaultGeoPushpinSort(afm);
+        case VisualizationTypes.HEATMAP:
+            return SortsHelper.getDefaultHeatmapSort(resultSpec);
     }
     return [];
 }
