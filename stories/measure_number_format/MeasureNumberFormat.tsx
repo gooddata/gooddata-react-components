@@ -68,7 +68,7 @@ const templates: IFormatTemplate[] = [
         format: "#,##0",
     },
     {
-        name: "Decimal number",
+        name: "Decimal number - this one has much longer name than others",
         localIdentifier: "decimal-number",
         format: "[=null]--;\n" + "[<.3][red]#,##0.00;\n" + "[>.8][green]#,##0.00;\n" + "#,##0.00",
     },
