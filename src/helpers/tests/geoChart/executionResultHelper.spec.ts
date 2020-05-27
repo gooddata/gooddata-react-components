@@ -73,6 +73,27 @@ describe("findGeoAttributesInDimension", () => {
                 name: "Type",
                 uri: "/gdc/md/projectId/obj/2",
             },
+            tooltipTextAttribute: {
+                formOf: { identifier: "attr.state", name: "State", uri: "any-uri" },
+                identifier: "label.state",
+                items: [
+                    {
+                        attributeHeaderItem: {
+                            name: "Wisconsin",
+                            uri: "/gdc/md/storybook/obj/694/elements?id=1808",
+                        },
+                    },
+                    {
+                        attributeHeaderItem: {
+                            name: "West Virginia",
+                            uri: "/gdc/md/storybook/obj/694/elements?id=1903",
+                        },
+                    },
+                ],
+                localIdentifier: "a_state_tooltip_text",
+                name: "State",
+                uri: "/gdc/md/projectId/obj/3",
+            },
         };
         expect(findGeoAttributesInDimension(mockExecution, mockGeoData)).toEqual(expectedData);
     });

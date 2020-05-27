@@ -7,6 +7,7 @@ import { IGeoData } from "../../interfaces/GeoChart";
 export interface IGeoAttributesInDimension {
     locationAttribute: IUnwrappedAttributeHeaderWithItems;
     segmentByAttribute: IUnwrappedAttributeHeaderWithItems;
+    tooltipTextAttribute: IUnwrappedAttributeHeaderWithItems;
 }
 
 export function findGeoAttributesInDimension(
@@ -17,7 +18,7 @@ export function findGeoAttributesInDimension(
         executionResponse: { dimensions },
         executionResult: { headerItems },
     } = execution;
-    const { color, location, segment, size } = geoData;
+    const { color, location, segment, size, tooltipText } = geoData;
 
     const hasMeasure = size || color;
     const attrDimensionIndex = hasMeasure ? 1 : 0;
@@ -35,8 +36,14 @@ export function findGeoAttributesInDimension(
             ? findAttributeInDimension(attributeDimension, attributeResultHeaderItems, segment.index)
             : undefined;
 
+    const tooltipTextAttribute: IUnwrappedAttributeHeaderWithItems =
+        tooltipText && tooltipText.data.length
+            ? findAttributeInDimension(attributeDimension, attributeResultHeaderItems, tooltipText.index)
+            : undefined;
+
     return {
         locationAttribute,
         segmentByAttribute,
+        tooltipTextAttribute,
     };
 }
