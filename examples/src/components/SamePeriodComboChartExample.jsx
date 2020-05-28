@@ -1,20 +1,23 @@
 // (C) 2007-2020 GoodData Corporation
+
 import React, { Component } from "react";
 import { ComboChart, Model } from "@gooddata/react-components";
 
 import "@gooddata/react-components/styles/css/main.css";
 
 import {
-    projectId,
+    totalSalesIdentifier,
+    quarterDateIdentifier,
+    yearDateDataSetAttributeIdentifier,
     franchiseFeesAdRoyaltyIdentifier,
-    franchiseFeesInitialFranchiseFeeIdentifier,
-    locationResortIdentifier,
+    projectId,
 } from "../utils/fixtures";
 
 const columnMeasures = [
-    Model.measure(franchiseFeesInitialFranchiseFeeIdentifier)
-        .format("#,##0")
-        .localIdentifier("franchiseFeesInitialFranchiseFeeIdentifier"),
+    Model.popMeasure("totalSales", yearDateDataSetAttributeIdentifier).alias("$ Total Sales - SP year ago"),
+    Model.measure(totalSalesIdentifier)
+        .localIdentifier("totalSales")
+        .alias("$ Total Sales"),
 ];
 
 const lineMeasures = [
@@ -23,17 +26,17 @@ const lineMeasures = [
         .localIdentifier("franchiseFeesAdRoyaltyIdentifier"),
 ];
 
-const locationResort = Model.attribute(locationResortIdentifier).localIdentifier("location_resort");
+const attribute = Model.attribute(quarterDateIdentifier);
 
-export class ComboChartExample extends Component {
+export class SamePeriodComboChartExample extends Component {
     onLoadingChanged(...params) {
         // eslint-disable-next-line no-console
-        return console.log("ComboChartExample onLoadingChanged", ...params);
+        return console.log("SamePeriodComboChartExample onLoadingChanged", ...params);
     }
 
     onError(...params) {
         // eslint-disable-next-line no-console
-        return console.log("ComboChartExample onError", ...params);
+        return console.log("SamePeriodComboChartExample onError", ...params);
     }
 
     render() {
@@ -43,7 +46,7 @@ export class ComboChartExample extends Component {
                     projectId={projectId}
                     primaryMeasures={columnMeasures}
                     secondaryMeasures={lineMeasures}
-                    viewBy={locationResort}
+                    viewBy={attribute}
                     onLoadingChanged={this.onLoadingChanged}
                     onError={this.onError}
                 />
@@ -52,4 +55,4 @@ export class ComboChartExample extends Component {
     }
 }
 
-export default ComboChartExample;
+export default SamePeriodComboChartExample;
