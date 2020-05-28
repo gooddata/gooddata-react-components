@@ -155,7 +155,7 @@ describe("Measure number format", () => {
                 expect(component.getShowExtendedPreviewButton().hasClass("hidden")).toEqual(true);
 
                 const extendedPreviewFormattedValues = component.getExtendedPreviewFormattedValues();
-                const expectedPreviewFormattedValues = ["", "1,234", "1234,567"];
+                const expectedPreviewFormattedValues = ["", "1,234", "1234,567", "1234567,89"];
                 expect(extendedPreviewFormattedValues).toEqual(expectedPreviewFormattedValues);
             });
         });
@@ -237,11 +237,13 @@ describe("Measure number format", () => {
                     templateName,
                 );
                 const expectedTemplatePreviewFormattedValues = [
+                    "€ -1 234 567,9",
                     "€ -1 234,6",
                     "€ -1,2",
                     "€ 0,0",
                     "€ 1,2",
                     "€ 1 234,6",
+                    "€ 1 234 567,9",
                 ];
 
                 expect(expectedTemplatePreviewFormattedValues).toEqual(templatePreviewFormattedValues);
