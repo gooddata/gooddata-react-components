@@ -293,10 +293,6 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
         const { chart, handleLayerLoaded, props } = this;
         const { colorStrategy, config, geoData } = props;
         const { points: { groupNearbyPoints = true } = {} } = config || {};
-        // hide city, town, village and hamlet labels
-        if (chart.getLayer("settlement-label")) {
-            chart.removeLayer("settlement-label");
-        }
 
         const hasClustering: boolean = isClusteringAllowed(geoData, groupNearbyPoints);
         const dataSourceProps: IGeoDataSourceProps = {
