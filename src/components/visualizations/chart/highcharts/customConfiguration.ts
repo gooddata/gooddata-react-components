@@ -43,6 +43,7 @@ import {
     isComboChart,
     isInvertedChartType,
 } from "../../utils/common";
+import { TOOLTIP_MAX_WIDTH, isTooltipShownInFullScreen, getTooltipContentWidth } from "../../chart/tooltip";
 import { shouldFollowPointer } from "../../../visualizations/chart/highcharts/helpers";
 import {
     shouldStartOnTick,
@@ -68,7 +69,6 @@ const ALIGN_RIGHT = "right";
 const ALIGN_CENTER = "center";
 
 const TOOLTIP_ARROW_OFFSET = 23;
-const TOOLTIP_MAX_WIDTH = 320;
 const TOOLTIP_INVERTED_CHART_VERTICAL_OFFSET = 5;
 const TOOLTIP_VERTICAL_OFFSET = 14;
 export const TOOLTIP_PADDING = 24; // padding of tooltip container - defined by CSS
@@ -76,9 +76,6 @@ export const TOOLTIP_VIEWPORT_MARGIN_TOP = 20;
 const BAR_COLUMN_TOOLTIP_TOP_OFFSET = 8;
 const BAR_COLUMN_TOOLTIP_LEFT_OFFSET = 5;
 const HIGHCHARTS_TOOLTIP_TOP_LEFT_OFFSET = 16;
-
-// in viewport <= 480, tooltip width is equal to chart container width
-const TOOLTIP_FULLSCREEN_THRESHOLD = 480;
 
 const escapeAngleBrackets = (str: any) => str && str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -336,16 +333,12 @@ export function getTooltipPositionInViewPort(
     };
 }
 
-const isTooltipShownInFullScreen = () => {
-    return document.documentElement.clientWidth <= TOOLTIP_FULLSCREEN_THRESHOLD;
-};
-
 function formatTooltip(tooltipCallback: any) {
     const { chart } = this.series;
     const { color: pointColor } = this.point;
     const chartWidth = chart.spacingBox.width;
     const isFullScreenTooltip = isTooltipShownInFullScreen();
-    const maxTooltipContentWidth = isFullScreenTooltip ? chartWidth : Math.min(chartWidth, TOOLTIP_MAX_WIDTH);
+    const maxTooltipContentWidth = getTooltipContentWidth(isFullScreenTooltip, chartWidth, TOOLTIP_MAX_WIDTH);
 
     // when brushing, do not show tooltip
     if (chart.mouseIsDown) {

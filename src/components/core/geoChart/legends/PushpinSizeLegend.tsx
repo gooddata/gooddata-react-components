@@ -30,7 +30,9 @@ export default function PushpinSizeLegend(props: IPushpinSizeLegendProps): JSX.E
 
     return (
         <div className="pushpin-size-legend s-pushpin-size-legend">
-            <div className="metric-name">{measureName}:</div>
+            <div className="metric-name" title={measureName}>
+                {measureName}:
+            </div>
             <div className="pushpin-size-legend-circle-list">
                 <div className="pushpin-size-legend-circle circle-min-value">
                     <span className="circle-min-icon" />

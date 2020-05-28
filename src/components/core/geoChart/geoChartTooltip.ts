@@ -5,7 +5,12 @@ import isFinite = require("lodash/isFinite");
 import escape = require("lodash/escape");
 import mapboxgl from "mapbox-gl";
 import { ISeparators } from "@gooddata/numberjs";
-import { formatValueForTooltip } from "../../visualizations/chart/tooltip";
+import {
+    TOOLTIP_MAX_WIDTH,
+    isTooltipShownInFullScreen,
+    formatValueForTooltip,
+    getTooltipContentWidth,
+} from "../../visualizations/chart/tooltip";
 import { DEFAULT_PUSHPIN_COLOR_VALUE, NULL_TOOLTIP_VALUE } from "../../../constants/geoChart";
 import { IGeoConfig, IGeoTooltipItem } from "../../../interfaces/GeoChart";
 import { parseGeoProperties } from "../../../helpers/geoChart/data";
@@ -55,6 +60,7 @@ export function shouldShowTooltip(geoProperties: GeoJSON.GeoJsonProperties): boo
 export function getTooltipHtml(
     geoProperties: GeoJSON.GeoJsonProperties,
     tooltipStroke: string,
+    maxWidth: number,
     separators?: ISeparators,
 ): string {
     const { locationName = {}, size = {}, color = {}, segment = {} } = geoProperties;
@@ -68,7 +74,7 @@ export function getTooltipHtml(
         .map(getTooltipItemHtml)
         .join("");
 
-    return `<div class="gd-viz-tooltip">
+    return `<div class="gd-viz-tooltip" style="max-width:${maxWidth}px">
                 <span class="stroke gd-viz-tooltip-stroke" style="border-top-color: ${tooltipStroke}"></span>
                 <div class="content gd-viz-tooltip-content">${tooltipItems}</div>
             </div>`;
@@ -113,11 +119,19 @@ export const handlePushpinMouseEnter = (
 
     const coordinates = feature.geometry.coordinates.slice();
     const tooltipStroke = get(parsedProps, "color.background", DEFAULT_PUSHPIN_COLOR_VALUE);
-    const tooltipHtml = getTooltipHtml(parsedProps, tooltipStroke, separators);
+    const isFullScreenTooltip = isTooltipShownInFullScreen();
+    const chartWidth: number = chart.getCanvas().clientWidth;
+    const maxTooltipContentWidth: number = getTooltipContentWidth(
+        isFullScreenTooltip,
+        chartWidth,
+        TOOLTIP_MAX_WIDTH,
+    );
+    const tooltipHtml = getTooltipHtml(parsedProps, tooltipStroke, maxTooltipContentWidth, separators);
 
     tooltip
         .setLngLat(coordinates)
         .setHTML(tooltipHtml)
+        .setMaxWidth(`${maxTooltipContentWidth}px`)
         .addTo(chart);
 };
 
