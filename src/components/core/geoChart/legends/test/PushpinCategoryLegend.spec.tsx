@@ -9,12 +9,14 @@ import StaticLegend from "../../../../visualizations/chart/legend/StaticLegend";
 const segmentData = [
     {
         name: "General Goods",
+        uri: "/gdc/md/projectId/obj/1",
         legendIndex: 0,
         color: "rgb(20,178,226)",
         isVisible: true,
     },
     {
         name: "Toy Store",
+        uri: "/gdc/md/projectId/obj/2",
         legendIndex: 1,
         color: "rgb(0,193,141)",
         isVisible: false,

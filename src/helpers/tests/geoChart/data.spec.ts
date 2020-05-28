@@ -91,6 +91,13 @@ describe("geoChartData", () => {
             },
             segment: {
                 data: ["General Goods", "General Goods", "General Goods", "General Goods", "General Goods"],
+                uris: [
+                    "/gdc/md/storybook/obj/23/elements?id=1",
+                    "/gdc/md/storybook/obj/23/elements?id=1",
+                    "/gdc/md/storybook/obj/23/elements?id=1",
+                    "/gdc/md/storybook/obj/23/elements?id=1",
+                    "/gdc/md/storybook/obj/23/elements?id=1",
+                ],
                 index: 1,
                 name: "Type",
             },
@@ -157,6 +164,13 @@ describe("geoChartData", () => {
             },
             segment: {
                 data: ["General Goods", "General Goods", "General Goods", "General Goods", "General Goods"],
+                uris: [
+                    "/gdc/md/storybook/obj/23/elements?id=1",
+                    "/gdc/md/storybook/obj/23/elements?id=1",
+                    "/gdc/md/storybook/obj/23/elements?id=1",
+                    "/gdc/md/storybook/obj/23/elements?id=1",
+                    "/gdc/md/storybook/obj/23/elements?id=1",
+                ],
                 index: 1,
                 name: "Type",
             },

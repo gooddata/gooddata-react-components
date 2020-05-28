@@ -44,6 +44,7 @@ function transformPushpinDataSource(dataSourceProps: IGeoDataSourceProps): IGeoD
     const locationData = hasLocation ? location.data : [];
     const locationNameData = hasTooltip ? tooltipText.data : [];
     const segmentData = hasSegment ? segment.data : [];
+    const segmentUris = hasSegment ? segment.uris : [];
     const sizeData = hasSize ? size.data : [];
     const { min: minSizeFromData, max: maxSizeFromData } = getMinMax(sizeData);
     const colorData = hasColor ? color.data : [];
@@ -67,6 +68,8 @@ function transformPushpinDataSource(dataSourceProps: IGeoDataSourceProps): IGeoD
             const colorValue = hasColor ? colorData[index] : undefined;
 
             const segmentValue = segmentData[index];
+            const segmentUri = segmentUris[index];
+
             const pushpinColor = pushpinColors[index] || pushpinColors[0] || {};
 
             return [
@@ -98,6 +101,7 @@ function transformPushpinDataSource(dataSourceProps: IGeoDataSourceProps): IGeoD
                         segment: {
                             title: segmentTitle,
                             value: segmentValue,
+                            uri: segmentUri,
                         },
                     },
                 },

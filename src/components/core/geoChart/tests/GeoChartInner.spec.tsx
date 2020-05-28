@@ -42,24 +42,28 @@ function buildGeoChartOptions(): IGeoChartInnerOptions {
             legendIndex: 0,
             color: "rgb(20,178,226)",
             isVisible: true,
+            uri: "/gdc/md/projectId/obj/1",
         },
         {
             name: "Toy Store",
             legendIndex: 1,
             color: "rgb(0,193,141)",
             isVisible: true,
+            uri: "/gdc/md/projectId/obj/2",
         },
         {
             name: "Speciality",
             legendIndex: 2,
             color: "rgb(229,77,66)",
             isVisible: true,
+            uri: "/gdc/md/projectId/obj/3",
         },
         {
             name: "Convenience",
             legendIndex: 3,
             color: "rgb(241,134,0)",
             isVisible: true,
+            uri: "/gdc/md/projectId/obj/4",
         },
     ];
 
@@ -139,10 +143,34 @@ describe("GeoChartInner", () => {
         expect(legendRenderer).toHaveBeenCalledTimes(1);
         expect(legendRenderer).toHaveBeenCalledWith({
             categoryItems: [
-                { color: "rgb(20,178,226)", isVisible: true, legendIndex: 0, name: "General Goods" },
-                { color: "rgb(0,193,141)", isVisible: true, legendIndex: 1, name: "Toy Store" },
-                { color: "rgb(229,77,66)", isVisible: true, legendIndex: 2, name: "Speciality" },
-                { color: "rgb(241,134,0)", isVisible: true, legendIndex: 3, name: "Convenience" },
+                {
+                    color: "rgb(20,178,226)",
+                    isVisible: true,
+                    legendIndex: 0,
+                    name: "General Goods",
+                    uri: "/gdc/md/projectId/obj/1",
+                },
+                {
+                    color: "rgb(0,193,141)",
+                    isVisible: true,
+                    legendIndex: 1,
+                    name: "Toy Store",
+                    uri: "/gdc/md/projectId/obj/2",
+                },
+                {
+                    color: "rgb(229,77,66)",
+                    isVisible: true,
+                    legendIndex: 2,
+                    name: "Speciality",
+                    uri: "/gdc/md/projectId/obj/3",
+                },
+                {
+                    color: "rgb(241,134,0)",
+                    isVisible: true,
+                    legendIndex: 3,
+                    name: "Convenience",
+                    uri: "/gdc/md/projectId/obj/4",
+                },
             ],
             colorLegendValue: "rgb(20,178,226)",
             format: "#,##0",
@@ -157,7 +185,10 @@ describe("GeoChartInner", () => {
                     data: [
                         { lat: 44.5, lng: -89.5 },
                         { lat: 39, lng: -80.5 },
-                        { lat: 44, lng: -72.699997 },
+                        {
+                            lat: 44,
+                            lng: -72.699997,
+                        },
                         { lat: 31, lng: -100 },
                         { lat: 44.5, lng: -100 },
                     ],
@@ -174,13 +205,15 @@ describe("GeoChartInner", () => {
                     ],
                     index: 1,
                     name: "Type",
+                    uris: [
+                        "/gdc/md/storybook/obj/23/elements?id=1",
+                        "/gdc/md/storybook/obj/23/elements?id=1",
+                        "/gdc/md/storybook/obj/23/elements?id=1",
+                        "/gdc/md/storybook/obj/23/elements?id=1",
+                        "/gdc/md/storybook/obj/23/elements?id=1",
+                    ],
                 },
-                size: {
-                    data: [1005, 943, NaN, 4726, 1719],
-                    format: "#,##0",
-                    index: 0,
-                    name: "Population",
-                },
+                size: { data: [1005, 943, NaN, 4726, 1719], format: "#,##0", index: 0, name: "Population" },
             },
             height: 600,
             locale: "en-US",

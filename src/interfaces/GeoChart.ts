@@ -38,6 +38,10 @@ export interface IGeoAttributeItem extends IGeoDataItem {
     data: string[];
 }
 
+export interface IGeoSegmentItem extends IGeoAttributeItem {
+    uris: string[];
+}
+
 export interface IGeoLocationItem extends IGeoDataItem {
     data: IGeoLngLat[];
 }
@@ -51,7 +55,7 @@ export interface IGeoData {
     location?: IGeoLocationItem;
     size?: IGeoMeasureItem;
     color?: IGeoMeasureItem;
-    segment?: IGeoAttributeItem;
+    segment?: IGeoSegmentItem;
     tooltipText?: IGeoAttributeItem;
 }
 
@@ -116,6 +120,7 @@ export interface IGeoPushpinChartProps extends ICommonChartProps {
 
 export interface IPushpinCategoryLegendItem {
     name: string;
+    uri: string;
     color?: string;
     legendIndex: number;
     isVisible?: boolean;

@@ -10,10 +10,10 @@ import {
 } from "../../interfaces/GeoChart";
 import { COLOR, LOCATION, SEGMENT, SIZE, TOOLTIP_TEXT } from "../../constants/bucketNames";
 import {
-    getAttributeHeadersInDimension,
-    getHeaderItemName,
-    getMeasureGroupHeaderItemsInDimension,
     isTwoDimensionsData,
+    getHeaderItemName,
+    getAttributeHeadersInDimension,
+    getMeasureGroupHeaderItemsInDimension,
 } from "../executionResultHelper";
 import { getMinMax, stringToFloat } from "../utils";
 import { getFormatFromExecutionResponse, getGeoAttributeHeaderItems } from "./common";
@@ -23,6 +23,11 @@ interface IBucketItemInfo {
     uri?: VisualizationObject.IObjUriQualifier["uri"];
     identifier?: VisualizationObject.IObjIdentifierQualifier["identifier"];
     localIdentifier: VisualizationObject.IObjUriQualifier["uri"];
+}
+
+interface ISegmentData {
+    uris: string[];
+    data: string[];
 }
 
 export function getLocation(latlng: string): IGeoLngLat | null {
@@ -63,7 +68,9 @@ export function getGeoData(
     }
 
     if (segmentIndex !== undefined) {
-        geoData[SEGMENT].data = getAttributeData(attributeHeaderItems, segmentIndex);
+        const { data, uris } = getSegmentDataAndUris(attributeHeaderItems, segmentIndex);
+        geoData[SEGMENT].data = data;
+        geoData[SEGMENT].uris = uris;
     }
 
     if (tooltipTextIndex !== undefined) {
@@ -99,6 +106,23 @@ function getAttributeData(
 ): string[] {
     const headerItems = attributeHeaderItems[dataIndex];
     return headerItems.map(getHeaderItemName);
+}
+
+function getSegmentDataAndUris(
+    attributeHeaderItems: Execution.IResultHeaderItem[][],
+    dataIndex: number,
+): ISegmentData {
+    const headerItems = attributeHeaderItems[dataIndex];
+    return headerItems.reduce<ISegmentData>(
+        (result: ISegmentData, headerItem: Execution.IResultHeaderItem): ISegmentData => {
+            if (headerItem && Execution.isAttributeHeaderItem(headerItem)) {
+                const { uri, name } = headerItem.attributeHeaderItem;
+                return { uris: [...result.uris, uri], data: [...result.data, name] };
+            }
+            return result;
+        },
+        { uris: [], data: [] },
+    );
 }
 
 function getBucketItemNameAndDataIndex(
