@@ -154,21 +154,22 @@ export interface ISort {
 }
 
 export interface IBucketItem {
-    localIdentifier: string;
-    type?: string;
     aggregation?: boolean;
     attribute?: string;
-    filters?: IBucketFilter[];
-    granularity?: string;
-    locationDisplayFormUri?: string;
     dfUri?: string; // default displayFrom uri
-    showInPercent?: boolean;
-    showOnSecondaryAxis?: boolean;
-    sort?: ISort;
+    filters?: IBucketFilter[];
+    format?: string;
+    granularity?: string;
+    localIdentifier: string;
+    locationDisplayFormUri?: string;
     masterLocalIdentifier?: string;
     overTimeComparisonType?: OverTimeComparisonType;
     operandLocalIdentifiers?: Array<string | null> | null;
     operator?: string | null;
+    showInPercent?: boolean;
+    showOnSecondaryAxis?: boolean;
+    sort?: ISort;
+    type?: string;
 }
 
 export interface IFiltersBucketItem extends IBucketItem {
