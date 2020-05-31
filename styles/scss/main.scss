@@ -8,7 +8,7 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
 @import "./bulletChart.scss";
 @import "./attributeFilter.scss";
 @import "./measureValueFilter.scss";
-@import "./measureNumberFormat.scss";
+@import "./measureNumberFormat/styles.scss";
 
 /* hide IE10+ eraser */
 

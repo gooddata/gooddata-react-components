@@ -186,4 +186,36 @@ storiesOf("Measure Number Format", module)
         }
 
         return screenshotWrap(screenshotTarget(<CustomFormatDialogWrapper />));
+    })
+    .add("Custom format dialog with highlighted syntax", () => {
+        class CustomFormatDialogWrapper extends React.Component<{}> {
+            public render() {
+                return (
+                    <React.Fragment>
+                        <div className={"anchor"} style={{ height: "50px", width: "50px" }} />
+                        <IntlWrapper>
+                            <CustomFormatDialog
+                                onApply={this.onApply}
+                                onCancel={this.onCancel}
+                                formatString={
+                                    "[<0][red]$#,#.##;\n[<1000][blue]$#,#.##;\n[>=1000][green]$#,#.##"
+                                }
+                                anchorEl={".anchor"}
+                                intl={intlMock}
+                            />
+                        </IntlWrapper>
+                    </React.Fragment>
+                );
+            }
+
+            private onApply = (format: string) => {
+                action(`onApply`)(format);
+            };
+
+            private onCancel = () => {
+                action(`onCancel`)();
+            };
+        }
+
+        return screenshotWrap(screenshotTarget(<CustomFormatDialogWrapper />));
     });
