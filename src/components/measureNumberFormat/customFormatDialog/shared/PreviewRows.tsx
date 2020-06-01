@@ -41,7 +41,7 @@ const PreviewRows: React.FC<IPreviewNumberRowsProps> = ({ previewNumbers, format
 );
 
 PreviewRows.defaultProps = {
-    previewNumbers: [0, 1.234, 1234.567, 1234567.89],
+    previewNumbers: [0, 1.234, 1234.567, 1234567.891],
 };
 
 export default PreviewRows;
