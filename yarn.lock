@@ -1384,10 +1384,10 @@
     firstline "^2.0.2"
     line-replace "^1.0.2"
 
-"@gooddata/gooddata-js@^13.0.1":
-  version "13.0.1"
-  resolved "https://registry.yarnpkg.com/@gooddata/gooddata-js/-/gooddata-js-13.0.1.tgz#1a738b16d1eeee8742771c2f5886ae4239793e80"
-  integrity sha512-hPWzqvhSzmkBOFGCAOkeqPutn/S3MFdVaY/442Bm9M3dmmdAyhQPIN3PH0FP0ZaKiELpiEiFi9GpiyqxJBsKRw==
+"@gooddata/gooddata-js@13.0.1-alpha-vlastikcz-vlk-fet-430-v2-2020-06-01T13-45-42-445Z":
+  version "13.0.1-alpha-vlastikcz-vlk-fet-430-v2-2020-06-01T13-45-42-445Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/gooddata-js/-/gooddata-js-13.0.1-alpha-vlastikcz-vlk-fet-430-v2-2020-06-01T13-45-42-445Z.tgz#b8c4b823991fa04ed7473c31349a80c9328eb12b"
+  integrity sha512-Q3s6y2A4NWwI+Ifq43eMp1B5a52hQdbS2ioeiRYYsu61HOa2++PQZkV/R2a9u8wYbPmrXFE0uT3B5vIAFBENJA==
   dependencies:
     "@gooddata/typings" "^2.24.0"
     es6-promise "^3.0.2"
