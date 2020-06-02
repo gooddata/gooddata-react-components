@@ -12,6 +12,7 @@ import { onErrorHandler } from "../mocks";
 import "../../styles/scss/charts.scss";
 import "../../styles/scss/table.scss";
 import { GERMAN_SEPARATORS } from "../data/numberFormat";
+import { ATTRIBUTE_TOOLTIP_GEOCHART } from "../data/geoChartComponentProps";
 
 const defaultFilter: AFM.IAbsoluteDateFilter = {
     absoluteDateFilter: {
@@ -424,24 +425,23 @@ storiesOf("URI components", module)
             </div>,
         ),
     )
-    /* This test case as it's unstable now. We'll bring it back once SD-948 is resolved. 
     .add("GeoPushpinChart example", () =>
-         screenshotWrap(
-             <div style={{ width: 800, height: 400 }}>
-                 <Visualization
-                     projectId="storybook"
-                     identifier="pushpin-chart-location-size-color-segment-tooltip"
-                     config={{
-                         mapboxToken: process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN,
-                         tooltipText: attribute("/gdc/md/storybook/obj/24.df").localIdentifier("tooltipText"),
-                     }}
-                     onError={onErrorHandler}
-                     LoadingComponent={null}
-                     ErrorComponent={null}
-                 />
-             </div>,
-         ),
-     ) */
+        screenshotWrap(
+            <div style={{ width: 800, height: 400 }}>
+                <Visualization
+                    projectId="storybook"
+                    identifier="pushpin-chart-location-size-color-segment-tooltip"
+                    config={{
+                        mapboxToken: process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN,
+                        tooltipText: ATTRIBUTE_TOOLTIP_GEOCHART,
+                    }}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
     .add("headline", () =>
         screenshotWrap(
             <div style={{ width: 800, height: 400 }}>
