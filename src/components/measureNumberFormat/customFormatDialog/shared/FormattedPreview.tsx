@@ -6,6 +6,16 @@ import { ISeparators } from "../../../filters/MeasureValueFilter/separators";
 
 const { stripColors, numberFormat, colors2Object }: any = numberJS;
 
+export const Label: React.FC<{ value?: string; style?: React.CSSProperties; className?: string }> = ({
+    value,
+    style,
+    className,
+}) => (
+    <div className={classNames("gd-measure-format-preview-formatted", className)}>
+        <span style={style}>{value}</span>
+    </div>
+);
+
 export interface IFormattedPreviewProps {
     previewNumber: number;
     format: string;
@@ -21,17 +31,15 @@ export const FormattedPreview: React.FC<IFormattedPreviewProps> = ({
     separators,
     className: customClassName,
 }) => {
-    const className = classNames("gd-measure-format-preview-formatted", customClassName);
-
     if (format === "") {
-        return <span className={className} />;
+        return <Label />;
     }
 
     const preview = previewNumber !== null ? previewNumber : "";
 
     if (!colors) {
         const label = numberFormat(preview, stripColors(format), undefined, separators);
-        return <span className={className}>{label}</span>;
+        return <Label value={label} className={customClassName} />;
     }
 
     const { label, color = "", backgroundColor = "" } = colors2Object(
@@ -40,11 +48,7 @@ export const FormattedPreview: React.FC<IFormattedPreviewProps> = ({
 
     const style = { color, backgroundColor };
 
-    return (
-        <span className={className} style={style}>
-            {label}
-        </span>
-    );
+    return <Label value={label} className={customClassName} style={style} />;
 };
 
 FormattedPreview.defaultProps = {
