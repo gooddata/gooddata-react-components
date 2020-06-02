@@ -1,6 +1,7 @@
 // (C) 2020 GoodData Corporation
 import { ISeparators } from "@gooddata/numberjs";
 import { getTooltipHtml, shouldShowTooltip } from "../geoChartTooltip";
+import { TOOLTIP_MAX_WIDTH } from "../../../visualizations/chart/tooltip";
 
 describe("geoChartTooltip", () => {
     describe("getTooltipHtml", () => {
@@ -25,8 +26,8 @@ describe("geoChartTooltip", () => {
                     value: "20-30",
                 },
             };
-            const tooltipHtml = getTooltipHtml(geoProperties, "rgb(0,0,0)");
-            expect(tooltipHtml).toBe(`<div class="gd-viz-tooltip">
+            const tooltipHtml = getTooltipHtml(geoProperties, "rgb(0,0,0)", TOOLTIP_MAX_WIDTH);
+            expect(tooltipHtml).toBe(`<div class="gd-viz-tooltip" style="max-width:320px">
                 <span class="stroke gd-viz-tooltip-stroke" style="border-top-color: rgb(0,0,0)"></span>
                 <div class="content gd-viz-tooltip-content"><div class="gd-viz-tooltip-item">
                 <span class="gd-viz-tooltip-title">State</span>
@@ -69,8 +70,8 @@ describe("geoChartTooltip", () => {
                     format: "#,##0.00",
                 },
             };
-            const tooltipHtml = getTooltipHtml(geoProperties, "rgb(0,0,0)");
-            expect(tooltipHtml).toBe(`<div class="gd-viz-tooltip">
+            const tooltipHtml = getTooltipHtml(geoProperties, "rgb(0,0,0)", TOOLTIP_MAX_WIDTH);
+            expect(tooltipHtml).toBe(`<div class="gd-viz-tooltip" style="max-width:320px">
                 <span class="stroke gd-viz-tooltip-stroke" style="border-top-color: rgb(0,0,0)"></span>
                 <div class="content gd-viz-tooltip-content"><div class="gd-viz-tooltip-item">
                 <span class="gd-viz-tooltip-title">State</span>
@@ -112,8 +113,8 @@ describe("geoChartTooltip", () => {
                 decimal: ",",
                 thousand: "'",
             };
-            const tooltipHtml = getTooltipHtml(geoProperties, "rgb(0,0,0)", separators);
-            expect(tooltipHtml).toBe(`<div class="gd-viz-tooltip">
+            const tooltipHtml = getTooltipHtml(geoProperties, "rgb(0,0,0)", TOOLTIP_MAX_WIDTH, separators);
+            expect(tooltipHtml).toBe(`<div class="gd-viz-tooltip" style="max-width:320px">
                 <span class="stroke gd-viz-tooltip-stroke" style="border-top-color: rgb(0,0,0)"></span>
                 <div class="content gd-viz-tooltip-content"><div class="gd-viz-tooltip-item">
                 <span class="gd-viz-tooltip-title">&lt;button&gt;State&lt;/button&gt;</span>

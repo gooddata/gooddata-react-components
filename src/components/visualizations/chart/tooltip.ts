@@ -5,6 +5,10 @@ import { customEscape } from "./chartOptionsBuilder";
 import { percentFormatter } from "../../../helpers/utils";
 import { IPointData } from "../../../interfaces/Config";
 
+// in viewport <= 480, tooltip width is equal to chart container width
+const TOOLTIP_FULLSCREEN_THRESHOLD = 480;
+export const TOOLTIP_MAX_WIDTH = 320;
+
 export function formatValueForTooltip(
     val: string | number,
     format: string,
@@ -29,3 +33,15 @@ export function getFormattedValueForTooltip(
         ? formatValueForTooltip(target ? target : y, format, separators)
         : percentFormatter(percentageValue);
 }
+
+export const isTooltipShownInFullScreen = () => {
+    return document.documentElement.clientWidth <= TOOLTIP_FULLSCREEN_THRESHOLD;
+};
+
+export const getTooltipContentWidth = (
+    isFullScreenTooltip: boolean,
+    chartWidth: number,
+    tooltipMaxWidth: number,
+): number => {
+    return isFullScreenTooltip ? chartWidth : Math.min(chartWidth, tooltipMaxWidth);
+};
