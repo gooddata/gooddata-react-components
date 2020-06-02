@@ -1,5 +1,8 @@
 const DEFAULT_SCENARIO_CONFIG = {
     readyEvent: "GDC_GEO_CANVAS_READY",
+    // Sometimes, Color/Position of labels in Mapbox is rendered incorrectly.
+    // BackstopJS would wait for 200 milliseconds before taking a screenshot
+    delay: 200,
 };
 
 const chartStories = [
@@ -45,49 +48,26 @@ const pointsStories = [
     "with config point size",
 ];
 
+const URIComponentsStories = ["GeoPushpinChart example"];
+
+function configGenerator(stories, config = DEFAULT_SCENARIO_CONFIG) {
+    return stories.reduce(
+        (result, story) => ({
+            ...result,
+            [story]: config,
+        }),
+        {},
+    );
+}
+
 const configuration = {
     sections: {
-        "Core components/GeoPushpinChart": chartStories.reduce(
-            (result, story) => ({
-                ...result,
-                [story]: DEFAULT_SCENARIO_CONFIG,
-            }),
-            {},
-        ),
-        "Core components/GeoPushpinChart/Config/Legend": legendStories.reduce(
-            (result, story) => ({
-                ...result,
-                [story]: DEFAULT_SCENARIO_CONFIG,
-            }),
-            {},
-        ),
-        "Core components/GeoPushpinChart/Config/Color": colorMappingStories.reduce(
-            (result, story) => ({
-                ...result,
-                [story]: DEFAULT_SCENARIO_CONFIG,
-            }),
-            {},
-        ),
-        "Core components/GeoPushpinChart/Config/Viewport": viewportStories.reduce(
-            (result, story) => ({
-                ...result,
-                [story]: DEFAULT_SCENARIO_CONFIG,
-            }),
-            {},
-        ),
-        "Core components/GeoPushpinChart/Config/Points": pointsStories.reduce(
-            (result, story) => ({
-                ...result,
-                [story]: DEFAULT_SCENARIO_CONFIG,
-            }),
-            {},
-        ),
-        /* This test case as it's unstable now. We'll bring it back once SD-948 is resolved.
-        .add("GeoPushpinChart example", () =>
-        "URI components": {
-            "GeoPushpinChart example": DEFAULT_SCENARIO_CONFIG,
-        },
-        */
+        "Core components/GeoPushpinChart": configGenerator(chartStories),
+        "Core components/GeoPushpinChart/Config/Legend": configGenerator(legendStories),
+        "Core components/GeoPushpinChart/Config/Color": configGenerator(colorMappingStories),
+        "Core components/GeoPushpinChart/Config/Viewport": configGenerator(viewportStories),
+        "Core components/GeoPushpinChart/Config/Points": configGenerator(pointsStories),
+        "URI components": configGenerator(URIComponentsStories),
     },
 };
 
