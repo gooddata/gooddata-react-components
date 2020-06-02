@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import React, { Component } from "react";
 import { LineChart, AttributeFilter, Model, ErrorComponent } from "@gooddata/react-components";
 import { VisualizationInput } from "@gooddata/typings";
@@ -9,6 +9,7 @@ import {
     totalSalesIdentifier,
     locationResortIdentifier,
     locationResortUri,
+    locationResortDisplayFormUri,
     projectId,
 } from "../utils/fixtures";
 
@@ -104,12 +105,21 @@ export class AttributeFilterExample extends Component {
         const { filters, error } = this.state;
         return (
             <div className="s-attribute-filter">
+                <p>Attribute Filter by values</p>
                 <AttributeFilter
                     projectId={projectId}
                     filter={filters[0]}
                     onApply={this.onApply}
                     onApplyWithFilterDefinition={this.onApplyWithFilterDefinition}
                 />
+
+                <p>Attribute Filter by uris</p>
+                <AttributeFilter
+                    uri={locationResortDisplayFormUri}
+                    onApply={this.onApply}
+                    onApplyWithFilterDefinition={this.onApplyWithFilterDefinition}
+                />
+
                 <div style={{ height: 300 }} className="s-line-chart">
                     {error ? (
                         <ErrorComponent message={error} />
