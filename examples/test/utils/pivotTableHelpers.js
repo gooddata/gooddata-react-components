@@ -77,3 +77,57 @@ export async function sortColumn(t, tableSelectorStr, columnIndex) {
     await t.expect(tableHeader.find(".s-sort-direction-arrow").exists).ok();
     await waitForPivotTableStopLoading(t);
 }
+
+export const dragResizer = async (t, resizer, destinationOffsetX) => {
+    const dragOptions = { speed: 0.55 };
+    await t.drag(resizer, destinationOffsetX, 0, dragOptions);
+};
+
+export const checkWidthWithTolerance = async (t, actualWidth, expectedWidth, tolerance, info) => {
+    await t.expect(Math.abs(actualWidth - expectedWidth)).lte(tolerance, info);
+};
+
+export const getCallbackArray = async tableSelectorStr => {
+    const callbackSelector = Selector(`${tableSelectorStr}-callback`);
+    const innerText = await callbackSelector.innerText;
+    return JSON.parse(innerText);
+};
+
+export const setAutoResize = async (t, tableSelectorStr) => {
+    const tableSelector = Selector(tableSelectorStr);
+    // example component change also PivotTable key so by this checkbox we simulate init render
+    await t.click(`${tableSelectorStr}-autoresize-checkbox`);
+    await waitForPivotTableStopLoading(t, tableSelector);
+};
+
+export const isAttributeColumnWidthItem = columnWidthItem => {
+    return columnWidthItem && columnWidthItem.attributeColumnWidthItem !== undefined;
+};
+
+export const isMeasureColumnWidthItem = columnWidthItem => {
+    return columnWidthItem && columnWidthItem.measureColumnWidthItem !== undefined;
+};
+
+export const getAttributeColumnWidthItemByIdentifier = (data, attributeIdentifier) => {
+    return data.find(item => {
+        if (isAttributeColumnWidthItem(item)) {
+            return item.attributeColumnWidthItem.attributeIdentifier === attributeIdentifier;
+        }
+        return false;
+    });
+};
+
+export const getMeasureColumnWidthItemByLocator = (data, measureIdentifier, attributeIdentifier, element) => {
+    return data.find(item => {
+        if (isMeasureColumnWidthItem(item)) {
+            return (
+                item.measureColumnWidthItem.locators[0].attributeLocatorItem.attributeIdentifier ===
+                    attributeIdentifier &&
+                item.measureColumnWidthItem.locators[0].attributeLocatorItem.element === element &&
+                item.measureColumnWidthItem.locators[1].measureLocatorItem.measureIdentifier ===
+                    measureIdentifier
+            );
+        }
+        return false;
+    });
+};
