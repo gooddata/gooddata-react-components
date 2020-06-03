@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { VisualizationObject, VisualizationInput } from "@gooddata/typings";
 import omit = require("lodash/omit");
@@ -11,7 +11,7 @@ import { ICommonChartProps } from "./core/base/BaseChart";
 import { convertBucketsToAFM } from "../helpers/conversion";
 import { getPivotTableDimensions } from "../helpers/dimensions";
 import { getResultSpec } from "../helpers/resultSpec";
-import { IPivotTableConfig } from "../interfaces/PivotTable";
+import { IPivotTableConfig, ColumnWidthItem } from "../interfaces/PivotTable";
 
 import { MEASURES, ATTRIBUTE, COLUMNS } from "../constants/bucketNames";
 import { hasDuplicateIdentifiers } from "../helpers/errorHandlers";
@@ -31,6 +31,7 @@ export interface IPivotTableProps extends ICommonChartProps, IPivotTableBucketPr
     config?: IPivotTableConfig;
     groupRows?: boolean;
     exportTitle?: string;
+    onColumnResized?: (columnWidths: ColumnWidthItem[]) => void;
 }
 
 export const getBuckets = (props: IPivotTableBucketProps): VisualizationObject.IBucket[] => {

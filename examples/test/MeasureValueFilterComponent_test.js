@@ -1,6 +1,7 @@
 // (C) 2007-2020 GoodData Corporation
 import { Selector } from "testcafe";
-import { loginUserAndNavigate, waitForPivotTableStopLoading, checkCellValue } from "./utils/helpers";
+import { loginUserAndNavigate } from "./utils/helpers";
+import { waitForPivotTableStopLoading, checkCellValue } from "./utils/pivotTableHelpers";
 import config from "./utils/config";
 
 const CELL_0_0 = ".s-cell-0-0";

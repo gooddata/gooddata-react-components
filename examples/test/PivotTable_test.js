@@ -1,6 +1,7 @@
 // (C) 2007-2020 GoodData Corporation
 import { config } from "./utils/config";
-import { checkCellValue, loginUserAndNavigate } from "./utils/helpers";
+import { loginUserAndNavigate } from "./utils/helpers";
+import { checkCellValue } from "./utils/pivotTableHelpers";
 
 fixture("Pivot Table").beforeEach(loginUserAndNavigate(`${config.url}/hidden/pivot-table`));
 

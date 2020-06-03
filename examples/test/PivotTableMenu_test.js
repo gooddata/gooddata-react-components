@@ -1,7 +1,13 @@
 // (C) 2007-2020 GoodData Corporation
 import { Selector } from "testcafe";
 import { config } from "./utils/config";
-import { checkCellValue, loginUserAndNavigate, waitForPivotTableStopLoading } from "./utils/helpers";
+import { loginUserAndNavigate } from "./utils/helpers";
+import {
+    waitForPivotTableStopLoading,
+    checkCellValue,
+    getMenu,
+    clickOnMenuAggregationItem,
+} from "./utils/pivotTableHelpers";
 
 const totalValues = {
     sum: ["Sum", "", "", "$1,566,007", "$150,709"],
@@ -20,29 +26,6 @@ const getMeasureGroupCell = column => {
 
 const getPivotTableFooterCell = (row, column) => {
     return Selector(`[row-index="b-${row}"] .s-cell-${row}-${column}`);
-};
-
-const getMenu = cell => {
-    return cell.find(".s-table-header-menu");
-};
-
-const clickOnMenuAggregationItem = async (t, cell, aggregationItemClass, attribute) => {
-    await t.hover(cell);
-    const menu = getMenu(cell);
-    await t.click(menu);
-
-    const sumTotal = Selector(aggregationItemClass).find(".s-menu-aggregation-inner");
-
-    if (attribute) {
-        await t.hover(sumTotal);
-        await t.wait(1000);
-        const submenu = Selector(".s-table-header-submenu-content");
-        await t.click(submenu.find(`.s-aggregation-item-${attribute}`));
-    } else {
-        await t.click(sumTotal);
-    }
-
-    await waitForPivotTableStopLoading(t);
 };
 
 const SUBTOTAL_ATTRIBUTE_LOCATION_NAME = "label-restaurantlocation-locationname";

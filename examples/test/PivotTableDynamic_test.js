@@ -1,14 +1,13 @@
 // (C) 2007-2020 GoodData Corporation
 import { Selector } from "testcafe";
 import { config } from "./utils/config";
+import { checkDrill, loginUserAndNavigate } from "./utils/helpers";
 import {
     checkCellHasClassName,
     checkCellHasNotClassName,
     checkCellValue,
-    checkDrill,
-    loginUserAndNavigate,
     waitForPivotTableStopLoading,
-} from "./utils/helpers";
+} from "./utils/pivotTableHelpers";
 import {
     attributeOnDrillExtendedParams,
     columnAndRowAttributesDrillParams,
