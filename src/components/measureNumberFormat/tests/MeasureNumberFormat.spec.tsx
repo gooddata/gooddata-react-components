@@ -10,6 +10,18 @@ import { withIntl } from "../../visualizations/utils/intlUtils";
 import MeasureNumberFormatFragment from "./fragments/MeasureNumberFormat";
 import { IFormatTemplate, IToggleButtonProps } from "../typings";
 
+// CodeMirror window method requirements
+(window as any).document.body.createTextRange = jest.fn(() => {
+    return {
+        setStart: jest.fn(),
+        setEnd: jest.fn(),
+        getBoundingClientRect: jest.fn(),
+        getClientRects: jest.fn(() => {
+            return { length: null };
+        }),
+    };
+});
+
 const getButtonComponent = (): React.FC<IToggleButtonProps> => ({ isOpened, text, toggleDropdown }) => {
     return (
         <div
@@ -214,7 +226,7 @@ describe("Measure number format", () => {
                 const template = component.getTemplateByName("Currency");
 
                 template.simulate("click");
-                expect(component.getCustomFormatValueInput().props().value).toEqual("€ #,##0.0");
+                expect(component.getCustomFormatValue()).toEqual("€ #,##0.0");
 
                 component.clickCustomFormatApply();
                 expect(setFormat).toHaveBeenCalledWith("€ #,##0.0");
