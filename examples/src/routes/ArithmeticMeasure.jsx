@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -34,7 +34,12 @@ export const ArithmeticMeasure = () => (
 
         <h2>Ratio</h2>
         <p>Take two measures and divide them (e.g. gross margin = gross profit / net sales).</p>
-        <ExampleWithSource for={ArithmeticMeasureRatioExample} source={ArithmeticMeasureRatioExampleSrc} />
+        <div className="s-ratio-calculated-example">
+            <ExampleWithSource
+                for={ArithmeticMeasureRatioExample}
+                source={ArithmeticMeasureRatioExampleSrc}
+            />
+        </div>
 
         <h2>Change</h2>
         <p>Calculate percentual change between two measures.</p>
@@ -44,24 +49,35 @@ export const ArithmeticMeasure = () => (
             <Link to="/time-over-time-comparison">Time Over Time Comparison</Link> with Arithmetic Measures to
             display trend of the given metric.
         </p>
-        <ExampleWithSource for={ArithmeticMeasureChangeExample} source={ArithmeticMeasureChangeExampleSrc} />
+        <div className="s-change-calculated-example">
+            <ExampleWithSource
+                for={ArithmeticMeasureChangeExample}
+                source={ArithmeticMeasureChangeExampleSrc}
+            />
+        </div>
 
         <h2>Sum and difference</h2>
         <p>Add or subtract two measures (e.g. revenue in 2017 - revenue in 2016).</p>
-        <ExampleWithSource for={ArithmeticMeasureSumExample} source={ArithmeticMeasureSumExampleSrc} />
+        <div className="s-sum-and-difference-calculated-example">
+            <ExampleWithSource for={ArithmeticMeasureSumExample} source={ArithmeticMeasureSumExampleSrc} />
+        </div>
 
         <h2>Multiplication</h2>
         <p>Multiply two measures (e.g. price per unit x volume = revenue).</p>
-        <ExampleWithSource
-            for={ArithmeticMeasureMultiplicationExample}
-            source={ArithmeticMeasureMultiplicationExampleSrc}
-        />
+        <div className="s-multiplication-calculated-example">
+            <ExampleWithSource
+                for={ArithmeticMeasureMultiplicationExample}
+                source={ArithmeticMeasureMultiplicationExampleSrc}
+            />
+        </div>
 
         <h2>Arithmetic Measures with Drilling</h2>
-        <ExampleWithSource
-            for={ArithmeticMeasureDrillingExample}
-            source={ArithmeticMeasureDrillingExampleSrc}
-        />
+        <div className="s-multiplication-calculated-with-drilling-example">
+            <ExampleWithSource
+                for={ArithmeticMeasureDrillingExample}
+                source={ArithmeticMeasureDrillingExampleSrc}
+            />
+        </div>
     </div>
 );
 
