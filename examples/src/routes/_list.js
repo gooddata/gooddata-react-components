@@ -36,6 +36,9 @@ import OnDrillHandling from "./OnDrillHandling";
 import Xirr from "./Xirr";
 import NativeTotalAndMeasureValueFilterTest from "../components/NativeTotalAndMeasureValueFilterTest";
 import MeasureValueFilterChartConfiguration from "../components/MeasureValueFilterChartConfiguration";
+import MeasureValueFilterAndDateFilter from "../components/MeasureValueFilterAndDateFilter";
+import MeasureValueFilterAndAttributeFilter from "../components/MeasureValueFilterAndAttributeFilter";
+import MeasureValueFilterAndDateFilterAndAttributeFilter from "../components/MeasureValueFilterAndDateFilterAndAttributeFilter";
 import MeasureValueFilterTreatNullAsZero from "../components/MeasureValueFilterTreatNullAsZero";
 import { PivotTableSizing } from "./PivotTableSizing";
 import GeoPushpinChartDemo from "./GeoPushpinChartDemo";
@@ -280,6 +283,21 @@ export const hiddenPaths = [
         path: "/hidden/measure-value-filter-with-chart-configuration",
         title: "Measure value filter with chart configuration",
         Component: MeasureValueFilterChartConfiguration,
+    },
+    {
+        path: "/hidden/measure-value-filter-and-date-filter",
+        title: "Measure value filter and date filter",
+        Component: MeasureValueFilterAndDateFilter,
+    },
+    {
+        path: "/hidden/measure-value-filter-and-attribute-filter",
+        title: "Measure value filter and attribute filter",
+        Component: MeasureValueFilterAndAttributeFilter,
+    },
+    {
+        path: "/hidden/measure-value-filter-and-date-filter-and-attribute-filter",
+        title: "Measure value filter and date filter and attribute filter",
+        Component: MeasureValueFilterAndDateFilterAndAttributeFilter,
     },
     {
         path: "/hidden/measure-value-filter-with-treat-null-as-zero",
