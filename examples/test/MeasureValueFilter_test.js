@@ -176,3 +176,42 @@ test("should filter the data with measure value filter that treats measure null 
     await checkCellValue(t, tableSelector, "–", CELL_1_1);
     await checkCellValue(t, tableSelector, "–", CELL_2_1);
 });
+
+fixture("Measure Value Filter combine date and attribute filter").beforeEach(
+    loginUserAndNavigate(`${config.url}/hidden/measure-value-filter-and-date-filter-and-attribute-filter`),
+);
+
+test("should render data when chart is combined with date and attribute filter", async t => {
+    const chartValues = Selector(".highcharts-data-label");
+    await t
+        .expect(chartValues.exists)
+        .ok()
+        .expect(chartValues.nth(0).textContent)
+        .eql("$729,443");
+});
+
+fixture("Measure Value Filter combine date filter").beforeEach(
+    loginUserAndNavigate(`${config.url}/hidden/measure-value-filter-and-date-filter`),
+);
+
+test("should render data when chart is combined with date filter", async t => {
+    const chartValues = Selector(".highcharts-data-label");
+    await t
+        .expect(chartValues.exists)
+        .ok()
+        .expect(chartValues.nth(0).textContent)
+        .eql("$6,232,274");
+});
+
+fixture("Measure Value Filter combine attribute filter").beforeEach(
+    loginUserAndNavigate(`${config.url}/hidden/measure-value-filter-and-attribute-filter`),
+);
+
+test("should render data when chart is combined", async t => {
+    const chartValues = Selector(".highcharts-data-label");
+    await t
+        .expect(chartValues.exists)
+        .ok()
+        .expect(chartValues.nth(0).textContent)
+        .eql("-24,823,451");
+});
