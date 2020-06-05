@@ -1,5 +1,5 @@
 include docker/.config
-DOCKER_REGISTRY=docker-registry.na.intgdc.com
+DOCKER_REGISTRY=harbor.intgdc.com/tools
 SOURCES_FILE=gooddata-react-components-web.tar.gz
 # NPM_AUTH_TOKEN variable will be taken from CI env variables
 .PHONY: dist
