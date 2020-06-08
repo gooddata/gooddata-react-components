@@ -5,6 +5,10 @@ import { checkRenderChart, loginUserAndNavigate } from "./utils/helpers";
 
 fixture("Basic components").beforeEach(loginUserAndNavigate(config.url));
 
+const tooltipItem = Selector(".gd-viz-tooltip-item");
+const tooltipValue = tooltipItem.find(".gd-viz-tooltip-value");
+const tooltipTitle = tooltipItem.find(".gd-viz-tooltip-title");
+
 test("Column chart should render", async t => {
     await checkRenderChart(".s-column-chart", t);
 });
@@ -56,7 +60,23 @@ test("KPI has correct number", async t => {
 });
 
 test("Donut chart should render", async t => {
+    const donutChart = Selector(".s-donut-chart");
     await checkRenderChart(".s-donut-chart", t);
+
+    const legend = donutChart.find(".viz-legend .series-item");
+    const highchartsPoint = donutChart.find(".highcharts-series.highcharts-series-0 .highcharts-point");
+    await t
+        .hover(highchartsPoint.nth(2))
+        .expect(tooltipTitle.textContent)
+        .eql("$ Franchise Fees (Initial Franchise Fee)")
+        .expect(tooltipValue.textContent)
+        .eql("40,000")
+        .expect(legend.nth(0).textContent)
+        .eql("$ Franchise Fees (Ongoing Royalty)")
+        .expect(legend.nth(1).textContent)
+        .eql("$ Franchise Fees (Ad Royalty)")
+        .expect(legend.nth(2).textContent)
+        .eql("$ Franchise Fees (Initial Franchise Fee)");
 });
 
 test("Scatter plot should render", async t => {
