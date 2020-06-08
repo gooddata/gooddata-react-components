@@ -73,6 +73,7 @@ import { BucketExecutor } from "./execution/BucketExecutor";
 import { MeasureNumberFormat } from "./components/measureNumberFormat/MeasureNumberFormat";
 import * as MeasureNumberFormatType from "./components/measureNumberFormat/typings";
 import * as IPositioning from "./typings/positioning";
+import { SyntaxHighlightingInput } from "./components/simple/SyntaxHighlightingInput";
 
 /**
  * CoreComponents
@@ -170,4 +171,5 @@ export {
     MeasureNumberFormat,
     MeasureNumberFormatType,
     IPositioning,
+    SyntaxHighlightingInput,
 };
