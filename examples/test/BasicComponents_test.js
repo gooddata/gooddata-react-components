@@ -133,7 +133,32 @@ test("Headline should render", async t => {
 });
 
 test("Heatmap should render", async t => {
-    await checkRenderChart(".s-heat-map", t);
+    const heatMap = Selector(".s-heat-map");
+    await checkRenderChart(heatMap, t);
+
+    const trackerCssSelector = ".highcharts-series-0.highcharts-tracker rect";
+    await t
+        .hover(heatMap.find(trackerCssSelector).nth(0))
+        .expect(tooltipTitle.nth(0).textContent)
+        .eql("Location State")
+        .expect(tooltipValue.nth(0).textContent)
+        .eql("Texas")
+        .expect(tooltipTitle.nth(1).textContent)
+        .eql("Menu Category")
+        .expect(tooltipValue.nth(1).textContent)
+        .eql("Alcoholic Beverages")
+        .expect(tooltipTitle.nth(2).textContent)
+        .eql("$ Total Sales")
+        .expect(tooltipValue.nth(2).textContent)
+        .eql("3,446,981")
+        .expect(heatMap.find(xAxisTitleCssSelector).textContent)
+        .eql("Menu Category")
+        .expect(heatMap.find(yAxisTitleCssSelector).textContent)
+        .eql("Location State")
+        .expect(heatMap.find(valuePrimaryYAxisCssSelector).textContent)
+        .eql("TexasNew YorkFloridaCaliforniaAlabama")
+        .expect(heatMap.find(valueXAxisCssSelector).textContent)
+        .eql("Alcoholic BeveragesAppetizersBeveragesCoffeeDessertsEnhancementsEntrees");
 });
 
 test("GeoPushpinChart should render", async t => {
