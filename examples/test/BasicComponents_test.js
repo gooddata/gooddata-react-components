@@ -84,7 +84,33 @@ test("Donut chart should render", async t => {
 });
 
 test("Scatter plot should render", async t => {
-    await checkRenderChart(".s-scatter-plot", t);
+    const scatterPlot = Selector(".s-scatter-plot");
+    await checkRenderChart(scatterPlot, t);
+
+    const trackerCssSelector = ".highcharts-series-0.highcharts-tracker path";
+
+    await t
+        .hover(scatterPlot.find(trackerCssSelector).nth(0))
+        .expect(tooltipTitle.nth(0).textContent)
+        .eql("Location Resort")
+        .expect(tooltipValue.nth(0).textContent)
+        .eql("Deerfield Beach")
+        .expect(tooltipTitle.nth(1).textContent)
+        .eql("$ Franchise Fees")
+        .expect(tooltipValue.nth(1).textContent)
+        .eql("420,529")
+        .expect(tooltipTitle.nth(2).textContent)
+        .eql("$ Franchised Sales")
+        .expect(tooltipValue.nth(2).textContent)
+        .eql("4,476,814")
+        .expect(scatterPlot.find(xAxisTitleCssSelector).textContent)
+        .eql("$ Franchise Fees")
+        .expect(scatterPlot.find(yAxisTitleCssSelector).textContent)
+        .eql("$ Franchised Sales")
+        .expect(scatterPlot.find(valuePrimaryYAxisCssSelector).textContent)
+        .eql("5M10M15M020M")
+        .expect(scatterPlot.find(valueXAxisCssSelector).textContent)
+        .eql("400k500k600k700k800k900k1 000k1 100k1 200k1 300k1 400k");
 });
 
 test("Bubble chart should render", async t => {
