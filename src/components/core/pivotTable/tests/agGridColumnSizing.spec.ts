@@ -11,13 +11,47 @@ import {
 import {
     ColumnWidthItem,
     ColumnEventSourceType,
-    ColumnWidth,
+    AbsoluteColumnWidth,
     IResizedColumns,
 } from "../../../../interfaces/PivotTable";
 import { IGridHeader } from "../agGridTypes";
 import { DEFAULT_COLUMN_WIDTH } from "../../PivotTable";
 import { Column, ColumnApi } from "ag-grid-community";
 import { oneColumnAttributeNoMeasureResponse } from "../../../../execution/fixtures/ExecuteAfm.fixtures";
+import { ResizedColumnsStore } from "../ResizedColumnsStore";
+import { MEASURE_COLUMN, COLUMN_ATTRIBUTE_COLUMN } from "../agGridConst";
+
+const getFakeColumnApi = (columnsMaps: { [id: string]: Column }): ColumnApi => {
+    const fakeColumnApi = {
+        getColumn: (columnId: string) => {
+            return columnsMaps[columnId];
+        },
+        setColumnWidth: (column: Column, width: number) => {
+            columnsMaps[column.getColId()].getColDef().width = width;
+        },
+        getAllColumns: () => {
+            return Object.keys(columnsMaps).map((colId: string) => columnsMaps[colId]);
+        },
+    };
+    return fakeColumnApi as ColumnApi;
+};
+
+const getFakeColumn = (columnDefinition: any): Column => {
+    const fakeColumn = {
+        getColDef: () => {
+            return columnDefinition;
+        },
+        getColId: () => {
+            return columnDefinition.colId;
+        },
+
+        getActualWidth: () => {
+            return columnDefinition.width;
+        },
+    };
+
+    return fakeColumn as Column;
+};
 
 describe("agGridColumnSizing", () => {
     const columnWidths: ColumnWidthItem[] = [
@@ -97,7 +131,7 @@ describe("agGridColumnSizing", () => {
     const MIN_WIDTH = 100;
     const MAX_WIDTH = 300;
 
-    const widthValidator = (width: ColumnWidth): ColumnWidth => {
+    const widthValidator = (width: AbsoluteColumnWidth): AbsoluteColumnWidth => {
         if (Number(width) === width) {
             return Math.min(Math.max(width, MIN_WIDTH), MAX_WIDTH);
         }
@@ -253,16 +287,22 @@ describe("agGridColumnSizing", () => {
         const coloursManualWidth = 400;
         const amountManualWidth = 100;
 
-        const manuallyResizedColumns: IResizedColumns = {
-            m_0: {
-                width: amountManualWidth,
-                source: ColumnEventSourceType.UI_DRAGGED,
-            },
-            [coloursId]: {
-                width: coloursManualWidth,
-                source: ColumnEventSourceType.UI_DRAGGED,
-            },
+        const columDefAmount = {
+            suppressSizeToFit: false,
+            width: amountManualWidth,
+            colId: "m_0",
+            type: MEASURE_COLUMN,
         };
+        const columDefColours = {
+            suppressSizeToFit: false,
+            width: coloursManualWidth,
+            colId: coloursId,
+            type: COLUMN_ATTRIBUTE_COLUMN,
+        };
+
+        const manuallyResizedColumns = new ResizedColumnsStore();
+        manuallyResizedColumns.addToManuallyResizedColumn(getFakeColumn(columDefAmount));
+        manuallyResizedColumns.addToManuallyResizedColumn(getFakeColumn(columDefColours));
 
         const coloursAutoWidth = 76;
         const amountAutoWidth = 77;
@@ -439,7 +479,7 @@ describe("agGridColumnSizing", () => {
 
                 const result = enrichColumnDefinitionsWithWidths(
                     columnDefinitions,
-                    {},
+                    new ResizedColumnsStore(),
                     autoResizeColumns,
                     DEFAULT_COLUMN_WIDTH,
                     false,
@@ -473,7 +513,7 @@ describe("agGridColumnSizing", () => {
 
                 const result = enrichColumnDefinitionsWithWidths(
                     columnDefinitions,
-                    {},
+                    new ResizedColumnsStore(),
                     autoResizeColumns,
                     DEFAULT_COLUMN_WIDTH,
                     true,
@@ -509,7 +549,7 @@ describe("agGridColumnSizing", () => {
 
                 const result = enrichColumnDefinitionsWithWidths(
                     columnDefinitions,
-                    {},
+                    new ResizedColumnsStore(),
                     {},
                     DEFAULT_COLUMN_WIDTH,
                     true,
@@ -543,7 +583,7 @@ describe("agGridColumnSizing", () => {
 
                 const result = enrichColumnDefinitionsWithWidths(
                     columnDefinitions,
-                    {},
+                    new ResizedColumnsStore(),
                     {},
                     DEFAULT_COLUMN_WIDTH,
                     true,
@@ -579,7 +619,7 @@ describe("agGridColumnSizing", () => {
 
                 const result = enrichColumnDefinitionsWithWidths(
                     columnDefinitions,
-                    {},
+                    new ResizedColumnsStore(),
                     {},
                     DEFAULT_COLUMN_WIDTH,
                     false,
@@ -591,64 +631,15 @@ describe("agGridColumnSizing", () => {
         });
     });
 
-    function getFakeColumnApi(columnsMaps: { [id: string]: Column }): ColumnApi {
-        const fakeColumnApi = {
-            getColumn: (columnId: string) => {
-                return columnsMaps[columnId];
-            },
-            setColumnWidth: (column: Column, width: number) => {
-                columnsMaps[column.getColId()].getColDef().width = width;
-            },
-            getAllColumns: () => {
-                return Object.keys(columnsMaps).map((colId: string) => columnsMaps[colId]);
-            },
-        };
-        return fakeColumnApi as ColumnApi;
-    }
-
-    function getFakeColumn(columnDefinition: any): Column {
-        const fakeColumn = {
-            getColDef: () => {
-                return columnDefinition;
-            },
-            getColId: () => {
-                return columnDefinition.colId;
-            },
-        };
-
-        return fakeColumn as Column;
-    }
-
     const colId1 = "colId1";
     const colId2 = "colId2";
     const colId3 = "colId3";
 
-    const oldResizeColumns: IResizedColumns = {
-        [colId1]: {
-            width: 100,
-            source: ColumnEventSourceType.UI_DRAGGED,
-        },
-        [colId2]: {
-            width: 200,
-            source: ColumnEventSourceType.UI_DRAGGED,
-        },
-    };
-    const newResizeColumns: IResizedColumns = {
-        [colId2]: {
-            width: 400,
-            source: ColumnEventSourceType.UI_DRAGGED,
-        },
-        [colId3]: {
-            width: 500,
-            source: ColumnEventSourceType.UI_DRAGGED,
-        },
-    };
-
     describe("syncSuppressSizeToFitOnColumns", () => {
         it("should set correctly suppressSizeToFit for columns ", () => {
-            const columnDef1 = { suppressSizeToFit: true, width: 100, colId: colId1 };
-            const columnDef2 = { suppressSizeToFit: true, width: 200, colId: colId2 };
-            const columnDef3 = { suppressSizeToFit: false, width: 200, colId: colId3 };
+            const columnDef1 = { suppressSizeToFit: true, width: 100, colId: colId1, type: MEASURE_COLUMN };
+            const columnDef2 = { suppressSizeToFit: true, width: 200, colId: colId2, type: MEASURE_COLUMN };
+            const columnDef3 = { suppressSizeToFit: false, width: 200, colId: colId3, type: MEASURE_COLUMN };
 
             const columnsMaps = {
                 colId1: getFakeColumn(columnDef1),
@@ -658,7 +649,11 @@ describe("agGridColumnSizing", () => {
 
             const columnApi = getFakeColumnApi(columnsMaps);
 
-            syncSuppressSizeToFitOnColumns(oldResizeColumns, newResizeColumns, columnApi);
+            const manuallyResizedColumns = new ResizedColumnsStore();
+            manuallyResizedColumns.addToManuallyResizedColumn(columnsMaps.colId2);
+            manuallyResizedColumns.addToManuallyResizedColumn(columnsMaps.colId3);
+
+            syncSuppressSizeToFitOnColumns(manuallyResizedColumns, columnApi);
 
             expect(columnDef1.suppressSizeToFit).toEqual(false);
 
@@ -670,9 +665,9 @@ describe("agGridColumnSizing", () => {
 
     describe("resetColumnsWidthToDefault", () => {
         it("should set correctly widths for columns: manual>auto>default", () => {
-            const columnDef1 = { suppressSizeToFit: true, width: 100, colId: colId1 };
-            const columnDef2 = { suppressSizeToFit: true, width: 200, colId: colId2 };
-            const columnDef3 = { suppressSizeToFit: false, width: 200, colId: colId3 };
+            const columnDef1 = { suppressSizeToFit: true, width: 100, colId: colId1, type: MEASURE_COLUMN };
+            const columnDef2 = { suppressSizeToFit: true, width: 200, colId: colId2, type: MEASURE_COLUMN };
+            const columnDef3 = { suppressSizeToFit: false, width: 200, colId: colId3, type: MEASURE_COLUMN };
 
             const columnsMaps = {
                 colId1: getFakeColumn(columnDef1),
@@ -682,12 +677,10 @@ describe("agGridColumnSizing", () => {
 
             const columnApi = getFakeColumnApi(columnsMaps);
 
-            const manualWidths = {
-                colId1: {
-                    width: 300,
-                    source: ColumnEventSourceType.UI_DRAGGED,
-                },
-            };
+            const manuallyResizedColumns = new ResizedColumnsStore();
+            manuallyResizedColumns.addToManuallyResizedColumn(
+                getFakeColumn({ suppressSizeToFit: true, width: 300, colId: colId1, type: MEASURE_COLUMN }),
+            );
 
             const autoWidths = {
                 colId1: {
@@ -704,7 +697,7 @@ describe("agGridColumnSizing", () => {
             resetColumnsWidthToDefault(
                 columnApi,
                 columnApi.getAllColumns(),
-                manualWidths,
+                manuallyResizedColumns,
                 autoWidths,
                 defaultWidth,
             );

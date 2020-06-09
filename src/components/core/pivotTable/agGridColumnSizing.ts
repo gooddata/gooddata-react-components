@@ -1,6 +1,5 @@
 // (C) 2007-2020 GoodData Corporation
 import cloneDeep = require("lodash/cloneDeep");
-import difference = require("lodash/difference");
 import { Execution } from "@gooddata/typings";
 import {
     getAttributeLocators,
@@ -11,6 +10,7 @@ import {
     getTreeLeaves,
     getColumnIdentifierFromDef,
     getColumnIdentifier,
+    isMeasureColumn,
 } from "./agGridUtils";
 import { FIELD_SEPARATOR, FIELD_TYPE_ATTRIBUTE, FIELD_TYPE_MEASURE, ID_SEPARATOR } from "./agGridConst";
 import { assortDimensionHeaders, identifyResponseHeader } from "./agGridHeaders";
@@ -18,7 +18,7 @@ import invariant = require("invariant");
 
 import {
     IAttributeColumnWidthItem,
-    ColumnWidth,
+    AbsoluteColumnWidth,
     IMeasureColumnWidthItem,
     isMeasureLocatorItem,
     isAttributeColumnWidthItem,
@@ -26,9 +26,12 @@ import {
     isMeasureColumnWidthItem,
     ColumnEventSourceType,
     IResizedColumns,
+    ColumnWidth,
+    isAbsoluteColumnWidth,
 } from "../../../interfaces/PivotTable";
 import { IGridHeader } from "./agGridTypes";
 import { ColumnApi, Column } from "ag-grid-community";
+import { ResizedColumnsStore, IResizedColumnsCollection } from "./ResizedColumnsStore";
 
 export const MIN_WIDTH = 60;
 export const AUTO_SIZED_MAX_WIDTH = 500;
@@ -42,13 +45,13 @@ export const convertColumnWidthsToMap = (
     columnWidths: ColumnWidthItem[],
     executionResponse: Execution.IExecutionResponse,
     widthValidator: (width: ColumnWidth) => ColumnWidth = defaultWidthValidator,
-): IResizedColumns => {
+): IResizedColumnsCollection => {
     if (!columnWidths || !executionResponse) {
         return {};
     }
     const { dimensions } = executionResponse;
 
-    const columnWidthsMap = {};
+    const columnWidthsMap: IResizedColumnsCollection = {};
     const { attributeHeaders, measureHeaderItems } = assortDimensionHeaders(dimensions);
     columnWidths.forEach((columnWidth: ColumnWidthItem) => {
         if (isAttributeColumnWidthItem(columnWidth)) {
@@ -72,7 +75,7 @@ export const convertColumnWidthsToMap = (
 const getAttributeColumnWidthItemFieldAndWidth = (
     columnWidthItem: IAttributeColumnWidthItem,
     attributeHeaders: Execution.IAttributeHeader[],
-): [string, ColumnWidth] => {
+): [string, AbsoluteColumnWidth] => {
     const localIdentifier = columnWidthItem.attributeColumnWidthItem.attributeIdentifier;
 
     const attributeHeader = attributeHeaders.find(
@@ -110,14 +113,14 @@ const getMeasureColumnWidthItemFieldAndWidth = (
             keys.push(key);
         }
     });
-    const field = keys.join(FIELD_SEPARATOR);
+    const field = keys.join(FIELD_SEPARATOR); // check if keys is empty than *
     return [field, columnWidthItem.measureColumnWidthItem.width];
 };
 
 const getSizeItemByColId = (
     execution: Execution.IExecutionResponses,
     colId: string,
-    width: number,
+    width: ColumnWidth,
 ): ColumnWidthItem => {
     const { dimensions } = execution.executionResponse;
     const fields = getParsedFields(colId);
@@ -132,13 +135,16 @@ const getSizeItemByColId = (
         for (const header of attributeHeaders) {
             if (getIdsFromUri(header.attributeHeader.uri)[0] === lastFieldId) {
                 const attributeIdentifier = header.attributeHeader.localIdentifier;
-
-                return {
-                    attributeColumnWidthItem: {
-                        width,
-                        attributeIdentifier,
-                    },
-                };
+                if (isAbsoluteColumnWidth(width)) {
+                    return {
+                        attributeColumnWidthItem: {
+                            width,
+                            attributeIdentifier,
+                        },
+                    };
+                } else {
+                    invariant(false, `width value for attributeColumnWidthItem has to be number ${colId}`);
+                }
             }
         }
         // check only column attribute without measure
@@ -181,7 +187,7 @@ const getSizeItemByColId = (
 };
 
 export const getColumnWidthsFromMap = (
-    map: IResizedColumns,
+    map: IResizedColumnsCollection,
     execution: Execution.IExecutionResponses,
 ): ColumnWidthItem[] => {
     return Object.keys(map).map((colId: string) => {
@@ -193,14 +199,17 @@ export const getColumnWidthsFromMap = (
 };
 
 export const defaultWidthValidator = (width: ColumnWidth): ColumnWidth => {
-    return Math.min(Math.max(width, MIN_WIDTH), MANUALLY_SIZED_MAX_WIDTH);
+    if (isAbsoluteColumnWidth(width)) {
+        return Math.min(Math.max(width, MIN_WIDTH), MANUALLY_SIZED_MAX_WIDTH);
+    }
+    return width;
 };
 
 export const enrichColumnDefinitionsWithWidths = (
     columnDefinitions: IGridHeader[],
-    manuallyResizedColumns: IResizedColumns,
+    resizedColumnsStore: ResizedColumnsStore,
     autoResizedColumns: IResizedColumns,
-    defaultColumnWidth: ColumnWidth,
+    defaultColumnWidth: AbsoluteColumnWidth,
     isGrowToFitEnabled: boolean,
     growToFittedColumns: IResizedColumns = {},
 ): IGridHeader[] => {
@@ -208,8 +217,9 @@ export const enrichColumnDefinitionsWithWidths = (
     const leaves = getTreeLeaves(result);
     leaves.forEach((columnDefinition: IGridHeader) => {
         if (columnDefinition) {
-            const manualSize = manuallyResizedColumns[getColumnIdentifierFromDef(columnDefinition)];
-            const autoResizeSize = autoResizedColumns[getColumnIdentifierFromDef(columnDefinition)];
+            const columnId = getColumnIdentifierFromDef(columnDefinition);
+            const manualSize = resizedColumnsStore.getManuallyResizedColumn(columnDefinition);
+            const autoResizeSize = autoResizedColumns[columnId];
 
             columnDefinition.maxWidth = MANUALLY_SIZED_MAX_WIDTH;
 
@@ -237,55 +247,58 @@ export const enrichColumnDefinitionsWithWidths = (
 };
 
 export const syncSuppressSizeToFitOnColumns = (
-    oldManuallyResizedColumns: IResizedColumns,
-    newManuallyResizedColumns: IResizedColumns,
+    resizedColumnsStore: ResizedColumnsStore,
     columnApi: ColumnApi,
 ) => {
     if (!columnApi) {
         return;
     }
 
-    const oldColumnIds = Object.keys(oldManuallyResizedColumns);
-    const newColumnIds = Object.keys(newManuallyResizedColumns);
-    const removedColumnIds = difference(oldColumnIds, newColumnIds);
-    const addedColumnIds = difference(newColumnIds, oldColumnIds);
-
     const columns = columnApi.getAllColumns();
 
     columns.forEach(col => {
-        const field = getColumnIdentifier(col);
-
-        if (removedColumnIds.indexOf(field) !== -1) {
-            col.getColDef().suppressSizeToFit = false;
-        }
-        if (addedColumnIds.indexOf(field) !== -1) {
-            col.getColDef().suppressSizeToFit = true;
-        }
+        const resizedColumn = resizedColumnsStore.isColumnManuallyResized(col);
+        resizedColumn
+            ? (col.getColDef().suppressSizeToFit = true)
+            : (col.getColDef().suppressSizeToFit = false);
     });
 };
 
 export const isColumnAutoResized = (autoResizedColumns: IResizedColumns, resizedColumnId: string) =>
     resizedColumnId && autoResizedColumns[resizedColumnId];
 
-export const isColumnManuallyResized = (manuallyResizedColumns: IResizedColumns, resizedColumnId: string) =>
-    resizedColumnId && manuallyResizedColumns[resizedColumnId];
-
 export const resetColumnsWidthToDefault = (
     columnApi: ColumnApi,
     columns: Column[],
-    manuallyResizedColumns: IResizedColumns,
+    resizedColumnsStore: ResizedColumnsStore,
     autoResizedColumns: IResizedColumns,
     defaultWidth: number,
 ) => {
     columns.forEach(col => {
         const id = getColumnIdentifier(col);
-
-        if (isColumnManuallyResized(manuallyResizedColumns, id)) {
-            columnApi.setColumnWidth(col, manuallyResizedColumns[id].width);
+        if (resizedColumnsStore.isColumnManuallyResized(col)) {
+            const manuallyResizedColumn = resizedColumnsStore.getManuallyResizedColumn(col);
+            columnApi.setColumnWidth(col, manuallyResizedColumn.width);
         } else if (isColumnAutoResized(autoResizedColumns, id)) {
             columnApi.setColumnWidth(col, autoResizedColumns[id].width);
         } else {
             columnApi.setColumnWidth(col, defaultWidth);
         }
     });
+};
+
+export const resizeAllMeasuresColumns = (
+    columnApi: ColumnApi,
+    resizedColumnsStore: ResizedColumnsStore,
+    column: Column,
+) => {
+    const columnWidth = column.getActualWidth();
+    const allColumns = columnApi.getAllColumns();
+
+    allColumns.forEach(col => {
+        if (isMeasureColumn(col)) {
+            columnApi.setColumnWidth(col, columnWidth);
+        }
+    });
+    resizedColumnsStore.addAllMeasureColumns(columnWidth, allColumns);
 };
