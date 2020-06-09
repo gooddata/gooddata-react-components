@@ -7,10 +7,13 @@ import { PivotTable } from "../../../src";
 import { onErrorHandler } from "../../mocks";
 import { ATTRIBUTE_1, ATTRIBUTE_2, MEASURE_1, MEASURE_2 } from "../../data/componentProps";
 import { ScreenshotReadyWrapper, visualizationNotLoadingResolver } from "../../utils/ScreenshotReadyWrapper";
+import { action } from "@storybook/addon-actions";
 
 const wrapperStyle = { width: 1200, height: 300 };
 const ATTRIBUTE_WIDTH = 400;
 const MEASURE_WIDTH = 60;
+const ALL_MEASURE_WIDTH = 300;
+
 const measureColumnWidthItemSimple = {
     measureColumnWidthItem: {
         width: MEASURE_WIDTH,
@@ -23,6 +26,13 @@ const measureColumnWidthItemSimple = {
         ],
     },
 };
+
+const allMeasureColumnWidthItem = {
+    measureColumnWidthItem: {
+        width: ALL_MEASURE_WIDTH,
+    },
+};
+
 const measureColumnWidthItemWithAttr = {
     measureColumnWidthItem: {
         width: MEASURE_WIDTH,
@@ -374,6 +384,101 @@ storiesOf("Core components/PivotTable/ManualResizing/Table with column attr", mo
                         onError={onErrorHandler}
                         LoadingComponent={null}
                         ErrorComponent={null}
+                    />
+                </div>
+            </ScreenshotReadyWrapper>,
+        );
+    });
+
+storiesOf("Core components/PivotTable/ManualResizing/With All measure width definition", module)
+    .add("autoResize=off, growToFit=off", () => {
+        const columnWidths = [
+            allMeasureColumnWidthItem,
+            measureColumnWidthItemWithAttr,
+            attributeColumnWidthItem,
+        ];
+
+        return screenshotWrap(
+            <ScreenshotReadyWrapper resolver={visualizationNotLoadingResolver()}>
+                <div style={wrapperStyle} className="s-table">
+                    <PivotTable
+                        projectId="storybook"
+                        measures={[MEASURE_1, MEASURE_2]}
+                        rows={[ATTRIBUTE_1]}
+                        columns={[ATTRIBUTE_2]}
+                        config={{
+                            columnSizing: {
+                                defaultWidth: "unset",
+                                growToFit: false,
+                                columnWidths,
+                            },
+                        }}
+                        onError={onErrorHandler}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                        onColumnResized={action("onColumnResized")}
+                    />
+                </div>
+            </ScreenshotReadyWrapper>,
+        );
+    })
+    .add("autoResize=on, growToFit=off", () => {
+        const columnWidths = [
+            allMeasureColumnWidthItem,
+            measureColumnWidthItemWithAttr,
+            attributeColumnWidthItem,
+        ];
+
+        return screenshotWrap(
+            <ScreenshotReadyWrapper resolver={visualizationNotLoadingResolver()}>
+                <div style={wrapperStyle} className="s-table">
+                    <PivotTable
+                        projectId="storybook"
+                        measures={[MEASURE_1, MEASURE_2]}
+                        rows={[ATTRIBUTE_1]}
+                        columns={[ATTRIBUTE_2]}
+                        config={{
+                            columnSizing: {
+                                defaultWidth: "viewport",
+                                growToFit: false,
+                                columnWidths,
+                            },
+                        }}
+                        onError={onErrorHandler}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                        onColumnResized={action("onColumnResized")}
+                    />
+                </div>
+            </ScreenshotReadyWrapper>,
+        );
+    })
+    .add("autoResize=on, growToFit=on", () => {
+        const columnWidths = [
+            allMeasureColumnWidthItem,
+            measureColumnWidthItemWithAttr,
+            attributeColumnWidthItem,
+        ];
+
+        return screenshotWrap(
+            <ScreenshotReadyWrapper resolver={visualizationNotLoadingResolver()}>
+                <div style={wrapperStyle} className="s-table">
+                    <PivotTable
+                        projectId="storybook"
+                        measures={[MEASURE_1, MEASURE_2]}
+                        rows={[ATTRIBUTE_1]}
+                        columns={[ATTRIBUTE_2]}
+                        config={{
+                            columnSizing: {
+                                defaultWidth: "viewport",
+                                growToFit: true,
+                                columnWidths,
+                            },
+                        }}
+                        onError={onErrorHandler}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                        onColumnResized={action("onColumnResized")}
                     />
                 </div>
             </ScreenshotReadyWrapper>,

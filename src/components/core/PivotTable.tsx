@@ -99,6 +99,7 @@ import {
     isMeasureColumnReadyToRender,
     getColumnIdentifier,
     sanitizeFingerprint,
+    isMeasureColumn,
 } from "./pivotTable/agGridUtils";
 import ColumnGroupHeader from "./pivotTable/ColumnGroupHeader";
 import ColumnHeader from "./pivotTable/ColumnHeader";
@@ -123,21 +124,19 @@ import noop = require("lodash/noop");
 import sumBy = require("lodash/sumBy");
 import difference = require("lodash/difference");
 import debounce = require("lodash/debounce");
-import omit = require("lodash/omit");
 
 import {
-    convertColumnWidthsToMap,
-    getColumnWidthsFromMap,
     MANUALLY_SIZED_MAX_WIDTH,
     MIN_WIDTH,
     AUTO_SIZED_MAX_WIDTH,
     enrichColumnDefinitionsWithWidths,
-    syncSuppressSizeToFitOnColumns,
     isColumnAutoResized,
-    isColumnManuallyResized,
+    syncSuppressSizeToFitOnColumns,
     resetColumnsWidthToDefault,
+    resizeAllMeasuresColumns,
 } from "./pivotTable/agGridColumnSizing";
 import { setColumnMaxWidth, setColumnMaxWidthIf } from "./pivotTable/agColumnWrapper";
+import { ResizedColumnsStore } from "./pivotTable/ResizedColumnsStore";
 
 export interface IPivotTableProps extends ICommonChartProps, IDataSourceProviderInjectedProps {
     totals?: VisualizationObject.IVisualizationTotal[];
@@ -207,7 +206,8 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         left: 0,
     };
 
-    private manuallyResizedColumns: IResizedColumns = {};
+    private resizedColumnsStore: ResizedColumnsStore;
+
     private autoResizedColumns: IResizedColumns = {};
     private growToFittedColumns: IResizedColumns = {};
     private watchingIntervalId: number | null;
@@ -217,6 +217,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     private lastResizedHeight = 0;
     private numberOfColumnResizedCalls = 0;
     private waitingForFirstExecution = true;
+    private isMetaOrCtrlKeyPressed = false;
 
     constructor(props: IPivotTableInnerProps) {
         super(props);
@@ -236,6 +237,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
         this.agGridDataSource = null;
         this.gridApi = null;
+        this.resizedColumnsStore = new ResizedColumnsStore();
 
         this.setGroupingProvider(props.groupRows);
         this.gridSizeChanged = debounce(this.gridSizeChanged, AGGRID_ON_RESIZE_TIMEOUT);
@@ -247,13 +249,13 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
     public componentDidMount() {
         if (this.containerRef) {
-            this.containerRef.addEventListener("mousedown", this.preventHeaderResizerEvents);
+            this.containerRef.addEventListener("mousedown", this.onContainerMouseDown);
         }
     }
 
     public componentWillUnmount() {
         if (this.containerRef) {
-            this.containerRef.removeEventListener("mousedown", this.preventHeaderResizerEvents);
+            this.containerRef.removeEventListener("mousedown", this.onContainerMouseDown);
         }
     }
 
@@ -327,17 +329,10 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             const columnWidths = this.getColumnWidths(this.props);
             if (!isEqual(prevColumnWidths, columnWidths) && !this.waitingForFirstExecution) {
                 if (this.columnApi) {
-                    const columnWidthsByField = convertColumnWidthsToMap(
-                        columnWidths,
-                        this.getExecutionResponse(),
-                    );
+                    this.resizedColumnsStore.updateColumnWidths(columnWidths, this.getExecutionResponse());
 
-                    syncSuppressSizeToFitOnColumns(
-                        this.manuallyResizedColumns,
-                        columnWidthsByField,
-                        this.columnApi,
-                    );
-                    this.manuallyResizedColumns = columnWidthsByField;
+                    syncSuppressSizeToFitOnColumns(this.resizedColumnsStore, this.columnApi);
+
                     if (this.isGrowToFitEnabled()) {
                         this.growToFit(this.columnApi); // calls resetColumnsWidthToDefault internally too
                     } else {
@@ -416,10 +411,6 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             </div>
         );
     }
-
-    //
-    //
-    //
 
     private isTableHidden() {
         return (
@@ -529,24 +520,6 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         }, this.autoResizedColumns);
     };
 
-    private addToManuallyResizedColumn = (column: Column): void => {
-        this.manuallyResizedColumns[getColumnIdentifier(column)] = {
-            width: column.getActualWidth(),
-            source: ColumnEventSourceType.UI_DRAGGED,
-        };
-
-        column.getColDef().suppressSizeToFit = true;
-    };
-
-    private removeFromManuallyResizedColumn = (column: Column): void => {
-        const colId = getColumnIdentifier(column);
-
-        if (this.manuallyResizedColumns[colId]) {
-            this.manuallyResizedColumns = omit(this.manuallyResizedColumns, colId);
-            column.getColDef().suppressSizeToFit = false;
-        }
-    };
-
     private autoresizeVisibleColumns = async (
         columnApi: ColumnApi,
         previouslyResizedColumnIds: string[],
@@ -575,6 +548,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         return new Promise(async resolve => {
             const newColumnIds = difference(autoWidthColumnIds, previouslyResizedColumnIds);
             await this.autoresizeColumnsByColumnId(columnApi, newColumnIds);
+            await sleep(AGGRID_RENDER_NEW_COLUMNS_TIMEOUT);
             resolve(this.autoresizeVisibleColumns(columnApi, autoWidthColumnIds, false));
         });
     };
@@ -583,7 +557,6 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         setColumnMaxWidth(columnApi, columnIds, AUTO_SIZED_MAX_WIDTH);
 
         columnApi.autoSizeColumns(columnIds);
-        await sleep(AGGRID_RENDER_NEW_COLUMNS_TIMEOUT);
 
         setColumnMaxWidth(columnApi, columnIds, MANUALLY_SIZED_MAX_WIDTH);
     }
@@ -662,15 +635,11 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         return isColumnAutoResized(this.autoResizedColumns, resizedColumnId);
     }
 
-    private isColumnManuallyResized(resizedColumnId: string) {
-        return isColumnManuallyResized(this.manuallyResizedColumns, resizedColumnId);
-    }
-
     private resetColumnsWidthToDefault(columnApi: ColumnApi, columns: Column[]) {
         resetColumnsWidthToDefault(
             columnApi,
             columns,
-            this.manuallyResizedColumns,
+            this.resizedColumnsStore,
             this.autoResizedColumns,
             this.getDefaultWidth(),
         );
@@ -797,7 +766,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         ) => {
             let enrichedColumnDefs = enrichColumnDefinitionsWithWidths(
                 columnDefs,
-                this.manuallyResizedColumns,
+                this.resizedColumnsStore,
                 this.autoResizedColumns,
                 this.getDefaultWidth(),
                 this.isGrowToFitEnabled(),
@@ -810,15 +779,13 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
                 // first render cant be in componentWillMount, because we need execution finished and first valid columnDefs
                 if (this.waitingForFirstExecution) {
                     this.waitingForFirstExecution = false;
+
                     const columnWidths = this.getColumnWidths(this.props);
-                    const columnWidthsByField = convertColumnWidthsToMap(
-                        columnWidths,
-                        execution.executionResponse,
-                    );
-                    this.manuallyResizedColumns = columnWidthsByField;
+                    this.resizedColumnsStore.updateColumnWidths(columnWidths, execution.executionResponse);
+
                     enrichedColumnDefs = enrichColumnDefinitionsWithWidths(
                         columnDefs,
-                        columnWidthsByField,
+                        this.resizedColumnsStore,
                         this.autoResizedColumns,
                         this.getDefaultWidth(),
                         this.isGrowToFitEnabled(),
@@ -1073,15 +1040,15 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     private async resetResizedColumn(column: Column) {
         const id = getColumnIdentifier(column);
 
-        if (this.isColumnManuallyResized(id)) {
-            this.removeFromManuallyResizedColumn(column);
+        if (this.resizedColumnsStore.isColumnManuallyResized(column)) {
+            this.resizedColumnsStore.removeFromManuallyResizedColumn(column);
         }
 
         if (this.isColumnAutoResized(id)) {
             this.columnApi.setColumnWidth(column, this.autoResizedColumns[id].width);
         } else {
             await this.autoresizeColumnsByColumnId(this.columnApi, this.getColumnIds([column]));
-            this.addToManuallyResizedColumn(column);
+            this.resizedColumnsStore.addToManuallyResizedColumn(column);
         }
     }
 
@@ -1113,26 +1080,45 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         }
     };
 
+    private isAllMeasureResetOperation() {
+        return this.isMetaOrCtrlKeyPressed;
+    }
+
     private onColumnsManualReset = async (columns: Column[]) => {
         const execution = this.getExecution();
 
         invariant(execution !== undefined, "changing column width prior execution cannot work");
 
-        for (const column of columns) {
+        let columnsToReset = columns;
+
+        if (this.isAllMeasureResetOperation()) {
+            this.resizedColumnsStore.removeAllMeasureColumns();
+            columnsToReset = this.columnApi.getAllColumns().filter(col => isMeasureColumn(col));
+        }
+
+        for (const column of columnsToReset) {
             await this.resetResizedColumn(column);
         }
 
         this.afterOnResizeColumns();
     };
 
+    private isAllMeasureResizeOperation(columns: Column[]) {
+        return this.isMetaOrCtrlKeyPressed && columns.length === 1 && isMeasureColumn(columns[0]);
+    }
+
     private onColumnsManualResized = (columns: Column[]) => {
         const execution = this.getExecution();
 
         invariant(execution !== undefined, "changing column width prior execution cannot work");
 
-        columns.forEach(column => {
-            this.addToManuallyResizedColumn(column);
-        });
+        if (this.isAllMeasureResizeOperation(columns)) {
+            resizeAllMeasuresColumns(this.columnApi, this.resizedColumnsStore, columns[0]);
+        } else {
+            columns.forEach(column => {
+                this.resizedColumnsStore.addToManuallyResizedColumn(column);
+            });
+        }
 
         this.afterOnResizeColumns();
     };
@@ -1143,7 +1129,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         invariant(execution !== undefined, "changing column width prior execution cannot work");
 
         this.growToFit(this.columnApi);
-        const columnWidths = getColumnWidthsFromMap(this.manuallyResizedColumns, execution);
+        const columnWidths = this.resizedColumnsStore.getColumnWidthsFromMap(execution);
         this.props.onColumnResized(columnWidths);
     }
 
@@ -1168,10 +1154,11 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         this.updateStickyRowContent(scrollPosition);
     };
 
-    private preventHeaderResizerEvents = (event: Event) => {
+    private onContainerMouseDown = (event: MouseEvent) => {
         if (event.target && this.isHeaderResizer(event.target as HTMLElement)) {
             event.stopPropagation();
         }
+        this.isMetaOrCtrlKeyPressed = event.metaKey || event.ctrlKey;
     };
 
     private getInfiniteInitialRowCountRowCount() {
@@ -1206,6 +1193,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             (props.config && props.config.columnSizing && props.config.columnSizing.defaultWidth) || "unset"
         );
     };
+
     //
     // grid options & styling
     //

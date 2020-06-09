@@ -23,6 +23,8 @@ const columns = [Model.attribute(quarterDateIdentifier).localIdentifier("quarter
 
 const attributeWidth = width => Model.attributeColumnWidthItem("state", width);
 
+const allMeasureWidth = width => Model.allMeasureColumnWidthItem(width);
+
 const isAttributeColumnWidthItem = columnWidthItem => {
     return columnWidthItem && columnWidthItem.attributeColumnWidthItem !== undefined;
 };
@@ -103,6 +105,12 @@ export class PivotTableSizingComplexExample extends Component {
                         onClick={() => this.onButtonClick(measureWidth(60))}
                     >
                         Change Q1 column width to 60
+                    </button>
+                    <button
+                        className="gd-button gd-button-secondary gd-button gd-button-secondary s-change-width-button-measure-all"
+                        onClick={() => this.onButtonClick(allMeasureWidth(60))}
+                    >
+                        Change all measures width
                     </button>
 
                     <label style={{ paddingLeft: 50 }}>
