@@ -8,6 +8,10 @@ fixture("Basic components").beforeEach(loginUserAndNavigate(config.url));
 const tooltipItem = Selector(".gd-viz-tooltip-item");
 const tooltipValue = tooltipItem.find(".gd-viz-tooltip-value");
 const tooltipTitle = tooltipItem.find(".gd-viz-tooltip-title");
+const xAxisTitleCssSelector = ".highcharts-xaxis .highcharts-axis-title";
+const yAxisTitleCssSelector = ".highcharts-yaxis .highcharts-axis-title";
+const valuePrimaryYAxisCssSelector = ".highcharts-yaxis-labels.s-highcharts-primary-yaxis";
+const valueXAxisCssSelector = ".highcharts-xaxis-labels";
 
 test("Column chart should render", async t => {
     await checkRenderChart(".s-column-chart", t);
@@ -84,7 +88,40 @@ test("Scatter plot should render", async t => {
 });
 
 test("Bubble chart should render", async t => {
-    await checkRenderChart(".s-bubble-chart", t);
+    const bubbleChart = Selector(".s-bubble-chart");
+    await checkRenderChart(bubbleChart, t);
+
+    const trackerCssSelector = ".highcharts-series-8.highcharts-tracker path";
+    const legendNames = bubbleChart.find(".series-name");
+
+    await t
+        .hover(bubbleChart.find(trackerCssSelector))
+        .expect(tooltipTitle.nth(0).textContent)
+        .eql("Location Resort")
+        .expect(tooltipValue.nth(0).textContent)
+        .eql("Montgomery")
+        .expect(tooltipTitle.nth(1).textContent)
+        .eql("$ Franchise Fees")
+        .expect(tooltipValue.nth(1).textContent)
+        .eql("1,406,548")
+        .expect(tooltipTitle.nth(2).textContent)
+        .eql("$ Franchised Sales")
+        .expect(tooltipValue.nth(2).textContent)
+        .eql("16,077,036")
+        .expect(tooltipTitle.nth(3).textContent)
+        .eql("Avg Check Size by Server")
+        .expect(tooltipValue.nth(3).textContent)
+        .eql("$97.88")
+        .expect(bubbleChart.find(xAxisTitleCssSelector).textContent)
+        .eql("$ Franchise Fees")
+        .expect(bubbleChart.find(yAxisTitleCssSelector).textContent)
+        .eql("$ Franchised Sales")
+        .expect(bubbleChart.find(valuePrimaryYAxisCssSelector).textContent)
+        .eql("05M10M15M20M")
+        .expect(bubbleChart.find(valueXAxisCssSelector).textContent)
+        .eql("400k600k800k1 000k1 200k1 400k")
+        .expect(legendNames.nth(0).textContent)
+        .eql("Aventura");
 });
 
 test("Treemap should render", async t => {
