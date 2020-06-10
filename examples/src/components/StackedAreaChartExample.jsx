@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import React, { Component } from "react";
 import { AreaChart, Model } from "@gooddata/react-components";
 
@@ -35,7 +35,7 @@ export class StackedAreaChartExample extends Component {
 
     render() {
         return (
-            <div style={{ height: 300 }} className="s-area-chart">
+            <div style={{ height: 300 }} className="s-stacked-area-chart">
                 <AreaChart
                     projectId={projectId}
                     measures={measures}
