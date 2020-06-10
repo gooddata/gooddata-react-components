@@ -46,6 +46,36 @@ test("Line chart should have custom colors", async t => {
     /* eslint-enable no-await-in-loop */
 });
 
+test("Stacked Area chart should render", async t => {
+    const stackedAreaChart = Selector(".s-stacked-area-chart");
+    await checkRenderChart(stackedAreaChart, t);
+
+    const trackerCssSelector = ".highcharts-series-0 path.highcharts-area";
+    const legendNames = stackedAreaChart.find(".series-name");
+
+    await t
+        .click(legendNames.nth(1))
+        .click(legendNames.nth(2))
+        .click(legendNames.nth(3))
+        .hover(stackedAreaChart.find(trackerCssSelector))
+        .expect(tooltipTitle.nth(0).textContent)
+        .eql("Month (Date)")
+        .expect(tooltipValue.nth(0).textContent)
+        .eql("Jul")
+        .expect(tooltipTitle.nth(1).textContent)
+        .eql("$ Franchise Fees")
+        .expect(tooltipValue.nth(1).textContent)
+        .eql("399,077")
+        .expect(stackedAreaChart.find(xAxisTitleCssSelector).textContent)
+        .eql("Month (Date)")
+        .expect(stackedAreaChart.find(valuePrimaryYAxisCssSelector).textContent)
+        .eql("0100k200k300k400k500k")
+        .expect(stackedAreaChart.find(valueXAxisCssSelector).textContent)
+        .eql("JanFebMarAprMayJunJulAugSepOctNovDec")
+        .expect(legendNames.nth(0).textContent)
+        .eql("$ Franchise Fees");
+});
+
 test("Pie chart should render", async t => {
     await checkRenderChart(".s-pie-chart", t);
 });
