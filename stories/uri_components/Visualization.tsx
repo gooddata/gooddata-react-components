@@ -211,7 +211,27 @@ storiesOf("URI components", module)
             </ScreenshotReadyWrapper>,
         ),
     )
-    .add("table with feature flag enableTableColumnsGrowToFit set to true", () =>
+    .add("table with explicitly turn on growToFit", () =>
+        screenshotWrap(
+            <ScreenshotReadyWrapper resolver={visualizationNotLoadingResolver()}>
+                <div style={{ width: 800, height: 400 }}>
+                    <Visualization
+                        projectId="growtofitstorybook"
+                        uri={"/gdc/md/growtofitstorybook/obj/1001"}
+                        onError={onErrorHandler}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                        config={{
+                            columnSizing: {
+                                growToFit: true,
+                            },
+                        }}
+                    />
+                </div>
+            </ScreenshotReadyWrapper>,
+        ),
+    )
+    .add("table ignoring feature flag enableTableColumnsGrowToFit set to true", () =>
         screenshotWrap(
             <ScreenshotReadyWrapper resolver={visualizationNotLoadingResolver()}>
                 <div style={{ width: 800, height: 400 }}>
@@ -233,6 +253,21 @@ storiesOf("URI components", module)
                     <Visualization
                         projectId="storybook"
                         uri={"/gdc/md/storybook/obj/1001"}
+                        onError={onErrorHandler}
+                        LoadingComponent={null}
+                        ErrorComponent={null}
+                    />
+                </div>
+            </ScreenshotReadyWrapper>,
+        ),
+    )
+    .add("table with feature flag enableTableColumnsManualResizing set to true", () =>
+        screenshotWrap(
+            <ScreenshotReadyWrapper resolver={visualizationNotLoadingResolver()}>
+                <div style={{ width: 800, height: 400 }}>
+                    <Visualization
+                        projectId="manualresizingstorybook"
+                        uri={"/gdc/md/manualresizingstorybook/obj/1001"}
                         onError={onErrorHandler}
                         LoadingComponent={null}
                         ErrorComponent={null}
