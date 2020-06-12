@@ -23,7 +23,12 @@ import { Execute } from "./execution/Execute";
 import { IDrillableItem, IDrillEventExtended, IDrillEvent } from "./interfaces/DrillEvents";
 import { convertDrillContextToLegacy } from "./components/visualizations/utils/drilldownEventingLegacy";
 import { IHeaderPredicate } from "./interfaces/HeaderPredicate";
-import { IPushData, IDrillableItemPushData, IColorsData } from "./interfaces/PushData";
+import {
+    IPushData,
+    IDrillableItemPushData,
+    IAttributeDisplayFormUri,
+    IColorsData,
+} from "./interfaces/PushData";
 import { AttributeFilter } from "./components/filters/AttributeFilter/AttributeFilter";
 import { AttributeElements } from "./components/filters/AttributeFilter/AttributeElements";
 import { MeasureValueFilterDropdown } from "./components/filters/MeasureValueFilter/MeasureValueFilterDropdown";
@@ -133,6 +138,7 @@ export {
     IColorPaletteItem,
     IPushData,
     IDrillableItemPushData,
+    IAttributeDisplayFormUri,
     IColorsData,
     isEmptyResult,
     Kpi,

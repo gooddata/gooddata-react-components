@@ -329,6 +329,7 @@ describe("VisualizationLoadingHOC", () => {
                             localIdentifier: "id:a",
                             title: "a",
                             type: "measure",
+                            attributes: [],
                         },
                     ],
                 }),
@@ -350,6 +351,7 @@ describe("VisualizationLoadingHOC", () => {
                             type: "measure",
                             title: "Lost",
                             localIdentifier: "1st_measure_local_identifier",
+                            attributes: [],
                         },
                     ],
                 }),
@@ -372,6 +374,7 @@ describe("VisualizationLoadingHOC", () => {
                         localIdentifier: "1st_measure_local_identifier",
                         title: "Lost",
                         type: "measure",
+                        attributes: [],
                     },
                 ],
             });
@@ -396,9 +399,38 @@ describe("VisualizationLoadingHOC", () => {
                         localIdentifier: "1st_measure_local_identifier",
                         title: "Lost",
                         type: "measure",
+                        attributes: [],
                     },
                 ],
             });
+        });
+    });
+
+    it("should push supportedDrillableItems with attributes", () => {
+        const pushData = jest.fn();
+        createComponent({
+            dataSource: oneAttributeOneMeasureOneFilterDataSource,
+            pushData,
+        });
+
+        return testUtils.delay().then(() => {
+            expect(pushData).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    supportedDrillableItems: [
+                        {
+                            type: "measure",
+                            localIdentifier: "m1",
+                            title: "Amount",
+                            attributes: [
+                                {
+                                    attribute: "/gdc/md/storybook/obj/4",
+                                    displayForm: "/gdc/md/storybook/obj/4.df",
+                                },
+                            ],
+                        },
+                    ],
+                }),
+            );
         });
     });
 
