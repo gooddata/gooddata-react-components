@@ -59,6 +59,10 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
         this.callbacks = callbacks;
         this.geoPushpinElement = element;
         this.initializeProperties(visualizationProperties);
+        // set references to null to clear references
+        this.callbacks.pushData({
+            references: this.references || null,
+        });
     }
 
     public getExtendedReferencePoint(referencePoint: IReferencePoint): Promise<IExtendedReferencePoint> {
@@ -335,9 +339,6 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
             },
         });
 
-        if (this.references) {
-            set(referencePointConfigured, "references", this.references);
-        }
         return referencePointConfigured;
     }
 }
