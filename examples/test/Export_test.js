@@ -44,7 +44,7 @@ test("Export chart data", async t => {
         .ok(`CSV with custom name file of Bar chart isn't exported`);
 });
 
-test("Export table data", async t => {
+test("Export tables data", async t => {
     const tableChart = Selector(".s-table");
     const fileName = "Table";
     await enableDownloadForHeadlessChrome(t);
