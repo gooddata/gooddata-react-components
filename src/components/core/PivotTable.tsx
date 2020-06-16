@@ -98,6 +98,7 @@ import {
     indexOfTreeNode,
     isMeasureColumnReadyToRender,
     getColumnIdentifier,
+    sanitizeFingerprint,
 } from "./pivotTable/agGridUtils";
 import ColumnGroupHeader from "./pivotTable/ColumnGroupHeader";
 import ColumnHeader from "./pivotTable/ColumnHeader";
@@ -296,8 +297,10 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
                 agGridDataSourceUpdateNeeded = true;
             }
 
-            const dataSourceChanged =
-                this.props.dataSource.getFingerprint() !== prevProps.dataSource.getFingerprint();
+            const fingerprint = sanitizeFingerprint(this.props.dataSource.getFingerprint());
+            const prevFingerprint = sanitizeFingerprint(prevProps.dataSource.getFingerprint());
+
+            const dataSourceChanged = fingerprint !== prevFingerprint;
 
             if (dataSourceChanged) {
                 this.waitingForFirstExecution = true;

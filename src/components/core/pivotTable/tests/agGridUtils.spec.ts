@@ -10,6 +10,7 @@ import {
     cellRenderer,
     generateAgGridComponentKey,
     getParsedFields,
+    sanitizeFingerprint,
 } from "../agGridUtils";
 import cloneDeep = require("lodash/cloneDeep");
 import identity = require("lodash/identity");
@@ -237,5 +238,56 @@ describe("getParsedFields", () => {
             ["a", "2071", "12"],
             ["m", "3"],
         ]);
+    });
+});
+
+describe("sanitizeFingerprint", () => {
+    const correctFingerprintMock = JSON.stringify({
+        afm: {
+            measures: [
+                {
+                    alias: "lost",
+                    localIdentifier: "1",
+                },
+            ],
+        },
+        bucketItemsPositionSignature: [
+            {
+                items: ["123"],
+                localIdentifier: "measure",
+            },
+        ],
+    });
+    const incorrectFingerprintMock = JSON.stringify({
+        afm: {
+            attributes: [],
+            measures: [
+                {
+                    alias: "lost",
+                    localIdentifier: "1",
+                },
+            ],
+            filters: [],
+            nativeTotals: [],
+        },
+        bucketItemsPositionSignature: [
+            {
+                items: ["123"],
+                localIdentifier: "measure",
+            },
+        ],
+    });
+
+    it("should return correctly sanitized fingerprint", () => {
+        expect(sanitizeFingerprint(incorrectFingerprintMock)).toEqual(correctFingerprintMock);
+    });
+
+    it("should not change correct fingerprint", () => {
+        expect(sanitizeFingerprint(correctFingerprintMock)).toEqual(correctFingerprintMock);
+    });
+
+    it("should return original fingerprint when fingerprint parse fails", () => {
+        const incorrectStringToParse = '{a": 1}}';
+        expect(sanitizeFingerprint(incorrectStringToParse)).toEqual(incorrectStringToParse);
     });
 });
