@@ -874,7 +874,14 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     private startWatchingTableRendered = () => {
         const missingContainerRef = !this.containerRef; // table having no data will be unmounted, it causes ref null
         const isTableVisible = !this.isTableHidden(); // table has data and takes place of Loading icon
-        if (missingContainerRef || isTableVisible) {
+
+        let shouldStopWatching = missingContainerRef || isTableVisible;
+        if (shouldStopWatching && this.gridApi) {
+            const firstRowNode = this.gridApi.getDisplayedRowAtIndex(0);
+            shouldStopWatching = firstRowNode && firstRowNode.data;
+        }
+
+        if (shouldStopWatching) {
             this.stopWatchingTableRendered();
         }
     };
