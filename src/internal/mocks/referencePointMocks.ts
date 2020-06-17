@@ -2203,7 +2203,7 @@ export const twoMeasuresWithShowInPercentOnSecondaryAxisReferencePoint: IReferen
         },
         {
             localIdentifier: "view",
-            items: [],
+            items: geoAttributeItems.slice(0, 1),
         },
         {
             localIdentifier: "segment",
