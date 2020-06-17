@@ -61,6 +61,12 @@ export function isDrillIntersectionAttributeItem(
     return (header as IDrillIntersectionAttributeItem).attributeHeaderItem !== undefined;
 }
 
+export function isDrillIntersectionAttribute(
+    header: DrillEventIntersectionElementHeader,
+): header is Execution.IAttributeHeader {
+    return (header as Execution.IAttributeHeader).attributeHeader !== undefined;
+}
+
 export type DrillEventIntersectionElementHeader =
     | Execution.IAttributeHeader
     | Execution.IMeasureHeaderItem
