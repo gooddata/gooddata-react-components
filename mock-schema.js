@@ -2553,14 +2553,16 @@ const getBaseProjectSchema = (title, identifier) => {
                     }]
                 }],
                 properties: JSON.stringify({
-                    widthDefs: [
-                        {
-                            attributeColumnWidthItem: {
-                                width: 100,
-                                attributeIdentifier: "3",
-                            },
-                        },
-                    ],
+                    controls: {
+                        columnWidths: [
+                            {
+                                attributeColumnWidthItem: {
+                                    width: 100,
+                                    attributeIdentifier: "3",
+                                },
+                            }
+                        ],
+                    }
                 }),
             },
             {
