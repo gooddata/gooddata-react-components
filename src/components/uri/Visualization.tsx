@@ -173,9 +173,7 @@ function fetchLocalizationFromUser(sdk: SDK, projectId: string): Promise<Localiz
 }
 
 function getWidthDefs(mdObjectContentProperties: IVisualizationProperties): ColumnWidthItem[] | undefined {
-    return mdObjectContentProperties && mdObjectContentProperties.widthDefs
-        ? mdObjectContentProperties.widthDefs
-        : undefined;
+    return get(mdObjectContentProperties, ["controls", "columnWidths"]);
 }
 
 function getProperties(mdObject: VisualizationObject.IVisualizationObject): IVisualizationProperties {
@@ -456,9 +454,7 @@ export class VisualizationWrapped extends React.Component<
 
         this.exportTitle = get(mdObject, "meta.title", "");
 
-        const mdObjectContent: IVisualizationObjectContent = mdObject.content;
-        const mdObjectContentProperties: IProperties | undefined =
-            mdObjectContent && mdObjectContent.properties && JSON.parse(mdObject.content.properties);
+        const mdObjectContentProperties: IProperties | undefined = getProperties(mdObject);
         const secondaryYAxis: IAxisConfig =
             get(this.props.config, ["secondary_yaxis"], undefined) ||
             get(mdObjectContentProperties, ["controls", "secondary_yaxis"], undefined);
@@ -509,10 +505,9 @@ export class VisualizationWrapped extends React.Component<
     private createVisualizationConfig(): IChartConfig {
         const { config } = this.props;
         const { featureFlags, mdObject, colorPalette } = this.state;
-        const mdObjectContent = mdObject && mdObject.content;
 
         return setConfigFromFeatureFlags(
-            mergeChartConfigWithProperties(config, mdObjectContent, colorPalette, featureFlags),
+            mergeChartConfigWithProperties(config, mdObject, colorPalette, featureFlags),
             featureFlags,
         );
     }
@@ -672,18 +667,18 @@ function buildAfmResultSpecForVis(
  */
 function mergeChartConfigWithProperties(
     config: IChartConfig,
-    visObj: IVisualizationObjectContent,
+    visObj: VisualizationObject.IVisualizationObject,
     fallbackPalette: IColorPaletteItem[],
     featureFlags: IFeatureFlags,
 ): IChartConfig {
-    const properties: IPropertiesControls | undefined =
-        visObj && visObj.properties && JSON.parse(visObj.properties).controls;
+    const properties = getProperties(visObj);
+    const propertiesControls: IPropertiesControls | undefined = properties && properties.controls;
 
     const colorPalette = config && config.colorPalette ? config.colorPalette : fallbackPalette;
 
     const colorMapping =
-        properties && properties.colorMapping
-            ? properties.colorMapping.map(mapping => {
+        propertiesControls && propertiesControls.colorMapping
+            ? propertiesControls.colorMapping.map(mapping => {
                   const predicate = getColorMappingPredicate(mapping.id);
                   return {
                       predicate,
@@ -693,7 +688,7 @@ function mergeChartConfigWithProperties(
             : undefined;
 
     const propsWithHCAxisNameConfig = getHighchartsAxisNameConfiguration(
-        properties,
+        propertiesControls,
         featureFlags.enableAxisNameConfiguration as boolean,
     );
 
@@ -702,7 +697,7 @@ function mergeChartConfigWithProperties(
         colorMapping,
         ...config,
         colorPalette,
-        mdObject: visObj,
+        mdObject: visObj && visObj.content,
     };
 }
 
