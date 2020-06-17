@@ -22,6 +22,9 @@ The REST API versions in the table are just for your information as the values a
 ### Fixed
 
 - Heatmap Y axis is now in ascending order by default
+- Saved insight is always rendered with the specified measure format
+- Several visual improvements of the Geo pushpin chart
+- Pivot table can be provided with custom loading component 
 
 ## 7.6.1
 
