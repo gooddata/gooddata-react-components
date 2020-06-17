@@ -622,6 +622,8 @@ describe("PivotTable", () => {
     });
 
     describe("onFirstDataRendered", () => {
+        const mockGridApi = { getDisplayedRowAtIndex: () => ({ data: {} }) };
+
         beforeEach(() => {
             jest.useFakeTimers();
         });
@@ -652,6 +654,7 @@ describe("PivotTable", () => {
         it("should stop watching with unmounted table", () => {
             const table = getTableInstance();
             table.containerRef = null;
+            table.gridApi = mockGridApi;
             table.watchingIntervalId = 123;
             jest.spyOn(table, "stopWatchingTableRendered");
 
@@ -665,6 +668,7 @@ describe("PivotTable", () => {
 
             const table = getTableInstance({ afterRender });
             table.isTableHidden = jest.fn().mockReturnValueOnce(false);
+            table.gridApi = mockGridApi;
             table.watchingIntervalId = 123;
             table.watchingTimeoutId = 456;
             jest.spyOn(table, "stopWatchingTableRendered");
