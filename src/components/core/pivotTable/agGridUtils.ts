@@ -2,6 +2,8 @@
 import { ICellRendererParams, ColDef, Column } from "ag-grid-community";
 import omit = require("lodash/omit");
 import escape = require("lodash/escape");
+import pickBy = require("lodash/pickBy");
+import size = require("lodash/size");
 import stringify = require("json-stable-stringify");
 import invariant = require("invariant");
 import { AFM, Execution } from "@gooddata/typings";
@@ -215,4 +217,29 @@ export const getColumnIdentifierFromDef = (colDef: IGridHeader | ColDef): string
 
 export const getColumnIdentifier = (column: Column): string => {
     return getColumnIdentifierFromDef(column.getColDef());
+};
+
+// ONE-4508 (bugfix) - in AFM object are presents empty arrays and therefore is necessary to sanitize
+export const sanitizeFingerprint = (fingerprint: string): string => {
+    let parsedFingerprint;
+
+    try {
+        parsedFingerprint = JSON.parse(fingerprint);
+    } catch {
+        console.error("unable to parse fingerprint"); // tslint:disable-line
+    }
+
+    if (!parsedFingerprint) {
+        return fingerprint;
+    }
+
+    const parsedFingerprintAfm = {
+        ...parsedFingerprint.afm,
+    };
+    const sanitizedParsedFingerprintAfm = pickBy(parsedFingerprintAfm, size);
+
+    return JSON.stringify({
+        ...parsedFingerprint,
+        afm: sanitizedParsedFingerprintAfm,
+    });
 };
