@@ -25,7 +25,7 @@
     "@gooddata/frontend-npm-scripts": "1.1.0",
     "@gooddata/mock-js": "^2.13.1",
     "@gooddata/stylelint-config": "4.0.1",
-    "@gooddata/test-storybook": "3.2.1",
+    "@gooddata/test-storybook": "4.0.0",
     "@gooddata/tslint-config": "1.0.0",
     "@storybook/addon-actions": "5.0.11",
     "@storybook/addon-options": "5.0.11",
