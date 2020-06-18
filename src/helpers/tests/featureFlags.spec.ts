@@ -96,24 +96,32 @@ describe("getTableConfigFromFeatureFlags", () => {
         },
     );
 
-    it("should use explicit config if provided", () => {
+    it("should merge explicit config if provided", () => {
         const explicitConfig: IPivotTableConfig = {
+            columnSizing: {
+                growToFit: true,
+                defaultWidth: "viewport",
+            },
+            maxHeight: 350,
+        };
+        const expectedConfig: IPivotTableConfig = {
             columnSizing: {
                 columnWidths,
                 growToFit: true,
                 defaultWidth: "viewport",
             },
+            maxHeight: 350,
         };
         const result = getTableConfigFromFeatureFlags(
             explicitConfig,
             {
-                enableTableColumnsManualResizing: false,
+                enableTableColumnsManualResizing: true,
                 enableTableColumnsAutoResizing: false,
                 enableTableColumnsGrowToFit: false,
             },
             false,
             columnWidths,
         );
-        expect(result.columnSizing).toEqual(explicitConfig.columnSizing);
+        expect(result).toEqual(expectedConfig);
     });
 });
