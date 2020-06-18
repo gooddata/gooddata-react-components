@@ -58,9 +58,18 @@ export function getTableConfigFromFeatureFlags(
             growToFit: true,
         };
     }
-    const columnSizingProp = isEmpty(columnSizing) ? {} : { columnSizing };
+    const configColumnSizing = config && config.columnSizing;
+    const columnSizingProp =
+        isEmpty(columnSizing) && !configColumnSizing
+            ? {}
+            : {
+                  columnSizing: {
+                      ...columnSizing,
+                      ...configColumnSizing,
+                  },
+              };
     return {
-        ...columnSizingProp,
         ...config,
+        ...columnSizingProp,
     };
 }
