@@ -5,6 +5,7 @@ import get = require("lodash/get");
 import isEqual = require("lodash/isEqual");
 import omit = require("lodash/omit");
 import flatten = require("lodash/flatten");
+import uniqBy = require("lodash/uniqBy");
 
 import {
     factory as createSdk,
@@ -31,7 +32,7 @@ import { IntlWrapper } from "../../core/base/IntlWrapper";
 import { LoadingComponent, ILoadingProps } from "../../simple/LoadingComponent";
 import { ErrorComponent, IErrorProps } from "../../simple/ErrorComponent";
 import { RuntimeError } from "../../../errors/RuntimeError";
-import { IPushData, IDrillableItemPushData } from "../../../interfaces/PushData";
+import { IPushData, IDrillableItemPushData, IAttributeDisplayFormUri } from "../../../interfaces/PushData";
 import { IChartConfig } from "../../../interfaces/Config";
 import { setTelemetryHeaders } from "../../../helpers/utils";
 import { fixEmptyHeaderItems } from "./utils/fixEmptyHeaderItems";
@@ -290,6 +291,24 @@ export function visualizationLoadingHOC<
             }
         };
 
+        private getAllAttributeHeaders(response: Execution.IExecutionResponse): Execution.IAttributeHeader[] {
+            return flatten(
+                response.dimensions.map((dimension: Execution.IResultDimension) => dimension.headers),
+            )
+                .filter((header: Execution.IHeader) => Execution.isAttributeHeader(header))
+                .map((header: Execution.IAttributeHeader) => header);
+        }
+
+        private getAllAttributes(response: Execution.IExecutionResponse): IAttributeDisplayFormUri[] {
+            return uniqBy(
+                this.getAllAttributeHeaders(response).map(attribute => ({
+                    attribute: attribute.attributeHeader.formOf.uri,
+                    displayForm: attribute.attributeHeader.uri,
+                })),
+                attribute => attribute.displayForm,
+            );
+        }
+
         private getAllMeasureHeaderItems(
             response: Execution.IExecutionResponse,
         ): Execution.IMeasureHeaderItem[] {
@@ -305,11 +324,14 @@ export function visualizationLoadingHOC<
         }
 
         private getSupportedDrillableItems(response: Execution.IExecutionResponse): IDrillableItemPushData[] {
+            const attributes = this.getAllAttributes(response);
+
             return this.getAllMeasureHeaderItems(response).map(
                 (measure: Execution.IMeasureHeaderItem): IDrillableItemPushData => ({
                     type: "measure",
                     localIdentifier: measure.measureHeaderItem.localIdentifier,
                     title: measure.measureHeaderItem.name,
+                    attributes,
                 }),
             );
         }
