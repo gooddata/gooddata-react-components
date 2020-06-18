@@ -78,8 +78,9 @@ export async function sortColumn(t, tableSelectorStr, columnIndex) {
     await waitForPivotTableStopLoading(t);
 }
 
-export const dragResizer = async (t, resizer, destinationOffsetX) => {
-    const dragOptions = { speed: 0.55 };
+export const dragResizer = async (t, resizer, destinationOffsetX, metaKey = false) => {
+    const dragOptions = { speed: 0.55, modifiers: { meta: metaKey } };
+
     await t.drag(resizer, destinationOffsetX, 0, dragOptions);
 };
 
@@ -105,7 +106,19 @@ export const isAttributeColumnWidthItem = columnWidthItem => {
 };
 
 export const isMeasureColumnWidthItem = columnWidthItem => {
-    return columnWidthItem && columnWidthItem.measureColumnWidthItem !== undefined;
+    return (
+        columnWidthItem &&
+        columnWidthItem.measureColumnWidthItem !== undefined &&
+        columnWidthItem.measureColumnWidthItem.locators !== undefined
+    );
+};
+
+export const isAllMeasureColumnWidthItem = columnWidthItem => {
+    return (
+        columnWidthItem &&
+        columnWidthItem.measureColumnWidthItem !== undefined &&
+        columnWidthItem.measureColumnWidthItem.locators === undefined
+    );
 };
 
 export const getAttributeColumnWidthItemByIdentifier = (data, attributeIdentifier) => {
@@ -130,4 +143,8 @@ export const getMeasureColumnWidthItemByLocator = (data, measureIdentifier, attr
         }
         return false;
     });
+};
+
+export const getAllMeasureColumnWidth = data => {
+    return data.find(isAllMeasureColumnWidthItem);
 };

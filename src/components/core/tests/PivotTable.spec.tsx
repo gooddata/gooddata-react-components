@@ -188,7 +188,7 @@ describe("PivotTable", () => {
             const resetColumnsWidthToDefault = jest.spyOn(table, "resetColumnsWidthToDefault");
             try {
                 resetColumnsWidthToDefault.mockImplementation(() => {
-                    expect(table.manuallyResizedColumns).toEqual({
+                    expect(table.resizedColumnsStore.manuallyResizedColumns).toEqual({
                         m_0: {
                             width: 350,
                             source: ColumnEventSourceType.UI_DRAGGED,
