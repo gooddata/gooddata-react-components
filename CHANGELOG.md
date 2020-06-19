@@ -26,7 +26,10 @@ The REST API versions in the table are just for your information as the values a
 
 ### Fixed
 
-- Heatmap Y axis is now in ascending order by default
+- The Y axis in a heatmap is sorted in ascending order by default.
+- A saved insight is always rendered with the specified measure format. The default format is used only if the insight does not have a format specified.
+- Several visual improvements are made in the Geo Pushpin Chart component.
+- A pivot table can be provided with a custom loading component.
 
 ## 7.6.1
 
