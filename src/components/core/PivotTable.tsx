@@ -135,6 +135,7 @@ import {
     syncSuppressSizeToFitOnColumns,
     resetColumnsWidthToDefault,
     resizeAllMeasuresColumns,
+    resizeWeakMeasureColumns,
 } from "./pivotTable/agGridColumnSizing";
 import { setColumnMaxWidth, setColumnMaxWidthIf } from "./pivotTable/agColumnWrapper";
 import { ResizedColumnsStore } from "./pivotTable/ResizedColumnsStore";
@@ -219,6 +220,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     private numberOfColumnResizedCalls = 0;
     private columnWidthsChangeWaitingForExecution = true;
     private isMetaOrCtrlKeyPressed = false;
+    private isAltKeyPressed = false;
 
     constructor(props: IPivotTableInnerProps) {
         super(props);
@@ -499,7 +501,6 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
                 ...acc,
                 [columnId]: {
                     width: col.getActualWidth(),
-                    source: ColumnEventSourceType.AUTOSIZE_COLUMNS,
                 },
             };
         }, this.autoResizedColumns);
@@ -657,7 +658,6 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
             this.growToFittedColumns[id] = {
                 width: col.getActualWidth(),
-                source: ColumnEventSourceType.FIT_GROW,
             };
         });
     }
@@ -1042,10 +1042,9 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         if (this.resizedColumnsStore.isColumnManuallyResized(column)) {
             this.resizedColumnsStore.removeFromManuallyResizedColumn(column);
         }
-
+        column.getColDef().suppressSizeToFit = false;
         if (this.isColumnAutoResized(id)) {
             this.columnApi.setColumnWidth(column, this.autoResizedColumns[id].width);
-            column.getColDef().suppressSizeToFit = false;
             return;
         }
 
@@ -1053,7 +1052,6 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         if (isColumnDisplayed(this.columnApi.getAllDisplayedVirtualColumns(), column)) {
             // skip columns out of viewport because these can not be autoresized
             this.resizedColumnsStore.addToManuallyResizedColumn(column, true);
-            column.getColDef().suppressSizeToFit = false;
         }
     }
 
@@ -1081,12 +1079,24 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         }
     };
 
+    private getAllMeasureColumns() {
+        return this.columnApi.getAllColumns().filter(col => isMeasureColumn(col));
+    }
+
     private onColumnsManualReset = async (columns: Column[]) => {
         let columnsToReset = columns;
 
         if (this.isAllMeasureResizeOperation(columns)) {
             this.resizedColumnsStore.removeAllMeasureColumns();
-            columnsToReset = this.columnApi.getAllColumns().filter(col => isMeasureColumn(col));
+            columnsToReset = this.getAllMeasureColumns();
+        }
+
+        if (this.isWeakMeasureResizeOperation(columns)) {
+            columnsToReset = this.resizedColumnsStore.getMatchingColumnsByMeasure(
+                columns[0],
+                this.getAllMeasureColumns(),
+            );
+            this.resizedColumnsStore.removeWeakMeasureColumn(columns[0]);
         }
 
         for (const column of columnsToReset) {
@@ -1100,9 +1110,15 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         return this.isMetaOrCtrlKeyPressed && columns.length === 1 && isMeasureColumn(columns[0]);
     }
 
+    private isWeakMeasureResizeOperation(columns: Column[]) {
+        return this.isAltKeyPressed && columns.length === 1 && isMeasureColumn(columns[0]);
+    }
+
     private onColumnsManualResized = (columns: Column[]) => {
         if (this.isAllMeasureResizeOperation(columns)) {
             resizeAllMeasuresColumns(this.columnApi, this.resizedColumnsStore, columns[0]);
+        } else if (this.isWeakMeasureResizeOperation(columns)) {
+            resizeWeakMeasureColumns(this.columnApi, this.resizedColumnsStore, columns[0]);
         } else {
             columns.forEach(column => {
                 this.resizedColumnsStore.addToManuallyResizedColumn(column);
@@ -1148,6 +1164,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             event.stopPropagation();
         }
         this.isMetaOrCtrlKeyPressed = event.metaKey || event.ctrlKey;
+        this.isAltKeyPressed = event.altKey;
     };
 
     private getInfiniteInitialRowCountRowCount() {

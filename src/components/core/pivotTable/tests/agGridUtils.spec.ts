@@ -11,10 +11,14 @@ import {
     generateAgGridComponentKey,
     getParsedFields,
     sanitizeFingerprint,
+    getMappingHeaderMeasureItemLocalIdentifier,
 } from "../agGridUtils";
 import cloneDeep = require("lodash/cloneDeep");
 import identity = require("lodash/identity");
 import { AFM } from "@gooddata/typings";
+import { IGridHeader } from "../agGridTypes";
+import { getFakeColumn } from "./agGridMock";
+import { IMappingHeader } from "../../../../interfaces/MappingHeader";
 
 describe("getIdsFromUri", () => {
     it("should return array of attribute id and attribute value id", () => {
@@ -289,5 +293,102 @@ describe("sanitizeFingerprint", () => {
     it("should return original fingerprint when fingerprint parse fails", () => {
         const incorrectStringToParse = '{a": 1}}';
         expect(sanitizeFingerprint(incorrectStringToParse)).toEqual(incorrectStringToParse);
+    });
+});
+
+describe("getMappingHeaderMeasureItemLocalIdentifier", () => {
+    const getColumnDef = (type: string, drillItems: IMappingHeader[]): IGridHeader => ({
+        drillItems,
+        headerName: "Amount",
+        field: "colId",
+        colId: "colId",
+        type,
+        measureIndex: 0,
+        index: 1,
+    });
+    it("should return undefined if it is not measure column", () => {
+        const columnDef: IGridHeader = getColumnDef("ROW_ATTRIBUTE_COLUMN", [
+            {
+                measureHeaderItem: {
+                    identifier: "1",
+                    uri: "/gdc/md/storybook/obj/1",
+                    localIdentifier: "m1",
+                    format: "#,##0.00",
+                    name: "Amount",
+                },
+            },
+        ]);
+
+        expect(getMappingHeaderMeasureItemLocalIdentifier(columnDef)).toBeUndefined();
+    });
+
+    it("should return undefined if drillItems missing", () => {
+        const columnDef: IGridHeader = getColumnDef("MEASURE_COLUMN", []);
+
+        expect(getMappingHeaderMeasureItemLocalIdentifier(columnDef)).toBeUndefined();
+    });
+
+    it("should return localIdentifier of first measure", () => {
+        const columnDef: IGridHeader = getColumnDef("MEASURE_COLUMN", [
+            {
+                attributeHeaderItem: {
+                    uri: "/gdc/md/storybook/obj/5/elements?id=3",
+                    name: "high",
+                },
+            },
+            {
+                measureHeaderItem: {
+                    identifier: "1",
+                    uri: "/gdc/md/storybook/obj/1",
+                    localIdentifier: "m1",
+                    format: "#,##0.00",
+                    name: "Amount",
+                },
+            },
+            {
+                measureHeaderItem: {
+                    identifier: "2",
+                    uri: "/gdc/md/storybook/obj/2",
+                    localIdentifier: "m2",
+                    format: "#,##0.00",
+                    name: "Big Amount",
+                },
+            },
+        ]);
+
+        expect(getMappingHeaderMeasureItemLocalIdentifier(columnDef)).toBe("m1");
+    });
+
+    it("should work with column object", () => {
+        const columnDef: IGridHeader = getColumnDef("MEASURE_COLUMN", [
+            {
+                attributeHeaderItem: {
+                    uri: "/gdc/md/storybook/obj/5/elements?id=3",
+                    name: "high",
+                },
+            },
+            {
+                measureHeaderItem: {
+                    identifier: "1",
+                    uri: "/gdc/md/storybook/obj/1",
+                    localIdentifier: "m1",
+                    format: "#,##0.00",
+                    name: "Amount",
+                },
+            },
+            {
+                measureHeaderItem: {
+                    identifier: "2",
+                    uri: "/gdc/md/storybook/obj/2",
+                    localIdentifier: "m2",
+                    format: "#,##0.00",
+                    name: "Big Amount",
+                },
+            },
+        ]);
+
+        const column = getFakeColumn(columnDef);
+
+        expect(getMappingHeaderMeasureItemLocalIdentifier(column)).toBe("m1");
     });
 });
