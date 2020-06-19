@@ -7,6 +7,7 @@ import {
     isAttributeColumnWidthItem,
     isMeasureLocatorItem,
     isMeasureColumnWidthItem,
+    isAllMeasureColumnWidthItem,
 } from "../../../../interfaces/PivotTable";
 
 import {
@@ -124,6 +125,8 @@ function adaptWidthItemsToPivotTable(
             ) {
                 return [...columnWidths, columnWidth];
             }
+        } else if (isAllMeasureColumnWidthItem(columnWidth)) {
+            return [...columnWidths, columnWidth];
         }
 
         return columnWidths;

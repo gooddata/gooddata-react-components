@@ -1,6 +1,10 @@
 // (C) 2020 GoodData Corporation
 
-import { IMeasureColumnWidthItem, IAttributeColumnWidthItem } from "../../../../../interfaces/PivotTable";
+import {
+    IMeasureColumnWidthItem,
+    IAttributeColumnWidthItem,
+    IAllMeasureColumnWidthItem,
+} from "../../../../../interfaces/PivotTable";
 
 export const validMeasureColumnWidthItem: IMeasureColumnWidthItem = {
     measureColumnWidthItem: {
@@ -18,6 +22,12 @@ export const validMeasureColumnWidthItem: IMeasureColumnWidthItem = {
                 },
             },
         ],
+    },
+};
+
+export const validAllMeasureColumnWidthItem: IAllMeasureColumnWidthItem = {
+    measureColumnWidthItem: {
+        width: 400,
     },
 };
 
