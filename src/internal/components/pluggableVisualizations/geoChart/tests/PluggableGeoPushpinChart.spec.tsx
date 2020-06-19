@@ -201,7 +201,16 @@ describe("PluggableGeoPushpinChart", () => {
             expect(newExtendedReferencePoint.buckets).toEqual([
                 {
                     localIdentifier: "location",
-                    items: [],
+                    items: [
+                        {
+                            aggregation: null,
+                            attribute: "attr.owner.country",
+                            dfUri: "/geo/attribute/displayform/uri/2",
+                            localIdentifier: "a1",
+                            locationDisplayFormUri: "/geo/attribute/displayform/uri/1",
+                            type: "attribute",
+                        },
+                    ],
                 },
                 {
                     localIdentifier: "size",

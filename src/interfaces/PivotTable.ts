@@ -40,15 +40,33 @@ export enum UIClick {
     DOUBLE_CLICK = 2,
 }
 
-export interface IResizedColumns {
-    [columnIdentifier: string]: { width: number; source: ColumnEventSourceType };
+export interface IResizedColumnsItem {
+    width: number;
+    source: ColumnEventSourceType;
 }
 
-export type ColumnWidthItem = IAttributeColumnWidthItem | IMeasureColumnWidthItem;
-export type ColumnWidth = number;
+export interface IResizedColumns {
+    [columnIdentifier: string]: IResizedColumnsItem;
+}
+
+export type ColumnWidthItem =
+    | IAttributeColumnWidthItem
+    | IMeasureColumnWidthItem
+    | IAllMeasureColumnWidthItem;
+export type AbsoluteColumnWidth = number;
+export type ColumnWidth = AbsoluteColumnWidth | "auto";
+
+export function isAbsoluteColumnWidth(columnWidth: ColumnWidth): columnWidth is AbsoluteColumnWidth {
+    return Number(columnWidth) === columnWidth;
+}
+
+export function isColumnWidthAuto(columnWidth: ColumnWidth): boolean {
+    return columnWidth === "auto";
+}
+
 export interface IAttributeColumnWidthItem {
     attributeColumnWidthItem: {
-        width: ColumnWidth;
+        width: AbsoluteColumnWidth;
         attributeIdentifier: AFM.Identifier;
         aggregation?: "sum";
     };
@@ -60,6 +78,13 @@ export interface IMeasureColumnWidthItem {
         locators: LocatorItem[];
     };
 }
+
+export interface IAllMeasureColumnWidthItem {
+    measureColumnWidthItem: {
+        width: AbsoluteColumnWidth;
+    };
+}
+
 type LocatorItem = IAttributeLocatorItem | AFM.IMeasureLocatorItem;
 interface IAttributeLocatorItem {
     attributeLocatorItem: {
@@ -82,7 +107,18 @@ export function isMeasureColumnWidthItem(
 ): columnWidthItem is IMeasureColumnWidthItem {
     return (
         !isEmpty(columnWidthItem) &&
-        (columnWidthItem as IMeasureColumnWidthItem).measureColumnWidthItem !== undefined
+        (columnWidthItem as IMeasureColumnWidthItem).measureColumnWidthItem !== undefined &&
+        (columnWidthItem as IMeasureColumnWidthItem).measureColumnWidthItem.locators !== undefined
+    );
+}
+
+export function isAllMeasureColumnWidthItem(
+    columnWidthItem: ColumnWidthItem,
+): columnWidthItem is IAllMeasureColumnWidthItem {
+    return (
+        !isEmpty(columnWidthItem) &&
+        (columnWidthItem as IAllMeasureColumnWidthItem).measureColumnWidthItem !== undefined &&
+        (columnWidthItem as IMeasureColumnWidthItem).measureColumnWidthItem.locators === undefined
     );
 }
 

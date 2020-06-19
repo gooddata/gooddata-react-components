@@ -11,6 +11,7 @@ import {
     getCallbackArray,
     getAttributeColumnWidthItemByIdentifier,
     getMeasureColumnWidthItemByLocator,
+    getAllMeasureColumnWidth,
     setAutoResize,
 } from "./utils/pivotTableHelpers";
 
@@ -21,6 +22,7 @@ fixture("Pivot Table Sizing and Reset by double click").beforeEach(
 const TABLE_SELECTOR_STR = ".s-pivot-table-sizing-complex";
 const CHANGE_WIDTH_BUTTON_ATTRIBUTE_STR = ".s-change-width-button-attribute";
 const CHANGE_WIDTH_BUTTON_MEASURE_STR = ".s-change-width-button-measure";
+const ADD_ALL_MEASURE_WIDTH_BUTTON = ".s-change-width-button-measure-all";
 
 const AGGRID_ON_RESIZE_TIMEOUT = 500;
 const AUTO_SIZE_TOLERANCE = 5;
@@ -62,6 +64,7 @@ const getSecondCellResizer = async (t, tableSelectorStr) => {
 test("should reset first column with default width by double click to auto size and notify column as manually resized via props", async t => {
     const tableSelector = Selector(TABLE_SELECTOR_STR);
     const cellSelectorStr = ".s-cell-0-0";
+    const expectedCallBackArrayItemsCount = 1;
 
     await waitForPivotTableStopLoading(t, tableSelector);
 
@@ -84,7 +87,7 @@ test("should reset first column with default width by double click to auto size 
     );
 
     const callBack = await getCallbackArray(TABLE_SELECTOR_STR);
-    await t.expect(callBack.length).eql(1);
+    await t.expect(callBack.length).eql(expectedCallBackArrayItemsCount);
 
     const item = getAttributeColumnWidthItemByIdentifier(callBack, ATTRIBUTE_IDENTIFIER);
     await t.expect(item).notEql(undefined);
@@ -100,6 +103,7 @@ test("should reset first column with default width by double click to auto size 
 test("should reset first column with manual width by double click to auto size and notify column as manually resized via props", async t => {
     const tableSelector = Selector(TABLE_SELECTOR_STR);
     const cellSelectorStr = ".s-cell-0-0";
+    const expectedCallBackArrayItemsCount = 1;
 
     await waitForPivotTableStopLoading(t, tableSelector);
 
@@ -124,7 +128,7 @@ test("should reset first column with manual width by double click to auto size a
     );
 
     const callBack = await getCallbackArray(TABLE_SELECTOR_STR);
-    await t.expect(callBack.length).eql(1);
+    await t.expect(callBack.length).eql(expectedCallBackArrayItemsCount);
 
     const item = getAttributeColumnWidthItemByIdentifier(callBack, ATTRIBUTE_IDENTIFIER);
     await t.expect(item).notEql(undefined);
@@ -140,6 +144,7 @@ test("should reset first column with manual width by double click to auto size a
 test("when auto resize is on should reset first column with manual width by double click to auto size and remove this column from manually resized via props", async t => {
     const tableSelector = Selector(TABLE_SELECTOR_STR);
     const cellSelectorStr = ".s-cell-0-0";
+    const expectedCallBackArrayItemsCount = 0;
 
     await waitForPivotTableStopLoading(t, tableSelector);
 
@@ -172,13 +177,14 @@ test("when auto resize is on should reset first column with manual width by doub
     );
 
     const callBack = await getCallbackArray(TABLE_SELECTOR_STR);
-    await t.expect(callBack.length).eql(0);
+    await t.expect(callBack.length).eql(expectedCallBackArrayItemsCount);
 });
 
 test("should resize first column by DnD and notify column as manually resized via props", async t => {
     const tableSelector = Selector(TABLE_SELECTOR_STR);
     const cellSelectorStr = ".s-cell-0-0";
     const dragOffset = 100;
+    const expectedCallBackArrayItemsCount = 1;
 
     await waitForPivotTableStopLoading(t, tableSelector);
 
@@ -201,7 +207,7 @@ test("should resize first column by DnD and notify column as manually resized vi
     );
 
     const callBack = await getCallbackArray(TABLE_SELECTOR_STR);
-    await t.expect(callBack.length).eql(1);
+    await t.expect(callBack.length).eql(expectedCallBackArrayItemsCount);
 
     const item = getAttributeColumnWidthItemByIdentifier(callBack, ATTRIBUTE_IDENTIFIER);
     await t.expect(item).notEql(undefined);
@@ -219,6 +225,7 @@ test("should resize first column by DnD and notify column as manually resized vi
 test("should reset second column with default width by double click to auto size and notify column as manually resized via props", async t => {
     const tableSelector = Selector(TABLE_SELECTOR_STR);
     const cellSelectorStr = ".s-cell-0-1";
+    const expectedCallBackArrayItemsCount = 1;
 
     await waitForPivotTableStopLoading(t, tableSelector);
 
@@ -241,7 +248,7 @@ test("should reset second column with default width by double click to auto size
     );
 
     const callBack = await getCallbackArray(TABLE_SELECTOR_STR);
-    await t.expect(callBack.length).eql(1);
+    await t.expect(callBack.length).eql(expectedCallBackArrayItemsCount);
 
     const item = getMeasureColumnWidthItemByLocator(
         callBack,
@@ -262,6 +269,7 @@ test("should reset second column with default width by double click to auto size
 test("should reset second column with manual width by double click to auto size and notify column as manually resized via props", async t => {
     const tableSelector = Selector(TABLE_SELECTOR_STR);
     const cellSelectorStr = ".s-cell-0-1";
+    const expectedCallBackArrayItemsCount = 1;
 
     await waitForPivotTableStopLoading(t, tableSelector);
 
@@ -286,7 +294,7 @@ test("should reset second column with manual width by double click to auto size 
     );
 
     const callBack = await getCallbackArray(TABLE_SELECTOR_STR);
-    await t.expect(callBack.length).eql(1);
+    await t.expect(callBack.length).eql(expectedCallBackArrayItemsCount);
 
     const item = getMeasureColumnWidthItemByLocator(
         callBack,
@@ -307,6 +315,7 @@ test("should reset second column with manual width by double click to auto size 
 test("when auto resize is on should reset second column with manual width by double click to auto size and remove this column from manually resized via props", async t => {
     const tableSelector = Selector(TABLE_SELECTOR_STR);
     const cellSelectorStr = ".s-cell-0-1";
+    const expectedCallBackArrayItemsCount = 0;
 
     await waitForPivotTableStopLoading(t, tableSelector);
 
@@ -339,13 +348,14 @@ test("when auto resize is on should reset second column with manual width by dou
     );
 
     const callBack = await getCallbackArray(TABLE_SELECTOR_STR);
-    await t.expect(callBack.length).eql(0);
+    await t.expect(callBack.length).eql(expectedCallBackArrayItemsCount);
 });
 
 test("should resize second column by DnD and notify column as manually resized via props", async t => {
     const tableSelector = Selector(TABLE_SELECTOR_STR);
     const cellSelectorStr = ".s-cell-0-1";
     const dragOffset = 100;
+    const expectedCallBackArrayItemsCount = 1;
 
     await waitForPivotTableStopLoading(t, tableSelector);
 
@@ -368,7 +378,7 @@ test("should resize second column by DnD and notify column as manually resized v
     );
 
     const callBack = await getCallbackArray(TABLE_SELECTOR_STR);
-    await t.expect(callBack.length).eql(1);
+    await t.expect(callBack.length).eql(expectedCallBackArrayItemsCount);
 
     const item = getMeasureColumnWidthItemByLocator(
         callBack,
@@ -384,4 +394,183 @@ test("should resize second column by DnD and notify column as manually resized v
         DND_SIZE_TOLERANCE,
         "Width of item from callback array",
     );
+});
+
+test("should resize second column by DnD while meta key pressed and resize all measure columns", async t => {
+    const tableSelector = Selector(TABLE_SELECTOR_STR);
+    const cellSelectorStr = ".s-cell-0-1";
+    const lastCellSelectorStr = ".s-cell-0-4";
+    const dragOffset = -100;
+    const expectedCallBackArrayItemsCount = 1;
+
+    await waitForPivotTableStopLoading(t, tableSelector);
+
+    const cell = await getCell(t, TABLE_SELECTOR_STR, cellSelectorStr);
+    // before resize
+    const actualCellWidth = await cell.getBoundingClientRectProperty("width");
+    await t.expect(actualCellWidth).eql(CELL_DEFAULT_WIDTH);
+
+    // resize by dnd -100px
+    const resizer = await getSecondCellResizer(t, TABLE_SELECTOR_STR);
+    await dragResizer(t, resizer, dragOffset, true);
+
+    await sleep(AGGRID_ON_RESIZE_TIMEOUT);
+
+    // after resize first cell
+    const resizedCellWidth = await cell.getBoundingClientRectProperty("width");
+    await checkWidthWithTolerance(
+        t,
+        resizedCellWidth,
+        CELL_DEFAULT_WIDTH + dragOffset,
+        DND_SIZE_TOLERANCE,
+        "Width of table column",
+    );
+
+    // after resize last cell
+    const cellLast = await getCell(t, TABLE_SELECTOR_STR, lastCellSelectorStr);
+    const resizedLastCellWidth = await cellLast.getBoundingClientRectProperty("width");
+
+    await checkWidthWithTolerance(
+        t,
+        resizedLastCellWidth,
+        CELL_DEFAULT_WIDTH + dragOffset,
+        DND_SIZE_TOLERANCE,
+        "Width of table column",
+    );
+
+    // check callback
+    const callBack = await getCallbackArray(TABLE_SELECTOR_STR);
+    await t.expect(callBack.length).eql(expectedCallBackArrayItemsCount);
+
+    const item = getAllMeasureColumnWidth(callBack);
+
+    await t.expect(item).notEql(undefined);
+    await checkWidthWithTolerance(
+        t,
+        item.measureColumnWidthItem.width,
+        CELL_DEFAULT_WIDTH + dragOffset,
+        DND_SIZE_TOLERANCE,
+        "Width of item from callback array",
+    );
+});
+
+test("should reset previously resized column with metaKey and notify column as manually resized via props", async t => {
+    const tableSelector = Selector(TABLE_SELECTOR_STR);
+    const cellSelectorStr = ".s-cell-0-1";
+    const expectedCallBackArrayItemsCount = 2;
+
+    await waitForPivotTableStopLoading(t, tableSelector);
+
+    await t.click(ADD_ALL_MEASURE_WIDTH_BUTTON);
+
+    const resizer = await getSecondCellResizer(t, TABLE_SELECTOR_STR);
+    await t.doubleClick(resizer);
+    await sleep(AGGRID_ON_RESIZE_TIMEOUT);
+
+    // after reset
+    const cell = await getCell(t, TABLE_SELECTOR_STR, cellSelectorStr);
+    const resizedLastCellWidth = await cell.getBoundingClientRectProperty("width");
+
+    await checkWidthWithTolerance(
+        t,
+        resizedLastCellWidth,
+        SECOND_CELL_AUTORESIZE_WIDTH,
+        DND_SIZE_TOLERANCE,
+        "Width of table column",
+    );
+
+    // check callback
+    const callBackAfterReset = await getCallbackArray(TABLE_SELECTOR_STR);
+    await t.expect(callBackAfterReset.length).eql(expectedCallBackArrayItemsCount);
+
+    const itemAfterReset = getMeasureColumnWidthItemByLocator(
+        callBackAfterReset,
+        MEASURE_LOCATOR_ITEM,
+        ATTRIBUTE_LOCATOR_ITEM_ATT_ID,
+        ATTRIBUTE_LOCATOR_ITEM_ATT_ELM,
+    );
+
+    await t.expect(itemAfterReset).notEql(undefined);
+    await checkWidthWithTolerance(
+        t,
+        itemAfterReset.measureColumnWidthItem.width,
+        SECOND_CELL_AUTORESIZE_WIDTH,
+        AUTO_SIZE_TOLERANCE,
+        "Width of item from callback array",
+    );
+});
+
+test("when autosize on it should reset previously resized column with metaKey and notify column as manually resized via props with value auto", async t => {
+    const tableSelector = Selector(TABLE_SELECTOR_STR);
+    const cellSelectorStr = ".s-cell-0-1";
+    const expectedCallBackArrayItemsCount = 2;
+
+    await waitForPivotTableStopLoading(t, tableSelector);
+
+    await t.click(ADD_ALL_MEASURE_WIDTH_BUTTON);
+    await setAutoResize(t, TABLE_SELECTOR_STR);
+
+    const resizer = await getSecondCellResizer(t, TABLE_SELECTOR_STR);
+    await t.doubleClick(resizer);
+    await sleep(AGGRID_ON_RESIZE_TIMEOUT);
+
+    // after reset
+    const cell = await getCell(t, TABLE_SELECTOR_STR, cellSelectorStr);
+    const resizedLastCellWidth = await cell.getBoundingClientRectProperty("width");
+
+    await checkWidthWithTolerance(
+        t,
+        resizedLastCellWidth,
+        SECOND_CELL_AUTORESIZE_WIDTH,
+        DND_SIZE_TOLERANCE,
+        "Width of table column",
+    );
+
+    // check callback
+    const callBackAfterReset = await getCallbackArray(TABLE_SELECTOR_STR);
+    await t.expect(callBackAfterReset.length).eql(expectedCallBackArrayItemsCount);
+
+    const itemAfterReset = getMeasureColumnWidthItemByLocator(
+        callBackAfterReset,
+        MEASURE_LOCATOR_ITEM,
+        ATTRIBUTE_LOCATOR_ITEM_ATT_ID,
+        ATTRIBUTE_LOCATOR_ITEM_ATT_ELM,
+    );
+
+    await t.expect(itemAfterReset).notEql(undefined);
+
+    await t.expect(itemAfterReset.measureColumnWidthItem.width).eql("auto");
+});
+
+test("should remove all measure width when reset with metaKey and all measures columns should be auto sized", async t => {
+    const tableSelector = Selector(TABLE_SELECTOR_STR);
+    const cellSelectorStr = ".s-cell-0-1";
+    const expectedCallBackArrayItemsCount = 4;
+
+    await waitForPivotTableStopLoading(t, tableSelector);
+
+    await t.click(ADD_ALL_MEASURE_WIDTH_BUTTON);
+
+    const resizer = await getSecondCellResizer(t, TABLE_SELECTOR_STR);
+    await t.doubleClick(resizer, { modifiers: { meta: true } });
+    await sleep(AGGRID_ON_RESIZE_TIMEOUT);
+
+    // after reset
+    const cell = await getCell(t, TABLE_SELECTOR_STR, cellSelectorStr);
+    const resizedLastCellWidth = await cell.getBoundingClientRectProperty("width");
+
+    await checkWidthWithTolerance(
+        t,
+        resizedLastCellWidth,
+        SECOND_CELL_AUTORESIZE_WIDTH,
+        DND_SIZE_TOLERANCE,
+        "Width of table column",
+    );
+
+    // check callback
+    const callBackAfterReset = await getCallbackArray(TABLE_SELECTOR_STR);
+    await t.expect(callBackAfterReset.length).eql(expectedCallBackArrayItemsCount);
+
+    const item = getAllMeasureColumnWidth(callBackAfterReset);
+    await t.expect(item).eql(undefined);
 });

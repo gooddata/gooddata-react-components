@@ -21,6 +21,7 @@ The REST API versions in the table are just for your information as the values a
 
 ### Added
 - Secondary Y axis is now rotated the same way as primary Y axis in line, column, combo and combo2 charts
+- Manual resizing of Pivot table, resize all measurers columns in the table at once
 
 ## 7.7.0
 
