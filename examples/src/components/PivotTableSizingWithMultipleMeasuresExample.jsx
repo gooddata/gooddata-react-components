@@ -9,12 +9,17 @@ import {
     quarterDateIdentifier,
     locationStateDisplayFormIdentifier,
     franchiseFeesIdentifier,
+    franchiseFeesAdRoyaltyIdentifier,
 } from "../utils/fixtures";
 
 const measures = [
     Model.measure(franchiseFeesIdentifier)
         .format("#,##0")
         .localIdentifier("franchiseFees"),
+    Model.measure(franchiseFeesAdRoyaltyIdentifier)
+        .format("#,##0")
+        .localIdentifier("franchiseFeesAdRoyaltyIdentifier")
+        .alias("Ad Royality"),
 ];
 
 const attributes = [Model.attribute(locationStateDisplayFormIdentifier).localIdentifier("state")];
@@ -25,10 +30,13 @@ const attributeWidth = width => Model.attributeColumnWidthItem("state", width);
 
 const allMeasureWidth = width => Model.allMeasureColumnWidthItem(width);
 
+const weakMeasureWidth = width => Model.weakMeasureColumnWidthItemBuilder("franchiseFees", width);
+
 const isAllMeasureColumnWidthItem = columnWidthItem => {
     return (
         columnWidthItem.measureColumnWidthItem !== undefined &&
-        columnWidthItem.measureColumnWidthItem.locators === undefined
+        columnWidthItem.measureColumnWidthItem.locators === undefined &&
+        columnWidthItem.measureColumnWidthItem.locator === undefined
     );
 };
 
@@ -51,6 +59,13 @@ const areLocatorsEqual = (locator1, locator2) => {
     );
 };
 
+const isWeakMeasureColumnWidthItem = columnWidthItem => {
+    return (
+        columnWidthItem.measureColumnWidthItem !== undefined &&
+        columnWidthItem.measureColumnWidthItem.locator !== undefined
+    );
+};
+
 const isSameWidthItem = (item, newItem) => {
     if (isAttributeColumnWidthItem(item) && isAttributeColumnWidthItem(newItem)) {
         return (
@@ -70,6 +85,10 @@ const isSameWidthItem = (item, newItem) => {
         return true;
     }
 
+    if (isWeakMeasureColumnWidthItem(item) && isWeakMeasureColumnWidthItem(newItem)) {
+        return true;
+    }
+
     return false;
 };
 
@@ -79,7 +98,7 @@ const measureWidth = width =>
         element: `/gdc/md/${projectId}/obj/2009/elements?id=1`,
     });
 
-export class PivotTableSizingComplexExample extends Component {
+export class PivotTableSizingWithMultipleMeasuresExample extends Component {
     state = {
         columnWidths: [],
         autoResize: false,
@@ -139,10 +158,17 @@ export class PivotTableSizingComplexExample extends Component {
                         Change all measures width
                     </button>
 
-                    <label style={{ paddingLeft: 20 }}>
+                    <button
+                        className="gd-button gd-button-secondary gd-button gd-button-secondary s-change-width-button-given-measures"
+                        onClick={() => this.onButtonClick(weakMeasureWidth(60))}
+                    >
+                        Change Franchise Fees measure width
+                    </button>
+
+                    <label style={{ paddingLeft: 50 }}>
                         Auto resize:
                         <input
-                            className="s-pivot-table-sizing-complex-autoresize-checkbox"
+                            className="s-pivot-table-sizing-with-multiple-measures-autoresize-checkbox"
                             name="autoresize-checkbox"
                             type="checkbox"
                             checked={this.state.autoResize}
@@ -153,7 +179,7 @@ export class PivotTableSizingComplexExample extends Component {
                     <label style={{ paddingLeft: 20 }}>
                         Grow to Fit:
                         <input
-                            className="s-pivot-table-sizing-complex-grow-to-fit-checkbox"
+                            className="s-pivot-table-sizing-with-multiple-measures-grow-to-fit"
                             name="grow-to-fit-checkbox"
                             type="checkbox"
                             checked={this.state.growToFit}
@@ -162,8 +188,8 @@ export class PivotTableSizingComplexExample extends Component {
                     </label>
                 </div>
                 <div
-                    style={{ width: 1000, height: 300, marginTop: 20, resize: "both", overflow: "auto" }}
-                    className="s-pivot-table-sizing-complex"
+                    style={{ height: 300, marginTop: 20, resize: "both", overflow: "auto" }}
+                    className="s-pivot-table-sizing-with-multiple-measures"
                 >
                     <PivotTable
                         key={`PivotTableKey-${this.state.gridTableCount}`}
@@ -183,7 +209,7 @@ export class PivotTableSizingComplexExample extends Component {
                     />
                 </div>
                 <div>columns state:</div>
-                <div className="s-pivot-table-sizing-complex-callback">
+                <div className="s-pivot-table-sizing-with-multiple-measures-callback">
                     {JSON.stringify(this.state.columnWidths)}
                 </div>
             </div>
@@ -191,4 +217,4 @@ export class PivotTableSizingComplexExample extends Component {
     }
 }
 
-export default PivotTableSizingComplexExample;
+export default PivotTableSizingWithMultipleMeasuresExample;

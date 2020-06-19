@@ -32,7 +32,6 @@ import { IGridCellEvent } from "../pivotTable/agGridTypes";
 import { IDrillEventExtended } from "../../../interfaces/DrillEvents";
 import { Execution } from "@gooddata/typings";
 import noop = require("lodash/noop");
-import { ColumnEventSourceType } from "../../../interfaces/PivotTable";
 
 const intl = createIntlMock();
 
@@ -191,7 +190,7 @@ describe("PivotTable", () => {
                     expect(table.resizedColumnsStore.manuallyResizedColumns).toEqual({
                         m_0: {
                             width: 350,
-                            source: ColumnEventSourceType.UI_DRAGGED,
+                            measureIdentifier: "m1",
                         },
                     });
                     done();
