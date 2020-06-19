@@ -25,12 +25,23 @@ const attributeWidth = width => Model.attributeColumnWidthItem("state", width);
 
 const allMeasureWidth = width => Model.allMeasureColumnWidthItem(width);
 
+const isAllMeasureColumnWidthItem = columnWidthItem => {
+    return (
+        columnWidthItem.measureColumnWidthItem !== undefined &&
+        columnWidthItem.measureColumnWidthItem.locators === undefined
+    );
+};
+
 const isAttributeColumnWidthItem = columnWidthItem => {
     return columnWidthItem && columnWidthItem.attributeColumnWidthItem !== undefined;
 };
 
 const isMeasureColumnWidthItem = columnWidthItem => {
-    return columnWidthItem && columnWidthItem.measureColumnWidthItem !== undefined;
+    return (
+        columnWidthItem &&
+        columnWidthItem.measureColumnWidthItem !== undefined &&
+        columnWidthItem.measureColumnWidthItem.locators !== undefined
+    );
 };
 
 const isLocatorsEqual = (locator1, locator2) => {
@@ -50,6 +61,10 @@ const isSameWidthItem = (item, newItem) => {
 
     if (isMeasureColumnWidthItem(item) && isMeasureColumnWidthItem(newItem)) {
         return isLocatorsEqual(item.measureColumnWidthItem.locators, newItem.measureColumnWidthItem.locators);
+    }
+
+    if (isAllMeasureColumnWidthItem(item) && isAllMeasureColumnWidthItem(newItem)) {
+        return true;
     }
 
     return false;
