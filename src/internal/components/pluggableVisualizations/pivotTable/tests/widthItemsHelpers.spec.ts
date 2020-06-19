@@ -11,6 +11,7 @@ import {
     validAllMeasureColumnWidthItem,
     validAttributeColumnWidthItem,
     validMeasureColumnWidthItem,
+    validWeakMeasureColumnWidthItem,
 } from "./widthItemsMock";
 import { ColumnWidthItem } from "../../../../../interfaces/PivotTable";
 import { adaptReferencePointWidthItemsToPivotTable } from "../widthItemsHelpers";
@@ -110,6 +111,44 @@ describe("adaptReferencePointWidthItemsToPivotTable", () => {
             [],
             [],
             [],
+            [],
+            [],
+            [],
+        );
+
+        expect(result).toEqual(expectedColumnWidthItems);
+    });
+
+    it("should keep weakMeasureColumnWidthItem when some measures left", () => {
+        const sourceColumnWidthsWithWeakMeasure: ColumnWidthItem[] = [validWeakMeasureColumnWidthItem];
+
+        const expectedColumnWidthItems: ColumnWidthItem[] = [validWeakMeasureColumnWidthItem];
+
+        const result = adaptReferencePointWidthItemsToPivotTable(
+            sourceColumnWidthsWithWeakMeasure,
+            measures,
+            [],
+            [],
+            [],
+            [],
+            [],
+        );
+
+        expect(result).toEqual(expectedColumnWidthItems);
+    });
+
+    it("should transform measureWidthItem to weakMeasureColumnWidthItem when first column attribute added", () => {
+        const sourceColumnWidthsWithweakMeasure: ColumnWidthItem[] = [
+            invalidMeasureColumnWidthItemLocatorsTooShort,
+        ];
+
+        const expectedColumnWidthItems: ColumnWidthItem[] = [validWeakMeasureColumnWidthItem];
+
+        const result = adaptReferencePointWidthItemsToPivotTable(
+            sourceColumnWidthsWithweakMeasure,
+            measures,
+            [],
+            columnAttributes,
             [],
             [],
             [],

@@ -2,12 +2,12 @@
 import { Selector } from "testcafe";
 
 export async function getCell(t, selector, cellSelector) {
-    const chart = Selector(selector);
-    await t.expect(chart.exists).eql(true, `${selector} not found`);
+    const table = Selector(selector);
+    await t.expect(table.exists).eql(true, `${selector} not found`);
     if (!cellSelector) {
         return null;
     }
-    const cell = await chart.find(`.ag-body-viewport ${cellSelector}`);
+    const cell = await table.find(`.ag-body-viewport ${cellSelector}`);
     await t.expect(cell.exists).eql(true, `${cellSelector} not found in ${selector}`);
     return cell;
 }
@@ -40,8 +40,7 @@ export const waitForPivotTableStopLoading = async (t, pivotSelector) => {
     const loadingSelector = pivotSelector
         ? pivotSelector.find(loadingSelectorString)
         : Selector(loadingSelectorString);
-
-    await t.expect(loadingSelector.exists).notOk();
+    await t.expect(loadingSelector.exists).notOk({ timeout: 15000 });
 };
 
 export const getMenu = cell => {
@@ -78,8 +77,8 @@ export async function sortColumn(t, tableSelectorStr, columnIndex) {
     await waitForPivotTableStopLoading(t);
 }
 
-export const dragResizer = async (t, resizer, destinationOffsetX, metaKey = false) => {
-    const dragOptions = { speed: 0.55, modifiers: { meta: metaKey } };
+export const dragResizer = async (t, resizer, destinationOffsetX, metaKey = false, altKey = false) => {
+    const dragOptions = { speed: 0.55, modifiers: { meta: metaKey, alt: altKey } };
 
     await t.drag(resizer, destinationOffsetX, 0, dragOptions);
 };

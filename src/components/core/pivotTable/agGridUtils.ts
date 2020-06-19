@@ -8,7 +8,11 @@ import stringify = require("json-stable-stringify");
 import invariant = require("invariant");
 import { AFM, Execution } from "@gooddata/typings";
 import { getMappingHeaderUri } from "../../../helpers/mappingHeader";
-import { IMappingHeader, isMappingHeaderTotal } from "../../../interfaces/MappingHeader";
+import {
+    IMappingHeader,
+    isMappingHeaderTotal,
+    isMappingHeaderMeasureItem,
+} from "../../../interfaces/MappingHeader";
 import {
     DOT_PLACEHOLDER,
     FIELD_SEPARATOR,
@@ -261,4 +265,25 @@ export const sanitizeFingerprint = (fingerprint: string): string => {
 
 export const isColumnDisplayed = (displayedColumns: Column[], column: Column) => {
     return displayedColumns.some(displayedColumn => displayedColumn.getColId() === column.getColId());
+};
+
+const getMappingHeaderMeasureItem = (item: Column | ColDef): Execution.IMeasureHeaderItem | undefined => {
+    if (!isMeasureColumn(item)) {
+        return;
+    }
+
+    const headers: IMappingHeader[] = isColumn(item)
+        ? (item.getColDef() as IGridHeader).drillItems
+        : (item as IGridHeader).drillItems;
+
+    if (headers) {
+        return headers.filter(isMappingHeaderMeasureItem)[0];
+    }
+};
+
+export const getMappingHeaderMeasureItemLocalIdentifier = (item: Column | ColDef): string | undefined => {
+    const measure = getMappingHeaderMeasureItem(item);
+    if (measure) {
+        return measure.measureHeaderItem.localIdentifier;
+    }
 };
