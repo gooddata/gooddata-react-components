@@ -4,6 +4,7 @@ import { ColumnEventSourceType, ColumnWidthItem } from "../../../../interfaces/P
 import { Execution } from "@gooddata/typings";
 import { ColDef, Column } from "ag-grid-community";
 import { MEASURE_COLUMN } from "../agGridConst";
+import { MANUALLY_SIZED_MAX_WIDTH, MIN_WIDTH } from "../agGridColumnSizing";
 
 describe("ResizedColumnsStore", () => {
     const columnWidthsMock: ColumnWidthItem[] = [
@@ -31,6 +32,20 @@ describe("ResizedColumnsStore", () => {
         {
             measureColumnWidthItem: {
                 width: 400,
+            },
+        },
+    ];
+    const columnWidthsAllMeasureMockMinWidth: ColumnWidthItem[] = [
+        {
+            measureColumnWidthItem: {
+                width: 10,
+            },
+        },
+    ];
+    const columnWidthsAllMeasureMockMaxWidth: ColumnWidthItem[] = [
+        {
+            measureColumnWidthItem: {
+                width: 4000,
             },
         },
     ];
@@ -384,6 +399,22 @@ describe("ResizedColumnsStore", () => {
             const columnWidthsOnlyAttributeMock = [columnWidthsMock[1]];
             resizedColumnsStore.updateColumnWidths(columnWidthsOnlyAttributeMock, executionResponseMock);
             const result = resizedColumnsStore.manuallyResizedColumns;
+            expect(result).toEqual(expectedResult);
+        });
+
+        it("should validate all measure width item with min width", () => {
+            const resizedColumnsStore: any = new ResizedColumnsStore();
+            resizedColumnsStore.updateColumnWidths(columnWidthsAllMeasureMockMinWidth, executionResponseMock);
+            const expectedResult = MIN_WIDTH;
+            const result = resizedColumnsStore.allMeasureColumnWidth;
+            expect(result).toEqual(expectedResult);
+        });
+
+        it("should validate all measure width item with max width", () => {
+            const resizedColumnsStore: any = new ResizedColumnsStore();
+            resizedColumnsStore.updateColumnWidths(columnWidthsAllMeasureMockMaxWidth, executionResponseMock);
+            const expectedResult = MANUALLY_SIZED_MAX_WIDTH;
+            const result = resizedColumnsStore.allMeasureColumnWidth;
             expect(result).toEqual(expectedResult);
         });
     });
