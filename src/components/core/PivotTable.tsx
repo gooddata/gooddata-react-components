@@ -216,7 +216,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     private lastResizedWidth = 0;
     private lastResizedHeight = 0;
     private numberOfColumnResizedCalls = 0;
-    private waitingForFirstExecution = true;
+    private columnWidthsChangeWaitingForExecution = true;
     private isMetaOrCtrlKeyPressed = false;
 
     constructor(props: IPivotTableInnerProps) {
@@ -265,6 +265,9 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         const currentStateTotals = this.state.columnTotals;
         const totalsStateChanged = !isEqual(prevStateTotals, currentStateTotals);
 
+        const prevColumnWidths = this.getColumnWidths(prevProps);
+        const columnWidths = this.getColumnWidths(this.props);
+
         new Promise(resolve => {
             if (totalsPropsChanged) {
                 this.setState(
@@ -293,7 +296,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             const dataSourceChanged = fingerprint !== prevFingerprint;
 
             if (dataSourceChanged) {
-                this.waitingForFirstExecution = true;
+                this.columnWidthsChangeWaitingForExecution = true;
             }
 
             if (dataSourceChanged || totalsPropsChanged || totalsStateChanged) {
@@ -313,20 +316,12 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             if (this.isGrowToFitEnabled(prevProps) !== this.isGrowToFitEnabled()) {
                 this.growToFit(this.columnApi);
             }
-            const prevColumnWidths = this.getColumnWidths(prevProps);
-            const columnWidths = this.getColumnWidths(this.props);
-            if (!isEqual(prevColumnWidths, columnWidths) && !this.waitingForFirstExecution) {
-                if (this.columnApi) {
-                    this.resizedColumnsStore.updateColumnWidths(columnWidths, this.getExecutionResponse());
 
-                    syncSuppressSizeToFitOnColumns(this.resizedColumnsStore, this.columnApi);
-
-                    if (this.isGrowToFitEnabled()) {
-                        this.growToFit(this.columnApi); // calls resetColumnsWidthToDefault internally too
-                    } else {
-                        const columns = this.columnApi.getAllColumns();
-                        this.resetColumnsWidthToDefault(this.columnApi, columns);
-                    }
+            if (!isEqual(prevColumnWidths, columnWidths) && !this.columnWidthsChangeWaitingForExecution) {
+                if (this.shouldWaitForExecution(totalsPropsChanged, totalsStateChanged)) {
+                    this.columnWidthsChangeWaitingForExecution = true;
+                } else {
+                    this.handleColumnWidthsChange(columnWidths);
                 }
             }
             if (agGridDataSourceUpdateNeeded) {
@@ -638,6 +633,21 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         this.growToFittedColumns = {};
     }
 
+    private handleColumnWidthsChange(columnWidths: ColumnWidthItem[]) {
+        if (this.columnApi) {
+            this.resizedColumnsStore.updateColumnWidths(columnWidths, this.getExecutionResponse());
+
+            syncSuppressSizeToFitOnColumns(this.resizedColumnsStore, this.columnApi);
+
+            if (this.isGrowToFitEnabled()) {
+                this.growToFit(this.columnApi); // calls resetColumnsWidthToDefault internally too
+            } else {
+                const columns = this.columnApi.getAllColumns();
+                this.resetColumnsWidthToDefault(this.columnApi, columns);
+            }
+        }
+    }
+
     private setFittedColumns(columnApi: ColumnApi) {
         const columns = columnApi.getAllColumns();
 
@@ -726,7 +736,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     private sortChanged = async (event: SortChangedEvent): Promise<void> => {
         const execution = this.getExecution();
 
-        invariant(execution !== undefined, "changing sorts without prior execution cannot work");
+        invariant(execution, "changing sorts without prior execution cannot work");
 
         const sortModel: ISortModelItem[] = event.columnApi
             .getAllColumns()
@@ -764,10 +774,9 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             if (!isEqual(enrichedColumnDefs, this.state.columnDefs)) {
                 const sortedByFirstAttribute = isSortedByFirstAttibute(columnDefs, resultSpec);
 
-                // this solves only first render, not change of columnWidths during lifetime
-                // first render cant be in componentWillMount, because we need execution finished and first valid columnDefs
-                if (this.waitingForFirstExecution) {
-                    this.waitingForFirstExecution = false;
+                // this solves first render and change of columnWidths during lifetime together with change of buckets/totals when we need execution finished and first valid columnDefs
+                if (this.columnWidthsChangeWaitingForExecution) {
+                    this.columnWidthsChangeWaitingForExecution = false;
 
                     const columnWidths = this.getColumnWidths(this.props);
                     this.resizedColumnsStore.updateColumnWidths(columnWidths, execution.executionResponse);
@@ -1074,10 +1083,6 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     }
 
     private onColumnsManualReset = async (columns: Column[]) => {
-        const execution = this.getExecution();
-
-        invariant(execution !== undefined, "changing column width prior execution cannot work");
-
         let columnsToReset = columns;
 
         if (this.isAllMeasureResetOperation()) {
@@ -1097,10 +1102,6 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     }
 
     private onColumnsManualResized = (columns: Column[]) => {
-        const execution = this.getExecution();
-
-        invariant(execution !== undefined, "changing column width prior execution cannot work");
-
         if (this.isAllMeasureResizeOperation(columns)) {
             resizeAllMeasuresColumns(this.columnApi, this.resizedColumnsStore, columns[0]);
         } else {
@@ -1115,7 +1116,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     private afterOnResizeColumns() {
         const execution = this.getExecution();
 
-        invariant(execution !== undefined, "changing column width prior execution cannot work");
+        invariant(execution, "changing column width prior execution cannot work");
 
         this.growToFit(this.columnApi);
         const columnWidths = this.resizedColumnsStore.getColumnWidthsFromMap(execution);
@@ -1486,6 +1487,10 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
     private isHeaderResizer(target: HTMLElement) {
         return target.classList.contains("ag-header-cell-resize");
+    }
+
+    private shouldWaitForExecution(totalsPropsChanged: boolean, totalsStateChanged: boolean) {
+        return !this.getExecutionResponse() || totalsPropsChanged || totalsStateChanged;
     }
 }
 

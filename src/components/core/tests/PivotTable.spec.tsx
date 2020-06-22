@@ -209,6 +209,43 @@ describe("PivotTable", () => {
             });
             wrapper.update();
         });
+
+        it("should postpone columnWidths prop handling when waiting for execution", async done => {
+            expect.assertions(2);
+            const wrapper = renderComponent(
+                {
+                    resultSpec: oneAttributeOneMeasureExecutionObject.execution.resultSpec,
+                },
+                oneAttributeOneMeasureDataSource,
+            );
+            await waitFor(waitForDataLoaded(wrapper));
+            const table = getTableInstanceFromWrapper(wrapper);
+
+            const resetColumnsWidthToDefault = jest.spyOn(table, "resetColumnsWidthToDefault");
+            const isNewAGGridDataSourceNeeded = jest.spyOn(table, "isNewAGGridDataSourceNeeded");
+            isNewAGGridDataSourceNeeded.mockReturnValueOnce(true);
+            const updateAGGridDataSource = jest.spyOn(table, "updateAGGridDataSource");
+            const getExecutionResponse = jest.spyOn(table, "getExecutionResponse");
+            getExecutionResponse.mockReturnValueOnce(null);
+            try {
+                updateAGGridDataSource.mockImplementation(() => {
+                    expect(resetColumnsWidthToDefault).not.toBeCalled();
+                    expect(table.columnWidthsChangeWaitingForExecution).toBeTruthy();
+                    done();
+                });
+            } catch (e) {
+                done.fail(e);
+            }
+
+            wrapper.setProps({
+                config: {
+                    columnSizing: {
+                        columnWidths,
+                    },
+                },
+            });
+            wrapper.update();
+        });
     });
 
     describe("column sizing", () => {
