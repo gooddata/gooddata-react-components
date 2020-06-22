@@ -43,8 +43,33 @@ test("Table visualization should render", async t => {
         .eql("Month/Year (Date)");
 });
 
-test("Bar chart should render", async t => {
+test("Bar chart should render with data sorted in descending order", async t => {
     await checkRenderedChart(".s-visualization-bar", t);
+    const chartValues = Selector(".s-visualization-bar .highcharts-data-label");
+
+    await t
+        .expect(chartValues.nth(0).textContent)
+        .eql("$16,077,036")
+        .expect(chartValues.nth(1).textContent)
+        .eql("$13,851,506")
+        .expect(chartValues.nth(2).textContent)
+        .eql("$9,392,461")
+        .expect(chartValues.nth(3).textContent)
+        .eql("$8,856,994")
+        .expect(chartValues.nth(4).textContent)
+        .eql("$8,428,501")
+        .expect(chartValues.nth(5).textContent)
+        .eql("$8,287,671")
+        .expect(chartValues.nth(6).textContent)
+        .eql("$8,265,962")
+        .expect(chartValues.nth(7).textContent)
+        .eql("$6,276,176")
+        .expect(chartValues.nth(8).textContent)
+        .eql("$4,589,119")
+        .expect(chartValues.nth(9).textContent)
+        .eql("$4,476,814")
+        .expect(chartValues.nth(10).textContent)
+        .eql("$4,054,336");
 });
 
 test("Line chart should render", async t => {

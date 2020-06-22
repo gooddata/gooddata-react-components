@@ -98,6 +98,7 @@ import {
     indexOfTreeNode,
     isMeasureColumnReadyToRender,
     getColumnIdentifier,
+    sanitizeFingerprint,
 } from "./pivotTable/agGridUtils";
 import ColumnGroupHeader from "./pivotTable/ColumnGroupHeader";
 import ColumnHeader from "./pivotTable/ColumnHeader";
@@ -295,12 +296,15 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
                 this.groupingProvider.reset();
                 agGridDataSourceUpdateNeeded = true;
             }
-            if (agGridDataSourceUpdateNeeded) {
-                this.updateAGGridDataSource();
-            }
 
-            const dataSourceChanged =
-                this.props.dataSource.getFingerprint() !== prevProps.dataSource.getFingerprint();
+            const fingerprint = sanitizeFingerprint(this.props.dataSource.getFingerprint());
+            const prevFingerprint = sanitizeFingerprint(prevProps.dataSource.getFingerprint());
+
+            const dataSourceChanged = fingerprint !== prevFingerprint;
+
+            if (dataSourceChanged) {
+                this.waitingForFirstExecution = true;
+            }
 
             if (dataSourceChanged || totalsPropsChanged || totalsStateChanged) {
                 // we need update last scroll position to be able call updateStickyRow
@@ -321,7 +325,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             }
             const prevColumnWidths = this.getColumnWidths(prevProps);
             const columnWidths = this.getColumnWidths(this.props);
-            if (!isEqual(prevColumnWidths, columnWidths)) {
+            if (!isEqual(prevColumnWidths, columnWidths) && !this.waitingForFirstExecution) {
                 if (this.columnApi) {
                     const columnWidthsByField = convertColumnWidthsToMap(
                         columnWidths,
@@ -341,6 +345,9 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
                         this.resetColumnsWidthToDefault(this.columnApi, columns);
                     }
                 }
+            }
+            if (agGridDataSourceUpdateNeeded) {
+                this.updateAGGridDataSource();
             }
         });
 
@@ -1083,7 +1090,10 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             return; // only update the height once the user is done setting the column size
         }
 
-        this.updateDesiredHeight(this.state.execution.executionResult);
+        const executionResult = this.getExecutionResult();
+        if (executionResult) {
+            this.updateDesiredHeight(executionResult);
+        }
 
         if (this.isManualResizing(columnEvent)) {
             if (this.hasColumnWidths()) {

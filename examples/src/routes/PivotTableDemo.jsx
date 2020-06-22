@@ -27,41 +27,59 @@ export const PivotTableDemo = () => (
 
         <hr className="separator" />
 
-        <h2 id="measures-row-attributes-and-column-attributes">Example of Presorted Pivot Table</h2>
-        <ExampleWithSource for={() => <PivotTableSortingExample />} source={PivotTableSortingExampleSRC} />
-
+        <h2>Example of presorted pivot table</h2>
+        <div id="measures-row-attributes-and-column-attributes">
+            <ExampleWithSource
+                for={() => <PivotTableSortingExample />}
+                source={PivotTableSortingExampleSRC}
+            />
+        </div>
         <hr className="separator" />
 
-        <h2 id="table-with-totals">Example of Pivot Table with Totals</h2>
-        <ExampleWithSource for={() => <PivotTableTotalsExample />} source={PivotTableTotalsExampleSRC} />
-
+        <h2>Example of pivot table with totals</h2>
+        <div id="table-with-totals">
+            <ExampleWithSource for={() => <PivotTableTotalsExample />} source={PivotTableTotalsExampleSRC} />
+        </div>
         <hr className="separator" />
 
-        <h2 id="table-with-drill-events">Example of Drill Event</h2>
-        <ExampleWithSource for={() => <PivotTableDrillExample />} source={PivotTableDrillExampleSRC} />
-
+        <h2>Example of drill event</h2>
+        <div id="table-with-drill-events">
+            <ExampleWithSource for={() => <PivotTableDrillExample />} source={PivotTableDrillExampleSRC} />
+        </div>
         <hr className="separator" />
 
-        <h2 id="table-with-row-grouping">Example of rows grouping</h2>
-        <ExampleWithSource
-            for={() => <PivotTableRowGroupingExample />}
-            source={PivotTableRowGroupingExampleSRC}
-        />
+        <h2>Example of rows grouping</h2>
+        <div id="table-with-row-grouping">
+            <ExampleWithSource
+                for={() => <PivotTableRowGroupingExample />}
+                source={PivotTableRowGroupingExampleSRC}
+            />
+        </div>
+        <hr className="separator" />
 
-        <h2 id="table-with-subtotals">Example of subtotals</h2>
-        <ExampleWithSource
-            for={() => <PivotTableSubtotalsExample />}
-            source={PivotTableSubtotalsExampleSRC}
-        />
+        <h2>Example of subtotals</h2>
+        <div id="table-with-subtotals">
+            <ExampleWithSource
+                for={() => <PivotTableSubtotalsExample />}
+                source={PivotTableSubtotalsExampleSRC}
+            />
+        </div>
+        <hr className="separator" />
 
-        <h2 id="table-with-sort-aggregation">Example of sort with aggregation</h2>
-        <ExampleWithSource
-            for={() => <PivotTableSortingAggregationExample />}
-            source={PivotTableSortingAggregationExampleSRC}
-        />
+        <h2>Example of sort with aggregation</h2>
+        <div id="table-with-sort-aggregation">
+            <ExampleWithSource
+                for={() => <PivotTableSortingAggregationExample />}
+                source={PivotTableSortingAggregationExampleSRC}
+            />
+        </div>
+        <hr className="separator" />
 
-        <h2 id="table-with-column-sizing">Example of table column sizing</h2>
-        <ExampleWithSource for={() => <PivotTableSizingExample />} source={PivotTableSizingExampleSRC} />
+        <h2>Example of table column sizing</h2>
+        <div id="table-with-column-sizing">
+            <ExampleWithSource for={() => <PivotTableSizingExample />} source={PivotTableSizingExampleSRC} />
+        </div>
+        <hr className="separator" />
 
         <h2 id="table-with-column-sizing">Example of table grow to fit container</h2>
         <ExampleWithSource
@@ -69,7 +87,7 @@ export const PivotTableDemo = () => (
             source={PivotTableColumnsGrowToFitExampleSRC}
         />
 
-        <h2 id="table-with-column-sizing">Example of Pivot Table with Manual Resizing</h2>
+        <h2 id="table-with-column-sizing">Example of pivot table with manual resizing</h2>
         <ExampleWithSource
             for={() => <PivotTableManualResizingExample />}
             source={PivotTableManualResizingExampleSRC}

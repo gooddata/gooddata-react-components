@@ -47,14 +47,21 @@ import { setPivotTableUiConfig } from "../../../utils/uiConfigHelpers/pivotTable
 import { createInternalIntl } from "../../../utils/internalIntlProvider";
 import { DEFAULT_PIVOT_TABLE_UICONFIG } from "../../../constants/uiConfig";
 import { AbstractPluggableVisualization } from "../AbstractPluggableVisualization";
-import { getReferencePointWithSupportedProperties } from "../../../utils/propertiesHelper";
+import {
+    getColumnWidthsFromProperties,
+    getReferencePointWithSupportedProperties,
+} from "../../../utils/propertiesHelper";
 import { VisualizationEnvironment } from "../../../../components/uri/Visualization";
 import { VisualizationTypes } from "../../../../constants/visualizationTypes";
 import { IPivotTableProps, PivotTable } from "../../../../components/core/PivotTable";
 import { generateDimensions } from "../../../../helpers/dimensions";
 import { DEFAULT_LOCALE } from "../../../../constants/localization";
 import { DASHBOARDS_ENVIRONMENT } from "../../../constants/properties";
-import { IColumnSizing, IMenu, IPivotTableConfig } from "../../../../interfaces/PivotTable";
+import { ColumnWidthItem, IMenu, IPivotTableConfig } from "../../../../interfaces/PivotTable";
+import { adaptReferencePointWidthItemsToPivotTable } from "./widthItemsHelpers";
+import { PIVOT_TABLE_SUPPORTED_PROPERTIES } from "../../../constants/supportedProperties";
+
+import { getTableConfigFromFeatureFlags } from "../../../../helpers/featureFlags";
 
 export const getColumnAttributes = (buckets: IBucket[]): IBucketItem[] => {
     return getItemsFromBuckets(
@@ -283,6 +290,9 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
         this.onExportReady = props.callbacks.onExportReady && this.onExportReady.bind(this);
         this.environment = props.environment;
         this.featureFlags = props.featureFlags || {};
+        this.onColumnResized = this.onColumnResized.bind(this);
+        this.handlePushData = this.handlePushData.bind(this);
+        this.supportedPropertiesList = PIVOT_TABLE_SUPPORTED_PROPERTIES;
     }
 
     public unmount() {
@@ -316,6 +326,8 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
                         previousReferencePoint && getRowAttributes(previousReferencePoint.buckets);
 
                     const columnAttributes = getColumnAttributes(buckets);
+                    const previousColumnAttributes =
+                        previousReferencePoint && getColumnAttributes(previousReferencePoint.buckets);
 
                     const totals = getTotalsFromBucket(buckets, BucketNames.ATTRIBUTE);
 
@@ -338,11 +350,37 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
                         },
                     ]);
 
+                    const filters: IBucketFilter[] = referencePointDraft.filters
+                        ? flatMap(referencePointDraft.filters.items, item => item.filters)
+                        : [];
+
                     const originalSortItems: AFM.SortItem[] = get(
                         referencePointDraft.properties,
                         "sortItems",
                         [],
                     );
+                    const originalColumnWidths: ColumnWidthItem[] = get(
+                        referencePointDraft.properties,
+                        "controls.columnWidths",
+                        [],
+                    );
+                    const columnWidths = adaptReferencePointWidthItemsToPivotTable(
+                        originalColumnWidths,
+                        measures,
+                        rowAttributes,
+                        columnAttributes,
+                        previousRowAttributes ? previousRowAttributes : [],
+                        previousColumnAttributes ? previousColumnAttributes : [],
+                        filters,
+                    );
+                    const controlsObj =
+                        this.featureFlags.enableTableColumnsManualResizing || columnWidths.length > 0
+                            ? {
+                                  controls: {
+                                      columnWidths,
+                                  },
+                              }
+                            : {};
 
                     referencePointDraft.properties = {
                         sortItems: addDefaultSort(
@@ -352,12 +390,11 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
                                 rowAttributes,
                                 columnAttributes,
                             ),
-                            referencePointDraft.filters
-                                ? flatMap(referencePointDraft.filters.items, item => item.filters)
-                                : [],
+                            filters,
                             rowAttributes,
                             previousRowAttributes,
                         ),
+                        ...controlsObj,
                     };
 
                     setPivotTableUiConfig(referencePointDraft, this.intl, VisualizationTypes.TABLE);
@@ -397,14 +434,7 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
             const { resultSpec, locale, custom, dimensions, config } = options;
             const { height } = dimensions;
             const { drillableItems } = custom;
-            const {
-                afterRender,
-                onError,
-                onLoadingChanged,
-                pushData,
-                onDrill,
-                onFiredDrillEvent,
-            } = this.callbacks;
+            const { afterRender, onError, onLoadingChanged, onDrill, onFiredDrillEvent } = this.callbacks;
 
             const resultSpecWithDimensions: AFM.IResultSpec = {
                 ...resultSpec,
@@ -420,12 +450,19 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
                       sorts,
                   };
 
+            const columnWidths: ColumnWidthItem[] = getColumnWidthsFromProperties(visualizationProperties);
+
             const rowsBucket = mdObject.buckets.find(
                 bucket => bucket.localIdentifier === BucketNames.ATTRIBUTE,
             );
             const totals: VisualizationObject.IVisualizationTotal[] = (rowsBucket && rowsBucket.totals) || [];
 
-            const updatedConfig = this.enrichConfigWithColumnSizing(this.enrichConfigWithMenu(config));
+            const updatedConfig = getTableConfigFromFeatureFlags(
+                this.enrichConfigWithMenu(config),
+                this.featureFlags,
+                this.environment === DASHBOARDS_ENVIRONMENT,
+                columnWidths,
+            );
             const pivotTableProps = {
                 projectId: this.projectId,
                 drillableItems,
@@ -439,12 +476,16 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
                 resultSpec: resultSpecWithSorts,
                 afterRender,
                 onLoadingChanged,
-                pushData,
+                pushData: this.handlePushData,
                 onError,
                 onExportReady: this.onExportReady,
                 LoadingComponent: null as any,
                 ErrorComponent: null as any,
                 intl: this.intl,
+            };
+            const pivotTablePropsFromFeatureFlags = {
+                ...pivotTableProps,
+                ...this.getPivotTablePropsFromFeatureFlags(),
             };
 
             if (this.environment === DASHBOARDS_ENVIRONMENT) {
@@ -459,7 +500,7 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
                                     textAlign: "left",
                                 };
                                 const extendedPivotTableProps = this.getExtendedPivotTableProps(
-                                    pivotTableProps,
+                                    pivotTablePropsFromFeatureFlags,
                                     {
                                         ...updatedConfig,
                                         maxHeight: clientHeight,
@@ -472,7 +513,7 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
                                         style={pivotWrapperStyle}
                                         className="gd-table-dashboard-wrapper"
                                     >
-                                        <PivotTable {...extendedPivotTableProps} height={usedHeight} />
+                                        {this.createTable({ ...extendedPivotTableProps, height: usedHeight })}
                                     </div>
                                 );
                             }}
@@ -485,10 +526,13 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
                 render(
                     <ReactMeasure client={true}>
                         {({ measureRef, contentRect }: any) => {
-                            const extendedPivotTableProps = this.getExtendedPivotTableProps(pivotTableProps, {
-                                ...updatedConfig,
-                                maxHeight: contentRect.client.height,
-                            });
+                            const extendedPivotTableProps = this.getExtendedPivotTableProps(
+                                pivotTablePropsFromFeatureFlags,
+                                {
+                                    ...updatedConfig,
+                                    maxHeight: contentRect.client.height,
+                                },
+                            );
 
                             return (
                                 <div
@@ -496,7 +540,7 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
                                     style={{ height: 328, textAlign: "left" }}
                                     className="gd-table-dashboard-wrapper"
                                 >
-                                    <PivotTable {...extendedPivotTableProps} />
+                                    {this.createTable(extendedPivotTableProps)}
                                 </div>
                             );
                         }}
@@ -504,9 +548,16 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
                     document.querySelector(this.element),
                 );
             } else {
-                render(<PivotTable {...pivotTableProps} />, document.querySelector(this.element));
+                render(
+                    this.createTable(pivotTablePropsFromFeatureFlags),
+                    document.querySelector(this.element),
+                );
             }
         }
+    }
+
+    protected createTable(props: IPivotTableProps) {
+        return <PivotTable {...props} />;
     }
 
     protected onExportReady(exportResult: VisEvents.IExportFunction) {
@@ -523,7 +574,6 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
                 "properties",
                 {},
             ) as IVisualizationProperties;
-
             // we need to handle cases when attribute previously bearing the default sort is no longer available
             const sanitizedProperties = properties.sortItems
                 ? {
@@ -560,29 +610,53 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
         return merge({ menu }, config);
     }
 
-    private enrichConfigWithColumnSizing(config: IPivotTableConfig): IPivotTableConfig {
-        const result = this.enrichConfigWithAutosize(config);
-        return this.enrichConfigWithGrowToFit(result);
+    private getMergedProperties(newProperties: any): IVisualizationProperties {
+        const properties: IVisualizationProperties = get(
+            this.visualizationProperties,
+            "properties",
+            {},
+        ) as IVisualizationProperties;
+
+        return {
+            properties: {
+                ...properties,
+                ...newProperties,
+            },
+        };
     }
 
-    private enrichConfigWithAutosize(config: IPivotTableConfig): IPivotTableConfig {
-        if (!this.featureFlags.enableTableColumnsAutoResizing) {
-            return config;
-        }
+    private onColumnResized(columnWidths: ColumnWidthItem[]) {
+        const { pushData } = this.callbacks;
 
-        const columnSizing: IColumnSizing = { defaultWidth: "viewport" };
-        return merge(config, { columnSizing });
+        pushData(
+            this.getMergedProperties({
+                controls: {
+                    columnWidths,
+                },
+            }),
+        );
     }
 
-    private enrichConfigWithGrowToFit(config: IPivotTableConfig): IPivotTableConfig {
-        if (this.environment === DASHBOARDS_ENVIRONMENT) {
-            if (!this.featureFlags.enableTableColumnsGrowToFit) {
-                return config;
-            }
-            const columnSizing: IColumnSizing = merge(config.columnSizing, { growToFit: true });
-            return merge(config, { columnSizing });
+    private handlePushData(data: any) {
+        const { pushData } = this.callbacks;
+        if (data && data.properties && data.properties.sortItems) {
+            pushData(
+                this.getMergedProperties({
+                    sortItems: data.properties.sortItems,
+                }),
+            );
+        } else {
+            pushData(data);
+        }
+    }
+
+    private getPivotTablePropsFromFeatureFlags() {
+        if (this.featureFlags.enableTableColumnsManualResizing) {
+            return {
+                onColumnResized: this.onColumnResized,
+            };
         }
 
-        return config;
+        return {};
     }
 }

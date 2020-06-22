@@ -18,6 +18,7 @@ test("should display sorted graphs", async t => {
     const dynamicSortingSumOfStacks = Selector(".s-dynamic-sorting .s-sum-of-stacks");
     const dynamicSortingStateElement = Selector(".s-dynamic-sorting .s-state-element");
     const dynamicSortingDateElement = Selector(".s-dynamic-sorting .s-date-element");
+    const dynamicSortingSeveralElement = Selector(".s-dynamic-sorting .s-several-element");
     const dynamicSortingMulti = Selector(".s-dynamic-sorting .s-multi");
 
     const dynamicSortingAscending = Selector(".s-dynamic-sorting .s-ascending");
@@ -74,6 +75,14 @@ test("should display sorted graphs", async t => {
         .click(dynamicSortingAscending)
         .expect(dynamicSortingChartLegendLabels.textContent)
         .eql("TexasNew YorkFloridaAlabamaCalifornia")
+
+        // dynamic several element sorting
+        .click(dynamicSortingSeveralElement)
+        .click(dynamicSortingAscending)
+        .expect(dynamicSortingChartLegendLabels.textContent)
+        .eql("TexasNew YorkFloridaAlabamaCalifornia")
+        .expect(dynamicSortingChartXAxisLabels.textContent)
+        .eql("DecAugMayMarOctNovFebSepJulJunAprJan")
 
         // dynamic multi sorting
         .click(dynamicSortingMulti)

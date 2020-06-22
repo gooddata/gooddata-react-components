@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 /* eslint-disable react/jsx-closing-tag-location */
 import React, { Component } from "react";
 import { ColumnChart, Model } from "@gooddata/react-components";
@@ -117,6 +117,21 @@ export class DynamicSortingExample extends Component {
                         dir,
                     )} order.`,
                 sortBy: dir => [
+                    Model.measureSortItem(totalSalesIdentifier, dir).attributeLocators({
+                        attributeIdentifier: monthDateIdentifier,
+                        element: monthDateIdentifierJanuary,
+                    }),
+                ],
+            },
+            {
+                key: "several-element",
+                label: "Combine several sorting",
+                description: dir =>
+                    `The column stacks (states) are sorted by the value of Total Sales and Sum of Month(Date) in the January column in ${this.getOrderLabel(
+                        dir,
+                    )} order.`,
+                sortBy: dir => [
+                    Model.attributeSortItem(monthDateIdentifier, dir).aggregation("sum"),
                     Model.measureSortItem(totalSalesIdentifier, dir).attributeLocators({
                         attributeIdentifier: monthDateIdentifier,
                         element: monthDateIdentifierJanuary,
