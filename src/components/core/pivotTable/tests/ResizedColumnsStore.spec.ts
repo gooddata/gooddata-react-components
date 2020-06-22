@@ -3,7 +3,7 @@ import { ResizedColumnsStore } from "../ResizedColumnsStore";
 import { ColumnEventSourceType, ColumnWidthItem } from "../../../../interfaces/PivotTable";
 import { Execution } from "@gooddata/typings";
 import { ColDef, Column } from "ag-grid-community";
-import { MEASURE_COLUMN } from "../agGridConst";
+import { MEASURE_COLUMN, ROW_ATTRIBUTE_COLUMN } from "../agGridConst";
 import { MANUALLY_SIZED_MAX_WIDTH, MIN_WIDTH } from "../agGridColumnSizing";
 
 describe("ResizedColumnsStore", () => {
@@ -280,7 +280,7 @@ describe("ResizedColumnsStore", () => {
     });
 
     describe("removeFromManuallyResizedColumn", () => {
-        it("should remove from manually resized column map by colId", () => {
+        it("should remove measure from manually resized column map by colId", () => {
             const resizedColumnsStore: any = new ResizedColumnsStore();
             resizedColumnsStore.manuallyResizedColumns = {
                 m_0: { width: 200, source: "uiColumnDragged" },
@@ -289,11 +289,34 @@ describe("ResizedColumnsStore", () => {
             const columnMock = getFakeColumn({
                 colId: "m_0",
                 type: MEASURE_COLUMN,
+                suppressSizeToFit: true,
             });
             resizedColumnsStore.removeFromManuallyResizedColumn(columnMock);
             const result = resizedColumnsStore.manuallyResizedColumns.m_0;
             expect(result).toBeUndefined();
+            expect(columnMock.getColDef().suppressSizeToFit).toBeFalsy();
         });
+
+        it.each([[null], [150]])(
+            "should remove row attribute from manually resized column map by colId when allMeasuresWidth set %d",
+            (allMeasuresWidth: number) => {
+                const resizedColumnsStore: any = new ResizedColumnsStore();
+                resizedColumnsStore.manuallyResizedColumns = {
+                    m_0: { width: 200, source: "uiColumnDragged" },
+                    a_4DOTdf: { width: 200, source: "uiColumnDragged" },
+                };
+                resizedColumnsStore.allMeasureColumnWidth = allMeasuresWidth;
+                const columnMock = getFakeColumn({
+                    colId: "a_4DOTdf",
+                    type: ROW_ATTRIBUTE_COLUMN,
+                    suppressSizeToFit: true,
+                });
+                resizedColumnsStore.removeFromManuallyResizedColumn(columnMock);
+                const result = resizedColumnsStore.manuallyResizedColumns.a_4DOTdf;
+                expect(result).toBeUndefined();
+                expect(columnMock.getColDef().suppressSizeToFit).toBeFalsy();
+            },
+        );
 
         it("should set auto width when colId does not exists and all measure is used", () => {
             const resizedColumnsStore: any = new ResizedColumnsStore();
