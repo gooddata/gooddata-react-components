@@ -2,7 +2,7 @@ const DEFAULT_SCENARIO_CONFIG = {
     readyEvent: "GDC_GEO_CANVAS_READY",
     // Sometimes, Color/Position of labels in Mapbox is rendered incorrectly.
     // BackstopJS would wait for 200 milliseconds before taking a screenshot
-    delay: 200,
+    delay: 500,
 };
 
 const chartStories = [
