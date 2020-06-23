@@ -100,6 +100,7 @@ import {
     getColumnIdentifier,
     sanitizeFingerprint,
     isMeasureColumn,
+    isColumnDisplayed,
 } from "./pivotTable/agGridUtils";
 import ColumnGroupHeader from "./pivotTable/ColumnGroupHeader";
 import ColumnHeader from "./pivotTable/ColumnHeader";
@@ -531,13 +532,13 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
         return new Promise(async resolve => {
             const newColumnIds = difference(autoWidthColumnIds, previouslyResizedColumnIds);
-            await this.autoresizeColumnsByColumnId(columnApi, newColumnIds);
+            this.autoresizeColumnsByColumnId(columnApi, newColumnIds);
             await sleep(AGGRID_RENDER_NEW_COLUMNS_TIMEOUT);
             resolve(this.autoresizeVisibleColumns(columnApi, autoWidthColumnIds, false));
         });
     };
 
-    private async autoresizeColumnsByColumnId(columnApi: ColumnApi, columnIds: string[]) {
+    private autoresizeColumnsByColumnId(columnApi: ColumnApi, columnIds: string[]) {
         setColumnMaxWidth(columnApi, columnIds, AUTO_SIZED_MAX_WIDTH);
 
         columnApi.autoSizeColumns(columnIds);
@@ -1035,7 +1036,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         return DEFAULT_COLUMN_WIDTH;
     };
 
-    private async resetResizedColumn(column: Column) {
+    private resetResizedColumn(column: Column) {
         const id = getColumnIdentifier(column);
 
         if (this.resizedColumnsStore.isColumnManuallyResized(column)) {
@@ -1044,8 +1045,12 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
         if (this.isColumnAutoResized(id)) {
             this.columnApi.setColumnWidth(column, this.autoResizedColumns[id].width);
-        } else {
-            await this.autoresizeColumnsByColumnId(this.columnApi, this.getColumnIds([column]));
+            return;
+        }
+
+        this.autoresizeColumnsByColumnId(this.columnApi, this.getColumnIds([column]));
+        if (isColumnDisplayed(this.columnApi.getAllDisplayedVirtualColumns(), column)) {
+            // skip columns out of viewport because these can not be autoresized
             this.resizedColumnsStore.addToManuallyResizedColumn(column);
         }
     }
