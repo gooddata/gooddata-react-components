@@ -1066,18 +1066,14 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         }
 
         if (this.isManualResizing(columnEvent)) {
-            if (this.hasColumnWidths()) {
-                this.numberOfColumnResizedCalls++;
-                await sleep(COLUMN_RESIZE_TIMEOUT);
+            this.numberOfColumnResizedCalls++;
+            await sleep(COLUMN_RESIZE_TIMEOUT);
 
-                if (this.numberOfColumnResizedCalls === UIClick.DOUBLE_CLICK) {
-                    this.numberOfColumnResizedCalls = 0;
-                    await this.onColumnsManualReset(columnEvent.columns);
-                } else if (this.numberOfColumnResizedCalls === UIClick.CLICK) {
-                    this.numberOfColumnResizedCalls = 0;
-                    this.onColumnsManualResized(columnEvent.columns);
-                }
-            } else {
+            if (this.numberOfColumnResizedCalls === UIClick.DOUBLE_CLICK) {
+                this.numberOfColumnResizedCalls = 0;
+                await this.onColumnsManualReset(columnEvent.columns);
+            } else if (this.numberOfColumnResizedCalls === UIClick.CLICK) {
+                this.numberOfColumnResizedCalls = 0;
                 this.onColumnsManualResized(columnEvent.columns);
             }
         }
