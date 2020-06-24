@@ -18,7 +18,7 @@ import invariant = require("invariant");
 
 import {
     IAttributeColumnWidthItem,
-    AbsoluteColumnWidth,
+    IAbsoluteColumnWidth,
     IMeasureColumnWidthItem,
     isMeasureLocatorItem,
     isAttributeColumnWidthItem,
@@ -75,7 +75,7 @@ export const convertColumnWidthsToMap = (
 const getAttributeColumnWidthItemFieldAndWidth = (
     columnWidthItem: IAttributeColumnWidthItem,
     attributeHeaders: Execution.IAttributeHeader[],
-): [string, AbsoluteColumnWidth] => {
+): [string, IAbsoluteColumnWidth] => {
     const localIdentifier = columnWidthItem.attributeColumnWidthItem.attributeIdentifier;
 
     const attributeHeader = attributeHeaders.find(
@@ -200,7 +200,10 @@ export const getColumnWidthsFromMap = (
 
 export const defaultWidthValidator = (width: ColumnWidth): ColumnWidth => {
     if (isAbsoluteColumnWidth(width)) {
-        return Math.min(Math.max(width, MIN_WIDTH), MANUALLY_SIZED_MAX_WIDTH);
+        return {
+            ...width,
+            value: Math.min(Math.max(width.value, MIN_WIDTH), MANUALLY_SIZED_MAX_WIDTH),
+        };
     }
     return width;
 };
@@ -209,7 +212,7 @@ export const enrichColumnDefinitionsWithWidths = (
     columnDefinitions: IGridHeader[],
     resizedColumnsStore: ResizedColumnsStore,
     autoResizedColumns: IResizedColumns,
-    defaultColumnWidth: AbsoluteColumnWidth,
+    defaultColumnWidth: number,
     isGrowToFitEnabled: boolean,
     growToFittedColumns: IResizedColumns = {},
 ): IGridHeader[] => {
@@ -225,7 +228,7 @@ export const enrichColumnDefinitionsWithWidths = (
 
             if (manualSize) {
                 columnDefinition.width = manualSize.width;
-                columnDefinition.suppressSizeToFit = true;
+                columnDefinition.suppressSizeToFit = !manualSize.allowGrowToFit;
             } else {
                 columnDefinition.suppressSizeToFit = false;
                 columnDefinition.width = autoResizeSize ? autoResizeSize.width : defaultColumnWidth;
@@ -257,9 +260,9 @@ export const syncSuppressSizeToFitOnColumns = (
     const columns = columnApi.getAllColumns();
 
     columns.forEach(col => {
-        const resizedColumn = resizedColumnsStore.isColumnManuallyResized(col);
+        const resizedColumn = resizedColumnsStore.getManuallyResizedColumn(col);
         resizedColumn
-            ? (col.getColDef().suppressSizeToFit = true)
+            ? (col.getColDef().suppressSizeToFit = !resizedColumn.allowGrowToFit)
             : (col.getColDef().suppressSizeToFit = false);
     });
 };
@@ -302,3 +305,5 @@ export const resizeAllMeasuresColumns = (
     });
     resizedColumnsStore.addAllMeasureColumns(columnWidth, allColumns);
 };
+
+export const getAllowGrowToFitProp = (allowGrowToFit: boolean) => (allowGrowToFit ? { allowGrowToFit } : {});

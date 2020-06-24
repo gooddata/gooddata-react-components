@@ -1045,13 +1045,15 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
         if (this.isColumnAutoResized(id)) {
             this.columnApi.setColumnWidth(column, this.autoResizedColumns[id].width);
+            column.getColDef().suppressSizeToFit = false;
             return;
         }
 
         this.autoresizeColumnsByColumnId(this.columnApi, this.getColumnIds([column]));
         if (isColumnDisplayed(this.columnApi.getAllDisplayedVirtualColumns(), column)) {
             // skip columns out of viewport because these can not be autoresized
-            this.resizedColumnsStore.addToManuallyResizedColumn(column);
+            this.resizedColumnsStore.addToManuallyResizedColumn(column, true);
+            column.getColDef().suppressSizeToFit = false;
         }
     }
 
@@ -1079,14 +1081,10 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         }
     };
 
-    private isAllMeasureResetOperation() {
-        return this.isMetaOrCtrlKeyPressed;
-    }
-
     private onColumnsManualReset = async (columns: Column[]) => {
         let columnsToReset = columns;
 
-        if (this.isAllMeasureResetOperation()) {
+        if (this.isAllMeasureResizeOperation(columns)) {
             this.resizedColumnsStore.removeAllMeasureColumns();
             columnsToReset = this.columnApi.getAllColumns().filter(col => isMeasureColumn(col));
         }

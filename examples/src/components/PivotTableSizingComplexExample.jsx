@@ -80,6 +80,7 @@ export class PivotTableSizingComplexExample extends Component {
     state = {
         columnWidths: [],
         autoResize: false,
+        growToFit: false,
         gridTableCount: 0,
     };
 
@@ -101,6 +102,13 @@ export class PivotTableSizingComplexExample extends Component {
         // change also PivotTable key so by this checkbox we simulate init render
         this.setState(prevState => ({
             autoResize: !prevState.autoResize,
+            gridTableCount: prevState.gridTableCount + 1,
+        }));
+    };
+
+    onGrowToFitChanged = () => {
+        this.setState(prevState => ({
+            growToFit: !prevState.growToFit,
             gridTableCount: prevState.gridTableCount + 1,
         }));
     };
@@ -128,7 +136,7 @@ export class PivotTableSizingComplexExample extends Component {
                         Change all measures width
                     </button>
 
-                    <label style={{ paddingLeft: 50 }}>
+                    <label style={{ paddingLeft: 20 }}>
                         Auto resize:
                         <input
                             className="s-pivot-table-sizing-complex-autoresize-checkbox"
@@ -138,9 +146,20 @@ export class PivotTableSizingComplexExample extends Component {
                             onChange={this.onAutoResizeChanged}
                         />
                     </label>
+
+                    <label style={{ paddingLeft: 20 }}>
+                        Grow to Fit:
+                        <input
+                            className="s-pivot-table-sizing-complex-grow-to-fit-checkbox"
+                            name="grow-to-fit-checkbox"
+                            type="checkbox"
+                            checked={this.state.growToFit}
+                            onChange={this.onGrowToFitChanged}
+                        />
+                    </label>
                 </div>
                 <div
-                    style={{ height: 300, marginTop: 20, resize: "both", overflow: "auto" }}
+                    style={{ width: 1000, height: 300, marginTop: 20, resize: "both", overflow: "auto" }}
                     className="s-pivot-table-sizing-complex"
                 >
                     <PivotTable
@@ -153,7 +172,7 @@ export class PivotTableSizingComplexExample extends Component {
                             columnSizing: {
                                 columnWidths: [...this.state.columnWidths],
                                 defaultWidth: this.state.autoResize ? "viewport" : "unset",
-                                growToFit: false,
+                                growToFit: this.state.growToFit,
                             },
                         }}
                         pageSize={20}

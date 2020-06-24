@@ -50,7 +50,9 @@ describe("getTableConfigFromFeatureFlags", () => {
     const columnWidths = [
         {
             attributeColumnWidthItem: {
-                width: 740,
+                width: {
+                    value: 740,
+                },
                 attributeIdentifier: "294512a6b2ed4be8bd3948dd14db1950",
             },
         },
