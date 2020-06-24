@@ -8,21 +8,12 @@ describe("widthItems", () => {
             const expected: IAttributeColumnWidthItem = {
                 attributeColumnWidthItem: {
                     attributeIdentifier: "foo",
-                    width: 100,
+                    width: {
+                        value: 100,
+                    },
                 },
             };
             expect(attributeColumnWidthItem("foo", 100)).toMatchObject(expected);
-        });
-
-        it("should return a simple attribute column width item with aggregation", () => {
-            const expected: IAttributeColumnWidthItem = {
-                attributeColumnWidthItem: {
-                    attributeIdentifier: "foo",
-                    width: 100,
-                    aggregation: "sum",
-                },
-            };
-            expect(attributeColumnWidthItem("foo", 100).aggregation("sum")).toMatchObject(expected);
         });
     });
 
@@ -30,7 +21,9 @@ describe("widthItems", () => {
         it("should return a simple measure column width item", () => {
             const expected: IMeasureColumnWidthItem = {
                 measureColumnWidthItem: {
-                    width: 100,
+                    width: {
+                        value: 100,
+                    },
                     locators: [
                         {
                             measureLocatorItem: {
@@ -46,7 +39,9 @@ describe("widthItems", () => {
         it("should return a measure column width item with attribute locators", () => {
             const expected: IMeasureColumnWidthItem = {
                 measureColumnWidthItem: {
-                    width: 100,
+                    width: {
+                        value: 100,
+                    },
                     locators: [
                         {
                             attributeLocatorItem: {

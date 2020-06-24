@@ -16,7 +16,9 @@ const ALL_MEASURE_WIDTH = 300;
 
 const measureColumnWidthItemSimple = {
     measureColumnWidthItem: {
-        width: MEASURE_WIDTH,
+        width: {
+            value: MEASURE_WIDTH,
+        },
         locators: [
             {
                 measureLocatorItem: {
@@ -29,13 +31,17 @@ const measureColumnWidthItemSimple = {
 
 const allMeasureColumnWidthItem = {
     measureColumnWidthItem: {
-        width: ALL_MEASURE_WIDTH,
+        width: {
+            value: ALL_MEASURE_WIDTH,
+        },
     },
 };
 
 const measureColumnWidthItemWithAttr = {
     measureColumnWidthItem: {
-        width: MEASURE_WIDTH,
+        width: {
+            value: MEASURE_WIDTH,
+        },
         locators: [
             {
                 attributeLocatorItem: {
@@ -53,7 +59,7 @@ const measureColumnWidthItemWithAttr = {
 };
 const attributeColumnWidthItem = {
     attributeColumnWidthItem: {
-        width: ATTRIBUTE_WIDTH,
+        width: { value: ATTRIBUTE_WIDTH },
         attributeIdentifier: ATTRIBUTE_1.visualizationAttribute.localIdentifier,
     },
 };
@@ -77,7 +83,9 @@ storiesOf("Core components/PivotTable/ManualResizing/Simple table", module)
                                 columnWidths: [
                                     {
                                         measureColumnWidthItem: {
-                                            width: measureColumnWidth,
+                                            width: {
+                                                value: measureColumnWidth,
+                                            },
                                             locators: [
                                                 {
                                                     measureLocatorItem: {
@@ -89,7 +97,9 @@ storiesOf("Core components/PivotTable/ManualResizing/Simple table", module)
                                     },
                                     {
                                         attributeColumnWidthItem: {
-                                            width: attributeColumnWidth,
+                                            width: {
+                                                value: attributeColumnWidth,
+                                            },
                                             attributeIdentifier:
                                                 ATTRIBUTE_1.visualizationAttribute.localIdentifier,
                                         },
@@ -207,13 +217,13 @@ storiesOf("Core components/PivotTable/ManualResizing/Simple table", module)
                                     {
                                         measureColumnWidthItem: {
                                             ...measureColumnWidthItemSimple.measureColumnWidthItem,
-                                            width: 30, // Will be ignored and replaced by MIN_WIDTH limit
+                                            width: { value: 30 }, // Will be ignored and replaced by MIN_WIDTH limit
                                         },
                                     },
                                     {
                                         attributeColumnWidthItem: {
                                             ...attributeColumnWidthItem.attributeColumnWidthItem,
-                                            width: 3000, // Will be ignored and replaced by MAX_WIDTH limit
+                                            width: { value: 3000 }, // Will be ignored and replaced by MAX_WIDTH limit
                                         },
                                     },
                                 ],
@@ -236,7 +246,9 @@ storiesOf("Core components/PivotTable/ManualResizing/Table with column attr", mo
             const attributeWidth = attributeColumnWidth
                 ? {
                       attributeColumnWidthItem: {
-                          width: attributeColumnWidth,
+                          width: {
+                              value: attributeColumnWidth,
+                          },
                           attributeIdentifier: ATTRIBUTE_1.visualizationAttribute.localIdentifier,
                       },
                   }
@@ -245,7 +257,9 @@ storiesOf("Core components/PivotTable/ManualResizing/Table with column attr", mo
             const measureWidth = measureColumnWidth
                 ? {
                       measureColumnWidthItem: {
-                          width: measureColumnWidth,
+                          width: {
+                              value: measureColumnWidth,
+                          },
                           locators: [
                               {
                                   attributeLocatorItem: {

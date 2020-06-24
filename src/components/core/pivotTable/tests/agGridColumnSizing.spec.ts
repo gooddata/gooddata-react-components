@@ -11,7 +11,7 @@ import {
 import {
     ColumnWidthItem,
     ColumnEventSourceType,
-    AbsoluteColumnWidth,
+    IAbsoluteColumnWidth,
     IResizedColumns,
 } from "../../../../interfaces/PivotTable";
 import { IGridHeader } from "../agGridTypes";
@@ -57,7 +57,9 @@ describe("agGridColumnSizing", () => {
     const columnWidths: ColumnWidthItem[] = [
         {
             measureColumnWidthItem: {
-                width: 60,
+                width: {
+                    value: 60,
+                },
                 locators: [
                     {
                         measureLocatorItem: {
@@ -69,7 +71,9 @@ describe("agGridColumnSizing", () => {
         },
         {
             attributeColumnWidthItem: {
-                width: 400,
+                width: {
+                    value: 400,
+                },
                 attributeIdentifier: "a1",
             },
         },
@@ -131,31 +135,42 @@ describe("agGridColumnSizing", () => {
     const MIN_WIDTH = 100;
     const MAX_WIDTH = 300;
 
-    const widthValidator = (width: AbsoluteColumnWidth): AbsoluteColumnWidth => {
-        if (Number(width) === width) {
-            return Math.min(Math.max(width, MIN_WIDTH), MAX_WIDTH);
+    const widthValidator = (width: IAbsoluteColumnWidth): IAbsoluteColumnWidth => {
+        if (Number(width.value) === width.value) {
+            return {
+                ...width,
+                value: Math.min(Math.max(width.value, MIN_WIDTH), MAX_WIDTH),
+            };
         }
         return width;
     };
 
     const expectedColumnMap = {
         m_0: {
-            width: 60,
+            width: {
+                value: 60,
+            },
             source: ColumnEventSourceType.UI_DRAGGED,
         },
         a_4DOTdf: {
-            width: 400,
+            width: {
+                value: 400,
+            },
             source: ColumnEventSourceType.UI_DRAGGED,
         },
     };
 
     const expectedColumnMapValidated = {
         m_0: {
-            width: MIN_WIDTH,
+            width: {
+                value: MIN_WIDTH,
+            },
             source: ColumnEventSourceType.UI_DRAGGED,
         },
         a_4DOTdf: {
-            width: MAX_WIDTH,
+            width: {
+                value: MAX_WIDTH,
+            },
             source: ColumnEventSourceType.UI_DRAGGED,
         },
     };
@@ -184,7 +199,9 @@ describe("agGridColumnSizing", () => {
         it("should return correct ColumnWidthItem array for only column attribute", async () => {
             const columnAttributeColumnMap = {
                 a_4_1: {
-                    width: 400,
+                    width: {
+                        value: 400,
+                    },
                     source: ColumnEventSourceType.UI_DRAGGED,
                 },
             };
@@ -192,7 +209,9 @@ describe("agGridColumnSizing", () => {
             const expectedColumnWidths: ColumnWidthItem[] = [
                 {
                     measureColumnWidthItem: {
-                        width: 400,
+                        width: {
+                            value: 400,
+                        },
                         locators: [
                             {
                                 attributeLocatorItem: {

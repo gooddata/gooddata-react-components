@@ -2557,7 +2557,7 @@ const getBaseProjectSchema = (title, identifier) => {
                         columnWidths: [
                             {
                                 attributeColumnWidthItem: {
-                                    width: 100,
+                                    width: { value: 100 },
                                     attributeIdentifier: "3",
                                 },
                             }

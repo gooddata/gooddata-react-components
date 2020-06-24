@@ -45,30 +45,34 @@ export interface IResizedColumnsItem {
     source: ColumnEventSourceType;
 }
 
+export interface IManuallyResizedColumnsItem {
+    width: number;
+    source: ColumnEventSourceType;
+    allowGrowToFit?: boolean;
+}
+
 export interface IResizedColumns {
     [columnIdentifier: string]: IResizedColumnsItem;
 }
 
-export type ColumnWidthItem =
-    | IAttributeColumnWidthItem
-    | IMeasureColumnWidthItem
-    | IAllMeasureColumnWidthItem;
-export type AbsoluteColumnWidth = number;
-export type ColumnWidth = AbsoluteColumnWidth | "auto";
-
-export function isAbsoluteColumnWidth(columnWidth: ColumnWidth): columnWidth is AbsoluteColumnWidth {
-    return Number(columnWidth) === columnWidth;
+export function isAbsoluteColumnWidth(columnWidth: ColumnWidth): columnWidth is IAbsoluteColumnWidth {
+    return Number(columnWidth.value) === columnWidth.value;
+}
+export interface IAbsoluteColumnWidth {
+    value: number;
+    allowGrowToFit?: boolean;
 }
 
-export function isColumnWidthAuto(columnWidth: ColumnWidth): boolean {
-    return columnWidth === "auto";
+export interface IAutoColumnWidth {
+    value: "auto";
 }
+
+export type ColumnWidth = IAbsoluteColumnWidth | IAutoColumnWidth;
 
 export interface IAttributeColumnWidthItem {
     attributeColumnWidthItem: {
-        width: AbsoluteColumnWidth;
+        width: IAbsoluteColumnWidth;
         attributeIdentifier: AFM.Identifier;
-        aggregation?: "sum";
     };
 }
 
@@ -81,9 +85,14 @@ export interface IMeasureColumnWidthItem {
 
 export interface IAllMeasureColumnWidthItem {
     measureColumnWidthItem: {
-        width: AbsoluteColumnWidth;
+        width: IAbsoluteColumnWidth;
     };
 }
+
+export type ColumnWidthItem =
+    | IAttributeColumnWidthItem
+    | IMeasureColumnWidthItem
+    | IAllMeasureColumnWidthItem;
 
 type LocatorItem = IAttributeLocatorItem | AFM.IMeasureLocatorItem;
 interface IAttributeLocatorItem {
