@@ -26,6 +26,9 @@ const wrapperStyle: React.CSSProperties = { width: 900, height: 600 };
 
 const DEFAULT_CONFIG: IGeoConfig = {
     mapboxToken: process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN,
+    viewport: {
+        area: "continent_na",
+    },
 };
 
 const afterRender = () => console.log("GDC_GEO_CANVAS_READY"); // tslint:disable-line:no-console
@@ -61,22 +64,6 @@ storiesOf("Core components/GeoPushpinChart", module)
                 projectId: "storybook",
                 location: ATTRIBUTE_LOCATION_GEOCHART,
                 config: DEFAULT_CONFIG,
-            }),
-        ),
-    )
-    .add("with location and show unclustered pins", () =>
-        screenshotWrap(
-            renderGeoPushpinChart({
-                projectId: "storybook",
-                location: ATTRIBUTE_LOCATION_GEOCHART,
-                config: {
-                    ...DEFAULT_CONFIG,
-                    center: {
-                        lat: 36.800486,
-                        lng: -94.922363,
-                    },
-                    zoom: 6,
-                },
             }),
         ),
     )
@@ -416,7 +403,7 @@ storiesOf("Core components/GeoPushpinChart/Config/Color", module)
     );
 
 storiesOf("Core components/GeoPushpinChart/Config/Viewport", module)
-    .add("with North America viewport", () =>
+    .add("with Asia viewport", () =>
         screenshotWrap(
             renderGeoPushpinChart({
                 projectId: "storybook",
@@ -424,7 +411,7 @@ storiesOf("Core components/GeoPushpinChart/Config/Viewport", module)
                 config: {
                     ...DEFAULT_CONFIG,
                     viewport: {
-                        area: "continent_na",
+                        area: "continent_as",
                     },
                 },
             }),
@@ -444,25 +431,12 @@ storiesOf("Core components/GeoPushpinChart/Config/Viewport", module)
             }),
         ),
     )
-    .add("with Include all data viewport", () =>
-        screenshotWrap(
-            renderGeoPushpinChart({
-                projectId: "storybook",
-                location: ATTRIBUTE_LOCATION_GEOCHART,
-                config: {
-                    ...DEFAULT_CONFIG,
-                    viewport: {
-                        area: "auto",
-                    },
-                },
-            }),
-        ),
-    )
     .add("with disabled interactive and zoom control button", () => {
         const config: IGeoConfig = {
             ...DEFAULT_CONFIG,
             viewport: {
                 frozen: true,
+                area: "continent_na",
             },
         };
         return screenshotWrap(
