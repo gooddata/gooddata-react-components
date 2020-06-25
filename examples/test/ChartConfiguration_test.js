@@ -1,7 +1,8 @@
 // (C) 2007-2020 GoodData Corporation
 import { Selector } from "testcafe";
 import { config } from "./utils/config";
-import { loginUserAndNavigate } from "./utils/helpers";
+import { loginUserAndNavigate, getElementTexts } from "./utils/helpers";
+import { getTracker } from "./utils/chartHelpers";
 
 fixture("Chart configuration").beforeEach(loginUserAndNavigate(`${config.url}/advanced/chart-configuration`));
 
@@ -155,4 +156,34 @@ test("should be able to change configuration of dual axis chart and render them"
         .eql("-45M", "To set min scale value incorrectly")
         .expect(dualAxisBarChart.find(secondaryYAxisLabels).nth(11).textContent)
         .eql("75M", "To set max scale value incorrectly");
+});
+
+test("should be able to change configuration of bullet chart and render them", async t => {
+    const bulletChart = Selector(".s-visualization-bullet");
+    const valuePrimaryYAxisCssSelector = ".highcharts-yaxis-labels.s-highcharts-primary-yaxis text";
+    const loading = Selector(".s-loading");
+    const tooltip = Selector(tooltipCssSelector);
+
+    await t
+        .hover(bulletChart)
+        .expect(bulletChart.visible)
+        .ok()
+        .expect(loading.exists)
+        .notOk()
+        .expect(await getElementTexts(bulletChart.find(valuePrimaryYAxisCssSelector)))
+        .contains("100k", "1 400k")
+        .hover(await getTracker(bulletChart, 1, 1))
+        .wait(500)
+        .expect(tooltip.nth(0).textContent)
+        .eql("Montgomery")
+        .expect(tooltip.nth(1).textContent)
+        .eql("$1,406,548");
+
+    await t
+        .expect((await getTracker(bulletChart, 0, 0)).getAttribute("fill"))
+        .eql("rgb(195,49,73)")
+        .expect((await getTracker(bulletChart, 1, 1)).getAttribute("fill"))
+        .eql("rgb(137,34,51)")
+        .expect((await getTracker(bulletChart, 2, 0)).getAttribute("fill"))
+        .eql("rgb(217,220,226)");
 });
