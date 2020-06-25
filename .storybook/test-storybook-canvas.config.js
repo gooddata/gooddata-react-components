@@ -3,6 +3,7 @@ const DEFAULT_SCENARIO_CONFIG = {
     // Sometimes, Color/Position of labels in Mapbox is rendered incorrectly.
     // BackstopJS would wait for 200 milliseconds before taking a screenshot
     delay: 200,
+    misMatchThreshold: 0.9
 };
 
 const chartStories = [
