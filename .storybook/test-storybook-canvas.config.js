@@ -7,7 +7,6 @@ const DEFAULT_SCENARIO_CONFIG = {
 
 const chartStories = [
     "with location",
-    "with location and show unclustered pins",
     "with location and size",
     "with location, size and segmentBy",
     "with location and color",
@@ -36,9 +35,8 @@ const colorMappingStories = [
 ];
 
 const viewportStories = [
-    "with North America viewport",
+    "with Asia viewport",
     "with World viewport",
-    "with Include all data viewport",
     "with disabled interactive and zoom control button",
 ];
 

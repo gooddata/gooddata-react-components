@@ -12,7 +12,7 @@ import { onErrorHandler } from "../mocks";
 import "../../styles/scss/charts.scss";
 import "../../styles/scss/table.scss";
 import { GERMAN_SEPARATORS } from "../data/numberFormat";
-// import { ATTRIBUTE_TOOLTIP_GEOCHART } from "../data/geoChartComponentProps";
+import { ATTRIBUTE_TOOLTIP_GEOCHART } from "../data/geoChartComponentProps";
 
 const defaultFilter: AFM.IAbsoluteDateFilter = {
     absoluteDateFilter: {
@@ -24,7 +24,7 @@ const defaultFilter: AFM.IAbsoluteDateFilter = {
     },
 };
 
-// const afterRender = () => console.log("GDC_GEO_CANVAS_READY"); // tslint:disable-line:no-console
+const afterRender = () => console.log("GDC_GEO_CANVAS_READY"); // tslint:disable-line:no-console
 
 class DynamicVisualization extends React.Component<any, any> {
     private initialProps: IVisualizationProps = {
@@ -494,24 +494,27 @@ storiesOf("URI components", module)
             </div>,
         ),
     )
-    // .add("GeoPushpinChart example", () =>
-    //     screenshotWrap(
-    //         <div style={{ width: 800, height: 400 }}>
-    //             <Visualization
-    //                 projectId="storybook"
-    //                 identifier="pushpin-chart-location-size-color-segment-tooltip"
-    //                 config={{
-    //                     mapboxToken: process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN,
-    //                     tooltipText: ATTRIBUTE_TOOLTIP_GEOCHART,
-    //                 }}
-    //                 afterRender={afterRender}
-    //                 onError={onErrorHandler}
-    //                 LoadingComponent={null}
-    //                 ErrorComponent={null}
-    //             />
-    //         </div>,
-    //     ),
-    // )
+    .add("GeoPushpinChart example", () =>
+        screenshotWrap(
+            <div style={{ width: 800, height: 400 }}>
+                <Visualization
+                    projectId="storybook"
+                    identifier="pushpin-chart-location-size-color-segment-tooltip"
+                    config={{
+                        mapboxToken: process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN,
+                        tooltipText: ATTRIBUTE_TOOLTIP_GEOCHART,
+                        viewport: {
+                            area: "continent_na",
+                        },
+                    }}
+                    afterRender={afterRender}
+                    onError={onErrorHandler}
+                    LoadingComponent={null}
+                    ErrorComponent={null}
+                />
+            </div>,
+        ),
+    )
     .add("headline", () =>
         screenshotWrap(
             <div style={{ width: 800, height: 400 }}>
