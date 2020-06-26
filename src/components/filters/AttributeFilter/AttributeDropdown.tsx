@@ -431,7 +431,6 @@ export class AttributeDropdownWrapped extends React.PureComponent<
                 noItemsFound={isListReady && !items.length}
                 rowItem={<AttributeFilterItem />}
                 maxSelectionSize={MAX_SELECTION_SIZE}
-                width={this.getListWidth()}
                 itemHeight={ITEM_HEIGHT}
                 height={ITEM_HEIGHT * VISIBLE_ITEMS_COUNT}
                 onRangeChange={this.onRangeChange}

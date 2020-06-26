@@ -1402,10 +1402,10 @@
     rxjs "^5.5.6"
     uuid "^3.2.1"
 
-"@gooddata/goodstrap@^68.13.1":
-  version "68.13.1"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-68.13.1.tgz#73d8d02ce9390b1228ea0af605cde96929fab93c"
-  integrity sha512-eFKm8xJKDgaJkCJlVR7Dfo880FolQAFGrkUbJ/9c6smOspUYSrY+9BNXCpfUw4A0rgqbEGqcESP/LIzUoCgMlg==
+"@gooddata/goodstrap@68.11.0-alpha-tulean-master-2020-06-26T12-57-47-924Z":
+  version "68.11.0-alpha-tulean-master-2020-06-26T12-57-47-924Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-68.11.0-alpha-tulean-master-2020-06-26T12-57-47-924Z.tgz#2ee48221989c63286c70bd12da7f1a1902364bc8"
+  integrity sha512-Lfn9oc5494QChNZppFwm8TgA5/LmoqvfKgdiy0qezoqqxrE+ZnGMH1gyykiX78HicarOTJhftwtuLe3+IMMXNg==
   dependencies:
     "@babel/runtime-corejs2" "^7.0.0"
     "@gooddata/js-utils" "^3.10.4"
