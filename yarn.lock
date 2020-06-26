@@ -1384,12 +1384,12 @@
     firstline "^2.0.2"
     line-replace "^1.0.2"
 
-"@gooddata/gooddata-js@^13.0.1":
-  version "13.0.1"
-  resolved "https://registry.yarnpkg.com/@gooddata/gooddata-js/-/gooddata-js-13.0.1.tgz#1a738b16d1eeee8742771c2f5886ae4239793e80"
-  integrity sha512-hPWzqvhSzmkBOFGCAOkeqPutn/S3MFdVaY/442Bm9M3dmmdAyhQPIN3PH0FP0ZaKiELpiEiFi9GpiyqxJBsKRw==
+"@gooddata/gooddata-js@^13.0.3":
+  version "13.0.3"
+  resolved "https://registry.yarnpkg.com/@gooddata/gooddata-js/-/gooddata-js-13.0.3.tgz#c18646950013da4571c3f88ab1876000b320b552"
+  integrity sha512-fcp8+3ksCofr1QRZmYndju+n9xrNA3bDJX/20vVQ9aFxj45q2tKfXiE6DKr09wQyipZL93ToH4F6Tgm2Dx5zjg==
   dependencies:
-    "@gooddata/typings" "^2.24.0"
+    "@gooddata/typings" "^2.25.0"
     es6-promise "^3.0.2"
     fetch-cookie "^0.7.0"
     invariant "^2.2.2"
@@ -1402,10 +1402,10 @@
     rxjs "^5.5.6"
     uuid "^3.2.1"
 
-"@gooddata/goodstrap@^68.12.1":
-  version "68.12.1"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-68.12.1.tgz#1e9492c802608185db4b992f2c36dbe2e0b9e68f"
-  integrity sha512-bs1YD/Y5QTmvMkXnnBnuvnrs0JRwm7CruyqyLnfF4dItIyMP3dnSYlnyyQzHHEg6rdJjrxTiRWMdJhlnYb0JBw==
+"@gooddata/goodstrap@^68.13.1":
+  version "68.13.1"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-68.13.1.tgz#73d8d02ce9390b1228ea0af605cde96929fab93c"
+  integrity sha512-eFKm8xJKDgaJkCJlVR7Dfo880FolQAFGrkUbJ/9c6smOspUYSrY+9BNXCpfUw4A0rgqbEGqcESP/LIzUoCgMlg==
   dependencies:
     "@babel/runtime-corejs2" "^7.0.0"
     "@gooddata/js-utils" "^3.10.4"
@@ -1499,10 +1499,17 @@
     tslint-microsoft-contrib "6.1.0"
     tslint-react "3.6.0"
 
-"@gooddata/typings@^2.23.0", "@gooddata/typings@^2.24.0", "@gooddata/typings@^2.24.2":
+"@gooddata/typings@^2.23.0", "@gooddata/typings@^2.24.0":
   version "2.24.2"
   resolved "https://registry.yarnpkg.com/@gooddata/typings/-/typings-2.24.2.tgz#0f2a511231aeba08c2051ad29ef1f497bdefce3b"
   integrity sha512-j20MPBDXq9oEUTtruMSRJRfWvLc6UHzb3aWn9z7Sb+pYptZFuUzDfxT7uyoU010cMNSPOGia74KorE82QQZugA==
+  dependencies:
+    lodash "^4.17.11"
+
+"@gooddata/typings@^2.25.0":
+  version "2.25.0"
+  resolved "https://registry.yarnpkg.com/@gooddata/typings/-/typings-2.25.0.tgz#85fc630ae971770ade197a52ea96a0ef967ce7a1"
+  integrity sha512-EyNTaoyiPSqa+hFrvbTLwwDo857CaOw+2/FUPAgqvljWNejfMV/+rfdFsDidOoNgYlgcVb7sXZuSEjj0aMue8w==
   dependencies:
     lodash "^4.17.11"
 
