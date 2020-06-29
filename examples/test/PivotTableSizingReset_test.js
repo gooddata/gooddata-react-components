@@ -23,6 +23,7 @@ const TABLE_SELECTOR_STR = ".s-pivot-table-sizing-complex";
 const CHANGE_WIDTH_BUTTON_ATTRIBUTE_STR = ".s-change-width-button-attribute";
 const CHANGE_WIDTH_BUTTON_MEASURE_STR = ".s-change-width-button-measure";
 const ADD_ALL_MEASURE_WIDTH_BUTTON = ".s-change-width-button-measure-all";
+const TURN_ON_GROW_TO_FIT = ".s-pivot-table-sizing-complex-grow-to-fit-checkbox";
 
 const AGGRID_ON_RESIZE_TIMEOUT = 500;
 const AUTO_SIZE_TOLERANCE = 5;
@@ -30,6 +31,7 @@ const DND_SIZE_TOLERANCE = 5;
 const CELL_DEFAULT_WIDTH = 200;
 const FIRST_CELL_AUTORESIZE_WIDTH = 111;
 const SECOND_CELL_AUTORESIZE_WIDTH = 125;
+const SECOND_CELL_GROW_TO_FIT_WIDTH = 150;
 const FIRST_CELL_MANUAL_WIDTH = 400;
 const SECOND_CELL_MANUAL_WIDTH = 60;
 const ATTRIBUTE_IDENTIFIER = "state";
@@ -90,10 +92,11 @@ test("should reset first column with default width by double click to auto size 
     await t.expect(callBack.length).eql(expectedCallBackArrayItemsCount);
 
     const item = getAttributeColumnWidthItemByIdentifier(callBack, ATTRIBUTE_IDENTIFIER);
+
     await t.expect(item).notEql(undefined);
     await checkWidthWithTolerance(
         t,
-        item.attributeColumnWidthItem.width,
+        item.attributeColumnWidthItem.width.value,
         FIRST_CELL_AUTORESIZE_WIDTH,
         AUTO_SIZE_TOLERANCE,
         "Width of item from callback array",
@@ -134,7 +137,7 @@ test("should reset first column with manual width by double click to auto size a
     await t.expect(item).notEql(undefined);
     await checkWidthWithTolerance(
         t,
-        item.attributeColumnWidthItem.width,
+        item.attributeColumnWidthItem.width.value,
         FIRST_CELL_AUTORESIZE_WIDTH,
         AUTO_SIZE_TOLERANCE,
         "Width of item from callback array",
@@ -213,7 +216,7 @@ test("should resize first column by DnD and notify column as manually resized vi
     await t.expect(item).notEql(undefined);
     await checkWidthWithTolerance(
         t,
-        item.attributeColumnWidthItem.width,
+        item.attributeColumnWidthItem.width.value,
         CELL_DEFAULT_WIDTH + dragOffset,
         DND_SIZE_TOLERANCE,
         "Width of item from callback array",
@@ -259,7 +262,7 @@ test("should reset second column with default width by double click to auto size
     await t.expect(item).notEql(undefined);
     await checkWidthWithTolerance(
         t,
-        item.measureColumnWidthItem.width,
+        item.measureColumnWidthItem.width.value,
         SECOND_CELL_AUTORESIZE_WIDTH,
         AUTO_SIZE_TOLERANCE,
         "Width of item from callback array",
@@ -305,7 +308,7 @@ test("should reset second column with manual width by double click to auto size 
     await t.expect(item).notEql(undefined);
     await checkWidthWithTolerance(
         t,
-        item.measureColumnWidthItem.width,
+        item.measureColumnWidthItem.width.value,
         SECOND_CELL_AUTORESIZE_WIDTH,
         AUTO_SIZE_TOLERANCE,
         "Width of item from callback array",
@@ -389,7 +392,7 @@ test("should resize second column by DnD and notify column as manually resized v
     await t.expect(item).notEql(undefined);
     await checkWidthWithTolerance(
         t,
-        item.measureColumnWidthItem.width,
+        item.measureColumnWidthItem.width.value,
         CELL_DEFAULT_WIDTH + dragOffset,
         DND_SIZE_TOLERANCE,
         "Width of item from callback array",
@@ -447,7 +450,7 @@ test("should resize second column by DnD while meta key pressed and resize all m
     await t.expect(item).notEql(undefined);
     await checkWidthWithTolerance(
         t,
-        item.measureColumnWidthItem.width,
+        item.measureColumnWidthItem.width.value,
         CELL_DEFAULT_WIDTH + dragOffset,
         DND_SIZE_TOLERANCE,
         "Width of item from callback array",
@@ -493,7 +496,7 @@ test("should reset previously resized column with metaKey and notify column as m
     await t.expect(itemAfterReset).notEql(undefined);
     await checkWidthWithTolerance(
         t,
-        itemAfterReset.measureColumnWidthItem.width,
+        itemAfterReset.measureColumnWidthItem.width.value,
         SECOND_CELL_AUTORESIZE_WIDTH,
         AUTO_SIZE_TOLERANCE,
         "Width of item from callback array",
@@ -539,7 +542,7 @@ test("when autosize on it should reset previously resized column with metaKey an
 
     await t.expect(itemAfterReset).notEql(undefined);
 
-    await t.expect(itemAfterReset.measureColumnWidthItem.width).eql("auto");
+    await t.expect(itemAfterReset.measureColumnWidthItem.width.value).eql("auto");
 });
 
 test("should remove all measure width when reset with metaKey and all measures columns should be auto sized", async t => {
@@ -573,4 +576,86 @@ test("should remove all measure width when reset with metaKey and all measures c
 
     const item = getAllMeasureColumnWidth(callBackAfterReset);
     await t.expect(item).eql(undefined);
+});
+
+test("should reset all measaure columns and apply correctly grow to fit on them", async t => {
+    const tableSelector = Selector(TABLE_SELECTOR_STR);
+    const cellSelectorStr = ".s-cell-0-1";
+    const expectedCallBackArrayItemsCount = 5;
+
+    await t.click(TURN_ON_GROW_TO_FIT);
+
+    await waitForPivotTableStopLoading(t, tableSelector);
+
+    await t.click(CHANGE_WIDTH_BUTTON_ATTRIBUTE_STR);
+    await t.click(ADD_ALL_MEASURE_WIDTH_BUTTON);
+
+    const resizer = await getSecondCellResizer(t, TABLE_SELECTOR_STR);
+    await t.doubleClick(resizer, { modifiers: { meta: true } });
+    await sleep(AGGRID_ON_RESIZE_TIMEOUT);
+
+    // after reset
+    const cell = await getCell(t, TABLE_SELECTOR_STR, cellSelectorStr);
+    const resizedLastCellWidth = await cell.getBoundingClientRectProperty("width");
+
+    await checkWidthWithTolerance(
+        t,
+        resizedLastCellWidth,
+        SECOND_CELL_GROW_TO_FIT_WIDTH,
+        DND_SIZE_TOLERANCE,
+        "Width of table column",
+    );
+
+    // check callback
+    const callBackAfterReset = await getCallbackArray(TABLE_SELECTOR_STR);
+    await t.expect(callBackAfterReset.length).eql(expectedCallBackArrayItemsCount);
+
+    const item = getAllMeasureColumnWidth(callBackAfterReset);
+    await t.expect(item).eql(undefined);
+});
+
+test("should not reset all measaure columns when doubleclicked with meta key on attribute resizer", async t => {
+    const tableSelector = Selector(TABLE_SELECTOR_STR);
+    const attrCellSelectorStr = ".s-cell-0-0";
+    const measureCellSelectorStr = ".s-cell-0-1";
+    const expectedCallBackArrayItemsCount = 2;
+
+    await waitForPivotTableStopLoading(t, tableSelector);
+
+    await t.click(CHANGE_WIDTH_BUTTON_ATTRIBUTE_STR);
+    await t.click(ADD_ALL_MEASURE_WIDTH_BUTTON);
+
+    const resizer = await getFirstCellResizer(t, TABLE_SELECTOR_STR);
+    await t.doubleClick(resizer, { modifiers: { meta: true } });
+    await sleep(AGGRID_ON_RESIZE_TIMEOUT);
+
+    // after reset
+    const cell = await getCell(t, TABLE_SELECTOR_STR, attrCellSelectorStr);
+    const resizedAttrCellWidth = await cell.getBoundingClientRectProperty("width");
+
+    await checkWidthWithTolerance(
+        t,
+        resizedAttrCellWidth,
+        FIRST_CELL_AUTORESIZE_WIDTH,
+        AUTO_SIZE_TOLERANCE,
+        "Width of table column",
+    );
+
+    const measureCell = await getCell(t, TABLE_SELECTOR_STR, measureCellSelectorStr);
+    const resizedMeasureCellWidth = await measureCell.getBoundingClientRectProperty("width");
+
+    await checkWidthWithTolerance(
+        t,
+        resizedMeasureCellWidth,
+        SECOND_CELL_MANUAL_WIDTH,
+        DND_SIZE_TOLERANCE,
+        "Width of table column",
+    );
+
+    // check callback
+    const callBackAfterReset = await getCallbackArray(TABLE_SELECTOR_STR);
+    await t.expect(callBackAfterReset.length).eql(expectedCallBackArrayItemsCount);
+
+    const item = getAllMeasureColumnWidth(callBackAfterReset);
+    await t.expect(item).notEql(undefined);
 });

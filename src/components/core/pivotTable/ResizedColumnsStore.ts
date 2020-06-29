@@ -9,6 +9,7 @@ import {
     getColumnWidthsFromMap,
     convertColumnWidthsToMap,
     defaultWidthValidator,
+    getAllowGrowToFitProp,
 } from "./agGridColumnSizing";
 import {
     ColumnEventSourceType,
@@ -16,9 +17,8 @@ import {
     isAllMeasureColumnWidthItem,
     IAllMeasureColumnWidthItem,
     ColumnWidth,
-    IResizedColumnsItem,
     isAbsoluteColumnWidth,
-    isColumnWidthAuto,
+    IManuallyResizedColumnsItem,
 } from "../../../interfaces/PivotTable";
 
 export interface IResizedColumnsCollection {
@@ -30,16 +30,20 @@ export interface IResizedColumnsCollectionItem {
     source: ColumnEventSourceType;
 }
 
+export function isColumnWidthAuto(columnWidth: ColumnWidth): boolean {
+    return columnWidth.value === "auto";
+}
+
 export class ResizedColumnsStore {
     private manuallyResizedColumns: IResizedColumnsCollection;
     private allMeasureColumnWidth: number | null;
 
-    public constructor() {
-        this.manuallyResizedColumns = {};
+    public constructor(manuallyResizedColumns: IResizedColumnsCollection = {}) {
+        this.manuallyResizedColumns = manuallyResizedColumns;
         this.allMeasureColumnWidth = null;
     }
 
-    public getManuallyResizedColumn(item: Column | ColDef): IResizedColumnsItem {
+    public getManuallyResizedColumn(item: Column | ColDef): IManuallyResizedColumnsItem {
         const colId = getColumnIdentifier(item);
 
         if (this.manuallyResizedColumns[colId]) {
@@ -55,13 +59,16 @@ export class ResizedColumnsStore {
         return !!this.getManuallyResizedColumn(item);
     }
 
-    public addToManuallyResizedColumn(column: Column): void {
+    public addToManuallyResizedColumn(column: Column, allowGrowToFit: boolean = false): void {
         this.manuallyResizedColumns[getColumnIdentifier(column)] = {
-            width: column.getActualWidth(),
+            width: {
+                value: column.getActualWidth(),
+                ...getAllowGrowToFitProp(allowGrowToFit),
+            },
             source: ColumnEventSourceType.UI_DRAGGED,
         };
 
-        column.getColDef().suppressSizeToFit = true;
+        column.getColDef().suppressSizeToFit = !allowGrowToFit;
     }
 
     public addAllMeasureColumns(columnWidth: number, allColumns: Column[]) {
@@ -126,7 +133,7 @@ export class ResizedColumnsStore {
 
         if (isAllMeasureColumnWidthItem(allMeasureWidthItem)) {
             const validatedWidth = defaultWidthValidator(allMeasureWidthItem.measureColumnWidthItem.width);
-            this.allMeasureColumnWidth = isAbsoluteColumnWidth(validatedWidth) ? validatedWidth : null;
+            this.allMeasureColumnWidth = isAbsoluteColumnWidth(validatedWidth) ? validatedWidth.value : null;
         } else {
             this.allMeasureColumnWidth = null;
         }
@@ -151,12 +158,14 @@ export class ResizedColumnsStore {
         );
     }
 
-    private convertItem(item: IResizedColumnsCollectionItem): IResizedColumnsItem {
-        // columns with width = auto are hidden
+    private convertItem(item: IResizedColumnsCollectionItem): IManuallyResizedColumnsItem {
+        // columns with width.value = auto are hidden
         if (isAbsoluteColumnWidth(item.width)) {
+            const { width, source } = item;
             return {
-                width: item.width,
-                source: item.source,
+                width: width.value,
+                source,
+                ...getAllowGrowToFitProp(width.allowGrowToFit),
             };
         }
     }
@@ -166,17 +175,19 @@ export class ResizedColumnsStore {
     }
 
     private getAutoSizeItem(): IResizedColumnsCollectionItem {
-        return { width: "auto", source: ColumnEventSourceType.UI_DRAGGED };
+        return { width: { value: "auto" }, source: ColumnEventSourceType.UI_DRAGGED };
     }
 
-    private getAllMeasureColumMapItem(): IResizedColumnsItem {
+    private getAllMeasureColumMapItem(): IManuallyResizedColumnsItem {
         return { width: this.allMeasureColumnWidth, source: ColumnEventSourceType.UI_DRAGGED };
     }
 
     private getAllMeasureColumnWidth(): IAllMeasureColumnWidthItem {
         return {
             measureColumnWidthItem: {
-                width: this.allMeasureColumnWidth,
+                width: {
+                    value: this.allMeasureColumnWidth,
+                },
             },
         };
     }

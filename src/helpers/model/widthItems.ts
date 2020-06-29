@@ -1,43 +1,58 @@
 // (C) 2020 GoodData Corporation
 import {
-    AbsoluteColumnWidth,
     IAttributeColumnWidthItem,
     IMeasureColumnWidthItem,
     IAllMeasureColumnWidthItem,
-    ColumnWidth,
 } from "../../interfaces/PivotTable";
 import { AFM } from "@gooddata/typings";
+import { getAllowGrowToFitProp } from "../../components/core/pivotTable/agGridColumnSizing";
 
 export class AttributeColumnWidthItemBuilder implements IAttributeColumnWidthItem {
     public attributeColumnWidthItem: IAttributeColumnWidthItem["attributeColumnWidthItem"];
 
-    constructor(attributeIdentifier: string, width: AbsoluteColumnWidth) {
+    constructor(attributeIdentifier: string, width: number, allowGrowToFit: boolean = false) {
         this.attributeColumnWidthItem = {
             attributeIdentifier,
-            width,
+            width: {
+                value: width,
+                ...getAllowGrowToFitProp(allowGrowToFit),
+            },
         };
     }
-
-    public aggregation = (aggregation: "sum") => {
-        this.attributeColumnWidthItem.aggregation = aggregation;
-        return this;
-    };
 }
 
 export class MeasureColumnWidthItemBuilder implements IMeasureColumnWidthItem {
     public measureColumnWidthItem: IMeasureColumnWidthItem["measureColumnWidthItem"];
 
-    constructor(measureIdentifier: AFM.Identifier, width: ColumnWidth) {
-        this.measureColumnWidthItem = {
-            width,
-            locators: [
-                {
-                    measureLocatorItem: {
-                        measureIdentifier,
-                    },
+    constructor(measureIdentifier: AFM.Identifier, width: number | "auto", allowGrowToFit: boolean = false) {
+        if (width !== "auto") {
+            this.measureColumnWidthItem = {
+                width: {
+                    value: width,
+                    ...getAllowGrowToFitProp(allowGrowToFit),
                 },
-            ],
-        };
+                locators: [
+                    {
+                        measureLocatorItem: {
+                            measureIdentifier,
+                        },
+                    },
+                ],
+            };
+        } else {
+            this.measureColumnWidthItem = {
+                width: {
+                    value: "auto",
+                },
+                locators: [
+                    {
+                        measureLocatorItem: {
+                            measureIdentifier,
+                        },
+                    },
+                ],
+            };
+        }
     }
 
     public attributeLocators = (
@@ -57,18 +72,22 @@ export class MeasureColumnWidthItemBuilder implements IMeasureColumnWidthItem {
 export class AllMeasureColumnWidthItemBuilder implements IAllMeasureColumnWidthItem {
     public measureColumnWidthItem: IAllMeasureColumnWidthItem["measureColumnWidthItem"];
 
-    constructor(width: AbsoluteColumnWidth) {
+    constructor(width: number) {
         this.measureColumnWidthItem = {
-            width,
+            width: {
+                value: width,
+            },
         };
     }
 }
 
-export const attributeColumnWidthItem = (attributeIdentifier: string, width: AbsoluteColumnWidth) =>
+export const attributeColumnWidthItem = (attributeIdentifier: string, width: number) =>
     new AttributeColumnWidthItemBuilder(attributeIdentifier, width);
 
-export const measureColumnWidthItem = (measureIdentifier: AFM.Identifier, width: ColumnWidth) =>
-    new MeasureColumnWidthItemBuilder(measureIdentifier, width);
+export const measureColumnWidthItem = (
+    measureIdentifier: AFM.Identifier,
+    width: number | "auto",
+    allowGrowToFit: boolean = false,
+) => new MeasureColumnWidthItemBuilder(measureIdentifier, width, allowGrowToFit);
 
-export const allMeasureColumnWidthItem = (width: AbsoluteColumnWidth) =>
-    new AllMeasureColumnWidthItemBuilder(width);
+export const allMeasureColumnWidthItem = (width: number) => new AllMeasureColumnWidthItemBuilder(width);

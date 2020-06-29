@@ -1045,13 +1045,15 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
         if (this.isColumnAutoResized(id)) {
             this.columnApi.setColumnWidth(column, this.autoResizedColumns[id].width);
+            column.getColDef().suppressSizeToFit = false;
             return;
         }
 
         this.autoresizeColumnsByColumnId(this.columnApi, this.getColumnIds([column]));
         if (isColumnDisplayed(this.columnApi.getAllDisplayedVirtualColumns(), column)) {
             // skip columns out of viewport because these can not be autoresized
-            this.resizedColumnsStore.addToManuallyResizedColumn(column);
+            this.resizedColumnsStore.addToManuallyResizedColumn(column, true);
+            column.getColDef().suppressSizeToFit = false;
         }
     }
 
@@ -1066,31 +1068,23 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         }
 
         if (this.isManualResizing(columnEvent)) {
-            if (this.hasColumnWidths()) {
-                this.numberOfColumnResizedCalls++;
-                await sleep(COLUMN_RESIZE_TIMEOUT);
+            this.numberOfColumnResizedCalls++;
+            await sleep(COLUMN_RESIZE_TIMEOUT);
 
-                if (this.numberOfColumnResizedCalls === UIClick.DOUBLE_CLICK) {
-                    this.numberOfColumnResizedCalls = 0;
-                    await this.onColumnsManualReset(columnEvent.columns);
-                } else if (this.numberOfColumnResizedCalls === UIClick.CLICK) {
-                    this.numberOfColumnResizedCalls = 0;
-                    this.onColumnsManualResized(columnEvent.columns);
-                }
-            } else {
+            if (this.numberOfColumnResizedCalls === UIClick.DOUBLE_CLICK) {
+                this.numberOfColumnResizedCalls = 0;
+                await this.onColumnsManualReset(columnEvent.columns);
+            } else if (this.numberOfColumnResizedCalls === UIClick.CLICK) {
+                this.numberOfColumnResizedCalls = 0;
                 this.onColumnsManualResized(columnEvent.columns);
             }
         }
     };
 
-    private isAllMeasureResetOperation() {
-        return this.isMetaOrCtrlKeyPressed;
-    }
-
     private onColumnsManualReset = async (columns: Column[]) => {
         let columnsToReset = columns;
 
-        if (this.isAllMeasureResetOperation()) {
+        if (this.isAllMeasureResizeOperation(columns)) {
             this.resizedColumnsStore.removeAllMeasureColumns();
             columnsToReset = this.columnApi.getAllColumns().filter(col => isMeasureColumn(col));
         }
