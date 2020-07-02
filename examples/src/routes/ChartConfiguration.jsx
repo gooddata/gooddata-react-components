@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import React from "react";
 import ExampleWithSource from "../components/utils/ExampleWithSource";
 
@@ -6,6 +6,8 @@ import BarChartDynamicExample from "../components/BarChartDynamicExample";
 import BarChartDynamicExampleSRC from "!raw-loader!../components/BarChartDynamicExample"; // eslint-disable-line
 import ConfigurationColumnChartExample from "../components/ConfigurationColumnChartExample";
 import ConfigurationColumnChartExampleSRC from "!raw-loader!../components/ConfigurationColumnChartExample"; // eslint-disable-line
+import ConfigurationBulletChartExample from "../components/ConfigurationBulletChartExample";
+import ConfigurationBulletChartExampleSRC from "!raw-loader!../components/ConfigurationBulletChartExample"; // eslint-disable-line
 import PieChartColorMappingExample from "../components/PieChartColorMappingExample";
 import PieChartColorMappingExampleSRC from "!raw-loader!../components/PieChartColorMappingExample"; // eslint-disable-line
 import DualAxisColumnChartExample from "../components/DualAxisColumnChartExample";
@@ -50,6 +52,15 @@ export const BarChartDynamic = () => (
             <ExampleWithSource
                 for={ConfigurationColumnChartExample}
                 source={ConfigurationColumnChartExampleSRC}
+            />
+
+            <h2>Bullet chart</h2>
+
+            <hr className="separator" />
+
+            <ExampleWithSource
+                for={ConfigurationBulletChartExample}
+                source={ConfigurationBulletChartExampleSRC}
             />
         </div>
 

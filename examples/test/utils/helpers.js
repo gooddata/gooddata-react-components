@@ -131,3 +131,13 @@ export async function sleep(delay) {
         setTimeout(resolve, delay);
     });
 }
+
+export const getElementTexts = async elements => {
+    return Promise.all(
+        Array(elements.count)
+            .fill(null)
+            .map((_, index) => {
+                return elements.nth(index).textContent;
+            }),
+    );
+};

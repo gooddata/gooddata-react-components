@@ -180,6 +180,31 @@ test("Bubble chart should render", async t => {
         .eql("Aventura");
 });
 
+test("Bullet chart should render", async t => {
+    const bulletChart = Selector(".s-bullet-chart");
+    await checkRenderChart(bulletChart, t);
+
+    const targetTrackerCssSelector = ".highcharts-point.highcharts-bullet-target";
+    const legendNames = bulletChart.find(".series-name");
+
+    await t
+        .hover(bulletChart.find(targetTrackerCssSelector).nth(0))
+        .expect(tooltipTitle.nth(0).textContent)
+        .eql("Location Resort")
+        .expect(tooltipValue.nth(0).textContent)
+        .eql("Deerfield Beach")
+        .expect(tooltipTitle.nth(1).textContent)
+        .eql("$ Franchise Fees")
+        .expect(tooltipValue.nth(1).textContent)
+        .eql("420,529")
+        .expect(bulletChart.find(xAxisTitleCssSelector).textContent)
+        .eql("Location Resort")
+        .expect(bulletChart.find(valueXAxisCssSelector).textContent)
+        .eql("Deerfield BeachHighland VillageIrvingMontgomerySan Jose")
+        .expect(legendNames.nth(0).textContent)
+        .eql("$ Franchise Fees (Ad Royalty)");
+});
+
 test("Treemap should render", async t => {
     await checkRenderChart(".s-tree-map", t);
 });
