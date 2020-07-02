@@ -270,7 +270,7 @@ storiesOf("Core components/Table", module)
     )
     .add("with supplied height of container of height 100px", () =>
         screenshotWrap(
-            <ScreenshotReadyWrapper resolver={createTableResolver(4)}>
+            <ScreenshotReadyWrapper resolver={createTableResolver(1)}>
                 <div>
                     <TableWithHeight height={100} />
                 </div>
@@ -279,7 +279,7 @@ storiesOf("Core components/Table", module)
     )
     .add("with supplied height of container of height 200px", () =>
         screenshotWrap(
-            <ScreenshotReadyWrapper resolver={createTableResolver(4)}>
+            <ScreenshotReadyWrapper resolver={createTableResolver(1)}>
                 <div>
                     <TableWithHeight height={200} />
                 </div>
@@ -288,7 +288,7 @@ storiesOf("Core components/Table", module)
     )
     .add("with supplied height of container of height 400px", () =>
         screenshotWrap(
-            <ScreenshotReadyWrapper resolver={createTableResolver(4)}>
+            <ScreenshotReadyWrapper resolver={createTableResolver(1)}>
                 <div>
                     <TableWithHeight height={400} />
                 </div>
@@ -297,7 +297,7 @@ storiesOf("Core components/Table", module)
     )
     .add("with supplied height of container of height 800px", () =>
         screenshotWrap(
-            <ScreenshotReadyWrapper resolver={createTableResolver(4)}>
+            <ScreenshotReadyWrapper resolver={createTableResolver(1)}>
                 <div>
                     <TableWithHeight height={800} />
                 </div>
