@@ -43,6 +43,7 @@ import {
     invalidMeasureColumnWidthItemTooManyLocators,
     validAttributeColumnWidthItem,
     validMeasureColumnWidthItem,
+    transformedWeakMeasureColumnWidth,
 } from "./widthItemsMock";
 
 const getMockReferencePoint = (
@@ -662,6 +663,7 @@ describe("PluggablePivotTable", () => {
                 ],
             );
             const expectedColumnWidthItems: ColumnWidthItem[] = [
+                transformedWeakMeasureColumnWidth,
                 validAttributeColumnWidthItem,
                 validMeasureColumnWidthItem,
             ];

@@ -1,4 +1,4 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
@@ -53,22 +53,22 @@ function TableWithHeightAndTotals(props: { height: number }) {
     );
 }
 
-function TableWithHeight(props: { height: number }) {
-    return (
-        <div style={{ width: 600, height: props.height }}>
-            <Table
-                environment="dashboards"
-                projectId="storybook"
-                measures={[MEASURE_1]}
-                attributes={[ATTRIBUTE_COUNTRY]}
-                onError={onErrorHandler}
-                LoadingComponent={null}
-                ErrorComponent={null}
-                height={props.height}
-            />
-        </div>
-    );
-}
+// function TableWithHeight(props: { height: number }) {
+//     return (
+//         <div style={{ width: 600, height: props.height }}>
+//             <Table
+//                 environment="dashboards"
+//                 projectId="storybook"
+//                 measures={[MEASURE_1]}
+//                 attributes={[ATTRIBUTE_COUNTRY]}
+//                 onError={onErrorHandler}
+//                 LoadingComponent={null}
+//                 ErrorComponent={null}
+//                 height={props.height}
+//             />
+//         </div>
+//     );
+// }
 
 const wrapperStyle = { width: 600, height: 300 };
 
@@ -268,18 +268,18 @@ storiesOf("Core components/Table", module)
             </div>,
         ),
     )
-    .add("with supplied height of container", () =>
-        screenshotWrap(
-            <ScreenshotReadyWrapper resolver={createTableResolver(4)}>
-                <div>
-                    <TableWithHeight height={100} />
-                    <TableWithHeight height={200} />
-                    <TableWithHeight height={400} />
-                    <TableWithHeight height={800} />
-                </div>
-            </ScreenshotReadyWrapper>,
-        ),
-    )
+    // .add("with supplied height of container", () =>
+    //     screenshotWrap(
+    //         <ScreenshotReadyWrapper resolver={createTableResolver(4)}>
+    //             <div>
+    //                 <TableWithHeight height={100} />
+    //                 <TableWithHeight height={200} />
+    //                 <TableWithHeight height={400} />
+    //                 <TableWithHeight height={800} />
+    //             </div>
+    //         </ScreenshotReadyWrapper>,
+    //     ),
+    // )
     .add("with table totals and supplied height of container", () =>
         screenshotWrap(
             <ScreenshotReadyWrapper resolver={createTableResolver(4)}>

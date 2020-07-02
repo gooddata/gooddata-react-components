@@ -40,19 +40,13 @@ export enum UIClick {
     DOUBLE_CLICK = 2,
 }
 
-export interface IResizedColumnsItem {
-    width: number;
-    source: ColumnEventSourceType;
-}
-
 export interface IManuallyResizedColumnsItem {
     width: number;
-    source: ColumnEventSourceType;
     allowGrowToFit?: boolean;
 }
 
 export interface IResizedColumns {
-    [columnIdentifier: string]: IResizedColumnsItem;
+    [columnIdentifier: string]: IManuallyResizedColumnsItem;
 }
 
 export function isAbsoluteColumnWidth(columnWidth: ColumnWidth): columnWidth is IAbsoluteColumnWidth {
@@ -89,10 +83,18 @@ export interface IAllMeasureColumnWidthItem {
     };
 }
 
+export interface IWeakMeasureColumnWidthItem {
+    measureColumnWidthItem: {
+        width: IAbsoluteColumnWidth;
+        locator: AFM.IMeasureLocatorItem;
+    };
+}
+
 export type ColumnWidthItem =
     | IAttributeColumnWidthItem
     | IMeasureColumnWidthItem
-    | IAllMeasureColumnWidthItem;
+    | IAllMeasureColumnWidthItem
+    | IWeakMeasureColumnWidthItem;
 
 type LocatorItem = IAttributeLocatorItem | AFM.IMeasureLocatorItem;
 interface IAttributeLocatorItem {
@@ -127,7 +129,18 @@ export function isAllMeasureColumnWidthItem(
     return (
         !isEmpty(columnWidthItem) &&
         (columnWidthItem as IAllMeasureColumnWidthItem).measureColumnWidthItem !== undefined &&
-        (columnWidthItem as IMeasureColumnWidthItem).measureColumnWidthItem.locators === undefined
+        (columnWidthItem as IMeasureColumnWidthItem).measureColumnWidthItem.locators === undefined &&
+        (columnWidthItem as IWeakMeasureColumnWidthItem).measureColumnWidthItem.locator === undefined
+    );
+}
+
+export function isWeakMeasureColumnWidthItem(
+    columnWidthItem: ColumnWidthItem,
+): columnWidthItem is IWeakMeasureColumnWidthItem {
+    return (
+        !isEmpty(columnWidthItem) &&
+        (columnWidthItem as IWeakMeasureColumnWidthItem).measureColumnWidthItem !== undefined &&
+        (columnWidthItem as IWeakMeasureColumnWidthItem).measureColumnWidthItem.locator !== undefined
     );
 }
 
