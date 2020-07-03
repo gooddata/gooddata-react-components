@@ -53,22 +53,22 @@ function TableWithHeightAndTotals(props: { height: number }) {
     );
 }
 
-// function TableWithHeight(props: { height: number }) {
-//     return (
-//         <div style={{ width: 600, height: props.height }}>
-//             <Table
-//                 environment="dashboards"
-//                 projectId="storybook"
-//                 measures={[MEASURE_1]}
-//                 attributes={[ATTRIBUTE_COUNTRY]}
-//                 onError={onErrorHandler}
-//                 LoadingComponent={null}
-//                 ErrorComponent={null}
-//                 height={props.height}
-//             />
-//         </div>
-//     );
-// }
+function TableWithHeight(props: { height: number }) {
+    return (
+        <div style={{ width: 600, height: props.height }}>
+            <Table
+                environment="dashboards"
+                projectId="storybook"
+                measures={[MEASURE_1]}
+                attributes={[ATTRIBUTE_COUNTRY]}
+                onError={onErrorHandler}
+                LoadingComponent={null}
+                ErrorComponent={null}
+                height={props.height}
+            />
+        </div>
+    );
+}
 
 const wrapperStyle = { width: 600, height: 300 };
 
