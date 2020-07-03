@@ -268,18 +268,42 @@ storiesOf("Core components/Table", module)
             </div>,
         ),
     )
-    // .add("with supplied height of container", () =>
-    //     screenshotWrap(
-    //         <ScreenshotReadyWrapper resolver={createTableResolver(4)}>
-    //             <div>
-    //                 <TableWithHeight height={100} />
-    //                 <TableWithHeight height={200} />
-    //                 <TableWithHeight height={400} />
-    //                 <TableWithHeight height={800} />
-    //             </div>
-    //         </ScreenshotReadyWrapper>,
-    //     ),
-    // )
+    .add("with supplied height of container of height 100px", () =>
+        screenshotWrap(
+            <ScreenshotReadyWrapper resolver={createTableResolver(1)}>
+                <div>
+                    <TableWithHeight height={100} />
+                </div>
+            </ScreenshotReadyWrapper>,
+        ),
+    )
+    .add("with supplied height of container of height 200px", () =>
+        screenshotWrap(
+            <ScreenshotReadyWrapper resolver={createTableResolver(1)}>
+                <div>
+                    <TableWithHeight height={200} />
+                </div>
+            </ScreenshotReadyWrapper>,
+        ),
+    )
+    .add("with supplied height of container of height 400px", () =>
+        screenshotWrap(
+            <ScreenshotReadyWrapper resolver={createTableResolver(1)}>
+                <div>
+                    <TableWithHeight height={400} />
+                </div>
+            </ScreenshotReadyWrapper>,
+        ),
+    )
+    .add("with supplied height of container of height 800px", () =>
+        screenshotWrap(
+            <ScreenshotReadyWrapper resolver={createTableResolver(1)}>
+                <div>
+                    <TableWithHeight height={800} />
+                </div>
+            </ScreenshotReadyWrapper>,
+        ),
+    )
     .add("with table totals and supplied height of container", () =>
         screenshotWrap(
             <ScreenshotReadyWrapper resolver={createTableResolver(4)}>
