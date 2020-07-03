@@ -1,6 +1,16 @@
 // (C) 2020 GoodData Corporation
-import { attributeColumnWidthItem, measureColumnWidthItem } from "../widthItems";
-import { IAttributeColumnWidthItem, IMeasureColumnWidthItem } from "../../../interfaces/PivotTable";
+import {
+    allMeasureColumnWidthItem,
+    attributeColumnWidthItem,
+    measureColumnWidthItem,
+    weakMeasureColumnWidthItemBuilder,
+} from "../widthItems";
+import {
+    IAllMeasureColumnWidthItem,
+    IAttributeColumnWidthItem,
+    IMeasureColumnWidthItem,
+    IWeakMeasureColumnWidthItem,
+} from "../../../interfaces/PivotTable";
 
 describe("widthItems", () => {
     describe("attributeColumnWidthItem", () => {
@@ -64,6 +74,58 @@ describe("widthItems", () => {
                     element: "elem",
                 }),
             ).toMatchObject(expected);
+        });
+    });
+
+    describe("allMeasureColumnWidthItem", () => {
+        it("should return all measure column item with width", () => {
+            const expected: IAllMeasureColumnWidthItem = {
+                measureColumnWidthItem: {
+                    width: {
+                        value: 100,
+                    },
+                },
+            };
+
+            expect(allMeasureColumnWidthItem(100)).toMatchObject(expected);
+        });
+    });
+
+    describe("weakMeasureColumnWidthItemBuilder", () => {
+        it("should return weak measure column item with width and false allowGrowToFit", () => {
+            const expected: IWeakMeasureColumnWidthItem = {
+                measureColumnWidthItem: {
+                    width: {
+                        value: 100,
+                        allowGrowToFit: false,
+                    },
+                    locator: {
+                        measureLocatorItem: {
+                            measureIdentifier: "id",
+                        },
+                    },
+                },
+            };
+
+            expect(weakMeasureColumnWidthItemBuilder("id", 100)).toMatchObject(expected);
+        });
+
+        it("should return weak measure column item with width and true allowGrowToFit", () => {
+            const expected: IWeakMeasureColumnWidthItem = {
+                measureColumnWidthItem: {
+                    width: {
+                        value: 100,
+                        allowGrowToFit: true,
+                    },
+                    locator: {
+                        measureLocatorItem: {
+                            measureIdentifier: "id",
+                        },
+                    },
+                },
+            };
+
+            expect(weakMeasureColumnWidthItemBuilder("id", 100, true)).toMatchObject(expected);
         });
     });
 });

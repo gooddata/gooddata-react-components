@@ -7,51 +7,21 @@ import {
     MANUALLY_SIZED_MAX_WIDTH,
     syncSuppressSizeToFitOnColumns,
     resetColumnsWidthToDefault,
+    getWeakColumnWidthsFromMap,
+    resizeWeakMeasureColumns,
 } from "../agGridColumnSizing";
-import {
-    ColumnWidthItem,
-    ColumnEventSourceType,
-    IAbsoluteColumnWidth,
-    IResizedColumns,
-} from "../../../../interfaces/PivotTable";
+import { ColumnWidthItem, IAbsoluteColumnWidth, IResizedColumns } from "../../../../interfaces/PivotTable";
 import { IGridHeader } from "../agGridTypes";
 import { DEFAULT_COLUMN_WIDTH } from "../../PivotTable";
-import { Column, ColumnApi } from "ag-grid-community";
+
 import { oneColumnAttributeNoMeasureResponse } from "../../../../execution/fixtures/ExecuteAfm.fixtures";
-import { ResizedColumnsStore } from "../ResizedColumnsStore";
-import { MEASURE_COLUMN, COLUMN_ATTRIBUTE_COLUMN } from "../agGridConst";
-
-const getFakeColumnApi = (columnsMaps: { [id: string]: Column }): ColumnApi => {
-    const fakeColumnApi = {
-        getColumn: (columnId: string) => {
-            return columnsMaps[columnId];
-        },
-        setColumnWidth: (column: Column, width: number) => {
-            columnsMaps[column.getColId()].getColDef().width = width;
-        },
-        getAllColumns: () => {
-            return Object.keys(columnsMaps).map((colId: string) => columnsMaps[colId]);
-        },
-    };
-    return fakeColumnApi as ColumnApi;
-};
-
-const getFakeColumn = (columnDefinition: any): Column => {
-    const fakeColumn = {
-        getColDef: () => {
-            return columnDefinition;
-        },
-        getColId: () => {
-            return columnDefinition.colId;
-        },
-
-        getActualWidth: () => {
-            return columnDefinition.width;
-        },
-    };
-
-    return fakeColumn as Column;
-};
+import {
+    ResizedColumnsStore,
+    IWeakMeasureColumnWidthItemsMap,
+    IResizedColumnsCollection,
+} from "../ResizedColumnsStore";
+import { MEASURE_COLUMN, COLUMN_ATTRIBUTE_COLUMN, ROW_ATTRIBUTE_COLUMN } from "../agGridConst";
+import { getFakeColumn, getFakeColumnApi } from "./agGridMock";
 
 describe("agGridColumnSizing", () => {
     const columnWidths: ColumnWidthItem[] = [
@@ -150,13 +120,12 @@ describe("agGridColumnSizing", () => {
             width: {
                 value: 60,
             },
-            source: ColumnEventSourceType.UI_DRAGGED,
+            measureIdentifier: "m1",
         },
         a_4DOTdf: {
             width: {
                 value: 400,
             },
-            source: ColumnEventSourceType.UI_DRAGGED,
         },
     };
 
@@ -165,25 +134,84 @@ describe("agGridColumnSizing", () => {
             width: {
                 value: MIN_WIDTH,
             },
-            source: ColumnEventSourceType.UI_DRAGGED,
+            measureIdentifier: "m1",
         },
         a_4DOTdf: {
             width: {
                 value: MAX_WIDTH,
             },
-            source: ColumnEventSourceType.UI_DRAGGED,
         },
     };
 
     describe("convertColumnWidthsToMap", () => {
-        it("should return correct IResizedColumns map", async () => {
+        it("should return correct IResizedColumnsCollection map", async () => {
             const result = convertColumnWidthsToMap(columnWidths, executionResponse);
             expect(result).toEqual(expectedColumnMap);
         });
 
-        it("should return correct IResizedColumns map and validate range of widths", async () => {
+        it("should return correct IResizedColumnsCollection map and validate range of widths", async () => {
             const result = convertColumnWidthsToMap(columnWidths, executionResponse, widthValidator);
             expect(result).toEqual(expectedColumnMapValidated);
+        });
+
+        it("should return correct IResizedColumnsCollection map for measureColumnWidthItem with missing IMeasureLocatorItem", async () => {
+            const executionResponseNoMeasures: Execution.IExecutionResponse = {
+                dimensions: [
+                    {
+                        headers: [],
+                    },
+                    {
+                        headers: [
+                            {
+                                attributeHeader: {
+                                    name: "Forecast Category",
+                                    localIdentifier: "a1",
+                                    uri: "/gdc/md/lmnivlu3sowt63jvr2mo1wlse5fyv203/obj/64727",
+                                    identifier: "label.opportunitysnapshot.forecastcategory",
+                                    formOf: {
+                                        name: "Forecast Category",
+                                        uri: "/gdc/md/lmnivlu3sowt63jvr2mo1wlse5fyv203/obj/64726",
+                                        identifier: "attr.opportunitysnapshot.forecastcategory",
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                ],
+                links: {
+                    executionResult: "resultUrl",
+                },
+            };
+
+            const noMeasureColumnWidths: ColumnWidthItem[] = [
+                {
+                    measureColumnWidthItem: {
+                        width: {
+                            value: 155,
+                        },
+                        locators: [
+                            {
+                                attributeLocatorItem: {
+                                    attributeIdentifier: "a1",
+                                    element:
+                                        "/gdc/md/lmnivlu3sowt63jvr2mo1wlse5fyv203/obj/64726/elements?id=966650",
+                                },
+                            },
+                        ],
+                    },
+                },
+            ];
+
+            const expectedResult: IResizedColumnsCollection = {
+                a_64726_966650: { width: { value: 155 } },
+            };
+
+            const result = convertColumnWidthsToMap(
+                noMeasureColumnWidths,
+                executionResponseNoMeasures,
+                widthValidator,
+            );
+            expect(result).toEqual(expectedResult);
         });
     });
 
@@ -202,7 +230,6 @@ describe("agGridColumnSizing", () => {
                     width: {
                         value: 400,
                     },
-                    source: ColumnEventSourceType.UI_DRAGGED,
                 },
             };
             const { executionResponse } = oneColumnAttributeNoMeasureResponse;
@@ -229,6 +256,57 @@ describe("agGridColumnSizing", () => {
                 executionResult: null,
             });
             expect(result).toEqual(expectedColumnWidths);
+        });
+    });
+
+    describe("getWeakColumnWidthsFromMap", () => {
+        const weakColumnWidthsMap: IWeakMeasureColumnWidthItemsMap = {
+            m1: {
+                measureColumnWidthItem: {
+                    width: { value: 250 },
+                    locator: {
+                        measureLocatorItem: {
+                            measureIdentifier: "m1",
+                        },
+                    },
+                },
+            },
+            m2: {
+                measureColumnWidthItem: {
+                    width: { value: 350 },
+                    locator: {
+                        measureLocatorItem: {
+                            measureIdentifier: "m2",
+                        },
+                    },
+                },
+            },
+        };
+
+        const expectedColumnWidths: ColumnWidthItem[] = [
+            {
+                measureColumnWidthItem: {
+                    width: { value: 250 },
+                    locator: {
+                        measureLocatorItem: {
+                            measureIdentifier: "m1",
+                        },
+                    },
+                },
+            },
+            {
+                measureColumnWidthItem: {
+                    width: { value: 350 },
+                    locator: {
+                        measureLocatorItem: {
+                            measureIdentifier: "m2",
+                        },
+                    },
+                },
+            },
+        ];
+        it("should return columnWidths array", () => {
+            expect(getWeakColumnWidthsFromMap(weakColumnWidthsMap)).toEqual(expectedColumnWidths);
         });
     });
 
@@ -275,7 +353,7 @@ describe("agGridColumnSizing", () => {
             headerName: "Amount",
             field: amountId,
             colId: amountId,
-            type: "MEASURE_COLUMN",
+            type: MEASURE_COLUMN,
             measureIndex: 0,
             index: 1,
         };
@@ -296,7 +374,7 @@ describe("agGridColumnSizing", () => {
             headerName: "Bigger Amount",
             field: biggerAmountId,
             colId: biggerAmountId,
-            type: "MEASURE_COLUMN",
+            type: MEASURE_COLUMN,
             measureIndex: 1,
             index: 2,
         };
@@ -330,15 +408,12 @@ describe("agGridColumnSizing", () => {
         const autoResizeColumns: IResizedColumns = {
             [amountId]: {
                 width: amountAutoWidth,
-                source: ColumnEventSourceType.AUTOSIZE_COLUMNS,
             },
             [coloursId]: {
                 width: coloursAutoWidth,
-                source: ColumnEventSourceType.AUTOSIZE_COLUMNS,
             },
             [biggerAmountId]: {
                 width: biggerAmountAutoWidth,
-                source: ColumnEventSourceType.AUTOSIZE_COLUMNS,
             },
         };
 
@@ -349,15 +424,12 @@ describe("agGridColumnSizing", () => {
         const growToFitResizeColumns: IResizedColumns = {
             [amountId]: {
                 width: amountGrowToFitWidth,
-                source: ColumnEventSourceType.FIT_GROW,
             },
             [coloursId]: {
                 width: coloursGrowToFitWidth,
-                source: ColumnEventSourceType.FIT_GROW,
             },
             [biggerAmountId]: {
                 width: biggerAmountGrowToFitWidth,
-                source: ColumnEventSourceType.FIT_GROW,
             },
         };
 
@@ -366,7 +438,7 @@ describe("agGridColumnSizing", () => {
         const getGrowToFitResizeColumnsOverLimit = () => {
             return {
                 ...growToFitResizeColumns,
-                [amountId]: { width: overLimitWidth, source: ColumnEventSourceType.FIT_GROW },
+                [amountId]: { width: overLimitWidth },
             };
         };
         describe("manually resized", () => {
@@ -653,6 +725,7 @@ describe("agGridColumnSizing", () => {
     const colId1 = "colId1";
     const colId2 = "colId2";
     const colId3 = "colId3";
+    const colId4 = "colId4";
 
     describe("syncSuppressSizeToFitOnColumns", () => {
         it("should set correctly suppressSizeToFit for columns ", () => {
@@ -674,11 +747,11 @@ describe("agGridColumnSizing", () => {
 
             syncSuppressSizeToFitOnColumns(manuallyResizedColumns, columnApi);
 
-            expect(columnDef1.suppressSizeToFit).toEqual(false);
+            expect(columnApi.getColumn(colId1).getColDef().suppressSizeToFit).toEqual(false);
 
-            expect(columnDef2.suppressSizeToFit).toEqual(true);
+            expect(columnApi.getColumn(colId2).getColDef().suppressSizeToFit).toEqual(true);
 
-            expect(columnDef3.suppressSizeToFit).toEqual(true);
+            expect(columnApi.getColumn(colId3).getColDef().suppressSizeToFit).toEqual(true);
         });
     });
 
@@ -704,11 +777,9 @@ describe("agGridColumnSizing", () => {
             const autoWidths = {
                 colId1: {
                     width: 150,
-                    source: ColumnEventSourceType.UI_DRAGGED,
                 },
                 colId2: {
                     width: 400,
-                    source: ColumnEventSourceType.UI_DRAGGED,
                 },
             };
             const defaultWidth = 250;
@@ -721,11 +792,99 @@ describe("agGridColumnSizing", () => {
                 defaultWidth,
             );
 
-            expect(columnDef1.width).toEqual(300);
+            expect(columnApi.getAllColumns()[0].getActualWidth()).toEqual(300);
 
-            expect(columnDef2.width).toEqual(400);
+            expect(columnApi.getAllColumns()[1].getActualWidth()).toEqual(400);
 
-            expect(columnDef3.width).toEqual(250);
+            expect(columnApi.getAllColumns()[2].getActualWidth()).toEqual(250);
+        });
+    });
+
+    describe("resizeWeakMeasureColumns", () => {
+        const drillItems = [
+            {
+                measureHeaderItem: {
+                    localIdentifier: "m1",
+                    name: "Amount",
+                    format: "#.##x",
+                },
+            },
+        ];
+
+        const columnDef1 = {
+            suppressSizeToFit: true,
+            width: 100,
+            colId: colId1,
+            type: MEASURE_COLUMN,
+            drillItems,
+        };
+        const columnDef2 = { suppressSizeToFit: true, width: 200, colId: colId2, type: MEASURE_COLUMN };
+        const columnDef3 = {
+            suppressSizeToFit: false,
+            width: 200,
+            colId: colId3,
+            type: MEASURE_COLUMN,
+            drillItems,
+        };
+        const columnDef4 = {
+            suppressSizeToFit: false,
+            width: 222,
+            colId: colId4,
+            type: ROW_ATTRIBUTE_COLUMN,
+        };
+
+        const resizedColumnDef = {
+            suppressSizeToFit: false,
+            width: 333,
+            colId: colId1,
+            type: MEASURE_COLUMN,
+            drillItems,
+        };
+
+        it("should resize all matching measure columns to the size of resized measure column", () => {
+            const columnsMaps = {
+                colId1: getFakeColumn(columnDef1),
+                colId2: getFakeColumn(columnDef2),
+                colId3: getFakeColumn(columnDef3),
+                colId4: getFakeColumn(columnDef4),
+            };
+            const columnApi = getFakeColumnApi(columnsMaps);
+            resizeWeakMeasureColumns(columnApi, new ResizedColumnsStore(), getFakeColumn(resizedColumnDef));
+            expect(columnApi.getAllColumns().map(column => column.getActualWidth())).toEqual([
+                333,
+                200,
+                333,
+                222,
+            ]);
+        });
+
+        it("should ignore resize of attribute column", () => {
+            const columnsMaps = {
+                colId1: getFakeColumn(columnDef1),
+                colId2: getFakeColumn(columnDef2),
+                colId3: getFakeColumn(columnDef3),
+                colId4: getFakeColumn(columnDef4),
+            };
+            const columnApi = getFakeColumnApi(columnsMaps);
+            const resizedAttrColumnDef = {
+                suppressSizeToFit: false,
+                width: 333,
+                colId: colId1,
+                type: ROW_ATTRIBUTE_COLUMN,
+                drillItems,
+            };
+
+            resizeWeakMeasureColumns(
+                columnApi,
+                new ResizedColumnsStore(),
+                getFakeColumn(resizedAttrColumnDef),
+            );
+            expect(columnApi.getAllColumns().map(column => column.getActualWidth())).toEqual([
+                100,
+                200,
+                200,
+                222,
+            ]);
         });
     });
 });
