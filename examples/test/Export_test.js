@@ -70,3 +70,13 @@ test("Export headline data", async t => {
         .expect(fs.existsSync(await exportToCSV("Headline")))
         .ok(`CSV file of headline isn't exported`);
 });
+
+test("Export bullet data", async t => {
+    const bulletChart = Selector(".s-bullet-chart");
+    await enableDownloadForHeadlessChrome(t);
+    await t
+        .hover(getExportWithCustomNameButton(bulletChart))
+        .click(await getExportWithCustomNameButton(bulletChart))
+        .expect(fs.existsSync(await exportToCSV("CustomName")))
+        .ok(`CSV file with custom name of bullet chart isn't exported`);
+});
