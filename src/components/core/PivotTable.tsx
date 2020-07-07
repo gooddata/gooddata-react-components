@@ -174,7 +174,6 @@ const AG_NUMERIC_CELL_CLASSNAME = "ag-numeric-cell";
 const AG_NUMERIC_HEADER_CLASSNAME = "ag-numeric-header";
 
 export const WATCHING_TABLE_RENDERED_INTERVAL = 500;
-export const WATCHING_TABLE_RENDERED_MAX_TIME = 15000;
 const AGGRID_RENDER_NEW_COLUMNS_TIMEOUT = 100;
 const AGGRID_BEFORE_RESIZE_TIMEOUT = 100;
 const AGGRID_ON_RESIZE_TIMEOUT = 300;
@@ -213,7 +212,6 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     private autoResizedColumns: IResizedColumns = {};
     private growToFittedColumns: IResizedColumns = {};
     private watchingIntervalId: number | null;
-    private watchingTimeoutId: number | null;
     private resizing: boolean = false;
     private lastResizedWidth = 0;
     private lastResizedHeight = 0;
@@ -575,27 +573,22 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
     private isGrowToFitEnabled = (props = this.props) =>
         props.config && props.config.columnSizing ? !!props.config.columnSizing.growToFit : false;
 
-    private autoresizeColumns = async (
-        event: AgGridEvent,
-        force: boolean = false,
-        previouslyResizedColumnIds: string[] = [],
-    ) => {
-        const alreadyResized = () => this.state.resized || this.resizing;
+    private isPivotTableReady = (api: GridApi) => {
         const noRowHeadersOrRows = (executionResult: Execution.IExecutionResult) =>
             executionResult &&
             (executionResult.data.length === 0 &&
                 executionResult.headerItems[0] &&
                 executionResult.headerItems[0].length === 0);
+
         const dataRendered = () => {
             const executionResult = this.getExecutionResult();
             return (
-                noRowHeadersOrRows(executionResult) ||
-                (executionResult && event.api.getRenderedNodes().length > 0)
+                noRowHeadersOrRows(executionResult) || (executionResult && api.getRenderedNodes().length > 0)
             );
         };
 
         const tablePagesLoaded = () => {
-            const pages = event.api.getCacheBlockState();
+            const pages = api.getCacheBlockState();
             return (
                 pages &&
                 Object.keys(pages).every(
@@ -605,12 +598,17 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             );
         };
 
-        if (
-            this.state.execution &&
-            tablePagesLoaded() &&
-            dataRendered() &&
-            (!alreadyResized() || (alreadyResized() && force))
-        ) {
+        return this.state.execution && tablePagesLoaded() && dataRendered();
+    };
+
+    private autoresizeColumns = async (
+        event: AgGridEvent,
+        force: boolean = false,
+        previouslyResizedColumnIds: string[] = [],
+    ) => {
+        const alreadyResized = () => this.state.resized || this.resizing;
+
+        if (this.isPivotTableReady(event.api) && (!alreadyResized() || (alreadyResized() && force))) {
             this.resizing = true;
             // we need to know autosize width for each column, even manually resized ones, to support removal of columnWidth def from props
             await this.autoresizeVisibleColumns(event.columnApi, previouslyResizedColumnIds);
@@ -734,10 +732,14 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         this.updateStickyRow();
     };
 
-    private onModelUpdated = async (event: ModelUpdatedEvent) => {
-        const shouldAutoresizeColumns = this.isColumnAutoresizeEnabled() && this.getExecution();
+    private shouldAutoResizeColumns = () => {
+        const columnAutoresize = this.isColumnAutoresizeEnabled() && this.getExecution();
         const growToFit = this.isGrowToFitEnabled() && this.getExecution();
-        if (shouldAutoresizeColumns || growToFit) {
+        return columnAutoresize || growToFit;
+    };
+
+    private onModelUpdated = async (event: ModelUpdatedEvent) => {
+        if (this.shouldAutoResizeColumns()) {
             await this.autoresizeColumns(event);
             this.updateStickyRow();
         } else {
@@ -853,8 +855,10 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
 
     private startWatchingTableRendered = () => {
         const missingContainerRef = !this.containerRef; // table having no data will be unmounted, it causes ref null
-        const isTableVisible = !this.isTableHidden(); // table has data and takes place of Loading icon
-        if (missingContainerRef || isTableVisible) {
+        const isTableRendered = this.shouldAutoResizeColumns()
+            ? this.state.resized
+            : this.isPivotTableReady(this.gridApi);
+        if (missingContainerRef || isTableRendered) {
             this.stopWatchingTableRendered();
         }
     };
@@ -863,8 +867,6 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         clearInterval(this.watchingIntervalId);
         this.watchingIntervalId = null;
 
-        clearTimeout(this.watchingTimeoutId);
-        this.watchingTimeoutId = null;
         this.props.afterRender();
     };
 
@@ -876,17 +878,6 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             this.watchingIntervalId = window.setInterval(
                 this.startWatchingTableRendered,
                 WATCHING_TABLE_RENDERED_INTERVAL,
-            );
-        }
-
-        // after 15s, this table might or not (due to long backend execution) be rendered
-        // either way, 'afterRender' should be called to notify to KPI dashboard
-        // if KPI dashboard is in export mode, its content could be exported as much as possible even without this table
-        if (!this.watchingTimeoutId) {
-            // onFirstDataRendered can be called multiple times
-            this.watchingTimeoutId = window.setTimeout(
-                this.stopWatchingTableRendered,
-                WATCHING_TABLE_RENDERED_MAX_TIME,
             );
         }
     };
