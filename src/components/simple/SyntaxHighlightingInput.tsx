@@ -57,13 +57,12 @@ export const SyntaxHighlightingInput: React.FC<ISyntaxHighlightingProps> = props
         }
     };
 
-    const handleOnChange = (editor: CodeMirror.Editor, _: CodeMirror.EditorChange, value: string): void => {
+    const handleOnChange = (
+        _editor: CodeMirror.Editor,
+        _change: CodeMirror.EditorChange,
+        value: string,
+    ): void => {
         onChange(value);
-        reportCursorPosition(editor);
-    };
-
-    const handleOnBlur = (editor: CodeMirror.Editor): void => {
-        reportCursorPosition(editor);
     };
 
     const modeOptions: IDefineModeOptions = formatting && {
@@ -77,7 +76,7 @@ export const SyntaxHighlightingInput: React.FC<ISyntaxHighlightingProps> = props
             value={value}
             defineMode={modeOptions}
             onChange={handleOnChange}
-            onBlur={handleOnBlur}
+            onCursorActivity={reportCursorPosition}
             autoCursor={false}
             options={{
                 ...defaultOptions,
