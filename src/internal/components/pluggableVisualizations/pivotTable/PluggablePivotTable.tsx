@@ -31,6 +31,7 @@ import {
     IVisConstruct,
     IVisProps,
     IVisualizationProperties,
+    IReferences,
 } from "../../../interfaces/Visualization";
 
 import { ATTRIBUTE, DATE, METRIC } from "../../../constants/bucket";
@@ -275,6 +276,7 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
     private callbacks: IVisCallbacks;
     private intl: IntlShape;
     private visualizationProperties: IVisualizationProperties;
+    private references: IReferences;
     private locale: ILocale;
     private environment: VisualizationEnvironment;
     private featureFlags: IFeatureFlags;
@@ -285,6 +287,7 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
         this.element = props.element;
         this.configPanelElement = props.configPanelElement;
         this.callbacks = props.callbacks;
+        this.references = props.references;
         this.locale = props.locale || DEFAULT_LOCALE;
         this.intl = createInternalIntl(this.locale);
         this.onExportReady = props.callbacks.onExportReady && this.onExportReady.bind(this);
@@ -303,8 +306,10 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
         options: IVisProps,
         visualizationProperties: IVisualizationProperties,
         mdObject: VisualizationObject.IVisualizationObjectContent,
+        references: IReferences,
     ) {
         this.visualizationProperties = visualizationProperties;
+        this.references = references;
         this.renderVisualization(options, visualizationProperties, mdObject);
         this.renderConfigurationPanel(mdObject);
     }
@@ -638,13 +643,25 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
     }
 
     private handlePushData(data: any) {
-        const { pushData } = this.callbacks;
+        const {
+            callbacks: { pushData },
+            visualizationProperties,
+            references,
+        } = this;
+        const properties = visualizationProperties ? visualizationProperties.properties : null;
         if (data && data.properties && data.properties.sortItems) {
             pushData(
                 this.getMergedProperties({
                     sortItems: data.properties.sortItems,
                 }),
             );
+        } else if (data && data.result && properties && references) {
+            // pushData from VisualizationLoadingHOC
+            pushData({
+                ...data,
+                references,
+                properties,
+            });
         } else {
             pushData(data);
         }

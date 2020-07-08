@@ -318,7 +318,7 @@ describe("PluggablePivotTable", () => {
             const renderSpy = spyOnRender();
 
             const options = getDefaultOptions();
-            pivotTable.update({ ...options, dataSource: null }, {}, testMocks.emptyMdObject);
+            pivotTable.update({ ...options, dataSource: null }, {}, testMocks.emptyMdObject, null);
 
             expect(renderSpy).toHaveBeenCalledTimes(0);
 
@@ -382,7 +382,7 @@ describe("PluggablePivotTable", () => {
             const renderSpy = spyOnRender();
 
             const options = getDefaultOptions();
-            pivotTable.update(options, {}, testMocks.emptyMdObject);
+            pivotTable.update(options, {}, testMocks.emptyMdObject, null);
 
             expect(createElementSpy).toHaveBeenCalledTimes(1);
             expect(createElementSpy.mock.calls[0][0]).toBe(PivotTable);
@@ -402,7 +402,7 @@ describe("PluggablePivotTable", () => {
             const renderSpy = spyOnRender();
 
             const options = getDefaultOptions();
-            pivotTable.update(options, {}, testMocks.emptyMdObject);
+            pivotTable.update(options, {}, testMocks.emptyMdObject, null);
 
             expect(createElementSpy).toHaveBeenCalledTimes(1);
             expect(createElementSpy.mock.calls[0][0]).toBe(PivotTable);
@@ -419,7 +419,7 @@ describe("PluggablePivotTable", () => {
             const renderSpy = spyOnRender();
 
             const options = getDefaultOptions();
-            pivotTable.update(options, {}, testMocks.emptyMdObject);
+            pivotTable.update(options, {}, testMocks.emptyMdObject, null);
 
             expect(createElementSpy).toHaveBeenCalledTimes(1);
             expect(createElementSpy.mock.calls[0][0]).toBe(PivotTable);
@@ -508,7 +508,7 @@ describe("PluggablePivotTable", () => {
                     };
 
                     const options = getDefaultOptions();
-                    pivotTable.update({ ...options }, visualizationProperties, testMocks.emptyMdObject);
+                    pivotTable.update({ ...options }, visualizationProperties, testMocks.emptyMdObject, null);
 
                     const props: any = createTableSpy.mock.calls[0][0];
 
