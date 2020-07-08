@@ -250,6 +250,18 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         this.createAGGridDataSource();
     }
 
+    public componentDidMount() {
+        if (this.containerRef) {
+            this.containerRef.addEventListener("mousedown", this.onContainerMouseDown);
+        }
+    }
+
+    public componentWillUnmount() {
+        if (this.containerRef) {
+            this.containerRef.removeEventListener("mousedown", this.onContainerMouseDown);
+        }
+    }
+
     public componentWillUpdate(nextProps: IPivotTableInnerProps, nextState: IPivotTableState) {
         if (
             this.props.groupRows !== nextProps.groupRows ||
@@ -382,7 +394,6 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
                     className="gd-table ag-theme-balham s-pivot-table"
                     style={style}
                     ref={this.setContainerRef}
-                    onMouseDown={this.onContainerMouseDown}
                 >
                     <AgGridReact
                         {...gridOptions}
@@ -1159,7 +1170,7 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         this.updateStickyRowContent(scrollPosition);
     };
 
-    private onContainerMouseDown = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    private onContainerMouseDown = (event: MouseEvent) => {
         if (event.target && this.isHeaderResizer(event.target as HTMLElement)) {
             event.stopPropagation();
         }
