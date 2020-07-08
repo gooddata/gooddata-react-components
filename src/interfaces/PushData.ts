@@ -1,7 +1,12 @@
 // (C) 2007-2020 GoodData Corporation
 import { AFM, Execution, VisualizationObject } from "@gooddata/typings";
 import { IColorAssignment, IColorPalette } from "./Config";
-import { IVisualizationPropertiesControls } from "../internal/interfaces/Visualization";
+import {
+    IVisualizationPropertiesControls,
+    IOpenAsReportUiConfig,
+    IReferences,
+    IVisualizationProperties,
+} from "../internal/interfaces/Visualization";
 
 export interface IColorsData {
     colorAssignments: IColorAssignment[];
@@ -21,7 +26,6 @@ export interface IDrillableItemPushData {
     title: string;
     attributes: IAttributeDisplayFormUri[];
 }
-
 export interface IPushData {
     result?: Execution.IExecutionResponses;
     properties?: {
@@ -29,7 +33,13 @@ export interface IPushData {
         totals?: VisualizationObject.IVisualizationTotal[];
         controls?: IVisualizationPropertiesControls;
     };
+    initialProperties?: {
+        supportedProperties: IVisualizationProperties;
+    };
     propertiesMeta?: any;
+    references?: IReferences;
+    openAsReport?: IOpenAsReportUiConfig;
+    ignoreUndoRedo?: boolean;
     colors?: IColorsData;
     supportedDrillableItems?: IDrillableItemPushData[];
 }

@@ -7,6 +7,7 @@ import DisabledBubbleMessage from "../DisabledBubbleMessage";
 
 import { getTranslation } from "../../utils/translations";
 import { IVisualizationProperties } from "../../interfaces/Visualization";
+import { IPushData } from "../../../interfaces/PushData";
 
 export interface IDropdownItem {
     title?: string;
@@ -24,7 +25,7 @@ export interface IDropdownControlProps {
     disabled?: boolean;
     width?: number;
     showDisabledMessage?: boolean;
-    pushData(data: any): void;
+    pushData(data: IPushData): void;
 }
 
 const alignPoints = ["bl tl", "tl bl", "br tr", "tr br"];

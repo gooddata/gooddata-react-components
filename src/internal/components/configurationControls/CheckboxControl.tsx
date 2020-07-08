@@ -5,6 +5,7 @@ import set = require("lodash/set");
 import DisabledBubbleMessage from "../DisabledBubbleMessage";
 import { IVisualizationProperties } from "../../interfaces/Visualization";
 import { getTranslation } from "../../utils/translations";
+import { IPushData } from "../../../interfaces/PushData";
 
 export interface ICheckboxControlProps {
     valuePath: string;
@@ -13,7 +14,7 @@ export interface ICheckboxControlProps {
     checked?: boolean;
     disabled?: boolean;
     showDisabledMessage?: boolean;
-    pushData(data: any): void;
+    pushData(data: IPushData): void;
 }
 
 class CheckboxControl extends React.Component<ICheckboxControlProps & WrappedComponentProps> {
