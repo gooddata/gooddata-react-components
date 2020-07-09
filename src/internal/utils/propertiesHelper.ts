@@ -5,7 +5,13 @@ import set = require("lodash/set");
 import keys = require("lodash/keys");
 import isEmpty = require("lodash/isEmpty");
 import cloneDeep = require("lodash/cloneDeep");
-import { IExtendedReferencePoint, IVisualizationProperties, IBucketItem } from "../interfaces/Visualization";
+import {
+    IExtendedReferencePoint,
+    IVisualizationPropertiesWrapper,
+    IBucketItem,
+    IVisualizationProperties,
+    IVisualizationPropertiesControls,
+} from "../interfaces/Visualization";
 import * as BucketNames from "../../constants/bucketNames";
 import { AXIS } from "../constants/axis";
 import {
@@ -24,11 +30,11 @@ import { ColumnWidthItem } from "../../interfaces/PivotTable";
 export function getSupportedPropertiesControls(
     visualizationControlsProperties: any,
     supportedPropertiesList: string[],
-): IVisualizationProperties {
+): IVisualizationPropertiesControls {
     const clonedControls = cloneDeep(visualizationControlsProperties);
     if (supportedPropertiesList) {
         return supportedPropertiesList.reduce(
-            (props: IVisualizationProperties, current: string) =>
+            (props: IVisualizationPropertiesControls, current: string) =>
                 has(clonedControls, current) ? set(props, current, get(clonedControls, current)) : props,
             {},
         );
@@ -77,7 +83,7 @@ export function isEmptyObject(obj: object) {
 }
 
 export function getSupportedProperties(
-    visualizationProperties: IVisualizationProperties,
+    visualizationProperties: IVisualizationPropertiesWrapper,
     supportedPropertiesList: string[],
 ): IVisualizationProperties {
     const controls = get(visualizationProperties, "properties.controls", {});
@@ -94,7 +100,7 @@ export function getReferencePointWithSupportedProperties(
     referencePoint: IExtendedReferencePoint,
     supportedPropertiesList: string[],
 ): IExtendedReferencePoint {
-    const supportedControlsProperties = referencePoint.properties
+    const supportedControlsProperties: IVisualizationPropertiesControls = referencePoint.properties
         ? getSupportedPropertiesControls(referencePoint.properties.controls, supportedPropertiesList)
         : {};
 
@@ -181,11 +187,11 @@ const AXIS_NAME_POSITION_MAPPING = {
 const AXIS_TYPES: string[] = ["xaxis", "yaxis", "secondary_xaxis", "secondary_yaxis"];
 
 export function getHighchartsAxisNameConfiguration(
-    controlProperties: IVisualizationProperties,
+    controlProperties: IVisualizationPropertiesControls,
     enableAxisNameConfiguration: boolean = false,
-): IVisualizationProperties {
-    const axisProperties: IVisualizationProperties = AXIS_TYPES.reduce(
-        (result: IVisualizationProperties, axis: string) => {
+): IVisualizationPropertiesControls {
+    const axisProperties: IVisualizationPropertiesControls = AXIS_TYPES.reduce(
+        (result: IVisualizationPropertiesControls, axis: string) => {
             const axisNameConfig: IAxisNameProperties = get(controlProperties, `${axis}.name`);
 
             if (isEmpty(axisNameConfig)) {
@@ -214,7 +220,7 @@ export function getHighchartsAxisNameConfiguration(
 }
 
 export function getColumnWidthsFromProperties(
-    visualizationProperties: IVisualizationProperties,
+    visualizationProperties: IVisualizationPropertiesWrapper,
 ): ColumnWidthItem[] | undefined {
     return get(visualizationProperties, "properties.controls.columnWidths");
 }

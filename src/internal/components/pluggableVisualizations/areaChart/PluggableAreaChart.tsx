@@ -18,7 +18,7 @@ import {
     IUiConfig,
     IBucket,
     IVisProps,
-    IVisualizationProperties,
+    IVisualizationPropertiesWrapper,
     IReferences,
 } from "../../../interfaces/Visualization";
 import { DEFAULT_AREA_UICONFIG, MAX_STACKS_COUNT, MAX_VIEW_COUNT } from "../../../constants/uiConfig";
@@ -67,7 +67,7 @@ export class PluggableAreaChart extends PluggableBaseChart {
 
     public update(
         options: IVisProps,
-        visualizationProperties: IVisualizationProperties,
+        visualizationProperties: IVisualizationPropertiesWrapper,
         mdObject: VisualizationObject.IVisualizationObjectContent,
         references: IReferences,
     ): void {

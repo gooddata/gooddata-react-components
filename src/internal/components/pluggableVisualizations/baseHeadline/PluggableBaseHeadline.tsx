@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import { render } from "react-dom";
 import { VisualizationObject } from "@gooddata/typings";
@@ -9,6 +9,7 @@ import UnsupportedConfigurationPanel from "../../configurationPanels/Unsupported
 import {
     ILocale,
     IVisCallbacks,
+    IVisualizationPropertiesWrapper,
     IVisualizationProperties,
     IVisProps,
     IFeatureFlags,
@@ -42,7 +43,7 @@ export abstract class PluggableBaseHeadline extends AbstractPluggableVisualizati
 
     public update(
         options: IVisProps,
-        visualizationProperties: IVisualizationProperties,
+        visualizationProperties: IVisualizationPropertiesWrapper,
         mdObject: VisualizationObject.IVisualizationObjectContent,
     ) {
         this.renderVisualization(options, mdObject);
@@ -58,16 +59,17 @@ export abstract class PluggableBaseHeadline extends AbstractPluggableVisualizati
         mdObject: VisualizationObject.IVisualizationObjectContent,
     ): void;
 
-    protected renderConfigurationPanel(visualizationProperties: IVisualizationProperties) {
+    protected renderConfigurationPanel(visualizationProperties: IVisualizationPropertiesWrapper) {
         if (document.querySelector(this.configPanelElement)) {
-            const properties: IVisualizationProperties =
-                (visualizationProperties && visualizationProperties.properties) || {};
+            const properties: IVisualizationProperties = visualizationProperties
+                ? getSupportedProperties(visualizationProperties, this.supportedPropertiesList)
+                : {};
 
             render(
                 <UnsupportedConfigurationPanel
                     locale={this.locale}
                     pushData={this.callbacks.pushData}
-                    properties={getSupportedProperties(properties, this.supportedPropertiesList)}
+                    properties={properties}
                 />,
                 document.querySelector(this.configPanelElement),
             );

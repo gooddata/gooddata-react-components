@@ -9,7 +9,7 @@ import {
     getSortIdentifiers,
     setSortItems,
 } from "../sort";
-import { IVisualizationProperties, IExtendedReferencePoint } from "../../interfaces/Visualization";
+import { IExtendedReferencePoint, IVisualizationProperties } from "../../interfaces/Visualization";
 import * as referencePointMocks from "../../mocks/referencePointMocks";
 import { DEFAULT_BASE_CHART_UICONFIG } from "../../constants/uiConfig";
 import { SORT_DIR_ASC, SORT_DIR_DESC } from "../../constants/sort";

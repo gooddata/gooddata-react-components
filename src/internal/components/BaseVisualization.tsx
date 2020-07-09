@@ -17,7 +17,7 @@ import {
     IVisualization,
     IReferencePoint,
     IFeatureFlags,
-    IVisualizationProperties,
+    IVisualizationPropertiesWrapper,
     IBucketItem,
     IGdcConfig,
     IReferences,
@@ -79,7 +79,7 @@ export interface IBaseVisualizationProps extends IVisCallbacks {
     featureFlags?: IFeatureFlags;
     visualizationsCatalog?: object;
     newDerivedBucketItems?: IBucketItem[];
-    visualizationProperties?: IVisualizationProperties;
+    visualizationProperties?: IVisualizationPropertiesWrapper;
     references?: IReferences;
     referencePoint?: IReferencePoint;
     onError: VisEvents.OnError;

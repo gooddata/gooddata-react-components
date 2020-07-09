@@ -30,8 +30,9 @@ import {
     IVisCallbacks,
     IVisConstruct,
     IVisProps,
-    IVisualizationProperties,
+    IVisualizationPropertiesWrapper,
     IReferences,
+    IVisualizationProperties,
 } from "../../../interfaces/Visualization";
 
 import { ATTRIBUTE, DATE, METRIC } from "../../../constants/bucket";
@@ -275,7 +276,7 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
     private configPanelElement: string;
     private callbacks: IVisCallbacks;
     private intl: IntlShape;
-    private visualizationProperties: IVisualizationProperties;
+    private visualizationProperties: IVisualizationPropertiesWrapper;
     private references: IReferences;
     private locale: ILocale;
     private environment: VisualizationEnvironment;
@@ -304,7 +305,7 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
 
     public update(
         options: IVisProps,
-        visualizationProperties: IVisualizationProperties,
+        visualizationProperties: IVisualizationPropertiesWrapper,
         mdObject: VisualizationObject.IVisualizationObjectContent,
         references: IReferences,
     ) {
@@ -430,7 +431,7 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
 
     protected renderVisualization(
         options: IVisProps,
-        visualizationProperties: IVisualizationProperties,
+        visualizationProperties: IVisualizationPropertiesWrapper,
         mdObject: VisualizationObject.IVisualizationObjectContent,
     ) {
         const { dataSource } = options;
@@ -574,11 +575,7 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
 
     protected renderConfigurationPanel(mdObject: VisualizationObject.IVisualizationObjectContent) {
         if (document.querySelector(this.configPanelElement)) {
-            const properties: IVisualizationProperties = get(
-                this.visualizationProperties,
-                "properties",
-                {},
-            ) as IVisualizationProperties;
+            const properties: IVisualizationProperties = get(this.visualizationProperties, "properties", {});
             // we need to handle cases when attribute previously bearing the default sort is no longer available
             const sanitizedProperties = properties.sortItems
                 ? {
@@ -615,12 +612,12 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
         return merge({ menu }, config);
     }
 
-    private getMergedProperties(newProperties: any): IVisualizationProperties {
-        const properties: IVisualizationProperties = get(
+    private getMergedProperties(newProperties: any): IVisualizationPropertiesWrapper {
+        const properties: IVisualizationPropertiesWrapper = get(
             this.visualizationProperties,
             "properties",
             {},
-        ) as IVisualizationProperties;
+        ) as IVisualizationPropertiesWrapper;
 
         return {
             properties: {

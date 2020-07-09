@@ -14,12 +14,13 @@ import {
     IReferencePoint,
     IExtendedReferencePoint,
     IVisConstruct,
-    IVisualizationProperties,
     IVisProps,
     IBucketItem,
     IBucket,
     IUiConfig,
     IGdcConfig,
+    IVisualizationProperties,
+    IVisualizationPropertiesControls,
 } from "../../../interfaces/Visualization";
 import { PluggableBaseChart } from "../baseChart/PluggableBaseChart";
 import { BUCKETS, METRIC, ATTRIBUTE } from "../../../constants/bucket";
@@ -163,7 +164,7 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
     protected buildVisualizationConfig(
         mdObject: VisualizationObject.IVisualizationObjectContent,
         config: IGdcConfig,
-        supportedControls: IVisualizationProperties,
+        supportedControls: IVisualizationPropertiesControls,
     ): IChartConfig {
         const { center, legend, viewport = {} } = supportedControls;
         const { colorMapping } = super.buildVisualizationConfig(mdObject, config, supportedControls);
@@ -219,7 +220,11 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
         // keep height undef for AD; causes indigo-visualizations to pick default 100%
         const resultingHeight = this.environment === DASHBOARDS_ENVIRONMENT ? height : undefined;
         const resultSpec = this.getResultSpec(options, visualizationProperties, mdObject);
-        const supportedControls: IVisualizationProperties = get(visualizationProperties, "controls", {});
+        const supportedControls: IVisualizationPropertiesControls = get(
+            visualizationProperties,
+            "controls",
+            {},
+        );
         const configSupportedControls = !isEmpty(supportedControls) && cloneDeep(supportedControls);
         const fullConfig = this.buildVisualizationConfig(mdObject, config, configSupportedControls);
 
@@ -269,7 +274,7 @@ export class PluggableGeoPushpinChart extends PluggableBaseChart {
             (bucket: VisualizationObject.IBucket): boolean => bucket.localIdentifier === BucketNames.SEGMENT,
         );
 
-        const allProperties: IVisualizationProperties = get(visualizationProperties, "properties", {});
+        const allProperties: IVisualizationProperties = visualizationProperties || {};
 
         // sort items by segmentBy by alphabetical order
         const sorts: AFM.SortItem[] = hasSegmentAttribute

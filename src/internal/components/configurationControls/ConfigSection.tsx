@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import { injectIntl, WrappedComponentProps } from "react-intl";
 import * as classNames from "classnames";
@@ -9,6 +9,7 @@ import set = require("lodash/set");
 import DisabledBubbleMessage from "../DisabledBubbleMessage";
 
 import { getTranslation } from "../../utils/translations";
+import { IVisualizationProperties } from "../../interfaces/Visualization";
 
 export interface IConfigSectionProps {
     id: string;
@@ -17,7 +18,7 @@ export interface IConfigSectionProps {
     toggleDisabled?: boolean;
     toggledOn?: boolean;
     propertiesMeta: any;
-    properties?: any;
+    properties?: IVisualizationProperties;
     title: string;
     subtitle?: string;
     showDisabledMessage?: boolean;

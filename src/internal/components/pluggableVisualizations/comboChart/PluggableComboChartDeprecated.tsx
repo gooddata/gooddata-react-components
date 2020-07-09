@@ -107,11 +107,7 @@ export class PluggableComboChartDeprecated extends PluggableBaseChart {
 
     protected renderConfigurationPanel() {
         if (document.querySelector(this.configPanelElement)) {
-            const properties: IVisualizationProperties = get(
-                this.visualizationProperties,
-                "properties",
-                {},
-            ) as IVisualizationProperties;
+            const properties: IVisualizationProperties = this.visualizationProperties || {};
 
             render(
                 <UnsupportedConfigurationPanel
