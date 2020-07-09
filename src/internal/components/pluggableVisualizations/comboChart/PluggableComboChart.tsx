@@ -12,8 +12,8 @@ import {
     IVisConstruct,
     IBucketItem,
     IBucket,
-    IVisualizationProperties,
     IUiConfig,
+    IVisualizationPropertiesContent,
 } from "../../../interfaces/Visualization";
 
 import { METRIC, BUCKETS } from "../../../constants/bucket";
@@ -189,7 +189,7 @@ export class PluggableComboChart extends PluggableBaseChart {
         ]);
     }
 
-    private configureChartTypes(referencePoint: IReferencePoint): IVisualizationProperties {
+    private configureChartTypes(referencePoint: IReferencePoint): IVisualizationPropertiesContent {
         const buckets: IBucket[] = get(referencePoint, BUCKETS, []);
         const controls = get(referencePoint, PROPERTY_CONTROLS, {});
         const primaryChartType = get(

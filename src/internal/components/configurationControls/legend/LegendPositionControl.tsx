@@ -1,17 +1,17 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import { injectIntl, WrappedComponentProps } from "react-intl";
 
 import DropdownControl from "../DropdownControl";
 import { legendPositionDropdownItems } from "../../../constants/dropdowns";
 import { getTranslatedDropdownItems } from "../../../utils/translations";
-import { IVisualizationProperties } from "../../../interfaces/Visualization";
+import { IVisualizationPropertiesContent } from "../../../interfaces/Visualization";
 
 export interface ILegendPositionControl {
     disabled: boolean;
     value: string;
     showDisabledMessage: boolean;
-    properties: IVisualizationProperties;
+    properties: IVisualizationPropertiesContent;
     pushData: (data: any) => any;
 }
 

@@ -56,7 +56,7 @@ import { _experimentalDataSourceFactory } from "./experimentalDataSource";
 import IVisualizationObjectContent = VisualizationObject.IVisualizationObjectContent;
 import { getHighchartsAxisNameConfiguration } from "../../internal/utils/propertiesHelper";
 import { DEFAULT_LOCALE } from "../../constants/localization";
-import { IVisualizationProperties } from "../../internal/interfaces/Visualization";
+import { IVisualizationPropertiesContent } from "../../internal/interfaces/Visualization";
 import { ColumnWidthItem, IPivotTableConfig } from "../../interfaces/PivotTable";
 export { Requireable };
 
@@ -172,11 +172,13 @@ function fetchLocalizationFromUser(sdk: SDK, projectId: string): Promise<Localiz
         });
 }
 
-function getWidthDefs(mdObjectContentProperties: IVisualizationProperties): ColumnWidthItem[] | undefined {
+function getWidthDefs(
+    mdObjectContentProperties: IVisualizationPropertiesContent,
+): ColumnWidthItem[] | undefined {
     return get(mdObjectContentProperties, ["controls", "columnWidths"]);
 }
 
-function getProperties(mdObject: VisualizationObject.IVisualizationObject): IVisualizationProperties {
+function getProperties(mdObject: VisualizationObject.IVisualizationObject): IVisualizationPropertiesContent {
     return mdObject.content && mdObject.content.properties && JSON.parse(mdObject.content.properties);
 }
 

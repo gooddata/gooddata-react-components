@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import { WrappedComponentProps, injectIntl } from "react-intl";
 import noop = require("lodash/noop");
@@ -6,12 +6,12 @@ import set = require("lodash/set");
 import cloneDeep = require("lodash/cloneDeep");
 import * as classNames from "classnames";
 import DisabledBubbleMessage from "../DisabledBubbleMessage";
-import { IVisualizationProperties } from "../../interfaces/Visualization";
+import { IVisualizationPropertiesContent } from "../../interfaces/Visualization";
 import { getTranslation } from "../../utils/translations";
 
 export interface IInputControlProps {
     valuePath: string;
-    properties: IVisualizationProperties;
+    properties: IVisualizationPropertiesContent;
     labelText?: string;
     value?: string;
     placeholder?: string;

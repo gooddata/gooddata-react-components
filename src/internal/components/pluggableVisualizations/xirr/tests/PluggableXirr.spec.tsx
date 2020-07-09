@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import * as ReactDom from "react-dom";
 import cloneDeep = require("lodash/cloneDeep");
@@ -73,7 +73,7 @@ describe("PluggableXirr", () => {
 
             const headline = createComponent();
 
-            const properties: IVisualizationProperties = {};
+            const properties: IVisualizationProperties = { properties: {} };
             const options: IVisProps = getTestOptions();
 
             headline.update({ ...options, dataSource: null }, properties, testMocks.emptyMdObject);

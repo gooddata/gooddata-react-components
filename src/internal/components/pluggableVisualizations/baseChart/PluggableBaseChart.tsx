@@ -23,6 +23,8 @@ import {
     IBucket,
     IBucketItem,
     IGdcConfig,
+    IVisualizationPropertiesControls,
+    IVisualizationPropertiesContent,
 } from "../../../interfaces/Visualization";
 import { IColorConfiguration } from "../../../interfaces/Colors";
 import {
@@ -87,9 +89,9 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
     protected isError: boolean;
     protected isLoading: boolean;
     protected options: IVisProps;
-    protected visualizationProperties: IVisualizationProperties;
-    protected defaultControlsProperties: IVisualizationProperties;
-    protected customControlsProperties: IVisualizationProperties;
+    protected visualizationProperties: IVisualizationPropertiesContent;
+    protected defaultControlsProperties: IVisualizationPropertiesControls;
+    protected customControlsProperties: IVisualizationPropertiesControls;
     protected propertiesMeta: any;
     protected mdObject: VisualizationObject.IVisualizationObjectContent;
     protected supportedPropertiesList: string[];
@@ -188,7 +190,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
         return isOpenAsReportSupportedByVisualization(this.type);
     }
 
-    public setCustomControlsProperties(customControlsProperties: IVisualizationProperties) {
+    public setCustomControlsProperties(customControlsProperties: IVisualizationPropertiesControls) {
         this.customControlsProperties = customControlsProperties;
     }
 
@@ -244,7 +246,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
 
     protected renderVisualization(
         options: IVisProps,
-        visualizationProperties: IVisualizationProperties,
+        visualizationProperties: IVisualizationPropertiesContent,
         mdObject: VisualizationObject.IVisualizationObjectContent,
     ) {
         const { dataSource } = options;
@@ -258,13 +260,9 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
             const { drillableItems } = custom;
             const { afterRender, onDrill, onFiredDrillEvent } = this.callbacks;
 
-            const allProperties: IVisualizationProperties = get(
-                visualizationProperties,
-                "properties",
-                {},
-            ) as IVisualizationProperties;
+            const allProperties: IVisualizationPropertiesContent = visualizationProperties || {};
 
-            const supportedControls: IVisualizationProperties = this.getSupportedControls(mdObject);
+            const supportedControls: IVisualizationPropertiesControls = this.getSupportedControls(mdObject);
 
             const resultSpecWithDimensions: AFM.IResultSpec = {
                 ...options.resultSpec,
@@ -432,7 +430,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
     protected buildVisualizationConfig(
         mdObject: VisualizationObject.IVisualizationObjectContent,
         config: IGdcConfig,
-        supportedControls: IVisualizationProperties,
+        supportedControls: IVisualizationPropertiesControls,
     ): IChartConfig {
         const colorMapping: IColorMappingProperty[] = get(supportedControls, "colorMapping");
 
@@ -453,7 +451,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
         };
     }
 
-    private getOpenAsReportConfig(properties: IVisualizationProperties) {
+    private getOpenAsReportConfig(properties: IVisualizationPropertiesContent) {
         const hasMapping = hasColorMapping(properties);
         const isSupported = this.isOpenAsReportSupported();
 
@@ -523,7 +521,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
     }
 
     private getLegendPosition(
-        controlProperties: IVisualizationProperties,
+        controlProperties: IVisualizationPropertiesControls,
         mdObject: VisualizationObject.IVisualizationObjectContent,
     ) {
         const legendPosition = get(controlProperties, "legend.position", "auto");

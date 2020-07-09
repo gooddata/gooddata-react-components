@@ -101,7 +101,7 @@ describe("PluggableHeadline", () => {
 
             const headline = createComponent();
 
-            const properties: IVisualizationProperties = {};
+            const properties: IVisualizationProperties = { properties: {} };
             const options: IVisProps = getTestOptions();
 
             headline.update({ ...options, dataSource: null }, properties, testMocks.emptyMdObject);

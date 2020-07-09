@@ -13,7 +13,7 @@ import {
     IExtendedReferencePoint,
     IVisConstruct,
     IBucketItem,
-    IVisualizationProperties,
+    IVisualizationPropertiesContent,
 } from "../../../interfaces/Visualization";
 
 import { METRIC, BUCKETS } from "../../../constants/bucket";
@@ -107,11 +107,7 @@ export class PluggableComboChartDeprecated extends PluggableBaseChart {
 
     protected renderConfigurationPanel() {
         if (document.querySelector(this.configPanelElement)) {
-            const properties: IVisualizationProperties = get(
-                this.visualizationProperties,
-                "properties",
-                {},
-            ) as IVisualizationProperties;
+            const properties: IVisualizationPropertiesContent = this.visualizationProperties || {};
 
             render(
                 <UnsupportedConfigurationPanel

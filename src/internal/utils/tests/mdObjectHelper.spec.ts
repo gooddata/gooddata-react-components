@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import { VisualizationObject } from "@gooddata/typings";
 import {
     hasAttribute,
@@ -8,7 +8,7 @@ import {
     countItemsInMdObject,
     countItemsOnAxes,
 } from "../mdObjectHelper";
-import { IVisualizationProperties } from "../../interfaces/Visualization";
+import { IVisualizationPropertiesControls } from "../../interfaces/Visualization";
 import * as BucketNames from "../../../constants/bucketNames";
 
 describe("mdObjectHelper", () => {
@@ -121,7 +121,7 @@ describe("mdObjectHelper", () => {
                 ],
                 visualizationClass,
             };
-            const supportedControls: IVisualizationProperties = {
+            const supportedControls: IVisualizationPropertiesControls = {
                 stackMeasures: true,
                 secondary_yaxis: {
                     measures: ["m2"],
@@ -144,7 +144,7 @@ describe("mdObjectHelper", () => {
                 ],
                 visualizationClass,
             };
-            const supportedControls: IVisualizationProperties = {
+            const supportedControls: IVisualizationPropertiesControls = {
                 stackMeasures: true,
             };
             expect(canSortStackTotalValue(mdObject, supportedControls)).toBe(true);
@@ -183,7 +183,7 @@ describe("mdObjectHelper", () => {
                     { localIdentifier: BucketNames.MEASURES, items: Array(3) as any[] },
                 ],
             };
-            const controls: IVisualizationProperties = {
+            const controls: IVisualizationPropertiesControls = {
                 secondary_yaxis: {
                     measures: Array(1),
                 },
@@ -206,7 +206,7 @@ describe("mdObjectHelper", () => {
                     { localIdentifier: BucketNames.MEASURES, items: Array(3) as any[] },
                 ],
             };
-            const controls: IVisualizationProperties = {
+            const controls: IVisualizationPropertiesControls = {
                 secondary_xaxis: {
                     measures: Array(2),
                 },
@@ -230,7 +230,7 @@ describe("mdObjectHelper", () => {
                     { localIdentifier: BucketNames.SECONDARY_MEASURES, items: Array(4) as any[] },
                 ],
             };
-            const controls: IVisualizationProperties = {
+            const controls: IVisualizationPropertiesControls = {
                 secondary_yaxis: {
                     measures: Array(4),
                 },

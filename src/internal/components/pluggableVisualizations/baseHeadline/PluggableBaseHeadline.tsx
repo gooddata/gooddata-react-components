@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import { render } from "react-dom";
 import { VisualizationObject } from "@gooddata/typings";
@@ -10,6 +10,7 @@ import {
     ILocale,
     IVisCallbacks,
     IVisualizationProperties,
+    IVisualizationPropertiesContent,
     IVisProps,
     IFeatureFlags,
     IVisConstruct,
@@ -60,14 +61,15 @@ export abstract class PluggableBaseHeadline extends AbstractPluggableVisualizati
 
     protected renderConfigurationPanel(visualizationProperties: IVisualizationProperties) {
         if (document.querySelector(this.configPanelElement)) {
-            const properties: IVisualizationProperties =
-                (visualizationProperties && visualizationProperties.properties) || {};
+            const properties: IVisualizationPropertiesContent = visualizationProperties
+                ? getSupportedProperties(visualizationProperties, this.supportedPropertiesList)
+                : {};
 
             render(
                 <UnsupportedConfigurationPanel
                     locale={this.locale}
                     pushData={this.callbacks.pushData}
-                    properties={getSupportedProperties(properties, this.supportedPropertiesList)}
+                    properties={properties}
                 />,
                 document.querySelector(this.configPanelElement),
             );

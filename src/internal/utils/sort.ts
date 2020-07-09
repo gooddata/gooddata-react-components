@@ -13,7 +13,7 @@ import {
     IBucket,
     IBucketItem,
     IExtendedReferencePoint,
-    IVisualizationProperties,
+    IVisualizationPropertiesContent,
 } from "../interfaces/Visualization";
 
 import { getFirstAttribute, getFirstValidMeasure } from "./bucketHelper";
@@ -73,13 +73,14 @@ export function createSorts(
     type: string,
     afm: AFM.IAfm,
     resultSpec: AFM.IResultSpec,
-    visualizationProperties: IVisualizationProperties,
+    visualizationProperties: IVisualizationPropertiesContent,
     canSortStackTotalValue: boolean = false,
     enableSortingByTotalGroup: boolean = false,
 ): AFM.SortItem[] {
     const sortItems = get(visualizationProperties, "sortItems", []) as AFM.SortItem[];
     const sanitizedSortItems: AFM.SortItem[] = sanitizeSorts(afm, sortItems);
 
+    // TODO this function is never called from PivotTable
     // reuse sorts only for Table
     // This does not apply to PivotTable, it doesn't use this function at all
     if (type === VisualizationTypes.TABLE && !isEmpty(sanitizedSortItems)) {

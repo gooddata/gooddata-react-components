@@ -3,7 +3,7 @@ import * as React from "react";
 import { WrappedComponentProps, injectIntl } from "react-intl";
 
 import get = require("lodash/get");
-import { IVisualizationProperties } from "../../interfaces/Visualization";
+import { IVisualizationPropertiesContent } from "../../interfaces/Visualization";
 import ConfigSubsection from "./ConfigSubsection";
 import DropdownControl from "./DropdownControl";
 import { getTranslatedDropdownItems } from "../../utils/translations";
@@ -11,7 +11,7 @@ import { pushpinSizeDropdownItems } from "../../constants/dropdowns";
 
 export interface IPushpinSizeControl {
     disabled: boolean;
-    properties: IVisualizationProperties;
+    properties: IVisualizationPropertiesContent;
     pushData: (data: any) => any;
 }
 

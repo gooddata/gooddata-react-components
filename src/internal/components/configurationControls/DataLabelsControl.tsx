@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import { WrappedComponentProps, injectIntl } from "react-intl";
 import get = require("lodash/get");
@@ -6,11 +6,11 @@ import DropdownControl from "./DropdownControl";
 
 import { dataLabelsDropdownItems } from "../../constants/dropdowns";
 import { getTranslatedDropdownItems } from "../../utils/translations";
-import { IVisualizationProperties } from "../../interfaces/Visualization";
+import { IVisualizationPropertiesContent } from "../../interfaces/Visualization";
 
 export interface IDataLabelsControlProps {
     pushData: (data: any) => any;
-    properties: IVisualizationProperties;
+    properties: IVisualizationPropertiesContent;
     isDisabled: boolean;
     showDisabledMessage?: boolean;
     defaultValue?: string | boolean;

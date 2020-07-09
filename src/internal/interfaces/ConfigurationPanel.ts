@@ -1,12 +1,12 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import { AxisType } from "./AxisType";
-import { IVisualizationProperties } from "./Visualization";
+import { IVisualizationPropertiesContent } from "./Visualization";
 import { IPushData } from "../../interfaces/PushData";
 
 export interface IConfigItemSubsection {
     disabled: boolean;
     configPanelDisabled: boolean;
     axis: AxisType;
-    properties: IVisualizationProperties;
+    properties: IVisualizationPropertiesContent;
     pushData(data: IPushData): void;
 }

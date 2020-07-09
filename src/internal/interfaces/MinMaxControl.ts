@@ -1,11 +1,11 @@
-// (C) 2019 GoodData Corporation
-import { IVisualizationProperties } from "./Visualization";
+// (C) 2019-2020 GoodData Corporation
+import { IVisualizationPropertiesContent } from "./Visualization";
 
 export interface IMinMaxControlProps {
     isDisabled: boolean;
     basePath: string;
     pushData: (data: any) => any;
-    properties: IVisualizationProperties;
+    properties: IVisualizationPropertiesContent;
     propertiesMeta: any;
 }
 

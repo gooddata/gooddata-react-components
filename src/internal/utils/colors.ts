@@ -9,7 +9,7 @@ import compact = require("lodash/compact");
 
 import { Execution } from "@gooddata/typings";
 import { TypeGuards, IColorItem, IColorMappingProperty } from "@gooddata/gooddata-js";
-import { IVisualizationProperties } from "../interfaces/Visualization";
+import { IVisualizationPropertiesContent } from "../interfaces/Visualization";
 import { IColorConfiguration, IColoredItem } from "../interfaces/Colors";
 import * as MappingHeader from "../../interfaces/MappingHeader";
 import ColorUtils from "../../components/visualizations/utils/color";
@@ -71,7 +71,11 @@ function getMeasureMappingIdentifier(item: Execution.IMeasureHeaderItem): string
     return item.measureHeaderItem.localIdentifier;
 }
 
-function mergeColorMappingToProperties(properties: IVisualizationProperties, id: string, color: IColorItem) {
+function mergeColorMappingToProperties(
+    properties: IVisualizationPropertiesContent,
+    id: string,
+    color: IColorItem,
+): IVisualizationPropertiesContent {
     const colorMapping: IColorMappingProperty[] = [
         {
             id,
@@ -89,10 +93,10 @@ function mergeColorMappingToProperties(properties: IVisualizationProperties, id:
 }
 
 export function getProperties(
-    properties: IVisualizationProperties,
+    properties: IVisualizationPropertiesContent,
     item: MappingHeader.IMappingHeader,
     color: IColorItem,
-): IVisualizationProperties {
+): IVisualizationPropertiesContent {
     if (MappingHeader.isMappingHeaderMeasureItem(item)) {
         const id = getMeasureMappingIdentifier(item);
         const newProperties = mergeColorMappingToProperties(properties, id, color);
@@ -107,7 +111,7 @@ export function getProperties(
 }
 
 export function getValidProperties(
-    properties: IVisualizationProperties,
+    properties: IVisualizationPropertiesContent,
     colorAssignments: ChartConfiguration.IColorAssignment[],
 ) {
     if (!properties || !properties.controls || !properties.controls.colorMapping) {

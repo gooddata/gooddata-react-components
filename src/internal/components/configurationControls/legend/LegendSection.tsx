@@ -2,12 +2,12 @@
 import * as React from "react";
 import ConfigSection from "../ConfigSection";
 import LegendPositionControl from "./LegendPositionControl";
-import { IVisualizationProperties } from "../../../interfaces/Visualization";
+import { IVisualizationPropertiesContent } from "../../../interfaces/Visualization";
 import get = require("lodash/get");
 
 export interface ILegendSection {
     controlsDisabled: boolean;
-    properties: IVisualizationProperties;
+    properties: IVisualizationPropertiesContent;
     propertiesMeta: any;
     pushData: (data: any) => any;
 }

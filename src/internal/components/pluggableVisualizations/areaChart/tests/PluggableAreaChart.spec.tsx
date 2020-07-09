@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import noop = require("lodash/noop");
 
 import { IBucket, IFilters, IVisProps } from "../../../../interfaces/Visualization";
@@ -166,7 +166,7 @@ describe("PluggableAreaChart", () => {
                               },
                           },
                       }
-                    : {};
+                    : { properties: {} };
             const expected = stackMeasures === null ? true : stackMeasures;
             chart.update(options, visualizationProperties, testMocks.emptyMdObject, undefined);
             const renderCallsCount = spyOnRender.mock.calls.length;

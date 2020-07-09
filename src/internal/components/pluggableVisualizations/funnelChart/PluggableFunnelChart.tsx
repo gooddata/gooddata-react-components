@@ -1,12 +1,11 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import { render } from "react-dom";
-import get = require("lodash/get");
 import {
     IVisConstruct,
     IReferencePoint,
     IExtendedReferencePoint,
-    IVisualizationProperties,
+    IVisualizationPropertiesContent,
 } from "../../../interfaces/Visualization";
 
 import { PluggablePieChart } from "../pieChart/PluggablePieChart";
@@ -26,11 +25,7 @@ export class PluggableFunnelChart extends PluggablePieChart {
 
     protected renderConfigurationPanel() {
         if (document.querySelector(this.configPanelElement)) {
-            const properties: IVisualizationProperties = get(
-                this.visualizationProperties,
-                "properties",
-                {},
-            ) as IVisualizationProperties;
+            const properties: IVisualizationPropertiesContent = this.visualizationProperties || {};
 
             render(
                 <UnsupportedConfigurationPanel

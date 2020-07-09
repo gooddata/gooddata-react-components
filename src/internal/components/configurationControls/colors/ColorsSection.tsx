@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import set = require("lodash/set");
 import get = require("lodash/get");
@@ -11,14 +11,14 @@ import * as classNames from "classnames";
 import ConfigSection from "../../configurationControls/ConfigSection";
 import ColoredItemsList from "./coloredItemsList/ColoredItemsList";
 import { getTranslation } from "../../../utils/translations";
-import { IReferences, IVisualizationProperties } from "../../../interfaces/Visualization";
+import { IReferences, IVisualizationPropertiesContent } from "../../../interfaces/Visualization";
 import { IColoredItem, IColorConfiguration } from "../../../interfaces/Colors";
 import { getColoredInputItems, getProperties } from "../../../utils/colors";
 
 export interface IColorsSectionProps {
     controlsDisabled: boolean;
     showCustomPicker: boolean;
-    properties: IVisualizationProperties;
+    properties: IVisualizationPropertiesContent;
     propertiesMeta: any;
     references: IReferences;
     pushData: (data: any) => void;

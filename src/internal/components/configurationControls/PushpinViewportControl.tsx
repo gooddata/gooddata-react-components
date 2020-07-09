@@ -4,14 +4,14 @@ import get = require("lodash/get");
 import { injectIntl, WrappedComponentProps } from "react-intl";
 
 import DropdownControl from "./DropdownControl";
-import { IVisualizationProperties } from "../../interfaces/Visualization";
+import { IVisualizationPropertiesContent } from "../../interfaces/Visualization";
 import { getTranslatedDropdownItems } from "../../utils/translations";
 import { pushpinViewportDropdownItems } from "../../constants/dropdowns";
 import { IGeoConfigViewport } from "../../../interfaces/GeoChart";
 
 export interface IPushpinViewportControl {
     disabled: boolean;
-    properties: IVisualizationProperties;
+    properties: IVisualizationPropertiesContent;
     pushData: (data: any) => any;
 }
 

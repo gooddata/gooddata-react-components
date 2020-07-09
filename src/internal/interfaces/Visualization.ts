@@ -260,16 +260,25 @@ export interface IUiConfig {
     supportedLocationIcon?: ISupportedLocationIcon;
 }
 
-export interface IVisualizationProperties {
+export interface IVisualizationPropertiesContent {
+    controls?: IVisualizationPropertiesControls;
+    sortItems?: AFM.SortItem[];
+}
+
+export interface IVisualizationPropertiesControls {
     // This can be anything depending on a visualization type
-    // perhaps consider adding: sortItems?: AFM.SortItem[]
     [property: string]: any;
+}
+
+export interface IVisualizationProperties {
+    properties: IVisualizationPropertiesContent;
+    propertiesMeta?: any;
 }
 
 export interface IReferencePoint {
     buckets: IBucket[];
     filters: IFilters;
-    properties?: IVisualizationProperties; // properties are under plugvis creator's control
+    properties?: IVisualizationPropertiesContent; // properties are under plugvis creator's control
 }
 
 export interface IReferences {
@@ -279,7 +288,7 @@ export interface IReferences {
 export interface IExtendedReferencePoint {
     buckets: IBucket[];
     filters: IFilters;
-    properties?: IVisualizationProperties; // properties are under plugvis creator's control
+    properties?: IVisualizationPropertiesContent; // properties are under plugvis creator's control
     uiConfig: IUiConfig;
 }
 

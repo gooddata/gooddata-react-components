@@ -1,14 +1,14 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import { injectIntl, WrappedComponentProps } from "react-intl";
 import set = require("lodash/set");
 import DisabledBubbleMessage from "../DisabledBubbleMessage";
-import { IVisualizationProperties } from "../../interfaces/Visualization";
+import { IVisualizationPropertiesContent } from "../../interfaces/Visualization";
 import { getTranslation } from "../../utils/translations";
 
 export interface ICheckboxControlProps {
     valuePath: string;
-    properties: IVisualizationProperties;
+    properties: IVisualizationPropertiesContent;
     labelText?: string;
     checked?: boolean;
     disabled?: boolean;

@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import noop = require("lodash/noop");
 import get = require("lodash/get");
 import * as referencePointMocks from "../../../mocks/referencePointMocks";
@@ -261,7 +261,7 @@ describe("PluggableColumnBarCharts", () => {
             const visualization = createComponent(defaultProps);
             const mdObject = testMocks.twoViewItemsMdObject;
 
-            visualization.update(options, {}, mdObject, undefined);
+            visualization.update(options, { properties: {} }, mdObject, undefined);
             const isOpenAsReportSupported = visualization.isOpenAsReportSupported();
             expect(isOpenAsReportSupported).toBe(false);
         });
@@ -303,7 +303,7 @@ describe("PluggableColumnBarCharts", () => {
             const visualization = createComponent(defaultProps);
             const mdObject = testMocks.twoMeasuresMdObject;
 
-            visualization.update(options, {}, mdObject, undefined);
+            visualization.update(options, { properties: {} }, mdObject, undefined);
             const isOpenAsReportSupported = visualization.isOpenAsReportSupported();
             expect(isOpenAsReportSupported).toBe(true);
         });

@@ -32,6 +32,7 @@ import {
     IVisProps,
     IVisualizationProperties,
     IReferences,
+    IVisualizationPropertiesContent,
 } from "../../../interfaces/Visualization";
 
 import { ATTRIBUTE, DATE, METRIC } from "../../../constants/bucket";
@@ -446,7 +447,8 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
                 dimensions: this.getDimensions(mdObject),
             };
 
-            const sorts: AFM.SortItem[] = get(visualizationProperties, "sortItems", []) as AFM.SortItem[];
+            const sorts: AFM.SortItem[] =
+                (visualizationProperties.properties && visualizationProperties.properties.sortItems) || [];
 
             const resultSpecWithSorts = resultSpecWithDimensions.sorts
                 ? resultSpecWithDimensions
@@ -574,11 +576,11 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
 
     protected renderConfigurationPanel(mdObject: VisualizationObject.IVisualizationObjectContent) {
         if (document.querySelector(this.configPanelElement)) {
-            const properties: IVisualizationProperties = get(
+            const properties: IVisualizationPropertiesContent = get(
                 this.visualizationProperties,
                 "properties",
                 {},
-            ) as IVisualizationProperties;
+            );
             // we need to handle cases when attribute previously bearing the default sort is no longer available
             const sanitizedProperties = properties.sortItems
                 ? {

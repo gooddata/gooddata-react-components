@@ -24,8 +24,10 @@ import {
     IExtendedReferencePoint,
     IBucketItem,
     IVisualizationProperties,
+    IVisualizationPropertiesControls,
 } from "../../interfaces/Visualization";
 import { ColumnWidthItem } from "../../../interfaces/PivotTable";
+import { AFM } from "@gooddata/typings";
 
 describe("propertiesHelper", () => {
     describe("getSupportedPropertiesControls", () => {
@@ -79,7 +81,7 @@ describe("propertiesHelper", () => {
         });
 
         it("should return empty object when properties do not have controls", () => {
-            const result = getSupportedProperties({}, []);
+            const result = getSupportedProperties({ properties: {} }, []);
             expect(result).toEqual({});
         });
 
@@ -108,11 +110,17 @@ describe("propertiesHelper", () => {
 
     describe("getReferencePointWithSupportedProperties", () => {
         it("should return reference point with pith properties with only sort items", () => {
+            const sortItem: AFM.IAttributeSortItem = {
+                attributeSortItem: {
+                    direction: "asc",
+                    attributeIdentifier: "a1",
+                },
+            };
             const referencePoint = {
                 ...emptyReferencePoint,
                 uiConfig: simpleStackedBaseUiConfig,
                 properties: {
-                    sortItems: ["sortItem"],
+                    sortItems: [sortItem],
                     controls: {},
                 },
             };
@@ -120,7 +128,7 @@ describe("propertiesHelper", () => {
                 ...emptyReferencePoint,
                 uiConfig: simpleStackedBaseUiConfig,
                 properties: {
-                    sortItems: ["sortItem"],
+                    sortItems: [sortItem],
                 },
             };
 
@@ -243,7 +251,7 @@ describe("propertiesHelper", () => {
 
     describe("getHighchartsAxisNameConfiguration", () => {
         it("should return same control properties when there is no name config", () => {
-            const controlsProp: IVisualizationProperties = {
+            const controlsProp: IVisualizationPropertiesControls = {
                 xaxis: {
                     visible: true,
                     min: 100,
@@ -262,7 +270,7 @@ describe("propertiesHelper", () => {
             ["middle", "middle"],
             ["high", "top"],
         ])("should return '%s' position when AD value is '%s'", (hcValue: string, adValue: string) => {
-            const controlsProp: IVisualizationProperties = {
+            const controlsProp: IVisualizationPropertiesControls = {
                 xaxis: {
                     name: {
                         position: adValue,
@@ -281,7 +289,7 @@ describe("propertiesHelper", () => {
         });
 
         it("should return default position", () => {
-            const controlsProp: IVisualizationProperties = {
+            const controlsProp: IVisualizationPropertiesControls = {
                 xaxis: {
                     name: {
                         position: "left",

@@ -11,8 +11,8 @@ import {
     IVisConstruct,
     IReferencePoint,
     IExtendedReferencePoint,
-    IVisualizationProperties,
     IGdcConfig,
+    IVisualizationPropertiesControls,
 } from "../../../interfaces/Visualization";
 import { configurePercent, configureOverTimeComparison } from "../../../utils/bucketConfig";
 import { PluggableBaseChart } from "../baseChart/PluggableBaseChart";
@@ -137,7 +137,7 @@ export class PluggablePieChart extends PluggableBaseChart {
     protected buildVisualizationConfig(
         mdObject: VisualizationObject.IVisualizationObjectContent,
         config: IGdcConfig,
-        supportedControls: IVisualizationProperties,
+        supportedControls: IVisualizationPropertiesControls,
     ): IChartConfig {
         const baseVisualizationConfig = super.buildVisualizationConfig(mdObject, config, supportedControls);
         if (this.environment === DASHBOARDS_ENVIRONMENT) {

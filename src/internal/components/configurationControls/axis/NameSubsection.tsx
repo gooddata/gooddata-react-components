@@ -1,11 +1,11 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import get = require("lodash/get");
 import * as React from "react";
 import { WrappedComponentProps, injectIntl } from "react-intl";
 import ConfigSubsection from "../../configurationControls/ConfigSubsection";
 import NamePositionControl from "./NamePositionControl";
 import { IConfigItemSubsection } from "../../../interfaces/ConfigurationPanel";
-import { IVisualizationProperties } from "../../../interfaces/Visualization";
+import { IVisualizationPropertiesControls } from "../../../interfaces/Visualization";
 
 class NameSubsection extends React.PureComponent<IConfigItemSubsection & WrappedComponentProps, {}> {
     public render() {
@@ -34,8 +34,8 @@ class NameSubsection extends React.PureComponent<IConfigItemSubsection & Wrapped
         );
     }
 
-    private getControlProperties(): IVisualizationProperties {
-        const controlsAxis: IVisualizationProperties = get(
+    private getControlProperties(): IVisualizationPropertiesControls {
+        const controlsAxis: IVisualizationPropertiesControls = get(
             this.props,
             `properties.controls.${this.props.axis}`,
             {},
