@@ -14,7 +14,7 @@ import {
     IReferencePoint,
     IVisConstruct,
     IVisProps,
-    IVisualizationProperties,
+    IVisualizationPropertiesWrapper,
 } from "../../../../interfaces/Visualization";
 
 import { getMeasureItems } from "../../../../utils/bucketHelper";
@@ -101,7 +101,7 @@ describe("PluggableHeadline", () => {
 
             const headline = createComponent();
 
-            const properties: IVisualizationProperties = {};
+            const properties: IVisualizationPropertiesWrapper = { properties: {} };
             const options: IVisProps = getTestOptions();
 
             headline.update({ ...options, dataSource: null }, properties, testMocks.emptyMdObject);

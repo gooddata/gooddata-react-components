@@ -18,11 +18,13 @@ import {
     ILocale,
     IFeatureFlags,
     IUiConfig,
-    IVisualizationProperties,
+    IVisualizationPropertiesWrapper,
     IReferences,
     IBucket,
     IBucketItem,
     IGdcConfig,
+    IVisualizationPropertiesControls,
+    IVisualizationProperties,
 } from "../../../interfaces/Visualization";
 import { IColorConfiguration } from "../../../interfaces/Colors";
 import {
@@ -88,8 +90,8 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
     protected isLoading: boolean;
     protected options: IVisProps;
     protected visualizationProperties: IVisualizationProperties;
-    protected defaultControlsProperties: IVisualizationProperties;
-    protected customControlsProperties: IVisualizationProperties;
+    protected defaultControlsProperties: IVisualizationPropertiesControls;
+    protected customControlsProperties: IVisualizationPropertiesControls;
     protected propertiesMeta: any;
     protected mdObject: VisualizationObject.IVisualizationObjectContent;
     protected supportedPropertiesList: string[];
@@ -133,7 +135,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
 
     public update(
         options: IVisProps,
-        visualizationProperties: IVisualizationProperties,
+        visualizationProperties: IVisualizationPropertiesWrapper,
         mdObject: VisualizationObject.IVisualizationObjectContent,
         references: IReferences,
     ) {
@@ -188,7 +190,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
         return isOpenAsReportSupportedByVisualization(this.type);
     }
 
-    public setCustomControlsProperties(customControlsProperties: IVisualizationProperties) {
+    public setCustomControlsProperties(customControlsProperties: IVisualizationPropertiesControls) {
         this.customControlsProperties = customControlsProperties;
     }
 
@@ -258,13 +260,9 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
             const { drillableItems } = custom;
             const { afterRender, onDrill, onFiredDrillEvent } = this.callbacks;
 
-            const allProperties: IVisualizationProperties = get(
-                visualizationProperties,
-                "properties",
-                {},
-            ) as IVisualizationProperties;
+            const allProperties: IVisualizationProperties = visualizationProperties || {};
 
-            const supportedControls: IVisualizationProperties = this.getSupportedControls(mdObject);
+            const supportedControls: IVisualizationPropertiesControls = this.getSupportedControls(mdObject);
 
             const resultSpecWithDimensions: AFM.IResultSpec = {
                 ...options.resultSpec,
@@ -315,7 +313,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
         }
     }
 
-    protected initializeProperties(visualizationProperties: IVisualizationProperties) {
+    protected initializeProperties(visualizationProperties: IVisualizationPropertiesWrapper) {
         const controls = get(visualizationProperties, "properties.controls");
 
         const supportedProperties = getSupportedPropertiesControls(controls, this.supportedPropertiesList);
@@ -432,7 +430,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
     protected buildVisualizationConfig(
         mdObject: VisualizationObject.IVisualizationObjectContent,
         config: IGdcConfig,
-        supportedControls: IVisualizationProperties,
+        supportedControls: IVisualizationPropertiesControls,
     ): IChartConfig {
         const colorMapping: IColorMappingProperty[] = get(supportedControls, "colorMapping");
 
@@ -523,7 +521,7 @@ export class PluggableBaseChart extends AbstractPluggableVisualization {
     }
 
     private getLegendPosition(
-        controlProperties: IVisualizationProperties,
+        controlProperties: IVisualizationPropertiesControls,
         mdObject: VisualizationObject.IVisualizationObjectContent,
     ) {
         const legendPosition = get(controlProperties, "legend.position", "auto");

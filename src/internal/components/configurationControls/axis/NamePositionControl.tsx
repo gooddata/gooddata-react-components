@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import { WrappedComponentProps, injectIntl } from "react-intl";
 import get = require("lodash/get");
@@ -7,7 +7,7 @@ import DropdownControl from "../DropdownControl";
 import { getTranslatedDropdownItems } from "../../../utils/translations";
 import { xAxisPositionDropdownItems, yAxisPositionDropdownItems } from "../../../constants/dropdowns";
 import { IConfigItemSubsection } from "../../../interfaces/ConfigurationPanel";
-import { IVisualizationProperties } from "../../../interfaces/Visualization";
+import { IVisualizationPropertiesControls } from "../../../interfaces/Visualization";
 
 class NamePositionControl extends React.PureComponent<IConfigItemSubsection & WrappedComponentProps, {}> {
     public render() {
@@ -38,7 +38,7 @@ class NamePositionControl extends React.PureComponent<IConfigItemSubsection & Wr
         return axis === "xaxis" || axis === "secondary_xaxis";
     }
 
-    private getControlProperties(): IVisualizationProperties {
+    private getControlProperties(): IVisualizationPropertiesControls {
         const { axis } = this.props;
         const controlsAxis = get(this.props, `properties.controls.${axis}`, {});
 

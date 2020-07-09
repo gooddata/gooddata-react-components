@@ -1,6 +1,7 @@
 // (C) 2007-2020 GoodData Corporation
 import { AFM, Execution, VisualizationObject } from "@gooddata/typings";
 import { IColorAssignment, IColorPalette } from "./Config";
+import { IVisualizationPropertiesControls } from "../internal/interfaces/Visualization";
 
 export interface IColorsData {
     colorAssignments: IColorAssignment[];
@@ -26,6 +27,7 @@ export interface IPushData {
     properties?: {
         sortItems?: AFM.SortItem[];
         totals?: VisualizationObject.IVisualizationTotal[];
+        controls?: IVisualizationPropertiesControls;
     };
     propertiesMeta?: any;
     colors?: IColorsData;

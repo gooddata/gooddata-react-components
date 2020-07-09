@@ -1,10 +1,14 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import noop = require("lodash/noop");
 import get = require("lodash/get");
 import { DataLayer } from "@gooddata/gooddata-js";
 import { AFM, Execution, VisualizationObject } from "@gooddata/typings";
 import { OverTimeComparisonTypes } from "../../../../../interfaces/OverTimeComparison";
-import { IVisConstruct, IVisProps, IVisualizationProperties } from "../../../../interfaces/Visualization";
+import {
+    IVisConstruct,
+    IVisProps,
+    IVisualizationPropertiesWrapper,
+} from "../../../../interfaces/Visualization";
 import { PluggableBarChart } from "../PluggableBarChart";
 import * as referencePointMocks from "../../../../mocks/referencePointMocks";
 import { AXIS } from "../../../../constants/axis";
@@ -213,7 +217,7 @@ describe("PluggableBarChart", () => {
                 mdObject: VisualizationObject.IVisualizationObjectContent,
                 dataSource: DataLayer.DataSource.IDataSource<Execution.IExecutionResponses>,
                 resultSpec: AFM.IResultSpec,
-                visualizationProperties: IVisualizationProperties,
+                visualizationProperties: IVisualizationPropertiesWrapper,
             ) => {
                 const renderObject = require("react-dom");
                 const spyOnRender = jest.spyOn(renderObject, "render");

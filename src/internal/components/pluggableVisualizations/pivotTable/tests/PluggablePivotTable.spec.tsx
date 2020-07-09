@@ -25,7 +25,7 @@ import {
     ILocale,
     IVisConstruct,
     IVisProps,
-    IVisualizationProperties,
+    IVisualizationPropertiesWrapper,
 } from "../../../../interfaces/Visualization";
 import { IDrillableItem } from "../../../../../interfaces/DrillEvents";
 import { PivotTable } from "../../../../../components/core/PivotTable";
@@ -311,6 +311,8 @@ describe("PluggablePivotTable", () => {
             renderSpy.mockRestore();
         }
 
+        const emptyProperties = { properties: {} };
+
         it("should not render table when dataSource is missing", () => {
             const pivotTable = createComponent();
 
@@ -318,7 +320,12 @@ describe("PluggablePivotTable", () => {
             const renderSpy = spyOnRender();
 
             const options = getDefaultOptions();
-            pivotTable.update({ ...options, dataSource: null }, {}, testMocks.emptyMdObject, null);
+            pivotTable.update(
+                { ...options, dataSource: null },
+                emptyProperties,
+                testMocks.emptyMdObject,
+                null,
+            );
 
             expect(renderSpy).toHaveBeenCalledTimes(0);
 
@@ -382,7 +389,7 @@ describe("PluggablePivotTable", () => {
             const renderSpy = spyOnRender();
 
             const options = getDefaultOptions();
-            pivotTable.update(options, {}, testMocks.emptyMdObject, null);
+            pivotTable.update(options, emptyProperties, testMocks.emptyMdObject, null);
 
             expect(createElementSpy).toHaveBeenCalledTimes(1);
             expect(createElementSpy.mock.calls[0][0]).toBe(PivotTable);
@@ -402,7 +409,7 @@ describe("PluggablePivotTable", () => {
             const renderSpy = spyOnRender();
 
             const options = getDefaultOptions();
-            pivotTable.update(options, {}, testMocks.emptyMdObject, null);
+            pivotTable.update(options, emptyProperties, testMocks.emptyMdObject, null);
 
             expect(createElementSpy).toHaveBeenCalledTimes(1);
             expect(createElementSpy.mock.calls[0][0]).toBe(PivotTable);
@@ -419,7 +426,7 @@ describe("PluggablePivotTable", () => {
             const renderSpy = spyOnRender();
 
             const options = getDefaultOptions();
-            pivotTable.update(options, {}, testMocks.emptyMdObject, null);
+            pivotTable.update(options, emptyProperties, testMocks.emptyMdObject, null);
 
             expect(createElementSpy).toHaveBeenCalledTimes(1);
             expect(createElementSpy.mock.calls[0][0]).toBe(PivotTable);
@@ -499,7 +506,7 @@ describe("PluggablePivotTable", () => {
 
                     (pivotTable as any).createTable = createTableSpy;
 
-                    const visualizationProperties: IVisualizationProperties = {
+                    const visualizationProperties: IVisualizationPropertiesWrapper = {
                         properties: {
                             controls: {
                                 columnWidths,

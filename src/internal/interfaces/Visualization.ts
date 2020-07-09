@@ -33,7 +33,7 @@ export interface IVisConstruct {
     environment?: VisualizationEnvironment;
     locale?: ILocale;
     featureFlags?: IFeatureFlags;
-    visualizationProperties?: IVisualizationProperties;
+    visualizationProperties?: IVisualizationPropertiesWrapper;
     references?: IReferences;
 }
 
@@ -261,9 +261,18 @@ export interface IUiConfig {
 }
 
 export interface IVisualizationProperties {
+    controls?: IVisualizationPropertiesControls;
+    sortItems?: AFM.SortItem[];
+}
+
+export interface IVisualizationPropertiesControls {
     // This can be anything depending on a visualization type
-    // perhaps consider adding: sortItems?: AFM.SortItem[]
     [property: string]: any;
+}
+
+export interface IVisualizationPropertiesWrapper {
+    properties: IVisualizationProperties;
+    propertiesMeta?: any;
 }
 
 export interface IReferencePoint {
@@ -287,7 +296,7 @@ export interface IVisualization {
     // visualizationProperties are used for visualization configuration
     update(
         props: IVisProps,
-        visualizationProperties: IVisualizationProperties,
+        visualizationProperties: IVisualizationPropertiesWrapper,
         mdObject: VisualizationObject.IVisualizationObjectContent,
         references: IReferences,
     ): void;

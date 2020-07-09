@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import cloneDeep = require("lodash/cloneDeep");
 import { VisualizationObject } from "@gooddata/typings";
 import IVisualizationObjectContent = VisualizationObject.IVisualizationObjectContent;
@@ -8,7 +8,7 @@ import {
     IVisualization,
     IBucketItem,
     IVisProps,
-    IVisualizationProperties,
+    IVisualizationPropertiesWrapper,
     IBucket,
     IReferences,
 } from "../../interfaces/Visualization";
@@ -44,7 +44,7 @@ export abstract class AbstractPluggableVisualization implements IVisualization {
 
     public abstract update(
         props: IVisProps,
-        visualizationProperties: IVisualizationProperties,
+        visualizationProperties: IVisualizationPropertiesWrapper,
         mdObject: IVisualizationObjectContent,
         references: IReferences,
     ): void;

@@ -2,7 +2,7 @@
 import get = require("lodash/get");
 import { VisualizationObject } from "@gooddata/typings";
 import * as BucketNames from "../../constants/bucketNames";
-import { IVisualizationProperties } from "../interfaces/Visualization";
+import { IVisualizationPropertiesControls } from "../interfaces/Visualization";
 import {
     isBarChart,
     isBubbleChart,
@@ -88,7 +88,7 @@ export function hasSegmentAttribute(mdObject: VisualizationObject.IVisualization
 // don't support sort by total value for dual axis
 export function canSortStackTotalValue(
     mdObject: VisualizationObject.IVisualizationObjectContent,
-    supportedControls: IVisualizationProperties,
+    supportedControls: IVisualizationPropertiesControls,
     enableSortingByTotalGroup: boolean = false,
 ): boolean {
     const isSingleAxisAndStacked: boolean =
@@ -122,7 +122,7 @@ export function countItemsInMdObject(mdObject: VisualizationObject.IVisualizatio
 
 export function countItemsOnAxes(
     type: string,
-    controls: IVisualizationProperties,
+    controls: IVisualizationPropertiesControls,
     mdObject: VisualizationObject.IVisualizationObjectContent,
 ) {
     const isBarFamilyChartType = isBarChart(type) || isBulletChart(type);

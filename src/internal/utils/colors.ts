@@ -71,7 +71,11 @@ function getMeasureMappingIdentifier(item: Execution.IMeasureHeaderItem): string
     return item.measureHeaderItem.localIdentifier;
 }
 
-function mergeColorMappingToProperties(properties: IVisualizationProperties, id: string, color: IColorItem) {
+function mergeColorMappingToProperties(
+    properties: IVisualizationProperties,
+    id: string,
+    color: IColorItem,
+): IVisualizationProperties {
     const colorMapping: IColorMappingProperty[] = [
         {
             id,

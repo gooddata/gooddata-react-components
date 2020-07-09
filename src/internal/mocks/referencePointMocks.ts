@@ -11,6 +11,7 @@ import {
 import { OverTimeComparisonTypes } from "../../interfaces/OverTimeComparison";
 import { DATE_DATASET_ATTRIBUTE, DATE, GRANULARITY } from "../constants/bucket";
 import { ColumnWidthItem } from "../../interfaces/PivotTable";
+import { AFM } from "@gooddata/typings";
 
 export const masterMeasureItems: IBucketItem[] = [
     {
@@ -472,7 +473,7 @@ export const overTimeComparisonDateItem: IBucketItem = {
     attribute: "attr.datedataset",
 };
 
-const defaultSortItem = {
+const defaultSortItem: AFM.IAttributeSortItem = {
     attributeSortItem: {
         attributeIdentifier: "a1",
         direction: "asc",

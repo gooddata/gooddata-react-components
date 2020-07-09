@@ -12,8 +12,8 @@ import {
     IVisConstruct,
     IBucketItem,
     IBucket,
-    IVisualizationProperties,
     IUiConfig,
+    IVisualizationProperties,
 } from "../../../interfaces/Visualization";
 
 import { METRIC, BUCKETS } from "../../../constants/bucket";

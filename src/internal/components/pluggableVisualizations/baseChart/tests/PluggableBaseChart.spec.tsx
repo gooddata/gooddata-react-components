@@ -1,4 +1,4 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import * as React from "react";
 import noop = require("lodash/noop");
 import pick = require("lodash/pick");
@@ -135,7 +135,7 @@ describe("PluggableBaseChart", () => {
             },
         };
 
-        visualization.update(options, {}, testMocks.emptyMdObject, undefined);
+        visualization.update(options, { properties: {} }, testMocks.emptyMdObject, undefined);
 
         expect(spyOnRender).toHaveBeenCalledTimes(0);
     });
