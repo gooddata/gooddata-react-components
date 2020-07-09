@@ -403,6 +403,7 @@ storiesOf("Core components/GeoPushpinChart/Config/Color", module)
     );
 
 storiesOf("Core components/GeoPushpinChart/Config/Viewport", module)
+    /* flaky test
     .add("with Asia viewport", () =>
         screenshotWrap(
             renderGeoPushpinChart({
@@ -416,7 +417,7 @@ storiesOf("Core components/GeoPushpinChart/Config/Viewport", module)
                 },
             }),
         ),
-    )
+    )*/
     .add("with World viewport", () =>
         screenshotWrap(
             renderGeoPushpinChart({
