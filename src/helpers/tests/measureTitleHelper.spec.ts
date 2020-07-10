@@ -1,5 +1,5 @@
-// (C) 2007-2018 GoodData Corporation
-import { fillMissingTitles } from "../measureTitleHelper";
+// (C) 2007-2020 GoodData Corporation
+import { fillMissingTitles, ignoreTitles } from "../measureTitleHelper";
 import { visualizationObjects } from "../../../__mocks__/fixtures";
 import { VisualizationObject } from "@gooddata/typings";
 import IVisualizationObjectContent = VisualizationObject.IVisualizationObjectContent;
@@ -203,6 +203,100 @@ describe("measureTitleHelper", () => {
             expect(
                 getTitleOfMeasure(result, "invalid_arithmetic_measure_with_cyclic_dependency_2"),
             ).toBeUndefined();
+        });
+    });
+
+    describe("ignoreTitles", () => {
+        function getTitleOfMeasure(
+            visualizationObject: IVisualizationObjectContent,
+            localIdentifier: string,
+        ): string {
+            const measureBucketItems = visualizationObject.buckets[0].items;
+            const matchingMeasure: IMeasure = measureBucketItems
+                .map(bucketItem => bucketItem as IMeasure)
+                .find(bucketItem => bucketItem.measure.localIdentifier === localIdentifier);
+
+            return matchingMeasure === undefined ? undefined : matchingMeasure.measure.title;
+        }
+
+        function getAliasOfMeasure(
+            visualizationObject: IVisualizationObjectContent,
+            localIdentifier: string,
+        ): string {
+            const measureBucketItems = visualizationObject.buckets[0].items;
+            const matchingMeasure: IMeasure = measureBucketItems
+                .map(bucketItem => bucketItem as IMeasure)
+                .find(bucketItem => bucketItem.measure.localIdentifier === localIdentifier);
+
+            return matchingMeasure === undefined ? undefined : matchingMeasure.measure.alias;
+        }
+
+        it("should delete all measures' titles", () => {
+            const visualizationObjectContent = findVisualizationObjectFixture("Arithmetic measures");
+            const result = ignoreTitles(visualizationObjectContent);
+
+            expect(
+                getTitleOfMeasure(result, "arithmetic_measure_created_from_complicated_arithmetic_measures"),
+            ).toBeUndefined();
+
+            expect(getTitleOfMeasure(result, "m1")).toBeUndefined();
+
+            expect(getTitleOfMeasure(result, "m2")).toBeUndefined();
+
+            expect(getTitleOfMeasure(result, "m3")).toBeUndefined();
+
+            expect(getTitleOfMeasure(result, "m4")).toBeUndefined();
+
+            expect(getTitleOfMeasure(result, "m1_pop")).toBeUndefined();
+
+            expect(getTitleOfMeasure(result, "m1_previous_period")).toBeUndefined();
+
+            expect(getTitleOfMeasure(result, "m1_pop_renamed")).toBeUndefined();
+
+            expect(getTitleOfMeasure(result, "m1_previous_period_renamed")).toBeUndefined();
+
+            expect(getTitleOfMeasure(result, "derived_measure_from_arithmetic_measure")).toBeUndefined();
+
+            expect(
+                getTitleOfMeasure(result, "arithmetic_measure_created_from_simple_measures"),
+            ).toBeUndefined();
+
+            expect(
+                getTitleOfMeasure(result, "arithmetic_measure_created_from_renamed_simple_measures"),
+            ).toBeUndefined();
+
+            expect(
+                getTitleOfMeasure(result, "arithmetic_measure_created_from_derived_measures"),
+            ).toBeUndefined();
+
+            expect(
+                getTitleOfMeasure(result, "arithmetic_measure_created_from_arithmetic_measures"),
+            ).toBeUndefined();
+
+            expect(
+                getTitleOfMeasure(result, "arithmetic_measure_created_from_renamed_derived_measures"),
+            ).toBeUndefined();
+
+            expect(
+                getTitleOfMeasure(result, "invalid_arithmetic_measure_with_missing_dependency"),
+            ).toBeUndefined();
+
+            expect(
+                getTitleOfMeasure(result, "invalid_arithmetic_measure_with_cyclic_dependency_1"),
+            ).toBeUndefined();
+
+            expect(
+                getTitleOfMeasure(result, "invalid_arithmetic_measure_with_cyclic_dependency_2"),
+            ).toBeUndefined();
+        });
+
+        it("should preserve all measures' aliases", () => {
+            const visualizationObjectContent = findVisualizationObjectFixture("Arithmetic measures");
+            const result = ignoreTitles(visualizationObjectContent);
+
+            expect(getAliasOfMeasure(result, "m3")).toEqual("AD Queries");
+
+            expect(getAliasOfMeasure(result, "m4")).toEqual("KD Queries");
         });
     });
 });

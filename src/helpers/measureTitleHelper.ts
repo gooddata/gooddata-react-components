@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import get = require("lodash/get");
 import flatMap = require("lodash/flatMap");
 
@@ -271,4 +271,34 @@ export function fillMissingTitles(
     const measureBucketItems = getAllMeasures(mdObject);
     const measureTitleProps = buildMeasureTitles(measureBucketItems, locale, maxArithmeticMeasureTitleLength);
     return updateVisualizationObjectTitles(mdObject, measureTitleProps);
+}
+
+function removeTitleFromMeasures(bucket: IBucket): IBucket {
+    return {
+        ...bucket,
+        items: bucket.items.map(bucketItem => {
+            if (VisualizationObject.isMeasure(bucketItem)) {
+                delete bucketItem.measure.title;
+            }
+            return bucketItem;
+        }),
+    };
+}
+
+/**
+ * The function ignores the titles of the measures.
+ *
+ * The returned measures have no titles.
+ *
+ * @param {VisualizationObject.IVisualizationObjectContent} mdObject - metadata object that must be processed.
+ *
+ * @returns {VisualizationObject.IVisualizationObjectContent}
+ *
+ * @internal
+ */
+export function ignoreTitles(mdObject: IVisualizationObjectContent): IVisualizationObjectContent {
+    return {
+        ...mdObject,
+        buckets: mdObject.buckets.map(bucket => removeTitleFromMeasures(bucket)),
+    };
 }
