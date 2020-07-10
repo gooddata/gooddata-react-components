@@ -122,8 +122,7 @@ export const visualizationOnDrillExtendedParams = `{
                             "uri": "/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/2352"
                         }
                     }
-                },
-                "alias": "$ Total Sales"
+                }
             }
         ],
         "attributes": [
