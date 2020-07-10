@@ -231,63 +231,29 @@ describe("measureTitleHelper", () => {
             return matchingMeasure === undefined ? undefined : matchingMeasure.measure.alias;
         }
 
-        it("should delete all measures' titles", () => {
+        it.each([
+            "arithmetic_measure_created_from_complicated_arithmetic_measures",
+            "m1",
+            "m2",
+            "m3",
+            "m4",
+            "m1_pop",
+            "m1_previous_period",
+            "m1_pop_renamed",
+            "m1_previous_period_renamed",
+            "derived_measure_from_arithmetic_measure",
+            "arithmetic_measure_created_from_simple_measures",
+            "arithmetic_measure_created_from_renamed_simple_measures",
+            "arithmetic_measure_created_from_simple_measures",
+            "arithmetic_measure_created_from_arithmetic_measures",
+            "arithmetic_measure_created_from_renamed_derived_measures",
+            "invalid_arithmetic_measure_with_missing_dependency",
+            "invalid_arithmetic_measure_with_cyclic_dependency_1",
+            "invalid_arithmetic_measure_with_cyclic_dependency_2",
+        ])("should delete all measures", (value: string) => {
             const visualizationObjectContent = findVisualizationObjectFixture("Arithmetic measures");
             const result = ignoreTitles(visualizationObjectContent);
-
-            expect(
-                getTitleOfMeasure(result, "arithmetic_measure_created_from_complicated_arithmetic_measures"),
-            ).toBeUndefined();
-
-            expect(getTitleOfMeasure(result, "m1")).toBeUndefined();
-
-            expect(getTitleOfMeasure(result, "m2")).toBeUndefined();
-
-            expect(getTitleOfMeasure(result, "m3")).toBeUndefined();
-
-            expect(getTitleOfMeasure(result, "m4")).toBeUndefined();
-
-            expect(getTitleOfMeasure(result, "m1_pop")).toBeUndefined();
-
-            expect(getTitleOfMeasure(result, "m1_previous_period")).toBeUndefined();
-
-            expect(getTitleOfMeasure(result, "m1_pop_renamed")).toBeUndefined();
-
-            expect(getTitleOfMeasure(result, "m1_previous_period_renamed")).toBeUndefined();
-
-            expect(getTitleOfMeasure(result, "derived_measure_from_arithmetic_measure")).toBeUndefined();
-
-            expect(
-                getTitleOfMeasure(result, "arithmetic_measure_created_from_simple_measures"),
-            ).toBeUndefined();
-
-            expect(
-                getTitleOfMeasure(result, "arithmetic_measure_created_from_renamed_simple_measures"),
-            ).toBeUndefined();
-
-            expect(
-                getTitleOfMeasure(result, "arithmetic_measure_created_from_derived_measures"),
-            ).toBeUndefined();
-
-            expect(
-                getTitleOfMeasure(result, "arithmetic_measure_created_from_arithmetic_measures"),
-            ).toBeUndefined();
-
-            expect(
-                getTitleOfMeasure(result, "arithmetic_measure_created_from_renamed_derived_measures"),
-            ).toBeUndefined();
-
-            expect(
-                getTitleOfMeasure(result, "invalid_arithmetic_measure_with_missing_dependency"),
-            ).toBeUndefined();
-
-            expect(
-                getTitleOfMeasure(result, "invalid_arithmetic_measure_with_cyclic_dependency_1"),
-            ).toBeUndefined();
-
-            expect(
-                getTitleOfMeasure(result, "invalid_arithmetic_measure_with_cyclic_dependency_2"),
-            ).toBeUndefined();
+            expect(getTitleOfMeasure(result, value)).toBeUndefined();
         });
 
         it("should preserve all measures' aliases", () => {
