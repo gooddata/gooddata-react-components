@@ -4,6 +4,7 @@ import { visualizationObjects } from "../../../__mocks__/fixtures";
 import { VisualizationObject } from "@gooddata/typings";
 import IVisualizationObjectContent = VisualizationObject.IVisualizationObjectContent;
 import IMeasure = VisualizationObject.IMeasure;
+import BucketItem = VisualizationObject.BucketItem;
 
 function findVisualizationObjectFixture(metaTitle: string): IVisualizationObjectContent {
     const visualizationObject = visualizationObjects.find(
@@ -211,10 +212,12 @@ describe("measureTitleHelper", () => {
             visualizationObject: IVisualizationObjectContent,
             localIdentifier: string,
         ): string {
-            const measureBucketItems = visualizationObject.buckets[0].items;
+            const measureBucketItems: BucketItem[] = visualizationObject.buckets[0].items;
             const matchingMeasure: IMeasure = measureBucketItems
-                .map(bucketItem => bucketItem as IMeasure)
-                .find(bucketItem => bucketItem.measure.localIdentifier === localIdentifier);
+                .map((bucketItem: BucketItem): IMeasure => bucketItem as IMeasure)
+                .find(
+                    (bucketItem: IMeasure): boolean => bucketItem.measure.localIdentifier === localIdentifier,
+                );
 
             return matchingMeasure === undefined ? undefined : matchingMeasure.measure.title;
         }
@@ -223,10 +226,12 @@ describe("measureTitleHelper", () => {
             visualizationObject: IVisualizationObjectContent,
             localIdentifier: string,
         ): string {
-            const measureBucketItems = visualizationObject.buckets[0].items;
+            const measureBucketItems: BucketItem[] = visualizationObject.buckets[0].items;
             const matchingMeasure: IMeasure = measureBucketItems
-                .map(bucketItem => bucketItem as IMeasure)
-                .find(bucketItem => bucketItem.measure.localIdentifier === localIdentifier);
+                .map((bucketItem: BucketItem): IMeasure => bucketItem as IMeasure)
+                .find(
+                    (bucketItem: IMeasure): boolean => bucketItem.measure.localIdentifier === localIdentifier,
+                );
 
             return matchingMeasure === undefined ? undefined : matchingMeasure.measure.alias;
         }
@@ -250,7 +255,7 @@ describe("measureTitleHelper", () => {
             "invalid_arithmetic_measure_with_missing_dependency",
             "invalid_arithmetic_measure_with_cyclic_dependency_1",
             "invalid_arithmetic_measure_with_cyclic_dependency_2",
-        ])("should delete all measures", (value: string) => {
+        ])("should delete title of the measure having localIdentifier %s", (value: string) => {
             const visualizationObjectContent = findVisualizationObjectFixture("Arithmetic measures");
             const result = ignoreTitles(visualizationObjectContent);
             expect(getTitleOfMeasure(result, value)).toBeUndefined();

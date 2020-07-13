@@ -276,12 +276,14 @@ export function fillMissingTitles(
 function removeTitleFromMeasures(bucket: IBucket): IBucket {
     return {
         ...bucket,
-        items: bucket.items.map(bucketItem => {
-            if (VisualizationObject.isMeasure(bucketItem)) {
-                delete bucketItem.measure.title;
-            }
-            return bucketItem;
-        }),
+        items: bucket.items.map(
+            (bucketItem: VisualizationObject.BucketItem): VisualizationObject.BucketItem => {
+                if (VisualizationObject.isMeasure(bucketItem)) {
+                    delete bucketItem.measure.title;
+                }
+                return bucketItem;
+            },
+        ),
     };
 }
 
@@ -299,6 +301,6 @@ function removeTitleFromMeasures(bucket: IBucket): IBucket {
 export function ignoreTitles(mdObject: IVisualizationObjectContent): IVisualizationObjectContent {
     return {
         ...mdObject,
-        buckets: mdObject.buckets.map(bucket => removeTitleFromMeasures(bucket)),
+        buckets: mdObject.buckets.map((bucket: IBucket): IBucket => removeTitleFromMeasures(bucket)),
     };
 }
