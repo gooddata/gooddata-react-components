@@ -6,7 +6,7 @@ This table shows which version of GoodData.UI introduced support for a particula
 
 The REST API versions in the table are just for your information as the values are set internally and cannot be overridden.
 
-|GoodData.UI Version | REST API version
+|GoodData.UI Version    | REST API version
 |:---:|:---:
 |\>= 7.3.0|5
 |\>= 7.2.0|4
