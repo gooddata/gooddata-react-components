@@ -1402,13 +1402,13 @@
     rxjs "^5.5.6"
     uuid "^3.2.1"
 
-"@gooddata/goodstrap@^68.16.0":
-  version "68.16.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-68.16.0.tgz#028cc521c9dfeb00efc0366e8806e93a1178858e"
-  integrity sha512-pv96l1Q8Xd6I6IJbZ5NR55pKF8omxPzmEBE2KO82AH8sd2ODEplDMA9frac1hwRydV0UUqESrS3YTgRhLWg6zA==
+"@gooddata/goodstrap@^68.17.2":
+  version "68.17.2"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-68.17.2.tgz#62a52d1c22c2e6a18de1853e1e72d92b07daa2d1"
+  integrity sha512-pZUnGvwv0tVJCFnkqmk+6FislHRLQT2H8CCIQ4dQJfHbDw20oJv8dWpO6QEMEdC3AKMbf49ucyBuChU3nIrheg==
   dependencies:
     "@babel/runtime-corejs2" "^7.0.0"
-    "@gooddata/js-utils" "^3.10.4"
+    "@gooddata/js-utils" "^3.10.9"
     classnames "^2.2.6"
     custom-event "^1.0.1"
     element-closest-polyfill "^1.0.0"
@@ -1433,12 +1433,21 @@
     rxjs "^5.5.6"
     tinycolor2 "^1.4.1"
 
-"@gooddata/js-utils@^3.10.4", "@gooddata/js-utils@^3.10.5":
+"@gooddata/js-utils@^3.10.5":
   version "3.10.5"
   resolved "https://registry.yarnpkg.com/@gooddata/js-utils/-/js-utils-3.10.5.tgz#f9e6fabb7c60554725c0772c19b430d67c3b8af4"
   integrity sha512-be6BFAbe6kmBjJy/AEq8LR67WFAJ2AybBBj7tKwLFcjUj/V1wOl/biswOVMn2yHjGNOYhNiPeWOXLpJGQCEYPw==
   dependencies:
     "@gooddata/typings" "^2.24.0"
+    js-cookie "^2.1.4"
+    lodash "^4.17.15"
+
+"@gooddata/js-utils@^3.10.9":
+  version "3.10.9"
+  resolved "https://registry.yarnpkg.com/@gooddata/js-utils/-/js-utils-3.10.9.tgz#dd65fc86f03df45cc9cf353c1adc76d069a9f19e"
+  integrity sha512-cG+v65l9vBWTZuhcj66j1Ko439cGXDeFandMtZnHhTgiDh3bUeuZDNxrlrhcKzUy0kY7yi2QyDWmyTMWJBkJjw==
+  dependencies:
+    "@gooddata/typings" "^2.24.9"
     js-cookie "^2.1.4"
     lodash "^4.17.15"
 
@@ -1506,7 +1515,7 @@
   dependencies:
     lodash "^4.17.11"
 
-"@gooddata/typings@^2.25.0":
+"@gooddata/typings@^2.24.9", "@gooddata/typings@^2.25.0":
   version "2.25.0"
   resolved "https://registry.yarnpkg.com/@gooddata/typings/-/typings-2.25.0.tgz#85fc630ae971770ade197a52ea96a0ef967ce7a1"
   integrity sha512-EyNTaoyiPSqa+hFrvbTLwwDo857CaOw+2/FUPAgqvljWNejfMV/+rfdFsDidOoNgYlgcVb7sXZuSEjj0aMue8w==
