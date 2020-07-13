@@ -94,7 +94,7 @@ STORYBOOK_MAPBOX_ACCESS_TOKEN=token yarn storybook
 ```
 - Apply either above way to `yarn build-storybook` or `yarn test-storybook`
 
-### Source code formatting
+### Source code   formatting
 The source code in the repository is formatted by [Prettier](https://prettier.io/).
 The format of the code is validated by our Continuous Integration server and is one of the requirements of successful merge.
 
