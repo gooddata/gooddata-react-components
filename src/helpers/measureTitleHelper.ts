@@ -273,12 +273,33 @@ export function fillMissingTitles(
     return updateVisualizationObjectTitles(mdObject, measureTitleProps);
 }
 
-function removeTitleFromMeasures(bucket: IBucket): IBucket {
+function isAdhocMeasure(definition: IMeasureDefinitionType): boolean {
+    return (
+        VisualizationObject.isMeasureDefinition(definition) &&
+        (!!definition.measureDefinition.aggregation ||
+            !!definition.measureDefinition.computeRatio ||
+            !!definition.measureDefinition.filters)
+    );
+}
+
+function isNonSimpleMeasure(definition: IMeasureDefinitionType): boolean {
+    return (
+        VisualizationObject.isArithmeticMeasureDefinition(definition) ||
+        VisualizationObject.isPopMeasureDefinition(definition) ||
+        VisualizationObject.isPreviousPeriodMeasureDefinition(definition)
+    );
+}
+
+function removeTitleForSimpleMeasure(bucket: IBucket): IBucket {
     return {
         ...bucket,
         items: bucket.items.map(
             (bucketItem: VisualizationObject.BucketItem): VisualizationObject.BucketItem => {
-                if (VisualizationObject.isMeasure(bucketItem)) {
+                if (
+                    VisualizationObject.isMeasure(bucketItem) &&
+                    !isAdhocMeasure(bucketItem.measure.definition) &&
+                    !isNonSimpleMeasure(bucketItem.measure.definition)
+                ) {
                     delete bucketItem.measure.title;
                 }
                 return bucketItem;
@@ -288,9 +309,10 @@ function removeTitleFromMeasures(bucket: IBucket): IBucket {
 }
 
 /**
- * The function ignores the titles of the measures.
+ * This function ignores the titles of simple measures.
  *
- * The returned measures have no titles.
+ * For simple measures, their titles are removed.
+ * For adhoc or non-simple measures, their titles are left intact.
  *
  * @param {VisualizationObject.IVisualizationObjectContent} mdObject - metadata object that must be processed.
  *
@@ -298,9 +320,11 @@ function removeTitleFromMeasures(bucket: IBucket): IBucket {
  *
  * @internal
  */
-export function ignoreTitles(mdObject: IVisualizationObjectContent): IVisualizationObjectContent {
+export function ignoreTitlesForSimpleMeasures(
+    mdObject: IVisualizationObjectContent,
+): IVisualizationObjectContent {
     return {
         ...mdObject,
-        buckets: mdObject.buckets.map((bucket: IBucket): IBucket => removeTitleFromMeasures(bucket)),
+        buckets: mdObject.buckets.map((bucket: IBucket): IBucket => removeTitleForSimpleMeasure(bucket)),
     };
 }

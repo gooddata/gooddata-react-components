@@ -1,5 +1,5 @@
 // (C) 2007-2020 GoodData Corporation
-import { fillMissingTitles, ignoreTitles } from "../measureTitleHelper";
+import { fillMissingTitles, ignoreTitlesForSimpleMeasures } from "../measureTitleHelper";
 import { visualizationObjects } from "../../../__mocks__/fixtures";
 import { VisualizationObject } from "@gooddata/typings";
 import IVisualizationObjectContent = VisualizationObject.IVisualizationObjectContent;
@@ -207,7 +207,7 @@ describe("measureTitleHelper", () => {
         });
     });
 
-    describe("ignoreTitles", () => {
+    describe("ignoreTitlesForSimpleMeasures", () => {
         function getTitleOfMeasure(
             visualizationObject: IVisualizationObjectContent,
             localIdentifier: string,
@@ -255,19 +255,48 @@ describe("measureTitleHelper", () => {
             "invalid_arithmetic_measure_with_missing_dependency",
             "invalid_arithmetic_measure_with_cyclic_dependency_1",
             "invalid_arithmetic_measure_with_cyclic_dependency_2",
-        ])("should delete title of the measure having localIdentifier %s", (value: string) => {
-            const visualizationObjectContent = findVisualizationObjectFixture("Arithmetic measures");
-            const result = ignoreTitles(visualizationObjectContent);
-            expect(getTitleOfMeasure(result, value)).toBeUndefined();
-        });
+        ])(
+            'should delete title of the measure which is not an adhoc and has localIdentifier "%s"',
+            (value: string) => {
+                const visualizationObjectContent = findVisualizationObjectFixture("Arithmetic measures");
+                const result = ignoreTitlesForSimpleMeasures(visualizationObjectContent);
+                expect(getTitleOfMeasure(result, value)).toBeUndefined();
+            },
+        );
 
         it("should preserve all measures' aliases", () => {
             const visualizationObjectContent = findVisualizationObjectFixture("Arithmetic measures");
-            const result = ignoreTitles(visualizationObjectContent);
-
+            const result = ignoreTitlesForSimpleMeasures(visualizationObjectContent);
             expect(getAliasOfMeasure(result, "m3")).toEqual("AD Queries");
-
             expect(getAliasOfMeasure(result, "m4")).toEqual("KD Queries");
+        });
+
+        it("should not delete a measure's title if the measure is an adhoc with aggregate", () => {
+            const visualizationObjectContent = findVisualizationObjectFixture(
+                "Headline over time comparison",
+            );
+            const result = ignoreTitlesForSimpleMeasures(visualizationObjectContent);
+            expect(getTitleOfMeasure(result, "fdd41e4ca6224cd2b5ecce15fdabf062")).toEqual(
+                "Sum of Email Clicks",
+            );
+        });
+
+        it("should not delete a measure's title if the measure is an adhoc with computeRatio", () => {
+            const visualizationObjectContent = findVisualizationObjectFixture(
+                "Adhoc measure with computeRatio",
+            );
+            const result = ignoreTitlesForSimpleMeasures(visualizationObjectContent);
+            expect(getTitleOfMeasure(result, "fdd41e4ca6224cd2b5ecce15fdabf062")).toEqual(
+                "Sum of Email Clicks",
+            );
+        });
+
+        it("should not delete a measure's title if the measure is an adhoc with filters", () => {
+            const visualizationObjectContent = findVisualizationObjectFixture("Adhoc measure with filters");
+            const result = ignoreTitlesForSimpleMeasures(visualizationObjectContent);
+            expect(getTitleOfMeasure(result, "fdd41e4ca6224cd2b5ecce15fdabf062")).toEqual(
+                "Sum of Email Clicks",
+            );
         });
     });
 });

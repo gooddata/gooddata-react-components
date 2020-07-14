@@ -36,7 +36,7 @@ import MdObjectHelper, {
     mdObjectToGeoPushpinBucketProps,
     mdObjectToPivotBucketProps,
 } from "../../helpers/MdObjectHelper";
-import { fillMissingTitles, ignoreTitles } from "../../helpers/measureTitleHelper";
+import { fillMissingTitles, ignoreTitlesForSimpleMeasures } from "../../helpers/measureTitleHelper";
 import { LoadingComponent, ILoadingProps } from "../simple/LoadingComponent";
 import { ErrorComponent, IErrorProps } from "../simple/ErrorComponent";
 import { IDrillableItem, generateDimensions, RuntimeError } from "../../";
@@ -598,8 +598,8 @@ function buildAfmResultSpec(
     sortingConfigs: ISortingConfigs,
 ): IConvertedAFM {
     const updatedVisObj = fillMissingTitles(visObj, locale);
-    // Ignore the measures' titles to make sure afm response contains the up-to-date titles
-    const ignoredMeasureTitlesVisObj = ignoreTitles(updatedVisObj);
+    // Ignore simple measures' titles to make sure afm response contains the up-to-date titles
+    const ignoredMeasureTitlesVisObj = ignoreTitlesForSimpleMeasures(updatedVisObj);
     const genericAfmResultSpec = toAfmResultSpec(ignoredMeasureTitlesVisObj);
 
     return buildAfmResultSpecForVis(
