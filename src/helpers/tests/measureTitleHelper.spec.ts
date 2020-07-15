@@ -208,9 +208,10 @@ describe("measureTitleHelper", () => {
     });
 
     describe("ignoreTitlesForSimpleMeasures", () => {
-        function getTitleOfMeasure(
+        function getInfoFromMeasure(
             visualizationObject: IVisualizationObjectContent,
             localIdentifier: string,
+            infoKey: string,
         ): string {
             const measureBucketItems: BucketItem[] = visualizationObject.buckets[0].items;
             const matchingMeasure: IMeasure = measureBucketItems
@@ -219,21 +220,7 @@ describe("measureTitleHelper", () => {
                     (bucketItem: IMeasure): boolean => bucketItem.measure.localIdentifier === localIdentifier,
                 );
 
-            return matchingMeasure === undefined ? undefined : matchingMeasure.measure.title;
-        }
-
-        function getAliasOfMeasure(
-            visualizationObject: IVisualizationObjectContent,
-            localIdentifier: string,
-        ): string {
-            const measureBucketItems: BucketItem[] = visualizationObject.buckets[0].items;
-            const matchingMeasure: IMeasure = measureBucketItems
-                .map((bucketItem: BucketItem): IMeasure => bucketItem as IMeasure)
-                .find(
-                    (bucketItem: IMeasure): boolean => bucketItem.measure.localIdentifier === localIdentifier,
-                );
-
-            return matchingMeasure === undefined ? undefined : matchingMeasure.measure.alias;
+            return matchingMeasure === undefined ? undefined : matchingMeasure.measure[infoKey];
         }
 
         it.each([
@@ -260,15 +247,15 @@ describe("measureTitleHelper", () => {
             (value: string) => {
                 const visualizationObjectContent = findVisualizationObjectFixture("Arithmetic measures");
                 const result = ignoreTitlesForSimpleMeasures(visualizationObjectContent);
-                expect(getTitleOfMeasure(result, value)).toBeUndefined();
+                expect(getInfoFromMeasure(result, value, "title")).toBeUndefined();
             },
         );
 
         it("should preserve all measures' aliases", () => {
             const visualizationObjectContent = findVisualizationObjectFixture("Arithmetic measures");
             const result = ignoreTitlesForSimpleMeasures(visualizationObjectContent);
-            expect(getAliasOfMeasure(result, "m3")).toEqual("AD Queries");
-            expect(getAliasOfMeasure(result, "m4")).toEqual("KD Queries");
+            expect(getInfoFromMeasure(result, "m3", "alias")).toEqual("AD Queries");
+            expect(getInfoFromMeasure(result, "m4", "alias")).toEqual("KD Queries");
         });
 
         it("should not delete a measure's title if the measure is an adhoc with aggregate", () => {
@@ -276,7 +263,7 @@ describe("measureTitleHelper", () => {
                 "Headline over time comparison",
             );
             const result = ignoreTitlesForSimpleMeasures(visualizationObjectContent);
-            expect(getTitleOfMeasure(result, "fdd41e4ca6224cd2b5ecce15fdabf062")).toEqual(
+            expect(getInfoFromMeasure(result, "fdd41e4ca6224cd2b5ecce15fdabf062", "title")).toEqual(
                 "Sum of Email Clicks",
             );
         });
@@ -286,7 +273,7 @@ describe("measureTitleHelper", () => {
                 "Adhoc measure with computeRatio",
             );
             const result = ignoreTitlesForSimpleMeasures(visualizationObjectContent);
-            expect(getTitleOfMeasure(result, "fdd41e4ca6224cd2b5ecce15fdabf062")).toEqual(
+            expect(getInfoFromMeasure(result, "fdd41e4ca6224cd2b5ecce15fdabf062", "title")).toEqual(
                 "Sum of Email Clicks",
             );
         });
@@ -294,7 +281,7 @@ describe("measureTitleHelper", () => {
         it("should not delete a measure's title if the measure is an adhoc with filters", () => {
             const visualizationObjectContent = findVisualizationObjectFixture("Adhoc measure with filters");
             const result = ignoreTitlesForSimpleMeasures(visualizationObjectContent);
-            expect(getTitleOfMeasure(result, "fdd41e4ca6224cd2b5ecce15fdabf062")).toEqual(
+            expect(getInfoFromMeasure(result, "fdd41e4ca6224cd2b5ecce15fdabf062", "title")).toEqual(
                 "Sum of Email Clicks",
             );
         });

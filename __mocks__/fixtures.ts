@@ -708,7 +708,7 @@ export const visualizationObjects: IVisualization[] = [
                                         measureDefinition: {
                                             computeRatio: true,
                                             item: {
-                                                uri: "/gdc/md/yrungi0zwpoud7h1kmh6ldhp0vgkpi41/obj/15428",
+                                                uri: "/gdc/md/myproject/obj/8172",
                                             },
                                         },
                                     },
@@ -726,7 +726,7 @@ export const visualizationObjects: IVisualization[] = [
                                         popMeasureDefinition: {
                                             measureIdentifier: "fdd41e4ca6224cd2b5ecce15fdabf062",
                                             popAttribute: {
-                                                uri: "/gdc/md/yrungi0zwpoud7h1kmh6ldhp0vgkpi41/obj/15330",
+                                                uri: "/gdc/md/myproject/obj/1514",
                                             },
                                         },
                                     },
@@ -741,8 +741,7 @@ export const visualizationObjects: IVisualization[] = [
                                             dateDataSets: [
                                                 {
                                                     dataSet: {
-                                                        uri:
-                                                            "/gdc/md/yrungi0zwpoud7h1kmh6ldhp0vgkpi41/obj/921",
+                                                        uri: "/gdc/md/myproject/obj/1515",
                                                     },
                                                     periodsAgo: 1,
                                                 },
@@ -760,18 +759,18 @@ export const visualizationObjects: IVisualization[] = [
                             to: "2017-12-31",
                             from: "2014-01-01",
                             dataSet: {
-                                uri: "/gdc/md/yrungi0zwpoud7h1kmh6ldhp0vgkpi41/obj/15337",
+                                uri: "/gdc/md/myproject/obj/1516",
                             },
                         },
                     },
                 ],
                 visualizationClass: {
-                    uri: "/gdc/md/yrungi0zwpoud7h1kmh6ldhp0vgkpi41/obj/808936",
+                    uri: "/gdc/md/myproject/obj/table",
                 },
             },
             meta: {
-                author: "/gdc/account/profile/26728eacad349ba6c4c04c5e5cc59437",
-                uri: "/gdc/md/yrungi0zwpoud7h1kmh6ldhp0vgkpi41/obj/809028",
+                author: "/gdc/account/profile/johndoe",
+                uri: "/gdc/md/myproject/obj/2",
                 tags: "",
                 created: new Date("2015-05-23T09:24:41Z"),
                 identifier: "aadQOoKTbq5E",
@@ -780,7 +779,7 @@ export const visualizationObjects: IVisualization[] = [
                 isProduction: true,
                 title: "Adhoc measure with computeRatio",
                 category: "visualizationObject",
-                contributor: "/gdc/account/profile/26728eacad349ba6c4c04c5e5cc59437",
+                contributor: "/gdc/account/profile/johndoe",
             },
         },
     },
@@ -812,7 +811,7 @@ export const visualizationObjects: IVisualization[] = [
                                                 },
                                             ],
                                             item: {
-                                                uri: "/gdc/md/yrungi0zwpoud7h1kmh6ldhp0vgkpi41/obj/15428",
+                                                uri: "/gdc/md/myproject/obj/8172",
                                             },
                                         },
                                     },
@@ -830,7 +829,7 @@ export const visualizationObjects: IVisualization[] = [
                                         popMeasureDefinition: {
                                             measureIdentifier: "fdd41e4ca6224cd2b5ecce15fdabf062",
                                             popAttribute: {
-                                                uri: "/gdc/md/yrungi0zwpoud7h1kmh6ldhp0vgkpi41/obj/15330",
+                                                uri: "/gdc/md/myproject/obj/1514",
                                             },
                                         },
                                     },
@@ -845,8 +844,7 @@ export const visualizationObjects: IVisualization[] = [
                                             dateDataSets: [
                                                 {
                                                     dataSet: {
-                                                        uri:
-                                                            "/gdc/md/yrungi0zwpoud7h1kmh6ldhp0vgkpi41/obj/921",
+                                                        uri: "/gdc/md/myproject/obj/1515",
                                                     },
                                                     periodsAgo: 1,
                                                 },
@@ -864,18 +862,18 @@ export const visualizationObjects: IVisualization[] = [
                             to: "2017-12-31",
                             from: "2014-01-01",
                             dataSet: {
-                                uri: "/gdc/md/yrungi0zwpoud7h1kmh6ldhp0vgkpi41/obj/15337",
+                                uri: "/gdc/md/myproject/obj/1516",
                             },
                         },
                     },
                 ],
                 visualizationClass: {
-                    uri: "/gdc/md/yrungi0zwpoud7h1kmh6ldhp0vgkpi41/obj/808936",
+                    uri: "/gdc/md/myproject/obj/table",
                 },
             },
             meta: {
-                author: "/gdc/account/profile/26728eacad349ba6c4c04c5e5cc59437",
-                uri: "/gdc/md/yrungi0zwpoud7h1kmh6ldhp0vgkpi41/obj/809028",
+                author: "/gdc/account/profile/johndoe",
+                uri: "/gdc/md/myproject/obj/2",
                 tags: "",
                 created: new Date("2015-05-23T09:24:41Z"),
                 identifier: "aadQOoKTbq5E",
@@ -884,7 +882,7 @@ export const visualizationObjects: IVisualization[] = [
                 isProduction: true,
                 title: "Adhoc measure with filters",
                 category: "visualizationObject",
-                contributor: "/gdc/account/profile/26728eacad349ba6c4c04c5e5cc59437",
+                contributor: "/gdc/account/profile/johndoe",
             },
         },
     },
