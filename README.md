@@ -51,7 +51,7 @@ These commands may come in handy while developing:
 | `yarn examples-build` | build Live Examples to `/examples/dist` |
 | `yarn examples-server` | serve built Live Examples - see `/examples/server/src` |
 | `yarn examples-testcafe` | run testcafe tests against `localhost:8999` |
-
+updated
 ### Deploy to heroku.com
 When you deploy this repo to heroku, it serves *GoodData.UI Live Examples*.
 Relevant tasks are in `Procfile` and `package.json`.
