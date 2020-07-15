@@ -12,7 +12,6 @@ import {
     PivotTable,
     PivotTableInner,
     WATCHING_TABLE_RENDERED_INTERVAL,
-    WATCHING_TABLE_RENDERED_MAX_TIME,
 } from "../PivotTable";
 import { LoadingComponent } from "../../simple/LoadingComponent";
 import {
@@ -676,15 +675,6 @@ describe("PivotTable", () => {
             );
         });
 
-        it("should set timeout for watching", () => {
-            const table = getTableInstance();
-            table.onFirstDataRendered();
-            expect(setTimeout).toHaveBeenCalledWith(
-                table.stopWatchingTableRendered,
-                WATCHING_TABLE_RENDERED_MAX_TIME,
-            );
-        });
-
         it("should stop watching with unmounted table", () => {
             const table = getTableInstance();
             table.containerRef = null;
@@ -700,35 +690,27 @@ describe("PivotTable", () => {
             const afterRender = jest.fn();
 
             const table = getTableInstance({ afterRender });
-            table.isTableHidden = jest.fn().mockReturnValueOnce(false);
+
+            // mock data for isPivotTableReady
+            table.state = {
+                execution: {
+                    executionResult: {
+                        data: [],
+                        headerItems: [[]],
+                    },
+                },
+            };
+            table.gridApi = {
+                getRenderedNodes: jest.fn().mockReturnValueOnce([{}]),
+                getCacheBlockState: jest.fn().mockReturnValueOnce({ pageId: { pageStatus: "loaded" } }),
+            };
+
             table.watchingIntervalId = 123;
-            table.watchingTimeoutId = 456;
             jest.spyOn(table, "stopWatchingTableRendered");
 
             table.startWatchingTableRendered();
-
             expect(table.stopWatchingTableRendered).toHaveBeenCalledTimes(1);
-
             expect(clearInterval).toHaveBeenNthCalledWith(1, 123);
-            expect(clearTimeout).toHaveBeenNthCalledWith(1, 456);
-
-            expect(afterRender).toHaveBeenCalledTimes(1);
-        });
-
-        it("should call afterRender after timeout", () => {
-            const afterRender = jest.fn();
-
-            const table = getTableInstance({ afterRender });
-            table.watchingIntervalId = 123;
-            table.watchingTimeoutId = 456;
-
-            table.stopWatchingTableRendered();
-
-            expect(clearInterval).toHaveBeenNthCalledWith(1, 123);
-            expect(clearTimeout).toHaveBeenNthCalledWith(1, 456);
-
-            expect(table.watchingIntervalId).toBe(null);
-            expect(table.watchingTimeoutId).toBe(null);
 
             expect(afterRender).toHaveBeenCalledTimes(1);
         });
