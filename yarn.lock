@@ -1402,10 +1402,10 @@
     rxjs "^5.5.6"
     uuid "^3.2.1"
 
-"@gooddata/goodstrap@68.17.2-alpha-pkingo-pki-cat-19-2020-07-15T09-08-48-106Z":
-  version "68.17.2-alpha-pkingo-pki-cat-19-2020-07-15T09-08-48-106Z"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-68.17.2-alpha-pkingo-pki-cat-19-2020-07-15T09-08-48-106Z.tgz#da390acc0317cb163fa80540fb11690a99da4dc9"
-  integrity sha512-rqKRHsFyCanBhruIqzjD/TxEzRqPpJpnkEDfARCBAD0osMAkogq+0aRIk7lpeytoFZZNCtWl6M1yVIqkoMxmwg==
+"@gooddata/goodstrap@68.17.2-alpha-pkingo-pki-cat-19-2020-07-15T11-59-11-926Z":
+  version "68.17.2-alpha-pkingo-pki-cat-19-2020-07-15T11-59-11-926Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-68.17.2-alpha-pkingo-pki-cat-19-2020-07-15T11-59-11-926Z.tgz#7c603392bcc258cd017fe455815d64e67979d73a"
+  integrity sha512-XTDISdPsqSF49183oHiYbHNWkGn7ttHegFVByTlIfYntSkWEu78fALucym5CsZWcMXbgciY/i8wyDmD6guc3Nw==
   dependencies:
     "@babel/runtime-corejs2" "^7.0.0"
     "@gooddata/js-utils" "^3.10.9"
