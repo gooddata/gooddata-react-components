@@ -119,7 +119,7 @@
   "dependencies": {
     "@formatjs/intl-pluralrules": "^1.3.6",
     "@gooddata/gooddata-js": "^13.0.3",
-    "@gooddata/goodstrap": "^68.17.2",
+    "@gooddata/goodstrap": "68.17.2-alpha-pkingo-pki-cat-19-2020-07-15T09-08-48-106Z",
     "@gooddata/js-utils": "^3.10.5",
     "@gooddata/numberjs": "^3.2.4",
     "@gooddata/typings": "^2.25.0",
