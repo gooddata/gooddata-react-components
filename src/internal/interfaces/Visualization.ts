@@ -9,6 +9,7 @@ import { ChartType } from "../../constants/visualizationTypes";
 import { IColorPalette } from "../../interfaces/Config";
 import * as VisEvents from "../../interfaces/Events";
 import { DATE_DATASET_ATTRIBUTE } from "../constants/bucket";
+import { IPushData } from "../../interfaces/PushData";
 
 export type ILocale =
     | "en-US"
@@ -63,7 +64,7 @@ export interface IVisualizationOptions {
 
 export interface IVisCallbacks extends VisEvents.IEvents {
     afterRender?(): void;
-    pushData(data: any, options?: IVisualizationOptions): void;
+    pushData(data: IPushData, options?: IVisualizationOptions): void;
 }
 
 export interface IBucketFilterElement {

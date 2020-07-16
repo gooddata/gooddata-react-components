@@ -1,5 +1,6 @@
 // (C) 2020 GoodData Corporation
 import includes = require("lodash/includes");
+import { VisualizationObject } from "@gooddata/typings";
 
 import {
     ColumnWidthItem,
@@ -19,6 +20,7 @@ import {
     isAttributeFilter,
     IBucketItem,
 } from "../../../interfaces/Visualization";
+import { getMeasures, getRows, getColumns } from "./sortItemsHelpers";
 
 const isMeasureWidthItemMatchedByFilter = (
     widthItem: IMeasureColumnWidthItem,
@@ -202,5 +204,27 @@ export function adaptReferencePointWidthItemsToPivotTable(
         filteredColumnAttributeLocalIdentifiers,
         filters,
         firstColumnAttributeAdded,
+    );
+}
+
+export function adaptMdObjectWidthItemsToPivotTable(
+    originalColumnWidths: ColumnWidthItem[],
+    buckets: VisualizationObject.IBucket[],
+): ColumnWidthItem[] {
+    const measureLocalIdentifiers = getMeasures(buckets).map(measure => measure.measure.localIdentifier);
+    const rowAttributeLocalIdentifiers = getRows(buckets).map(
+        rowAttribute => rowAttribute.visualizationAttribute.localIdentifier,
+    );
+    const columnAttributeLocalIdentifiers = getColumns(buckets).map(
+        columnAttribute => columnAttribute.visualizationAttribute.localIdentifier,
+    );
+
+    return adaptWidthItemsToPivotTable(
+        originalColumnWidths,
+        measureLocalIdentifiers,
+        rowAttributeLocalIdentifiers,
+        columnAttributeLocalIdentifiers,
+        [],
+        false,
     );
 }
