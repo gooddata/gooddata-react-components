@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import get = require("lodash/get");
 import flatMap = require("lodash/flatMap");
 
@@ -271,4 +271,60 @@ export function fillMissingTitles(
     const measureBucketItems = getAllMeasures(mdObject);
     const measureTitleProps = buildMeasureTitles(measureBucketItems, locale, maxArithmeticMeasureTitleLength);
     return updateVisualizationObjectTitles(mdObject, measureTitleProps);
+}
+
+function isAdhocMeasure(definition: IMeasureDefinitionType): boolean {
+    return (
+        VisualizationObject.isMeasureDefinition(definition) &&
+        (!!definition.measureDefinition.aggregation ||
+            !!definition.measureDefinition.computeRatio ||
+            !!definition.measureDefinition.filters)
+    );
+}
+
+function isNonSimpleMeasure(definition: IMeasureDefinitionType): boolean {
+    return (
+        VisualizationObject.isArithmeticMeasureDefinition(definition) ||
+        VisualizationObject.isPopMeasureDefinition(definition) ||
+        VisualizationObject.isPreviousPeriodMeasureDefinition(definition)
+    );
+}
+
+function removeTitleForSimpleMeasure(bucket: IBucket): IBucket {
+    return {
+        ...bucket,
+        items: bucket.items.map(
+            (bucketItem: VisualizationObject.BucketItem): VisualizationObject.BucketItem => {
+                if (
+                    VisualizationObject.isMeasure(bucketItem) &&
+                    !isAdhocMeasure(bucketItem.measure.definition) &&
+                    !isNonSimpleMeasure(bucketItem.measure.definition)
+                ) {
+                    delete bucketItem.measure.title;
+                }
+                return bucketItem;
+            },
+        ),
+    };
+}
+
+/**
+ * This function ignores the titles of simple measures.
+ *
+ * For simple measures, their titles are removed.
+ * For adhoc or non-simple measures, their titles are left intact.
+ *
+ * @param {VisualizationObject.IVisualizationObjectContent} mdObject - metadata object that must be processed.
+ *
+ * @returns {VisualizationObject.IVisualizationObjectContent}
+ *
+ * @internal
+ */
+export function ignoreTitlesForSimpleMeasures(
+    mdObject: IVisualizationObjectContent,
+): IVisualizationObjectContent {
+    return {
+        ...mdObject,
+        buckets: mdObject.buckets.map((bucket: IBucket): IBucket => removeTitleForSimpleMeasure(bucket)),
+    };
 }
