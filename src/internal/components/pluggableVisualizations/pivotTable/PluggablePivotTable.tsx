@@ -5,6 +5,7 @@ import merge = require("lodash/merge");
 import flatMap = require("lodash/flatMap");
 import isNil = require("lodash/isNil");
 import isEqual = require("lodash/isEqual");
+import isEmpty = require("lodash/isEmpty");
 import * as React from "react";
 import ReactMeasure from "react-measure";
 import { render } from "react-dom";
@@ -452,6 +453,10 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
         columnWidths: ColumnWidthItem[],
         mdObject: VisualizationObject.IVisualizationObjectContent,
     ) {
+        // BUGFIX ONE-4570, buckets have to have at least one item
+        if (isEmpty(mdObject.buckets)) {
+            return;
+        }
         const adaptedColumnWidths = adaptMdObjectWidthItemsToPivotTable(columnWidths, mdObject.buckets);
         if (!isEqual(columnWidths, adaptedColumnWidths)) {
             this.visualizationProperties.properties.controls.columnWidths = adaptedColumnWidths;
