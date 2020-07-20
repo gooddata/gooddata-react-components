@@ -16,6 +16,7 @@ import {
     IVisConstruct,
     IVisProps,
     IVisualizationPropertiesWrapper,
+    IReferencePoint,
 } from "../../../../interfaces/Visualization";
 import { IDrillableItem } from "../../../../../interfaces/DrillEvents";
 import { PivotTable } from "../../../../../components/core/PivotTable";
@@ -379,6 +380,21 @@ describe("PluggablePivotTable", () => {
                     expect(extendedReferencePoint.properties.controls.columnWidths).toEqual(
                         expectedColumnWidths,
                     );
+                });
+            });
+
+            it("should not generate empty columnWidths in a new reference point", () => {
+                const emptyControlsReferencePoint: IReferencePoint = {
+                    ...sourceReferencePoint,
+                    properties: {
+                        sortItems: sourceReferencePoint.properties.sortItems,
+                    },
+                };
+                const promise: Promise<IExtendedReferencePoint> = pivotTable.getExtendedReferencePoint(
+                    emptyControlsReferencePoint,
+                );
+                return promise.then(extendedReferencePoint => {
+                    expect(extendedReferencePoint.properties.controls).toBeUndefined();
                 });
             });
         });
