@@ -207,7 +207,6 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
                     const originalColumnWidths: ColumnWidthItem[] = get(
                         referencePointDraft.properties,
                         "controls.columnWidths",
-                        [],
                     );
                     const columnWidths = adaptReferencePointWidthItemsToPivotTable(
                         originalColumnWidths,
@@ -218,14 +217,13 @@ export class PluggablePivotTable extends AbstractPluggableVisualization {
                         previousColumnAttributes ? previousColumnAttributes : [],
                         filters,
                     );
-                    const controlsObj =
-                        this.featureFlags.enableTableColumnsManualResizing || columnWidths.length > 0
-                            ? {
-                                  controls: {
-                                      columnWidths,
-                                  },
-                              }
-                            : {};
+                    const controlsObj = columnWidths
+                        ? {
+                              controls: {
+                                  columnWidths,
+                              },
+                          }
+                        : {};
 
                     referencePointDraft.properties = {
                         sortItems: addDefaultSort(

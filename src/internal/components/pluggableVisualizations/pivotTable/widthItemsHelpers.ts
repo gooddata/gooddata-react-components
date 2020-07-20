@@ -117,6 +117,9 @@ function adaptWidthItemsToPivotTable(
     filters: IBucketFilter[],
     firstColumnAttributeAdded: boolean,
 ): ColumnWidthItem[] {
+    if (!originalColumnWidths) {
+        return originalColumnWidths;
+    }
     const attributeLocalIdentifiers = [...rowAttributeLocalIdentifiers, ...columnAttributeLocalIdentifiers];
 
     return originalColumnWidths.reduce((columnWidths: ColumnWidthItem[], columnWidth: ColumnWidthItem) => {
