@@ -1401,10 +1401,10 @@
     rxjs "^5.5.6"
     uuid "^3.2.1"
 
-"@gooddata/goodstrap@68.18.0":
-  version "68.18.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-68.18.0.tgz#c8bdb4f943aad72595faf7cb6a472a7445576692"
-  integrity sha512-We4Qn6q7Y3DAh3JUT9CCXrhRWtVfho6Dh3+wYj8wJuPzK9KMfGLNfc352xjBq+I/4Qlxj8mt+OxmE5LRxGXIcA==
+"@gooddata/goodstrap@68.18.0-alpha-tulean-master-2020-07-20T14-22-36-472Z":
+  version "68.18.0-alpha-tulean-master-2020-07-20T14-22-36-472Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-68.18.0-alpha-tulean-master-2020-07-20T14-22-36-472Z.tgz#63a3c5fbd456d943527b48b663fe9c4fd9a477b3"
+  integrity sha512-iUQnFQHg7pxLZh/z/Gtm7PBu59sC7D/wKF+jWVyEurhWNGCDyQVkM8gYyZSUkz0P2OmhvihZCK/jEPnZ+75YLw==
   dependencies:
     "@babel/runtime-corejs2" "^7.0.0"
     "@gooddata/js-utils" "^3.10.9"
@@ -1416,7 +1416,7 @@
     immutable "^3.8.1"
     invariant "^2.2.2"
     kefir "^3.7.1"
-    lodash "^4.17.12"
+    lodash "^4.17.19"
     moment "^2.23.0"
     moment-timezone "^0.5.23"
     prop-types "^15.6.0"
