@@ -268,11 +268,11 @@ storiesOf("Core components/Table", module)
             </div>,
         ),
     )
-    .add("with supplied height of container of height 100px", () =>
+    .add("with supplied height of container of height 120px", () =>
         screenshotWrap(
             <ScreenshotReadyWrapper resolver={createTableResolver(1)}>
                 <div>
-                    <TableWithHeight height={100} />
+                    <TableWithHeight height={120} />
                 </div>
             </ScreenshotReadyWrapper>,
         ),
