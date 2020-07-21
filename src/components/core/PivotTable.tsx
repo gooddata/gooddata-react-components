@@ -743,6 +743,9 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             await this.autoresizeColumns(event);
             this.updateStickyRow();
         } else {
+            if (this.columnApi && this.isGrowToFitEnabled()) {
+                this.growToFit(this.columnApi);
+            }
             this.updateStickyRow();
         }
     };

@@ -118,6 +118,7 @@ describe("PivotTable", () => {
             try {
                 growToFit.mockImplementation(() => {
                     expect(growToFit).toHaveBeenCalledTimes(1);
+                    growToFit.mockReset();
                     done();
                 });
             } catch (e) {
@@ -154,6 +155,7 @@ describe("PivotTable", () => {
             try {
                 growToFit.mockImplementation(() => {
                     expect(growToFit).toHaveBeenCalledTimes(1);
+                    growToFit.mockReset();
                     done();
                 });
             } catch (e) {
@@ -312,12 +314,12 @@ describe("PivotTable", () => {
             try {
                 growToFit.mockImplementation(() => {
                     expect(growToFit).toHaveBeenCalledTimes(1);
+                    growToFit.mockReset();
                     done();
                 });
             } catch (e) {
                 done.fail(e);
             }
-            wrapper.update();
         });
 
         it("should not grow to fit columns if the growToFit is not configured", async () => {
@@ -330,6 +332,7 @@ describe("PivotTable", () => {
 
             await waitFor(waitForDataLoaded(wrapper));
             expect(growToFit).toHaveBeenCalledTimes(0);
+            growToFit.mockReset();
         });
     });
     describe("infiniteInitialRowCount", () => {
