@@ -1050,8 +1050,12 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
             return;
         }
 
-        this.autoresizeColumnsByColumnId(this.columnApi, this.getColumnIds([column]));
-        if (isColumnDisplayed(this.columnApi.getAllDisplayedVirtualColumns(), column)) {
+        if (
+            isColumnDisplayed(this.columnApi.getAllDisplayedVirtualColumns(), column) &&
+            this.isColumnAutoresizeEnabled()
+        ) {
+            this.autoresizeColumnsByColumnId(this.columnApi, this.getColumnIds([column]));
+        } else if (isColumnDisplayed(this.columnApi.getAllDisplayedVirtualColumns(), column)) {
             // skip columns out of viewport because these can not be autoresized
             this.resizedColumnsStore.addToManuallyResizedColumn(column, true);
         }
