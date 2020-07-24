@@ -533,28 +533,14 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
         }
 
         const displayedVirtualColumns = columnApi.getAllDisplayedVirtualColumns();
-        const manuallyResizedColumnIds: string[] = this.getColumnIds(
-            displayedVirtualColumns.filter((col: Column) =>
-                this.resizedColumnsStore.isColumnManuallyResized(col),
-            ),
-        );
         const autoWidthColumnIds: string[] = this.getColumnIds(
             displayedVirtualColumns.filter(
                 (col: Column) => !this.resizedColumnsStore.isColumnManuallyResized(col),
             ),
         );
-        const mergedColumnIds = [...manuallyResizedColumnIds, ...autoWidthColumnIds];
-        console.log("--------------");
-        console.log("previouslyResizedColumnIds", previouslyResizedColumnIds);
-        console.log("manuallyResizedColumnIds", manuallyResizedColumnIds);
-        console.log("autoWidthColumnIds", autoWidthColumnIds);
-        console.log("mergedColumnIds", mergedColumnIds);
+
         if (previouslyResizedColumnIds.length >= autoWidthColumnIds.length) {
-            const newColumnIds = difference(autoWidthColumnIds, mergedColumnIds);
-            this.autoresizeColumnsByColumnId(columnApi, newColumnIds);
-            await sleep(AGGRID_RENDER_NEW_COLUMNS_TIMEOUT);
             this.autoResizedColumns = this.getAutoResizedColumns(columnApi.getAllDisplayedVirtualColumns());
-            console.log("autoResizedColumns", this.autoResizedColumns);
             return Promise.resolve();
         }
 
@@ -803,7 +789,6 @@ export class PivotTableInner extends BaseVisualization<IPivotTableInnerProps, IP
                 this.isGrowToFitEnabled(),
                 this.growToFittedColumns,
             );
-            console.log("onSuccess call");
             if (!isEqual(enrichedColumnDefs, this.state.columnDefs)) {
                 const sortedByFirstAttribute = isSortedByFirstAttibute(columnDefs, resultSpec);
 
