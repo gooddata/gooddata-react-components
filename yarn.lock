@@ -1383,10 +1383,10 @@
     line-replace "^1.0.2"
     linebyline "^1.3.0"
 
-"@gooddata/gooddata-js@^13.0.4":
-  version "13.0.4"
-  resolved "https://registry.yarnpkg.com/@gooddata/gooddata-js/-/gooddata-js-13.0.4.tgz#1994a1ca4d25c10e8388acfb9a9f647b6c67c2ac"
-  integrity sha512-WERk4HnVCoN5h2vVIwXWzDCLhq0k9XGltO1OAAfzDipzaTJLi5tNfEjW8vaV+l5y7dtFJop/1JxLEFSYOXr1fA==
+"@gooddata/gooddata-js@^13.1.0":
+  version "13.1.0"
+  resolved "https://registry.yarnpkg.com/@gooddata/gooddata-js/-/gooddata-js-13.1.0.tgz#d8e870488d4d74300594d4c980fe9bacb0256ac3"
+  integrity sha512-S0UrZ7jPGzCIXrMGqXb8Av8Ronqkrb9fg1CVg+dZ4BywjIhd3wUFgPHVmvoBDiwZX1TRRHYfxIQCi3+iY20+yw==
   dependencies:
     "@gooddata/typings" "^2.26.0"
     es6-promise "^3.0.2"
@@ -1401,10 +1401,10 @@
     rxjs "^5.5.6"
     uuid "^3.2.1"
 
-"@gooddata/goodstrap@68.18.0":
-  version "68.18.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-68.18.0.tgz#c8bdb4f943aad72595faf7cb6a472a7445576692"
-  integrity sha512-We4Qn6q7Y3DAh3JUT9CCXrhRWtVfho6Dh3+wYj8wJuPzK9KMfGLNfc352xjBq+I/4Qlxj8mt+OxmE5LRxGXIcA==
+"@gooddata/goodstrap@68.18.3":
+  version "68.18.3"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-68.18.3.tgz#387bdbd780be550d8d4620535482f1d01e4d5f79"
+  integrity sha512-QhPijBQM7nShbgtqdSJkmV0l8txmMDL/vFohltKtWE1zwRFoiQZ2Ylb/4z3eK/4+HU2WpXrWqc6vNhB4peoaHQ==
   dependencies:
     "@babel/runtime-corejs2" "^7.0.0"
     "@gooddata/js-utils" "^3.10.9"
@@ -1416,7 +1416,7 @@
     immutable "^3.8.1"
     invariant "^2.2.2"
     kefir "^3.7.1"
-    lodash "^4.17.12"
+    lodash "^4.17.19"
     moment "^2.23.0"
     moment-timezone "^0.5.23"
     prop-types "^15.6.0"
