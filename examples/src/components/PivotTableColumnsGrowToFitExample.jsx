@@ -5,17 +5,21 @@ import { Model, PivotTable } from "@gooddata/react-components";
 import "@gooddata/react-components/styles/css/main.css";
 
 import {
+    employeeNameIdentifier,
+    franchisedSalesIdentifier,
+    locationNameDisplayFormIdentifier,
     projectId,
-    quarterDateIdentifier,
-    locationStateDisplayFormIdentifier,
-    franchiseFeesIdentifier,
 } from "../utils/fixtures";
 
-const measures = [Model.measure(franchiseFeesIdentifier).format("#,##0")];
+const measures = [
+    Model.measure(franchisedSalesIdentifier)
+        .format("#,##0")
+        .alias("Sales"),
+];
 
-const attributes = [Model.attribute(locationStateDisplayFormIdentifier).localIdentifier("state")];
+const attributes = [Model.attribute(employeeNameIdentifier)];
 
-const columns = [Model.attribute(quarterDateIdentifier)];
+const columns = [Model.attribute(locationNameDisplayFormIdentifier).localIdentifier("location")];
 
 export class PivotTableColumnsGrowToFitExample extends Component {
     render() {
@@ -31,6 +35,7 @@ export class PivotTableColumnsGrowToFitExample extends Component {
                     columns={columns}
                     config={{
                         columnSizing: {
+                            defaultWidth: "viewport",
                             growToFit: true,
                         },
                     }}

@@ -68,9 +68,7 @@ test("should resize newly displayed columns after the whole table is resized", a
     await t.expect(newlyDisplayedColumnWidth).eql(originalColumnWidth);
 });
 
-fixture("Pivot Table Grow to fit").beforeEach(
-    loginUserAndNavigate(`${config.url}/hidden/pivot-table-sizing`),
-);
+fixture("Pivot Table Grow to fit").beforeEach(loginUserAndNavigate(`${config.url}/pivot-table`));
 
 test("should render table auto-resized and fitted to container", async t => {
     const tableSelector = Selector(".s-pivot-table-columns-grow-to-fit");

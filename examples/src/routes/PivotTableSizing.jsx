@@ -8,8 +8,6 @@ import PivotTableSizingWithAttributeFilterExample from "../components/PivotTable
 import PivotTableSizingWithAttributeFilterExampleSRC from "!raw-loader!../components/PivotTableSizingWithAttributeFilterExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import PivotTableSizingExample from "../components/PivotTableSizingExample";
 import PivotTableSizingExampleSRC from "!raw-loader!../components/PivotTableSizingExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
-import PivotTableSizingWithGrowToFitExample from "../components/PivotTableSizingWithGrowToFitExample";
-import PivotTableSizingWithGrowToFitExampleSRC from "!raw-loader!../components/PivotTableSizingWithGrowToFitExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import PivotTableSizingComplexExample from "../components/PivotTableSizingComplexExample";
 import PivotTableSizingComplexExampleSRC from "!raw-loader!../components/PivotTableSizingComplexExample"; // eslint-disable-line import/no-webpack-loader-syntax, import/no-unresolved, import/extensions, import/first
 import PivotTableSizingWithMultipleMeasuresExample from "../components/PivotTableSizingWithMultipleMeasuresExample";
@@ -38,12 +36,6 @@ export const PivotTableSizing = () => (
         <ExampleWithSource
             for={() => <PivotTableSizingWithAttributeFilterExample withAttributes withMeasures withPivot />}
             source={PivotTableSizingWithAttributeFilterExampleSRC}
-        />
-
-        <h2 id="simple-table">Simple table with growToFit</h2>
-        <ExampleWithSource
-            for={() => <PivotTableSizingWithGrowToFitExample />}
-            source={PivotTableSizingWithGrowToFitExampleSRC}
         />
 
         <h2 id="simple-table">Sizing complex example</h2>
