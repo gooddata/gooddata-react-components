@@ -20,8 +20,8 @@ The REST API versions in the table are just for your information as the values a
 ## 7.8.0
 
 ### Added
+- Table column resizing - manual. A Pivot Table can consume the width of the columns.
 - Secondary Y axis is now rotated the same way as primary Y axis in line, column, combo and combo2 charts
-- Manual resizing of Pivot table, resize all measurers columns in the table at once
 
 ## 7.7.0
 
