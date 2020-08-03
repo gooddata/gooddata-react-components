@@ -124,6 +124,7 @@ export default function getLegend(legendConfig: any = {}, chartOptions: any): IL
         VisualizationTypes.PIE,
         VisualizationTypes.DONUT,
         VisualizationTypes.BULLET,
+        VisualizationTypes.PUSHPIN,
     ];
 
     if (legendConfig.position === "auto" || !legendConfig.position) {
