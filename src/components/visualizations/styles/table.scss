@@ -165,6 +165,39 @@ $gdc-goodstrap-basepath: "~@gooddata/goodstrap/lib/";
         background: #fff;
     }
 
+    .public_Scrollbar_main {
+        &,
+        &.public_Scrollbar_mainActive {
+            border-color: transparent;
+        }
+
+        &,
+        &Active {
+            background-color: transparent;
+        }
+
+        &:hover,
+        &Active {
+            .public_Scrollbar_face::after {
+                background-color: $gd-color-disabled;
+            }
+        }
+    }
+
+    .public_Scrollbar_face {
+        &::after {
+            background-color: transparentize($gd-color-disabled, 0.7);
+        }
+
+        &Active::after {
+            background-color: $gd-color-disabled;
+        }
+    }
+
+    .public_fixedDataTable_scrollbarSpacer {
+        background: none;
+    }
+
     .fixedDataTableLayout_header {
         .gd-table-header-ordering {
             color: $gd-color-label;
