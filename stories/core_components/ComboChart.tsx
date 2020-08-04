@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
 import { screenshotWrap } from "@gooddata/test-storybook";
@@ -322,50 +322,46 @@ storiesOf("Core components/ComboChart", module)
     )
     .add("stack primary measures has many data with 1 VIEW BY and chart type is COLUMN", () =>
         screenshotWrap(
-            <ScreenshotReadyWrapper resolver={createHighChartResolver(2)}>
-                <div key={COLUMN}>
-                    <div className="storybook-title">{`${COLUMN} - ${COLUMN}`}</div>
-                    <div style={wrapperStyle} className="screenshot-container">
-                        <ComboChart
-                            projectId="storybook"
-                            primaryMeasures={[MEASURE_1, MEASURE_3]}
-                            secondaryMeasures={secondaryMeasure}
-                            viewBy={ATTRIBUTE_COUNTRY}
-                            config={{
-                                primaryChartType: COLUMN,
-                                secondaryChartType: COLUMN,
-                                stackMeasures: true,
-                            }}
-                            onError={onErrorHandler}
-                        />
-                    </div>
+            <div key={COLUMN}>
+                <div className="storybook-title">{`${COLUMN} - ${COLUMN}`}</div>
+                <div style={wrapperStyle} className="screenshot-container">
+                    <ComboChart
+                        projectId="storybook"
+                        primaryMeasures={[MEASURE_1, MEASURE_3]}
+                        secondaryMeasures={secondaryMeasure}
+                        viewBy={ATTRIBUTE_COUNTRY}
+                        config={{
+                            primaryChartType: COLUMN,
+                            secondaryChartType: COLUMN,
+                            stackMeasures: true,
+                        }}
+                        onError={onErrorHandler}
+                    />
                 </div>
-            </ScreenshotReadyWrapper>,
+            </div>,
         ),
     )
     .add("stack primary measures has many data with 1 VIEW BY and chart type is COLUMN to percent", () =>
         screenshotWrap(
-            <ScreenshotReadyWrapper resolver={createHighChartResolver(2)}>
-                <div key={COLUMN}>
-                    <div className="storybook-title">{`${COLUMN} - ${COLUMN}`}</div>
-                    <div style={wrapperStyle} className="screenshot-container">
-                        <ComboChart
-                            projectId="storybook"
-                            primaryMeasures={[MEASURE_1, MEASURE_3]}
-                            secondaryMeasures={secondaryMeasure}
-                            viewBy={ATTRIBUTE_COUNTRY}
-                            filters={filtersByAttributeCountry}
-                            config={{
-                                primaryChartType: COLUMN,
-                                secondaryChartType: COLUMN,
-                                stackMeasures: true,
-                                stackMeasuresToPercent: true,
-                            }}
-                            onError={onErrorHandler}
-                        />
-                    </div>
+            <div key={COLUMN}>
+                <div className="storybook-title">{`${COLUMN} - ${COLUMN}`}</div>
+                <div style={wrapperStyle} className="screenshot-container">
+                    <ComboChart
+                        projectId="storybook"
+                        primaryMeasures={[MEASURE_1, MEASURE_3]}
+                        secondaryMeasures={secondaryMeasure}
+                        viewBy={ATTRIBUTE_COUNTRY}
+                        filters={filtersByAttributeCountry}
+                        config={{
+                            primaryChartType: COLUMN,
+                            secondaryChartType: COLUMN,
+                            stackMeasures: true,
+                            stackMeasuresToPercent: true,
+                        }}
+                        onError={onErrorHandler}
+                    />
                 </div>
-            </ScreenshotReadyWrapper>,
+            </div>,
         ),
     )
     .add("stack primary measures to percent", () =>
