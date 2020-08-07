@@ -889,6 +889,121 @@ export const visualizationObjects: IVisualization[] = [
     {
         visualizationObject: {
             content: {
+                buckets: [
+                    {
+                        localIdentifier: "measures",
+                        items: [
+                            {
+                                measure: {
+                                    localIdentifier: "fdd41e4ca6224cd2b5ecce15fdabf062",
+                                    format: "#,##0.00",
+                                    title: "Sum of Email Clicks",
+                                    definition: {
+                                        measureDefinition: {
+                                            filters: [
+                                                {
+                                                    relativeDateFilter: {
+                                                        dataSet: {
+                                                            uri: "/gdc/md/myproject/obj/315",
+                                                        },
+                                                        from: 0,
+                                                        granularity: "GDC.time.quarter",
+                                                        to: 0,
+                                                    },
+                                                },
+                                            ],
+                                            item: {
+                                                uri: "/gdc/md/myproject/obj/8172",
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            {
+                                measure: {
+                                    localIdentifier: "fdd41e4ca6224cd2b5ecce15fdabf063",
+                                    title: "Sum of Something",
+                                    definition: {
+                                        measureDefinition: {
+                                            item: {
+                                                uri: "/gdc/md/myproject/obj/8172",
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                    {
+                        localIdentifier: "secondary_measures",
+                        items: [
+                            {
+                                measure: {
+                                    localIdentifier: "fdd41e4ca6224cd2b5ecce15fdabf062_pop",
+                                    definition: {
+                                        popMeasureDefinition: {
+                                            measureIdentifier: "fdd41e4ca6224cd2b5ecce15fdabf062",
+                                            popAttribute: {
+                                                uri: "/gdc/md/myproject/obj/1514",
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            {
+                                measure: {
+                                    localIdentifier: "fdd41e4ca6224cd2b5ecce15fdabf062_previous_period",
+                                    definition: {
+                                        previousPeriodMeasure: {
+                                            measureIdentifier: "fdd41e4ca6224cd2b5ecce15fdabf062",
+                                            dateDataSets: [
+                                                {
+                                                    dataSet: {
+                                                        uri: "/gdc/md/myproject/obj/1515",
+                                                    },
+                                                    periodsAgo: 1,
+                                                },
+                                            ],
+                                        },
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                ],
+                filters: [
+                    {
+                        absoluteDateFilter: {
+                            to: "2017-12-31",
+                            from: "2014-01-01",
+                            dataSet: {
+                                uri: "/gdc/md/myproject/obj/1516",
+                            },
+                        },
+                    },
+                ],
+                visualizationClass: {
+                    uri: "/gdc/md/myproject/obj/table",
+                },
+            },
+            meta: {
+                author: "/gdc/account/profile/johndoe",
+                uri: "/gdc/md/myproject/obj/2",
+                tags: "",
+                created: new Date("2015-05-23T09:24:41Z"),
+                identifier: "aadQOoKTbq5E",
+                deprecated: false,
+                summary: "",
+                isProduction: true,
+                title: "Adhoc measure with date filters",
+                category: "visualizationObject",
+                contributor: "/gdc/account/profile/johndoe",
+            },
+        },
+    },
+    {
+        visualizationObject: {
+            content: {
                 visualizationClass: {
                     uri: "/gdc/md/myproject/obj/table",
                 },
