@@ -20,9 +20,9 @@ The REST API versions in the table are just for your information as the values a
 ## 7.8.0
 
 ### Added
-- Secondary Y axis is now rotated the same way as primary Y axis in line, column, combo and combo2 charts
-- Manual resizing of Pivot table columns, resize all measurers columns in the table at once
-- Increase pin limit in GeoChart (from 2k) to 25k
+- The secondary Y axis is now rotated the same way as the primary Y axis in line, column, and combo charts.
+- Manual resizing for columns in pivot tables; resizing all measure columns in a pivot table at once
+- The max number of pins in geo pushpin charts increased from 2,000 to 25,000
 
 ## 7.7.0
 
