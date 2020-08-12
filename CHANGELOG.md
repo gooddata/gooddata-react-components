@@ -22,6 +22,7 @@ The REST API versions in the table are just for your information as the values a
 ### Added
 - The secondary Y axis is now rotated the same way as the primary Y axis in line, column, and combo charts.
 - Manual resizing for columns in pivot tables; resizing all measure columns in a pivot table at once
+- The option to configure the currently visible columns in a pivot table to take the available screen space
 - The max number of pins in geo pushpin charts increased from 2,000 to 25,000
 
 ## 7.7.0
