@@ -57,21 +57,23 @@ function setBarDataLabelsColor(chart: any) {
 function setColumnDataLabelsColor(chart: any) {
     const points = getVisiblePointsWithLabel(chart);
 
-    return points.forEach((point: any) => {
-        const labelDimensions = getDataLabelAttributes(point);
-        const columnDimensions = getShapeAttributes(point);
-        const columnTop = columnDimensions.y + columnDimensions.height;
-        const columnDown = columnDimensions.y;
-        const labelDown = labelDimensions.y;
+    return points
+        .filter((point: any) => point.shapeArgs) // skip if shapeArgs missing (such as line points in line/column combo chart)
+        .forEach((point: any) => {
+            const labelDimensions = getDataLabelAttributes(point);
+            const columnDimensions = getShapeAttributes(point);
+            const columnTop = columnDimensions.y + columnDimensions.height;
+            const columnDown = columnDimensions.y;
+            const labelDown = labelDimensions.y;
 
-        if (point.negative) {
-            changeDataLabelsColor(labelDown < columnDown, point);
-        } else if (!isStacked(chart)) {
-            changeDataLabelsColor(labelDown > columnTop, point);
-        } else {
-            changeDataLabelsColor(labelDown < columnTop, point);
-        }
-    });
+            if (point.negative) {
+                changeDataLabelsColor(labelDown < columnDown, point);
+            } else if (!isStacked(chart)) {
+                changeDataLabelsColor(labelDown > columnTop, point);
+            } else {
+                changeDataLabelsColor(labelDown < columnTop, point);
+            }
+        });
 }
 
 export function isWhiteNotContrastEnough(color: string) {
