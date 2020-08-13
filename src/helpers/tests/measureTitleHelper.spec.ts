@@ -285,5 +285,18 @@ describe("measureTitleHelper", () => {
                 "Sum of Email Clicks",
             );
         });
+
+        it("should not delete a measure's title if there is another measure with date filter", () => {
+            const visualizationObjectContent = findVisualizationObjectFixture(
+                "Adhoc measure with date filters",
+            );
+            const result = ignoreTitlesForSimpleMeasures(visualizationObjectContent);
+            expect(getInfoFromMeasure(result, "fdd41e4ca6224cd2b5ecce15fdabf062", "title")).toEqual(
+                "Sum of Email Clicks",
+            );
+            expect(getInfoFromMeasure(result, "fdd41e4ca6224cd2b5ecce15fdabf063", "title")).toEqual(
+                "Sum of Something",
+            );
+        });
     });
 });

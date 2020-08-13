@@ -815,4 +815,51 @@ describe("PluggableBaseChart", () => {
             expect(extendedReferencePoint.uiConfig.supportedOverTimeComparisonTypes).toEqual([]);
         });
     });
+
+    describe("legend position", () => {
+        it.each([
+            ["auto", 1000, "auto"],
+            ["right", 1000, "right"],
+            ["auto", 600, "top"],
+            ["right", 600, "right"],
+            ["auto", 400, "top"],
+            ["right", 400, "top"],
+        ])(
+            "should set legend position to %s when width is %s",
+            (desiredPosition: string, width: number, expectedPosition: string) => {
+                const renderObject = require("react-dom");
+                const spyOnRender = jest.spyOn(renderObject, "render");
+
+                const props = { ...defaultProps, environment: DASHBOARDS_ENVIRONMENT };
+
+                const visualization = createComponent(props);
+                const options: IVisProps = {
+                    dataSource: testMocks.dummyDataSource,
+                    resultSpec: testMocks.stackedBaseChartResultSpec,
+                    dimensions: { height: 5, width },
+                    locale: dummyLocale,
+                    custom: {
+                        stickyHeaderOffset: 3,
+                    },
+                };
+
+                const visualizationProperties = {
+                    properties: {
+                        controls: {
+                            legend: {
+                                position: desiredPosition,
+                            },
+                        },
+                    },
+                    propertiesMeta: {},
+                };
+                visualization.update(options, visualizationProperties, testMocks.stackedMdObject, undefined);
+
+                const renderCallsCount = spyOnRender.mock.calls.length;
+                expect(
+                    (spyOnRender.mock.calls[renderCallsCount - 1][0] as any).props.config.legend.position,
+                ).toEqual(expectedPosition);
+            },
+        );
+    });
 });

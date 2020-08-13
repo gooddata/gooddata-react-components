@@ -308,6 +308,27 @@ function removeTitleForSimpleMeasure(bucket: IBucket): IBucket {
     };
 }
 
+function isBucketContainingMeasureDateFilter(bucket: IBucket): boolean {
+    return !!bucket.items.find(
+        (bucketItem: VisualizationObject.BucketItem): boolean => {
+            if (!VisualizationObject.isMeasure(bucketItem)) {
+                return false;
+            }
+            const definition: IMeasureDefinitionType = bucketItem.measure.definition;
+            if (!VisualizationObject.isMeasureDefinition(definition)) {
+                return false;
+            }
+            const filters: VisualizationObject.VisualizationObjectFilter[] =
+                definition.measureDefinition.filters;
+            return filters && !!filters.find(VisualizationObject.isDateFilter);
+        },
+    );
+}
+
+function isBucketsContainingMeasureDateFilter(buckets: IBucket[]): boolean {
+    return !!buckets.find(isBucketContainingMeasureDateFilter);
+}
+
 /**
  * This function ignores the titles of simple measures.
  *
@@ -323,8 +344,13 @@ function removeTitleForSimpleMeasure(bucket: IBucket): IBucket {
 export function ignoreTitlesForSimpleMeasures(
     mdObject: IVisualizationObjectContent,
 ): IVisualizationObjectContent {
+    if (isBucketsContainingMeasureDateFilter(mdObject.buckets)) {
+        // If there is one bucket containing a measure with date filter, all other measures are considered adhoc measures
+        // and all the titles should be left intact
+        return mdObject;
+    }
     return {
         ...mdObject,
-        buckets: mdObject.buckets.map((bucket: IBucket): IBucket => removeTitleForSimpleMeasure(bucket)),
+        buckets: mdObject.buckets.map(removeTitleForSimpleMeasure),
     };
 }
