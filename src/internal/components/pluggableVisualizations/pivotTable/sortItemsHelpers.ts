@@ -50,7 +50,7 @@ function adaptSortItemsToPivotTable(
                 columnAttributeLocalIdentifiers.length + 1;
             // keep sortItem if measureLocator is present and locators are correct length
             if (hasMeasureLocatorItem && hasCorrectLength) {
-                changedSortItems.push(sortItem);
+                changedSortItems.push(filteredSortItem);
             }
         }
 

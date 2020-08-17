@@ -20,6 +20,7 @@ import {
     invalidMeasureSortTooManyLocators,
     validAttributeSort,
     validMeasureSort,
+    partiallyValidMeasureSort,
 } from "./sortItemsMock";
 import { getMockReferencePoint } from "./testHelper";
 
@@ -54,6 +55,19 @@ describe("adaptReferencePointSortItemsToPivotTable", () => {
         expect(
             adaptReferencePointSortItemsToPivotTable(
                 sourceSortItems,
+                measures,
+                rowAttributes,
+                columnAttributes,
+            ),
+        ).toEqual(expectedSortItems);
+    });
+
+    it("should keep modified measure sort item with column attribute removed", async () => {
+        const expectedSortItems: AFM.SortItem[] = [validMeasureSort];
+
+        expect(
+            adaptReferencePointSortItemsToPivotTable(
+                [partiallyValidMeasureSort],
                 measures,
                 rowAttributes,
                 columnAttributes,
