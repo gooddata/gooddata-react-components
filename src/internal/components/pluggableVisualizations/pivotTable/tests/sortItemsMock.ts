@@ -27,6 +27,31 @@ export const validAttributeSort: AFM.IAttributeSortItem = {
     },
 };
 
+export const partiallyValidMeasureSort: AFM.IMeasureSortItem = {
+    measureSortItem: {
+        direction: "asc",
+        locators: [
+            {
+                attributeLocatorItem: {
+                    attributeIdentifier: "a1",
+                    element: "/gdc/md/PROJECTID/obj/2209/elements?id=12345",
+                },
+            },
+            {
+                attributeLocatorItem: {
+                    attributeIdentifier: "a2",
+                    element: "/gdc/md/PROJECTID/obj/2210/elements?id=1234",
+                },
+            },
+            {
+                measureLocatorItem: {
+                    measureIdentifier: "m1",
+                },
+            },
+        ],
+    },
+};
+
 export const invalidAttributeSort: AFM.IAttributeSortItem = {
     attributeSortItem: {
         attributeIdentifier: "invalid",
