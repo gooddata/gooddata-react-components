@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import { mount, ReactWrapper } from "enzyme";
 import { Table } from "fixed-data-table-2";
@@ -125,7 +125,8 @@ describe("Table", () => {
             ITableVisualizationState
         > = renderTable();
         const columns = wrapper.find(Table).prop("children");
-        expect(columns[0].props.width).toEqual(200);
+        expect(columns[0].props.width).toEqual(100);
+        expect(columns[0].props.flexGrow).toEqual(1);
     });
 
     describe("renderers", () => {

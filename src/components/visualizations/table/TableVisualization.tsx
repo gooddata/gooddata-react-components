@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as classNames from "classnames";
@@ -74,6 +74,7 @@ import { DEFAULT_HEADER_HEIGHT, DEFAULT_ROW_HEIGHT } from "./constants/layout";
 
 const FULLSCREEN_TOOLTIP_VIEWPORT_THRESHOLD: number = 480;
 const MIN_COLUMN_WIDTH: number = 100;
+const VERTICAL_SCROLL_WIDTH = 16; // derived from scroll width in fixed-data-table-2
 
 const DEBOUNCE_SCROLL_STOP: number = 500;
 const TOOLTIP_DISPLAY_DELAY: number = 1000;
@@ -322,7 +323,10 @@ export class TableVisualizationClass extends React.Component<
             this.isTotalsEditAllowed(),
             shouldShowTotals(headers),
         );
-        const columnWidth: number = Math.max(containerWidth / headers.length, MIN_COLUMN_WIDTH);
+        const columnWidth: number = Math.max(
+            (containerWidth - VERTICAL_SCROLL_WIDTH) / headers.length,
+            MIN_COLUMN_WIDTH,
+        );
         const isSticky: boolean = TableVisualizationClass.isSticky(stickyHeaderOffset);
 
         return (
@@ -884,7 +888,8 @@ export class TableVisualizationClass extends React.Component<
         return headers.map((header: IMappingHeader, columnIndex: number) => (
             <Column
                 key={`${columnIndex}.${getMappingHeaderLocalIdentifier(header)}`}
-                width={columnWidth}
+                width={MIN_COLUMN_WIDTH} // all columns have the same base width, flex will do the rest
+                flexGrow={1} // will grow columns in case vertical scroll is not shown
                 align={getColumnAlign(header)}
                 columnKey={columnIndex}
                 header={renderHeader(header, columnIndex, columnWidth)}
