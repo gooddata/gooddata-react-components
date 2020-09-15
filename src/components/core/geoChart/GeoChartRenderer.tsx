@@ -29,7 +29,7 @@ import { IDrillConfig } from "../../../interfaces/DrillEvents";
 import { IGeoConfig, IGeoData, IGeoLngLat } from "../../../interfaces/GeoChart";
 import { IHeaderPredicate } from "../../../interfaces/HeaderPredicate";
 
-import "../../../../styles/scss/geoChart.scss";
+import "../../../../styles/css/geoChart.css";
 import { handlePushpinMouseEnter, handlePushpinMouseLeave } from "./geoChartTooltip";
 import { getViewportOptions } from "../../../helpers/geoChart/viewport";
 import {
