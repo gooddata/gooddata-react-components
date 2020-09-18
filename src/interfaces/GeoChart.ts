@@ -102,6 +102,7 @@ export interface IGeoConfig {
     colors?: string[];
     colorPalette?: IColorPalette;
     colorMapping?: IColorMapping[];
+    showLabels?: boolean;
 }
 
 export interface IGeoPushpinChartProps extends ICommonChartProps {

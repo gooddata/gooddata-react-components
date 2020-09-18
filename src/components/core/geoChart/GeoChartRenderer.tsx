@@ -24,6 +24,7 @@ import {
     DEFAULT_TOOLTIP_OPTIONS,
     INTERACTION_EVENTS,
     ZOOM_CONTROLS_HEIGHT,
+    LAYER_STYLE_LABEL_PREFIX,
 } from "../../../constants/geoChart";
 import { IDrillConfig } from "../../../interfaces/DrillEvents";
 import { IGeoConfig, IGeoData, IGeoLngLat } from "../../../interfaces/GeoChart";
@@ -309,7 +310,7 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
     private setupMap = (): void => {
         const { chart, handleLayerLoaded, props } = this;
         const { colorStrategy, config, geoData } = props;
-        const { points: { groupNearbyPoints = true } = {} } = config || {};
+        const { points: { groupNearbyPoints = true } = {}, showLabels = true } = config || {};
 
         const hasClustering: boolean = isClusteringAllowed(geoData, groupNearbyPoints);
         const dataSourceProps: IGeoDataSourceProps = {
@@ -330,6 +331,17 @@ export default class GeoChartRenderer extends React.Component<IGeoChartRendererP
             chart.addLayer(createClusterLabels(DEFAULT_DATA_SOURCE_NAME));
             // un-clustered points will be rendered under state/county label
             chart.addLayer(createUnclusterPoints(DEFAULT_DATA_SOURCE_NAME), "state-label");
+        }
+
+        // that config is not public,
+        // we only use for storybook to make it is more stable
+        if (!showLabels) {
+            const { layers = [] } = chart.getStyle();
+            layers.forEach((layer: mapboxgl.Layer) => {
+                if (layer.id.includes(LAYER_STYLE_LABEL_PREFIX)) {
+                    this.removeLayer(layer.id);
+                }
+            });
         }
 
         // keep listening to the data event until the style is loaded
