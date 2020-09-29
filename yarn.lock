@@ -1176,13 +1176,13 @@
     rxjs "^5.5.6"
     uuid "^3.2.1"
 
-"@gooddata/goodstrap@^65.0.0":
-  version "65.0.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-65.0.0.tgz#c4ce79752059e448c9fa058a8a27b9c9b1fe7541"
-  integrity sha512-Eb1xRmlJBOT7inE3nDjOchxde0IrThTjKpvT3NSpX1ceAkpFNvONRMwv6k/cSzKDqVrxUCzyGAqCWDTqDf33MQ==
+"@gooddata/goodstrap@65.0.2":
+  version "65.0.2"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-65.0.2.tgz#632f19f993896326bf6d25448322ec993200ee3b"
+  integrity sha512-nE+z8XzApKTzRb10Pf1vXtBTo0O5hGZ9WcmODiLAT1XY1tJw1pYUp8KwrtfRMx1CVtALelTf+3cmcvEATHNASw==
   dependencies:
     "@gooddata/js-utils" "^3.5.0"
-    babel-runtime "6.25.0"
+    babel-runtime "^6.26.0"
     classnames "^2.2.6"
     custom-event "^1.0.1"
     element-closest-polyfill "^1.0.0"
@@ -3952,14 +3952,6 @@ babel-register@^6.26.0:
     lodash "^4.17.4"
     mkdirp "^0.5.1"
     source-map-support "^0.4.15"
-
-babel-runtime@6.25.0:
-  version "6.25.0"
-  resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.25.0.tgz#33b98eaa5d482bb01a8d1aa6b437ad2b01aec41c"
-  integrity sha1-M7mOql1IK7AajRqmtDetKwGuxBw=
-  dependencies:
-    core-js "^2.4.0"
-    regenerator-runtime "^0.10.0"
 
 babel-runtime@^5.6.15, babel-runtime@^5.8.34:
   version "5.8.38"
@@ -13712,7 +13704,7 @@ regenerate@^1.4.0:
   resolved "https://registry.yarnpkg.com/regenerate/-/regenerate-1.4.0.tgz#4a856ec4b56e4077c557589cae85e7a4c8869a11"
   integrity sha512-1G6jJVDWrt0rK99kBjvEtziZNCICAuvIPkSiUFIQxVP06RCVpq3dmDo2oi6ABpYaDYaTRr67BEhL8r1wgEZZKg==
 
-regenerator-runtime@^0.10.0, regenerator-runtime@^0.10.5:
+regenerator-runtime@^0.10.5:
   version "0.10.5"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.10.5.tgz#336c3efc1220adcedda2c9fab67b5a7955a33658"
 
