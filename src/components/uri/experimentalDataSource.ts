@@ -1,9 +1,10 @@
-// (C) 2019 GoodData Corporation
+// (C) 2019-2020 GoodData Corporation
 import { SDK } from "@gooddata/gooddata-js";
 import { DataSource } from "@gooddata/gooddata-js/lib/DataLayer/dataSources/DataSource";
 import { IDataSource } from "@gooddata/gooddata-js/lib/DataLayer/interfaces/DataSource";
 import { IVisualizationExecution } from "@gooddata/gooddata-js/lib/execution/execute-afm";
 import { AFM, Execution } from "@gooddata/typings";
+import { mergeFiltersToAfm } from "../../helpers/afmHelper";
 
 /**
  *
@@ -29,7 +30,7 @@ export function _experimentalDataSourceFactory(
     projectId: string,
     reference: string,
     afm: AFM.IAfm,
-    filters: AFM.CompatibilityFilter[],
+    filters: AFM.ExtendedFilter[],
 ): Promise<IDataSource<Execution.IExecutionResponses>> {
     // We have ONE-3961 as followup to take this out of experimental mode
 
@@ -62,7 +63,7 @@ export function _experimentalDataSourceFactory(
 
     const dataSource = new DataSource<Execution.IExecutionResponses>(
         execFactory,
-        afm,
+        mergeFiltersToAfm(afm, filters),
         undefined,
         responseFactory,
         resultFactory,
