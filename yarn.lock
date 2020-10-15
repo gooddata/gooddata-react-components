@@ -1136,10 +1136,10 @@
     rxjs "^5.5.6"
     uuid "^3.2.1"
 
-"@gooddata/goodstrap@^68.20.5":
-  version "68.20.5"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-68.20.5.tgz#9ba185153556bfbf528b2e5187dc426611d618b6"
-  integrity sha512-Msb3/kEQt9mfZKsbpsAr2gP9x6ADOXUIlnRHhIvMT5d5cgx/LTyy0N09HIB+7gALjBoxyr7xOCyevin0KfFuew==
+"@gooddata/goodstrap@69.0.0-alpha-pkingo-pki-cat-284-2020-10-15T08-34-09-398Z":
+  version "69.0.0-alpha-pkingo-pki-cat-284-2020-10-15T08-34-09-398Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-69.0.0-alpha-pkingo-pki-cat-284-2020-10-15T08-34-09-398Z.tgz#6d8ccc4ba91f1d522bd9590895b53d30078750d2"
+  integrity sha512-hqLS5K2HW3ABlKEwaZYj3VZDtDZC5JSRqj0FN5orygHH14FVpMyqbUkePOwZdoSpyNIqRsoYEOmn24t/jJF6aQ==
   dependencies:
     "@babel/runtime-corejs2" "^7.0.0"
     "@gooddata/js-utils" "^3.10.9"
