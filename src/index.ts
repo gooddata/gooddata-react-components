@@ -97,6 +97,8 @@ const CoreComponents: ICoreComponents = {
 
 export * from "./components/filters/DateFilter";
 
+// Test comment
+
 export {
     AfmComponents,
     AttributeElements,
