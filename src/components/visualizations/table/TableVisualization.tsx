@@ -15,7 +15,7 @@ import "nodelist-foreach-polyfill";
 
 import Bubble from "@gooddata/goodstrap/lib/Bubble/Bubble";
 import BubbleHoverTrigger from "@gooddata/goodstrap/lib/Bubble/BubbleHoverTrigger";
-import { Subscription } from "rxjs/Subscription";
+import { Subscription } from "rxjs";
 import { isSomeHeaderPredicateMatched } from "../../../helpers/headerPredicate";
 import { getMappingHeaderLocalIdentifier, getMappingHeaderName } from "../../../helpers/mappingHeader";
 import { IMappingHeader, isMappingHeaderMeasureItem } from "../../../interfaces/MappingHeader";

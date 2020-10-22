@@ -8,7 +8,7 @@
     font-size: nth(map-get($gd-typo, font-sizes), 4);
     margin: 0 0 0 10px;
     padding: 10px;
-    border-left: 2px dotted $border-color;
+    border-left: 2px dotted $gd-border-color;
 }
 
 .gd-date-filter-form-wrapper-inner {

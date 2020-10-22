@@ -6,8 +6,8 @@
     width: 100%;
     padding: 10px;
     border: none;
-    border-top: 1px solid $border-color;
-    border-bottom: 1px solid $border-color;
+    border-top: 1px solid $gd-border-color;
+    border-bottom: 1px solid $gd-border-color;
     font-size: nth(map-get($gd-typo, font-sizes), 4);
     text-align: left;
     font-weight: bold;

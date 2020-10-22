@@ -1118,10 +1118,10 @@
     line-replace "^1.0.2"
     linebyline "^1.3.0"
 
-"@gooddata/gooddata-js@^13.1.2":
-  version "13.1.2"
-  resolved "https://registry.yarnpkg.com/@gooddata/gooddata-js/-/gooddata-js-13.1.2.tgz#7645a3215118c487d2a55498a14ecd27a6b0591c"
-  integrity sha512-gajYP6Jnf/j99rO4Y5OwXRdGoOtrQ5pCdiCeuxHs5awreCirFPDbT357+xioz4GIfBhaX3pL19jhatYuxCSlkg==
+"@gooddata/gooddata-js@13.1.4-alpha-no23reason-dho-rxjs-bump-2020-10-29T08-28-46-016Z":
+  version "13.1.4-alpha-no23reason-dho-rxjs-bump-2020-10-29T08-28-46-016Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/gooddata-js/-/gooddata-js-13.1.4-alpha-no23reason-dho-rxjs-bump-2020-10-29T08-28-46-016Z.tgz#2ed4e02fbed95a2e594ac7cdbe46c26082addb2f"
+  integrity sha512-hUQ5gkttFkT5KiQASTO8I2TDYhKWOc5FNmWKWSBI3tQO7Dv1XyDCl3CrGfdSiw4j5A6UuYKhCOrI2tH8n/uUeQ==
   dependencies:
     "@gooddata/typings" "^2.26.0"
     es6-promise "^3.0.2"
@@ -1133,13 +1133,13 @@
     md5 "^2.2.1"
     node-fetch "^1.7.3"
     qs "^6.5.1"
-    rxjs "^5.5.6"
+    rxjs "^6.3.1"
     uuid "^3.2.1"
 
-"@gooddata/goodstrap@^68.20.5":
-  version "68.20.5"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-68.20.5.tgz#9ba185153556bfbf528b2e5187dc426611d618b6"
-  integrity sha512-Msb3/kEQt9mfZKsbpsAr2gP9x6ADOXUIlnRHhIvMT5d5cgx/LTyy0N09HIB+7gALjBoxyr7xOCyevin0KfFuew==
+"@gooddata/goodstrap@^70.0.0":
+  version "70.0.0"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-70.0.0.tgz#5d8b19886e81518ef4268c78227df85f6f777303"
+  integrity sha512-LjTmZZf9zMZZlnIhSvlMz4ER7admbD25dqN3xpkce7duGM20TNhniYRibCiKHJ6z5qQuaxD7mUdNKKZsKY8rgw==
   dependencies:
     "@babel/runtime-corejs2" "^7.0.0"
     "@gooddata/js-utils" "^3.10.9"
@@ -1164,7 +1164,7 @@
     react-responsive "^3.0.0"
     react-textarea-autosize "^7.0.4"
     react-transition-group "^1.2.1"
-    rxjs "^5.5.6"
+    rxjs "^6.3.1"
     tinycolor2 "^1.4.1"
 
 "@gooddata/js-utils@^3.10.5", "@gooddata/js-utils@^3.10.9":
@@ -13832,16 +13832,10 @@ rx-lite@*, rx-lite@^4.0.8:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/rx-lite/-/rx-lite-4.0.8.tgz#0b1e11af8bc44836f04a6407e92da42467b79444"
 
-rxjs@^5.5.6:
-  version "5.5.6"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-5.5.6.tgz#e31fb96d6fd2ff1fd84bcea8ae9c02d007179c02"
-  dependencies:
-    symbol-observable "1.0.1"
-
-rxjs@^6.1.0, rxjs@^6.3.3, rxjs@^6.4.0:
-  version "6.5.2"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.5.2.tgz#2e35ce815cd46d84d02a209fb4e5921e051dbec7"
-  integrity sha512-HUb7j3kvb7p7eCUHE3FqjoDsC1xfZQ4AHFWfTKSpZ+sAhhz5X1WX0ZuUqWbzB2QhSLp3DoLUG+hMdEDKqWo2Zg==
+rxjs@^6.1.0, rxjs@^6.3.1, rxjs@^6.3.3, rxjs@^6.4.0:
+  version "6.6.3"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.6.3.tgz#8ca84635c4daa900c0d3967a6ee7ac60271ee552"
+  integrity sha512-trsQc+xYYXZ3urjOiJOuCOa5N3jAZ3eiSpQB5hIT8zGlL2QfnHLJ2r7GMkBGuIausdJN1OneaI6gQlsqNHHmZQ==
   dependencies:
     tslib "^1.9.0"
 
@@ -14984,10 +14978,6 @@ swap-case@^1.1.0:
   dependencies:
     lower-case "^1.1.1"
     upper-case "^1.1.1"
-
-symbol-observable@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.0.1.tgz#8340fc4702c3122df5d22288f88283f513d3fdd4"
 
 symbol-observable@1.0.4:
   version "1.0.4"
