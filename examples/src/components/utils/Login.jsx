@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 /* eslint-disable react/jsx-closing-tag-location */
 import React from "react";
 import { PropTypes } from "prop-types";
@@ -69,9 +69,9 @@ export const LoginFormUncontrolled = props => {
                 className="LoginLogo"
             />
             <form className="LoginForm s-loginForm" onSubmit={handleSubmit}>
-                <h1>Sign in to the Live&nbsp;Examples</h1>
+                <h1>Sign in to the Examples&nbsp;Gallery</h1>
                 <p>
-                    Accessing Live Examples requires a unique one-time{" "}
+                    Accessing Examples Gallery requires a unique one-time{" "}
                     <Link to="/registration">registration</Link> even if you already have a GoodData account.
                 </p>
 

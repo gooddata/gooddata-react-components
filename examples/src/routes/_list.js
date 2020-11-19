@@ -345,7 +345,7 @@ export const userRoutes = [
 export const topNavigationRoutes = [
     {
         path: "/",
-        title: "Live Examples",
+        title: "Examples Gallery",
         Component: BasicComponents,
     },
 ];

@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 /* eslint-disable react/jsx-closing-tag-location */
 import React from "react";
 import { Helmet } from "react-helmet";
@@ -9,6 +9,7 @@ import { projectId, backendUrlForInfo } from "../../utils/fixtures";
 
 const favicon = require("../../static/favicon.ico");
 const logo = require("../../static/gooddata.svg");
+const ogImage = require("../../static/og-image.png");
 
 const appName = "GoodData.UI Examples";
 
@@ -310,6 +311,7 @@ class Header extends React.Component {
                     <meta charSet="utf-8" />
                     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
                     <link rel="shortcut icon" type="image/x-icon" href={favicon} />
+                    <meta property="og:image" content={`https://gdui-examples.herokuapp.com${ogImage}`} />
                 </Helmet>
                 <div className="gd-header header-6 is-loaded">
                     <div className="gd-header-inner">
