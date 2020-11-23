@@ -3,7 +3,8 @@ import setWith = require("lodash/setWith");
 import clone = require("lodash/clone");
 import get = require("lodash/get");
 import includes = require("lodash/includes");
-import { Observable } from "rxjs/Rx";
+import { fromEvent } from "rxjs";
+import { debounceTime } from "rxjs/operators";
 import { numberFormat } from "@gooddata/numberjs";
 
 import { VisualizationTypes } from "../../../constants/visualizationTypes";
@@ -29,12 +30,12 @@ export const repeatItemsNTimes = (array: any[], n: number) =>
 
 export function subscribeEvent(event: any, debounce: any, func: any, target: any = window): any {
     if (debounce > 0) {
-        return Observable.fromEvent(target, event)
-            .debounceTime(debounce)
+        return fromEvent(target, event)
+            .pipe(debounceTime(debounce))
             .subscribe(func);
     }
 
-    return Observable.fromEvent(target, event).subscribe(func);
+    return fromEvent(target, event).subscribe(func);
 }
 
 export function subscribeEvents(func: any, events: any[], target: any = window) {

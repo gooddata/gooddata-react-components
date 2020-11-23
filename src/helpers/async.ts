@@ -1,9 +1,7 @@
-// (C) 2007-2018 GoodData Corporation
+// (C) 2007-2020 GoodData Corporation
 import identity = require("lodash/identity");
-import { Subject } from "rxjs/Subject";
-import { Subscription } from "rxjs/Subscription";
-import "rxjs/add/operator/switchMap";
-import "rxjs/add/operator/catch";
+import { Subject, Subscription } from "rxjs";
+import { catchError, switchMap } from "rxjs/operators";
 
 export { Subscription };
 
@@ -36,14 +34,15 @@ export function createSubject<T>(
 ): ISubject<Promise<T>> {
     const subject = new Subject<Promise<T>>();
     const subscription = subject
-        // This ensures we get last added promise
-        .switchMap<Promise<T>, T>(identity)
-
-        // Streams are closed on error by default so we need this workaround
-        .catch((error, caught) => {
-            errorHandler(error); // handle error
-            return caught; // stream continue
-        })
+        .pipe(
+            // This ensures we get last added promise
+            switchMap(identity),
+            // Streams are closed on error by default so we need this workaround
+            catchError((error, caught) => {
+                errorHandler(error); // handle error
+                return caught; // stream continue
+            }),
+        )
         .subscribe(successHandler);
 
     const wrapper: ISubject<Promise<T>> = {
