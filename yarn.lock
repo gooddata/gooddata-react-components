@@ -1135,13 +1135,13 @@
     rxjs "^6.3.1"
     uuid "^8.3.1"
 
-"@gooddata/goodstrap@^68.22.0":
-  version "68.22.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-68.22.0.tgz#64622a1a1c04027cc11bad2446c73a2999e05266"
-  integrity sha512-s0T4S8iY1GrcAB69x/mdg6FUHqT9x7jh/aI6zamNoZBOjQ7iA3yONnUS5OI9buptXl/qj5LrYlwXwRo8lezC+Q==
+"@gooddata/goodstrap@70.0.3-alpha-pkingo-pki-cat-329-2020-11-26T09-21-10-309Z":
+  version "70.0.3-alpha-pkingo-pki-cat-329-2020-11-26T09-21-10-309Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-70.0.3-alpha-pkingo-pki-cat-329-2020-11-26T09-21-10-309Z.tgz#caba0005aac6dbc47eddf81d1dfc6e021b4466f2"
+  integrity sha512-fkcDf6882R1sMLbH5TZn1Bi2uVVGUxz6UD7THHgGgmw6bKT2K4B2EKU78ac0xCfn8xxxjIPBIVFXUAbMo8zyRA==
   dependencies:
     "@babel/runtime-corejs2" "^7.0.0"
-    "@gooddata/js-utils" "^3.10.9"
+    "@gooddata/js-utils" "^3.10.14"
     classnames "^2.2.6"
     custom-event "^1.0.1"
     element-closest-polyfill "^1.0.0"
@@ -1166,7 +1166,16 @@
     rxjs "^6.3.1"
     tinycolor2 "^1.4.1"
 
-"@gooddata/js-utils@^3.10.5", "@gooddata/js-utils@^3.10.9":
+"@gooddata/js-utils@^3.10.14":
+  version "3.10.14"
+  resolved "https://registry.yarnpkg.com/@gooddata/js-utils/-/js-utils-3.10.14.tgz#d56146fde27619076e77422c730f5c3d7e0aa342"
+  integrity sha512-vnQsoKHt5BZ1Bdp6ZXThy5+mOd0HavZm41bn0trNJYyX+AwhLJlJL10bzR4xn5YyFUfIlcTobKOcAmOQ3uK0eg==
+  dependencies:
+    "@gooddata/typings" "^2.26.1"
+    js-cookie "^2.1.4"
+    lodash "^4.17.15"
+
+"@gooddata/js-utils@^3.10.5":
   version "3.10.9"
   resolved "https://registry.yarnpkg.com/@gooddata/js-utils/-/js-utils-3.10.9.tgz#dd65fc86f03df45cc9cf353c1adc76d069a9f19e"
   integrity sha512-cG+v65l9vBWTZuhcj66j1Ko439cGXDeFandMtZnHhTgiDh3bUeuZDNxrlrhcKzUy0kY7yi2QyDWmyTMWJBkJjw==
@@ -1232,7 +1241,7 @@
     tslint-microsoft-contrib "6.1.0"
     tslint-react "3.6.0"
 
-"@gooddata/typings@^2.23.0", "@gooddata/typings@^2.24.9", "@gooddata/typings@^2.27.0":
+"@gooddata/typings@^2.23.0", "@gooddata/typings@^2.24.9", "@gooddata/typings@^2.26.1", "@gooddata/typings@^2.27.0":
   version "2.27.0"
   resolved "https://registry.yarnpkg.com/@gooddata/typings/-/typings-2.27.0.tgz#361888304d56d124cabd9625e81a3b0dae0597f8"
   integrity sha512-vB9/BQHtWHZtTl/LgO/Hsl8xr8YlmHy61kbj7A316Ana08H2wnqV8Y8ZjlVf94bHq9Hza7ViF7urhbCbfP8PFA==
