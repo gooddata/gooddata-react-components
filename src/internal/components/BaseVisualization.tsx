@@ -1,6 +1,6 @@
 // (C) 2019-2020 GoodData Corporation
 import * as React from "react";
-import * as uuid from "uuid";
+import { v4 as uuid } from "uuid";
 import isEqual = require("lodash/isEqual");
 import isEmpty = require("lodash/isEmpty");
 import get = require("lodash/get");
@@ -110,7 +110,7 @@ export class BaseVisualization extends React.PureComponent<IBaseVisualizationPro
 
     constructor(props: IBaseVisualizationProps) {
         super(props);
-        this.componentId = uuid.v4();
+        this.componentId = uuid();
     }
 
     public componentWillUnmount() {
@@ -137,7 +137,7 @@ export class BaseVisualization extends React.PureComponent<IBaseVisualizationPro
         );
 
         if (visualizationClassChanged) {
-            this.componentId = uuid.v4();
+            this.componentId = uuid();
             this.setupVisualization(nextProps);
         }
 

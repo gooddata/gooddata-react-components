@@ -108,18 +108,11 @@ In the case, when your editor is not supported or you don't want to setup the in
 
 ## Supported versions
 
-In order to make the user experience with integrating GoodData UI SDK as smooth and secure as possible and to ensure that the SDK is using the latest features of the platform, we will only provide support to two most recent major versions of UI SDK.
+We encourage you to always use the latest available version of GoodData.UI to make the user experience with integrating GoodData.UI as smooth and secure as possible and to ensure that GoodData.UI always uses the latest features of the GoodData platform.
 
-The most recent majors will be supported in the following modes:
+For more information, see [Supported Versions](https://sdk.gooddata.com/gooddata-ui/docs/supported_versions.html).
 
-- The latest major version will receive all new functionality and all bug fixes
-- The previous major version will only receive fixes to critical issues and security fixes. These fixes will be applied on top of last released version of the previous major
-
-The customers are encouraged to always use the latest version of the UI SDK.
-
-In case of using older versions, the user might face API incompatibility, performance or security issues.
-
-Please follow the installation instructions to update to the newest version.
+Please follow the installation instructions in the [gooddata-ui-sdk repository](https://github.com/gooddata/gooddata-ui-sdk) to update to the latest version.
 
 ## License
 
@@ -130,4 +123,4 @@ This project is dual licensed:
 - The ATTRIBUTION-NONCOMMERCIAL 4.0 INTERNATIONAL (CC BY-NC 4.0) is used for purpose of the trial experience and evaluation of GoodData.UI library.
 - The GOODDATA GOODDATA.UI LIBRARY END USER LICENSE AGREEMENT is used for GoodData customers.
 
-For more information, please see [LICENSE](https://github.com/gooddata/gooddata-react-components/blob/master/LICENSE)
+For more information, please see [LICENSE](https://github.com/gooddata/gooddata-react-components/blob/master/LICENSE).

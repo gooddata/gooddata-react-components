@@ -17,6 +17,21 @@ The REST API versions in the table are just for your information as the values a
 
 - We ask developers to consider using the Headline component instead of the KPI component. The KPI component may be eventually marked as deprecated in one of the next major versions.
 
+## 8.0.0
+
+[Migration guide](https://sdk.gooddata.com/gooddata-ui/docs/migration_guide_8.html) from version 7.8.0
+
+### Added
+
+- Infrastructure improvements and a number of features aimed at developer productivity and ease of use ([doc](https://sdk.gooddata.com/gooddata-ui/docs/whats_new_8.html))
+- Ranking filters that show the data from a set of the highest or lowest ranked values of an attribute based on the ranking criteria that you establish ([doc](https://sdk.gooddata.com/gooddata-ui/docs/ranking_filter_component.html))
+- The option to turning off data points in line charts, area charts, and combo charts ([doc](https://sdk.gooddata.com/gooddata-ui/docs/chart_config.html#configure-canvases))
+
+## 7.9.0
+
+### Added
+- The dependencies are upgraded to their latest possible versions to still be backward-compatible.
+
 ## 7.8.0
 
 ### Added

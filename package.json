@@ -1,6 +1,6 @@
 {
   "name": "@gooddata/react-components",
-  "version": "7.8.1",
+  "version": "7.9.0-rc.2",
   "description": "GoodData.UI - A powerful JavaScript library for building analytical applications",
   "main": "dist/index.js",
   "repository": "git@github.com:gooddata/gooddata-react-components.git",
@@ -53,7 +53,7 @@
     "@types/storybook__addon-actions": "3.4.2",
     "@types/storybook__react": "4.0.1",
     "@types/stringify-object": "^3.2.0",
-    "@types/uuid": "3.4.3",
+    "@types/uuid": "8.3.0",
     "babel-loader": "8.1.0",
     "babel-plugin-lodash": "3.3.4",
     "circular-dependency-plugin": "5.0.2",
@@ -118,11 +118,11 @@
   },
   "dependencies": {
     "@formatjs/intl-pluralrules": "^1.3.6",
-    "@gooddata/gooddata-js": "^13.1.2",
-    "@gooddata/goodstrap": "^68.20.5",
+    "@gooddata/gooddata-js": "^13.2.0",
+    "@gooddata/goodstrap": "^68.22.0",
     "@gooddata/js-utils": "^3.10.5",
     "@gooddata/numberjs": "^3.2.4",
-    "@gooddata/typings": "^2.26.0",
+    "@gooddata/typings": "^2.27.0",
     "@types/codemirror": "^0.0.95",
     "@types/mapbox-gl": "1.9.1",
     "ag-grid-community": "20.0.0",
@@ -140,7 +140,7 @@
     "immer": "^1.3.1",
     "invariant": "^2.2.2",
     "json-stable-stringify": "^1.0.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.20",
     "mapbox-gl": "1.11.0",
     "nodelist-foreach-polyfill": "^1.2.0",
     "prop-types": "^15.6.0",
@@ -152,9 +152,9 @@
     "react-responsive": "^3.0.0",
     "react-transition-group": "^2.2.1",
     "react-window": "^1.8.1",
-    "rxjs": "^5.5.6",
+    "rxjs": "^6.3.1",
     "stringify-object": "^2.4.0",
-    "uuid": "^3.2.1"
+    "uuid": "^8.3.1"
   },
   "peerDependencies": {
     "react": "^16.5.2",
