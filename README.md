@@ -3,6 +3,8 @@
 # GoodData.UI React components
 > A React-based JavaScript library for building data-driven applications
 
+CHANGES FOR TESTING
+
 ## Getting started
 - [GoodData.UI Documentation](http://sdk.gooddata.com/gooddata-ui/)
 - [GoodData.UI Live Examples](https://gooddata-examples.herokuapp.com/)
