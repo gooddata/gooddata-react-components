@@ -23,7 +23,7 @@
     "@babel/runtime": "7.4.4",
     "@gooddata/eslint-config": "^1.0.0",
     "@gooddata/frontend-npm-scripts": "1.2.0",
-    "@gooddata/mock-js": "^2.14.2",
+    "@gooddata/mock-js": "2.16.2-alpha-pbenes-pb-FET-564-2021-01-08T08-56-19-179Z",
     "@gooddata/stylelint-config": "^5.0.0",
     "@gooddata/test-storybook": "4.0.0",
     "@gooddata/tslint-config": "1.0.0",

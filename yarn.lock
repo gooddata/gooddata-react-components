@@ -1175,12 +1175,12 @@
     js-cookie "^2.1.4"
     lodash "^4.17.15"
 
-"@gooddata/mock-js@^2.14.2":
-  version "2.14.2"
-  resolved "https://registry.yarnpkg.com/@gooddata/mock-js/-/mock-js-2.14.2.tgz#4f90054459a753f59ffeeb21d8107a95fe7526b8"
-  integrity sha512-/MusTN/gxF0uFlo1VWhe9yWSdtpu9D8JQ4grXKOSG3yvb3LiOiTyb9JWhZA0IOS1xCHskrDASf9vauhD64RQEg==
+"@gooddata/mock-js@2.16.2-alpha-pbenes-pb-FET-564-2021-01-08T08-56-19-179Z":
+  version "2.16.2-alpha-pbenes-pb-FET-564-2021-01-08T08-56-19-179Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/mock-js/-/mock-js-2.16.2-alpha-pbenes-pb-FET-564-2021-01-08T08-56-19-179Z.tgz#0f866982bc1ec950f2389706a1b227afba908496"
+  integrity sha512-np2oa3RIzFyg5/EKwf5zHjqQq/cG5Y/CWHE8F/hPcXdTPdes7yOr6/SFQGl+PlyH4yoHX0wLfOcEQIblJtFdQQ==
   dependencies:
-    "@gooddata/typings" "^2.23.0"
+    "@gooddata/typings" "^2.27.0"
     "@types/seedrandom" "2.4.27"
     "@types/uuid" "3.4.3"
     body-parser "1.17.1"
@@ -1232,7 +1232,7 @@
     tslint-microsoft-contrib "6.1.0"
     tslint-react "3.6.0"
 
-"@gooddata/typings@^2.23.0", "@gooddata/typings@^2.24.9", "@gooddata/typings@^2.27.0":
+"@gooddata/typings@^2.24.9", "@gooddata/typings@^2.27.0":
   version "2.27.0"
   resolved "https://registry.yarnpkg.com/@gooddata/typings/-/typings-2.27.0.tgz#361888304d56d124cabd9625e81a3b0dae0597f8"
   integrity sha512-vB9/BQHtWHZtTl/LgO/Hsl8xr8YlmHy61kbj7A316Ana08H2wnqV8Y8ZjlVf94bHq9Hza7ViF7urhbCbfP8PFA==
