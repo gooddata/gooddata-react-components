@@ -1,4 +1,4 @@
-// (C) 2007-2020 GoodData Corporation
+// (C) 2007-2021 GoodData Corporation
 import * as React from "react";
 import { mount } from "enzyme";
 
@@ -7,7 +7,7 @@ import Chart from "../Chart";
 
 jest.mock("highcharts", () => {
     return {
-        Chart: ({}, callback: any) => {
+        Chart: (_a: {}, callback: any) => {
             callback();
         },
     };

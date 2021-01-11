@@ -1,4 +1,4 @@
-// (C) 2007-2020 GoodData Corporation
+// (C) 2007-2021 GoodData Corporation
 import { Execution } from "@gooddata/typings";
 import * as invariant from "invariant";
 import { IUnwrappedAttributeHeaderWithItems } from "../components/visualizations/typings/chart";
@@ -16,21 +16,26 @@ export function findInDimensionHeaders(
     ) => any,
 ): any {
     let returnValue: any = null;
-    dimensions.some((dimension: any, dimensionIndex: number) => {
-        dimension.headers.some(
-            (
-                wrappedHeader: Execution.IMeasureGroupHeader | Execution.IAttributeHeader,
-                headerIndex: number,
-            ) => {
-                const headerType = Object.keys(wrappedHeader)[0];
-                const header = wrappedHeader[headerType];
-                const headerCount = dimension.headers.length;
-                returnValue = headerCallback(headerType, header, dimensionIndex, headerIndex, headerCount);
-                return !!returnValue;
-            },
-        );
-        return !!returnValue;
-    });
+    for (let dimensionIndex = 0; dimensionIndex < dimensions.length; dimensionIndex++) {
+        const dimension = dimensions[dimensionIndex];
+
+        for (let headerIndex = 0; headerIndex < dimension.headers.length; headerIndex++) {
+            const wrappedHeader = dimension.headers[headerIndex];
+            const headerType = Object.keys(wrappedHeader)[0];
+            const header = wrappedHeader[headerType];
+            const headerCount = dimension.headers.length;
+            returnValue = headerCallback(headerType, header, dimensionIndex, headerIndex, headerCount);
+
+            if (!!returnValue) {
+                break;
+            }
+        }
+
+        if (!!returnValue) {
+            break;
+        }
+    }
+
     return returnValue;
 }
 

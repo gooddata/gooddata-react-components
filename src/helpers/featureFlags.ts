@@ -1,4 +1,4 @@
-// (C) 2007-2020 GoodData Corporation
+// (C) 2007-2021 GoodData Corporation
 import isNil = require("lodash/isNil");
 import isEmpty = require("lodash/isEmpty");
 import { IFeatureFlags, SDK } from "@gooddata/gooddata-js";
@@ -10,7 +10,7 @@ export async function getFeatureFlags(sdk: SDK, projectId: string): Promise<IFea
     const apiCallIdentifier = `getFeatureFlags.${projectId}`;
     const loader = () => sdk.project.getFeatureFlags(projectId);
     try {
-        return getCachedOrLoad(apiCallIdentifier, loader);
+        return await getCachedOrLoad(apiCallIdentifier, loader);
     } catch (error) {
         // tslint:disable-next-line:no-console
         console.error(`unable to retrieve featureFlags for project ${projectId}`, error);
