@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2021 GoodData Corporation
 import remove = require("lodash/remove");
 import cloneDeep = require("lodash/cloneDeep");
 import sortedUniq = require("lodash/sortedUniq");
@@ -242,7 +242,7 @@ export function addMeasureIndex(
 
         const outputMeasureIndexes: number[] = clone(total.outputMeasureIndexes);
         outputMeasureIndexes.push(index);
-        outputMeasureIndexes.sort();
+        outputMeasureIndexes.sort((a, b) => a - b);
 
         return {
             ...total,
