@@ -188,7 +188,7 @@ June 28, 2019
 - Managing subtotals in pivot tables via a submenu
 - Formatting and validating the source code structure by [Prettier](https://prettier.io/)
 
-### Changed
+### Chan ged
 
 - The library now uses Typescript 3.3.4000.
 - The pivot table property `groupRows` is `true` by default, which means that grouping is now enabled by default.
