@@ -119,8 +119,8 @@
   "dependencies": {
     "@formatjs/intl-pluralrules": "^1.3.6",
     "@gooddata/gooddata-js": "^13.2.0",
-    "@gooddata/goodstrap": "^68.22.0",
-    "@gooddata/js-utils": "^3.10.5",
+    "@gooddata/goodstrap": "^70.2.1",
+    "@gooddata/js-utils": "^3.10.17",
     "@gooddata/numberjs": "^3.2.4",
     "@gooddata/typings": "^2.27.0",
     "@types/codemirror": "^0.0.95",

@@ -1,4 +1,4 @@
-// (C) 2019-2020 GoodData Corporation
+// (C) 2019-2021 GoodData Corporation
 @import "~@gooddata/goodstrap/lib/core/styles/variables.scss";
 @import "~@gooddata/goodstrap/lib/Button/styles/variables.scss";
 
@@ -60,7 +60,7 @@
         flex: 1 1 auto;
         max-height: none;
         padding: 0;
-        border-bottom: 1px solid $border-color;
+        border-bottom: 1px solid $gd-border-color;
 
         .gd-list-item:last-child {
             border-bottom-color: transparent;
@@ -69,7 +69,7 @@
 
     &-actions {
         padding: 10px;
-        border-top: 1px solid $border-color;
+        border-top: 1px solid $gd-border-color;
 
         &-buttons {
             display: flex;
@@ -135,7 +135,7 @@
     &-body .gd-date-filter-item-mobile {
         &.gd-list-item {
             flex: 0 0 auto;
-            border-bottom: 1px solid $border-color;
+            border-bottom: 1px solid $gd-border-color;
         }
 
         &.gd-filter-list-item {
@@ -151,7 +151,7 @@
             &,
             &:hover,
             &:active {
-                background-color: transparentize($border-color, 0.8);
+                background-color: transparentize($gd-border-color, 0.8);
             }
         }
     }
