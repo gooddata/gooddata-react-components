@@ -1135,10 +1135,10 @@
     rxjs "^6.3.1"
     uuid "^8.3.1"
 
-"@gooddata/goodstrap@^70.2.1":
-  version "70.2.1"
-  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-70.2.1.tgz#c9a13d896b1ed41adb162cb64b2b50a54bb59708"
-  integrity sha512-SOIZ/JzlY0PJPhlMG0jW2qYqDmCpPJ4LBfMK+zw5VOgskRUA96ROcs1ha73E1/RhvNFy77kwAINYwX6pltckwg==
+"@gooddata/goodstrap@^70.2.2":
+  version "70.2.2"
+  resolved "https://registry.yarnpkg.com/@gooddata/goodstrap/-/goodstrap-70.2.2.tgz#5d5a20b607f3c2c8ffa45f6ce076999324fb005d"
+  integrity sha512-4bu1fBEymRoTtjg6E3up3CZXIg6dFolG4yVkQkG0GRQyqiuUtZosz3/8zDyyIbNtscedbJ5VqFw0Z0/ybSgJIA==
   dependencies:
     "@babel/runtime-corejs2" "^7.0.0"
     "@gooddata/js-utils" "^3.10.17"
