@@ -1,4 +1,4 @@
-// (C) 2007-2020 GoodData Corporation
+// (C) 2007-2021 GoodData Corporation
 import { t as testController, Selector, Role } from "testcafe";
 import { config } from "./config";
 
@@ -102,7 +102,10 @@ export const regularUser = Role(`${config.url}`, async (tc = testController) => 
 });
 
 export const loginUserAndNavigate = (redirectUri = "/") => async (tc = testController) => {
-    await tc.useRole(regularUser).navigateTo(redirectUri);
+    // Note: this is enough when running tests in pipeline as they run against anonymously available
+    //  examples which do not need login.
+    await tc.navigateTo(redirectUri);
+    // await tc.useRole(regularUser).navigateTo(redirectUri);
 };
 
 export const checkRenderChart = async (selector, t) => {
