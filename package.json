@@ -193,7 +193,7 @@
     "examples-testcafe": "./scripts/run-testcafe.sh visual",
     "examples-testcafe-live": "./scripts/run-testcafe.sh live",
     "examples-testcafe-ci": "./scripts/run-testcafe.sh ci",
-    "heroku-postbuild": "yarn examples-build developer"
+    "heroku-postbuild": "yarn examples-build public"
   },
   "typings": "dist/index.d.ts",
   "husky": {
