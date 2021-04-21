@@ -18,6 +18,7 @@ const backendShortcuts = {
     stg3: "https://staging3.intgdc.com",
     demo: "https://client-demo-be.na.intgdc.com",
     developer: "https://developer.na.gooddata.com",
+    public: "https://live-examples-proxy.herokuapp.com",
 };
 
 const defaultBackend = backendShortcuts.developer;
@@ -35,7 +36,7 @@ function SimplestProgressPlugin() {
 
 module.exports = async (env, argv) => {
     const basePath = (env && env.basePath) || ""; // eslint-disable-line no-mixed-operators
-    const backendParam = env ? env.backend : "";
+    const backendParam = (env && env.backend) || "public";
     const backendUrl = backendShortcuts[backendParam] || backendParam || defaultBackend;
     console.log("Backend URI: ", backendUrl); // eslint-disable-line no-console
     const isProduction = argv.mode === "production";

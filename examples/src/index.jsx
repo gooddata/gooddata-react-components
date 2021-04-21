@@ -1,4 +1,4 @@
-// (C) 2020 GoodData Corporation
+// (C) 2020-2021 GoodData Corporation
 /* eslint-disable react/jsx-closing-tag-location */
 import React from "react";
 import ReactDOM from "react-dom";
@@ -16,6 +16,7 @@ import { CustomError } from "./components/utils/CustomError";
 import CustomLoading from "./components/utils/CustomLoading";
 
 import { routes, userRoutes, sideNavigationRoutes, topNavigationRoutes } from "./routes/_list";
+import { ANONYMOUS_ACCESS } from "./utils/fixtures";
 
 const GA_ID = "UA-3766725-19";
 const isProduction = process.env.NODE_ENV === "production";
@@ -53,9 +54,15 @@ export class App extends React.Component {
     };
 
     isUserLoggedIn = () => {
+        if (ANONYMOUS_ACCESS) {
+            this.onUserLogin(true, null);
+            return Promise.resolve();
+        }
+
         this.setState({
             isLoadingUserState: true,
         });
+
         return sdk.user.isLoggedIn().then(
             isLoggedIn => {
                 this.onUserLogin(isLoggedIn, null);
@@ -67,6 +74,10 @@ export class App extends React.Component {
     };
 
     logout() {
+        if (ANONYMOUS_ACCESS) {
+            return;
+        }
+
         this.setState({
             isLoadingUserState: true,
         });
