@@ -1,4 +1,4 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2021 GoodData Corporation
 /* eslint-disable no-console */
 const { factory } = require("@gooddata/gooddata-js");
 const https = require("https");
@@ -7,8 +7,8 @@ const express = require("express");
 require("dotenv").config();
 
 const proxy = require("./endpoints/proxy");
-const register = require("./endpoints/register");
-const assignProject = require("./endpoints/assignProject");
+// const register = require("./endpoints/register");
+// const assignProject = require("./endpoints/assignProject");
 const staticFiles = require("./endpoints/staticFiles");
 const redirectToHttps = require("./endpoints/redirectToHttps");
 
@@ -16,7 +16,7 @@ const config = {
     serveFrom: `${__dirname}/../../dist/`,
     port: process.env.PORT || 3009,
     https: process.env.HTTPS || false,
-    domain: process.env.DOMAIN || "https://developer.na.gooddata.com/",
+    domain: process.env.DOMAIN || "https://live-examples-proxy.herokuapp.com",
     domainAdmin: {
         username: process.env.DOMAIN_ADMIN_USERNAME,
         password: process.env.DOMAIN_ADMIN_PASSWORD,
@@ -26,7 +26,7 @@ const config = {
 };
 console.log(`Examples-node-server config: ${JSON.stringify(config, false, "\t")}`);
 
-const endpoints = [redirectToHttps, register, assignProject, proxy, staticFiles];
+const endpoints = [redirectToHttps, proxy, staticFiles];
 
 const sdk = factory({ domain: config.domain });
 

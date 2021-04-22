@@ -1,11 +1,11 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2021 GoodData Corporation
 /* eslint-disable react/jsx-closing-tag-location */
 import React from "react";
 import { Helmet } from "react-helmet";
 import PropTypes from "prop-types";
 import { NavLink, Link, withRouter } from "react-router-dom";
 import CustomLoading from "./CustomLoading";
-import { projectId, backendUrlForInfo } from "../../utils/fixtures";
+import { projectId, backendUrlForInfo, ANONYMOUS_ACCESS } from "../../utils/fixtures";
 
 const favicon = require("../../static/favicon.ico");
 const logo = require("../../static/gooddata.svg");
@@ -35,14 +35,19 @@ class Header extends React.Component {
 
         return (
             <div className="backendInfo">
-                <span className="backendInfoItem">
-                    Connected to:
-                    <span className="backendInfoValue">{backendUrlForInfo}</span>
-                </span>
-                <span className="backendInfoItem">
-                    Project ID:
-                    <span className="backendInfoValue">{projectId}</span>
-                </span>
+                {!ANONYMOUS_ACCESS && (
+                    <React.Fragment>
+                        <span className="backendInfoItem">
+                            Connected to:
+                            <span className="backendInfoValue">{backendUrlForInfo}</span>
+                        </span>
+                        <span className="backendInfoItem">
+                            Project ID:
+                            <span className="backendInfoValue">{projectId}</span>
+                        </span>
+                    </React.Fragment>
+                )}
+
                 <span className="backendInfoItem">
                     <span className="backendInfoValue">
                         <a
@@ -65,6 +70,10 @@ class Header extends React.Component {
     };
 
     renderLoggingBlock = () => {
+        if (ANONYMOUS_ACCESS) {
+            return null;
+        }
+
         const { isUserLoggedIn } = this.props;
         const redirectUri =
             typeof window !== "undefined" && !window.location.pathname.match("/login")
