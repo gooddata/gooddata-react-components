@@ -1,4 +1,4 @@
-// (C) 2007-2020 GoodData Corporation
+// (C) 2007-2021 GoodData Corporation
 import { existsSync, readFileSync } from "fs";
 import * as path from "path";
 import program from "commander";
@@ -19,18 +19,6 @@ export const definedOptions = [
         param: "--url <url>",
         description: `Url of tested app. The default is ${DEFAULT_URL}`,
         defaultValue: DEFAULT_URL,
-        isRequired: true,
-    },
-    {
-        key: "username",
-        param: "--username <email>",
-        description: "Your username that you use to log in to GoodData platform.",
-        isRequired: true,
-    },
-    {
-        key: "password",
-        param: "--password <value>",
-        description: "Your password that you use to log in to GoodData platform.",
         isRequired: true,
     },
 ];

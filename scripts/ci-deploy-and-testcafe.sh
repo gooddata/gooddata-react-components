@@ -18,6 +18,4 @@ fi;
 
 # test
 yarn -s examples-testcafe-ci \
-   --url https://$HEROKU_APP_NAME.herokuapp.com \
-   --username rail+testcafe@gooddata.com \
-   --password $LIVE_EXAMPLES_TESTER_PASSWORD
+   --url https://$HEROKU_APP_NAME.herokuapp.com
