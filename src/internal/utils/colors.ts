@@ -1,7 +1,5 @@
-// (C) 2019-2020 GoodData Corporation
-import produce from "immer";
+// (C) 2019-2021 GoodData Corporation
 import get = require("lodash/get");
-import set = require("lodash/set");
 import isEqual = require("lodash/isEqual");
 import uniqBy = require("lodash/uniqBy");
 import isEmpty = require("lodash/isEmpty");
@@ -87,9 +85,13 @@ function mergeColorMappingToProperties(
 
     const mergedMapping = compact(uniqBy([...colorMapping, ...previousColorMapping], "id"));
 
-    return produce(properties, newProperties => {
-        set(newProperties, "controls.colorMapping", mergedMapping);
-    });
+    return {
+        ...properties,
+        controls: {
+            ...((properties && properties.controls) || {}),
+            colorMapping: mergedMapping,
+        },
+    };
 }
 
 export function getProperties(
