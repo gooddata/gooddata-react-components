@@ -79,7 +79,7 @@
     "jest-enzyme": "7.0.2",
     "jest-junit": "3.0.0",
     "lint-staged": "9.1.0",
-    "madge": "^3.4.4",
+    "madge": "^4.0.1",
     "moment": "2.23.0",
     "node-sass": "4.13.1",
     "node-sass-magic-importer": "5.1.0",
