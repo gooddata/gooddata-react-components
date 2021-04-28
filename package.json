@@ -81,7 +81,7 @@
     "lint-staged": "9.1.0",
     "madge": "^3.4.4",
     "moment": "2.23.0",
-    "node-sass": "4.13.0",
+    "node-sass": "4.13.1",
     "node-sass-magic-importer": "5.1.0",
     "prettier": "1.16.4",
     "raf": "3.3.2",
