@@ -1,11 +1,11 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2021 GoodData Corporation
 import React from "react";
 import { PropTypes } from "prop-types";
 import { withRouter, Redirect, Link } from "react-router-dom";
 import sdk from "@gooddata/gooddata-js";
 import { has } from "lodash";
 import { withFormik } from "formik";
-import Yup from "yup";
+import * as Yup from "yup";
 import ReCAPTCHA from "react-google-recaptcha";
 import CustomLoading from "./CustomLoading";
 

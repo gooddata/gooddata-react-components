@@ -1,11 +1,11 @@
-// (C) 2007-2019 GoodData Corporation
+// (C) 2007-2021 GoodData Corporation
 /* eslint-disable react/jsx-closing-tag-location */
 import React from "react";
 import { PropTypes } from "prop-types";
 import { withRouter, Link, Redirect } from "react-router-dom";
 import sdk from "@gooddata/gooddata-js";
 import { withFormik } from "formik";
-import Yup from "yup";
+import * as Yup from "yup";
 import CustomLoading from "./CustomLoading";
 import CustomError from "./CustomError";
 import { projectId } from "../../utils/fixtures";
