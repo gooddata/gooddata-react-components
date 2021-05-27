@@ -96,7 +96,7 @@ module.exports = async (env, argv) => {
     }
 
     return {
-        entry: ["./src/index.jsx"],
+        entry: ["@babel/polyfill", "./src/index.jsx"],
         plugins,
         output: {
             filename: "[name].[hash].js",
@@ -108,7 +108,8 @@ module.exports = async (env, argv) => {
             __filename: true,
         },
         resolve: {
-            mainFields: ["browser", "main", "module"],
+            // Prefer ESM versions of packages to enable tree shaking and easier dev experience
+            mainFields: ["module", "browser", "main"],
             extensions: [".js", ".jsx"],
             alias: {
                 "@gooddata/react-components/styles": path.resolve(__dirname, "../styles/"),
@@ -126,12 +127,27 @@ module.exports = async (env, argv) => {
                     loaders: ["style-loader", "css-loader", "sass-loader"],
                 },
                 {
-                    test: /\.jsx?$/,
-                    // we have to explicitly transpile react-intl for it to work in IE11
-                    // see docs https://github.com/formatjs/react-intl/blob/master/docs/Getting-Started.md#webpack
-                    exclude: /update-dependencies|node_modules\/(?!react-intl|intl-messageformat|intl-messageformat-parser)/,
+                    test: /\.[jt]sx?$/,
+                    exclude: /node_modules|update-dependencies/,
+                    loaders: ["babel-loader"],
+                },
+                {
+                    test: /\.js?$/,
+                    include: rawModulePath => {
+                        // Some npm modules no longer transpiled to ES5, which
+                        // causes errors such in IE11.
+                        const inclusionReg = /node_modules\/.*((lru-cache)|(react-intl)|(intl-messageformat)|(yup)|highlight.js)/;
+                        // On Windows, mPath use backslashes for folder separators. We need
+                        // to convert these to forward slashes because our
+                        // test regex, inclusionReg, contains one.
+                        const modulePath = rawModulePath.replace(/\\/g, "/");
+                        return inclusionReg.test(modulePath);
+                    },
                     use: {
                         loader: "babel-loader",
+                        options: {
+                            presets: ["@babel/preset-env"],
+                        },
                     },
                 },
                 {
