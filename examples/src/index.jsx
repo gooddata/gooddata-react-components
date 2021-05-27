@@ -3,7 +3,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import sdk from "@gooddata/gooddata-js";
-import "@babel/polyfill";
 
 import { Router, Route, Redirect, Switch } from "react-router-dom";
 import { createBrowserHistory } from "history";
