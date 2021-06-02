@@ -5,12 +5,13 @@
   "main": "dist/index.js",
   "repository": "git@github.com:gooddata/gooddata-react-components.git",
   "author": "GoodData Corporation",
-  "license": "BSD-3-Clause",
+  "license": "SEE LICENSE IN LICENSE",
   "files": [
     "dist",
     "src",
     "styles",
-    "LICENSE"
+    "LICENSE",
+    "NOTICES.txt"
   ],
   "devDependencies": {
     "@babel/core": "7.11.6",
