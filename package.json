@@ -26,7 +26,7 @@
     "@gooddata/frontend-npm-scripts": "1.2.0",
     "@gooddata/mock-js": "2.22.0-alpha-pbenes-pb-deps-2021-08-05T10-41-43-854Z",
     "@gooddata/stylelint-config": "^5.0.0",
-    "@gooddata/test-storybook": "4.0.0",
+    "@gooddata/test-storybook": "4.0.0-alpha-pbenes-pb-deps-2021-08-06T06-50-29-818Z",
     "@gooddata/tslint-config": "1.0.0",
     "@storybook/addon-actions": "5.0.11",
     "@storybook/addon-options": "5.0.11",

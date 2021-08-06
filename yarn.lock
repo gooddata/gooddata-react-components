@@ -1217,10 +1217,10 @@
     stylelint-order "^4.1.0"
     stylelint-scss "^3.18.0"
 
-"@gooddata/test-storybook@4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@gooddata/test-storybook/-/test-storybook-4.0.0.tgz#58d547873a6dadd2e4955910c85855875119c350"
-  integrity sha512-Mpm+w2xKO4tgHAdhGaMwqB1TJC0H6VjTCtOJX8MSCuXRCJ9VijH6Is3sytbVm6F1VgbEVrHoDCAV/FCW0kiuoA==
+"@gooddata/test-storybook@4.0.0-alpha-pbenes-pb-deps-2021-08-06T06-50-29-818Z":
+  version "4.0.0-alpha-pbenes-pb-deps-2021-08-06T06-50-29-818Z"
+  resolved "https://registry.yarnpkg.com/@gooddata/test-storybook/-/test-storybook-4.0.0-alpha-pbenes-pb-deps-2021-08-06T06-50-29-818Z.tgz#6f31fbdebb26c76b6bc0aad8a275fb766536a8ef"
+  integrity sha512-9IqKONbUVvMLewdyq9Ug7hvFasH+AN0mrWmkEtB6n9YzrQa4GgH5iVwsKJm+OH4g8yL1VYcCWsVzPMZs8pZcJQ==
   dependencies:
     acorn "^5.1.1"
     acorn-jsx "^4.0.1"
