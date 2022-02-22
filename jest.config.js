@@ -6,8 +6,8 @@ module.exports = {
         "<rootDir>/jest.setup.ts"
     ],
     "transform": {
-        ".(js|jsx)": "babel-jest",
-        ".(ts|tsx)": "ts-jest"
+        ".(js|jsx)$": "babel-jest",
+        ".(ts|tsx)$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(tsx?|jsx?)$",
     "testPathIgnorePatterns": [
