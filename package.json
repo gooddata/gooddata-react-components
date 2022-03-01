@@ -6,6 +6,9 @@
   "repository": "git@github.com:gooddata/gooddata-react-components.git",
   "author": "GoodData Corporation",
   "license": "SEE LICENSE IN LICENSE",
+  "engines": {
+    "node": "12.x"
+  },
   "files": [
     "dist",
     "src",
