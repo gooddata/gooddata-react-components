@@ -25,7 +25,7 @@ because they are not intended to be part of the public API.
 
 We welcome any contribution in form of [issues](https://github.com/gooddata/gooddata-react-components/issues) or [pull requests](https://github.com/gooddata/gooddata-react-components/pulls).
 
-Install [Node.js](http://nodejs.org) (node 12.16.1, npm v6.13.4) and [Yarn](https://classic.yarnpkg.com) (1.22.4).
+Install [Node.js](http://nodejs.org) and [Yarn](https://classic.yarnpkg.com) (for versions, see `docker/.config`).
 
 Install dependencies:
 ```
