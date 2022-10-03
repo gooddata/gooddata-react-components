@@ -29,7 +29,7 @@
     "@gooddata/frontend-npm-scripts": "1.3.0",
     "@gooddata/mock-js": "^2.23.0",
     "@gooddata/stylelint-config": "^5.0.0",
-    "@gooddata/test-storybook": "4.1.0",
+    "@gooddata/test-storybook": "4.1.0-alpha-pbenes-pb-upgrade-sep22-2-2022-10-03T12-23-41-143Z",
     "@gooddata/tslint-config": "1.0.0",
     "@storybook/addon-actions": "5.0.11",
     "@storybook/addon-options": "5.0.11",
