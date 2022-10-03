@@ -13,7 +13,6 @@ Supported PR commands:
 
 Command | Description
 --- | ---
-`extended test - examples` | Live examples tests
 `extended test - storybook` | Storybook screenshot tests
 
 See more [options](https://confluence.intgdc.com/display/kbhr/How+to+work+with+git+and+Github#HowtoworkwithgitandGithub-Extendedchecks).
@@ -24,13 +23,13 @@ See more [options](https://confluence.intgdc.com/display/kbhr/How+to+work+with+g
 - [ ] [Verify pull-request formalities](https://confluence.intgdc.com/display/Development/Code-reviews)
 - [ ] Change was tested by using [gdc-dev-release](https://confluence.intgdc.com/display/~tomas.vojtasek/Private+NPM) in [gdc-analytical-designer](https://github.com/gooddata/gdc-analytical-designer) and [gdc-dashboards](https://github.com/gooddata/gdc-dashboards) (if applicable)
 - [ ] Migration guide (for major changes) is mentioned in [CHANGELOG.md](../blob/master/CHANGELOG.md).
-- [ ] Successful `extended test - examples`
+- [ ] Run examples locally and run testcafe for local run (no heroku build from pull-request support anymore)
 - [ ] Successful `extended test - storybook`
 - [ ] Checked yarn.lock consistency (no dep. duplicities especially Goodstrap)
 
 
 # Related PRs
-<!-- Mandatory 
+<!-- Mandatory
 
 Example:
 - gdc-analytical-designer: https://github.com/gooddata/gdc-analytical-designer/pull/2072

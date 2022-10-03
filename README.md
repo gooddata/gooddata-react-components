@@ -5,7 +5,6 @@
 
 ## Getting started
 - [GoodData.UI Documentation](http://sdk.gooddata.com/gooddata-ui/)
-- [GoodData.UI Live Examples](https://gooddata-examples.herokuapp.com/)
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/gooddata)
 
 ### Usage
@@ -52,18 +51,6 @@ These commands may come in handy while developing:
 | `yarn examples-server` | serve built Live Examples - see `/examples/server/src` |
 | `yarn examples-testcafe` | run testcafe tests against `localhost:8999` |
 
-### Deploy to heroku.com
-When you deploy this repo to heroku, it serves *GoodData.UI Live Examples*.
-Relevant tasks are in `Procfile` and `package.json`.
-
-```bash
-# run in the project directory
-heroku login
-heroku create <your-app-name>
-heroku config:set DOMAIN_ADMIN_USERNAME=x@gooddata.com DOMAIN_ADMIN_PASSWORD=xy PROJECT_ID_TO_ASSIGN=xms7ga4tf3g3nzucd8380o2bev8oeknp
-git push heroku HEAD:master
-heroku open
-```
 ### Enable Geo Chart for Storybook and Live Examples
 Geo chart uses Mapbox to render map which requires a Mapbox access token.
 - Register an account and create Mapbox access token at [guide](https://docs.mapbox.com/help/how-mapbox-works/access-tokens/)
@@ -81,7 +68,13 @@ cd  <repository-folder>
 yarn install --pure-lockfile
 yarn examples
 ```
-Then open https://localhost:8999 and login using Live Examples account (you can [create one here](https://gooddata-examples.herokuapp.com/registration)).
+Then open https://localhost:8999
+
+### Run testcafe against locally running examples
+Make sure the examples are running locally (previous step)
+```bash
+yarn examples-testcafe
+```
 
 ### Run Storybook locally
 - Run storybook with token stored in `.env` for more secure
