@@ -189,14 +189,13 @@
     "storybook": "yarn build && start-storybook -p 9001 -c .storybook",
     "build-storybook": "yarn build && build-storybook -c .storybook -o dist-storybook",
     "test-storybook": "yarn build && test-storybook",
-    "examples?": "# Default is developer domain, other options: yarn examples [sec,secure,stg,stg2,stg3,demo,developer or URL]",
+    "examples?": "# Default is developer domain, other options: yarn examples [sec,secure,stg,stg2,stg3,demo,developer,public or URL]. Use `yarn examples public` for running against proxy with no auth needed.",
     "examples": "bash scripts/run-examples.sh",
     "examples-build": "bash scripts/build-examples.sh",
     "examples-server": "node examples/server/src/index.js",
     "examples-testcafe": "./scripts/run-testcafe.sh visual",
     "examples-testcafe-live": "./scripts/run-testcafe.sh live",
-    "examples-testcafe-ci": "./scripts/run-testcafe.sh ci",
-    "heroku-postbuild": "yarn examples-build public"
+    "examples-testcafe-ci": "./scripts/run-testcafe.sh ci"
   },
   "typings": "dist/index.d.ts",
   "husky": {
