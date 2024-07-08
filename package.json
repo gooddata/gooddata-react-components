@@ -84,7 +84,7 @@
     "jest-junit": "3.0.0",
     "lint-staged": "9.1.0",
     "madge": "^4.0.1",
-    "moment": "2.23.0",
+    "moment": "2.29.4",
     "node-sass": "^6.0.0",
     "node-sass-magic-importer": "5.1.0",
     "prettier": "1.16.4",
